@@ -1,7 +1,7 @@
-use super::super::runtime::{
+use super::runtime::{
     FixtureEvaluationBridge, FixtureTaskRequest, ProductionEvaluationRun, ProductionRuntimeError,
 };
-use super::super::{
+use super::{
     CanonicalEvaluationFailure, CanonicalEvaluationRun, CapturedTaskObservation, EvaluationError,
     EvaluationEventKind, EvaluationExecutor, EvaluationRun, EvaluationTask,
     PrivacySafeEvaluationEvent, PrivacySafeEvaluationEventRecord, RuntimeConfiguration,
@@ -13,7 +13,7 @@ const MAX_ARTIFACT_BYTES: u64 = 1024 * 1024;
 
 struct FixtureSchedulerEvaluationExecutor<'a, B> {
     bridge: &'a mut B,
-    permit: &'a super::super::production_input::ProductionSpecPermit<'a>,
+    permit: &'a super::production_input::ProductionSpecPermit<'a>,
     live_context_id: String,
     candidate_id: String,
     spec_sha256: String,
@@ -80,10 +80,10 @@ impl ExecutionOwner {
     /// fixture bridge, publish authenticated identities, and settle terminally.
     fn execute_production<B: FixtureEvaluationBridge>(
         &mut self,
-        permit: &super::super::production_input::ProductionSpecPermit<'_>,
+        permit: &super::production_input::ProductionSpecPermit<'_>,
         execution_session_id: impl Into<String>,
         runtime_configuration: RuntimeConfiguration,
-        expected_binding: &super::super::EvaluationExecutionBinding,
+        expected_binding: &super::EvaluationExecutionBinding,
         bridge: &mut B,
     ) -> Result<ProductionEvaluationRun, ProductionRuntimeError> {
         permit.revalidate()?;
@@ -101,7 +101,7 @@ impl ExecutionOwner {
                 "evaluation-production-ledger-binding-invalid",
             ));
         }
-        let reservation_id = super::super::digest(
+        let reservation_id = super::digest(
             format!(
                 "production-execution|{}|{}",
                 spec.spec_sha256(),
@@ -124,10 +124,7 @@ impl ExecutionOwner {
             .0
             .reserve_outcome(&reservation_id)
             .map_err(|error| ProductionRuntimeError::new(error.code()))?;
-        if !matches!(
-            reservation,
-            super::super::ExecutionReservationOutcome::Acquired
-        ) {
+        if !matches!(reservation, super::ExecutionReservationOutcome::Acquired) {
             return Err(ProductionRuntimeError::new(
                 "evaluation-production-execution-replayed",
             ));
@@ -157,7 +154,7 @@ impl ExecutionOwner {
             .map_err(|error| error.code())?;
             let canonical_run =
                 CanonicalEvaluationRun::from_parts(&run, runtime_configuration, &records);
-            let artifact_set_sha256 = super::super::digest(
+            let artifact_set_sha256 = super::digest(
                 records
                     .iter()
                     .map(FixtureExecutionRecord::record_sha256)

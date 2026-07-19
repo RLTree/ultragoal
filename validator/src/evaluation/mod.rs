@@ -20,7 +20,7 @@ pub(crate) mod runtime;
 mod tests;
 
 #[cfg(test)]
-pub(super) use ledger::TestFileEvaluationExecutionLedger as FileEvaluationExecutionLedger;
+pub(in crate::evaluation) use ledger::TestFileEvaluationExecutionLedger as FileEvaluationExecutionLedger;
 pub(crate) use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
     EvaluationLedgerState, ExecutionReservationOutcome,

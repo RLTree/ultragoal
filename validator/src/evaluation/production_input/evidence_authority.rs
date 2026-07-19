@@ -25,7 +25,7 @@ pub(super) struct ProductionEvidenceAuthority {
     _seal: seal::Seal,
 }
 
-struct ProductionEvidenceRequest {
+pub(super) struct ProductionEvidenceRequest {
     task_authority_id: String,
     task_principal_id: String,
     task_session_id: String,

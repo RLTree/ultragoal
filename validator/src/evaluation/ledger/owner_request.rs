@@ -1,5 +1,5 @@
-use super::super::production_input::ProductionSpecPermit;
-use super::super::{EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationSpec};
+use super::production_input::ProductionSpecPermit;
+use super::{EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationSpec};
 
 pub(crate) struct ProductionExecutionRequest<'a> {
     spec: &'a EvaluationSpec,
