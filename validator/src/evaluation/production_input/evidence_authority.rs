@@ -6,7 +6,8 @@ mod seal {
 }
 
 /// Domain-sealed evidence authority. Its fields and seal are deliberately not
-/// exposed outside evaluation; production issuance needs a root-owned adapter.
+/// exposed outside evaluation; production issuance is confined to the
+/// evaluation-owned root request.
 pub(super) struct ProductionEvidenceAuthority {
     live_context_id: String,
     candidate_id: String,
@@ -24,17 +25,16 @@ pub(super) struct ProductionEvidenceAuthority {
     _seal: seal::Seal,
 }
 
-#[cfg(test)]
-pub(crate) struct ProductionEvidenceRequest {
-    pub task_authority_id: String,
-    pub task_principal_id: String,
-    pub task_session_id: String,
-    pub provenance_authority_id: String,
-    pub provenance_principal_id: String,
-    pub provenance_session_id: String,
-    pub grader_authority_id: String,
-    pub grader_principal_id: String,
-    pub grader_session_id: String,
+struct ProductionEvidenceRequest {
+    task_authority_id: String,
+    task_principal_id: String,
+    task_session_id: String,
+    provenance_authority_id: String,
+    provenance_principal_id: String,
+    provenance_session_id: String,
+    grader_authority_id: String,
+    grader_principal_id: String,
+    grader_session_id: String,
 }
 
 pub(super) struct AuthorizedEvidenceBinding {
@@ -50,7 +50,6 @@ pub(super) struct AuthorizedEvidenceBinding {
 }
 
 impl ProductionEvidenceAuthority {
-    #[cfg(test)]
     pub(super) fn issue(
         spec: &EvaluationSpec,
         request: ProductionEvidenceRequest,
@@ -74,6 +73,7 @@ impl ProductionEvidenceAuthority {
         authority.binding_sha256 = authority_binding_sha256(&authority);
         Ok(authority)
     }
+
     pub(super) fn consume(
         self,
         spec: &EvaluationSpec,
@@ -148,6 +148,32 @@ impl ProductionEvidenceAuthority {
         };
         authority.binding_sha256 = authority_binding_sha256(&authority);
         authority
+    }
+}
+
+impl ProductionEvidenceRequest {
+    pub(super) fn from_values(
+        task_authority_id: String,
+        task_principal_id: String,
+        task_session_id: String,
+        provenance_authority_id: String,
+        provenance_principal_id: String,
+        provenance_session_id: String,
+        grader_authority_id: String,
+        grader_principal_id: String,
+        grader_session_id: String,
+    ) -> Self {
+        Self {
+            task_authority_id,
+            task_principal_id,
+            task_session_id,
+            provenance_authority_id,
+            provenance_principal_id,
+            provenance_session_id,
+            grader_authority_id,
+            grader_principal_id,
+            grader_session_id,
+        }
     }
 }
 

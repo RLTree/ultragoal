@@ -1,4 +1,4 @@
-use super::super::production_input::{ProductionEvidenceRequest, ProductionSpecPermit};
+use super::super::production_input::ProductionSpecPermit;
 use super::super::runtime::ProductionExecutionRequest;
 use super::super::runtime::{self, FixtureEvaluationBridge, FixtureTaskRequest};
 use super::super::*;
@@ -110,17 +110,6 @@ fn late_input_swap_after_fixture_effect_settles_execution_as_interrupted() {
         &input_root,
         &ledger_root,
         [9; 32],
-        ProductionEvidenceRequest {
-            task_authority_id: "evaluation-test-authority".to_owned(),
-            task_principal_id: "evaluation-test-author".to_owned(),
-            task_session_id: format!("sha256:{}", "1".repeat(64)),
-            provenance_authority_id: "evaluation-test-provenance-authority".to_owned(),
-            provenance_principal_id: "evaluation-test-provenance".to_owned(),
-            provenance_session_id: format!("sha256:{}", "2".repeat(64)),
-            grader_authority_id: "evaluation-test-grader-authority".to_owned(),
-            grader_principal_id: "evaluation-test-grader".to_owned(),
-            grader_session_id: format!("sha256:{}", "3".repeat(64)),
-        },
         format!("sha256:{}", "7".repeat(64)),
         format!("sha256:{}", "8".repeat(64)),
         RuntimeConfiguration::all_unknown(),

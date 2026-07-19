@@ -7,14 +7,14 @@ mod execution;
 #[path = "production_input/material.rs"]
 mod material;
 
-#[cfg(test)]
-pub(crate) use evidence_authority::ProductionEvidenceRequest;
 pub(crate) use execution::ProductionExecutionRequest;
 pub(crate) use material::AuthenticatedTaskMaterial;
 
 use super::{EvaluationError, EvaluationSpec, EvaluationTask, TaskAudit, digest};
 use descriptor::{ProtectedProductionInput, open_production_root, production_identity};
-use evidence_authority::{AuthorizedEvidenceBinding, ProductionEvidenceAuthority};
+use evidence_authority::{
+    AuthorizedEvidenceBinding, ProductionEvidenceAuthority, ProductionEvidenceRequest,
+};
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 
@@ -41,12 +41,11 @@ pub(crate) struct ProductionSpecPermit<'a> {
 }
 
 impl<'a> ProductionSpecPermit<'a> {
-    #[cfg(test)]
-    pub(super) fn issue_from_evidence(
+    pub(super) fn issue_from_root(
         spec: &'a EvaluationSpec,
         root: impl AsRef<std::path::Path>,
-        evidence: ProductionEvidenceRequest,
     ) -> Result<Self, EvaluationError> {
+        let evidence = derive_root_evidence(spec, root.as_ref())?;
         Self::issue(
             spec,
             root,
@@ -164,6 +163,8 @@ impl<'a> ProductionSpecPermit<'a> {
         Self::issue(spec, root, ProductionEvidenceAuthority::test_issue(spec))
     }
 }
+
+include!("production_input/root_evidence.rs");
 
 fn material_set_sha256(tasks: &[ProtectedTaskInputs]) -> String {
     let mut rows = tasks

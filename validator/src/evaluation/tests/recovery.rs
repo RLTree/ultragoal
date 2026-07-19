@@ -88,23 +88,11 @@ fn preparation_issues_private_authority_and_derives_material_binding() {
     let input_root = root("preparation-input");
     let ledger_root = root("preparation-ledger");
     let spec = preparation_spec(&input_root);
-    let evidence = super::super::production_input::ProductionEvidenceRequest {
-        task_authority_id: "evaluation-test-authority".to_owned(),
-        task_principal_id: "evaluation-test-author".to_owned(),
-        task_session_id: sha('1'),
-        provenance_authority_id: "evaluation-test-provenance-authority".to_owned(),
-        provenance_principal_id: "evaluation-test-provenance".to_owned(),
-        provenance_session_id: sha('2'),
-        grader_authority_id: "evaluation-test-grader-authority".to_owned(),
-        grader_principal_id: "evaluation-test-grader".to_owned(),
-        grader_session_id: sha('3'),
-    };
     let request = super::super::runtime::ProductionExecutionRequest::new(
         &spec,
         &input_root,
         &ledger_root,
         [9; 32],
-        evidence,
         sha('1'),
         sha('8'),
         RuntimeConfiguration::all_unknown(),
