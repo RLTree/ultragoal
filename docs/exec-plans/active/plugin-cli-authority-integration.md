@@ -566,6 +566,14 @@ contract passes 107/107 and supported package identity passes 3/3. This closes
 the source-local cleanup defect only; installed-product and later-node claims
 remain withheld.
 
+The first bounded acceptance review returned one material shared-boundary
+REWORK: HCT-/PS- replacement targets still admitted empty, lowercase, or
+separator-leading suffixes. The common predicate now implements the adopted
+uppercase semantic-identifier grammar, with executing registry and shard
+negatives for `HCT-`, `PS-`, `HCT-lower`, and `PS--X`. No deletion-scope,
+historical-authority, digest-chain, or claim-ceiling defect was found in that
+review; the correction requires one fresh exact-candidate review.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps

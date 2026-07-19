@@ -66,3 +66,28 @@ fn rejects_cycles_unsorted_sources_and_command_substitution() {
         "generated_authority_command_invalid"
     );
 }
+
+#[test]
+fn rejects_noncanonical_retained_replacement_targets() {
+    for target in ["HCT-", "PS-", "HCT-lower", "PS--X"] {
+        let bytes = serde_json::to_vec(&serde_json::json!({
+            "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+            "contract_id": "harness-ultragoal-successor-contract-v2",
+            "surfaces": [{
+                "disposition": "retained_context",
+                "output": "generated/context.json",
+                "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "reason": "context",
+                "replacement_targets": [target],
+                "preserve": true,
+                "physical_deletion_authorized": false
+            }]
+        }))
+        .unwrap();
+        assert_eq!(
+            rejection_code(&bytes),
+            "generated_authority_shard_retained_context_invalid",
+            "target {target} must fail closed"
+        );
+    }
+}

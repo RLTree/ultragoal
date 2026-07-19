@@ -31,6 +31,18 @@ fn retained(output: &str, digest: &str) -> Value {
     })
 }
 
+fn retained_target(output: &str, digest: &str, target: &str) -> Value {
+    json!({
+        "disposition": "retained_context",
+        "output": output,
+        "sha256": digest,
+        "reason": "Preserved only as bound migration context.",
+        "replacement_targets": [target],
+        "preserve": true,
+        "physical_deletion_authorized": false
+    })
+}
+
 fn rejects(label: &str, bytes: &[u8]) {
     let repo = TestRepo::new(label);
     repo.write(REGISTRY, bytes);
@@ -130,6 +142,26 @@ fn generated_authority_v3_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
             "replacement_targets":["foo"], "preserve":true,
             "physical_deletion_authorized":false
         })]),
+        registry(vec![retained_target(
+            "generated/empty-hct.json",
+            &digest,
+            "HCT-",
+        )]),
+        registry(vec![retained_target(
+            "generated/empty-ps.json",
+            &digest,
+            "PS-",
+        )]),
+        registry(vec![retained_target(
+            "generated/lower-hct.json",
+            &digest,
+            "HCT-lower",
+        )]),
+        registry(vec![retained_target(
+            "generated/hyphen-ps.json",
+            &digest,
+            "PS--X",
+        )]),
         registry(vec![json!({
             "disposition":"canonical_projection", "output":"generated//x.json",
             "generator":"HCT-INVENTORY", "recipe":"input-digest-index-v1",
