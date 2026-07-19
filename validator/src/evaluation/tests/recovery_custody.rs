@@ -2,7 +2,7 @@ use super::super::production_input::ProductionSpecPermit;
 use super::super::*;
 use super::custody::{execution_binding, root};
 use super::recovery_setup::{
-    preparation_spec, production_root, set_panic_effect_marker, sha, PanickingBridge,
+    PanickingBridge, preparation_spec, production_root, set_panic_effect_marker, sha,
 };
 use std::fs;
 

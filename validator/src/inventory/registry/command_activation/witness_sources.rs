@@ -79,9 +79,19 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "supported operation activation authority"
     ),
     source!(
+        "validator/src/cli/successor_public/operation_binding/groups.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/groups.rs"),
+        "complete command-group activation authority"
+    ),
+    source!(
         "validator/src/cli/successor_public/output_limit.rs",
         include_bytes!("../../../cli/successor_public/output_limit.rs"),
         "public dispatcher consumption of operation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/evaluation/run.rs",
+        include_bytes!("../../../cli/successor_public/evaluation/run.rs"),
+        "evaluation write-route admission and result projection"
     ),
     source!(
         "validator/src/cli/successor_public/orchestration.rs",

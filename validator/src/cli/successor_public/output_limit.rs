@@ -51,8 +51,12 @@ pub(crate) fn execute_invocation_with_home(
     if operation == super::operation_binding::PublicOperation::RoutineCheck {
         return routine::execute(root, &invocation, home);
     }
-    let public_fit_apply = operation == super::operation_binding::PublicOperation::FitApply;
-    if invocation.effect != EffectClass::Read && !public_fit_apply {
+    let public_write = matches!(
+        operation,
+        super::operation_binding::PublicOperation::FitApply
+            | super::operation_binding::PublicOperation::EvaluationRun
+    );
+    if invocation.effect != EffectClass::Read && !public_write {
         return crate::cli::successor::runtime::unavailable(&invocation);
     }
     let context_root = match invocation.command {
@@ -67,7 +71,8 @@ pub(crate) fn execute_invocation_with_home(
     // Plan and apply intentionally share one effect-bound context identity. The
     // plan route still performs only reads and issues no mutation permit.
     let context_result = match invocation.command {
-        SuccessorCommand::Fit(FitAction::Plan | FitAction::Apply) => {
+        SuccessorCommand::Fit(FitAction::Plan | FitAction::Apply)
+        | SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Run) => {
             workspace_context(&context_root)
         }
         _ => read_context(&context_root),
@@ -97,6 +102,9 @@ pub(crate) fn execute_invocation_with_home(
         }
         SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Audit) => {
             evaluation::audit(&context, &invocation)
+        }
+        SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Run) => {
+            evaluation::run(&context, &invocation)
         }
         SuccessorCommand::Fit(FitAction::Inspect) => fit::inspect(&context, &invocation),
         SuccessorCommand::Fit(FitAction::Plan) => fit::plan(&context, &invocation),

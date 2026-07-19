@@ -9,7 +9,10 @@ use crate::cli::successor::{
 use crate::context::LiveContext;
 use sha2::{Digest, Sha256};
 
+mod run;
 mod specification;
+
+pub(super) use run::execute as run;
 
 pub(super) fn audit(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
     let Some(spec_path) = spec_path(invocation) else {

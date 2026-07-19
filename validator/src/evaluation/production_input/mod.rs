@@ -1,11 +1,11 @@
 mod admission_authority;
 mod descriptor;
-mod execution;
 mod material;
 mod root_admission;
+mod run_admission;
 
-pub(crate) use execution::ProductionExecutionRequest;
 pub(crate) use material::AuthenticatedTaskMaterial;
+pub(crate) use run_admission::EvaluationRunAdmission;
 
 use super::{EvaluationError, EvaluationSpec, EvaluationTask, TaskAudit, digest};
 use admission_authority::{EvaluationAdmissionAuthority, EvaluationAdmissionBinding};

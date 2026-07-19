@@ -11,6 +11,7 @@ use std::path::Path;
 #[path = "accepted_observe_query_reads_current_local_events_without_writes.rs"]
 mod accepted_observe_query_reads_current_local_events_without_writes;
 mod evaluation;
+mod evaluation_run;
 #[path = "fit_apply_runs_the_public_production_route_and_retires_recovery_state.rs"]
 mod fit_apply_runs_the_public_production_route_and_retires_recovery_state;
 mod inspection;

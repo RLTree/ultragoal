@@ -30,6 +30,8 @@ include!("file/state_transition.rs");
 
 include!("file/published_current_requirement.rs");
 
+include!("file/terminal_result.rs");
+
 include!("test_publication_pause.rs");
 
 include!("read/current.rs");

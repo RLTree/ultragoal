@@ -24,11 +24,12 @@ impl FileEvaluationExecutionLedger {
     fn reconcile_authenticated_publication(&mut self) -> Result<(), EvaluationLedgerError> {
         self.transition(None, |ledger, current| match &current.payload.core.state {
             EvaluationLedgerState::RecoveryRequired { .. } => {
-                let (run_sha256, artifact_set_sha256) =
+                let (run_sha256, artifact_set_sha256, terminal_result) =
                     ledger.authenticated_recovery_publication(current)?;
                 Ok(EvaluationLedgerState::Published {
                     run_sha256,
                     artifact_set_sha256,
+                    terminal_result,
                 })
             }
             _ => Err(EvaluationLedgerError::new(
@@ -44,7 +45,7 @@ impl FileEvaluationExecutionLedger {
     fn authenticated_recovery_publication(
         &self,
         current: &AuthenticatedSnapshot,
-    ) -> Result<(String, String), EvaluationLedgerError> {
+    ) -> Result<(String, String, Vec<u8>), EvaluationLedgerError> {
         let reservation_id = current
             .payload
             .core
@@ -91,7 +92,12 @@ impl FileEvaluationExecutionLedger {
                     EvaluationLedgerState::Published {
                         run_sha256,
                         artifact_set_sha256,
-                    } => Some((run_sha256.clone(), artifact_set_sha256.clone())),
+                        terminal_result,
+                    } => Some((
+                        run_sha256.clone(),
+                        artifact_set_sha256.clone(),
+                        terminal_result.clone(),
+                    )),
                     _ => None,
                 })
                 .flatten()
@@ -105,9 +111,11 @@ impl FileEvaluationExecutionLedger {
                 EvaluationLedgerState::Published {
                     run_sha256,
                     artifact_set_sha256,
+                    terminal_result,
                 } => Ok(EvaluationLedgerState::Terminal {
                     run_sha256,
                     artifact_set_sha256,
+                    terminal_result,
                 }),
                 _ => Err(EvaluationLedgerError::new(
                     "evaluation-terminal-transition-refused",
@@ -127,6 +135,7 @@ impl FileEvaluationExecutionLedger {
         let EvaluationLedgerState::Terminal {
             run_sha256,
             artifact_set_sha256,
+            ..
         } = snapshot.payload.core.state
         else {
             return Err(EvaluationLedgerError::new(

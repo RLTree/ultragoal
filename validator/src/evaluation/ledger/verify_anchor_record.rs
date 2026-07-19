@@ -101,11 +101,18 @@ fn state_valid(state: &EvaluationLedgerState) -> bool {
         EvaluationLedgerState::Published {
             run_sha256,
             artifact_set_sha256,
+            terminal_result,
         }
         | EvaluationLedgerState::Terminal {
             run_sha256,
             artifact_set_sha256,
-        } => super::valid_sha256(run_sha256) && super::valid_sha256(artifact_set_sha256),
+            terminal_result,
+        } => {
+            super::valid_sha256(run_sha256)
+                && super::valid_sha256(artifact_set_sha256)
+                && !terminal_result.is_empty()
+                && terminal_result.len() <= 64 * 1024
+        }
         EvaluationLedgerState::Interrupted { causal_code }
         | EvaluationLedgerState::RecoveryRequired { causal_code } => {
             super::valid_identifier(causal_code)

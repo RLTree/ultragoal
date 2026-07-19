@@ -1,8 +1,4 @@
 //! Exact public-operation authority for the supported successor dispatcher.
-//!
-//! Catalog presence and compile visibility describe compatibility. Only this
-//! private table can attest that a command/effect pair reaches one supported
-//! production handler and consumes its named API family.
 
 use crate::cli::successor::command_contract::EvalAction;
 use crate::cli::successor::{
@@ -28,6 +24,7 @@ pub(crate) enum PublicOperation {
     Diagnosis,
     ObservabilityQuery,
     EvaluationAudit,
+    EvaluationRun,
 }
 
 #[derive(Clone, Copy)]
@@ -90,6 +87,12 @@ const EVALUATION_AUDIT: &[&str] = &[
     "EffectClass",
     "EvaluationSpec",
     "TaskAudit",
+];
+const EVALUATION_RUN: &[&str] = &[
+    "LiveContext::build",
+    "EvaluationRunAdmission",
+    "ScheduledFixtureEvaluationBridge",
+    "ProductionEvaluationRun",
 ];
 
 const BINDINGS: &[Binding] = &[
@@ -195,6 +198,12 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         EVALUATION_AUDIT,
     ),
+    binding(
+        PublicOperation::EvaluationRun,
+        SuccessorCommand::Eval(EvalAction::Run),
+        EffectClass::WorkspaceWrite,
+        EVALUATION_RUN,
+    ),
 ];
 
 const fn binding(
@@ -230,22 +239,7 @@ pub(crate) fn active_api_identifiers() -> BTreeSet<&'static str> {
         .collect()
 }
 
-pub(crate) fn active_command_groups() -> BTreeSet<&'static str> {
-    let represented = BINDINGS
-        .iter()
-        .map(|binding| binding.command.group())
-        .collect::<BTreeSet<Group>>();
-    represented
-        .into_iter()
-        .filter(|group| {
-            catalog()
-                .iter()
-                .filter(|descriptor| descriptor.command.group() == *group)
-                .all(|descriptor| bind_command(descriptor.command, descriptor.effect).is_some())
-        })
-        .map(Group::as_str)
-        .collect()
-}
+include!("operation_binding/groups.rs");
 
 #[cfg(test)]
 #[path = "operation_binding_tests.rs"]

@@ -27,6 +27,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
         )),
         Some(PublicOperation::EvaluationAudit),
     );
+    assert_eq!(
+        bind(&invocation(
+            SuccessorCommand::Eval(EvalAction::Run),
+            EffectClass::WorkspaceWrite,
+        )),
+        Some(PublicOperation::EvaluationRun),
+    );
     for invocation in [
         invocation(
             SuccessorCommand::Observe(ObserveAction::Export),
@@ -35,10 +42,6 @@ fn only_exact_supported_command_effect_pairs_bind() {
         invocation(
             SuccessorCommand::Package(PackageAction::Inventory),
             EffectClass::Read,
-        ),
-        invocation(
-            SuccessorCommand::Eval(EvalAction::Run),
-            EffectClass::WorkspaceWrite,
         ),
         invocation(SuccessorCommand::Fit(FitAction::Apply), EffectClass::Read),
     ] {
@@ -70,7 +73,7 @@ fn unsupported_api_families_do_not_gain_dispatcher_authority() {
             "{api} has no supported public operation"
         );
     }
-    for group in ["observe", "package", "eval", "migrate", "prove"] {
+    for group in ["observe", "package", "migrate", "prove"] {
         assert!(!active_command_groups().contains(group));
     }
 }

@@ -46,7 +46,6 @@ impl FixtureCaptureAdapter {
         )
     }
 
-    #[cfg(test)]
     pub(crate) fn issue_evaluation(
         fixture: &FixtureSpec,
         request: FixtureCaptureRequest,

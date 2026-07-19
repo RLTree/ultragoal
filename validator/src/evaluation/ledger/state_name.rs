@@ -81,6 +81,7 @@ pub(crate) enum EvaluationLedgerState {
     Published {
         run_sha256: String,
         artifact_set_sha256: String,
+        terminal_result: Vec<u8>,
     },
     Interrupted {
         causal_code: String,
@@ -91,6 +92,7 @@ pub(crate) enum EvaluationLedgerState {
     Terminal {
         run_sha256: String,
         artifact_set_sha256: String,
+        terminal_result: Vec<u8>,
     },
 }
 
@@ -107,6 +109,7 @@ pub(crate) enum ExecutionReservationOutcome {
     AlreadyPublished {
         run_sha256: String,
         artifact_set_sha256: String,
+        terminal_result: Vec<u8>,
     },
     Interrupted {
         causal_code: String,
@@ -117,6 +120,7 @@ pub(crate) enum ExecutionReservationOutcome {
     Terminal {
         run_sha256: String,
         artifact_set_sha256: String,
+        terminal_result: Vec<u8>,
     },
 }
 

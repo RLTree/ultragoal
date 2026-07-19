@@ -1,9 +1,9 @@
-pub(crate) use super::production_input::ProductionExecutionRequest;
+pub(in crate::evaluation) use super::ledger::ProductionExecutionRequest;
 use super::{
     CanonicalEvaluationFailure, CanonicalEvaluationRun, EvaluationError, PrivacySafeEvaluationEvent,
 };
 use crate::fixture_scheduler::{FixtureExecutionBinding, FixtureExecutionRecord};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -40,16 +40,55 @@ impl From<EvaluationError> for ProductionRuntimeError {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub struct ProductionEvaluationRun {
+pub(crate) struct ProductionEvaluationRun {
     pub canonical_run: CanonicalEvaluationRun,
     pub canonical_failures: Vec<CanonicalEvaluationFailure>,
     pub events: Vec<PrivacySafeEvaluationEvent>,
+    public_result: Vec<u8>,
     pub(crate) fixture_records: Vec<FixtureExecutionRecord>,
 }
 
 impl ProductionEvaluationRun {
-    pub fn fixture_records(&self) -> &[FixtureExecutionRecord] {
+    pub(crate) fn new(
+        canonical_run: CanonicalEvaluationRun,
+        canonical_failures: Vec<CanonicalEvaluationFailure>,
+        events: Vec<PrivacySafeEvaluationEvent>,
+        public_result: Vec<u8>,
+        fixture_records: Vec<FixtureExecutionRecord>,
+    ) -> Self {
+        Self {
+            canonical_run,
+            canonical_failures,
+            events,
+            public_result,
+            fixture_records,
+        }
+    }
+
+    pub(crate) fn public_result(&self) -> &[u8] {
+        &self.public_result
+    }
+
+    pub(crate) fn fixture_records(&self) -> &[FixtureExecutionRecord] {
         &self.fixture_records
+    }
+
+    pub(crate) fn from_terminal(public_result: Vec<u8>) -> Result<Self, ProductionRuntimeError> {
+        #[derive(Deserialize)]
+        struct TerminalResult {
+            canonical_run: CanonicalEvaluationRun,
+            canonical_failures: Vec<CanonicalEvaluationFailure>,
+            events: Vec<PrivacySafeEvaluationEvent>,
+        }
+        let result = serde_json::from_slice::<TerminalResult>(&public_result)
+            .map_err(|_| ProductionRuntimeError::new("evaluation-terminal-result-invalid"))?;
+        Ok(Self::new(
+            result.canonical_run,
+            result.canonical_failures,
+            result.events,
+            public_result,
+            Vec::new(),
+        ))
     }
 }
 

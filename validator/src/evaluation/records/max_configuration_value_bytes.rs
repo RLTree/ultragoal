@@ -3,7 +3,7 @@ const MAX_TOOLS: usize = 64;
 
 /// Provenance classes that can expose configuration. Prompt text is
 /// intentionally not a member of this enum.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ConfigurationSource {
     RuntimeApi,
@@ -11,7 +11,7 @@ pub enum ConfigurationSource {
     SignedReceipt,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(tag = "exposure", rename_all = "snake_case")]
 pub enum ConfigurationExposure {
     Exposed {
@@ -54,7 +54,7 @@ impl ConfigurationExposure {
 
 /// Vendor-neutral runtime metadata. Every field is either supported by an
 /// exposed runtime/tool/receipt provenance or explicitly unknown.
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct RuntimeConfiguration {
     pub model: ConfigurationExposure,
     pub runtime: ConfigurationExposure,
@@ -95,9 +95,9 @@ impl RuntimeConfiguration {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct CanonicalEvaluationRun {
-    pub schema_version: &'static str,
+    pub schema_version: String,
     pub live_context_id: String,
     pub candidate_id: String,
     pub spec_id: String,
@@ -111,7 +111,6 @@ pub struct CanonicalEvaluationRun {
 }
 
 impl CanonicalEvaluationRun {
-    #[cfg(test)]
     pub(crate) fn from_parts(
         run: &EvaluationRun,
         runtime_configuration: RuntimeConfiguration,
@@ -123,7 +122,7 @@ impl CanonicalEvaluationRun {
             .collect::<Vec<_>>()
             .join("\n");
         Self {
-            schema_version: "CanonicalEvaluationRun-v1",
+            schema_version: "CanonicalEvaluationRun-v1".to_owned(),
             live_context_id: run.live_context_id.clone(),
             candidate_id: run.candidate_id.clone(),
             spec_id: run.spec_id.clone(),
@@ -142,9 +141,9 @@ impl CanonicalEvaluationRun {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct CanonicalEvaluationFailure {
-    pub schema_version: &'static str,
+    pub schema_version: String,
     pub live_context_id: String,
     pub candidate_id: String,
     pub run_sha256: String,
@@ -157,7 +156,7 @@ pub struct CanonicalEvaluationFailure {
 impl From<&FailureCase> for CanonicalEvaluationFailure {
     fn from(value: &FailureCase) -> Self {
         Self {
-            schema_version: "CanonicalEvaluationFailure-v1",
+            schema_version: "CanonicalEvaluationFailure-v1".to_owned(),
             live_context_id: value.live_context_id.clone(),
             candidate_id: value.candidate_id.clone(),
             run_sha256: value.run_sha256.clone(),
