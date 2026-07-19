@@ -61,6 +61,13 @@ pub(super) fn expected(
             exact_state(states, "N14", "ready")?;
             (&["N14"][..], &[][..])
         }
+        "N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER" => {
+            exact_state(states, "N10", "integrated")?;
+            exact_state(states, "N11", "blocked")?;
+            exact_state(states, "N12", "integrated")?;
+            active_state(states, "N14")?;
+            (&[][..], &["N14"][..])
+        }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };
     Ok(ExpectedLifecycle {

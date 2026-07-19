@@ -195,6 +195,43 @@ fn inventory_reobservation_frontier_rejects_blocked_migration() {
 }
 
 #[test]
+fn issued_migration_is_the_only_active_worktree_lane() {
+    let nodes = scheduler_nodes(&registry(
+        &[
+            ("N10", "integrated"),
+            ("N11", "blocked"),
+            ("N12", "integrated"),
+            ("N14", "leased"),
+        ],
+        &[],
+        "N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER",
+    ))
+    .unwrap();
+
+    assert!(nodes.ready.is_empty());
+    assert_eq!(
+        nodes.active_worktree_lanes,
+        BTreeSet::from(["N14".to_owned()])
+    );
+}
+
+#[test]
+fn active_migration_frontier_rejects_ready_without_a_lease() {
+    let result = scheduler_nodes(&registry(
+        &[
+            ("N10", "integrated"),
+            ("N11", "blocked"),
+            ("N12", "integrated"),
+            ("N14", "ready"),
+        ],
+        &["N14"],
+        "N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER",
+    ));
+
+    assert!(result.is_err());
+}
+
+#[test]
 fn active_leases_are_exactly_one_open_evaluation_worktree() {
     let lanes = BTreeSet::from(["N11".to_owned()]);
     let record = json!({"lane_id":"N11","status":"issued","worktree":"/worktree/n11"});

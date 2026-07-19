@@ -49,7 +49,7 @@ product-success contract without promoting a claim: source acceptance is
 accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim
 reconciliation; it does not satisfy N11 execution or `CL-EVAL-IMPROVEMENT`.
-The current frontier is `N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER`.
+The current frontier is `N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER`.
 N12-A's original source remains accepted from
 `27c9afd0021ad9751d2411e4837d7f897064b99e`, while current root source
 admission is rebound at `10a77aeb9106e74a9cc534741248fbf076942f04` /
@@ -60,8 +60,12 @@ N02 reobservation passes on exact clean candidate
 recursive-zero-write summaries at SHA-256
 `859f0b6e115e1201554413c447e086a335892616bb987eeb2cd7179bcb4ffee2`
 both exit zero, with zero blockers and 30 named nonblocking obligations. N14 is
-the sole scheduler-eligible lane and remains unleased until this checkpoint is
-committed and issuance gates pass.
+the sole active worktree lane under lease
+`LEASE-N14-MIGRATION-COMPATIBILITY-001`, branch
+`codex/n14-migration-compatibility-closure`, and managed task
+`019f7a92-0a12-7521-986f-78d1113c9ca9`. Its exact lease base is
+`096a81124076eeea3430f62500cbe7b5a932682a` / tree
+`1d177ed28e57179361da151d60036748314ea8b7`; every claim remains withheld.
 
 ## Stage B projection freeze (routing only)
 

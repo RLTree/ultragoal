@@ -3,10 +3,15 @@ use serde_json::Value;
 pub(super) fn satisfies(registry: &Value, lane: &str, dependency: &str) -> bool {
     if lane != "N12"
         || dependency != "N11"
-        || registry
-            .pointer("/pre_adoption_source/frontier")
-            .and_then(Value::as_str)
-            != Some("N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER")
+        || !matches!(
+            registry
+                .pointer("/pre_adoption_source/frontier")
+                .and_then(Value::as_str),
+            Some(
+                "N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER"
+                    | "N14_ACTIVE_N12_INTEGRATED_SOURCE_FRONTIER"
+            )
+        )
     {
         return false;
     }
