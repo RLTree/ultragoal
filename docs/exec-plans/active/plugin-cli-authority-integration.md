@@ -710,19 +710,26 @@ claim and representative product or release proof.
   checkpoint. Package, install, cache, marketplace, app-registry, discovery,
   runtime, Product Fitness, readiness, release, and completion remain withheld.
 
-The post-N11 root debt checkpoint is in exact-freeze preparation. Scoped
+The post-N11 root debt checkpoint is closed at source candidate
+`b279f7c6fc31c5fc35096cd1d5268d91765bb417` / tree
+`165a4fcabd5a3ac539c03c26dc4c03edbb711304`. Scoped
 `OD-009-SCOPED-002` authorizes only the 126 path/content-digested Rust files
 proved unreachable from every Cargo production and test root; compile probes
-and standalone roots are excluded. The same batch removes three stale launch
-snapshots after the canonical registry reported no active lease, collapses the
-duplicate required-law list to the mandatory catalog, replaces user-facing
+and standalone roots are excluded. Three launch snapshots that were outside
+that exact deletion scope remain preserved. The batch collapses the duplicate
+required-law list to the mandatory catalog, replaces user-facing
 lane-number repairs with product capabilities, and restores semantic module
 names for review records, evaluation admission, ledger initialization, and
-public inspection controls. Package, install, runtime, journey, readiness,
-release, and completion claims remain withheld. One bounded Terra/high review
-will inspect the exact clean freeze; only material authority/security,
-false-pass, integration, operator-journey, or compounding-architecture defects
-can reopen it, with at most one coherent correction and one correction review.
+public inspection controls. It also removes every current package, coverage,
+mandatory-law, cohesion, lane, migration, and retained-route selector for the
+retired paths. Warning-denied production compilation, the exact namespace
+zero-write gate, 121 standards rows, JSON, line caps, and both current coverage
+manifest digests pass. The bounded Terra/high review returned five material
+projection defects in one pass; one correction review found only the stale
+route cardinality, which the parent corrected and verified as 10 compiled,
+registered routes. The review bound is closed without a third speculative
+round. Package, install, runtime, journey, readiness, release, and completion
+claims remain withheld.
 
 Two debts are deliberately scheduled at their real dependency boundaries
 instead of extending this review loop. The broad suppression in
