@@ -43,6 +43,7 @@ include!("publish_file.rs");
 include!("owner.rs");
 
 #[cfg(test)]
+#[derive(Debug)]
 pub(super) struct TestFileEvaluationExecutionLedger(FileEvaluationExecutionLedger);
 
 #[cfg(test)]
