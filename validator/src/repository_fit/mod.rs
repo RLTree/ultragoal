@@ -8,6 +8,10 @@ mod product_adapter;
 mod repository_contract;
 mod state;
 
+#[cfg(test)]
+#[path = "tests/repository_contract.rs"]
+mod repository_contract_tests;
+
 use sha2::{Digest, Sha256};
 
 pub use apply::{apply, rollback, verify};
