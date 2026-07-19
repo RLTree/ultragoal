@@ -864,6 +864,22 @@ the catalog has zero blockers and the exact 35 nonblocking obligations above.
 The next controller action is lane restructuring and one bounded adversarial
 path review before any new implementation worktree is issued.
 
+The first strict-debt increment is integrated through root commit
+`a8bec220663dc2e1962753a7912c3d532ddefccc` / tree
+`6288a77d5812dc926418ab2cebd7de8b90c7501c`. Repository-fit and plugin-product
+diagnostics owned by that increment are cleared. The current clean source base
+passes warning-free library compilation, the 121-row standards entrypoint, and
+the namespace strict route with zero findings. The remaining exact Clippy set
+is 118 paths: 38 routine and fixture-scheduler paths, 27 distribution and
+package paths, and 53 control-plane and safety paths. Root reissues only those
+three disjoint worktree leases from the exact integrated base. Their
+dependency-closed support sets own typed retained-cleanup recovery, narrow
+nonsecret distribution errors, recorded Git capability, identity-conditioned
+cleanup, journal directory durability, and errno-aware workspace enumeration.
+All work remains source-local and claim-withheld; no receipt family, public
+dispatch, dependency, migration, package, install, runtime, readiness, release,
+or completion authority is added.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
