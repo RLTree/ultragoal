@@ -1,5 +1,5 @@
 impl FileEvaluationExecutionLedger {
-    pub fn require_recovery(
+    fn require_recovery(
         &mut self,
         causal_code: impl Into<String>,
     ) -> Result<(), EvaluationLedgerError> {
@@ -16,7 +16,7 @@ impl FileEvaluationExecutionLedger {
         })
     }
 
-    pub fn reconcile_recovery(
+    fn reconcile_recovery(
         &mut self,
         recovered_publication: Option<(String, String)>,
     ) -> Result<(), EvaluationLedgerError> {
@@ -27,15 +27,14 @@ impl FileEvaluationExecutionLedger {
                 "evaluation-recovery-binding-invalid",
             ));
         }
-        self.transition(None, |state| match state {
+        let clear_reservation = recovered_publication.is_none();
+        self.transition(clear_reservation.then_some(None), |state| match state {
             EvaluationLedgerState::RecoveryRequired { .. } => match recovered_publication {
                 Some((run_sha256, artifact_set_sha256)) => Ok(EvaluationLedgerState::Published {
                     run_sha256,
                     artifact_set_sha256,
                 }),
-                None => Ok(EvaluationLedgerState::Interrupted {
-                    causal_code: "recovery-confirmed-no-publication".to_owned(),
-                }),
+                None => Ok(EvaluationLedgerState::Initialized),
             },
             _ => Err(EvaluationLedgerError::new(
                 "evaluation-recovery-not-required",
@@ -43,7 +42,7 @@ impl FileEvaluationExecutionLedger {
         })
     }
 
-    pub fn complete(&mut self) -> Result<(), EvaluationLedgerError> {
+    fn complete(&mut self) -> Result<(), EvaluationLedgerError> {
         self.transition(None, |state| match state {
             EvaluationLedgerState::Published {
                 run_sha256,
@@ -85,7 +84,7 @@ impl FileEvaluationExecutionLedger {
 
     fn transition(
         &mut self,
-        reservation_id_sha256: Option<String>,
+        reservation_id_sha256: Option<Option<String>>,
         update: impl FnOnce(
             EvaluationLedgerState,
         ) -> Result<EvaluationLedgerState, EvaluationLedgerError>,
@@ -125,11 +124,8 @@ impl FileEvaluationExecutionLedger {
             lock_identity: self.lock_identity,
             anchor_authority: self.anchor_authority,
             binding: self.binding.clone(),
-            reservation_id_sha256: reservation_id_sha256.or(current
-                .payload
-                .core
-                .reservation_id_sha256
-                .clone()),
+            reservation_id_sha256: reservation_id_sha256
+                .unwrap_or_else(|| current.payload.core.reservation_id_sha256.clone()),
             state: next_state,
         };
         let record = authenticate_anchor_record(

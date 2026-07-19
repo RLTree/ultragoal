@@ -1,4 +1,5 @@
-use super::super::production_input::ProductionSpecPermit;
+use super::super::production_input::{ProductionEvidenceRequest, ProductionSpecPermit};
+use super::super::runtime::ProductionExecutionRequest;
 use super::super::runtime::{self, FixtureEvaluationBridge, FixtureTaskRequest};
 use super::super::*;
 use super::custody::root;
@@ -100,36 +101,53 @@ fn late_input_swap_after_fixture_effect_settles_execution_as_interrupted() {
     let input_root = root("runtime-late-input");
     let ledger_root = root("runtime-late-input-ledger");
     let spec = production_spec(&input_root);
-    let permit = ProductionSpecPermit::test_issue(&spec, &input_root).unwrap();
-    let mut ledger = FileEvaluationExecutionLedger::initialize(
+    let material_set_sha256 = ProductionSpecPermit::test_issue(&spec, &input_root)
+        .unwrap()
+        .material_set_sha256()
+        .to_owned();
+    let request = ProductionExecutionRequest::new(
+        &spec,
+        &input_root,
         &ledger_root,
         [9; 32],
-        EvaluationExecutionBinding::new(EvaluationExecutionBindingRequest {
-            live_context_id: spec.live_context_id().to_owned(),
-            candidate_id: spec.candidate_id().to_owned(),
-            spec_sha256: spec.spec_sha256().to_owned(),
-            task_set_sha256: spec.task_set_sha256().to_owned(),
-            execution_session_id: format!("sha256:{}", "7".repeat(64)),
-            execution_material_set_sha256: permit.material_set_sha256().to_owned(),
-            artifact_root_sha256: format!("sha256:{}", "8".repeat(64)),
-        })
-        .unwrap(),
-    )
-    .unwrap();
-    let error = runtime::execute_production(
-        &permit,
-        format!("sha256:{}", "7".repeat(64)),
-        RuntimeConfiguration::all_unknown(),
-        &mut ledger,
-        &mut LateSwapBridge {
-            dataset: input_root.join("datasets/core.json"),
+        ProductionEvidenceRequest {
+            task_authority_id: "evaluation-test-authority".to_owned(),
+            task_principal_id: "evaluation-test-author".to_owned(),
+            task_session_id: format!("sha256:{}", "1".repeat(64)),
+            provenance_authority_id: "evaluation-test-provenance-authority".to_owned(),
+            provenance_principal_id: "evaluation-test-provenance".to_owned(),
+            provenance_session_id: format!("sha256:{}", "2".repeat(64)),
+            grader_authority_id: "evaluation-test-grader-authority".to_owned(),
+            grader_principal_id: "evaluation-test-grader".to_owned(),
+            grader_session_id: format!("sha256:{}", "3".repeat(64)),
         },
-    )
-    .unwrap_err();
-    assert_eq!(error.code(), "evaluation-production-input-changed");
-    assert!(
-        matches!(ledger.inspect().unwrap(), EvaluationLedgerState::Interrupted { causal_code } if causal_code == "evaluation-production-input-changed")
+        format!("sha256:{}", "7".repeat(64)),
+        format!("sha256:{}", "8".repeat(64)),
+        RuntimeConfiguration::all_unknown(),
     );
+    let error = request
+        .execute(&mut LateSwapBridge {
+            dataset: input_root.join("datasets/core.json"),
+        })
+        .unwrap_err();
+    assert_eq!(error.code(), "evaluation-production-input-changed");
+    assert!(matches!(FileEvaluationExecutionLedger::open(
+            &ledger_root,
+            [9; 32],
+            EvaluationExecutionBinding::new(EvaluationExecutionBindingRequest {
+                live_context_id: spec.live_context_id().to_owned(),
+                candidate_id: spec.candidate_id().to_owned(),
+                spec_sha256: spec.spec_sha256().to_owned(),
+                task_set_sha256: spec.task_set_sha256().to_owned(),
+                execution_session_id: format!("sha256:{}", "7".repeat(64)),
+                execution_material_set_sha256: material_set_sha256,
+                artifact_root_sha256: format!("sha256:{}", "8".repeat(64)),
+            })
+            .unwrap(),
+        )
+            .unwrap()
+            .inspect()
+            .unwrap(), EvaluationLedgerState::Interrupted { causal_code } if causal_code == "evaluation-production-input-changed"));
     fs::remove_dir_all(input_root).unwrap();
     fs::remove_dir_all(ledger_root).unwrap();
 }

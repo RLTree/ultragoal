@@ -1,5 +1,5 @@
 impl FileEvaluationExecutionLedger {
-    pub fn initialize(
+    fn initialize(
         root: impl AsRef<Path>,
         key: [u8; 32],
         binding: EvaluationExecutionBinding,
@@ -7,7 +7,7 @@ impl FileEvaluationExecutionLedger {
         initialize_execution_ledger(root.as_ref().to_path_buf(), key, binding)
     }
 
-    pub fn open(
+    fn open(
         root: impl AsRef<Path>,
         key: [u8; 32],
         binding: EvaluationExecutionBinding,
@@ -60,7 +60,7 @@ impl FileEvaluationExecutionLedger {
 
     /// Read-only authenticated inspection. This does not create lock, temp,
     /// recovery, or audit files.
-    pub fn inspect(&self) -> Result<EvaluationLedgerState, EvaluationLedgerError> {
+    fn inspect(&self) -> Result<EvaluationLedgerState, EvaluationLedgerError> {
         self.validate_descriptors()?;
         let _guard = FileLock::exclusive(&self.lock)?;
         self.validate_descriptors()?;
@@ -71,12 +71,12 @@ impl FileEvaluationExecutionLedger {
         Ok(state)
     }
 
-    pub fn reserve(&mut self) -> Result<(), EvaluationLedgerError> {
+    fn reserve(&mut self) -> Result<(), EvaluationLedgerError> {
         let reservation_id_sha256 =
             sha256(&serde_json::to_vec(&self.binding).map_err(|_| {
                 EvaluationLedgerError::new("evaluation-ledger-serialization-failed")
             })?);
-        self.transition(Some(reservation_id_sha256), |state| match state {
+        self.transition(Some(Some(reservation_id_sha256)), |state| match state {
             EvaluationLedgerState::Initialized => Ok(EvaluationLedgerState::Reserved),
             _ => Err(EvaluationLedgerError::new(
                 "evaluation-execution-reservation-conflict",
@@ -84,7 +84,7 @@ impl FileEvaluationExecutionLedger {
         })
     }
 
-    pub fn reserve_outcome(
+    fn reserve_outcome(
         &mut self,
         reservation_id: &str,
     ) -> Result<ExecutionReservationOutcome, EvaluationLedgerError> {
@@ -205,7 +205,7 @@ impl FileEvaluationExecutionLedger {
         &self.binding
     }
 
-    pub fn publish_result(
+    fn publish_result(
         &mut self,
         run_sha256: impl Into<String>,
         artifact_set_sha256: impl Into<String>,
@@ -228,7 +228,7 @@ impl FileEvaluationExecutionLedger {
         })
     }
 
-    pub fn mark_interrupted(
+    fn mark_interrupted(
         &mut self,
         causal_code: impl Into<String>,
     ) -> Result<(), EvaluationLedgerError> {

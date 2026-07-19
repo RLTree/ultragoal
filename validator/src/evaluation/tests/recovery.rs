@@ -1,3 +1,4 @@
+use super::super::runtime::{FixtureEvaluationBridge, FixtureTaskRequest};
 use super::super::*;
 use super::custody::{execution_binding, root};
 use sha2::{Digest, Sha256};
@@ -67,28 +68,50 @@ fn preparation_spec(input_root: &std::path::Path) -> EvaluationSpec {
     .unwrap()
 }
 
+struct RefusingBridge;
+
+impl super::super::runtime::bridge_authority::Sealed for RefusingBridge {}
+
+impl FixtureEvaluationBridge for RefusingBridge {
+    fn execute_fixture(
+        &mut self,
+        _: &FixtureTaskRequest,
+    ) -> Result<crate::fixture_scheduler::FixtureExecutionRecord, ProductionRuntimeError> {
+        Err(ProductionRuntimeError::bridge(
+            "evaluation-test-bridge-refused",
+        ))
+    }
+}
+
 #[test]
-fn preparation_refuses_a_ledger_binding_that_omits_material_identity() {
+fn preparation_issues_private_authority_and_derives_material_binding() {
     let input_root = root("preparation-input");
     let ledger_root = root("preparation-ledger");
     let spec = preparation_spec(&input_root);
-    let authority = super::super::production_input::ProductionEvidenceAuthority::test_issue(&spec);
+    let evidence = super::super::production_input::ProductionEvidenceRequest {
+        task_authority_id: "evaluation-test-authority".to_owned(),
+        task_principal_id: "evaluation-test-author".to_owned(),
+        task_session_id: sha('1'),
+        provenance_authority_id: "evaluation-test-provenance-authority".to_owned(),
+        provenance_principal_id: "evaluation-test-provenance".to_owned(),
+        provenance_session_id: sha('2'),
+        grader_authority_id: "evaluation-test-grader-authority".to_owned(),
+        grader_principal_id: "evaluation-test-grader".to_owned(),
+        grader_session_id: sha('3'),
+    };
     let request = super::super::runtime::ProductionExecutionRequest::new(
         &spec,
         &input_root,
         &ledger_root,
         [9; 32],
-        execution_binding('b', '1'),
-        authority,
+        evidence,
         sha('1'),
+        sha('8'),
         RuntimeConfiguration::all_unknown(),
     );
-    let error = match request.prepare() {
-        Ok(_) => panic!("preparation accepted a mismatched material identity"),
-        Err(error) => error,
-    };
-    assert_eq!(error.code(), "evaluation-production-ledger-binding-invalid");
-    assert!(fs::read_dir(&ledger_root).unwrap().next().is_none());
+    let error = request.execute(&mut RefusingBridge).unwrap_err();
+    assert_eq!(error.code(), "evaluation-test-bridge-refused");
+    assert!(fs::read_dir(&ledger_root).unwrap().next().is_some());
     fs::remove_dir_all(input_root).unwrap();
     fs::remove_dir_all(ledger_root).unwrap();
 }
@@ -125,6 +148,10 @@ fn execution_interruption_recovers_without_a_publication() {
         reopened.inspect().unwrap(),
         EvaluationLedgerState::Initialized
     ));
+    assert_eq!(
+        reopened.reserve_outcome(&sha('8')).unwrap(),
+        ExecutionReservationOutcome::Acquired
+    );
     fs::remove_dir_all(root).unwrap();
 }
 

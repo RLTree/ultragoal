@@ -7,13 +7,14 @@ mod execution;
 #[path = "production_input/material.rs"]
 mod material;
 
-pub(crate) use evidence_authority::ProductionEvidenceAuthority;
+#[cfg(test)]
+pub(crate) use evidence_authority::ProductionEvidenceRequest;
 pub(crate) use execution::ProductionExecutionRequest;
 pub(crate) use material::AuthenticatedTaskMaterial;
 
 use super::{EvaluationError, EvaluationSpec, EvaluationTask, TaskAudit, digest};
 use descriptor::{ProtectedProductionInput, open_production_root, production_identity};
-use evidence_authority::AuthorizedEvidenceBinding;
+use evidence_authority::{AuthorizedEvidenceBinding, ProductionEvidenceAuthority};
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 
@@ -40,7 +41,20 @@ pub(crate) struct ProductionSpecPermit<'a> {
 }
 
 impl<'a> ProductionSpecPermit<'a> {
-    pub(crate) fn issue(
+    #[cfg(test)]
+    pub(super) fn issue_from_evidence(
+        spec: &'a EvaluationSpec,
+        root: impl AsRef<std::path::Path>,
+        evidence: ProductionEvidenceRequest,
+    ) -> Result<Self, EvaluationError> {
+        Self::issue(
+            spec,
+            root,
+            ProductionEvidenceAuthority::issue(spec, evidence)?,
+        )
+    }
+
+    pub(super) fn issue(
         spec: &'a EvaluationSpec,
         root: impl AsRef<std::path::Path>,
         authority: ProductionEvidenceAuthority,

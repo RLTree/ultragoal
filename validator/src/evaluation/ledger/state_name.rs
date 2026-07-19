@@ -11,7 +11,7 @@ const ANCHOR_GENESIS: &[u8] = b"evaluation-anchor-journal-genesis";
 type HmacSha256 = Hmac<Sha256>;
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-pub struct EvaluationExecutionBinding {
+pub(crate) struct EvaluationExecutionBinding {
     pub live_context_id: String,
     pub candidate_id: String,
     pub spec_sha256: String,
@@ -21,7 +21,7 @@ pub struct EvaluationExecutionBinding {
     pub artifact_root_sha256: String,
 }
 
-pub struct EvaluationExecutionBindingRequest {
+pub(crate) struct EvaluationExecutionBindingRequest {
     pub live_context_id: String,
     pub candidate_id: String,
     pub spec_sha256: String,
@@ -32,7 +32,9 @@ pub struct EvaluationExecutionBindingRequest {
 }
 
 impl EvaluationExecutionBinding {
-    pub fn new(request: EvaluationExecutionBindingRequest) -> Result<Self, EvaluationLedgerError> {
+    pub(crate) fn new(
+        request: EvaluationExecutionBindingRequest,
+    ) -> Result<Self, EvaluationLedgerError> {
         let EvaluationExecutionBindingRequest {
             live_context_id,
             candidate_id,
@@ -73,7 +75,7 @@ impl EvaluationExecutionBinding {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(tag = "state", rename_all = "snake_case")]
-pub enum EvaluationLedgerState {
+pub(crate) enum EvaluationLedgerState {
     Initialized,
     Reserved,
     Published {
@@ -96,7 +98,7 @@ pub enum EvaluationLedgerState {
 /// execution journal.  Callers must preserve the losing outcome instead of
 /// inferring success from a later state read.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum ExecutionReservationOutcome {
+pub(crate) enum ExecutionReservationOutcome {
     Acquired,
     Lost {
         causal_code: &'static str,
@@ -119,7 +121,7 @@ pub enum ExecutionReservationOutcome {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct EvaluationLedgerError {
+pub(crate) struct EvaluationLedgerError {
     code: &'static str,
 }
 
@@ -128,7 +130,7 @@ impl EvaluationLedgerError {
         Self { code }
     }
 
-    pub fn code(&self) -> &'static str {
+    pub(crate) fn code(&self) -> &'static str {
         self.code
     }
 }
@@ -150,7 +152,7 @@ pub(crate) struct ExecutionTerminalProof {
 }
 
 #[derive(Debug)]
-pub struct FileEvaluationExecutionLedger {
+struct FileEvaluationExecutionLedger {
     root_path: PathBuf,
     root: File,
     root_identity: FileIdentity,

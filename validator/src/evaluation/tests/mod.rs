@@ -2,6 +2,7 @@ mod controls;
 mod custody;
 mod initialization;
 mod journal;
+mod privacy;
 mod promotion_recovery;
 mod recovery;
 mod research;

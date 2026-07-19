@@ -7,7 +7,7 @@ mod seal {
 
 /// Domain-sealed evidence authority. Its fields and seal are deliberately not
 /// exposed outside evaluation; production issuance needs a root-owned adapter.
-pub(crate) struct ProductionEvidenceAuthority {
+pub(super) struct ProductionEvidenceAuthority {
     live_context_id: String,
     candidate_id: String,
     spec_sha256: String,
@@ -24,6 +24,19 @@ pub(crate) struct ProductionEvidenceAuthority {
     _seal: seal::Seal,
 }
 
+#[cfg(test)]
+pub(crate) struct ProductionEvidenceRequest {
+    pub task_authority_id: String,
+    pub task_principal_id: String,
+    pub task_session_id: String,
+    pub provenance_authority_id: String,
+    pub provenance_principal_id: String,
+    pub provenance_session_id: String,
+    pub grader_authority_id: String,
+    pub grader_principal_id: String,
+    pub grader_session_id: String,
+}
+
 pub(super) struct AuthorizedEvidenceBinding {
     pub(super) task_authority_id: String,
     pub(super) task_principal_id: String,
@@ -37,7 +50,31 @@ pub(super) struct AuthorizedEvidenceBinding {
 }
 
 impl ProductionEvidenceAuthority {
-    pub(crate) fn consume(
+    #[cfg(test)]
+    pub(super) fn issue(
+        spec: &EvaluationSpec,
+        request: ProductionEvidenceRequest,
+    ) -> Result<Self, EvaluationError> {
+        let mut authority = Self {
+            live_context_id: spec.live_context_id().to_owned(),
+            candidate_id: spec.candidate_id().to_owned(),
+            spec_sha256: spec.spec_sha256().to_owned(),
+            task_authority_id: request.task_authority_id,
+            task_principal_id: request.task_principal_id,
+            task_session_id: request.task_session_id,
+            provenance_authority_id: request.provenance_authority_id,
+            provenance_principal_id: request.provenance_principal_id,
+            provenance_session_id: request.provenance_session_id,
+            grader_authority_id: request.grader_authority_id,
+            grader_principal_id: request.grader_principal_id,
+            grader_session_id: request.grader_session_id,
+            binding_sha256: String::new(),
+            _seal: seal::Seal,
+        };
+        authority.binding_sha256 = authority_binding_sha256(&authority);
+        Ok(authority)
+    }
+    pub(super) fn consume(
         self,
         spec: &EvaluationSpec,
     ) -> Result<AuthorizedEvidenceBinding, EvaluationError> {

@@ -19,9 +19,11 @@ pub(crate) mod runtime;
 #[cfg(test)]
 mod tests;
 
-pub use ledger::{
+#[cfg(test)]
+pub(super) use ledger::TestFileEvaluationExecutionLedger as FileEvaluationExecutionLedger;
+pub(crate) use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
-    EvaluationLedgerState, ExecutionReservationOutcome, FileEvaluationExecutionLedger,
+    EvaluationLedgerState, ExecutionReservationOutcome,
 };
 pub use promotion_ledger::{
     FilePromotionReviewLedger, PromotionLedgerBinding, PromotionLedgerState,
