@@ -129,7 +129,7 @@ impl ProductionEvidenceAuthority {
     }
 
     #[cfg(test)]
-    pub(crate) fn test_issue(spec: &EvaluationSpec) -> Self {
+    pub(super) fn test_issue(spec: &EvaluationSpec) -> Self {
         let mut authority = Self {
             live_context_id: spec.live_context_id().to_owned(),
             candidate_id: spec.candidate_id().to_owned(),

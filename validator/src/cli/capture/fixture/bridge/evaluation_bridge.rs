@@ -38,7 +38,7 @@ impl FixtureEvaluationBridge for ScheduledFixtureEvaluationBridge {
             .map_err(|_| ProductionRuntimeError::bridge("evaluation-fixture-schedule-failed"))?
             .pop()
             .ok_or_else(|| ProductionRuntimeError::bridge("evaluation-fixture-lease-missing"))?;
-        let (disposition, record) = match self.scheduler.execute_recorded(&lease_id, &adapter) {
+        let (disposition, _record) = match self.scheduler.execute_recorded(&lease_id, &adapter) {
             Ok(executed) => executed,
             Err(_) => {
                 if self.scheduler.recover(&lease_id).is_err() {
@@ -55,7 +55,6 @@ impl FixtureEvaluationBridge for ScheduledFixtureEvaluationBridge {
         if disposition != RunDisposition::Accepted {
             if disposition == RunDisposition::CleanupFailure {
                 self.recovery_required.insert(lease_id.clone());
-                self.recovery_records.insert(lease_id, record);
                 return Err(ProductionRuntimeError::bridge(
                     "evaluation-fixture-recovery-required",
                 ));

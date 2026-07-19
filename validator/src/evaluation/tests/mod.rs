@@ -1,3 +1,4 @@
+mod contract;
 mod controls;
 mod custody;
 mod initialization;
@@ -7,3 +8,4 @@ mod promotion_recovery;
 mod recovery;
 mod research;
 mod runtime;
+mod runtime_contract;

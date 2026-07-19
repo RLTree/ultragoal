@@ -53,7 +53,7 @@ impl<'a> ProductionSpecPermit<'a> {
         )
     }
 
-    pub(super) fn issue(
+    fn issue(
         spec: &'a EvaluationSpec,
         root: impl AsRef<std::path::Path>,
         authority: ProductionEvidenceAuthority,
