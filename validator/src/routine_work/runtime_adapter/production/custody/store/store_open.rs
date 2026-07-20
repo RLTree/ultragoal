@@ -18,7 +18,7 @@ impl Store {
         let opened = directory
             .metadata()
             .map_err(|_| error("routine-production-authority-root-stat-failed"))?;
-        let expected_uid = unsafe { libc::geteuid() };
+        let expected_uid = current_user_id();
         if !opened.is_dir()
             || opened.dev() != path_metadata.dev()
             || opened.ino() != path_metadata.ino()
@@ -56,7 +56,7 @@ impl Store {
             || !path.is_dir()
             || root_identity(&path) != self.identity
             || root_identity(&opened) != self.identity
-            || path.uid() != unsafe { libc::geteuid() }
+            || path.uid() != current_user_id()
             || path.mode() & 0o7777 != 0o700
             || fs::canonicalize(&self.requested_root)
                 .map_err(|_| error("routine-production-authority-root-replaced"))?
@@ -105,6 +105,8 @@ impl Store {
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;
+        // SAFETY: `name` is a validated NUL-terminated relative name and the
+        // directory descriptor was opened with no-follow protections.
         let descriptor = unsafe {
             libc::openat(
                 self.directory.as_raw_fd(),
@@ -124,12 +126,15 @@ impl Store {
                 _ => error("routine-production-authority-entry-create-failed"),
             });
         }
+        // SAFETY: successful `openat` returns a newly owned descriptor.
         Ok(unsafe { File::from_raw_fd(descriptor) })
     }
     pub(super) fn open_existing(&self, name: &str, flags: i32) -> Result<File, RoutineError> {
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;
+        // SAFETY: `name` is a validated NUL-terminated relative name and the
+        // directory descriptor was opened with no-follow protections.
         let descriptor = unsafe {
             libc::openat(
                 self.directory.as_raw_fd(),
@@ -140,6 +145,7 @@ impl Store {
         if descriptor < 0 {
             return Err(error("routine-production-authority-entry-open-failed"));
         }
+        // SAFETY: successful `openat` returns a newly owned descriptor.
         Ok(unsafe { File::from_raw_fd(descriptor) })
     }
     pub(super) fn exact_identity(
@@ -156,7 +162,7 @@ impl Store {
             .ok_or_else(|| error("routine-production-authority-entry-missing"))?;
         let opened = file_identity(&opened);
         if opened != path
-            || opened.owner != unsafe { libc::geteuid() }
+            || opened.owner != current_user_id()
             || opened.mode & u32::from(libc::S_IFMT) != u32::from(libc::S_IFREG)
             || opened.mode & 0o7777 != mode
             || opened.links != 1
@@ -165,4 +171,9 @@ impl Store {
         }
         Ok(opened)
     }
+}
+
+pub(super) fn current_user_id() -> u32 {
+    // SAFETY: `geteuid` only reads this process's credential and takes no pointers.
+    unsafe { libc::geteuid() }
 }

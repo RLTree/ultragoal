@@ -6,6 +6,13 @@ pub(super) struct PublicationContext<'a> {
     failure: Option<&'a ReservationFailureEvidence>,
 }
 
+struct AmbiguityPublication<'a> {
+    key: &'a LedgerKey,
+    ambiguity: DurableAmbiguity,
+    context: PublicationContext<'a>,
+    tick: u64,
+}
+
 impl<'a> PublicationContext<'a> {
     pub(super) fn read() -> Self {
         Self {
@@ -113,11 +120,13 @@ impl FileLedger {
                     return self.persist_ambiguity(
                         local,
                         payload,
-                        &key,
                         value,
-                        ambiguity.clone(),
-                        context,
-                        tick,
+                        AmbiguityPublication {
+                            key: &key,
+                            ambiguity: ambiguity.clone(),
+                            context,
+                            tick,
+                        },
                     );
                 }
                 (_, Ok(_) | Err(_)) => {
@@ -175,12 +184,15 @@ impl FileLedger {
         &self,
         local: &mut LocalHead,
         mut payload: Payload,
-        key: &LedgerKey,
         value: T,
-        ambiguity: DurableAmbiguity,
-        context: PublicationContext<'_>,
-        tick: u64,
+        publication: AmbiguityPublication<'_>,
     ) -> Result<DurableWrite<T>, RoutineError> {
+        let AmbiguityPublication {
+            key,
+            ambiguity,
+            context,
+            tick,
+        } = publication;
         let grant_id = context
             .grant_id
             .ok_or_else(|| error("routine-production-ambiguity-attempt-unbound"))?;

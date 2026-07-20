@@ -1,3 +1,4 @@
+use super::store_open::current_user_id;
 use super::*;
 
 #[cfg(test)]
@@ -52,7 +53,7 @@ impl Store {
                     .metadata()
                     .map_err(|_| error("routine-production-authority-entry-stat-failed"))?,
             );
-            if identity.owner != unsafe { libc::geteuid() }
+            if identity.owner != current_user_id()
                 || identity.mode & u32::from(libc::S_IFMT) != u32::from(libc::S_IFREG)
                 || identity.mode & 0o7777 != 0o600
                 || identity.links != 1
@@ -110,6 +111,8 @@ impl Store {
             Ok(name) => name,
             Err(_) => return false,
         };
+        // SAFETY: `name` was validated and the descriptor remains bound to the
+        // authority directory; identity equality above prevents deleting another entry.
         (unsafe { libc::unlinkat(self.directory.as_raw_fd(), name.as_ptr(), 0) }) == 0
             && self.directory.sync_all().is_ok()
     }

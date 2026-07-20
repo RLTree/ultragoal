@@ -24,7 +24,7 @@ impl DurableCustody {
                 supported::record_authentication::FileLedger::open_or_initialize(root)?;
             let token = token(spec);
             let write = inner.reserve(&mut head, &token)?;
-            return match write {
+            match write {
                 DurableWrite::Committed(expires_tick) => {
                     token.expires_tick.set(expires_tick);
                     Ok(Self {
@@ -41,7 +41,7 @@ impl DurableCustody {
                 DurableWrite::Ambiguous(_, _) => {
                     Err(error("routine-production-authority-publish-ambiguous"))
                 }
-            };
+            }
         }
         #[cfg(not(target_vendor = "apple"))]
         {

@@ -1,3 +1,4 @@
+use super::store_open::current_user_id;
 use super::*;
 
 pub(super) fn initial_payload(
@@ -143,13 +144,13 @@ fn valid_launch_stage(stage: &LaunchStageRecord) -> bool {
     let regular = |entry: LaunchEntryIdentity| {
         entry.device != 0
             && entry.inode != 0
-            && entry.owner == unsafe { libc::geteuid() }
+            && entry.owner == current_user_id()
             && entry.mode & u32::from(libc::S_IFMT) == u32::from(libc::S_IFREG)
             && entry.links == 1
     };
     stage.directory.device != 0
         && stage.directory.inode != 0
-        && stage.directory.owner == unsafe { libc::geteuid() }
+        && stage.directory.owner == current_user_id()
         && stage.directory.mode & u32::from(libc::S_IFMT) == u32::from(libc::S_IFDIR)
         && valid(&stage.program_sha256)
         && valid_intent(&stage.intent)

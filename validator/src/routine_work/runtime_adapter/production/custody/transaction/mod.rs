@@ -141,15 +141,17 @@ fn execute_intent(
     let child = RefCell::<Option<ChildHandle>>::new(None);
     let observation = catch_unwind(AssertUnwindSafe(|| {
         match super::super::super::mediator::prepare_authorized_process(
-            &staged.executable,
-            intent.root(),
-            intent.outputs(),
-            intent.reads(),
-            intent.argv(),
-            intent.environment(),
-            intent.framed_input().to_vec(),
-            intent.output_budget(),
-            intent.cancellation(),
+            super::super::super::mediator::AuthorizedProcessPreparation {
+                program: &staged.executable,
+                root: intent.root(),
+                outputs: intent.outputs(),
+                reads: intent.reads(),
+                argv: intent.argv(),
+                environment: intent.environment(),
+                framed_input: intent.framed_input().to_vec(),
+                output_budget: intent.output_budget(),
+                cancellation: intent.cancellation(),
+            },
         )? {
             super::super::super::mediator::PreparedProcess::Cancelled(observation) => {
                 Ok(observation)

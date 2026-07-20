@@ -81,6 +81,8 @@ pub(super) fn rename_relative(directory: &File, from: &str, to: &str) -> Result<
     let from =
         CString::new(from).map_err(|_| error("routine-production-authority-name-invalid"))?;
     let to = CString::new(to).map_err(|_| error("routine-production-authority-name-invalid"))?;
+    // SAFETY: `directory` is an open directory descriptor; both C strings were
+    // validated as single relative authority entry names before this call.
     if unsafe {
         libc::renameat(
             directory.as_raw_fd(),
@@ -132,6 +134,7 @@ pub(super) fn stat_identity(stat: &libc::stat) -> FileIdentity {
 
 pub(super) fn descriptor_path(file: &File) -> Result<PathBuf, RoutineError> {
     let mut bytes = vec![0u8; libc::PATH_MAX as usize];
+    // SAFETY: the file descriptor is live, and `bytes` is writable PATH_MAX storage.
     if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_GETPATH, bytes.as_mut_ptr()) } != 0 {
         return Err(error(
             "routine-production-authority-root-descriptor-path-failed",
