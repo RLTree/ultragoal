@@ -910,6 +910,12 @@ raw-authority marker, and public-output callers; they do not add diagnostics,
 public behavior, or authority. The control-plane repair ceiling remains
 source-only and withheld.
 
+The complete compiler-directed caller audit added two final internal adapters:
+the lease-issuance caller of the recorded Git change-impact query and the
+research-record caller of the bundled configuration row values. These are
+support-only paths with no public or claim authority; further caller-scope
+expansion is not authorized.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
