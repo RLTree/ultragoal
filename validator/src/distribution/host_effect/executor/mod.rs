@@ -29,14 +29,13 @@ pub(crate) use model::{
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };
-#[cfg(test)]
 use process::NativeRetainedDescriptorProcessBackend;
 use process::RetainedDescriptorProcessBackend;
 pub(crate) use target::ConfinedHostEffectTarget;
 
 use self::model::{
-    digest_json, CommandCaptureDigest, PostReservationRecoveryRequest,
-    TerminalTransitionRecoveryRequest,
+    CommandCaptureDigest, PostReservationRecoveryRequest, TerminalTransitionRecoveryRequest,
+    digest_json,
 };
 use self::process::BackendFailure;
 use self::target::{CommittedPublication, PublicationFailure};

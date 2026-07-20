@@ -11,19 +11,14 @@ mod binding;
 mod coordinator;
 mod recovery;
 
-#[cfg(test)]
 pub(in crate::distribution::host_effect) use binding::HostEffectAcceptanceRequest;
-#[cfg(test)]
 pub(crate) use binding::{
     AcceptedHostEffect, AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy,
 };
 pub(crate) use binding::{AcceptedHostScope, HostObjectIdentity, ObservedTargetIdentity};
-#[cfg(test)]
 pub(in crate::distribution::host_effect) use coordinator::HostEffectPreparationRequest;
-#[cfg(test)]
 pub(crate) use coordinator::TrustedTimeSample;
-#[cfg(test)]
 pub(crate) use coordinator::{
     DescriptorExecutionAdapter, DescriptorExecutionPrimitive, SupportedHostLifecycleCoordinator,
 };

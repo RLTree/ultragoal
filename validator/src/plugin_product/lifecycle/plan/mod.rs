@@ -160,7 +160,6 @@ pub(super) fn plan_digest(
     Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
 }
 
-#[cfg(test)]
 pub(super) fn record_writes_host_state(effects: &[LifecycleEffect]) -> bool {
     transitions::writes_host_state(effects)
 }

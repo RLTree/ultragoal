@@ -31,7 +31,7 @@ impl std::fmt::Debug for SupportedHostEffectExecutor<'_> {
 }
 
 impl<'a> SupportedHostEffectExecutor<'a> {
-    fn new(
+    pub(in crate::distribution::host_effect) fn new(
         ledger: &'a dyn DurableHostEffectLedger,
         target: ConfinedHostEffectTarget,
         backend: &'a mut dyn RetainedDescriptorProcessBackend,

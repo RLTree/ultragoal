@@ -17,7 +17,9 @@ pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
     command_plan: Option<HostCommandPlan>,
     pre_effect_record: HostLifecycleRecord,
+    command_cursor: usize,
     effect_cursor: usize,
+    custody_phase: u8,
 }
 
 impl HostLifecycleCustody {
@@ -44,12 +46,16 @@ impl HostLifecycleCustody {
                 command_plan: HostCommandPlanRecord::from_plan(&binding.command_plan),
                 scope_sha256: binding.scope_sha256,
                 host_capability_sha256: binding.host_capability_sha256,
+                command_cursor: 0,
                 effect_cursor: 0,
+                custody_phase: 0,
                 expected_observations: binding.expected_observations,
             },
             plan,
             command_plan: Some(binding.command_plan),
+            command_cursor: 0,
             effect_cursor: 0,
+            custody_phase: 0,
         })
     }
 
@@ -57,12 +63,14 @@ impl HostLifecycleCustody {
         &mut self,
         admission: &DurableHostLifecycleAdmission,
     ) -> Result<HostEffectExecutionBinding, LifecycleError> {
-        if self.effect_cursor != 0 || admission.record() != &self.pre_effect_record {
+        if self.custody_phase != 0 || admission.record() != &self.pre_effect_record {
             return Err(LifecycleError::ReplayedPlan);
         }
         self.plan.authorization_seal.consume_transferred()?;
-        self.effect_cursor = 1;
-        debug_assert_eq!(self.pre_effect_record.effect_cursor, 0);
+        self.custody_phase = 1;
+        debug_assert_eq!(self.pre_effect_record.custody_phase(), 0);
+        debug_assert_eq!(self.pre_effect_record.command_cursor(), 0);
+        debug_assert_eq!(self.pre_effect_record.effect_cursor(), 0);
         Ok(HostEffectExecutionBinding {
             record: self.pre_effect_record.clone(),
         })
@@ -115,7 +123,7 @@ impl HostLifecycleCustody {
         &mut self,
         completion: HostEffectCompletion,
     ) -> Result<(), LifecycleError> {
-        if self.effect_cursor != 1 || completion.binding() != &self.pre_effect_record {
+        if self.custody_phase != 1 || completion.binding() != &self.pre_effect_record {
             return Err(LifecycleError::InvalidTransition);
         }
         let exact_recovery_state = match completion.outcome() {
@@ -135,16 +143,23 @@ impl HostLifecycleCustody {
             } if observed == &self.plan.expected_after
                 && completed_effects == &self.plan.effects =>
             {
+                if completion.effect_cursor() != self.plan.effects.len() {
+                    return Err(LifecycleError::InvalidTransition);
+                }
                 if !observations.matches(self.pre_effect_record.expected_observations()) {
                     return Err(LifecycleError::InvalidTransition);
                 }
                 self.plan.authorization_seal.finish_apply(None)?;
             }
             HostEffectCompletionOutcome::Ambiguous {
+                completed_effects,
                 observed,
                 observations,
                 ..
             } if exact_recovery_state.as_ref() == Some(observed) => {
+                if completion.effect_cursor() != completed_effects.len() {
+                    return Err(LifecycleError::InvalidTransition);
+                }
                 if !observations.matches(self.pre_effect_record.expected_observations()) {
                     return Err(LifecycleError::InvalidTransition);
                 }
@@ -152,12 +167,21 @@ impl HostLifecycleCustody {
             }
             _ => return Err(LifecycleError::InvalidTransition),
         }
-        self.effect_cursor = 2;
+        let command_cursor = completion.observations().command_cursor();
+        let effect_cursor = completion.effect_cursor();
+        if command_cursor > self.command_plan.as_ref().map_or(0, HostCommandPlan::len)
+            || effect_cursor > self.plan.effects.len()
+        {
+            return Err(LifecycleError::InvalidTransition);
+        }
+        self.command_cursor = command_cursor;
+        self.effect_cursor = effect_cursor;
+        self.custody_phase = 2;
         Ok(())
     }
 
     pub(crate) fn recovery_token(&self) -> Result<super::model::RecoveryToken, LifecycleError> {
-        if self.effect_cursor != 2 {
+        if self.custody_phase != 2 {
             return Err(LifecycleError::RecoveryUnavailable);
         }
         super::execution::recovery_token(&self.plan)

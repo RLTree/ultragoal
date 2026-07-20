@@ -11,7 +11,6 @@ pub struct HostCommand {
 }
 
 impl HostCommand {
-    #[cfg(test)]
     pub(crate) fn from_untrusted_record(
         program: String,
         argv: Vec<String>,
@@ -139,9 +138,12 @@ impl HostCommandPlan {
         &self.commands
     }
 
-    #[cfg(test)]
     pub(crate) fn package(&self) -> &PackageIdentity {
         &self.package
+    }
+
+    pub(crate) fn len(&self) -> usize {
+        self.commands.len()
     }
 
     pub fn plan_sha256(&self) -> &str {

@@ -96,6 +96,10 @@ impl HostLifecycleObservedBundle {
             && self.runtime_sha256 == expected.runtime_sha256
             && self.command_outcomes.len() == expected.command_count
     }
+
+    pub(crate) fn command_cursor(&self) -> usize {
+        self.command_outcomes.len()
+    }
 }
 
 fn is_observation_digest(value: &str) -> bool {

@@ -16,7 +16,6 @@ impl PlanAuthorizationSeal {
         }
     }
 
-    #[cfg(test)]
     pub(super) fn issuance_id(&self) -> Result<u64, LifecycleError> {
         let Self::Sealed(data) = self else {
             return Err(LifecycleError::UnsealedPlan);
@@ -39,7 +38,6 @@ impl PlanAuthorizationSeal {
             .map_err(|_| LifecycleError::ReplayedPlan)
     }
 
-    #[cfg(test)]
     pub(super) fn transfer_to_host(&self) -> Result<(), LifecycleError> {
         let Self::Sealed(data) = self else {
             return Err(LifecycleError::UnsealedPlan);
@@ -55,7 +53,6 @@ impl PlanAuthorizationSeal {
             .map_err(|_| LifecycleError::ReplayedPlan)
     }
 
-    #[cfg(test)]
     pub(super) fn consume_transferred(&self) -> Result<(), LifecycleError> {
         let Self::Sealed(data) = self else {
             return Err(LifecycleError::UnsealedPlan);

@@ -19,7 +19,6 @@ pub(crate) use authority::{
 pub(crate) use executor::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
 };
-#[cfg(test)]
 pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;

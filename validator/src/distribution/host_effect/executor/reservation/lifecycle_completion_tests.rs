@@ -36,6 +36,7 @@ fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {
                     Vec::new(),
                 )
                 .unwrap(),
+                custody.effects().len(),
             ))
             .is_ok()
     );
@@ -89,6 +90,7 @@ fn ambiguous_terminal_observation_arms_recovery_after_durable_admission() {
                     Vec::new(),
                 )
                 .unwrap(),
+                1,
             ))
             .is_ok()
     );

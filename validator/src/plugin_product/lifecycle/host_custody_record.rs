@@ -6,7 +6,6 @@ pub(crate) struct HostCommandPlanRecord {
     plan_sha256: String,
 }
 
-#[cfg(test)]
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawHostCommandPlanRecord {
@@ -15,7 +14,6 @@ struct RawHostCommandPlanRecord {
     plan_sha256: String,
 }
 
-#[cfg(test)]
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct RawHostCommand {
@@ -26,7 +24,6 @@ struct RawHostCommand {
     max_attempts: u8,
 }
 
-#[cfg(test)]
 impl<'de> Deserialize<'de> for HostCommandPlanRecord {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -142,7 +139,9 @@ pub(crate) struct HostLifecycleRecord {
     command_plan: HostCommandPlanRecord,
     scope_sha256: String,
     host_capability_sha256: String,
+    command_cursor: usize,
     effect_cursor: usize,
+    custody_phase: u8,
     expected_observations: HostLifecycleExpectedObservations,
 }
 
@@ -163,7 +162,9 @@ impl HostLifecycleRecord {
             || self.issuance_id == 0
             || self.effects.is_empty()
             || super::plan::record_writes_host_state(&self.effects) != self.writes_host_state
+            || self.command_cursor > self.command_plan.commands.len()
             || self.effect_cursor > self.effects.len()
+            || self.custody_phase > 2
             || !is_digest(&self.scope_sha256)
             || !is_digest(&self.host_capability_sha256)
             || self.expected_observations.validate().is_err()
@@ -208,6 +209,18 @@ impl HostLifecycleRecord {
 
     pub(crate) fn command_plan_sha256(&self) -> &str {
         self.command_plan.plan_sha256()
+    }
+
+    pub(crate) const fn command_cursor(&self) -> usize {
+        self.command_cursor
+    }
+
+    pub(crate) const fn custody_phase(&self) -> u8 {
+        self.custody_phase
+    }
+
+    pub(crate) const fn effect_cursor(&self) -> usize {
+        self.effect_cursor
     }
 }
 

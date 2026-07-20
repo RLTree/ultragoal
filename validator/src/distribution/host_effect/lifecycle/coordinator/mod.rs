@@ -5,13 +5,10 @@ use super::super::{
 use super::super::{HostEffectState, HostEffectTransition};
 use super::binding::{AcceptedHostEffect, HostEffectAcceptanceRequest, ObservedTargetIdentity};
 use super::recovery::{
-    issue_recovery_authorization, propose_recovery, PublicationClassification,
-    RecoveryAuthorization, RecoveryProposal,
+    PublicationClassification, RecoveryAuthorization, RecoveryProposal,
+    issue_recovery_authorization, propose_recovery,
 };
-use super::{lifecycle_error, SupportedHostLifecycleError, SupportedHostLifecycleErrorId};
-#[cfg(test)]
-use crate::plugin_product::lifecycle::HostLifecycleCustody;
-#[cfg(not(test))]
+use super::{SupportedHostLifecycleError, SupportedHostLifecycleErrorId, lifecycle_error};
 use crate::plugin_product::lifecycle::HostLifecycleCustody;
 use serde::Serialize;
 use sha2::{Digest, Sha256};

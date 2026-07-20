@@ -99,6 +99,7 @@ pub(crate) fn reserve_in_flight_lifecycle(
 pub(crate) struct HostEffectCompletion {
     binding: HostEffectExecutionBinding,
     outcome: HostEffectCompletionOutcome,
+    effect_cursor: usize,
 }
 
 pub(crate) enum HostEffectCompletionOutcome {
@@ -115,11 +116,12 @@ pub(crate) enum HostEffectCompletionOutcome {
 }
 
 impl HostEffectCompletion {
-    fn settled(
+    pub(in crate::distribution::host_effect) fn settled(
         binding: HostEffectExecutionBinding,
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
         observations: HostLifecycleObservedBundle,
+        effect_cursor: usize,
     ) -> Self {
         Self {
             binding,
@@ -128,14 +130,16 @@ impl HostEffectCompletion {
                 completed_effects,
                 observations,
             },
+            effect_cursor,
         }
     }
 
-    fn ambiguous(
+    pub(in crate::distribution::host_effect) fn ambiguous(
         binding: HostEffectExecutionBinding,
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
         observations: HostLifecycleObservedBundle,
+        effect_cursor: usize,
     ) -> Self {
         Self {
             binding,
@@ -144,6 +148,7 @@ impl HostEffectCompletion {
                 completed_effects,
                 observations,
             },
+            effect_cursor,
         }
     }
 
@@ -153,6 +158,17 @@ impl HostEffectCompletion {
 
     pub(crate) fn outcome(&self) -> &HostEffectCompletionOutcome {
         &self.outcome
+    }
+
+    pub(crate) fn observations(&self) -> &HostLifecycleObservedBundle {
+        match &self.outcome {
+            HostEffectCompletionOutcome::Settled { observations, .. }
+            | HostEffectCompletionOutcome::Ambiguous { observations, .. } => observations,
+        }
+    }
+
+    pub(crate) fn effect_cursor(&self) -> usize {
+        self.effect_cursor
     }
 }
 
