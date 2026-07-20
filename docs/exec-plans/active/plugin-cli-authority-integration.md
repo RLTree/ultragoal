@@ -973,6 +973,15 @@ The same request migration may remove the now-unused `ReadConfinement` import
 from `validator/src/routine_work/runtime_adapter/mediator/process/mod.rs`; this
 is compiler-directed support only.
 
+The final five-warning partition adds two more dependency-closed caller
+supports to this same root-only checkpoint:
+`validator/src/fixture_scheduler/scheduler/fixture/acquisition.rs` may consume
+the boxed recovery lease while preserving the scheduler's sole durable
+recovery handle, and `validator/src/routine_work/reuse/artifact.rs` may box the
+crate-private executed-result facts at their sole constructor. These are
+representation-only repairs for the exact Clippy boundary; they add no public
+API, behavior, authority, receipt, schema, dependency, or claim surface.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
