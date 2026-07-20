@@ -59,7 +59,7 @@ impl ReservationSpec {
 
 impl ReservationOwner {
     pub(super) fn reserve(
-        authority_root: &Path,
+        custody: &RoutineCustodyCapability,
         request: &RoutineEffectRequest,
         binding: AuthorityBinding,
         output_journal: OutputProvisionJournal,
@@ -87,7 +87,7 @@ impl ReservationOwner {
             output_journal,
             intents,
         };
-        let ledger = DurableCustody::reserve(authority_root, &spec)?;
+        let ledger = DurableCustody::reserve(custody, &spec)?;
         Ok(Self {
             ledger,
             started: Cell::new(false),

@@ -1,6 +1,7 @@
 use super::*;
 use crate::routine_work::runtime_adapter::mediator::RoutineContinuationOutcome;
 use crate::routine_work::runtime_adapter::production::DurableSettlement;
+use crate::routine_work::runtime_adapter::production::custody::RoutineCustodyCapability;
 use crate::routine_work::runtime_adapter::production::custody::observations::{
     ChildObservation, IntentObservation, LaunchObservation, OwnerObservation, TerminalObservation,
 };
@@ -16,11 +17,12 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Durable
 }
 impl DurableCustody {
     pub(in crate::routine_work::runtime_adapter::production::custody) fn reconcile_reserved(
-        root: &Path,
+        custody: &RoutineCustodyCapability,
         binding: &AuthorityBinding,
         attempt_grant: &str,
         expected_head: &str,
     ) -> Result<RoutineContinuationOutcome, RoutineError> {
+        let root = custody.authority_root();
         #[cfg(target_vendor = "apple")]
         {
             let (inner, mut head) =
@@ -44,14 +46,15 @@ impl DurableCustody {
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (root, binding, attempt_grant, expected_head);
+            let _ = (custody, binding, attempt_grant, expected_head);
             Err(error("routine-production-authority-host-unsupported"))
         }
     }
     pub(in crate::routine_work::runtime_adapter::production::custody) fn reserve(
-        root: &Path,
+        custody: &RoutineCustodyCapability,
         spec: &ReservationSpec,
     ) -> Result<Self, RoutineError> {
+        let root = custody.authority_root();
         #[cfg(target_vendor = "apple")]
         {
             let (inner, mut head) =
@@ -79,7 +82,7 @@ impl DurableCustody {
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (root, spec);
+            let _ = (custody, spec);
             Err(error("routine-production-authority-host-unsupported"))
         }
     }

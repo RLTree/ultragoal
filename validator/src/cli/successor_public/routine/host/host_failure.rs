@@ -1,4 +1,6 @@
 use super::*;
+use crate::routine_work::RoutineCustodyCapability;
+use crate::state::RoutineFindingBinding;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum HostFailure {
@@ -27,10 +29,10 @@ impl HostState {
         }
     }
 
-    pub(crate) fn authority_root(&self) -> &Path {
+    pub(crate) fn issue_custody_capability(&self) -> RoutineCustodyCapability {
         #[cfg(target_vendor = "apple")]
         {
-            &self.inner.authority.path
+            RoutineCustodyCapability::issue_from_host(self.inner.authority.path.clone())
         }
         #[cfg(not(target_vendor = "apple"))]
         {
@@ -60,6 +62,7 @@ impl HostState {
         recovery_marker: &str,
         attempt_grant: &str,
         authenticated_ledger_head: &str,
+        finding_binding: Option<&RoutineFindingBinding>,
     ) -> Result<(), HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
@@ -73,6 +76,7 @@ impl HostState {
                 recovery_marker,
                 attempt_grant,
                 authenticated_ledger_head,
+                finding_binding,
             )
         }
         #[cfg(not(target_vendor = "apple"))]
@@ -87,6 +91,7 @@ impl HostState {
                 recovery_marker,
                 attempt_grant,
                 authenticated_ledger_head,
+                finding_binding,
             );
             unreachable!("unsupported host state cannot be constructed")
         }
@@ -136,6 +141,7 @@ impl HostState {
         continuation: &str,
         attempt_grant: &str,
         authenticated_ledger_head: &str,
+        finding_binding: Option<&RoutineFindingBinding>,
     ) -> Result<(), HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
@@ -148,6 +154,7 @@ impl HostState {
                 continuation,
                 attempt_grant,
                 authenticated_ledger_head,
+                finding_binding,
             )
         }
         #[cfg(not(target_vendor = "apple"))]
@@ -161,6 +168,7 @@ impl HostState {
                 continuation,
                 attempt_grant,
                 authenticated_ledger_head,
+                finding_binding,
             );
             unreachable!("unsupported host state cannot be constructed")
         }

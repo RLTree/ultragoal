@@ -73,7 +73,7 @@ impl Fixture {
         set_mode(&binary, 0o555);
         set_mode(&home, 0o700);
         fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 1 }\n").unwrap();
-        fs::write(root.join(".gitignore"), b"target/\n").unwrap();
+        fs::write(root.join(".gitignore"), b"target/\nvalidation_artifacts/\n").unwrap();
 
         let graph = graph(nodes, routes);
         let catalog = catalog_bytes(nodes, graph.graph_id());

@@ -31,6 +31,7 @@ mod production_mediation;
 mod reservation_failure;
 
 use custody::AuthorityBinding;
+pub(crate) use custody::RoutineCustodyCapability;
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use custody::{
     set_test_publication_ambiguity_after, set_test_publication_refusal_after,
@@ -60,8 +61,9 @@ pub(crate) fn mediate_public_routine_execution(
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
 ) -> Result<RoutineMediationResult, RoutineError> {
+    let custody = authority_root.map(custody::issue_test_custody);
     mediate_public_routine_execution_with_control(
-        authority_root,
+        custody,
         context,
         plan,
         prepared,
@@ -72,7 +74,7 @@ pub(crate) fn mediate_public_routine_execution(
 }
 
 pub(crate) fn mediate_public_routine_execution_with_control(
-    authority_root: Option<&Path>,
+    custody: Option<RoutineCustodyCapability>,
     context: &LiveContext,
     plan: &RoutinePlan,
     prepared: PreparedRoutineExecution,
@@ -95,10 +97,9 @@ pub(crate) fn mediate_public_routine_execution_with_control(
     preflight_production_request(context, plan, &request)?;
     let reuse_supplied = !reuse.is_empty();
     let reuse = preflight_production_reuse_input(reuse, &request, reuse_supplied)?;
-    let authority_root =
-        authority_root.ok_or_else(|| error("routine-production-authority-root-missing"))?;
+    let custody = custody.ok_or_else(|| error("routine-production-authority-root-missing"))?;
     custody::mediate_reserved_effect(
-        authority_root,
+        custody,
         context,
         plan,
         request,
@@ -109,7 +110,7 @@ pub(crate) fn mediate_public_routine_execution_with_control(
 }
 
 pub(crate) fn reconcile_public_routine_reservation(
-    authority_root: &Path,
+    custody: RoutineCustodyCapability,
     context: &LiveContext,
     plan: &RoutinePlan,
     prepared: PreparedRoutineExecution,
@@ -120,5 +121,5 @@ pub(crate) fn reconcile_public_routine_reservation(
         return Err(error("routine-production-continuation-effect-required"));
     };
     preflight_production_request(context, plan, &request)?;
-    custody::reconcile_reserved_effect(authority_root, &request, attempt_grant, expected_head)
+    custody::reconcile_reserved_effect(custody, &request, attempt_grant, expected_head)
 }

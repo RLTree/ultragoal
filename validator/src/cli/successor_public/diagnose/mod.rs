@@ -6,7 +6,10 @@ use crate::cli::successor::{
 };
 use crate::context::LiveContext;
 use crate::observability::{EventQuery, EventStore};
-use crate::state::{Finding, ProductState, RoutineFindingObservation, RoutineObservationWindow};
+use crate::state::{
+    Finding, ProductState, RoutineFindingBinding, RoutineFindingObservation,
+    RoutineObservationWindow,
+};
 use serde_json::Value;
 use std::path::Path;
 
@@ -120,7 +123,19 @@ fn read_routine_observations(
         })
         .cloned()
         .collect::<Vec<_>>();
-    let observations = routine_observations_from_events(&bound_events);
+    let observations = routine_observations_from_events(&bound_events)
+        .into_iter()
+        .filter(|observation| {
+            let binding = RoutineFindingBinding {
+                finding_id: observation.finding_id.clone(),
+                repair_id: observation.repair_id.clone(),
+            };
+            state
+                .findings()
+                .iter()
+                .any(|finding| binding.matches(finding))
+        })
+        .collect();
     (observations, RoutineObservationWindow::Available)
 }
 

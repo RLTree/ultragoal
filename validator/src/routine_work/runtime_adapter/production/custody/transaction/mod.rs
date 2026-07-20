@@ -25,7 +25,7 @@ pub(in crate::routine_work::runtime_adapter::production) use store::{
 };
 
 pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_effect(
-    authority_root: &Path,
+    custody: RoutineCustodyCapability,
     context: &LiveContext,
     plan: &RoutinePlan,
     request: RoutineEffectRequest,
@@ -34,14 +34,14 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     control: super::super::PublicRoutineControl,
 ) -> Result<RoutineMediationResult, RoutineError> {
     preflight_production_request(context, plan, &request)?;
-    let launch_root = launch_root(authority_root)?;
+    let launch_root = launch_root(&custody)?;
     if !reuse.is_empty() {
         return Err(error("routine-production-session-continuity-required"));
     }
     let binding = authority_binding(&request)?;
     let scopes = allowed_output_scopes(&request);
     let journal = super::super::output_journal::observe(context.worktree_root(), &scopes)?;
-    let owner = ReservationOwner::reserve(authority_root, &request, binding, journal)?;
+    let owner = ReservationOwner::reserve(&custody, &request, binding, journal)?;
     if control == super::super::PublicRoutineControl::InterruptAfterReservation {
         return interrupted_after_reservation(&request, &owner);
     }
@@ -129,13 +129,13 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
 }
 
 pub(in crate::routine_work::runtime_adapter::production) fn reconcile_reserved_effect(
-    authority_root: &Path,
+    custody: RoutineCustodyCapability,
     request: &RoutineEffectRequest,
     attempt_grant: &str,
     expected_head: &str,
 ) -> Result<super::super::super::mediator::RoutineContinuationOutcome, RoutineError> {
     let binding = authority_binding(request)?;
-    DurableCustody::reconcile_reserved(authority_root, &binding, attempt_grant, expected_head)
+    DurableCustody::reconcile_reserved(&custody, &binding, attempt_grant, expected_head)
 }
 
 fn interrupted_after_reservation(

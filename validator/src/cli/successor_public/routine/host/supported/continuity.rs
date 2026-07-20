@@ -18,6 +18,7 @@ pub(crate) struct ContinuationCheckpoint {
     recovery_marker: String,
     attempt_grant: String,
     authenticated_ledger_head: String,
+    finding_binding: Option<crate::state::RoutineFindingBinding>,
     state: String,
     event_id: String,
     event_observed_at_unix_ms: u64,
@@ -34,6 +35,10 @@ impl ContinuationCheckpoint {
 
     pub(crate) fn attempt_grant(&self) -> &str {
         &self.attempt_grant
+    }
+
+    pub(crate) fn finding_binding(&self) -> Option<&crate::state::RoutineFindingBinding> {
+        self.finding_binding.as_ref()
     }
 
     pub(crate) fn is_reserved(&self) -> bool {
@@ -86,6 +91,7 @@ impl HostState {
         recovery_marker: &str,
         attempt_grant: &str,
         authenticated_ledger_head: &str,
+        finding_binding: Option<&crate::state::RoutineFindingBinding>,
     ) -> Result<(), HostFailure> {
         if !target.is_absolute()
             || target.to_str().is_none()
@@ -109,6 +115,7 @@ impl HostState {
             recovery_marker,
             attempt_grant,
             authenticated_ledger_head,
+            finding_binding,
             "reserved",
             1,
         )?;
@@ -126,6 +133,7 @@ impl HostState {
         continuation: &str,
         attempt_grant: &str,
         authenticated_ledger_head: &str,
+        finding_binding: Option<&crate::state::RoutineFindingBinding>,
     ) -> Result<(), HostFailure> {
         let previous = self.read_optional_checkpoint()?;
         if let Some(previous) = &previous {
@@ -138,7 +146,9 @@ impl HostState {
                 snapshot_id,
                 None,
             )?;
-            if previous.state != "reconciled" {
+            if previous.state != "reconciled"
+                || previous.finding_binding.as_ref() != finding_binding
+            {
                 return Err(HostFailure::Busy);
             }
         }
@@ -159,6 +169,7 @@ impl HostState {
             "",
             attempt_grant,
             authenticated_ledger_head,
+            finding_binding,
             "complete-event-pending",
             generation,
         )?;
@@ -283,6 +294,7 @@ fn checkpoint(
     recovery_marker: &str,
     attempt_grant: &str,
     authenticated_ledger_head: &str,
+    finding_binding: Option<&crate::state::RoutineFindingBinding>,
     state: &str,
     generation: u64,
 ) -> Result<ContinuationCheckpoint, HostFailure> {
@@ -296,7 +308,7 @@ fn checkpoint(
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
-        schema_version: "RoutineContinuationCheckpoint-v2".to_owned(),
+        schema_version: "RoutineContinuationCheckpoint-v3".to_owned(),
         generation,
         target: target.to_str().ok_or(HostFailure::Invalid)?.to_owned(),
         context_id: context_id.to_owned(),
@@ -307,6 +319,7 @@ fn checkpoint(
         recovery_marker: recovery_marker.to_owned(),
         attempt_grant: attempt_grant.to_owned(),
         authenticated_ledger_head: authenticated_ledger_head.to_owned(),
+        finding_binding: finding_binding.cloned(),
         state: state.to_owned(),
         event_id: terminal_event_id(continuation, authenticated_ledger_head),
         event_observed_at_unix_ms: 0,
@@ -336,7 +349,7 @@ fn validate_checkpoint(
     snapshot_id: &str,
     continuation: Option<&str>,
 ) -> Result<(), HostFailure> {
-    if checkpoint.schema_version != "RoutineContinuationCheckpoint-v2"
+    if checkpoint.schema_version != "RoutineContinuationCheckpoint-v3"
         || checkpoint.generation == 0
         || !matches!(
             checkpoint.state.as_str(),
@@ -358,6 +371,10 @@ fn validate_checkpoint(
         || checkpoint.event_sequence == 0
         || checkpoint.event_status.is_empty()
         || checkpoint.event_transition.is_empty()
+        || checkpoint
+            .finding_binding
+            .as_ref()
+            .is_some_and(|binding| binding.finding_id.is_empty() || binding.repair_id.is_empty())
         || (checkpoint.state == "reserved" && checkpoint.recovery_marker.is_empty())
         || continuation.is_some_and(|value| checkpoint.continuation != value)
     {

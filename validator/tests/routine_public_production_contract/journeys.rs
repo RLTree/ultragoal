@@ -286,6 +286,30 @@ fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() 
 }
 
 #[test]
+fn missing_validation_artifacts_ignore_fails_closed_on_repeat() {
+    let mut fixture = Fixture::new(
+        "missing-observability-ignore",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::write(fixture.root.join(".gitignore"), b"target/\n").unwrap();
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    assert_eq!(Fixture::value(&first)["status"], "executed");
+    let repeat = fixture.run();
+    assert_eq!(repeat.status.code(), Some(3), "{repeat:?}");
+    assert!(repeat.stdout.is_empty(), "{repeat:?}");
+    let value: Value = serde_json::from_slice(&repeat.stderr).unwrap();
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_authority_required"
+    );
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn independent_fresh_authority_roots_execute_once_and_reuse_their_own_bindings() {
     let mut first = Fixture::new(
         "binding-first",
