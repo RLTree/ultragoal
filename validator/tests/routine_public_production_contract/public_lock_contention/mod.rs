@@ -65,6 +65,7 @@ fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() 
         let output_dir = fixture.root.join("target/routine/compile");
         assert!(output_dir.is_dir());
         assert_eq!(fs::read_dir(&output_dir).unwrap().count(), 0);
+        assert_terminal_event_after_retry(fixture);
         assert_eq!(
             new_root_paths(fixture, &before_root),
             expected_output_paths()
@@ -89,8 +90,58 @@ fn new_root_paths(
 }
 
 fn expected_output_paths() -> BTreeSet<String> {
-    ["target", "target/routine", "target/routine/compile"]
-        .into_iter()
+    [
+        "target",
+        "target/routine",
+        "target/routine/compile",
+        "validation_artifacts",
+        "validation_artifacts/observability",
+        "validation_artifacts/observability/spool",
+        "validation_artifacts/observability/spool/successor-events.jsonl",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+fn assert_terminal_event_after_retry(fixture: &super::scenario::Fixture) {
+    let event_path = fixture
+        .root
+        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+    let rows = fs::read_to_string(&event_path)
+        .unwrap()
+        .lines()
+        .filter(|line| !line.is_empty())
         .map(str::to_owned)
-        .collect()
+        .collect::<Vec<_>>();
+    assert_eq!(
+        rows.len(),
+        1,
+        "successful retry must append one terminal event"
+    );
+    let row: Value = serde_json::from_str(&rows[0]).unwrap();
+    let event = &row["event"];
+    let checkpoint: Value =
+        serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap()).unwrap();
+    assert_eq!(event["event_id"], checkpoint["event_id"]);
+    assert_eq!(event["sequence"], checkpoint["event_sequence"]);
+    assert_eq!(
+        event["observed_at_unix_ms"],
+        checkpoint["event_observed_at_unix_ms"]
+    );
+    assert_eq!(event["operation"], "check.routine.terminal");
+    assert_eq!(event["outcome"], checkpoint["event_status"]);
+    assert_eq!(
+        event["public_attributes"]["continuation_id"],
+        checkpoint["continuation"]
+    );
+    assert_eq!(
+        event["public_attributes"]["terminal_ledger_head"],
+        checkpoint["authenticated_ledger_head"]
+    );
+    assert_eq!(
+        event["public_attributes"]["routine_transition"],
+        checkpoint["event_transition"]
+    );
+    assert_eq!(checkpoint["state"], "terminal-event-joined");
 }
