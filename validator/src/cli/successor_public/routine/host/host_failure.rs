@@ -15,14 +15,14 @@ pub(crate) struct HostState {
 }
 
 impl HostState {
-    pub(crate) fn open(home: &Path) -> Result<Self, HostFailure> {
+    pub(crate) fn open_or_bootstrap(home: &Path, target: &Path) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            supported::HostState::open(home).map(|inner| Self { inner })
+            supported::HostState::open_or_bootstrap(home, target).map(|inner| Self { inner })
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = home;
+            let _ = (home, target);
             Err(HostFailure::Unsupported)
         }
     }

@@ -83,6 +83,8 @@
     "templates/agent-standards/enforcement-audit.tsv",
     "templates/agent-standards/enforcement.json",
     "templates/agent-standards/enforcement.tsv",
+    "templates/config/routine-public.json",
+    "templates/config/routines.json",
     "templates/docs/design-docs/core-beliefs.md",
     "templates/docs/design-docs/index.md",
     "templates/docs/exec-plans/tech-debt-tracker.md",

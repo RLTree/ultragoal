@@ -3,8 +3,6 @@ use serde_json::Value;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::process::Output;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 pub(super) fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     Fixture::new(
@@ -61,35 +59,59 @@ fn valid_host_runs_through_local_issuer_before_repeat() {
 }
 
 #[test]
-fn missing_local_host_repeat_refusals_never_initialize_state_or_outputs() {
-    let mut fixture = dirty_fixture("missing-local-host-repeat", false);
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
+fn missing_local_host_bootstraps_once_before_the_authoritative_effect() {
+    let mut fixture = dirty_fixture("missing-local-host-bootstrap", false);
     assert!(!fixture.state_root().exists());
 
-    for _ in 0..4 {
-        assert_public_refusal(&fixture.run());
-        assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-        assert!(!fixture.state_root().exists());
-    }
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    assert_eq!(Fixture::value(&first)["status"], "executed");
+    assert!(fixture.authority_root().is_dir());
+    assert!(fixture.lock_path().is_file());
+    let before_repeat = tree(&fixture.root);
+    assert_session_continuity_refusal(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_repeat);
+    fixture.teardown_after_assertions();
+}
+
+fn assert_session_continuity_refusal(output: &Output) {
+    assert_ne!(output.status.code(), Some(0), "{output:?}");
+    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(
+        diagnostic["cause"],
+        "routine-production-session-continuity-required"
+    );
+}
+
+#[test]
+fn fitted_routine_templates_bind_the_supported_rust_source_route() {
+    let mut fixture = dirty_fixture("fitted-routine-templates", false);
+    fs::write(
+        fixture.root.join("config/routines.json"),
+        include_bytes!("../../../templates/config/routines.json"),
+    )
+    .unwrap();
+    fs::write(
+        fixture.root.join("config/routine-public.json"),
+        include_bytes!("../../../templates/config/routine-public.json"),
+    )
+    .unwrap();
+
+    let output = fixture.run();
+
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "executed");
+    assert_eq!(value["nodes"][0]["node_id"], "syntax");
+    assert!(fixture.root.join("target/routine/syntax").is_dir());
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn concurrent_local_issuer_attempts_have_no_forged_success() {
-    let mut fixture = dirty_fixture("local-issuer-concurrent", true);
+fn concurrent_first_use_has_one_authoritative_effect() {
+    let mut fixture = dirty_fixture("local-issuer-concurrent", false);
 
     std::thread::scope(|scope| {
-        let done = Arc::new(AtomicBool::new(false));
-        let monitor_done = Arc::clone(&done);
-        let monitored = &fixture;
-        let monitor = scope.spawn(move || {
-            while !monitor_done.load(Ordering::Acquire) {
-                assert!(monitored.authority_root().exists());
-                std::thread::yield_now();
-            }
-        });
         let attempts = (0..8)
             .map(|_| scope.spawn(|| fixture.run()))
             .collect::<Vec<_>>();
@@ -106,8 +128,6 @@ fn concurrent_local_issuer_attempts_have_no_forged_success() {
                 assert_public_refusal(&output);
             }
         }
-        done.store(true, Ordering::Release);
-        monitor.join().unwrap();
     });
 
     assert!(fixture.authority_root().is_dir());

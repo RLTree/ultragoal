@@ -1,4 +1,5 @@
 use super::*;
+use std::io::Write;
 
 impl AnchoredDirectory {
     pub(crate) fn open_absolute(path: &Path) -> Result<Self, HostFailure> {
@@ -44,6 +45,24 @@ impl AnchoredDirectory {
         Self::from_file(self.path.join(name), descriptor)
     }
 
+    pub(crate) fn open_or_create_owned_child(
+        &self,
+        name: &str,
+    ) -> Result<(Self, bool), HostFailure> {
+        validate_name(name)?;
+        let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+        // SAFETY: the descriptor is live, the component is validated, and mkdirat retains neither input.
+        let created = unsafe { libc::mkdirat(self.file.as_raw_fd(), name.as_ptr(), 0o700) } == 0;
+        if !created && std::io::Error::last_os_error().raw_os_error() != Some(libc::EEXIST) {
+            return Err(HostFailure::Invalid);
+        }
+        let child = self.open_child(name.to_str().map_err(|_| HostFailure::Invalid)?)?;
+        if created {
+            self.file.sync_all().map_err(|_| HostFailure::Invalid)?;
+        }
+        Ok((child, created))
+    }
+
     pub(crate) fn open_regular(
         &self,
         name: &str,
@@ -64,6 +83,39 @@ impl AnchoredDirectory {
             return Err(HostFailure::Invalid);
         }
         Ok(file)
+    }
+
+    pub(crate) fn open_or_create_regular(
+        &self,
+        name: &str,
+        mode: u32,
+    ) -> Result<(File, bool), HostFailure> {
+        let created = openat(
+            &self.file,
+            name,
+            libc::O_RDWR | libc::O_CREAT | libc::O_EXCL,
+            mode,
+        );
+        match created {
+            Ok(file) => {
+                let metadata = file.metadata().map_err(|_| HostFailure::Invalid)?;
+                let observed = identity(&metadata);
+                // SAFETY: geteuid has no preconditions and only reads the process credential.
+                let effective_uid = unsafe { libc::geteuid() };
+                if !metadata.is_file()
+                    || observed.owner != effective_uid
+                    || observed.mode & 0o7777 != mode
+                    || observed.links != 1
+                    || self.stat(name)? != Some(observed)
+                {
+                    return Err(HostFailure::Invalid);
+                }
+                self.file.sync_all().map_err(|_| HostFailure::Invalid)?;
+                Ok((file, true))
+            }
+            Err(HostFailure::Invalid) => Ok((self.open_regular(name, libc::O_RDWR, mode)?, false)),
+            Err(error) => Err(error),
+        }
     }
 
     pub(crate) fn stat(&self, name: &str) -> Result<Option<Identity>, HostFailure> {
@@ -116,6 +168,14 @@ impl ProcessLock {
         }
         Ok(Self(file))
     }
+}
+
+pub(crate) fn write_lock_marker(lock: &File) -> Result<(), HostFailure> {
+    let mut marker = lock.try_clone().map_err(|_| HostFailure::Invalid)?;
+    marker
+        .write_all(LOCK_MARKER)
+        .map_err(|_| HostFailure::Invalid)?;
+    marker.sync_all().map_err(|_| HostFailure::Invalid)
 }
 
 pub(crate) fn openat(

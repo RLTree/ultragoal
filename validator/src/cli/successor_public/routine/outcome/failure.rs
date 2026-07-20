@@ -72,7 +72,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
         PublicFailure::Host(HostFailure::Unavailable) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "preprovisioned owner-only routine host authority is unavailable",
+            "owner-only routine host authority is unavailable or unsafe",
             "routine production host authority",
             "install or repair the owner-only routine-public authority, adapter directory, and lock file",
             "none",

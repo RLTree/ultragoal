@@ -58,7 +58,7 @@ pub(crate) fn execute_inner(
 
     let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
-    let state = HostState::open(home).map_err(PublicFailure::Host)?;
+    let state = HostState::open_or_bootstrap(home, &target).map_err(PublicFailure::Host)?;
     let mediated = mediate_public_routine_execution(
         Some(state.authority_root()),
         &context,

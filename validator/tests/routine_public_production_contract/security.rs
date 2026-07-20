@@ -1,6 +1,7 @@
 use super::scenario::{Fixture, pass_node, prefix_route, tree};
 use serde_json::Value;
 use std::fs;
+use std::os::unix::fs::PermissionsExt;
 use std::os::unix::fs::symlink;
 
 #[test]
@@ -54,7 +55,7 @@ fn legacy_manifest_schema_is_rejected_before_effect() {
 }
 
 #[test]
-fn missing_host_refuses_before_any_workspace_write() {
+fn missing_host_bootstraps_only_after_source_admission() {
     let mut fixture = Fixture::new(
         "missing-host",
         &[pass_node("compile", &[])],
@@ -62,20 +63,36 @@ fn missing_host_refuses_before_any_workspace_write() {
         true,
         false,
     );
+    let output = fixture.run();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "executed");
+    assert!(fixture.state_root().is_dir());
+    assert!(fixture.root.join("target/routine/compile").is_dir());
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn malformed_host_component_refuses_without_repair() {
+    let mut fixture = Fixture::new(
+        "malformed-host",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    let component = fixture.home.join(".codex");
+    fs::create_dir(&component).unwrap();
+    fs::set_permissions(&component, fs::Permissions::from_mode(0o755)).unwrap();
     let before_root = tree(&fixture.root);
     let before_home = tree(&fixture.home);
     let before_status = fixture.status();
+
     let output = fixture.run();
+
     assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
-    assert!(
-        !fixture
-            .root
-            .join("target/routine/compile/result.txt")
-            .exists()
-    );
     fixture.teardown_after_assertions();
 }
 
