@@ -1,6 +1,7 @@
 use crate::distribution::host_effect::{
-    DurableHostEffectLedger, HostEffectLedgerError, HostEffectLedgerErrorId,
-    HostEffectLedgerRecord, HostEffectReservation, HostEffectState, HostEffectTransition,
+    DurableHostEffectLedger, HostEffectAuthority, HostEffectLedgerError, HostEffectLedgerErrorId,
+    HostEffectLedgerRecord, HostEffectPermit, HostEffectReservation, HostEffectState,
+    HostEffectTransition,
 };
 use crate::plugin_product::lifecycle::{
     HostEffectExecutionBinding, HostLifecycleRecord, LifecycleEffect, LifecycleState,
@@ -52,9 +53,20 @@ impl DurableHostLifecycleAdmission {
 
 pub(crate) fn reserve_in_flight_lifecycle(
     ledger: &dyn DurableHostEffectLedger,
-    reservation: HostEffectReservation,
+    authority: &HostEffectAuthority,
+    permit: HostEffectPermit,
+    trusted_now_unix_ms: u64,
     record: HostLifecycleRecord,
 ) -> Result<DurableHostLifecycleAdmission, HostEffectLedgerError> {
+    authority
+        .verify(&permit, trusted_now_unix_ms)
+        .map_err(|_| HostEffectLedgerError::new(HostEffectLedgerErrorId::InvalidRecord))?;
+    if permit.binding().lifecycle_record.as_ref() != Some(&record) {
+        return Err(HostEffectLedgerError::new(
+            HostEffectLedgerErrorId::InvalidRecord,
+        ));
+    }
+    let reservation = HostEffectReservation::from_permit(&permit);
     let reserved = ledger.reserve(reservation)?;
     let in_flight = ledger.transition(HostEffectTransition::new(
         reserved.reservation().permit_id().to_owned(),

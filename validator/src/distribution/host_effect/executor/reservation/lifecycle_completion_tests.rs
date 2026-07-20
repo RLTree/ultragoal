@@ -66,8 +66,8 @@ fn admission_for(
     let authority =
         HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())
             .unwrap();
-    let (_, reservation) = authority.issue(binding(bound, &head)).unwrap();
-    reserve_in_flight_lifecycle(&ledger, reservation, admitted)
+    let (permit, _) = authority.issue(binding(bound, &head)).unwrap();
+    reserve_in_flight_lifecycle(&ledger, &authority, permit, 1, admitted)
 }
 
 fn binding(
