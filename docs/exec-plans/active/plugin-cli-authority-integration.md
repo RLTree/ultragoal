@@ -969,6 +969,9 @@ plus
 `validator/src/routine_work/runtime_adapter/mediator/process/termination_tests.rs`
 for the typed authorized-process preparation request. These are caller-shape
 repairs only; they do not broaden behavior, public authority, or claims.
+The same request migration may remove the now-unused `ReadConfinement` import
+from `validator/src/routine_work/runtime_adapter/mediator/process/mod.rs`; this
+is compiler-directed support only.
 
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
