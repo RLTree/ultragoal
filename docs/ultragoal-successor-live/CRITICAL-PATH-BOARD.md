@@ -1,5 +1,29 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 post-fit routine activation checkpoint
+
+The accepted worktree freeze `455d22678` / tree `4de4e435` is integrated
+serially through root `a55038d9f`. Fit now supplies the canonical Rust routine
+catalog and repository-bound manifest. After source admission, the existing
+routine route can create missing private host custody through one fixed,
+owner-only, resumable staging transaction. Exact interrupted prefixes resume;
+malformed, substituted, aliased, extra, or forged state refuses; the stage
+lock spans exclusive publication; and concurrent losers are classified as
+contention only when the final state is visible.
+
+Focused worktree evidence passed 6/6 bootstrap/concurrency controls and 1/1
+forged-marker refusal, followed by one Terra/high exact-byte ACCEPT. On the
+integrated root, warning-free production compilation and the public routine
+contract pass 47/47; changed Rust formatting and the 250-line limit pass.
+Repository-wide formatting and two unchanged repository-fit adapter
+source-shape assertions remain separate pre-existing debt and support no
+claim.
+
+This closes the source-level post-fit activation blocker only. Exact package,
+supported install, fresh-task discovery, installed routine work,
+diagnosis/recovery, repeat use, Product Fitness, readiness, release, and
+completion remain withheld pending the real installed daily-driver journey.
+
 ## 2026-07-20 isolated distribution/runtime checkpoint
 
 Accepted root source through `0866fa8aa`, plus the supported Codex marketplace

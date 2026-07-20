@@ -1,5 +1,33 @@
 # Plugin and CLI Authority Integration
 
+## Post-fit routine activation integration — 2026-07-20
+
+Root integrated the accepted routine-activation series through
+`a55038d9f`. Repository fit now installs the fixed Rust routine catalog and
+manifest, and the existing public routine route may initialize its missing
+owner-only host state only after source admission. One fixed private staging
+transaction resumes exact interrupted prefixes, holds its lock through
+exclusive publication, rejects malformed or substituted state, and classifies
+a losing publisher as contention only when the final state is actually
+visible.
+
+The exact worktree freeze `455d22678` / tree `4de4e435` passed the focused
+bootstrap/concurrency controls 6/6 and forged-marker refusal 1/1. One bounded
+Terra/high correction review returned ACCEPT. After serial root integration,
+warning-free production compilation passed and the dependency-closed public
+routine contract passed 47/47. Changed Rust passes formatting and the 250-line
+limit. Repository-wide formatting remains blocked by unrelated pre-existing
+files, and the adjacent repository-fit adapter source-shape test remains 3/5
+on two unchanged stale assertions; neither result is promoted as current
+product proof.
+
+The ceiling rises only to integrated source and focused behavior. Package,
+supported installation, fresh-task discovery, installed routine execution,
+diagnosis, recovery, repeat use, Product Fitness, readiness, release, and
+completion remain withheld. The next boundary is one exact package built
+twice, supported isolated installation, and the real installed dirty-repository
+journey.
+
 ## Isolated package-to-runtime integration — 2026-07-20
 
 Root integrated the accepted production increment through `0866fa8aa`, then
