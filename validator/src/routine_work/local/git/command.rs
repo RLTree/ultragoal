@@ -78,7 +78,7 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
             .map_err(|_| capture_error("git-check-ignore-wait-failed"))?
         {
             return match status.code() {
-                Some(0) => runtime_store_untracked(&git, binding),
+                Some(0) => runtime_store_untracked(git, binding),
                 Some(1) => Ok(false),
                 _ => Err(capture_error("git-check-ignore-nonzero")),
             };
