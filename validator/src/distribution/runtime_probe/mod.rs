@@ -22,3 +22,5 @@ include!("pinned_executable.rs");
 include!("output_limit.rs");
 
 include!("unique_marker.rs");
+
+const PACKAGE_RUNTIME_ENTRY: &str = "runtime/runtime-probe-bin";

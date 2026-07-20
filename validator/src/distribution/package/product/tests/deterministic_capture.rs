@@ -86,9 +86,15 @@ fn captured_runtime_payload_drives_the_confined_runtime_probe() {
     let artifact = capture_product_package(&context, &catalog(&context)).expect("package");
     let output = OutputRoot::new("supported-package-product-runtime");
     let confined = ConfinedRoot::open(&output.root).expect("confined root");
-    let executable = ScopedFile::new(confined.clone(), "runtime/runtime-probe-bin").unwrap();
+    let executable = ScopedFile::new(
+        confined.clone(),
+        "plugins/harness-ultragoal/runtime/runtime-probe-bin",
+    )
+    .unwrap();
     publish_installed_runtime_probe(artifact.snapshot(), &executable).expect("runtime payload");
-    let program = output.root.join("runtime/runtime-probe-bin");
+    let program = output
+        .root
+        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     fs::set_permissions(&program, fs::Permissions::from_mode(0o600)).expect("remove execute mode");
     publish_installed_runtime_probe(artifact.snapshot(), &executable)
         .expect("same bytes with wrong mode repaired");

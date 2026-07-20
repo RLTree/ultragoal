@@ -29,5 +29,7 @@ include!("inventory_publication.rs");
 
 include!("archive_publication.rs");
 
+include!("marketplace_source_publication.rs");
+
 #[cfg(test)]
 mod tests;

@@ -3,7 +3,9 @@
 fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (fixture, plan, archive) = candidate();
     let package = verify_package(&plan, &archive).unwrap();
-    let runtime_program = fixture.0.join("runtime/runtime-probe-bin");
+    let runtime_program = fixture
+        .0
+        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.0,
         &fixture.0.join("project"),

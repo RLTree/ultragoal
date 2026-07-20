@@ -1,7 +1,7 @@
 use crate::distribution::{
     DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallEffects,
-    InstallPlan, InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot,
-    InstalledPackageRuntimeProbeRequest, RuntimeObservation, RuntimeProbePlan, RuntimeVerdict,
+    InstallPlan, InstallScope, InstallTransaction, InstalledPackageRuntimeProbeRequest,
+    JourneyBinding, PackageSnapshot, RuntimeObservation, RuntimeProbePlan, RuntimeVerdict,
     ScopedInstall, SurfaceIdentity, execute_runtime_probe, install, uninstall,
 };
 use crate::distribution_fixture::Fixture;
@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 pub fn installed_program(root: &std::path::Path) -> PathBuf {
-    let target = root.join("runtime/runtime-probe-bin");
+    let target = root.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     std::fs::create_dir_all(target.parent().unwrap()).unwrap();
     std::fs::write(&target, runtime_probe_bytes()).unwrap();
     #[cfg(unix)]

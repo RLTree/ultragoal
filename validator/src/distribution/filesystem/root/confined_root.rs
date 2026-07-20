@@ -144,6 +144,19 @@ impl ConfinedRoot {
         validate_relative_path(relative)?;
         self.revalidate()
     }
+
+    #[cfg(unix)]
+    pub(crate) fn remove_owned(self) -> Result<(), DistributionError> {
+        let authority = std::sync::Arc::try_unwrap(self.authority)
+            .map_err(|_| error(DistributionErrorId::ObjectChanged))?;
+        authority.revalidate()?;
+        super::remove::remove_tree_identity(&authority.parent, &authority.name, authority.identity)
+    }
+
+    #[cfg(not(unix))]
+    pub(crate) fn remove_owned(self) -> Result<(), DistributionError> {
+        Err(error(DistributionErrorId::CapabilityMismatch))
+    }
 }
 
 #[cfg(unix)]

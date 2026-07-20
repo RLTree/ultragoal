@@ -72,9 +72,15 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         .unwrap();
     assert_eq!(installed, first.archive());
 
-    let executable_file = ScopedFile::new(fixture.confined(), "runtime/runtime-probe-bin").unwrap();
+    let executable_file = ScopedFile::new(
+        fixture.confined(),
+        "plugins/harness-ultragoal/runtime/runtime-probe-bin",
+    )
+    .unwrap();
     publish_installed_runtime_probe(&first, &executable_file).unwrap();
-    let executable = fixture.root.join("runtime/runtime-probe-bin");
+    let executable = fixture
+        .root
+        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,

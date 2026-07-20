@@ -75,7 +75,9 @@ fn host_surface_substitution_controls(
         binding.clone(),
         host,
         installed.snapshot(),
-        &fixture.0.join("runtime/runtime-probe-bin"),
+        &fixture
+            .0
+            .join("plugins/harness-ultragoal/runtime/runtime-probe-bin"),
         vec!["sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd".into()],
         Duration::from_secs(5),
     );

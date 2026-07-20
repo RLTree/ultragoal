@@ -9,6 +9,9 @@ include!("confined_root.rs");
 include!("workspace_context.rs");
 
 #[cfg(all(test, unix))]
+mod cleanup_tests;
+
+#[cfg(all(test, unix))]
 mod tests {
     use super::ConfinedRoot;
     use crate::distribution::DistributionErrorId;

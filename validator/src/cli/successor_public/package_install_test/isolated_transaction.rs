@@ -1,11 +1,10 @@
 use super::*;
 use crate::distribution::{
-    CacheExpectation, Capability, CodexPlugin, ExpectedPrior, ExpectedTree,
-    HostCapabilityDeclaration, InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest,
-    JourneyBinding, MarketplaceScope, RuntimeProbePlan, ScopedInstall, ScopedTree, SurfaceIdentity,
+    CacheExpectation, Capability, CodexPlugin, ExpectedPrior, HostCapabilityDeclaration,
+    InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest, JourneyBinding,
+    MarketplaceScope, RuntimeProbePlan, ScopedInstall, ScopedTree, SurfaceIdentity,
     apply_marketplace, install, observe_codex_marketplace, observe_registry_file,
-    plan_codex_marketplace, publish_cache_file, publish_installed_runtime_probe,
-    publish_registry_file, reconcile_cache_file,
+    plan_codex_marketplace, publish_cache_file, publish_registry_file, reconcile_cache_file,
 };
 use crate::inventory::AuthorityCatalog;
 use std::fs;
@@ -20,8 +19,9 @@ pub(super) fn execute(
     artifact: &ProductionPackageArtifact,
 ) -> Result<IsolatedObservation, &'static str> {
     let root_path = temporary_root::create()?;
-    let result = execute_inner(context, catalog, artifact, &root_path);
-    if fs::remove_dir_all(&root_path).is_err() {
+    let confined = ConfinedRoot::open(&root_path).map_err(|_| "isolated host root unavailable")?;
+    let result = execute_inner(context, catalog, artifact, confined.clone(), &root_path);
+    if confined.remove_owned().is_err() {
         return Err("disposable isolated host cleanup failed");
     }
     result
@@ -31,14 +31,15 @@ fn execute_inner(
     context: &LiveContext,
     catalog: &AuthorityCatalog,
     artifact: &ProductionPackageArtifact,
+    confined: ConfinedRoot,
     root_path: &Path,
 ) -> Result<IsolatedObservation, &'static str> {
-    let confined = ConfinedRoot::open(root_path).map_err(|_| "isolated host root unavailable")?;
-    let runtime_file = ScopedFile::new(confined.clone(), "runtime/runtime-probe-bin")
-        .map_err(|_| "runtime target unavailable")?;
-    publish_installed_runtime_probe(artifact.snapshot(), &runtime_file)
-        .map_err(|_| "runtime payload publication failed")?;
-    let runtime_path = root_path.join("runtime/runtime-probe-bin");
+    let mut package_tree = ScopedTree::new(confined.clone(), "plugins/harness-ultragoal")
+        .map_err(|_| "package materialization target failed")?;
+    let package_publication = artifact
+        .materialize_marketplace_source(context, catalog, &mut package_tree)
+        .map_err(|_| "package materialization failed")?;
+    let runtime_path = root_path.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     let project = root_path.join("project");
     fs::create_dir(&project).map_err(|_| "isolated project creation failed")?;
     let host = HostCapabilityDeclaration::isolated(
@@ -68,6 +69,11 @@ fn execute_inner(
         "local-harness-plugins",
     )
     .map_err(|_| "journey binding failed")?;
+    if package_publication.root_id() != binding.home_id()
+        || package_publication.tree_sha256() != artifact.snapshot().identity().tree_sha256()
+    {
+        return Err("materialized package identity diverged");
+    }
     execute_bound(
         context,
         catalog,
@@ -75,6 +81,7 @@ fn execute_inner(
         confined,
         host,
         binding,
+        package_tree,
         runtime_path,
     )
 }
@@ -86,27 +93,9 @@ fn execute_bound(
     confined: ConfinedRoot,
     host: HostCapabilityDeclaration,
     binding: JourneyBinding,
+    package_tree: ScopedTree,
     runtime_path: std::path::PathBuf,
 ) -> Result<IsolatedObservation, &'static str> {
-    let mut package_tree =
-        ScopedTree::new(confined.clone(), "repository/packages/harness-ultragoal")
-            .map_err(|_| "package materialization target failed")?;
-    let package_publication = artifact
-        .publish(
-            context,
-            catalog,
-            &binding,
-            &ExpectedTree::Absent,
-            &mut package_tree,
-        )
-        .map_err(|_| "package materialization failed")?;
-    let package_surface = SurfaceIdentity::from_published_package(
-        artifact.snapshot(),
-        &package_publication,
-        &binding,
-    )
-    .map_err(|_| "package identity observation failed")?;
-
     let marketplace_plan = plan_codex_marketplace(
         None,
         None,
@@ -205,7 +194,6 @@ fn execute_bound(
         return Err("runtime execution was not current");
     }
     let surfaces = [
-        package_surface,
         install_surface,
         cache_surface,
         marketplace_surface,
@@ -218,6 +206,9 @@ fn execute_bound(
     }) {
         return Err("isolated identity surfaces diverged");
     }
+    artifact
+        .verify_marketplace_source(context, catalog, &package_tree)
+        .map_err(|_| "materialized package changed during transaction")?;
     Ok(IsolatedObservation {
         installed_tree_sha256: artifact.snapshot().identity().tree_sha256().into(),
         cache_observation_sha256: cache.observation_sha256().into(),

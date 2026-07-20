@@ -39,3 +39,5 @@ include!("every_artifact_binding_dimension_is_checked_before_output_effects.rs")
 include!("package_surface_identity.rs");
 
 include!("artifact_identity_fields.rs");
+
+include!("marketplace_source_publication.rs");

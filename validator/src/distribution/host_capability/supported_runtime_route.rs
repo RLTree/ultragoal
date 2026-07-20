@@ -1,4 +1,5 @@
-pub(crate) const SUPPORTED_RUNTIME_PROGRAM: &str = "runtime/runtime-probe-bin";
+pub(crate) const SUPPORTED_RUNTIME_PROGRAM: &str =
+    "plugins/harness-ultragoal/runtime/runtime-probe-bin";
 
 pub(crate) fn supported_runtime_program(
     path: &Path,

@@ -44,7 +44,7 @@ pub fn publish_installed_runtime_probe(
     let Some(entry) = entries.first() else {
         return Err(error(DistributionErrorId::CapabilityMismatch));
     };
-    if entries.len() != 1 || entry.path() != SUPPORTED_RUNTIME_PROGRAM {
+    if entries.len() != 1 || entry.path() != PACKAGE_RUNTIME_ENTRY {
         return Err(error(DistributionErrorId::CapabilityMismatch));
     }
     let current = executable.inspect(EXECUTABLE_LIMIT)?;
@@ -111,7 +111,7 @@ impl RuntimeProbePlan {
         };
         if host.state(Capability::Runtime) != HostCapabilityState::Supported
             || runtime_entry.len() != 1
-            || entry.path() != SUPPORTED_RUNTIME_PROGRAM
+            || entry.path() != PACKAGE_RUNTIME_ENTRY
             || entry.sha256() != executable_sha256
             || package.identity() != binding.package()
             || install.context_id() != binding.package().source().context_id()

@@ -2,6 +2,9 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
+#[cfg(unix)]
+use std::os::unix::fs::DirBuilderExt;
+
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 pub(super) fn create() -> Result<PathBuf, &'static str> {
@@ -16,7 +19,10 @@ pub(super) fn create() -> Result<PathBuf, &'static str> {
             std::process::id(),
             NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
         ));
-        match fs::create_dir(&path) {
+        let mut builder = fs::DirBuilder::new();
+        #[cfg(unix)]
+        builder.mode(0o700);
+        match builder.create(&path) {
             Ok(()) => return Ok(path),
             Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
             Err(_) => return Err("disposable isolated host creation failed"),
