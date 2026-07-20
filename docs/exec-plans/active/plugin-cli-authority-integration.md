@@ -982,6 +982,19 @@ crate-private executed-result facts at their sole constructor. These are
 representation-only repairs for the exact Clippy boundary; they add no public
 API, behavior, authority, receipt, schema, dependency, or claim surface.
 
+The root debt checkpoint is strict-clean through source commit
+`5ab7e89933654fb10e95fbbf4b41bae4d3e3062f` / tree
+`1242a4885d0849e0e2e18f2efef6478c6713052d`. Dependency-wide production
+Clippy passes with warnings denied; fixture custody passes 37 controls;
+production routine authority passes three controls; reuse and report pass 20
+and six controls; mediator process custody passes 12 controls; reservation
+authority passes three controls; semantic namespace/zero-write, 121 standards
+rows, generated authority, authored-file limits, and diff checks pass. One
+bounded Terra/high material review accepted the complete 47-path repair with
+no counterexample. This closes the no-new-worktree debt checkpoint, but does
+not promote `CL-STRICT`: its `CL-SOURCE` prerequisite, claim-relevant coverage,
+and exact claim-specific independent reconciliation remain outstanding.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
