@@ -153,4 +153,9 @@ impl FileJournal {
     pub(crate) fn set_test_pre_publication_hook(hook: impl FnOnce() + 'static) {
         test_hook::set(hook);
     }
+
+    #[cfg(test)]
+    pub(crate) fn set_test_post_rename_hook(hook: impl FnOnce() + 'static) {
+        test_hook::set_post_rename(hook);
+    }
 }

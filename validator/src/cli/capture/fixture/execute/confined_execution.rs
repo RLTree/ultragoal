@@ -1,16 +1,67 @@
 use super::*;
 
-pub(crate) fn run_confined(
-    fixture: &FixtureSpec,
-    source_executable: &Path,
+type ConfinedResult =
+    Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError>;
+type ConfinedRunner = for<'a> fn(
+    &'a FixtureSpec,
+    &'a Path,
+    PinnedExecutableKind,
+    &'a [u8],
+    &'a [std::ffi::OsString],
+    &'a Path,
+    &'a BTreeMap<String, String>,
+    usize,
+    &'a Arc<AtomicBool>,
+) -> ConfinedResult;
+
+pub(crate) const RUN_CONFINED: ConfinedRunner =
+    |fixture,
+     source_executable,
+     executable_kind,
+     executable_bytes,
+     arguments,
+     cwd,
+     environment,
+     output_limit,
+     interrupt| {
+        run_confined_inner(ConfinedExecution {
+            fixture,
+            source_executable,
+            executable_kind,
+            executable_bytes,
+            arguments,
+            cwd,
+            environment,
+            output_limit,
+            interrupt,
+        })
+    };
+pub(crate) use RUN_CONFINED as run_confined;
+
+struct ConfinedExecution<'a> {
+    fixture: &'a FixtureSpec,
+    source_executable: &'a Path,
     executable_kind: PinnedExecutableKind,
-    executable_bytes: &[u8],
-    arguments: &[std::ffi::OsString],
-    cwd: &Path,
-    environment: &BTreeMap<String, String>,
+    executable_bytes: &'a [u8],
+    arguments: &'a [std::ffi::OsString],
+    cwd: &'a Path,
+    environment: &'a BTreeMap<String, String>,
     output_limit: usize,
-    interrupt: &Arc<AtomicBool>,
-) -> Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError> {
+    interrupt: &'a Arc<AtomicBool>,
+}
+
+fn run_confined_inner(request: ConfinedExecution<'_>) -> ConfinedResult {
+    let ConfinedExecution {
+        fixture,
+        source_executable,
+        executable_kind,
+        executable_bytes,
+        arguments,
+        cwd,
+        environment,
+        output_limit,
+        interrupt,
+    } = request;
     #[cfg(not(unix))]
     {
         let _ = (
@@ -64,6 +115,8 @@ pub(crate) fn run_confined(
             use std::os::unix::process::CommandExt;
 
             let directory = snapshot.directory.as_raw_fd();
+            // SAFETY: this closure runs only in the spawned child before exec;
+            // `directory` is a live descriptor owned by `snapshot` until spawn.
             unsafe {
                 command.pre_exec(move || {
                     if libc::fchdir(directory) != 0 {

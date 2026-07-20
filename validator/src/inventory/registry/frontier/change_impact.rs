@@ -1,13 +1,11 @@
 use super::{envelope_codec, scope_consumption};
+use crate::context::query_git;
 use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
-use std::path::Path;
-use std::process::Command;
 
 pub(super) fn validate(
     reads: &ReadSession,
-    root: &Path,
     registry: &Value,
     lanes: &[Value],
     scopes: &[Value],
@@ -33,7 +31,7 @@ pub(super) fn validate(
         "lease consumed set differs from canonical authority",
     )?;
     scope_consumption::validate_dependencies(consumed, lane, lanes)?;
-    let expected_changed = derive_changed(reads, root, record, base, to)?;
+    let expected_changed = derive_changed(reads, record, base, to)?;
     envelope_codec::exact_categories(
         changed,
         &expected_changed,
@@ -62,18 +60,20 @@ fn handoff_revision<'a>(
 
 fn derive_changed(
     reads: &ReadSession,
-    root: &Path,
     record: &Value,
     from: (&str, &str),
     to: (&str, &str),
 ) -> Result<Value, InventoryError> {
-    if git(root, &["rev-parse", &format!("{}^{{tree}}", to.0)])? != to.1 {
+    if git(reads, &["rev-parse", &format!("{}^{{tree}}", to.0)])? != to.1 {
         return Err(invalid("lease changed-set target has the wrong Git tree"));
     }
     let mut categories = envelope_codec::empty_categories();
-    for path in git(root, &["diff", "--name-only", "--no-renames", from.0, to.0])?
-        .lines()
-        .filter(|path| !path.is_empty())
+    for path in git(
+        reads,
+        &["diff", "--name-only", "--no-renames", from.0, to.0],
+    )?
+    .lines()
+    .filter(|path| !path.is_empty())
     {
         categories
             .get_mut(classify(path, record)?)
@@ -131,19 +131,12 @@ fn overlaps(left: &str, right: &str) -> bool {
             .strip_prefix(left)
             .is_some_and(|tail| tail.starts_with('/'))
 }
-fn git(root: &Path, args: &[&str]) -> Result<String, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(args)
-        .output()
-        .map_err(|_| invalid("cannot derive lease changes from Git"))?;
-    if !output.status.success() {
-        return Err(invalid("cannot derive lease changes from Git"));
-    }
-    String::from_utf8(output.stdout)
-        .map(|text| text.trim().to_owned())
-        .map_err(|_| invalid("lease change derivation is not UTF-8"))
+fn git(reads: &ReadSession, args: &[&str]) -> Result<String, InventoryError> {
+    String::from_utf8(
+        query_git(reads, args).map_err(|_| invalid("cannot derive lease changes from Git"))?,
+    )
+    .map(|text| text.trim().to_owned())
+    .map_err(|_| invalid("lease change derivation is not UTF-8"))
 }
 fn invalid(message: &str) -> InventoryError {
     InventoryError::InvalidRegistry(message.to_owned())

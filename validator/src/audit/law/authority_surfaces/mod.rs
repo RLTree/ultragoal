@@ -17,9 +17,9 @@ mod source;
 mod surface_inventory;
 
 #[cfg(test)]
-pub(crate) use source::BoundaryRow;
-#[cfg(test)]
 pub(crate) use source::failures_for_sources_and_rows;
+#[cfg(test)]
+pub(crate) use source::BoundaryRow;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))
@@ -118,7 +118,7 @@ pub(crate) fn authority_graph_failures_for_test(
     standards_audit: &str,
     red_ids: &BTreeSet<String>,
 ) -> Vec<(String, String)> {
-    graph::authority_graph_failures(
+    graph::authority_graph_failures(graph::AuthorityGraphInputs {
         root,
         inventory,
         mandatory,
@@ -127,5 +127,5 @@ pub(crate) fn authority_graph_failures_for_test(
         standards,
         standards_audit,
         red_ids,
-    )
+    })
 }

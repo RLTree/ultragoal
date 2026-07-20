@@ -18,7 +18,7 @@ impl HostState {
     pub(crate) fn open(home: &Path) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            return supported::HostState::open(home).map(|inner| Self { inner });
+            supported::HostState::open(home).map(|inner| Self { inner })
         }
         #[cfg(not(target_vendor = "apple"))]
         {

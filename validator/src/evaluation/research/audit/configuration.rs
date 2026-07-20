@@ -172,14 +172,13 @@ fn valid_record_sourced_row<'a>(
     source_locator: &str,
     mapped_law_ids: &BTreeSet<String>,
     record: &ResearchSourceRecord,
-    row_ids: &mut BTreeSet<&'a str>,
-    statements: &mut BTreeSet<&'a str>,
+    row_values: (&mut BTreeSet<&'a str>, &mut BTreeSet<&'a str>),
 ) -> bool {
     source_id == record.source_id
         && valid_source_locator(source_locator, &record.url)
         && law_subset(mapped_law_ids, &record.mapped_law_ids)
-        && row_ids.insert(id)
-        && statements.insert(statement)
+        && row_values.0.insert(id)
+        && row_values.1.insert(statement)
 }
 
 fn law_subset(values: &BTreeSet<String>, supported: &BTreeSet<String>) -> bool {

@@ -99,16 +99,16 @@ fn path_name_failures(listed: &[String]) -> Vec<String> {
         {
             out.push(format!("namespace_junk_drawer_path:{rel}"));
         }
-        if components.iter().any(|part| *part == "common") {
+        if components.contains(&"common") {
             out.push(format!("namespace_vague_common_domain_path:{rel}"));
         }
-        if components.iter().any(|part| *part == "shared") {
+        if components.contains(&"shared") {
             out.push(format!("namespace_vague_shared_domain_path:{rel}"));
         }
-        if components.iter().any(|part| *part == "lib") {
+        if components.contains(&"lib") {
             out.push(format!("namespace_vague_lib_domain_path:{rel}"));
         }
-        if components.iter().any(|part| *part == "services") {
+        if components.contains(&"services") {
             out.push(format!("namespace_generic_services_path:{rel}"));
         }
         if components.len() > 8 {

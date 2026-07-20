@@ -75,10 +75,12 @@ fn specific_guard_red_fixture_failures(
 ) -> Vec<String> {
     fields
         .iter()
-        .filter_map(|(field, enabled)| {
-            (enabled.as_bool() == Some(true)
-                && !specific_guard_has_red_fixture(root, value, law, field))
-            .then(|| format!("mandatory_law_specific_guard_missing_red_fixture:{law}:{field}"))
+        .filter(|(field, enabled)| {
+            enabled.as_bool() == Some(true)
+                && !specific_guard_has_red_fixture(root, value, law, field)
+        })
+        .map(|(field, _)| {
+            format!("mandatory_law_specific_guard_missing_red_fixture:{law}:{field}")
         })
         .collect()
 }

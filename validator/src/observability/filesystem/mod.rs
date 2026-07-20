@@ -2,6 +2,19 @@ use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 use std::path::Path;
 
+#[cfg(test)]
+use std::cell::Cell;
+
+#[cfg(test)]
+thread_local! {
+    static FAIL_CREATED_LEAF_VALIDATION: Cell<bool> = const { Cell::new(false) };
+}
+
+#[cfg(test)]
+pub(crate) fn fail_next_created_leaf_validation() {
+    FAIL_CREATED_LEAF_VALIDATION.with(|fail| fail.set(true));
+}
+
 mod anchors;
 mod confinement;
 
@@ -12,8 +25,8 @@ use confinement::io_code;
 use confinement::unsupported_platform;
 #[cfg(unix)]
 use confinement::{
-    identity, inspect_leaf, open_leaf, open_verified_parent, remove_created_leaf, validate_file,
-    validate_metadata,
+    created_leaf_recovery_required, identity, inspect_leaf, open_leaf, open_verified_parent,
+    validate_file, validate_metadata,
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -90,9 +103,8 @@ pub(super) fn open_append(
             ) {
                 Ok(file) => {
                     let created = file_identity(&file)?;
-                    if let Err(error) = validate_file(parent, &file, None) {
-                        remove_created_leaf(parent, created)?;
-                        return Err(error);
+                    if !validate_created_leaf(parent, &file) {
+                        return Err(created_leaf_recovery_required(parent, created));
                     }
                     return Ok((file, true));
                 }
@@ -105,6 +117,15 @@ pub(super) fn open_append(
         validate_file(parent, &file, expected)?;
         Ok((file, false))
     }
+}
+
+#[cfg(unix)]
+fn validate_created_leaf(parent: &VerifiedParent, file: &File) -> bool {
+    #[cfg(test)]
+    if FAIL_CREATED_LEAF_VALIDATION.with(|fail| fail.replace(false)) {
+        return false;
+    }
+    validate_file(parent, file, None).is_ok()
 }
 
 pub(super) fn open_write_existing(

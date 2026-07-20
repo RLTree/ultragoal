@@ -55,6 +55,8 @@ pub(crate) fn read_artifact(
     let name = CString::new(name).map_err(|_| {
         FixtureScheduleError::InvalidMetadata("evaluation artifact name".to_owned())
     })?;
+    // SAFETY: `directory` is an owned descriptor, `name` is a live CString,
+    // and the fixed flags prevent link traversal and descriptor inheritance.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -65,6 +67,7 @@ pub(crate) fn read_artifact(
     if descriptor < 0 {
         return Err(FixtureScheduleError::Io(std::io::Error::last_os_error()));
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     let mut file = unsafe { std::fs::File::from_raw_fd(descriptor) };
     let before = file.metadata()?;
     if !before.is_file()
@@ -88,6 +91,8 @@ pub(crate) fn read_artifact(
     }
     let after = file.metadata()?;
     let mut current = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: `current` is writable storage and `directory`/`name` remain
+    // valid throughout this fixed-flag `fstatat` call.
     if unsafe {
         libc::fstatat(
             directory.as_raw_fd(),
@@ -99,6 +104,7 @@ pub(crate) fn read_artifact(
     {
         return Err(FixtureScheduleError::Io(std::io::Error::last_os_error()));
     }
+    // SAFETY: a zero `fstatat` status initializes the complete `stat` value.
     let current = unsafe { current.assume_init() };
     if before.dev() != after.dev()
         || before.ino() != after.ino()
@@ -106,7 +112,7 @@ pub(crate) fn read_artifact(
         || before.mtime() != after.mtime()
         || before.mtime_nsec() != after.mtime_nsec()
         || before.dev() != current.st_dev as u64
-        || before.ino() != current.st_ino as u64
+        || before.ino() != current.st_ino
         || current.st_mode & libc::S_IFMT != libc::S_IFREG
         || current.st_nlink != 1
     {
@@ -168,6 +174,8 @@ pub(crate) fn terminate_and_reap(
 
 #[cfg(unix)]
 pub(crate) fn signal_process(process: i32, signal: i32) -> Result<(), FixtureScheduleError> {
+    // SAFETY: `process` is validated by the caller as the child process id and
+    // `signal` is a fixed POSIX signal selected by the termination protocol.
     if unsafe { libc::kill(process, signal) } == 0 {
         return Ok(());
     }
@@ -182,6 +190,8 @@ pub(crate) fn signal_process(process: i32, signal: i32) -> Result<(), FixtureSch
 
 #[cfg(unix)]
 pub(crate) fn signal_process_group(group: i32, signal: i32) -> Result<(), FixtureScheduleError> {
+    // SAFETY: `group` is the validated negative child process-group id and
+    // `signal` is a fixed POSIX signal selected by the termination protocol.
     if unsafe { libc::kill(group, signal) } == 0 {
         return Ok(());
     }
@@ -198,6 +208,8 @@ pub(crate) fn signal_process_group(group: i32, signal: i32) -> Result<(), Fixtur
 pub(crate) fn wait_for_process_group_absence(group: i32) -> Result<(), FixtureScheduleError> {
     let deadline = Instant::now() + Duration::from_secs(1);
     loop {
+        // SAFETY: `group` is a validated negative process-group id; signal zero
+        // probes existence and does not deliver a signal.
         if unsafe { libc::kill(group, 0) } != 0 {
             let error = std::io::Error::last_os_error();
             if error.raw_os_error() == Some(libc::ESRCH) {

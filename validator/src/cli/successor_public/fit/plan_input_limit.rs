@@ -5,7 +5,7 @@ pub(crate) const MAX_PLAN_RECORD_BYTES: u64 = 16 * 1024 * 1024;
 pub(crate) fn target_root(
     root: &Path,
     invocation: &ParsedInvocation,
-) -> Result<PathBuf, RuntimeOutcome> {
+) -> Result<PathBuf, Box<RuntimeOutcome>> {
     let mut target = None;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
@@ -15,7 +15,7 @@ pub(crate) fn target_root(
             (OptionName::Plan, ParsedValue::RelativePath(_))
             | (OptionName::AcceptPlan, ParsedValue::Identifier(_))
                 if invocation.command == SuccessorCommand::Fit(FitAction::Apply) => {}
-            _ => return Err(invalid_invocation()),
+            _ => return Err(Box::new(invalid_invocation())),
         }
     }
     Ok(target.map_or_else(|| root.to_path_buf(), |path| root.join(path)))
@@ -107,7 +107,7 @@ pub(crate) fn apply(
 ) -> RuntimeOutcome {
     let arguments = match apply_arguments(invocation) {
         Ok(arguments) => arguments,
-        Err(outcome) => return outcome,
+        Err(outcome) => return *outcome,
     };
     let Some(home) = home else {
         return authority::host_state_unavailable();
@@ -115,11 +115,11 @@ pub(crate) fn apply(
     match authority::recover_pending(context, home) {
         Ok(Some(outcome)) => return outcome,
         Ok(None) => {}
-        Err(outcome) => return outcome,
+        Err(outcome) => return *outcome,
     }
     let prepared = match prepare_apply_with_arguments(context, arguments) {
         Ok(prepared) => prepared,
-        Err(outcome) => return outcome,
+        Err(outcome) => return *outcome,
     };
     authority::execute(context, prepared, home)
 }
@@ -131,11 +131,11 @@ pub(crate) struct ApplyArguments<'a> {
 
 pub(crate) fn apply_arguments(
     invocation: &ParsedInvocation,
-) -> Result<ApplyArguments<'_>, RuntimeOutcome> {
+) -> Result<ApplyArguments<'_>, Box<RuntimeOutcome>> {
     if invocation.command != SuccessorCommand::Fit(FitAction::Apply)
         || invocation.effect != EffectClass::WorkspaceWrite
     {
-        return Err(invalid_invocation());
+        return Err(Box::new(invalid_invocation()));
     }
     let mut plan_path = None;
     let mut accepted_plan = None;
@@ -148,11 +148,11 @@ pub(crate) fn apply_arguments(
             (OptionName::AcceptPlan, ParsedValue::Identifier(value)) if accepted_plan.is_none() => {
                 accepted_plan = Some(value.as_str())
             }
-            _ => return Err(invalid_invocation()),
+            _ => return Err(Box::new(invalid_invocation())),
         }
     }
     let (Some(plan_path), Some(accepted_plan)) = (plan_path, accepted_plan) else {
-        return Err(invalid_invocation());
+        return Err(Box::new(invalid_invocation()));
     };
     Ok(ApplyArguments {
         plan_path,
@@ -167,19 +167,22 @@ pub(crate) fn apply_arguments(
 pub(crate) fn prepare_apply_with_arguments(
     context: &LiveContext,
     arguments: ApplyArguments<'_>,
-) -> Result<PreparedFitApply, RuntimeOutcome> {
-    let reads = context.begin_read_session().map_err(|_| stale_context())?;
+) -> Result<PreparedFitApply, Box<RuntimeOutcome>> {
+    let reads = context
+        .begin_read_session()
+        .map_err(|_| Box::new(stale_context()))?;
     let absolute = reads.root().join(arguments.plan_path);
     let bytes = reads
         .read_bounded(&absolute, MAX_PLAN_RECORD_BYTES)
-        .map_err(|_| invalid_plan())?;
-    reads.revalidate().map_err(|_| stale_context())?;
+        .map_err(|_| Box::new(invalid_plan()))?;
+    reads.revalidate().map_err(|_| Box::new(stale_context()))?;
     let canonical = if bytes.ends_with(b"\n") && !bytes[..bytes.len() - 1].ends_with(b"\n") {
         &bytes[..bytes.len() - 1]
     } else {
         bytes.as_slice()
     };
-    prepare_apply_request(context, canonical, arguments.accepted_plan).map_err(adapter_failure)
+    prepare_apply_request(context, canonical, arguments.accepted_plan)
+        .map_err(|failure| Box::new(adapter_failure(failure)))
 }
 
 pub(crate) fn valid_read_invocation(invocation: &ParsedInvocation, action: FitAction) -> bool {

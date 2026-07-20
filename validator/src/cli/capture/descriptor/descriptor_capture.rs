@@ -104,6 +104,8 @@ pub(crate) fn c_name(name: &std::ffi::OsStr) -> Result<CString, String> {
 #[cfg(unix)]
 pub(crate) fn open_dir_at(directory: &File, name: &std::ffi::OsStr) -> Result<File, String> {
     let name = c_name(name)?;
+    // SAFETY: `directory` is an owned descriptor and `name` is a NUL-terminated
+    // CString retained for the duration of this call; all flags are constants.
     let fd = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -114,6 +116,7 @@ pub(crate) fn open_dir_at(directory: &File, name: &std::ffi::OsStr) -> Result<Fi
     if fd < 0 {
         return Err("confined directory open failed".to_owned());
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 
@@ -133,6 +136,8 @@ pub(crate) fn open_file_at(
     #[cfg(test)]
     super::super::descriptor_race_control::pause_before_file_open();
     record_test_file_open_attempt();
+    // SAFETY: `directory` is an owned descriptor and `name` remains valid for
+    // the call; the fixed flags do not permit symlink traversal.
     let fd = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -143,6 +148,7 @@ pub(crate) fn open_file_at(
     if fd < 0 {
         return Err("confined regular-file open failed".to_owned());
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     let file = unsafe { File::from_raw_fd(fd) };
     let metadata = file
         .metadata()
@@ -156,6 +162,8 @@ pub(crate) fn open_file_at(
 #[cfg(unix)]
 pub(crate) fn regular_identity_at(directory: &File, name: &CString) -> Result<(u64, u64), String> {
     let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: `stat` points to writable storage and `name`/`directory` remain
+    // valid throughout this fixed-flag `fstatat` call.
     let status = unsafe {
         libc::fstatat(
             directory.as_raw_fd(),
@@ -167,11 +175,12 @@ pub(crate) fn regular_identity_at(directory: &File, name: &CString) -> Result<(u
     if status != 0 {
         return Err("confined regular-file open failed".to_owned());
     }
+    // SAFETY: a zero `fstatat` status initializes the entire `stat` value.
     let stat = unsafe { stat.assume_init() };
     if !regular_mode(stat.st_mode) {
         return Err("confined regular-file open failed".to_owned());
     }
-    Ok((stat.st_dev as u64, stat.st_ino as u64))
+    Ok((stat.st_dev as u64, stat.st_ino))
 }
 
 #[cfg(unix)]

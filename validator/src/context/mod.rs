@@ -40,5 +40,6 @@ pub use bound_context::{
     ToolCapability,
 };
 pub use error::ContextError;
+pub(crate) use git::query as query_git;
 pub(crate) use read_session::ReadSession;
 pub use request::BuildRequest;

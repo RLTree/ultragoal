@@ -30,13 +30,13 @@ pub(crate) fn value_failures(
 ) -> Vec<String> {
     let mut out = Vec::new();
     out.extend(
-        schema_catalog::schema_errors(store, SCHEMA, &receipt)
+        schema_catalog::schema_errors(store, SCHEMA, receipt)
             .into_iter()
             .map(|err| format!("final_packet_proof_schema:{err}")),
     );
-    current_candidate_failures(root, &receipt, &mut out);
-    packet_artifact_failures(root, &receipt, &mut out);
-    out.extend(references::failures(root, store, &receipt));
+    current_candidate_failures(root, receipt, &mut out);
+    packet_artifact_failures(root, receipt, &mut out);
+    out.extend(references::failures(root, store, receipt));
     out.extend(observability::failures(root, receipt));
     out
 }
@@ -51,7 +51,7 @@ pub(crate) fn value_claim_guard_failures(
     }
     let mut out = Vec::new();
     out.extend(
-        schema_catalog::schema_errors(store, SCHEMA, &receipt)
+        schema_catalog::schema_errors(store, SCHEMA, receipt)
             .into_iter()
             .map(|err| format!("final_packet_proof_schema:{err}")),
     );
@@ -126,10 +126,10 @@ fn current_candidate_guard_failures(root: &Path, receipt: &Value, out: &mut Vec<
     {
         out.push("final_packet_proof_guard_failure_reason_missing".to_string());
     }
-    if !receipt
+    if receipt
         .pointer("/failure/observed_failures")
         .and_then(Value::as_array)
-        .is_some_and(|failures| !failures.is_empty())
+        .is_none_or(Vec::is_empty)
     {
         out.push("final_packet_proof_guard_observed_failures_missing".to_string());
     }

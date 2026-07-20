@@ -27,7 +27,7 @@ pub(crate) fn value_failures(
 ) -> Vec<String> {
     let mut out = Vec::new();
     out.extend(
-        schema_catalog::schema_errors(store, "codex-registry-exposure.schema.json", &receipt)
+        schema_catalog::schema_errors(store, "codex-registry-exposure.schema.json", receipt)
             .into_iter()
             .map(|err| format!("plugin_self_law_registry_schema:{err}")),
     );
@@ -45,7 +45,7 @@ pub(crate) fn value_claim_guard_failures(
     }
     let mut out = Vec::new();
     out.extend(
-        schema_catalog::schema_errors(store, "codex-registry-exposure.schema.json", &receipt)
+        schema_catalog::schema_errors(store, "codex-registry-exposure.schema.json", receipt)
             .into_iter()
             .map(|err| format!("plugin_self_law_registry_schema:{err}")),
     );

@@ -58,15 +58,18 @@ impl ProcessLock {
         file: File,
         created: bool,
     ) -> Result<Self, HostFailure> {
+        // SAFETY: the descriptor is owned by `file` and the mode is a fixed permission mask.
         if created && unsafe { libc::fchmod(file.as_raw_fd(), 0o600) } != 0 {
             return Err(HostFailure::Persistence);
         }
         let identity = identity(&file.metadata().map_err(|_| HostFailure::Invalid)?);
+        // SAFETY: the descriptor is owned by `file` and the lock operation does not outlive it.
+        let locked = unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } == 0;
         if !identity.safe_regular()
             || identity.size != 0
             || prior.is_some_and(|prior| prior != identity)
             || stat_at(&directory.file, name)? != Some(identity)
-            || unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0
+            || !locked
         {
             return Err(HostFailure::Invalid);
         }
@@ -92,6 +95,7 @@ impl ProcessLock {
 
 impl Drop for ProcessLock {
     fn drop(&mut self) {
+        // SAFETY: the descriptor is owned by `self`; releasing its advisory lock is the only effect.
         unsafe {
             libc::flock(self.file.as_raw_fd(), libc::LOCK_UN);
         }
@@ -111,8 +115,10 @@ pub(crate) struct FileIdentity {
 
 impl FileIdentity {
     pub(crate) fn safe_regular(self) -> bool {
+        // SAFETY: geteuid has no preconditions and only reads the process credential.
+        let effective_uid = unsafe { libc::geteuid() };
         self.kind == libc::S_IFREG as u32
-            && self.uid == unsafe { libc::geteuid() }
+            && self.uid == effective_uid
             && self.mode == 0o600
             && self.links == 1
             && self.size <= MAX_PENDING_BYTES
@@ -152,6 +158,7 @@ pub(crate) fn identity(metadata: &fs::Metadata) -> FileIdentity {
 pub(crate) fn stat_at(directory: &File, name: &str) -> Result<Option<FileIdentity>, HostFailure> {
     let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
     let mut value = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: the descriptor is borrowed, the C string is NUL-terminated, and `value` points to writable storage.
     if unsafe {
         libc::fstatat(
             directory.as_raw_fd(),
@@ -167,10 +174,11 @@ pub(crate) fn stat_at(directory: &File, name: &str) -> Result<Option<FileIdentit
             Err(HostFailure::Invalid)
         };
     }
+    // SAFETY: fstatat returned zero, so it initialized `value`.
     let value = unsafe { value.assume_init() };
     Ok(Some(FileIdentity {
         device: value.st_dev as u64,
-        inode: value.st_ino as u64,
+        inode: value.st_ino,
         uid: value.st_uid,
         mode: value.st_mode as u32 & 0o7777,
         links: value.st_nlink as u64,

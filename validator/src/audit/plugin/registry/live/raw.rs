@@ -205,11 +205,11 @@ fn reviewer_row_failures(raw: &Value) -> Vec<String> {
             ));
             continue;
         }
-        if string(&matches[0], "agent_manifest_path") != *path {
+        if string(matches[0], "agent_manifest_path") != *path {
             out.push("plugin_self_law_registry_raw_observation_agent_mismatch".to_string());
         }
-        if string(&matches[0], "runtime_metadata_status") != "unavailable"
-            || string(&matches[0], "custom_agent_discovery_status") != "unavailable"
+        if string(matches[0], "runtime_metadata_status") != "unavailable"
+            || string(matches[0], "custom_agent_discovery_status") != "unavailable"
         {
             out.push(
                 "plugin_self_law_registry_raw_observation_agent_runtime_unverified".to_string(),
@@ -220,7 +220,7 @@ fn reviewer_row_failures(raw: &Value) -> Vec<String> {
                 "plugin_self_law_registry_raw_observation_agent_exposure_claim_invalid".to_string(),
             );
         }
-        if string(&matches[0], "sandbox_mode") != "read-only" {
+        if string(matches[0], "sandbox_mode") != "read-only" {
             out.push(
                 "plugin_self_law_registry_raw_observation_agent_sandbox_not_read_only".to_string(),
             );

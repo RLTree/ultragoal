@@ -170,11 +170,11 @@ fn embedded_status_failures(
         }
         _ => {}
     }
-    if let Some(actual) = value.get("status").and_then(Value::as_str) {
-        if embedded_status != Some(actual) {
-            out.push(format!(
-                "final_packet_proof_ref_status_disagreement:{label}"
-            ));
-        }
+    if let Some(actual) = value.get("status").and_then(Value::as_str)
+        && embedded_status != Some(actual)
+    {
+        out.push(format!(
+            "final_packet_proof_ref_status_disagreement:{label}"
+        ));
     }
 }

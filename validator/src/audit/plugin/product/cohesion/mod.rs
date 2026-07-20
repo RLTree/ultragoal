@@ -59,7 +59,7 @@ fn flow_manifest_failures(root: &Path, flow: &PluginCohesionManifest) -> Vec<Str
     }
     out.extend(crate::audit::plugin::flow::authority::failures(flow));
     for surface in &flow.required_surfaces {
-        if !root.join(&surface).is_file() {
+        if !root.join(surface).is_file() {
             out.push(format!("plugin_flow_setup_file_not_packaged:{surface}"));
         }
     }

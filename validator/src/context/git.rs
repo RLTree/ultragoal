@@ -1,7 +1,9 @@
 use super::bound_context::CandidateIdentity;
+use super::capability;
 use super::digest::{add_framed, sha256_hex};
-use super::error::{ContextError, io_error};
+use super::error::{io_error, ContextError};
 use super::process::{run_bounded, run_bounded_allow_failure};
+use super::read_session::ReadSession;
 use sha2::{Digest, Sha256};
 use std::ffi::{OsStr, OsString};
 use std::fs::{self, File};
@@ -33,6 +35,29 @@ fn git_args(arguments: &[&str]) -> Vec<OsString> {
 
 fn run(git: &Path, cwd: &Path, arguments: &[&str]) -> Result<Vec<u8>, ContextError> {
     Ok(run_bounded(git, &git_args(arguments), cwd, GIT_TIMEOUT)?.stdout)
+}
+
+/// Runs a read-only Git query through the capability captured by this session.
+pub(crate) fn query(reads: &ReadSession, arguments: &[&str]) -> Result<Vec<u8>, ContextError> {
+    reads.revalidate()?;
+    let recorded = reads
+        .context
+        .capabilities()
+        .tool("git")
+        .filter(|tool| tool.available)
+        .ok_or_else(|| ContextError::ConcurrentMutation("Git substrate unavailable".to_owned()))?;
+    let executable = recorded.executable.as_deref().ok_or_else(|| {
+        ContextError::ConcurrentMutation("Git substrate path unavailable".to_owned())
+    })?;
+    let git = Path::new(executable);
+    if capability::executable_identity("git", git)? != *recorded {
+        return Err(ContextError::ConcurrentMutation(
+            "Git substrate identity changed".to_owned(),
+        ));
+    }
+    let output = run(git, reads.root(), arguments)?;
+    reads.revalidate()?;
+    Ok(output)
 }
 
 fn optional(git: &Path, cwd: &Path, arguments: &[&str]) -> Result<Option<Vec<u8>>, ContextError> {
@@ -117,6 +142,38 @@ fn trim_line(mut bytes: Vec<u8>) -> Vec<u8> {
         bytes.pop();
     }
     bytes
+}
+
+#[cfg(test)]
+mod query_tests {
+    use super::query;
+    use crate::context::tests::Repo;
+    use crate::context::{BuildRequest, ContextError, LiveContext};
+    use std::fs;
+
+    #[test]
+    fn recorded_git_capability_executes_fixed_query_arguments() {
+        let repo = Repo::new("recorded-git-query");
+        let context = LiveContext::build(BuildRequest::new(&repo.root)).unwrap();
+        let session = context.begin_read_session().unwrap();
+        let output = query(&session, &["rev-parse", "--show-toplevel"]).unwrap();
+        assert_eq!(
+            String::from_utf8(output).unwrap().trim(),
+            repo.root.display().to_string()
+        );
+    }
+
+    #[test]
+    fn stale_session_is_refused_before_git_query_runs() {
+        let repo = Repo::new("stale-git-query");
+        let context = LiveContext::build(BuildRequest::new(&repo.root)).unwrap();
+        let session = context.begin_read_session().unwrap();
+        fs::write(repo.root.join("tracked.txt"), b"changed\n").unwrap();
+        assert!(matches!(
+            query(&session, &["rev-parse", "HEAD"]),
+            Err(ContextError::ConcurrentMutation(_))
+        ));
+    }
 }
 
 fn text(value: Option<Vec<u8>>, field: &str) -> Result<Option<String>, ContextError> {

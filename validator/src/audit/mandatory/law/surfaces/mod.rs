@@ -109,10 +109,10 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         if !registry::trace_entry_exists(root, law) {
             out.push(format!("mandatory_law_missing_foundational_trace:{law}"));
         }
-        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str) {
-            if !root.join(path).is_file() {
-                out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
-            }
+        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str)
+            && !root.join(path).is_file()
+        {
+            out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
         }
         for red in row
             .get("red_fixture_ids")

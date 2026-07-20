@@ -132,8 +132,7 @@ impl ResearchSourceRecord {
                     &practice.source_locator,
                     &practice.mapped_law_ids,
                     self,
-                    &mut row_ids,
-                    &mut statements,
+                    (&mut row_ids, &mut statements),
                 )
             {
                 return Err(invalid_source());
@@ -148,8 +147,7 @@ impl ResearchSourceRecord {
                     &hypothesis.source_locator,
                     &hypothesis.mapped_law_ids,
                     self,
-                    &mut row_ids,
-                    &mut statements,
+                    (&mut row_ids, &mut statements),
                 )
             {
                 return Err(invalid_source());
@@ -164,8 +162,7 @@ impl ResearchSourceRecord {
                     &recommendation.source_locator,
                     &recommendation.mapped_law_ids,
                     self,
-                    &mut row_ids,
-                    &mut statements,
+                    (&mut row_ids, &mut statements),
                 )
             {
                 return Err(invalid_source());

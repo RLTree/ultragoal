@@ -8,7 +8,7 @@ pub(crate) fn execute(
 ) -> RuntimeOutcome {
     #[cfg(target_vendor = "apple")]
     {
-        return supported::execute(context, prepared, home).unwrap_or_else(host_failure);
+        supported::execute(context, prepared, home).unwrap_or_else(host_failure)
     }
     #[cfg(not(target_vendor = "apple"))]
     {
@@ -20,14 +20,14 @@ pub(crate) fn execute(
 pub(crate) fn recover_pending(
     context: &LiveContext,
     home: &Path,
-) -> Result<Option<RuntimeOutcome>, RuntimeOutcome> {
+) -> Result<Option<RuntimeOutcome>, Box<RuntimeOutcome>> {
     #[cfg(target_vendor = "apple")]
     {
-        return match supported::recover_pending(context, home) {
+        match supported::recover_pending(context, home) {
             Ok(outcome) => Ok(outcome),
             Err(HostFailure::Unavailable) => Ok(None),
-            Err(failure) => Err(host_failure(failure)),
-        };
+            Err(failure) => Err(Box::new(host_failure(failure))),
+        }
     }
     #[cfg(not(target_vendor = "apple"))]
     {

@@ -3,6 +3,7 @@ use super::*;
 impl AnchoredDirectory {
     pub(crate) fn open_absolute(path: &Path) -> Result<Self, HostFailure> {
         let name = CString::new(path.as_os_str().as_bytes()).map_err(|_| HostFailure::Invalid)?;
+        // SAFETY: the owned C string is NUL-terminated and all flags are constants.
         let fd = unsafe {
             libc::open(
                 name.as_ptr(),
@@ -12,14 +13,17 @@ impl AnchoredDirectory {
         if fd < 0 {
             return Err(HostFailure::Unavailable);
         }
+        // SAFETY: a non-negative descriptor was returned exclusively to this call.
         Self::from_file(path.to_path_buf(), unsafe { File::from_raw_fd(fd) })
     }
 
     pub(crate) fn from_file(path: PathBuf, file: File) -> Result<Self, HostFailure> {
         let metadata = file.metadata().map_err(|_| HostFailure::Invalid)?;
         let observed = identity(&metadata);
+        // SAFETY: geteuid has no preconditions and only reads the process credential.
+        let effective_uid = unsafe { libc::geteuid() };
         if !metadata.is_dir()
-            || observed.owner != unsafe { libc::geteuid() }
+            || observed.owner != effective_uid
             || observed.mode & 0o7777 != 0o700
             || fs::symlink_metadata(&path)
                 .map(|value| identity(&value) != observed)
@@ -49,8 +53,10 @@ impl AnchoredDirectory {
         let file = openat(&self.file, name, flags, 0)?;
         let metadata = file.metadata().map_err(|_| HostFailure::Invalid)?;
         let observed = identity(&metadata);
+        // SAFETY: geteuid has no preconditions and only reads the process credential.
+        let effective_uid = unsafe { libc::geteuid() };
         if !metadata.is_file()
-            || observed.owner != unsafe { libc::geteuid() }
+            || observed.owner != effective_uid
             || observed.mode & 0o7777 != mode
             || observed.links != 1
             || self.stat(name)? != Some(observed)
@@ -64,6 +70,7 @@ impl AnchoredDirectory {
         validate_name(name)?;
         let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
         let mut metadata = MaybeUninit::<libc::stat>::uninit();
+        // SAFETY: the descriptor is borrowed, the C string is NUL-terminated, and `metadata` points to writable storage.
         let result = unsafe {
             libc::fstatat(
                 self.file.as_raw_fd(),
@@ -73,6 +80,7 @@ impl AnchoredDirectory {
             )
         };
         if result == 0 {
+            // SAFETY: fstatat returned zero, so it initialized `metadata`.
             let metadata = unsafe { metadata.assume_init() };
             return Ok(Some(stat_identity(&metadata)));
         }
@@ -97,6 +105,7 @@ impl AnchoredDirectory {
 
 impl ProcessLock {
     pub(crate) fn acquire(file: File) -> Result<Self, HostFailure> {
+        // SAFETY: the descriptor is owned by `file` and the lock operation does not outlive it.
         if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
             return Err(match std::io::Error::last_os_error().raw_os_error() {
                 Some(value) if value == libc::EWOULDBLOCK || value == libc::EAGAIN => {
@@ -117,6 +126,7 @@ pub(crate) fn openat(
 ) -> Result<File, HostFailure> {
     validate_name(name)?;
     let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+    // SAFETY: the descriptor is borrowed, the C string is NUL-terminated, and the flags are bounded constants.
     let descriptor = unsafe {
         libc::openat(
             parent.as_raw_fd(),
@@ -132,5 +142,6 @@ pub(crate) fn openat(
             _ => HostFailure::Invalid,
         });
     }
+    // SAFETY: a non-negative descriptor was returned exclusively to this call.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }

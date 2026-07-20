@@ -204,10 +204,10 @@ fn validate_target(target: &PermitTarget) -> Result<(), ProductError> {
             validate_identifier(value)?;
         }
     }
-    if let Some(binding) = &target.recovered_binding {
-        if !is_digest(&binding.context_id) || !is_digest(&binding.candidate_id) {
-            return Err(ProductError::AuthorityInvalid);
-        }
+    if target.recovered_binding.as_ref().is_some_and(|binding| {
+        !is_digest(&binding.context_id) || !is_digest(&binding.candidate_id)
+    }) {
+        return Err(ProductError::AuthorityInvalid);
     }
     Ok(())
 }

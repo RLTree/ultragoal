@@ -18,10 +18,10 @@ fn valid_run_invocation(invocation: &ParsedInvocation) -> bool {
             [spec, output]
                 if spec.name == OptionName::Spec && output.name == OptionName::Output =>
             {
-                match (&spec.value, &output.value) {
-                    (ParsedValue::RelativePath(_), ParsedValue::RelativePath(_)) => true,
-                    _ => false,
-                }
+                matches!(
+                    (&spec.value, &output.value),
+                    (ParsedValue::RelativePath(_), ParsedValue::RelativePath(_))
+                )
             }
             _ => false,
         },

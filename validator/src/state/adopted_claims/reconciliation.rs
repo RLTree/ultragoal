@@ -82,11 +82,13 @@ pub(in crate::state) fn stage_target(
         context,
         authority_catalog,
         registry,
-        claim_registry_sha256,
-        contract_manifest_sha256,
-        handoff_sha256,
-        dependency_identities,
-        SourceBindingStatus::RegistryDeclared,
+        StageInputs {
+            claim_registry_sha256,
+            contract_manifest_sha256,
+            handoff_sha256,
+            dependency_identities,
+            source_binding: SourceBindingStatus::RegistryDeclared,
+        },
     )
 }
 
@@ -103,11 +105,13 @@ pub(in crate::state) fn stage_root(
         context,
         authority_catalog,
         registry,
-        claim_registry_sha256,
-        contract_manifest_sha256,
-        handoff_sha256,
-        dependency_identities,
-        SourceBindingStatus::RootSourceVerified,
+        StageInputs {
+            claim_registry_sha256,
+            contract_manifest_sha256,
+            handoff_sha256,
+            dependency_identities,
+            source_binding: SourceBindingStatus::RootSourceVerified,
+        },
     )?;
     Ok(RootClaimStage {
         stage_id: staged.stage_id()?.to_owned(),
@@ -118,11 +122,7 @@ fn stage(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
     registry: &AdoptedClaimRegistry,
-    claim_registry_sha256: String,
-    contract_manifest_sha256: String,
-    handoff_sha256: String,
-    dependency_identities: Vec<DependencyIdentity>,
-    source_binding: SourceBindingStatus,
+    inputs: StageInputs,
 ) -> Result<StagedClaimReconciliation, StateError> {
     let goal_contract_sha256 = sha256(GOAL_BYTES);
     let amendment = verify_amendment(&goal_contract_sha256)?;
@@ -145,16 +145,16 @@ fn stage(
         context_id: context.context_id().to_owned(),
         candidate: context.candidate().clone(),
         authority_catalog_id: authority_catalog.catalog_id().to_owned(),
-        claim_registry_sha256,
-        contract_manifest_sha256,
-        handoff_sha256,
+        claim_registry_sha256: inputs.claim_registry_sha256,
+        contract_manifest_sha256: inputs.contract_manifest_sha256,
+        handoff_sha256: inputs.handoff_sha256,
         goal_contract_sha256,
         amendments_sha256: sha256(AMENDMENT_BYTES),
         amendment_id: amendment.amendment_id().to_owned(),
         amendment_hash: amendment.amendment_hash().to_owned(),
         lane_registry_sha256: sha256(LANE_BYTES),
-        source_binding,
-        dependency_identities,
+        source_binding: inputs.source_binding,
+        dependency_identities: inputs.dependency_identities,
         decisions,
         generated_outputs: Vec::new(),
         fixtures: Vec::new(),
@@ -162,6 +162,14 @@ fn stage(
     };
     staged.stage_id = Some(digest(&staged)?);
     Ok(staged)
+}
+
+struct StageInputs {
+    claim_registry_sha256: String,
+    contract_manifest_sha256: String,
+    handoff_sha256: String,
+    dependency_identities: Vec<DependencyIdentity>,
+    source_binding: SourceBindingStatus,
 }
 
 impl RootClaimStage {

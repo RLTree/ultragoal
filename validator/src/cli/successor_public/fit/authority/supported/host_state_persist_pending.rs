@@ -28,6 +28,7 @@ impl HostState {
             0o600,
         )?;
         let result = (|| {
+            // SAFETY: the descriptor is owned by `file` and the mode is a fixed permission mask.
             if unsafe { libc::fchmod(file.as_raw_fd(), 0o600) } != 0 {
                 return Err(HostFailure::Persistence);
             }

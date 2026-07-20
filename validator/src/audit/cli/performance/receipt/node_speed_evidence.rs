@@ -70,12 +70,12 @@ fn speed_node_failures(node: &Value, expected_candidate: Option<&str>) -> Vec<St
         }
     }
     for field in ["candidate_digest", "result_digest", "output_digest"] {
-        if let Some(value) = str_field(node, field) {
-            if !valid_digest(value) {
-                out.push(format!(
-                    "cli_performance_speed_node_invalid_digest:{node_id}:/{field}"
-                ));
-            }
+        if let Some(value) = str_field(node, field)
+            && !valid_digest(value)
+        {
+            out.push(format!(
+                "cli_performance_speed_node_invalid_digest:{node_id}:/{field}"
+            ));
         }
     }
     if node
@@ -195,12 +195,12 @@ fn verified_cache_node_failures(node: &Value, node_id: &str, out: &mut Vec<Strin
         "prior_result_digest",
         "replayed_output_digest",
     ] {
-        if let Some(value) = str_field(node, field) {
-            if !valid_digest(value) {
-                out.push(format!(
-                    "cli_performance_speed_node_invalid_digest:{node_id}:/{field}"
-                ));
-            }
+        if let Some(value) = str_field(node, field)
+            && !valid_digest(value)
+        {
+            out.push(format!(
+                "cli_performance_speed_node_invalid_digest:{node_id}:/{field}"
+            ));
         }
     }
     if str_field(node, "prior_result_digest") != str_field(node, "result_digest")

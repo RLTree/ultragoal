@@ -41,7 +41,7 @@ impl PolicyState {
             "observation_only",
             &mut out,
         );
-        if self.destination != PathBuf::from(APPROVED_DESTINATION) {
+        if self.destination != std::path::Path::new(APPROVED_DESTINATION) {
             out.push("openai_key_policy_unapproved_destination".to_string());
         }
         if !self.gitignored {

@@ -64,7 +64,7 @@ pub(crate) fn execute_invocation_with_home(
             FitAction::Inspect | FitAction::Plan | FitAction::Apply | FitAction::Verify,
         ) => match fit::target_root(root, &invocation) {
             Ok(target) => target,
-            Err(outcome) => return outcome,
+            Err(outcome) => return *outcome,
         },
         _ => root.to_path_buf(),
     };
