@@ -22,10 +22,15 @@ impl FixtureScheduler {
                 return Err(FixtureScheduleError::Collision(spec.id.clone()));
             }
         }
-        let mut ids = Vec::with_capacity(ordered.len());
+        let mut acquired = Vec::with_capacity(ordered.len());
         for spec in ordered {
-            ids.push(self.acquire(spec)?);
+            match self.acquire(spec) {
+                Ok(run) => acquired.push(run),
+                Err(source) => return Err(self.rollback_acquisition(acquired, source)),
+            }
         }
+        let ids = acquired.iter().map(|(lease_id, _)| lease_id.clone()).collect();
+        self.active.extend(acquired);
         Ok(ids)
     }
 

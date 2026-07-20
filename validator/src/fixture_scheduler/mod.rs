@@ -19,6 +19,9 @@ pub use error::FixtureScheduleError;
 #[cfg(all(test, unix))]
 pub(crate) use lease::set_before_capture_hook;
 pub use lease::{IsolationLease, LeaseDisposition};
+pub(crate) use lease::LeaseAcquisitionFailure;
+#[cfg(all(test, unix))]
+pub(crate) use lease::{LeaseAcquisitionStage, run_lease_acquisition_hook, set_lease_acquisition_hook};
 pub(crate) use outcome::{ExecutedFixture, FixtureExecutionRecordCapture};
 pub use outcome::{
     ExpectedOutcome, FixtureExecutionBinding, FixtureExecutionRecord, ObservedOutcome,
