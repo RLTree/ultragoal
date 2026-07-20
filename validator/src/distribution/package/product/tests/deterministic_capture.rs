@@ -129,6 +129,30 @@ fn captured_runtime_payload_drives_the_confined_runtime_probe() {
     .expect("runtime execution");
     assert_eq!(runtime.0.runtime_verdict(), RuntimeVerdict::Executed);
 }
+
+#[test]
+fn verified_artifact_archive_publication_is_repeatable() {
+    let repo = Repo::new("supported-package-product-archive");
+    let context = repo.context();
+    let catalog = catalog(&context);
+    let artifact = capture_product_package(&context, &catalog).expect("package");
+    let output = OutputRoot::new("supported-package-product-archive");
+    let file = ScopedFile::new(
+        ConfinedRoot::open(&output.root).expect("confined root"),
+        "packages/harness-ultragoal.hugpkg",
+    )
+    .expect("archive output");
+    artifact
+        .publish_archive(&context, &catalog, &file)
+        .expect("first publication");
+    artifact
+        .publish_archive(&context, &catalog, &file)
+        .expect("repeat publication");
+    assert_eq!(
+        file.inspect(65 * 1024 * 1024).unwrap().unwrap(),
+        artifact.snapshot().archive()
+    );
+}
 use crate::distribution::{
     ExpectedPrior, InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest,
     RuntimeProbePlan, RuntimeVerdict, ScopedInstall, install, publish_installed_runtime_probe,

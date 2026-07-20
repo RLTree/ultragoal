@@ -27,5 +27,7 @@ include!("packaged_entries.rs");
 
 include!("inventory_publication.rs");
 
+include!("archive_publication.rs");
+
 #[cfg(test)]
 mod tests;
