@@ -54,6 +54,7 @@ pub(crate) struct HostEffectReservation {
     issued_at_unix_ms: u64,
     expires_at_unix_ms: u64,
     lifecycle_record: Option<crate::plugin_product::lifecycle::HostLifecycleRecord>,
+    lifecycle_record_sha256: Option<String>,
 }
 
 impl HostEffectReservation {
@@ -70,6 +71,7 @@ impl HostEffectReservation {
             issued_at_unix_ms: permit.binding().issued_at_unix_ms,
             expires_at_unix_ms: permit.binding().expires_at_unix_ms,
             lifecycle_record: permit.binding().lifecycle_record.clone(),
+            lifecycle_record_sha256: permit.binding().lifecycle_record_sha256.clone(),
         }
     }
 
@@ -89,6 +91,10 @@ impl HostEffectReservation {
         &self,
     ) -> Option<&crate::plugin_product::lifecycle::HostLifecycleRecord> {
         self.lifecycle_record.as_ref()
+    }
+
+    pub(crate) fn lifecycle_record_sha256(&self) -> Option<&str> {
+        self.lifecycle_record_sha256.as_deref()
     }
 }
 
