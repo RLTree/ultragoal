@@ -959,6 +959,17 @@ installed, runtime, readiness, release, and completion claim remain withheld.
 Per the required debt checkpoint, root owns this exact 40-path repair before
 any new implementation worktree may launch.
 
+The root-only checkpoint may additionally edit four dependency-closed support
+paths: `validator/src/routine_work/reuse/decision.rs` to box the crate-private
+`VerifiedReuse` facts at their sole constructor,
+`validator/src/routine_work/runtime_adapter/mediator/intent_mediation.rs` for
+the typed executed-intent projection request, and
+`validator/src/routine_work/runtime_adapter/production/custody/transaction/mod.rs`
+plus
+`validator/src/routine_work/runtime_adapter/mediator/process/termination_tests.rs`
+for the typed authorized-process preparation request. These are caller-shape
+repairs only; they do not broaden behavior, public authority, or claims.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
