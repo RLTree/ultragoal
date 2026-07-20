@@ -32,6 +32,8 @@ include!("wrong/pre_reservation_identity.rs");
 
 include!("wrong/package_plan.rs");
 
+include!("accepted_lifecycle_operation_matrix.rs");
+
 include!("every_complete_permit_binding_dimension_changes_the_canonical_binding.rs");
 
 include!("expected/publication_identity.rs");
