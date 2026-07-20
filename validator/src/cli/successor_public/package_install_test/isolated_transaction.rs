@@ -105,8 +105,9 @@ fn execute_bound(
         artifact.snapshot().identity().clone(),
     )
     .map_err(|_| "marketplace plan failed")?;
-    let mut marketplace_file = ScopedFile::new(confined.clone(), ".codex-plugin/marketplace.json")
-        .map_err(|_| "marketplace target failed")?;
+    let mut marketplace_file =
+        ScopedFile::new(confined.clone(), ".agents/plugins/marketplace.json")
+            .map_err(|_| "marketplace target failed")?;
     apply_marketplace(&marketplace_plan, &mut marketplace_file)
         .map_err(|_| "marketplace publication failed")?;
     let marketplace_bytes = marketplace_file
