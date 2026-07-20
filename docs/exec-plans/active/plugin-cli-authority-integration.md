@@ -2,8 +2,10 @@
 
 ## Isolated package-to-runtime integration — 2026-07-20
 
-Root integrated the accepted production increment through `0866fa8aa`. The
-public `package install-test` route now recaptures the exact current package,
+Root integrated the accepted production increment through `0866fa8aa`, then
+bound its catalog to Codex's supported `.agents/plugins/marketplace.json` path
+through `d1300e129`. The public `package install-test` route now recaptures the
+exact current package,
 requires its input archive bytes to match, and executes one disposable
 descriptor-confined transaction across the marketplace source, archive
 install, cache, app registry, and packaged runtime. The marketplace manifest

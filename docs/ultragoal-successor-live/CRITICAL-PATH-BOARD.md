@@ -2,7 +2,8 @@
 
 ## 2026-07-20 isolated distribution/runtime checkpoint
 
-Accepted root source through `0866fa8aa` replaces the fail-closed
+Accepted root source through `0866fa8aa`, plus the supported Codex marketplace
+catalog path correction at `d1300e129`, replaces the fail-closed
 `package install-test` outcome with one exact current-source isolated
 transaction. The command binds a marketplace manifest to its real relative
 source, verifies a separate archive install and cache/app-registry state,
