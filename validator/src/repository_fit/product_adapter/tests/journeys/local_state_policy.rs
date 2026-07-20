@@ -14,7 +14,10 @@ pub(crate) fn local_state_only_mutation_is_counted_at_each_preparation_surface()
     assert_eq!(prepared.projection().mutation_count, 1);
     assert_eq!(prepared.request().all_mutations().len(), 1);
     execute(&fixture, prepared).unwrap();
-    assert_eq!(fs::read(fixture.root.join(".gitignore")).unwrap(), b"validation_artifacts/\n");
+    assert_eq!(
+        fs::read(fixture.root.join(".gitignore")).unwrap(),
+        b"validation_artifacts/\n"
+    );
 }
 
 #[test]
@@ -69,16 +72,27 @@ pub(crate) fn local_state_policy_preserves_user_bytes_newline_shape_and_mode() {
             & 0o7777,
         0o600
     );
-    assert_eq!(fs::read(fixture.root.join("unrelated.txt")).unwrap(), b"keep me\n");
+    assert_eq!(
+        fs::read(fixture.root.join("unrelated.txt")).unwrap(),
+        b"keep me\n"
+    );
     assert_ne!(git_status(&fixture.root), before_status);
 
     let child = fixture
         .root
         .join("validation_artifacts/observability/spool/successor-events.jsonl");
     fixture.write("validation_artifacts/observability/spool/child.txt", b"x");
-    git(&fixture.root, &["check-ignore", "--quiet", child.to_str().unwrap()]);
+    git(
+        &fixture.root,
+        &["check-ignore", "--quiet", child.to_str().unwrap()],
+    );
     let tracked = std::process::Command::new("git")
-        .args(["ls-files", "--error-unmatch", "--", "validation_artifacts/observability/spool/child.txt"])
+        .args([
+            "ls-files",
+            "--error-unmatch",
+            "--",
+            "validation_artifacts/observability/spool/child.txt",
+        ])
         .current_dir(&fixture.root)
         .stdout(Stdio::null())
         .stderr(Stdio::null())

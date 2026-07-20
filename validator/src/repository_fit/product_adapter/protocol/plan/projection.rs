@@ -74,9 +74,7 @@ pub(crate) fn plan_projection(
     })
 }
 
-pub(crate) fn local_state_projection(
-    state: &LocalStatePlan,
-) -> LocalStatePolicyProjection {
+pub(crate) fn local_state_projection(state: &LocalStatePlan) -> LocalStatePolicyProjection {
     LocalStatePolicyProjection {
         path: state.path.as_str().to_owned(),
         required_rule: state.required_rule.clone(),
@@ -86,10 +84,7 @@ pub(crate) fn local_state_projection(
             LocalStateDisposition::AlreadyIgnored => "already_ignored",
         }
         .to_owned(),
-        observed_sha256: state
-            .prior
-            .as_deref()
-            .map(crate::repository_fit::digest),
+        observed_sha256: state.prior.as_deref().map(crate::repository_fit::digest),
         observed_unix_mode: state.observed_mode,
         desired_unix_mode: state.desired_mode,
         desired_sha256: state.desired_sha256(),

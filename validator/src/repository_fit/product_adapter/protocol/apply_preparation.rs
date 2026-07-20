@@ -187,10 +187,8 @@ pub(crate) fn current_plan(context: &LiveContext) -> Result<CurrentPlan, FitAdap
         .map_err(kernel_error)?;
     let local_state_mode = mode_reader
         .read_unix_mode(
-            &crate::repository_fit::CanonicalPath::parse(
-                crate::repository_fit::LOCAL_STATE_PATH,
-            )
-            .map_err(kernel_error)?,
+            &crate::repository_fit::CanonicalPath::parse(crate::repository_fit::LOCAL_STATE_PATH)
+                .map_err(kernel_error)?,
         )
         .map_err(kernel_error)?;
     let local_state = inspect_local_state(&mut reader, local_state_mode).map_err(kernel_error)?;

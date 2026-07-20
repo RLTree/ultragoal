@@ -1,6 +1,6 @@
 use std::io::Read;
-use std::process::{Child, Command, ExitStatus, Stdio};
 use std::path::Path;
+use std::process::{Child, Command, ExitStatus, Stdio};
 use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -91,10 +91,7 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
     }
 }
 
-fn runtime_store_untracked(
-    git: &Path,
-    binding: &RoutineBinding,
-) -> Result<bool, RoutineError> {
+fn runtime_store_untracked(git: &Path, binding: &RoutineBinding) -> Result<bool, RoutineError> {
     let mut child = Command::new(git)
         .args([
             "--no-optional-locks",

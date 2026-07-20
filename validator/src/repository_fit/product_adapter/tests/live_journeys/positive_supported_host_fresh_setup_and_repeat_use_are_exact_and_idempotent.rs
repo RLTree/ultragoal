@@ -24,7 +24,8 @@ pub(crate) fn positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_i
 
     fs::remove_file(fixture.root.join(".gitignore")).unwrap();
     let local_only_context = fixture.context();
-    let local_only_record = assert_zero_write(&fixture, || plan_target(&local_only_context).unwrap());
+    let local_only_record =
+        assert_zero_write(&fixture, || plan_target(&local_only_context).unwrap());
     assert_eq!(local_only_record.mutation_count(), 1);
     let local_only = fixture.request(&local_only_context);
     let local_only_outcome = apply_once(

@@ -43,12 +43,7 @@ pub fn apply(
             }
         }
         if let Err(failure) = require_root(effects, &plan.root_binding) {
-            return fail_with_rollback(
-                failure,
-                &mutations[..applied],
-                &plan.root_binding,
-                effects,
-            );
+            return fail_with_rollback(failure, &mutations[..applied], &plan.root_binding, effects);
         }
     }
     if require_postconditions(&plan.checks, effects).is_err() {
@@ -60,12 +55,7 @@ pub fn apply(
         );
     }
     if let Err(failure) = require_root(effects, &plan.root_binding) {
-        return fail_with_rollback(
-            failure,
-            &mutations[..applied],
-            &plan.root_binding,
-            effects,
-        );
+        return fail_with_rollback(failure, &mutations[..applied], &plan.root_binding, effects);
     }
     Ok(AppliedFit {
         plan_sha256: plan.plan_sha256.clone(),

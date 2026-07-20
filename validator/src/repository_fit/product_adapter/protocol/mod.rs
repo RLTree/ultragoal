@@ -12,17 +12,18 @@ use super::projection::{APPLY_PREPARATION_SCHEMA, FitApplyPreparationProjection}
 use super::projection::{
     CLAIM_EFFECT, CandidateProjection, CheckProjection, ConflictProjection, DesiredProjection,
     ExpectedProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
-    INSPECT_SCHEMA, InspectionProjection, MutationProjection, ObservedFileProjection, PLAN_SCHEMA,
-    PlanProjection, ProvenanceProjection, RollbackEntryProjection, SUPPORT_LIMIT, TargetProjection,
-    VERIFY_SCHEMA, VerificationFailureProjection, LocalStatePolicyProjection,
+    INSPECT_SCHEMA, InspectionProjection, LocalStatePolicyProjection, MutationProjection,
+    ObservedFileProjection, PLAN_SCHEMA, PlanProjection, ProvenanceProjection,
+    RollbackEntryProjection, SUPPORT_LIMIT, TargetProjection, VERIFY_SCHEMA,
+    VerificationFailureProjection,
 };
 use super::{AdapterErrorId, FitAdapterError, adapter_error, kernel_error};
 use crate::repository_fit::LocalEffects;
 use crate::repository_fit::{
     DesiredState, ExpectedContent, FitInspection, FitMode, FitPlan, LocalRepository,
-    LocalStatePlan,
-    ObservedDisposition, Ownership, OwnershipProvenance, PlanAuthorization, RepositoryClass,
-    digest, inspect, inspect_local_state, plan_with_local_state, valid_digest, verify,
+    LocalStatePlan, ObservedDisposition, Ownership, OwnershipProvenance, PlanAuthorization,
+    RepositoryClass, digest, inspect, inspect_local_state, plan_with_local_state, valid_digest,
+    verify,
 };
 
 #[path = "apply_preparation.rs"]

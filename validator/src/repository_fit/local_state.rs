@@ -1,6 +1,6 @@
 use super::{
-    CanonicalPath, ExpectedContent, FitCheck, FitError, FitErrorId, FitReader, Mutation,
-    Ownership, OwnershipProvenance, digest, error,
+    CanonicalPath, ExpectedContent, FitCheck, FitError, FitErrorId, FitReader, Mutation, Ownership,
+    OwnershipProvenance, digest, error,
 };
 
 pub(crate) const LOCAL_STATE_PATH: &str = ".gitignore";
@@ -173,10 +173,7 @@ mod tests {
             append_rule(b"# note\n!validation_artifacts/"),
             b"# note\n!validation_artifacts/\nvalidation_artifacts/"
         );
-        assert_eq!(
-            append_rule(b"# note\n"),
-            b"# note\nvalidation_artifacts/\n"
-        );
+        assert_eq!(append_rule(b"# note\n"), b"# note\nvalidation_artifacts/\n");
         assert_eq!(
             append_rule(b"# note\r\n"),
             b"# note\r\nvalidation_artifacts/\r\n"
