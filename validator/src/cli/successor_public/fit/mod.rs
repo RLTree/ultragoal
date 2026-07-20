@@ -16,6 +16,11 @@ use crate::repository_fit::{
 use std::path::{Path, PathBuf};
 
 mod authority;
+#[path = "external_plan_file.rs"]
+mod external_plan_file;
+#[cfg(test)]
+#[path = "external_plan_file_tests.rs"]
+mod external_plan_file_tests;
 #[path = "invocation_errors.rs"]
 mod invocation_errors;
 #[path = "plan_input_limit.rs"]

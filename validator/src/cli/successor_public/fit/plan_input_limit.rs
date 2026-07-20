@@ -12,7 +12,7 @@ pub(crate) fn target_root(
             (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
                 target = Some(path.as_str())
             }
-            (OptionName::Plan, ParsedValue::RelativePath(_))
+            (OptionName::Plan, ParsedValue::HostPath(_))
             | (OptionName::AcceptPlan, ParsedValue::Identifier(_))
                 if invocation.command == SuccessorCommand::Fit(FitAction::Apply) => {}
             _ => return Err(Box::new(invalid_invocation())),
@@ -125,7 +125,7 @@ pub(crate) fn apply(
 }
 
 pub(crate) struct ApplyArguments<'a> {
-    pub(crate) plan_path: &'a str,
+    pub(crate) plan_path: &'a Path,
     pub(crate) accepted_plan: &'a str,
 }
 
@@ -142,8 +142,8 @@ pub(crate) fn apply_arguments(
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
             (OptionName::Target, ParsedValue::RelativePath(_)) => {}
-            (OptionName::Plan, ParsedValue::RelativePath(path)) if plan_path.is_none() => {
-                plan_path = Some(path.as_str())
+            (OptionName::Plan, ParsedValue::HostPath(path)) if plan_path.is_none() => {
+                plan_path = Some(path.as_path())
             }
             (OptionName::AcceptPlan, ParsedValue::Identifier(value)) if accepted_plan.is_none() => {
                 accepted_plan = Some(value.as_str())
@@ -168,14 +168,15 @@ pub(crate) fn prepare_apply_with_arguments(
     context: &LiveContext,
     arguments: ApplyArguments<'_>,
 ) -> Result<PreparedFitApply, Box<RuntimeOutcome>> {
-    let reads = context
-        .begin_read_session()
+    context
+        .revalidate()
         .map_err(|_| Box::new(stale_context()))?;
-    let absolute = reads.root().join(arguments.plan_path);
-    let bytes = reads
-        .read_bounded(&absolute, MAX_PLAN_RECORD_BYTES)
-        .map_err(|_| Box::new(invalid_plan()))?;
-    reads.revalidate().map_err(|_| Box::new(stale_context()))?;
+    let bytes =
+        super::external_plan_file::read_immutable_plan(arguments.plan_path, MAX_PLAN_RECORD_BYTES)
+            .map_err(|_| Box::new(invalid_plan()))?;
+    context
+        .revalidate()
+        .map_err(|_| Box::new(stale_context()))?;
     let canonical = if bytes.ends_with(b"\n") && !bytes[..bytes.len() - 1].ends_with(b"\n") {
         &bytes[..bytes.len() - 1]
     } else {

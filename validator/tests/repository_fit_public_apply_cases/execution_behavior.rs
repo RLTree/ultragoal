@@ -46,12 +46,13 @@ pub(crate) fn public_binary_applies_verifies_and_repeats_through_durable_authori
 pub(crate) fn public_binary_serializes_concurrent_apply_contenders() {
     let fixture = Fixture::new("concurrent");
     let (plan_sha256, _) = fixture.plan();
+    let plan_path = fixture.plan_path();
     let args = [
         "--json",
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ];
@@ -80,9 +81,11 @@ pub(crate) fn public_binary_serializes_concurrent_apply_contenders() {
         .map(authoritative_contender_outcome)
         .collect::<Vec<_>>();
     assert!(outcomes.iter().any(|status| status == "applied"));
-    assert!(outcomes
-        .iter()
-        .any(|status| status == "idempotent" || status == "contender_refused"));
+    assert!(
+        outcomes
+            .iter()
+            .any(|status| status == "idempotent" || status == "contender_refused")
+    );
     assert_eq!(fixture.verify_zero_write()["idempotent"], true);
     assert_eq!(pending_entries(&fixture.pending).len(), 1);
     assert!(pending_entries(&fixture.pending)[0].ends_with(".lock"));

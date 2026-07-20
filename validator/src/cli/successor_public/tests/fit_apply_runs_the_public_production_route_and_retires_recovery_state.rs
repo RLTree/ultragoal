@@ -38,19 +38,15 @@ pub(crate) fn fit_apply_runs_the_public_production_route_and_retires_recovery_st
         .as_str()
         .unwrap()
         .to_owned();
-    fs::create_dir_all(repo.root.join("validation_artifacts")).unwrap();
-    fs::write(
-        repo.root.join("validation_artifacts/fit-plan.json"),
-        &plan.stdout,
-    )
-    .unwrap();
+    let plan_path = home.join("fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
 
     let ParseOutcome::Invocation(apply_invocation) = parse_args([
         "--json",
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ])
@@ -130,12 +126,8 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
         .as_str()
         .unwrap()
         .to_owned();
-    fs::create_dir_all(repo.root.join("validation_artifacts")).unwrap();
-    fs::write(
-        repo.root.join("validation_artifacts/fit-plan.json"),
-        &plan.stdout,
-    )
-    .unwrap();
+    let plan_path = home.join("fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
 
     crate::repository_fit::after_effect_before_terminal_for_test(|| {
         panic!("simulated public process interruption after the workspace effect")
@@ -146,7 +138,7 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
             "fit",
             "apply",
             "--plan",
-            "validation_artifacts/fit-plan.json",
+            plan_path.to_str().unwrap(),
             "--accept-plan",
             &plan_sha256,
         ])
@@ -170,7 +162,7 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ])

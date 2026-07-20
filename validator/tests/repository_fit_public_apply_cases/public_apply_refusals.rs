@@ -27,7 +27,7 @@ pub(crate) fn exercise_public_refusals() {
 
     OpenOptions::new()
         .append(true)
-        .open(fixture.root.join("validation_artifacts/fit-plan.json"))
+        .open(fixture.plan_path())
         .unwrap()
         .write_all(b"\n")
         .unwrap();
@@ -45,11 +45,7 @@ pub(crate) fn exercise_public_refusals() {
     assert_eq!(snapshot(&fixture.home), before_home);
     assert_eq!(snapshot(&fixture.temp), before_temp);
 
-    fs::write(
-        fixture.root.join("validation_artifacts/fit-plan.json"),
-        plan_bytes,
-    )
-    .unwrap();
+    fs::write(fixture.plan_path(), plan_bytes).unwrap();
     fs::remove_dir(&fixture.pending).unwrap();
     let substituted = fixture.container.join("substituted-pending");
     fs::create_dir(&substituted).unwrap();

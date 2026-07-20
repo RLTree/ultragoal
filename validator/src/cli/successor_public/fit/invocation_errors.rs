@@ -28,7 +28,7 @@ pub(crate) fn invalid_plan() -> RuntimeOutcome {
             DiagnosticDetails {
                 cause: "the plan path is not one bounded descriptor-anchored regular file",
                 affected_surface: "HCT-FIT accepted plan",
-                repair: "write the exact canonical fit plan projection to a confined regular file",
+                repair: "write the exact canonical fit plan projection to one immutable external regular file",
                 effect: "read",
                 rerun: "ultragoal --json fit plan",
                 ceiling: "no workspace effect is authorized or performed",

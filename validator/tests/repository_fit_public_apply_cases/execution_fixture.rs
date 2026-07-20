@@ -124,25 +124,25 @@ impl Fixture {
         assert_eq!(status(&self.root), before_status);
         let value: Value = serde_json::from_slice(&output.stdout).unwrap();
         let plan_sha256 = value["plan"]["plan_sha256"].as_str().unwrap().to_owned();
-        fs::create_dir_all(self.root.join("validation_artifacts")).unwrap();
-        fs::write(
-            self.root.join("validation_artifacts/fit-plan.json"),
-            &output.stdout,
-        )
-        .unwrap();
+        fs::write(self.plan_path(), &output.stdout).unwrap();
         (plan_sha256, output.stdout)
     }
 
     pub(crate) fn apply(&self, plan_sha256: &str) -> Output {
+        let plan_path = self.plan_path();
         self.run(&[
             "--json",
             "fit",
             "apply",
             "--plan",
-            "validation_artifacts/fit-plan.json",
+            plan_path.to_str().unwrap(),
             "--accept-plan",
             plan_sha256,
         ])
+    }
+
+    pub(crate) fn plan_path(&self) -> PathBuf {
+        self.temp.join("fit-plan.json")
     }
 
     pub(crate) fn verify_zero_write(&self) -> Value {

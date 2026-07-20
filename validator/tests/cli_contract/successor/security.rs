@@ -122,7 +122,7 @@ fn parse_results_are_deterministic_and_do_not_downgrade_effects() {
         "fit",
         "apply",
         "--plan",
-        "fit/plan.json",
+        "/tmp/fit-plan.json",
         "--accept-plan",
         "sha256:1234",
     ];

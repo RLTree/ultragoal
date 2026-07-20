@@ -4,7 +4,8 @@ use super::super::command_contract::{
 use crate::context::EffectClass;
 
 const TARGET: OptionSpec = option(OptionName::Target, ValueKind::RelativePath, false);
-const PLAN: OptionSpec = option(OptionName::Plan, ValueKind::RelativePath, true);
+const FIT_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::HostPath, true);
+const MIGRATION_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::RelativePath, true);
 const ACCEPT_PLAN: OptionSpec = option(OptionName::AcceptPlan, ValueKind::Identifier, true);
 const CLAIM: OptionSpec = option(OptionName::Claim, ValueKind::Identifier, true);
 const FINDING: OptionSpec = option(OptionName::Finding, ValueKind::Identifier, false);
@@ -21,7 +22,7 @@ const APPROVE_RETIREMENT: OptionSpec = option(OptionName::ApproveRetirement, Val
 const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::HostPath, false);
 
 pub(super) const TARGET_OPTION: &[OptionSpec] = &[TARGET];
-pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, PLAN, ACCEPT_PLAN];
+pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, FIT_PLAN, ACCEPT_PLAN];
 pub(super) const STRICT_OPTIONS: &[OptionSpec] = &[TARGET, CLAIM];
 pub(super) const FINDING_OPTION: &[OptionSpec] = &[FINDING];
 pub(super) const CLAIM_OUTPUT: &[OptionSpec] = &[CLAIM, OUTPUT];
@@ -36,8 +37,8 @@ pub(super) const INPUT_OUTPUT: &[OptionSpec] = &[INPUT, OUTPUT];
 pub(super) const CANDIDATE_OUTPUT: &[OptionSpec] = &[CANDIDATE, OUTPUT];
 pub(super) const ADAPTER_OPTIONS: &[OptionSpec] = &[SPEC, PROVIDER];
 pub(super) const REGISTRY_OPTION: &[OptionSpec] = &[REGISTRY];
-pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[PLAN, ACCEPT_PLAN];
-pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[PLAN, APPROVE_RETIREMENT];
+pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[MIGRATION_PLAN, ACCEPT_PLAN];
+pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[MIGRATION_PLAN, APPROVE_RETIREMENT];
 pub(super) const CAPABILITIES_OPTION: &[OptionSpec] = &[PACKAGE_ROOT];
 
 const fn option(name: OptionName, kind: ValueKind, required: bool) -> OptionSpec {
