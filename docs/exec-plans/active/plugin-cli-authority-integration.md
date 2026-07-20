@@ -885,6 +885,24 @@ All work remains source-local and claim-withheld; no receipt family, public
 dispatch, dependency, migration, package, install, runtime, readiness, release,
 or completion authority is added.
 
+The distribution/package P0 increment is independently accepted and integrated
+through root commit `d1e5092b5357072f888e53afa89775e18df3f837` / tree
+`1b3185635c0cbee42acce9b3371443053c53c711`. The exact 49-path handoff closes
+its owned warning and Clippy debt; the dependency-closed distribution contract
+passes 208 tests with one intentional subprocess helper ignored. The accepted
+branch tip `bb56500c7e5a228037309a954a29aa12716cb972` remains historical and
+nonselectable after teardown. This is source integration only: package,
+installation, cache, marketplace, discovery, runtime, product, readiness,
+release, and completion claims remain withheld.
+
+Root also approved the control-plane safety repair within its already-issued
+exact lease; no adopted-contract amendment or scope expansion was required.
+The shared boundary is limited to recorded-capability Git reads, fail-closed
+created-leaf recovery, post-rename journal directory durability, and
+errno-aware workspace enumeration with their already-leased focused controls.
+Public API, schema, dispatch, dependency, receipt, and claim authority remain
+unchanged.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
