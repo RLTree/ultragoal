@@ -8,8 +8,12 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[path = "authentication.rs"]
+pub(super) mod authentication;
 #[path = "failure.rs"]
 mod failure;
+#[path = "identity.rs"]
+mod identity;
 #[path = "initial_state.rs"]
 mod initial_state;
 #[path = "ledger_effect_adapter.rs"]
@@ -20,10 +24,6 @@ mod open_or_initialize;
 mod output;
 #[path = "output_journal_validation.rs"]
 mod output_journal_validation;
-#[path = "record_authentication.rs"]
-pub(super) mod record_authentication;
-#[path = "record_identity.rs"]
-mod record_identity;
 #[path = "reservation_lifecycle.rs"]
 mod reservation_lifecycle;
 #[path = "reserved_reconciliation.rs"]
@@ -39,11 +39,11 @@ mod store_stat_name;
 #[path = "transaction.rs"]
 mod transaction;
 
+use authentication::*;
+use identity::*;
 use initial_state::*;
 use ledger_effect_adapter::*;
 use output_journal_validation::*;
-use record_authentication::*;
-use record_identity::*;
 #[cfg(test)]
 pub(crate) use state_publication::{
     set_test_publication_ambiguity_after, set_test_publication_refusal_after,

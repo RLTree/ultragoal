@@ -1,4 +1,4 @@
-use super::record_observation::{child, stage, terminal_state, token};
+use super::observation::{child, stage, terminal_state, token};
 use super::*;
 use crate::routine_work::runtime_adapter::mediator::RoutineContinuationOutcome;
 use crate::routine_work::runtime_adapter::production::custody::RoutineCustodyCapability;
@@ -8,9 +8,9 @@ use crate::routine_work::runtime_adapter::production::custody::observations::{
 use crate::routine_work::runtime_adapter::production::custody::transaction::ReservationSpec;
 pub(in crate::routine_work::runtime_adapter::production::custody) struct DurableCustody {
     #[cfg(target_vendor = "apple")]
-    inner: supported::record_authentication::FileLedger,
+    inner: supported::authentication::FileLedger,
     #[cfg(target_vendor = "apple")]
-    head: RefCell<supported::record_authentication::LocalHead>,
+    head: RefCell<supported::authentication::LocalHead>,
     token: ReservationToken,
     launch_stage: RefCell<Option<LaunchStageRecord>>,
     child: RefCell<Option<ChildLease>>,
@@ -26,7 +26,7 @@ impl DurableCustody {
         #[cfg(target_vendor = "apple")]
         {
             let (inner, mut head) =
-                supported::record_authentication::FileLedger::open_or_initialize(root)?;
+                supported::authentication::FileLedger::open_or_initialize(root)?;
             match inner.reconcile_reserved(&mut head, binding, attempt_grant, expected_head)? {
                 DurableWrite::Committed(ContinuationDisposition::Complete(result)) => {
                     Ok(RoutineContinuationOutcome::Complete(result))
@@ -58,7 +58,7 @@ impl DurableCustody {
         #[cfg(target_vendor = "apple")]
         {
             let (inner, mut head) =
-                supported::record_authentication::FileLedger::open_or_initialize(root)?;
+                supported::authentication::FileLedger::open_or_initialize(root)?;
             let token = token(spec);
             let write = inner.reserve(&mut head, &token)?;
             match write {

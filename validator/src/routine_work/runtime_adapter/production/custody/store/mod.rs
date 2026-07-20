@@ -16,7 +16,7 @@ use crate::routine_work::{
 mod authority_record;
 #[path = "file_authority.rs"]
 mod file_authority;
-mod record_observation;
+mod observation;
 #[cfg(target_vendor = "apple")]
 mod supported;
 
