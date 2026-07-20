@@ -142,7 +142,7 @@ pub enum LifecycleError {
     VerificationFailed,
 }
 
-pub trait LifecycleEffectAdapter {
+pub(crate) trait LifecycleEffectAdapter {
     fn execute(
         &mut self,
         effect: LifecycleEffect,

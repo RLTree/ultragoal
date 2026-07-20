@@ -4,7 +4,7 @@ use super::model::{
 };
 use super::plan::{consume_plan, validate_plan};
 
-pub fn apply<A: LifecycleEffectAdapter>(
+pub(crate) fn apply<A: LifecycleEffectAdapter>(
     observed: &LifecycleState,
     plan: &LifecyclePlan,
     adapter: &mut A,
@@ -77,7 +77,7 @@ pub fn verify(actual: &LifecycleState, plan: &LifecyclePlan) -> Result<(), Lifec
     Ok(())
 }
 
-pub fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleError> {
+pub(crate) fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleError> {
     validate_plan(plan)?;
     if !plan.writes_host_state {
         return Err(LifecycleError::InvalidTransition);
@@ -98,7 +98,7 @@ pub fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleEr
     })
 }
 
-pub fn recover<A: LifecycleEffectAdapter>(
+pub(crate) fn recover<A: LifecycleEffectAdapter>(
     observed: &LifecycleState,
     token: &RecoveryToken,
     adapter: &mut A,

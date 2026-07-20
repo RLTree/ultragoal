@@ -1,8 +1,8 @@
 use super::*;
 use crate::distribution::{HostCommandPlan, PackageIdentity, SourceIdentity};
 use crate::plugin_product::lifecycle::{
-    apply, plan, LifecycleAuthorization, LifecycleEffect, LifecycleEffectAdapter, LifecycleIntent,
-    LifecycleRequest, PackageAuthority, Version,
+    LifecycleAuthorization, LifecycleEffect, LifecycleEffectAdapter, LifecycleIntent,
+    LifecycleRequest, PackageAuthority, Version, apply, plan,
 };
 
 #[test]

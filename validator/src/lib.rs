@@ -26,6 +26,9 @@ mod fixture_scheduler_tests;
 mod generated_authority;
 pub mod inventory;
 mod json_boundary;
+#[cfg(test)]
+#[path = "../tests/plugin_distribution_adapter_contract/lifecycle_fixture.rs"]
+mod lifecycle_fixture;
 pub(crate) mod migration;
 pub mod observability;
 pub mod orchestration;

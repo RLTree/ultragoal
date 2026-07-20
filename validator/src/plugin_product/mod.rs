@@ -10,8 +10,10 @@ pub mod product_fitness;
 pub mod source_closure;
 
 // The product contract imports this compiled library surface; it does not
-// duplicate production modules inside an integration-test crate.
-pub mod distribution_adapter;
+// duplicate production modules inside an integration-test crate. Host
+// mutation remains crate-private and is reachable only through the sealed
+// production transaction facade.
+pub(crate) mod distribution_adapter;
 
 // The registry control plane consumes the sealed read-only agent authority
 // transaction. Host discovery and route eligibility remain separate surfaces.

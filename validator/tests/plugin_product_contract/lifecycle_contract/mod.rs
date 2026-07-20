@@ -1,27 +1,31 @@
-use super::plugin_product::journey_matrix::{JOURNEYS, validate_journey_matrix};
 use super::plugin_product::lifecycle::{
-    ApplyDisposition, LifecycleAuthorization, LifecycleEffect, LifecycleEffectAdapter,
-    LifecycleError, LifecycleIntent, LifecyclePlan, LifecycleRequest, LifecycleState,
-    PackageAuthority, RecoveryToken, Version, apply, plan, recover, recovery_token, verify,
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, LifecycleState, PackageAuthority,
+    Version, plan, verify,
 };
-use serde::Deserialize;
-use sha2::{Digest, Sha256};
-use std::cell::Cell;
-use std::path::{Path, PathBuf};
-use std::sync::{Arc, Barrier};
 
-include!("lifecycle_fixtures.rs");
+#[test]
+fn lifecycle_plan_and_verification_remain_public_read_only_operations() {
+    let authority = PackageAuthority {
+        version: Version::parse("1.0.0").unwrap(),
+        package_sha256: digest('a'),
+        inventory_sha256: digest('b'),
+        candidate_id: digest('c'),
+    };
+    let before = LifecycleState::default();
+    let request = LifecycleRequest {
+        intent: LifecycleIntent::FreshInstall,
+        target: Some(authority),
+        prior_authority: None,
+        authorization: LifecycleAuthorization {
+            allow_host_write: true,
+            allow_downgrade: false,
+            expected_installed_sha256: None,
+        },
+    };
+    let lifecycle = plan(&before, &request).unwrap();
+    verify(&lifecycle.expected_after, &lifecycle).unwrap();
+}
 
-include!("zero_write_trap_adapter.rs");
-
-include!("explicit_failed_update_recovery_is_prior_bound.rs");
-
-include!("every_read_only_effect_failure_is_causal_and_closes_without_recovery_calls.rs");
-
-include!("plan_identity_binds_authorization_and_rejects_post_plan_mutation.rs");
-
-include!("serialized_plan_is_transport_only_and_cannot_recover_apply_authority.rs");
-
-include!("serialized_recovery_token_cannot_recover_restore_authority.rs");
-
-include!("recovery_during_apply_refuses_until_effects_finish_and_then_arms.rs");
+fn digest(seed: char) -> String {
+    format!("sha256:{}", seed.to_string().repeat(64))
+}
