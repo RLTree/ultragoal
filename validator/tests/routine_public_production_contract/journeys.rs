@@ -1,6 +1,6 @@
 use super::scenario::{
-    ContainedContender, Fixture, contain_contender, pass_node, prefix_route, run_bounded_contender,
-    tree,
+    ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route,
+    run_bounded_contender, tree,
 };
 use serde_json::Value;
 use std::fs;
@@ -339,6 +339,49 @@ fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
             .join("validation_artifacts/observability/spool/successor-events.jsonl")
             .exists()
     );
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
+    let mut fixture = Fixture::new(
+        "tracked-observability-store",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let store = fixture
+        .root
+        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+    fs::create_dir_all(store.parent().unwrap()).unwrap();
+    fs::write(&store, b"tracked-runtime-store\n").unwrap();
+    git(
+        &fixture.root,
+        &[
+            "add",
+            "-f",
+            "validation_artifacts/observability/spool/successor-events.jsonl",
+        ],
+    );
+    git(
+        &fixture.root,
+        &["commit", "--quiet", "-m", "tracked runtime store"],
+    );
+
+    let before_status = fixture.status();
+    let refused = fixture.run();
+    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
+    assert!(refused.stdout.is_empty(), "{refused:?}");
+    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
+    assert_eq!(
+        value["cause"],
+        "routine-runtime-observability-store-not-ignored"
+    );
+    assert_eq!(fixture.status(), before_status);
+    assert_eq!(fs::read(store).unwrap(), b"tracked-runtime-store\n");
+    assert!(!fixture.checkpoint_path().exists());
+    assert!(!fixture.root.join("target/routine").exists());
     fixture.teardown_after_assertions();
 }
 

@@ -55,7 +55,6 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
         .args([
             "--no-optional-locks",
             "check-ignore",
-            "--no-index",
             "--quiet",
             "validation_artifacts/observability/spool/successor-events.jsonl",
         ])
