@@ -26,8 +26,9 @@ pub use plan::{
 include_production_package_module!();
 #[cfg(not(test))]
 pub use product::{
-    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-    ProductionPackageSession, capture_product_package, verify_product_package,
+    MarketplaceSourceObservation, ProductionPackageArtifact, ProductionPackageError,
+    ProductionPackageErrorId, ProductionPackageSession, capture_product_package,
+    verify_product_package,
 };
 #[cfg(test)]
 pub(crate) use product::{

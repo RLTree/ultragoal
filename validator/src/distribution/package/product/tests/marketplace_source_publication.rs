@@ -17,9 +17,17 @@ fn marketplace_source_is_exact_and_detects_post_publication_substitution() {
         publication.tree_sha256(),
         artifact.snapshot().identity().tree_sha256()
     );
+    assert_eq!(publication.context_id(), artifact.context_id());
+    assert_eq!(publication.candidate_id(), artifact.candidate_id());
+    assert_eq!(publication.catalog_id(), artifact.catalog_id());
+    assert_eq!(publication.relative_path(), "plugins/harness-ultragoal");
     artifact
         .verify_marketplace_source(&context, &catalog, &tree)
         .expect("verified marketplace source");
+    let repeated = artifact
+        .materialize_marketplace_source(&context, &catalog, &mut tree)
+        .expect("repeat marketplace source");
+    assert_eq!(repeated.tree_sha256(), publication.tree_sha256());
     fs::write(
         output
             .root

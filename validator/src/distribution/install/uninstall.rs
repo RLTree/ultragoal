@@ -27,6 +27,20 @@ pub fn rollback_install(
     transaction: InstallTransaction,
     effects: &mut ScopedInstall,
 ) -> Result<(), RollbackInstallError> {
+    if !transaction.effect_applied {
+        let current = effects
+            .read_installed(&transaction.target, INSTALL_LIMIT)
+            .map_err(|_| {
+                RollbackInstallError::committed(error(DistributionErrorId::RollbackFailed))
+            })?;
+        if current == transaction.previous {
+            return Ok(());
+        }
+        return Err(RollbackInstallError::refused(
+            error(DistributionErrorId::ObjectChanged),
+            transaction,
+        ));
+    }
     if let Err(failure) = transaction.revalidate_for_rollback(effects) {
         return Err(RollbackInstallError::refused(failure, transaction));
     }

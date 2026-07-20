@@ -20,6 +20,13 @@ pub fn apply_marketplace(
     if before.as_deref().map(sha256).as_deref() != plan.expected_sha256() {
         return Err(error(DistributionErrorId::InstallConflict));
     }
+    if before.as_deref() == Some(plan.replacement()) {
+        return Ok(MarketplaceTransaction::new(
+            sha256(plan.replacement()),
+            before,
+            false,
+        ));
+    }
     match effects.compare_exchange(plan.expected_sha256(), Some(plan.replacement())) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
@@ -39,6 +46,7 @@ pub fn apply_marketplace(
     Ok(MarketplaceTransaction::new(
         sha256(plan.replacement()),
         before,
+        true,
     ))
 }
 

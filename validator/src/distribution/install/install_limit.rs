@@ -120,6 +120,30 @@ pub fn install(
     if !prior_matches(&plan.expected_prior, previous.as_deref()) {
         return Err(error(DistributionErrorId::InstallConflict));
     }
+    if matches!(&plan.expected_prior, ExpectedPrior::ExactDigest(expected) if expected == &plan.package_sha256)
+        && previous.as_deref() == Some(package.archive())
+    {
+        return Ok(InstallTransaction {
+            snapshot: InstallSnapshot {
+                context_id: plan.context_id.clone(),
+                candidate_id: plan.candidate_id.clone(),
+                scope: plan.scope,
+                target_id: sha256(plan.target.as_bytes()),
+                target: plan.target.clone(),
+                package_sha256: plan.package_sha256.clone(),
+                replaced_existing: true,
+                postimage: effects
+                    .installed_postimage(&plan.target, INSTALL_LIMIT)
+                    .ok()
+                    .flatten()
+                    .filter(|row| row.object_sha256 == plan.package_sha256),
+                journey_binding_sha256: None,
+            },
+            target: plan.target.clone(),
+            previous,
+            effect_applied: false,
+        });
+    }
     match effects.compare_exchange_installed(
         &plan.target,
         &plan.expected_prior,
@@ -161,5 +185,6 @@ pub fn install(
         },
         target: plan.target.clone(),
         previous,
+        effect_applied: true,
     })
 }
