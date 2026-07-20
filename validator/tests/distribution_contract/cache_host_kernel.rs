@@ -86,7 +86,11 @@ struct Executor {
 }
 
 impl HostExecutor for Executor {
-    fn execute(&mut self, program: &str, argv: &[String]) -> Result<CommandOutput, ()> {
+    fn execute(
+        &mut self,
+        program: &str,
+        argv: &[String],
+    ) -> Result<CommandOutput, crate::distribution::EffectFailure> {
         self.calls.push((program.into(), argv.to_vec()));
         Ok(CommandOutput {
             exit_code: 0,

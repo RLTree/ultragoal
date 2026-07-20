@@ -38,7 +38,10 @@ fn digest(bytes: &[u8]) -> String {
 struct Sink(Option<Vec<u8>>);
 
 impl PackageEffects for Sink {
-    fn read_package(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_package(
+        &mut self,
+        _: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
 
@@ -46,7 +49,7 @@ impl PackageEffects for Sink {
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         if self.0.as_deref().map(digest).as_deref() != expected {
             return Ok(false);
         }
