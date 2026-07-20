@@ -141,7 +141,8 @@ mod tests {
             if path.is_dir() {
                 entries.extend(snapshot(&path));
             } else {
-                entries.push((path, fs::read(&path).unwrap()));
+                let bytes = fs::read(&path).unwrap();
+                entries.push((path, bytes));
             }
         }
         entries.sort_by(|left, right| left.0.cmp(&right.0));
