@@ -107,6 +107,21 @@ fn current_host_repair_is_the_only_ready_lane() {
     assert!(nodes.active_worktree_lanes.is_empty());
 }
 
+#[test]
+fn current_host_repair_active_frontier_has_one_worktree_lane() {
+    let mut states = repair_states("integrated");
+    states.retain(|(id, _)| id != &"N08");
+    states.push(("N08", "leased"));
+    let nodes = scheduler_nodes(&registry(
+        &states,
+        &[],
+        "N08_REPAIR_ACTIVE_N14_EXTERNAL_BLOCKED_N12_REOBSERVATION_REQUIRED",
+    ))
+    .unwrap();
+    assert!(nodes.ready.is_empty());
+    assert_eq!(nodes.active_worktree_lanes, ["N08".to_owned()].into());
+}
+
 fn repair_states(n04: &'static str) -> Vec<(&'static str, &'static str)> {
     vec![
         ("N04", n04),

@@ -24,6 +24,17 @@ change shared public dispatch, issue claims, or create a new receipt family.
 N11 and N14 are not parallel implementation lanes. This path has no useful
 implementation antichain; parallelism is reserved for the milestone reviewers.
 
+The N08 lane is now ACTIVE under
+`LEASE-N08-CURRENT-HOST-LIFECYCLE-001` in managed task
+`019f7dbd-f578-7ce2-b400-36a44aedd254`, branch
+`codex/n08-current-host-lifecycle`, worktree
+`/Users/terrynoblin/.codex/worktrees/8d58/harness-ultragoal-plugin-proposal`,
+and exact base `1862ba8c152524063c49a14eb0917d772654947c` / tree
+`46ef081c35c10d70344e2a124711d3ee7ece43fc`. Its authority is exactly the
+existing `WS-PLUGIN` scope. The lane consumes `distribution::host_effect`; it
+does not own or recreate that shared host-effect authority. Any demonstrated
+gap outside `WS-PLUGIN` returns as a root request.
+
 ## Late N04 repair checkpoint — 2026-07-19
 
 N04 is now root-integrated at exact source `d9525e027a9e0aeecf0ec3e4680f9818f2950455`

@@ -99,6 +99,14 @@ pub(super) fn expected(
             exact_state(states, "N14", "blocked")?;
             (&["N08"][..], &[][..])
         }
+        "N08_REPAIR_ACTIVE_N14_EXTERNAL_BLOCKED_N12_REOBSERVATION_REQUIRED" => {
+            exact_state(states, "N04", "integrated")?;
+            active_state(states, "N08")?;
+            exact_state(states, "N11", "blocked")?;
+            exact_state(states, "N12", "blocked")?;
+            exact_state(states, "N14", "blocked")?;
+            (&[][..], &["N08"][..])
+        }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };
     Ok(ExpectedLifecycle {
