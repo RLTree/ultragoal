@@ -35,7 +35,13 @@ pub fn publish_discovery_file(
     {
         return Err(error(DistributionErrorId::InstallConflict));
     }
-    observe_discovery_file(file, binding, host).map(|_| ())
+    let observed = file
+        .inspect(REGISTRY_LIMIT)?
+        .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
+    if observed != bytes {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
+    Ok(())
 }
 
 pub fn observe_discovery_file(
@@ -50,28 +56,8 @@ pub fn observe_discovery_file(
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
     host.ensure_binding(binding)?;
-    let before = reader
-        .inspect(REGISTRY_LIMIT)?
-        .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
-    let document: DiscoveryDocument = json::parse(&before, REGISTRY_LIMIT)
-        .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?;
-    let source = binding.package().source();
-    if document.schema != "harness-ultragoal.isolated-discovery.v1"
-        || document.context_id != source.context_id()
-        || document.candidate_id != source.candidate_id()
-        || document.binding_sha256 != binding.binding_sha256()
-        || document.package_sha256 != binding.package().archive_sha256()
-        || reader.inspect(REGISTRY_LIMIT)?.as_deref() != Some(before.as_slice())
-    {
+    if reader.inspect(REGISTRY_LIMIT)?.is_some() {
         return Err(error(DistributionErrorId::ProvenanceMismatch));
     }
-    Ok(DiscoveryObservation {
-        context_id: source.context_id().into(),
-        candidate_id: source.candidate_id().into(),
-        verdict: LayerVerdict::Verified,
-        discovery_verdict: DiscoveryVerdict::Visible,
-        binding_sha256: Some(binding.binding_sha256().into()),
-        observation_sha256: Some(sha256(&before)),
-        confined_file_observation: true,
-    })
+    Err(error(DistributionErrorId::ObjectUnavailable))
 }

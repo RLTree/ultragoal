@@ -16,9 +16,10 @@ use super::descriptor::read_file;
 #[cfg(unix)]
 use super::file_transition::{same_snapshot, transition};
 
+mod executable_publication;
+
 pub(super) const FILE_LIMIT: usize = 65 * 1024 * 1024;
 static NONCE: AtomicU64 = AtomicU64::new(0);
-
 #[derive(Clone, Debug)]
 pub struct ScopedFile {
     root: ConfinedRoot,
@@ -119,17 +120,6 @@ impl ScopedFile {
         self.apply_with_mode(expected_sha256, replacement, 0o600)
     }
 
-    /// Atomically publishes a regular executable whose bytes have already been
-    /// authenticated by the caller's package boundary.
-    #[cfg(unix)]
-    pub fn apply_executable(
-        &self,
-        expected_sha256: Option<&str>,
-        replacement: Option<&[u8]>,
-    ) -> Result<bool, DistributionError> {
-        self.apply_with_mode(expected_sha256, replacement, 0o755)
-    }
-
     #[cfg(unix)]
     fn apply_with_mode(
         &self,
@@ -192,17 +182,7 @@ impl ScopedFile {
     ) -> Result<bool, DistributionError> {
         Err(error(DistributionErrorId::CapabilityMismatch))
     }
-
-    #[cfg(not(unix))]
-    pub fn apply_executable(
-        &self,
-        _expected_sha256: Option<&str>,
-        _replacement: Option<&[u8]>,
-    ) -> Result<bool, DistributionError> {
-        Err(error(DistributionErrorId::CapabilityMismatch))
-    }
 }
-
 impl PackageEffects for ScopedFile {
     fn read_package(
         &mut self,

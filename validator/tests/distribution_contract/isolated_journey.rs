@@ -121,8 +121,13 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     let discovery_file = ScopedFile::new(fixture.confined(), "host/discovery.json").unwrap();
     publish_discovery_file(&discovery_file, &binding, &host).unwrap();
     let before_reads = fixture.tree();
-    let discovery = observe_discovery_file(&discovery_file, &binding, &host).unwrap();
-    assert!(discovery.is_current_visible());
+    assert_eq!(
+        observe_discovery_file(&discovery_file, &binding, &host)
+            .unwrap_err()
+            .id(),
+        DistributionErrorId::ProvenanceMismatch,
+        "writer output cannot substitute for independent host discovery"
+    );
     assert!(app.observation_sha256().is_some());
     assert_eq!(
         fixture.tree(),
