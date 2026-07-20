@@ -1,5 +1,23 @@
 # Plugin and CLI Authority Integration
 
+## Installed-journey dependency REWORK — 2026-07-20
+
+The N08 installed-journey worktree started cleanly from
+`fb2a0ad5f53d8cf0f577a5c9adca0e9315cfe80f` / tree
+`4fb33b342c2bfb53adfcb3bbd9dab4fc4d85a0df` and returned no source delta.
+Its production map confirmed that N08 cannot honestly close the journey from
+the plugin-product scope: the current package contains no executable runtime
+probe, supported discovery has no writer, Darwin host effects are unavailable,
+and install/cache/registry coordination has no canonical production owner.
+
+This is upstream distribution/runtime REWORK, not an external blocker and not
+permission for an isolated success fixture. Root closes the empty N08 lease,
+preserves its fail-closed public command, and returns the scheduler frontier to
+one N04 distribution/runtime repair. N04 must provide a real packaged runtime
+payload and production-wired install/cache/discovery observation boundaries
+before N08 is refreshed. N08, N11, N12, N14, installed-product, readiness,
+release, and completion claims remain withheld.
+
 ## Fail-closed install-test public boundary — 2026-07-20
 
 Exact root candidate `0fc93039a1daa29ec68e5c26ee47cbbca30e318c` /

@@ -1,5 +1,21 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 installed-journey dependency REWORK
+
+The clean N08 installed-journey worktree at
+`fb2a0ad5f53d8cf0f577a5c9adca0e9315cfe80f` / tree
+`4fb33b342c2bfb53adfcb3bbd9dab4fc4d85a0df` correctly returned no source
+candidate. The current distribution cannot execute the required journey: its
+package has no runtime probe executable, supported discovery has no writer,
+Darwin host effects are unavailable, and no canonical production transaction
+joins install, cache, and registry observation.
+
+Root classifies this as upstream N04 REWORK. The empty N08 lease is closed and
+its public command remains fail-closed. The next selectable implementation is
+one distribution/runtime repair that establishes those real production
+surfaces without a parallel state mirror. N08 and every dependent product or
+claim surface remain withheld.
+
 ## 2026-07-20 fail-closed package install-test boundary
 
 Root candidate `0fc93039a1daa29ec68e5c26ee47cbbca30e318c` / tree
