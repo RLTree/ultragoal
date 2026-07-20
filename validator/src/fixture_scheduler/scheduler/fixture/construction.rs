@@ -102,6 +102,11 @@ impl FixtureScheduler {
                 .active
                 .get(lease_id)
                 .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            if !run.is_active() {
+                return Err(FixtureScheduleError::Integrity(
+                    "fixture execution requires an active lease".to_owned(),
+                ));
+            }
             (
                 run.fixture.clone(),
                 run.lease.root().to_path_buf(),
@@ -141,6 +146,11 @@ impl FixtureScheduler {
                 .active
                 .get(lease_id)
                 .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            if !run.is_active() {
+                return Err(FixtureScheduleError::Integrity(
+                    "fixture execution requires an active lease".to_owned(),
+                ));
+            }
             (
                 run.fixture.clone(),
                 run.lease.root().to_path_buf(),

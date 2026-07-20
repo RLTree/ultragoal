@@ -234,3 +234,13 @@ fn acquisition_custody_matrix_records_every_stage_and_retains_unpinned_retries()
     drop(scheduler);
     fs::remove_dir_all(root).unwrap();
 }
+
+#[cfg(unix)] #[test]
+fn retained_collision_is_recovery_only_and_cannot_launch() {
+    struct Never; impl FixtureExecutor for Never { fn execute(&self, _: &FixtureSpec, _: &IsolationLease, _: &std::collections::BTreeMap<String, String>) -> Result<ObservedOutcome, FixtureScheduleError> { panic!("recovery lease reached executor") } }
+    let root = root("collision-recovery-only"); let spec = spec("collision", FixtureKind::Positive, ExpectedOutcome::pass(3), false);
+    let id = format!("{}-{}", spec.id, stable_digest(&format!("{}:1", spec.metadata_digest))); let retained = root.join(&id); fs::create_dir_all(&retained).unwrap(); fs::write(retained.join("sentinel"), b"unchanged").unwrap();
+    let mut scheduler = FixtureScheduler::new(&root); assert!(matches!(scheduler.schedule([spec]), Err(FixtureScheduleError::ScheduleRollback { .. })));
+    assert!(matches!(scheduler.execute(&id, &Never), Err(FixtureScheduleError::Integrity(message)) if message == "fixture execution requires an active lease"));
+    assert_eq!(fs::read(retained.join("sentinel")).unwrap(), b"unchanged"); assert_eq!(scheduler.run(&id).unwrap().lease.disposition(), &LeaseDisposition::RecoveryRequired); fs::remove_dir_all(root).unwrap();
+}

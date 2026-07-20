@@ -105,7 +105,7 @@ impl IsolationLease {
                 return Err(LeaseAcquisitionFailure::RecoveryRequired { lease, source: failure });
             }
             #[cfg(not(unix))]
-            return Err(LeaseAcquisitionFailure::Failed(source));
+            return Err(LeaseAcquisitionFailure::Failed(FixtureScheduleError::Collision(id)));
         }
         root_created.map_err(LeaseAcquisitionFailure::Failed)?;
         let mut lease = Self {
