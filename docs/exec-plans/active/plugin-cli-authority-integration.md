@@ -941,6 +941,24 @@ The same lease therefore additionally owns
 recorded-capability positive query and fail-closed stale-session cases. This
 does not broaden production Git authority, public API, diagnostics, or claims.
 
+The control-plane P0 increment is independently accepted and integrated
+through root commit `ba75354db4c0cb4ebd98b4e5e2191582c18d67e7` / tree
+`bf9e61b5d857a3d2b2032c8799cf26d16d76e056`. Its recorded Git query,
+fail-closed created-leaf cleanup, journal directory durability, errno-aware
+enumeration, and synthetic activation controls pass on the root candidate.
+The accepted branch tip
+`e0e2fb23dd35a03cf4429baace745bc7c63a9534` remains historical and
+nonselectable after teardown.
+
+The dependency-wide Clippy boundary is not closed: the exact integrated
+candidate reports 133 findings across 40 authored Rust paths, predominantly in
+the routine and fixture-scheduler surfaces plus the confined-execution result
+shape. Compile, namespace, standards, generated authority, and the five
+control-plane behavior gates are green. `CL-STRICT` and every downstream
+installed, runtime, readiness, release, and completion claim remain withheld.
+Per the required debt checkpoint, root owns this exact 40-path repair before
+any new implementation worktree may launch.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
