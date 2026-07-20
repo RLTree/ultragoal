@@ -29,6 +29,22 @@ fn reopen_reserve_in_flight_rejects_record_substitution() {
 }
 
 #[test]
+fn expired_permit_is_rejected_at_authority_current_time() {
+    let record = custody('a').pre_effect_record().clone();
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("ledger");
+    let ledger = FileHostEffectLedger::create(&path, "fixture-ledger".to_owned()).unwrap();
+    let now = unix_ms();
+    let authority =
+        HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())
+            .unwrap();
+    let (permit, _) = authority
+        .issue(binding(record, &ledger.head().unwrap(), now - 2, now - 1))
+        .unwrap();
+    assert!(authority.verify_current(permit).is_err());
+}
+
+#[test]
 fn ambiguous_terminal_observation_arms_recovery_after_durable_admission() {
     let mut custody = custody('a');
     let admission = admission(custody.pre_effect_record().clone()).unwrap();
@@ -66,13 +82,19 @@ fn admission_for(
     let authority =
         HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())
             .unwrap();
-    let (permit, _) = authority.issue(binding(bound, &head)).unwrap();
-    reserve_in_flight_lifecycle(&ledger, &authority, permit, 1, admitted)
+    let now = unix_ms();
+    let (permit, _) = authority
+        .issue(binding(bound, &head, now, now + 1_000))
+        .unwrap();
+    let permit = authority.verify_current(permit).unwrap();
+    reserve_in_flight_lifecycle(&ledger, permit, admitted)
 }
 
 fn binding(
     record: HostLifecycleRecord,
     head: &crate::distribution::host_effect::HostEffectLedgerHead,
+    issued_at_unix_ms: u64,
+    expires_at_unix_ms: u64,
 ) -> HostEffectPermitBinding {
     let digest = record_digest(&record);
     let (plan_id, intent) = record.permit_join();
@@ -97,8 +119,8 @@ fn binding(
         executable_identity_sha256: digest('1'),
         target_identity_sha256: digest('2'),
         target_generation: 1,
-        issued_at_unix_ms: 1,
-        expires_at_unix_ms: 2,
+        issued_at_unix_ms,
+        expires_at_unix_ms,
         expected_head_sha256: head.head_sha256().to_owned(),
         lifecycle_record: Some(record),
         lifecycle_record_sha256: Some(digest),
@@ -157,4 +179,13 @@ fn intent_name(intent: LifecycleIntent) -> &'static str {
 
 fn digest(seed: char) -> String {
     format!("sha256:{}", seed.to_string().repeat(64))
+}
+
+fn unix_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_millis()
+        .try_into()
+        .unwrap()
 }

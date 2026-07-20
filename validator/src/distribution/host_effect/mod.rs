@@ -14,6 +14,7 @@ mod lifecycle;
 
 pub(crate) use authority::{
     HostEffectAuthority, HostEffectDecision, HostEffectPermit, HostEffectPermitBinding,
+    VerifiedHostEffectPermit,
 };
 pub(crate) use executor::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,

@@ -70,6 +70,10 @@ pub(crate) struct HostEffectPermit {
     tag: [u8; 32],
 }
 
+pub(crate) struct VerifiedHostEffectPermit {
+    permit: HostEffectPermit,
+}
+
 impl HostEffectAuthority {
     pub(in crate::distribution::host_effect) fn generate(
         issuer_id: String,
@@ -169,6 +173,20 @@ impl HostEffectAuthority {
             return Err(authority_error(HostEffectAuthorityErrorId::InvalidBinding));
         }
         Ok(())
+    }
+
+    pub(in crate::distribution::host_effect) fn verify_current(
+        &self,
+        permit: HostEffectPermit,
+    ) -> Result<VerifiedHostEffectPermit, HostEffectAuthorityError> {
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|_| authority_error(HostEffectAuthorityErrorId::NotYetValid))?
+            .as_millis()
+            .try_into()
+            .map_err(|_| authority_error(HostEffectAuthorityErrorId::Expired))?;
+        self.verify(&permit, now)?;
+        Ok(VerifiedHostEffectPermit { permit })
     }
 }
 

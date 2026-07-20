@@ -32,6 +32,16 @@ impl HostEffectPermit {
     }
 }
 
+impl VerifiedHostEffectPermit {
+    pub(in crate::distribution::host_effect) fn binding(&self) -> &HostEffectPermitBinding {
+        self.permit.binding()
+    }
+
+    pub(in crate::distribution::host_effect) fn into_reservation(self) -> HostEffectReservation {
+        HostEffectReservation::from_permit(&self.permit)
+    }
+}
+
 impl Drop for HostEffectPermit {
     fn drop(&mut self) {
         zeroize(&mut self.nonce);
