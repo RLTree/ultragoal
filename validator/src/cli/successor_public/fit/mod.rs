@@ -10,17 +10,13 @@ use crate::cli::successor::{
 };
 use crate::context::LiveContext;
 use crate::repository_fit::{
-    AdapterErrorId, FitAdapterError, PreparedFitApply, inspect_target, plan_target,
-    prepare_apply_request, verify_target,
+    inspect_target, plan_target, prepare_apply_request, verify_target, AdapterErrorId,
+    FitAdapterError, PreparedFitApply,
 };
 use std::path::{Path, PathBuf};
 
 mod authority;
-#[path = "external_plan_file.rs"]
 mod external_plan_file;
-#[cfg(test)]
-#[path = "external_plan_file_tests.rs"]
-mod external_plan_file_tests;
 #[path = "invocation_errors.rs"]
 mod invocation_errors;
 #[path = "plan_input_limit.rs"]

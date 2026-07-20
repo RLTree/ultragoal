@@ -1,12 +1,12 @@
-use super::terminal_routine::{RoutineTerminalEvent, terminal_event_id};
-use super::{LocalStoreFailure, RUNTIME_SOURCE_ID, store_path};
+use super::super::{LocalStoreFailure, RUNTIME_SOURCE_ID, store_path};
+use super::observations::{RoutineTerminalEvent, terminal_event_id};
 use crate::context::LiveContext;
 use crate::observability::{EventStore, SemanticEvent};
 use crate::routine_work::require_runtime_store_ignored;
 use std::fs;
 use std::path::Path;
 
-pub(crate) fn append_routine_terminal(
+pub(in super::super::super) fn append_routine_terminal(
     root: &Path,
     context: &LiveContext,
     binding: &crate::routine_work::RoutineBinding,

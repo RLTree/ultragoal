@@ -1,8 +1,9 @@
 use std::path::Path;
 
 #[cfg(unix)]
-#[path = "external_plan_file/unix.rs"]
-mod platform;
+mod unix;
+#[cfg(unix)]
+use unix as platform;
 
 #[cfg(not(unix))]
 mod platform {
@@ -19,3 +20,6 @@ mod platform {
 pub(super) fn read_immutable_plan(path: &Path, maximum: u64) -> Result<Vec<u8>, &'static str> {
     platform::read_immutable_plan(path, maximum)
 }
+
+#[cfg(test)]
+mod tests;

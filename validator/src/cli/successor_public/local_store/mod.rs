@@ -11,15 +11,11 @@ const STORE_PATH: &str = "validation_artifacts/observability/spool/successor-eve
 pub(super) const RUNTIME_SOURCE_ID: &str = "successor-runtime";
 
 mod failure;
-mod terminal_append;
-mod terminal_routine;
-#[cfg(test)]
-mod terminal_routine_tests;
+mod terminal;
 pub(super) use failure::LocalStoreFailure;
-pub(super) use terminal_append::append_routine_terminal;
-pub(super) use terminal_routine::routine_observations_from_events;
 #[allow(unused_imports)]
-pub(super) use terminal_routine::{RoutineTerminalEvent, terminal_event_id};
+pub(super) use terminal::{RoutineTerminalEvent, terminal_event_id};
+pub(super) use terminal::{append_routine_terminal, routine_observations_from_events};
 
 pub(super) struct LocalStore {
     root: PathBuf,

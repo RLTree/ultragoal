@@ -1,9 +1,9 @@
-use super::*;
+use crate::observability::SemanticEvent;
 use sha2::{Digest, Sha256};
 
 /// A terminal routine observation. It is diagnostic-only: it names neither a
 /// finding nor a claim and cannot change product-state authority.
-pub(crate) struct RoutineTerminalEvent<'a> {
+pub(in super::super::super) struct RoutineTerminalEvent<'a> {
     pub(crate) event_id: &'a str,
     pub(crate) continuation_id: &'a str,
     pub(crate) terminal_ledger_head: &'a str,
@@ -16,7 +16,10 @@ pub(crate) struct RoutineTerminalEvent<'a> {
     pub(crate) finding_binding: Option<&'a crate::state::RoutineFindingBinding>,
 }
 
-pub(crate) fn terminal_event_id(continuation_id: &str, terminal_ledger_head: &str) -> String {
+pub(in super::super::super) fn terminal_event_id(
+    continuation_id: &str,
+    terminal_ledger_head: &str,
+) -> String {
     let mut digest = Sha256::new();
     digest.update(b"routine-terminal-event-v1\0");
     digest.update(continuation_id.as_bytes());
@@ -25,7 +28,7 @@ pub(crate) fn terminal_event_id(continuation_id: &str, terminal_ledger_head: &st
     format!("routine-terminal-{:x}", digest.finalize())
 }
 
-pub(crate) fn routine_observations_from_events(
+pub(in super::super::super) fn routine_observations_from_events(
     events: &[SemanticEvent],
 ) -> Vec<crate::state::RoutineFindingObservation> {
     events

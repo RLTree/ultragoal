@@ -219,7 +219,3 @@ fn reject_target_overlap(state_root: &Path, target: &Path) -> Result<(), HostFai
     }
     Ok(())
 }
-
-#[cfg(test)]
-#[path = "host_state_target_confinement_tests.rs"]
-mod host_state_target_confinement_tests;

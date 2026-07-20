@@ -1,6 +1,6 @@
 #![cfg(unix)]
 
-use super::external_plan_file::read_immutable_plan;
+use super::read_immutable_plan;
 use std::fs;
 use std::os::unix::fs::symlink;
 use std::sync::atomic::{AtomicU64, Ordering};

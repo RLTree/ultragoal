@@ -1,5 +1,5 @@
-use super::terminal_append::append_routine_terminal_with_hook;
-use super::terminal_routine::{RoutineTerminalEvent, terminal_event_id};
+use super::append::append_routine_terminal_with_hook;
+use super::observations::{RoutineTerminalEvent, terminal_event_id};
 use crate::context::{BuildRequest, LiveContext};
 use crate::routine_work::{RoutineBinding, RoutineTerminalOutcome};
 use std::fs;
