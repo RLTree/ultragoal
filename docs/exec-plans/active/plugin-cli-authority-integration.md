@@ -1,5 +1,32 @@
 # Plugin and CLI Authority Integration
 
+## Installed daily-driver root convergence — 2026-07-20
+
+The managed N08 task on branch `codex/n08-installed-daily-driver` returned a
+clean no-source result at `7d490a886905004f667bb61a6fcd9ae9cc8d8b52` /
+tree `c0da72c8a0d9520026a94540c9dbf22297b36a88`. Its discarded draft merely
+renamed the existing opaque `verify_bound_surface_chain` authority; retaining
+that wrapper would have created duplicate lifecycle authority without a
+working installed journey. The task is archived, its clean worktree is
+removed, and no receipt was emitted.
+
+Root now owns the serial behavior closure. The smallest honest product slice
+builds exact current-source package bytes, performs an isolated install/cache/
+marketplace/app-registry/runtime transaction, installs that exact plugin
+through the supported Codex marketplace path, and observes discovery only from
+a fresh Codex task. The existing `inspect capabilities` route remains a
+separate post-fit repository-adoption observation: it explicitly reports host
+discovery and runtime exposure unavailable and cannot be promoted into a
+discovery receipt.
+
+The production discovery boundary must therefore use a challenge-bound fresh
+process or a supported fresh Codex task and bind the opaque package, install,
+cache, registry, and journey identities. Caller-authored hashes and
+writer-produced `host/discovery.json` remain invalid. N08 is ready with no
+active lease while root implements and observes this cross-authority slice.
+Installed, discovery, daily-driver, readiness, release, and completion claims
+remain withheld.
+
 ## Installed-journey dependency REWORK — 2026-07-20
 
 The N08 installed-journey worktree started cleanly from

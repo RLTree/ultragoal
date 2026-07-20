@@ -1,5 +1,24 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 installed daily-driver root convergence
+
+The exact N08 worktree on branch `codex/n08-installed-daily-driver` returned no
+source candidate at `7d490a886905004f667bb61a6fcd9ae9cc8d8b52` / tree
+`c0da72c8a0d9520026a94540c9dbf22297b36a88`. Its only draft was a duplicate
+wrapper around the existing opaque surface-chain verifier, so root rejected
+the false increment, archived the task, removed the clean worktree, and issued
+no receipt.
+
+The frontier is N08 ready with no active lease. Root owns the cross-scope
+behavior closure: exact package build, isolated install/cache/marketplace/
+app-registry/runtime transaction, supported Codex installation, fresh-task
+plugin discovery, then repository fit, dirty routine work, controlled failure,
+recovery, and repeat use. Public capability inspection remains separate
+repository-adoption evidence and cannot substitute for host discovery.
+Caller-authored digests and writer-produced discovery files remain invalid.
+All installed-product and higher claims remain withheld until the exact
+current candidate completes that journey.
+
 ## 2026-07-20 installed-journey dependency REWORK
 
 The clean N08 installed-journey worktree at
