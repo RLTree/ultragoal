@@ -31,6 +31,36 @@ impl PlanAuthorizationSeal {
             .map_err(|_| LifecycleError::ReplayedPlan)
     }
 
+    pub(super) fn transfer_to_host(&self) -> Result<(), LifecycleError> {
+        let Self::Sealed(data) = self else {
+            return Err(LifecycleError::UnsealedPlan);
+        };
+        data.action_state
+            .compare_exchange(
+                LifecycleActionState::Planned as u8,
+                LifecycleActionState::Transferred as u8,
+                AtomicOrdering::AcqRel,
+                AtomicOrdering::Acquire,
+            )
+            .map(|_| ())
+            .map_err(|_| LifecycleError::ReplayedPlan)
+    }
+
+    pub(super) fn consume_transferred(&self) -> Result<(), LifecycleError> {
+        let Self::Sealed(data) = self else {
+            return Err(LifecycleError::UnsealedPlan);
+        };
+        data.action_state
+            .compare_exchange(
+                LifecycleActionState::Transferred as u8,
+                LifecycleActionState::Applying as u8,
+                AtomicOrdering::AcqRel,
+                AtomicOrdering::Acquire,
+            )
+            .map(|_| ())
+            .map_err(|_| LifecycleError::ReplayedPlan)
+    }
+
     pub(super) fn finish_apply(
         &self,
         recovery_state: Option<&LifecycleState>,

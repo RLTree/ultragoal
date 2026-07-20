@@ -35,18 +35,20 @@ impl RecoveryAuthorizationSeal {
             .lock()
             .map_err(|_| LifecycleError::InvalidTransition)?;
         loop {
-            let action_state_value = LifecycleActionState::decode(
-                data.action_state.load(AtomicOrdering::Acquire),
-            )?;
+            let action_state_value =
+                LifecycleActionState::decode(data.action_state.load(AtomicOrdering::Acquire))?;
             match action_state_value {
-                LifecycleActionState::Planned | LifecycleActionState::Applying => {
+                LifecycleActionState::Planned
+                | LifecycleActionState::Transferred
+                | LifecycleActionState::Applying => {
                     return Err(LifecycleError::RecoveryUnavailable);
                 }
                 LifecycleActionState::RecoveryAvailable => {
                     if recovery_state.as_ref() != Some(observed_state) {
                         return Err(LifecycleError::StaleRecoveryToken);
                     }
-                    if data.action_state
+                    if data
+                        .action_state
                         .compare_exchange_weak(
                             LifecycleActionState::RecoveryAvailable as u8,
                             LifecycleActionState::Recovering as u8,
