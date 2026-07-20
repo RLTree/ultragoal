@@ -1,15 +1,17 @@
 use std::fs;
 use std::os::unix::fs::DirBuilderExt;
 
-use super::routine_plan_fixture::{authority_path, isolate_fixture_test, RoutinePlanFixture};
-use super::routine_work::{
+use super::super::routine_plan_fixture::{
+    authority_path, isolate_fixture_test, RoutinePlanFixture,
+};
+use super::super::routine_work::{
     mediate_public_routine_execution, set_test_publication_refusal_after,
     test_last_spawn_group_absent, RoutineCancellation, RoutineReuseInput,
 };
 
 pub(super) fn launch_stage_publication_refusal_cleans_exact_staged_program() {
     if isolate_fixture_test(
-        "reservation_publication_controls::launch_stage_publication_refusal_cleans_exact_staged_program",
+        "reservation::launch_stage_publication_refusal_cleans_exact_staged_program",
     ) {
         return;
     }
@@ -36,7 +38,7 @@ pub(super) fn launch_stage_publication_refusal_cleans_exact_staged_program() {
 
 pub(super) fn child_lease_publication_refusal_reaps_before_stage_cleanup() {
     if isolate_fixture_test(
-        "reservation_publication_controls::child_lease_publication_refusal_reaps_before_stage_cleanup",
+        "reservation::child_lease_publication_refusal_reaps_before_stage_cleanup",
     ) {
         return;
     }

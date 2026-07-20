@@ -38,10 +38,7 @@ mod local_issuer_binding_controls;
 mod planning;
 mod provenance;
 mod report;
-mod reservation_publication_ambiguity;
-mod reservation_publication_controls;
-mod reservation_publication_precommit;
-mod reservation_terminal_outcomes;
+mod reservation;
 #[path = "reuse/mod.rs"]
 mod reuse;
 #[path = "routine/fixture_repository.rs"]

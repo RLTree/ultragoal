@@ -1,15 +1,17 @@
 use std::fs;
 use std::os::unix::fs::DirBuilderExt;
 
-use super::routine_plan_fixture::{authority_path, isolate_fixture_test, RoutinePlanFixture};
-use super::routine_work::{
+use super::super::routine_plan_fixture::{
+    authority_path, isolate_fixture_test, RoutinePlanFixture,
+};
+use super::super::routine_work::{
     mediate_public_routine_execution, set_test_publication_ambiguity_after,
     test_last_spawn_group_absent, RoutineCancellation, RoutineReuseInput,
 };
 
 pub(super) fn reservation_publication_ambiguity_is_durable_before_workspace_effects() {
     if isolate_fixture_test(
-        "reservation_publication_controls::reservation_publication_ambiguity_is_durable_before_workspace_effects",
+        "reservation::reservation_publication_ambiguity_is_durable_before_workspace_effects",
     ) {
         return;
     }
@@ -41,7 +43,7 @@ pub(super) fn reservation_publication_ambiguity_is_durable_before_workspace_effe
 
 pub(super) fn output_stage_publication_ambiguity_is_durable_and_rolls_back_exact_scope() {
     if isolate_fixture_test(
-        "reservation_publication_controls::output_stage_publication_ambiguity_is_durable_and_rolls_back_exact_scope",
+        "reservation::output_stage_publication_ambiguity_is_durable_and_rolls_back_exact_scope",
     ) {
         return;
     }
@@ -97,7 +99,7 @@ pub(super) fn output_stage_publication_ambiguity_is_durable_and_rolls_back_exact
 
 pub(super) fn terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay() {
     if isolate_fixture_test(
-        "reservation_publication_controls::terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay",
+        "reservation::terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay",
     ) {
         return;
     }

@@ -1,15 +1,17 @@
 use std::fs;
 use std::os::unix::fs::DirBuilderExt;
 
-use super::routine_plan_fixture::{authority_path, isolate_fixture_test, RoutinePlanFixture};
-use super::routine_work::{
+use super::super::routine_plan_fixture::{
+    authority_path, isolate_fixture_test, RoutinePlanFixture,
+};
+use super::super::routine_work::{
     mediate_public_routine_execution, RoutineCancellation, RoutineMediatorStatus,
     RoutineReuseInput, RoutineTerminalOutcome,
 };
 
 pub(super) fn cancelled_effect_keeps_a_cancelled_typed_terminal_outcome() {
     if isolate_fixture_test(
-        "reservation_publication_controls::cancelled_effect_keeps_a_cancelled_typed_terminal_outcome",
+        "reservation::cancelled_effect_keeps_a_cancelled_typed_terminal_outcome",
     ) {
         return;
     }
