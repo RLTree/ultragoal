@@ -38,6 +38,7 @@ pub(super) fn validate(
         .get("scope_mappings")
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("scope mappings are missing"))?;
+    reject_terminal_p0(records)?;
     debt_worktree::validate(records, registry, base, root)?;
     let scheduler_records = records
         .iter()
@@ -89,6 +90,13 @@ pub(super) fn validate(
         }
         change_impact::validate(reads, registry, lanes, scopes, record, lane, base)?;
         handoff_adjacency::validate(reads, root, record)?;
+    }
+    Ok(())
+}
+
+fn reject_terminal_p0(records: &[Value]) -> Result<(), InventoryError> {
+    if records.iter().any(debt_worktree::is_record) {
+        return Err(invalid("completed P0 repair cannot be reissued"));
     }
     Ok(())
 }
@@ -200,4 +208,11 @@ fn text<'a>(value: &'a Value, field: &str, message: &str) -> Result<&'a str, Inv
 
 fn invalid(message: &str) -> InventoryError {
     InventoryError::InvalidRegistry(message.to_owned())
+}
+
+#[cfg(test)]
+#[test]
+fn completed_p0_cannot_reenter_active_lease_records() {
+    let records = [serde_json::json!({"exception_id":"P0-DEBT-REPAIR"})];
+    assert!(reject_terminal_p0(&records).is_err());
 }
