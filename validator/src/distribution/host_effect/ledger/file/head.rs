@@ -160,6 +160,7 @@ struct PersistedReservation {
     expected_head_sha256: String,
     issued_at_unix_ms: u64,
     expires_at_unix_ms: u64,
+    lifecycle_record: Option<crate::plugin_product::lifecycle::HostLifecycleRecord>,
 }
 
 #[derive(Default)]

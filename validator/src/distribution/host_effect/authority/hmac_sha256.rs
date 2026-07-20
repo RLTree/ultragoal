@@ -1,5 +1,7 @@
 type HmacSha256 = Hmac<Sha256>;
 
+use crate::plugin_product::lifecycle::HostLifecycleRecord;
+
 const KEY_BYTES: usize = 32;
 const NONCE_BYTES: usize = 32;
 const MAX_PERMIT_TTL_MS: u64 = 5 * 60 * 1000;
@@ -39,6 +41,8 @@ pub(crate) struct HostEffectPermitBinding {
     pub(in crate::distribution::host_effect) issued_at_unix_ms: u64,
     pub(in crate::distribution::host_effect) expires_at_unix_ms: u64,
     pub(in crate::distribution::host_effect) expected_head_sha256: String,
+    pub(in crate::distribution::host_effect) lifecycle_record: Option<HostLifecycleRecord>,
+    pub(in crate::distribution::host_effect) lifecycle_record_sha256: Option<String>,
     pub(in crate::distribution::host_effect) decision: HostEffectDecision,
 }
 

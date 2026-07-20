@@ -34,6 +34,8 @@ impl AcceptedHostEffect {
             issued_at_unix_ms,
             expires_at_unix_ms,
             expected_head_sha256: current_head.head_sha256().to_owned(),
+            lifecycle_record: None,
+            lifecycle_record_sha256: None,
             decision: HostEffectDecision::Authorize,
         })
     }

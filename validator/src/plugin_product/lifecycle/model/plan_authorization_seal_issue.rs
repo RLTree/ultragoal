@@ -16,6 +16,13 @@ impl PlanAuthorizationSeal {
         }
     }
 
+    pub(super) fn issuance_id(&self) -> Result<u64, LifecycleError> {
+        let Self::Sealed(data) = self else {
+            return Err(LifecycleError::UnsealedPlan);
+        };
+        Ok(data.issuance_id)
+    }
+
     pub(super) fn consume(&self) -> Result<(), LifecycleError> {
         let Self::Sealed(data) = self else {
             return Err(LifecycleError::UnsealedPlan);

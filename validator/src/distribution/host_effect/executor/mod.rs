@@ -8,9 +8,15 @@
 //! backend for Linux/FreeBSD, and descriptor-relative durable publication used
 //! by the executor after a retained-authority handoff.
 
+#[path = "reservation/lifecycle_completion.rs"]
+mod lifecycle_completion;
 mod model;
 mod process;
 mod target;
+
+pub(crate) use lifecycle_completion::{
+    DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
+};
 
 pub(crate) use model::{
     HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,

@@ -15,6 +15,9 @@ mod lifecycle;
 pub(crate) use authority::{
     HostEffectAuthority, HostEffectDecision, HostEffectPermit, HostEffectPermitBinding,
 };
+pub(crate) use executor::{
+    DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
+};
 #[cfg(test)]
 pub(crate) use ledger::FileHostEffectLedger;
 

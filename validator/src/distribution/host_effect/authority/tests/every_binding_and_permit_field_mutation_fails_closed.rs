@@ -26,6 +26,7 @@ fn every_binding_and_permit_field_mutation_fails_closed() {
         |row| row.issued_at_unix_ms += 1,
         |row| row.expires_at_unix_ms += 1,
         |row| row.expected_head_sha256 = repeated_digest('a'),
+        |row| row.lifecycle_record_sha256 = Some(repeated_digest('a')),
         |row| row.decision = HostEffectDecision::Refuse,
     ];
     for mutate in mutations {

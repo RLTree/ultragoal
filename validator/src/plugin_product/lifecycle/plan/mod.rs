@@ -140,7 +140,7 @@ pub(super) fn consume_plan(plan: &LifecyclePlan) -> Result<(), LifecycleError> {
     plan.authorization_seal.consume()
 }
 
-fn plan_digest(
+pub(super) fn plan_digest(
     intent: LifecycleIntent,
     before: &LifecycleState,
     after: &LifecycleState,
@@ -158,6 +158,10 @@ fn plan_digest(
     ))
     .map_err(|_| LifecycleError::InvalidTransition)?;
     Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
+}
+
+pub(super) fn record_writes_host_state(effects: &[LifecycleEffect]) -> bool {
+    transitions::writes_host_state(effects)
 }
 
 fn digest_value<T: Serialize>(value: &T) -> Result<String, LifecycleError> {

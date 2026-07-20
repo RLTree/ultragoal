@@ -43,6 +43,8 @@ fn permit_binding(
         issued_at_unix_ms: 1_000,
         expires_at_unix_ms: 2_000,
         expected_head_sha256: repeated_digest('2'),
+        lifecycle_record: None,
+        lifecycle_record_sha256: None,
         decision: HostEffectDecision::Authorize,
     }
 }

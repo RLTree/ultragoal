@@ -112,7 +112,7 @@ pub fn recover<A: LifecycleEffectAdapter>(
     Ok(token.prior.clone())
 }
 
-fn recovery_state_after_completed_prefix(
+pub(super) fn recovery_state_after_completed_prefix(
     plan: &LifecyclePlan,
     completed_effects: &[super::model::LifecycleEffect],
 ) -> Result<LifecycleState, LifecycleError> {
