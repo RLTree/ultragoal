@@ -195,7 +195,7 @@ mod tests {
         )
         .unwrap();
         let replay = plan.clone();
-        let mut custody = HostLifecycleCustody::take(plan).unwrap();
+        let custody = HostLifecycleCustody::take(plan).unwrap();
         let mut effects = NeverExecute;
 
         let record = custody.pre_effect_record();
