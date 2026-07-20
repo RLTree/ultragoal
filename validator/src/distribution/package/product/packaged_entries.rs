@@ -45,6 +45,8 @@ fn packaged_entries(
 fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageError> {
     let role = if path == SUPPORTED_MANIFEST_PATH {
         PackageRole::Manifest
+    } else if path == "runtime/runtime-probe-bin" {
+        PackageRole::Executable
     } else if CANONICAL_SKILLS
         .iter()
         .any(|name| path == format!("skills/{name}/SKILL.md"))
@@ -58,7 +60,9 @@ fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageE
     } else {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     };
-    if mode != 0o644 {
+    if (role == PackageRole::Executable && mode != 0o755)
+        || (role != PackageRole::Executable && mode != 0o644)
+    {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     }
     Ok(role)

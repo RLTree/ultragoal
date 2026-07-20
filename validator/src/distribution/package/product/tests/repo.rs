@@ -56,8 +56,10 @@ impl Repo {
         let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
         fs::create_dir_all(root.join(".codex-plugin")).expect("plugin manifest directory");
         fs::create_dir_all(root.join("schemas")).expect("schema directory");
+        fs::create_dir_all(root.join("runtime")).expect("runtime directory");
         fs::write(root.join("schemas/catalog.json"), "{}\n").expect("schema catalog");
         write_supported_manifest(&root, SUPPORTED_VERSION);
+        write_runtime_probe(&root);
         for name in CANONICAL_SKILLS {
             let root = root.join("skills").join(name);
             fs::create_dir_all(root.join("agents")).expect("skill metadata directory");
@@ -97,6 +99,17 @@ impl Repo {
         )
         .expect("workspace-write live context")
     }
+}
+
+fn write_runtime_probe(root: &Path) {
+    let probe = root.join("runtime/runtime-probe-bin");
+    fs::write(
+        &probe,
+        include_bytes!("../../../../../../runtime/runtime-probe-bin"),
+    )
+    .expect("runtime probe");
+    #[cfg(unix)]
+    fs::set_permissions(&probe, fs::Permissions::from_mode(0o755)).expect("runtime probe mode");
 }
 
 impl Drop for Repo {

@@ -75,6 +75,7 @@ pub(super) fn capture_supported_package_paths(
     source: &mut CachedSource<'_>,
 ) -> Result<Vec<String>, String> {
     let supported_manifest = ".codex-plugin/plugin.json";
+    let runtime_probe = "runtime/runtime-probe-bin";
     if !tree
         .get(supported_manifest)
         .is_some_and(|kind| matches!(kind, PackageEntryKind::Regular { single_link: true }))
@@ -105,7 +106,7 @@ pub(super) fn capture_supported_package_paths(
         return Err("package snapshot skill roots are not unique".to_string());
     }
 
-    let mut required = BTreeSet::from([supported_manifest.to_string()]);
+    let mut required = BTreeSet::from([supported_manifest.to_string(), runtime_probe.to_string()]);
     for root in &roots {
         required.insert(format!("{root}/SKILL.md"));
         required.insert(format!("{root}/agents/openai.yaml"));
@@ -135,6 +136,19 @@ pub(super) fn capture_supported_package_paths(
                 return Err("package snapshot skill subtree is unsafe".to_string());
             }
         }
+    }
+    match tree.get(runtime_probe) {
+        Some(PackageEntryKind::Regular { single_link: true }) => {
+            source.read(runtime_probe, anchored::MAX_RESOURCE_BYTES)?;
+            packaged.push(runtime_probe.to_string());
+        }
+        _ => return Err("package snapshot runtime probe is unavailable or unsafe".to_string()),
+    }
+    if tree
+        .keys()
+        .any(|path| path.starts_with("runtime/") && path != runtime_probe)
+    {
+        return Err("package snapshot runtime subtree contains an unknown member".to_string());
     }
     packaged.sort();
     if packaged.windows(2).any(|pair| pair[0] == pair[1]) {
