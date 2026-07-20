@@ -3,10 +3,7 @@ use super::transaction_observation::{
 };
 use super::transaction_observation_transition::validate_read_only_transition;
 use super::transaction_policy;
-use super::{
-    HostEffectCancellation, HostEffectExecutionPolicy, NativeRetainedDescriptorProcessBackend,
-    PinnedHostExecutable,
-};
+use super::{HostEffectCancellation, NativeRetainedDescriptorProcessBackend, PinnedHostExecutable};
 use crate::distribution::PackageIdentity;
 use crate::plugin_product::lifecycle::{HostLifecycleExpectedObservations, LifecyclePlan};
 use std::os::fd::AsRawFd;
@@ -29,8 +26,7 @@ pub(super) fn observe_read_only(
         .first()
         .map(|command| command.environment())
         .ok_or("host lifecycle command plan empty")?;
-    let policy = HostEffectExecutionPolicy::strict(30_000, environment)
-        .map_err(|_| "host lifecycle execution policy failed")?;
+    let policy = transaction_policy::isolated_codex_policy(environment)?;
     let mut backend = NativeRetainedDescriptorProcessBackend;
     let cancellation = HostEffectCancellation::default();
     let capability = transaction_policy::current_capability()

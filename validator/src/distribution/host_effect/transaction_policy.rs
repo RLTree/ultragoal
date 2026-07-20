@@ -1,3 +1,4 @@
+use super::HostEffectExecutionPolicy;
 use super::lifecycle::{
     AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy, DescriptorExecutionAdapter,
@@ -7,7 +8,29 @@ use super::lifecycle::{
 };
 use crate::distribution::PackageIdentity;
 use crate::plugin_product::lifecycle::{HostLifecycleCustody, LifecycleIntent, LifecycleState};
+use std::path::Path;
 use std::time::SystemTime;
+
+pub(crate) fn isolated_codex_policy(
+    environment: &[(String, String)],
+) -> Result<HostEffectExecutionPolicy, &'static str> {
+    if environment.len() != 2
+        || environment[0].0 != "CODEX_HOME"
+        || environment[1].0 != "HOME"
+        || environment[0].1 != environment[1].1
+    {
+        return Err("isolated Codex environment binding invalid");
+    }
+    let home = Path::new(&environment[0].1);
+    let canonical = home
+        .canonicalize()
+        .map_err(|_| "isolated Codex home unavailable")?;
+    if canonical.display().to_string() != environment[0].1 {
+        return Err("isolated Codex home binding is not canonical");
+    }
+    HostEffectExecutionPolicy::strict_isolated_codex_home(30_000, home)
+        .map_err(|_| "isolated Codex execution policy failed")
+}
 
 pub(crate) fn accepted_lifecycle(
     custody: &HostLifecycleCustody,

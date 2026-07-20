@@ -12,8 +12,8 @@ use super::transaction_read_only::observe_read_only;
 use super::transaction_recovery::ObservedRecoveryAdapter;
 use super::{
     ConfinedHostEffectTarget, DurableHostEffectLedger, FileHostEffectLedger,
-    HostEffectCancellation, HostEffectCompletion, HostEffectExecutionPolicy,
-    NativeRetainedDescriptorProcessBackend, PinnedHostExecutable, SupportedHostEffectExecutor,
+    HostEffectCancellation, HostEffectCompletion, NativeRetainedDescriptorProcessBackend,
+    PinnedHostExecutable, SupportedHostEffectExecutor,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
 use crate::plugin_product::lifecycle::{
@@ -133,8 +133,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
     {
         return Err("host lifecycle command environments diverged");
     }
-    let policy = HostEffectExecutionPolicy::strict(30_000, environment)
-        .map_err(|_| "host lifecycle execution policy failed")?;
+    let policy = transaction_policy::isolated_codex_policy(environment)?;
     let cancellation = HostEffectCancellation::default();
     let mut executor =
         SupportedHostEffectExecutor::new(&ledger, target, &mut backend, policy.clone());

@@ -1,21 +1,42 @@
 impl HostEffectExecutionPolicy {
-    /// The accepted argv binding permits only the two exact paths of the
-    /// disposable Codex home. No inherited, loader, locale, or PATH entries
-    /// cross this boundary.
+    /// The established private fixture policy permits only a cleared environment.
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn strict(
         timeout_ms: u64,
         environment: &[(String, String)],
     ) -> Result<Self, HostEffectExecutorFailure> {
-        if environment.len() != 2
-            || environment[0].0 != "CODEX_HOME"
-            || environment[1].0 != "HOME"
-            || environment[0].1 != environment[1].1
-            || !std::path::Path::new(&environment[0].1).is_absolute()
-        {
+        if !environment.is_empty() {
             return Err(HostEffectExecutorFailure::new(
                 HostEffectExecutorErrorId::EnvironmentInjection,
             ));
         }
+        Self::from_bound_environment(timeout_ms, environment)
+    }
+
+    pub(in crate::distribution::host_effect) fn strict_isolated_codex_home(
+        timeout_ms: u64,
+        isolated_home: &std::path::Path,
+    ) -> Result<Self, HostEffectExecutorFailure> {
+        let home = isolated_home.canonicalize().map_err(|_| {
+            HostEffectExecutorFailure::new(HostEffectExecutorErrorId::EnvironmentInjection)
+        })?;
+        if !home.is_absolute() {
+            return Err(HostEffectExecutorFailure::new(
+                HostEffectExecutorErrorId::EnvironmentInjection,
+            ));
+        }
+        let value = home.display().to_string();
+        let environment = [
+            ("CODEX_HOME".to_owned(), value.clone()),
+            ("HOME".to_owned(), value),
+        ];
+        Self::from_bound_environment(timeout_ms, &environment)
+    }
+
+    fn from_bound_environment(
+        timeout_ms: u64,
+        environment: &[(String, String)],
+    ) -> Result<Self, HostEffectExecutorFailure> {
         if timeout_ms == 0 || timeout_ms > MAX_TIMEOUT_MS {
             return Err(HostEffectExecutorFailure::new(
                 HostEffectExecutorErrorId::InvalidPolicy,

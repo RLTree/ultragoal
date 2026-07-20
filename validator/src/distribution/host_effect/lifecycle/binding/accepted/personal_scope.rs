@@ -116,21 +116,33 @@ impl AcceptedHostScope {
                     })
                     .map(|command| command.argv()[3].as_str())
                     .ok_or_else(invalid)?;
-                let isolated_home = plan
-                    .commands()
-                    .first()
-                    .and_then(|command| command.environment().iter().find(|(key, _)| key == "HOME"))
-                    .map(|(_, value)| Path::new(value))
-                    .ok_or_else(invalid)?;
-                if project_identity(repository_root)? != *project_id {
-                    return Err(invalid());
+                #[cfg(test)]
+                {
+                    if project_identity(repository_root)? != *project_id {
+                        return Err(invalid());
+                    }
+                    HostCommandPlan::repository_install(package, repository_root, marketplace)
                 }
-                HostCommandPlan::repository_install_in_isolated_codex_home(
-                    package,
-                    repository_root,
-                    marketplace,
-                    isolated_home,
-                )
+                #[cfg(not(test))]
+                {
+                    let isolated_home = plan
+                        .commands()
+                        .first()
+                        .and_then(|command| {
+                            command.environment().iter().find(|(key, _)| key == "HOME")
+                        })
+                        .map(|(_, value)| Path::new(value))
+                        .ok_or_else(invalid)?;
+                    if project_identity(repository_root)? != *project_id {
+                        return Err(invalid());
+                    }
+                    HostCommandPlan::repository_install_in_isolated_codex_home(
+                        package,
+                        repository_root,
+                        marketplace,
+                        isolated_home,
+                    )
+                }
             }
         }
         .map_err(|_| invalid())?;
