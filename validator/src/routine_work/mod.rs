@@ -63,14 +63,16 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, PublicRoutineControl, RoutineAdapterSpec,
-    RoutineCancellation, RoutineContinuationOutcome, RoutineCustodyCapability,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, ProductionExecutionControl,
+    PublicRoutineControl, RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReservationPublication, RoutineReuseInput, RoutineTerminalOutcome,
-    bind_rust_source_syntax_invocation, fixed_environment,
-    mediate_public_routine_execution_with_control, prepare_routine_execution,
+    RoutineReservationPublication, RoutineTerminalOutcome, bind_rust_source_syntax_invocation,
+    fixed_environment, mediate_public_routine_execution_with_control, prepare_routine_execution,
     reconcile_public_routine_reservation, validate_immutable_routine_program,
 };
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::{RoutineCancellation, RoutineReuseInput};
 
 #[cfg(test)]
 pub(crate) use runtime_adapter::mediate_public_routine_execution;

@@ -1,7 +1,6 @@
 use super::HostCustodyIssuance;
 use super::*;
 use crate::routine_work::RoutineCustodyCapability;
-use crate::state::RoutineFindingBinding;
 use std::path::Path;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -57,126 +56,46 @@ impl HostState {
 
     pub(crate) fn record_reserved_checkpoint(
         &self,
-        target: &Path,
-        context_id: &str,
-        candidate_id: &str,
-        plan_id: &str,
-        snapshot_id: &str,
-        continuation: &str,
-        recovery_marker: &str,
-        attempt_grant: &str,
-        authenticated_ledger_head: &str,
-        finding_binding: Option<&RoutineFindingBinding>,
+        request: ReservedCheckpoint<'_>,
     ) -> Result<(), HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            self.inner.record_reserved_checkpoint(
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-                recovery_marker,
-                attempt_grant,
-                authenticated_ledger_head,
-                finding_binding,
-            )
+            self.inner.record_reserved_checkpoint(request)
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-                recovery_marker,
-                attempt_grant,
-                authenticated_ledger_head,
-                finding_binding,
-            );
+            let _ = request;
             unreachable!("unsupported host state cannot be constructed")
         }
     }
 
     pub(crate) fn exact_checkpoint(
         &self,
-        target: &Path,
-        context_id: &str,
-        candidate_id: &str,
-        plan_id: &str,
-        snapshot_id: &str,
+        binding: CheckpointBinding<'_>,
         continuation: Option<&str>,
     ) -> Result<Option<supported::ContinuationCheckpoint>, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            self.inner.exact_checkpoint(
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-            )
+            self.inner.exact_checkpoint(binding, continuation)
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-            );
+            let _ = (binding, continuation);
             unreachable!("unsupported host state cannot be constructed")
         }
     }
 
     pub(crate) fn record_terminal_checkpoint(
         &self,
-        target: &Path,
-        context_id: &str,
-        candidate_id: &str,
-        plan_id: &str,
-        snapshot_id: &str,
-        continuation: &str,
-        attempt_grant: &str,
-        authenticated_ledger_head: &str,
-        finding_binding: Option<&RoutineFindingBinding>,
-        terminal_outcome: crate::routine_work::RoutineTerminalOutcome,
+        request: TerminalCheckpoint<'_>,
     ) -> Result<(), HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            self.inner.record_terminal_checkpoint(
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-                attempt_grant,
-                authenticated_ledger_head,
-                finding_binding,
-                terminal_outcome,
-            )
+            self.inner.record_terminal_checkpoint(request)
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = (
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                continuation,
-                attempt_grant,
-                authenticated_ledger_head,
-                finding_binding,
-                terminal_outcome,
-            );
+            let _ = request;
             unreachable!("unsupported host state cannot be constructed")
         }
     }

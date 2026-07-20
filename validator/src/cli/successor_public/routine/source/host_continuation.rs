@@ -1,34 +1,48 @@
 use super::*;
 use crate::routine_work::{
-    require_runtime_store_ignored, DirtySnapshot, RoutineContinuationOutcome,
+    DirtySnapshot, RoutineContinuationOutcome, require_runtime_store_ignored,
 };
 
-pub(super) fn run(
-    target: &Path,
-    context: &LiveContext,
-    manifest: &LoadedManifest,
-    graph: &ImpactGraph,
-    snapshot: &DirtySnapshot,
-    plan: &RoutinePlan,
-    source_id: &str,
-    continuation: Option<&str>,
-    control: PublicRoutineControl,
-    home: Option<&Path>,
-) -> Result<RuntimeOutcome, PublicFailure> {
+pub(super) struct HostContinuationRequest<'a> {
+    pub(super) target: &'a Path,
+    pub(super) context: &'a LiveContext,
+    pub(super) manifest: &'a LoadedManifest,
+    pub(super) graph: &'a ImpactGraph,
+    pub(super) snapshot: &'a DirtySnapshot,
+    pub(super) plan: &'a RoutinePlan,
+    pub(super) source_id: &'a str,
+    pub(super) continuation: Option<&'a str>,
+    pub(super) control: PublicRoutineControl,
+    pub(super) home: Option<&'a Path>,
+}
+
+pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome, PublicFailure> {
+    let HostContinuationRequest {
+        target,
+        context,
+        manifest,
+        graph,
+        snapshot,
+        plan,
+        source_id,
+        continuation,
+        control,
+        home,
+    } = request;
     require_runtime_store_ignored(plan.binding()).map_err(PublicFailure::Routine)?;
 
     let prepared = prepare(context, manifest, graph, snapshot, plan)?;
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
     let state = HostState::open_or_bootstrap(home, target).map_err(PublicFailure::Host)?;
+    let checkpoint_binding = host::CheckpointBinding::new(
+        target,
+        context.context_id(),
+        plan.binding().candidate_id(),
+        plan.plan_id(),
+        snapshot.snapshot_id(),
+    );
     let checkpoint = state
-        .exact_checkpoint(
-            target,
-            context.context_id(),
-            plan.binding().candidate_id(),
-            plan.plan_id(),
-            snapshot.snapshot_id(),
-            continuation,
-        )
+        .exact_checkpoint(checkpoint_binding, continuation)
         .map_err(PublicFailure::Host)?;
     let finding_binding = checkpoint
         .as_ref()
@@ -96,30 +110,19 @@ pub(super) fn run(
                         .checkpoint_head()
                         .ok_or(PublicFailure::PersistenceAfterEffect)?;
                     state
-                        .record_terminal_checkpoint(
-                            target,
-                            context.context_id(),
-                            plan.binding().candidate_id(),
-                            plan.plan_id(),
-                            snapshot.snapshot_id(),
+                        .record_terminal_checkpoint(host::TerminalCheckpoint {
+                            binding: checkpoint_binding,
                             continuation,
                             attempt_grant,
-                            head,
-                            finding_binding.as_ref(),
-                            result
+                            authenticated_ledger_head: head,
+                            finding_binding: finding_binding.as_ref(),
+                            terminal_outcome: result
                                 .terminal_outcome()
                                 .ok_or(PublicFailure::PersistenceAfterEffect)?,
-                        )
+                        })
                         .map_err(PublicFailure::Host)?;
                     let persisted = state
-                        .exact_checkpoint(
-                            target,
-                            context.context_id(),
-                            plan.binding().candidate_id(),
-                            plan.plan_id(),
-                            snapshot.snapshot_id(),
-                            Some(continuation),
-                        )
+                        .exact_checkpoint(checkpoint_binding, Some(continuation))
                         .map_err(PublicFailure::Host)?
                         .ok_or(PublicFailure::PersistenceAfterEffect)?;
                     terminal_event::join(target, context, &state, plan.binding(), &persisted)?;
@@ -141,18 +144,14 @@ pub(super) fn run(
     let mut publish_reserved =
         |reservation: &crate::routine_work::RoutineReservationPublication| {
             state
-                .record_reserved_checkpoint(
-                    target,
-                    context.context_id(),
-                    plan.binding().candidate_id(),
-                    plan.plan_id(),
-                    snapshot.snapshot_id(),
-                    reservation.continuation(),
-                    reservation.recovery_marker(),
-                    reservation.attempt_grant(),
-                    reservation.authenticated_ledger_head(),
-                    finding_binding.as_ref(),
-                )
+                .record_reserved_checkpoint(host::ReservedCheckpoint {
+                    binding: checkpoint_binding,
+                    continuation: reservation.continuation(),
+                    recovery_marker: reservation.recovery_marker(),
+                    attempt_grant: reservation.attempt_grant(),
+                    authenticated_ledger_head: reservation.authenticated_ledger_head(),
+                    finding_binding: finding_binding.as_ref(),
+                })
                 .map_err(|_| {
                     crate::routine_work::RoutineError::new(
                         crate::routine_work::RoutineErrorId::ObservationFailed,
@@ -162,14 +161,14 @@ pub(super) fn run(
                 })
         };
     let mediated = mediate_public_routine_execution_with_control(
-        Some(state.issue_custody_capability()),
         context,
         plan,
         prepared,
-        RoutineCancellation::new(),
-        RoutineReuseInput::default(),
-        control,
-        Some(&mut publish_reserved),
+        ProductionExecutionControl::with_reservation_publication(
+            state.issue_custody_capability(),
+            control,
+            &mut publish_reserved,
+        ),
     );
     let result = match mediated {
         Ok(result) => result,
@@ -193,18 +192,14 @@ pub(super) fn run(
             .terminal_outcome()
             .ok_or(PublicFailure::PersistenceAfterEffect)?;
         state
-            .record_terminal_checkpoint(
-                target,
-                context.context_id(),
-                plan.binding().candidate_id(),
-                plan.plan_id(),
-                snapshot.snapshot_id(),
+            .record_terminal_checkpoint(host::TerminalCheckpoint {
+                binding: checkpoint_binding,
                 continuation,
                 attempt_grant,
-                head,
-                finding_binding.as_ref(),
+                authenticated_ledger_head: head,
+                finding_binding: finding_binding.as_ref(),
                 terminal_outcome,
-            )
+            })
             .map_err(|_| {
                 terminal_event::mark_post_effect_ambiguity(&state, target, context, plan, snapshot);
                 PublicFailure::PersistenceAfterEffect
@@ -219,14 +214,7 @@ pub(super) fn run(
             .continuation()
             .ok_or(PublicFailure::PersistenceAfterEffect)?;
         let persisted = state
-            .exact_checkpoint(
-                target,
-                context.context_id(),
-                plan.binding().candidate_id(),
-                plan.plan_id(),
-                snapshot.snapshot_id(),
-                Some(continuation),
-            )
+            .exact_checkpoint(checkpoint_binding, Some(continuation))
             .map_err(PublicFailure::Host)?
             .ok_or(PublicFailure::PersistenceAfterEffect)?;
         terminal_event::join(target, context, &state, plan.binding(), &persisted)?;

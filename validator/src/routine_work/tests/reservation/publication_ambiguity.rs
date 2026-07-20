@@ -2,11 +2,11 @@ use std::fs;
 use std::os::unix::fs::DirBuilderExt;
 
 use super::super::routine_plan_fixture::{
-    authority_path, isolate_fixture_test, RoutinePlanFixture,
+    RoutinePlanFixture, authority_path, isolate_fixture_test,
 };
 use super::super::routine_work::{
-    mediate_public_routine_execution, set_test_publication_ambiguity_after,
-    test_last_spawn_group_absent, RoutineCancellation, RoutineReuseInput,
+    RoutineCancellation, RoutineReuseInput, mediate_public_routine_execution,
+    set_test_publication_ambiguity_after, test_last_spawn_group_absent,
 };
 
 pub(super) fn reservation_publication_ambiguity_is_durable_before_workspace_effects() {

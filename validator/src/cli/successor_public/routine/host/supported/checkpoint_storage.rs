@@ -1,36 +1,23 @@
+use super::super::super::{CheckpointBinding, HostFailure};
 use super::super::{
-    AnchoredDirectory, CONTINUITY_CHECKPOINT_NAME, CONTINUITY_CHECKPOINT_STAGE_NAME, HostFailure,
-    HostState,
+    AnchoredDirectory, CONTINUITY_CHECKPOINT_NAME, CONTINUITY_CHECKPOINT_STAGE_NAME, HostState,
 };
 use super::checkpoint::ContinuationCheckpoint;
 use super::continuity_validation::validate_checkpoint;
 use std::io::Read;
-use std::path::Path;
 
 const MAX_CHECKPOINT_BYTES: u64 = 16 * 1024;
 
 impl HostState {
     pub(crate) fn exact_checkpoint(
         &self,
-        target: &Path,
-        context_id: &str,
-        candidate_id: &str,
-        plan_id: &str,
-        snapshot_id: &str,
+        binding: CheckpointBinding<'_>,
         continuation: Option<&str>,
     ) -> Result<Option<ContinuationCheckpoint>, HostFailure> {
         let Some(checkpoint) = self.read_optional_checkpoint()? else {
             return Ok(None);
         };
-        validate_checkpoint(
-            &checkpoint,
-            target,
-            context_id,
-            candidate_id,
-            plan_id,
-            snapshot_id,
-            continuation,
-        )?;
+        validate_checkpoint(&checkpoint, binding, continuation)?;
         Ok(Some(checkpoint))
     }
 

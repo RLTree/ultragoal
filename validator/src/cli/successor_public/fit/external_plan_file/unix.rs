@@ -35,10 +35,11 @@ pub(super) fn read_immutable_plan(path: &Path, maximum: u64) -> Result<Vec<u8>, 
     let named_before =
         identity(&std::fs::symlink_metadata(&observed_path).map_err(|_| "plan-input-stat-failed")?);
     // SAFETY: geteuid has no preconditions and only reads the process credential.
+    let effective_user_id = unsafe { libc::geteuid() };
     if before != named_before
         || before.mode & libc::S_IFMT as u32 != libc::S_IFREG as u32
         || before.links != 1
-        || before.owner != unsafe { libc::geteuid() }
+        || before.owner != effective_user_id
         || before.length == 0
         || before.length > maximum
     {

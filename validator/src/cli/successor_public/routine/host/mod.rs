@@ -36,4 +36,8 @@ pub(crate) use supported::ContinuationCheckpoint;
 #[path = "host_failure.rs"]
 mod host_failure;
 
+#[path = "checkpoint_request.rs"]
+mod checkpoint_request;
+
+pub(crate) use checkpoint_request::*;
 pub(crate) use host_failure::*;

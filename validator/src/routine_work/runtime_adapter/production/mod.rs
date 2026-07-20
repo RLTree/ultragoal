@@ -50,6 +50,55 @@ pub(crate) enum PublicRoutineControl {
     InterruptAfterReservation,
 }
 
+type ReservationPublicationCallback<'a> =
+    dyn FnMut(&RoutineReservationPublication) -> Result<(), RoutineError> + 'a;
+
+/// Private controls carried together from production admission to the one
+/// reservation-and-effect transition.
+pub(crate) struct ProductionExecutionControl<'a> {
+    custody: Option<RoutineCustodyCapability>,
+    cancellation: RoutineCancellation,
+    reuse: RoutineReuseInput,
+    control: PublicRoutineControl,
+    on_reserved: Option<&'a mut ReservationPublicationCallback<'a>>,
+}
+
+pub(in crate::routine_work::runtime_adapter::production) struct ReservedEffectControl<'a> {
+    cancellation: RoutineCancellation,
+    reuse: PreflightedProductionReuse,
+    control: PublicRoutineControl,
+    on_reserved: Option<&'a mut ReservationPublicationCallback<'a>>,
+}
+
+impl<'a> ProductionExecutionControl<'a> {
+    pub(crate) fn standard(
+        custody: Option<RoutineCustodyCapability>,
+        control: PublicRoutineControl,
+    ) -> Self {
+        Self {
+            custody,
+            cancellation: RoutineCancellation::new(),
+            reuse: RoutineReuseInput::default(),
+            control,
+            on_reserved: None,
+        }
+    }
+
+    pub(crate) fn with_reservation_publication(
+        custody: RoutineCustodyCapability,
+        control: PublicRoutineControl,
+        on_reserved: &'a mut ReservationPublicationCallback<'a>,
+    ) -> Self {
+        Self {
+            custody: Some(custody),
+            cancellation: RoutineCancellation::new(),
+            reuse: RoutineReuseInput::default(),
+            control,
+            on_reserved: Some(on_reserved),
+        }
+    }
+}
+
 /// Private host checkpoint data published after the durable reservation and
 /// before any workspace effect can begin.
 pub(crate) struct RoutineReservationPublication {
@@ -104,27 +153,32 @@ pub(crate) fn mediate_public_routine_execution(
 ) -> Result<RoutineMediationResult, RoutineError> {
     let custody = authority_root.map(custody::issue_test_custody);
     mediate_public_routine_execution_with_control(
-        custody,
         context,
         plan,
         prepared,
-        cancellation,
-        reuse,
-        PublicRoutineControl::Run,
-        None,
+        ProductionExecutionControl {
+            custody,
+            cancellation,
+            reuse,
+            control: PublicRoutineControl::Run,
+            on_reserved: None,
+        },
     )
 }
 
 pub(crate) fn mediate_public_routine_execution_with_control(
-    custody: Option<RoutineCustodyCapability>,
     context: &LiveContext,
     plan: &RoutinePlan,
     prepared: PreparedRoutineExecution,
-    cancellation: RoutineCancellation,
-    reuse: RoutineReuseInput,
-    control: PublicRoutineControl,
-    on_reserved: Option<&mut dyn FnMut(&RoutineReservationPublication) -> Result<(), RoutineError>>,
+    control: ProductionExecutionControl<'_>,
 ) -> Result<RoutineMediationResult, RoutineError> {
+    let ProductionExecutionControl {
+        custody,
+        cancellation,
+        reuse,
+        control,
+        on_reserved,
+    } = control;
     if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
         if !reuse.is_empty() {
             return Err(error("routine-production-noop-reuse-present"));
@@ -141,16 +195,13 @@ pub(crate) fn mediate_public_routine_execution_with_control(
     let reuse_supplied = !reuse.is_empty();
     let reuse = preflight_production_reuse_input(reuse, &request, reuse_supplied)?;
     let custody = custody.ok_or_else(|| error("routine-production-authority-root-missing"))?;
-    custody::mediate_reserved_effect(
-        custody,
-        context,
-        plan,
-        request,
+    let control = ReservedEffectControl {
         cancellation,
         reuse,
         control,
         on_reserved,
-    )
+    };
+    custody::mediate_reserved_effect(custody, context, plan, request, control)
 }
 
 pub(crate) fn reconcile_public_routine_reservation(

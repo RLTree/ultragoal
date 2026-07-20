@@ -21,9 +21,9 @@ use crate::context::{BuildRequest, LiveContext, ToolCapability};
 use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
-    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, PublicRoutineControl,
-    RepoPath, RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec, RoutinePlan,
-    RoutineReuseInput, RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
+    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionExecutionControl,
+    PublicRoutineControl, RepoPath, RoutineAdapterSpec, RoutineInvocationSpec, RoutinePlan,
+    RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
     bind_rust_source_syntax_invocation, load_production_catalog,
     mediate_public_routine_execution_with_control, plan_routine, prepare_routine_execution,
     reconcile_public_routine_reservation, validate_immutable_routine_program,

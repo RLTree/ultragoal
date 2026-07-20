@@ -1,64 +1,64 @@
-use super::super::HostFailure;
+use super::super::super::{CheckpointBinding, HostFailure};
 use super::checkpoint::{ContinuationCheckpoint, RoutineCheckpointOperation};
 use sha2::{Digest, Sha256};
-use std::path::Path;
+
+pub(super) struct CheckpointDraft<'a> {
+    pub(super) binding: CheckpointBinding<'a>,
+    pub(super) continuation: &'a str,
+    pub(super) recovery_marker: &'a str,
+    pub(super) attempt_grant: &'a str,
+    pub(super) authenticated_ledger_head: &'a str,
+    pub(super) finding_binding: Option<&'a crate::state::RoutineFindingBinding>,
+    pub(super) terminal_outcome: Option<crate::routine_work::RoutineTerminalOutcome>,
+    pub(super) state: &'a str,
+    pub(super) generation: u64,
+}
 
 pub(super) fn checkpoint(
-    target: &Path,
-    context_id: &str,
-    candidate_id: &str,
-    plan_id: &str,
-    snapshot_id: &str,
-    continuation: &str,
-    recovery_marker: &str,
-    attempt_grant: &str,
-    authenticated_ledger_head: &str,
-    finding_binding: Option<&crate::state::RoutineFindingBinding>,
-    terminal_outcome: Option<crate::routine_work::RoutineTerminalOutcome>,
-    state: &str,
-    generation: u64,
+    draft: CheckpointDraft<'_>,
 ) -> Result<ContinuationCheckpoint, HostFailure> {
-    if !target.is_absolute()
-        || target.to_str().is_none()
-        || !continuation.starts_with("routine-cont-")
-        || attempt_grant.is_empty()
-        || authenticated_ledger_head.is_empty()
-        || generation == 0
+    if !draft.binding.target().is_absolute()
+        || draft.binding.target().to_str().is_none()
+        || !draft.continuation.starts_with("routine-cont-")
+        || draft.attempt_grant.is_empty()
+        || draft.authenticated_ledger_head.is_empty()
+        || draft.generation == 0
     {
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
         schema_version: "RoutineContinuationCheckpoint-v4".to_owned(),
-        generation,
-        target: target.to_str().ok_or(HostFailure::Invalid)?.to_owned(),
-        context_id: context_id.to_owned(),
-        candidate_id: candidate_id.to_owned(),
-        plan_id: plan_id.to_owned(),
-        snapshot_id: snapshot_id.to_owned(),
-        continuation: continuation.to_owned(),
-        recovery_marker: recovery_marker.to_owned(),
-        attempt_grant: attempt_grant.to_owned(),
-        authenticated_ledger_head: authenticated_ledger_head.to_owned(),
-        finding_binding: finding_binding.cloned(),
+        generation: draft.generation,
+        target: draft
+            .binding
+            .target()
+            .to_str()
+            .ok_or(HostFailure::Invalid)?
+            .to_owned(),
+        context_id: draft.binding.context_id().to_owned(),
+        candidate_id: draft.binding.candidate_id().to_owned(),
+        plan_id: draft.binding.plan_id().to_owned(),
+        snapshot_id: draft.binding.snapshot_id().to_owned(),
+        continuation: draft.continuation.to_owned(),
+        recovery_marker: draft.recovery_marker.to_owned(),
+        attempt_grant: draft.attempt_grant.to_owned(),
+        authenticated_ledger_head: draft.authenticated_ledger_head.to_owned(),
+        finding_binding: draft.finding_binding.cloned(),
         operation: RoutineCheckpointOperation::Terminal,
-        terminal_outcome,
-        state: state.to_owned(),
-        event_id: terminal_event_id(continuation, authenticated_ledger_head),
+        terminal_outcome: draft.terminal_outcome,
+        state: draft.state.to_owned(),
+        event_id: terminal_event_id(draft.continuation, draft.authenticated_ledger_head),
         event_observed_at_unix_ms: 0,
-        event_sequence: generation,
+        event_sequence: draft.generation,
         event_parent_id: None,
-        event_status: event_projection(terminal_outcome).0.to_owned(),
-        event_transition: event_projection(terminal_outcome).1.to_owned(),
+        event_status: event_projection(draft.terminal_outcome).0.to_owned(),
+        event_transition: event_projection(draft.terminal_outcome).1.to_owned(),
     })
 }
 
 pub(super) fn validate_checkpoint(
     checkpoint: &ContinuationCheckpoint,
-    target: &Path,
-    context_id: &str,
-    candidate_id: &str,
-    plan_id: &str,
-    snapshot_id: &str,
+    binding: CheckpointBinding<'_>,
     continuation: Option<&str>,
 ) -> Result<(), HostFailure> {
     if checkpoint.schema_version != "RoutineContinuationCheckpoint-v4"
@@ -71,11 +71,11 @@ pub(super) fn validate_checkpoint(
                 | "terminal-event-pending"
                 | "terminal-event-joined"
         )
-        || checkpoint.target != target.to_str().ok_or(HostFailure::Invalid)?
-        || checkpoint.context_id != context_id
-        || checkpoint.candidate_id != candidate_id
-        || checkpoint.plan_id != plan_id
-        || checkpoint.snapshot_id != snapshot_id
+        || checkpoint.target != binding.target().to_str().ok_or(HostFailure::Invalid)?
+        || checkpoint.context_id != binding.context_id()
+        || checkpoint.candidate_id != binding.candidate_id()
+        || checkpoint.plan_id != binding.plan_id()
+        || checkpoint.snapshot_id != binding.snapshot_id()
         || !checkpoint.continuation.starts_with("routine-cont-")
         || checkpoint.attempt_grant.is_empty()
         || checkpoint.authenticated_ledger_head.is_empty()

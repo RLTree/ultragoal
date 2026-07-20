@@ -11,7 +11,7 @@ use super::process_execution::execute_intent;
 use super::*;
 use crate::routine_work::runtime_adapter::mediator;
 use crate::routine_work::runtime_adapter::production::{
-    PublicRoutineControl, RoutineReservationPublication, output_journal,
+    PublicRoutineControl, ReservedEffectControl, RoutineReservationPublication, output_journal,
 };
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -22,13 +22,15 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     context: &LiveContext,
     plan: &RoutinePlan,
     request: RoutineEffectRequest,
-    cancellation: RoutineCancellation,
-    reuse: PreflightedProductionReuse,
-    control: PublicRoutineControl,
-    mut on_reserved: Option<
-        &mut dyn FnMut(&RoutineReservationPublication) -> Result<(), RoutineError>,
-    >,
+    control: ReservedEffectControl<'_>,
 ) -> Result<RoutineMediationResult, RoutineError> {
+    let ReservedEffectControl {
+        cancellation,
+        reuse,
+        control,
+        mut on_reserved,
+        ..
+    } = control;
     preflight_production_request(context, plan, &request)?;
     let launch_root = launch_root(&custody)?;
     if !reuse.is_empty() {

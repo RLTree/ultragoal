@@ -1,8 +1,8 @@
-use super::super::{HostFailure, HostState};
+use super::super::super::{CheckpointBinding, HostFailure};
+use super::super::HostState;
 use super::checkpoint::ContinuationCheckpoint;
 use super::checkpoint_storage::write_checkpoint;
 use super::continuity_validation::{event_projection, terminal_event_id};
-use std::path::Path;
 
 impl HostState {
     pub(crate) fn mark_event_joined(
@@ -11,11 +11,13 @@ impl HostState {
     ) -> Result<(), HostFailure> {
         let current = self
             .exact_checkpoint(
-                Path::new(&checkpoint.target),
-                &checkpoint.context_id,
-                &checkpoint.candidate_id,
-                &checkpoint.plan_id,
-                &checkpoint.snapshot_id,
+                CheckpointBinding::new(
+                    std::path::Path::new(&checkpoint.target),
+                    &checkpoint.context_id,
+                    &checkpoint.candidate_id,
+                    &checkpoint.plan_id,
+                    &checkpoint.snapshot_id,
+                ),
                 Some(&checkpoint.continuation),
             )?
             .ok_or(HostFailure::Invalid)?;
@@ -39,11 +41,13 @@ impl HostState {
     ) -> Result<(), HostFailure> {
         let current = self
             .exact_checkpoint(
-                Path::new(&checkpoint.target),
-                &checkpoint.context_id,
-                &checkpoint.candidate_id,
-                &checkpoint.plan_id,
-                &checkpoint.snapshot_id,
+                CheckpointBinding::new(
+                    std::path::Path::new(&checkpoint.target),
+                    &checkpoint.context_id,
+                    &checkpoint.candidate_id,
+                    &checkpoint.plan_id,
+                    &checkpoint.snapshot_id,
+                ),
                 Some(&checkpoint.continuation),
             )?
             .ok_or(HostFailure::Invalid)?;
@@ -69,11 +73,13 @@ impl HostState {
     ) -> Result<(), HostFailure> {
         let current = self
             .exact_checkpoint(
-                Path::new(&checkpoint.target),
-                &checkpoint.context_id,
-                &checkpoint.candidate_id,
-                &checkpoint.plan_id,
-                &checkpoint.snapshot_id,
+                CheckpointBinding::new(
+                    std::path::Path::new(&checkpoint.target),
+                    &checkpoint.context_id,
+                    &checkpoint.candidate_id,
+                    &checkpoint.plan_id,
+                    &checkpoint.snapshot_id,
+                ),
                 Some(&checkpoint.continuation),
             )?
             .ok_or(HostFailure::Invalid)?;

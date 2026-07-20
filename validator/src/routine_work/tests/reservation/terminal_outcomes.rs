@@ -2,11 +2,11 @@ use std::fs;
 use std::os::unix::fs::DirBuilderExt;
 
 use super::super::routine_plan_fixture::{
-    authority_path, isolate_fixture_test, RoutinePlanFixture,
+    RoutinePlanFixture, authority_path, isolate_fixture_test,
 };
 use super::super::routine_work::{
-    mediate_public_routine_execution, RoutineCancellation, RoutineMediatorStatus,
-    RoutineReuseInput, RoutineTerminalOutcome,
+    RoutineCancellation, RoutineMediatorStatus, RoutineReuseInput, RoutineTerminalOutcome,
+    mediate_public_routine_execution,
 };
 
 pub(super) fn cancelled_effect_keeps_a_cancelled_typed_terminal_outcome() {

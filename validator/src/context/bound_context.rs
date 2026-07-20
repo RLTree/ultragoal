@@ -226,7 +226,7 @@ impl LiveContext {
     }
 
     #[cfg(unix)]
-    pub(crate) fn matches_worktree_directory(self: &Self, device: u64, inode: u64) -> bool {
+    pub(crate) fn matches_worktree_directory(&self, device: u64, inode: u64) -> bool {
         self.worktree_directory_identity.matches(device, inode)
     }
 

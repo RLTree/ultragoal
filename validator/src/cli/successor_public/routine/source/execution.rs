@@ -28,14 +28,10 @@ pub(crate) fn execute_inner(
     if plan.checks().is_empty() {
         let prepared = prepare(&context, &manifest, &graph, &snapshot, &plan)?;
         let result = mediate_public_routine_execution_with_control(
-            None,
             &context,
             &plan,
             prepared,
-            RoutineCancellation::new(),
-            RoutineReuseInput::default(),
-            control,
-            None,
+            ProductionExecutionControl::standard(None, control),
         )
         .map_err(PublicFailure::Routine)?;
         return Ok(outcome::mediation(
@@ -44,16 +40,16 @@ pub(crate) fn execute_inner(
         ));
     }
 
-    host_continuation::run(
-        &target,
-        &context,
-        &manifest,
-        &graph,
-        &snapshot,
-        &plan,
-        &source_id,
-        options.continuation(),
+    host_continuation::run(host_continuation::HostContinuationRequest {
+        target: &target,
+        context: &context,
+        manifest: &manifest,
+        graph: &graph,
+        snapshot: &snapshot,
+        plan: &plan,
+        source_id: &source_id,
+        continuation: options.continuation(),
         control,
         home,
-    )
+    })
 }

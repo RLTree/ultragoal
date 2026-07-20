@@ -1,4 +1,4 @@
-use super::super::super::super::local_store::{append_routine_terminal, RoutineTerminalEvent};
+use super::super::super::super::local_store::{RoutineTerminalEvent, append_routine_terminal};
 use super::*;
 use crate::routine_work::DirtySnapshot;
 use crate::state::RoutineFindingBinding;
@@ -11,14 +11,14 @@ pub(super) fn mark_post_effect_ambiguity(
     plan: &RoutinePlan,
     snapshot: &DirtySnapshot,
 ) {
-    if let Ok(Some(checkpoint)) = state.exact_checkpoint(
+    let binding = host::CheckpointBinding::new(
         target,
         context.context_id(),
         plan.binding().candidate_id(),
         plan.plan_id(),
         snapshot.snapshot_id(),
-        None,
-    ) {
+    );
+    if let Ok(Some(checkpoint)) = state.exact_checkpoint(binding, None) {
         let _ = state.mark_checkpoint_ambiguous(&checkpoint);
     }
 }

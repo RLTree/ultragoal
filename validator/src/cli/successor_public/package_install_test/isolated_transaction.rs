@@ -74,7 +74,7 @@ fn execute_inner(
     {
         return Err("materialized package identity diverged");
     }
-    execute_bound(
+    execute_bound(InstallTransaction {
         context,
         catalog,
         artifact,
@@ -83,19 +83,31 @@ fn execute_inner(
         binding,
         package_tree,
         runtime_path,
-    )
+    })
 }
 
-fn execute_bound(
-    context: &LiveContext,
-    catalog: &AuthorityCatalog,
-    artifact: &ProductionPackageArtifact,
+struct InstallTransaction<'a> {
+    context: &'a LiveContext,
+    catalog: &'a AuthorityCatalog,
+    artifact: &'a ProductionPackageArtifact,
     confined: ConfinedRoot,
     host: HostCapabilityDeclaration,
     binding: JourneyBinding,
     package_tree: ScopedTree,
     runtime_path: std::path::PathBuf,
-) -> Result<IsolatedObservation, &'static str> {
+}
+
+fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservation, &'static str> {
+    let InstallTransaction {
+        context,
+        catalog,
+        artifact,
+        confined,
+        host,
+        binding,
+        package_tree,
+        runtime_path,
+    } = transaction;
     let marketplace_plan = plan_codex_marketplace(
         None,
         None,
