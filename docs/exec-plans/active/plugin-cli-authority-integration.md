@@ -903,6 +903,13 @@ errno-aware workspace enumeration with their already-leased focused controls.
 Public API, schema, dispatch, dependency, receipt, and claim authority remain
 unchanged.
 
+The root subsequently added four dependency-closed caller files to that same
+lease after the exact warning partition proved the original leaf-only support
+set could not compile coherently. The added files only adapt the leased graph,
+raw-authority marker, and public-output callers; they do not add diagnostics,
+public behavior, or authority. The control-plane repair ceiling remains
+source-only and withheld.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
