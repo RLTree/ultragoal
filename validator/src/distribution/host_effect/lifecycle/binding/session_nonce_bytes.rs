@@ -73,7 +73,6 @@ pub(crate) enum AcceptedRollbackPolicy {
 pub(crate) enum AcceptedReconciliationPolicy {
     ExactPostStateAndSeparateHostLayers,
     ExactAbsenceAndSeparateHostLayers,
-    AmbiguousOutcomeRequiresManualReview,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
