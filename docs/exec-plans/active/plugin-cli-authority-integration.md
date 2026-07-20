@@ -1,5 +1,29 @@
 # Plugin and CLI Authority Integration
 
+## Current-host to installed frontier — 2026-07-19
+
+Root dependency reobservation found N08 material REWORK: its historical
+lifecycle acceptance names 11 source/test paths that no longer exist, with no
+current equivalence map to `distribution::host_effect`. N14 has no N04
+intersection and retains its source-accepted/external-blocked outcome. N11 is
+blocked through N08, and N12 remains root-only.
+
+The bounded Sol/Max path review selected this serialized critical path:
+
+1. one managed N08 worktree maps historical lifecycle obligations to current
+   host authority and repairs only demonstrated current gaps;
+2. one bounded Terra/high source review decides N08 acceptance;
+3. root integrates N08 and proves the smallest exact package/install/discovery/
+   public-operation/restore journey;
+4. only then refresh or narrowly repair N11 from the integrated N08 identity;
+5. root rebinds N12 and runs the four-persona milestone review on one exact
+   installed-journey candidate.
+
+N08 may not restore the deleted parallel coordinator, mutate real host state,
+change shared public dispatch, issue claims, or create a new receipt family.
+N11 and N14 are not parallel implementation lanes. This path has no useful
+implementation antichain; parallelism is reserved for the milestone reviewers.
+
 ## Late N04 repair checkpoint — 2026-07-19
 
 N04 is now root-integrated at exact source `d9525e027a9e0aeecf0ec3e4680f9818f2950455`

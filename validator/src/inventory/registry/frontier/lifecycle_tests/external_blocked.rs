@@ -92,6 +92,21 @@ fn integrated_distribution_repair_requires_dependency_reobservation() {
     assert!(nodes.active_worktree_lanes.is_empty());
 }
 
+#[test]
+fn current_host_repair_is_the_only_ready_lane() {
+    let mut states = repair_states("integrated");
+    states.retain(|(id, _)| id != &"N08");
+    states.push(("N08", "ready"));
+    let nodes = scheduler_nodes(&registry(
+        &states,
+        &["N08"],
+        "N08_REPAIR_READY_N14_EXTERNAL_BLOCKED_N12_REOBSERVATION_REQUIRED",
+    ))
+    .unwrap();
+    assert_eq!(nodes.ready, ["N08".to_owned()].into());
+    assert!(nodes.active_worktree_lanes.is_empty());
+}
+
 fn repair_states(n04: &'static str) -> Vec<(&'static str, &'static str)> {
     vec![
         ("N04", n04),
