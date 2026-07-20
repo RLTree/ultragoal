@@ -5,7 +5,6 @@ use crate::routine_work::{
 };
 use crate::state::RoutineFindingBinding;
 use crate::{inventory::InventoryBuilder, state::derive_adopted};
-
 pub(crate) const SOURCE_CONFIG_KEY: &str = "contract_id";
 
 pub(crate) fn execute(
