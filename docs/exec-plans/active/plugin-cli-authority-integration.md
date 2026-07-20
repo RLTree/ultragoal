@@ -916,6 +916,24 @@ research-record caller of the bundled configuration row values. These are
 support-only paths with no public or claim authority; further caller-scope
 expansion is not authorized.
 
+The routine/fixture P0 increment is independently accepted and integrated
+through root commit `cdc1225a185b0f255cf716d14e0f250a142b1167` / tree
+`7509bc2c215c853ceecc08c4dc1595358184af63`. Its typed provisional and pinned
+lease custody keeps collision roots recovery-only, preserves established
+active recovery, retains unsupported identity-conditioned cleanup fail-closed,
+and denies adapter execution from a recovery-required lease. The exact focused
+fixture boundary passes 37 tests; authored Rust remains at or below 250 lines.
+The accepted branch tip `1ad7953e9d2845e551b8ec50ebe08d9d27f9090b`
+remains historical and nonselectable after teardown. Runtime, installation,
+readiness, release, and completion claims remain withheld.
+
+The control-plane correction may additionally edit only
+`validator/src/cli/capture/fixture/execute/capture_adapter.rs` so the
+over-limit confined-execution function can accept one typed request at its
+actual caller instead of retaining a line-expensive compatibility wrapper.
+This is a support-only semantic split: no diagnostic set, public API, behavior,
+schema, dispatch, dependency, receipt, or claim authority changes.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
