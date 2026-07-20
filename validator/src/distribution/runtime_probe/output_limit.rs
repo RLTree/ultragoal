@@ -49,7 +49,10 @@ pub fn publish_installed_runtime_probe(
     }
     let current = executable.inspect(EXECUTABLE_LIMIT)?;
     let expected = current.as_deref().map(sha256);
-    if current.as_deref() != Some(entry.bytes())
+    let current_mode = executable
+        .installed_postimage(EXECUTABLE_LIMIT)?
+        .map(|postimage| postimage.mode());
+    if (current.as_deref() != Some(entry.bytes()) || current_mode != Some(0o755))
         && !executable.apply_executable(expected.as_deref(), Some(entry.bytes()))?
     {
         return Err(error(DistributionErrorId::InstallConflict));
@@ -57,7 +60,12 @@ pub fn publish_installed_runtime_probe(
     let observed = executable
         .inspect(EXECUTABLE_LIMIT)?
         .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
-    if observed != entry.bytes() || sha256(&observed) != entry.sha256() {
+    if observed != entry.bytes()
+        || sha256(&observed) != entry.sha256()
+        || executable
+            .installed_postimage(EXECUTABLE_LIMIT)?
+            .is_none_or(|postimage| postimage.mode() != 0o755)
+    {
         return Err(error(DistributionErrorId::ObjectChanged));
     }
     Ok(())

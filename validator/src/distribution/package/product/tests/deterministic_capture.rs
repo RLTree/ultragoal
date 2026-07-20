@@ -89,6 +89,15 @@ fn captured_runtime_payload_drives_the_confined_runtime_probe() {
     let executable = ScopedFile::new(confined.clone(), "runtime/runtime-probe-bin").unwrap();
     publish_installed_runtime_probe(artifact.snapshot(), &executable).expect("runtime payload");
     let program = output.root.join("runtime/runtime-probe-bin");
+    fs::set_permissions(&program, fs::Permissions::from_mode(0o600)).expect("remove execute mode");
+    publish_installed_runtime_probe(artifact.snapshot(), &executable)
+        .expect("same bytes with wrong mode repaired");
+    publish_installed_runtime_probe(artifact.snapshot(), &executable).expect("repeat publication");
+    assert_eq!(
+        fs::metadata(&program).unwrap().permissions().mode() & 0o777,
+        0o755,
+        "publisher accepted same bytes with nonexecutable mode",
+    );
     let host = HostCapabilityDeclaration::isolated(
         &output.root,
         &output.root,

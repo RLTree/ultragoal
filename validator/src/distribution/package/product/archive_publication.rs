@@ -1,7 +1,7 @@
 const ARCHIVE_OUTPUT_LIMIT: usize = 65 * 1024 * 1024;
 
 impl ProductionPackageArtifact {
-    pub fn publish_archive(
+    pub(crate) fn publish_archive(
         &self,
         context: &LiveContext,
         catalog: &AuthorityCatalog,
