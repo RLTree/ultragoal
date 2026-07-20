@@ -32,14 +32,6 @@ fn accepted_lifecycle_operations_require_their_exact_state_transitions() {
             exact,
         ),
         (
-            AcceptedLifecycleOperation::AuthorizedRollback,
-            state(5, Some(&replacement.package), false),
-            state(6, Some(&current.package), false),
-            state(5, Some(&replacement.package), false),
-            AcceptedRollbackPolicy::RestoreExactPreState,
-            exact,
-        ),
-        (
             AcceptedLifecycleOperation::IdempotentReinstall,
             state(6, Some(&current.package), false),
             state(6, Some(&current.package), false),
@@ -78,17 +70,22 @@ fn accepted_lifecycle_operations_require_their_exact_state_transitions() {
         assert_eq!(plan.operation().as_str(), operation.as_str());
         assert!(plan.plan_sha256().starts_with("sha256:"));
     }
-    assert!(
-        AcceptedLifecyclePlan::new(
-            AcceptedLifecycleOperation::StaleCacheRecovery,
-            state(9, Some(&current.package), false),
-            state(10, Some(&current.package), false),
-            state(9, Some(&current.package), false),
-            AcceptedRollbackPolicy::ManualReconciliationOnly,
-            AcceptedReconciliationPolicy::AmbiguousOutcomeRequiresManualReview,
-        )
-        .is_err()
-    );
+    for operation in [
+        AcceptedLifecycleOperation::AuthorizedRollback,
+        AcceptedLifecycleOperation::StaleCacheRecovery,
+    ] {
+        assert!(
+            AcceptedLifecyclePlan::new(
+                operation,
+                state(9, Some(&current.package), false),
+                state(10, Some(&replacement.package), false),
+                state(9, Some(&current.package), false),
+                AcceptedRollbackPolicy::RestoreExactPreState,
+                exact,
+            )
+            .is_err()
+        );
+    }
 }
 
 #[test]
@@ -127,7 +124,7 @@ fn lifecycle_operation_matrix_rejects_sibling_state_mutations() {
         (
             AcceptedLifecycleOperation::AuthorizedRollback,
             state(5, Some(&replacement.package), false),
-            state(6, Some(&replacement.package), false),
+            state(6, Some(&current.package), false),
             state(5, Some(&replacement.package), false),
             AcceptedRollbackPolicy::RestoreExactPreState,
             exact,

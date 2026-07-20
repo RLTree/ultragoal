@@ -194,17 +194,6 @@ fn matches_lifecycle_operation(
                 && rollback_policy == ManualReconciliationOnly
                 && reconciliation_policy == ExactPostStateAndSeparateHostLayers
         }
-        AuthorizedRollback => {
-            before_has_package
-                && !before.recovery_required
-                && after_has_package
-                && !expected_after.recovery_required
-                && package_changed
-                && increments_once
-                && restores_before
-                && rollback_policy == RestoreExactPreState
-                && reconciliation_policy == ExactPostStateAndSeparateHostLayers
-        }
         IdempotentReinstall | RepeatUse => {
             before_has_package
                 && !before.recovery_required
@@ -223,9 +212,9 @@ fn matches_lifecycle_operation(
                 && rollback_policy == RemoveOnlyNewTarget
                 && reconciliation_policy == ExactAbsenceAndSeparateHostLayers
         }
-        // A one-package host state cannot distinguish stale cache from a
-        // current package. Do not turn that ambiguity into host authority.
-        StaleCacheRecovery => false,
+        // This state has neither an approved predecessor nor a cache identity.
+        // Do not turn either ambiguous recovery intent into host authority.
+        AuthorizedRollback | StaleCacheRecovery => false,
     }
 }
 
