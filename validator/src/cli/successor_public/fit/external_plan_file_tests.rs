@@ -1,3 +1,5 @@
+#![cfg(unix)]
+
 use super::external_plan_file::read_immutable_plan;
 use std::fs;
 use std::os::unix::fs::symlink;
@@ -17,6 +19,7 @@ impl Fixture {
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
         fs::create_dir(&root).unwrap();
+        let root = root.canonicalize().unwrap();
         Self { root }
     }
 
@@ -60,6 +63,14 @@ fn external_plan_reader_rejects_aliases_nonfiles_and_oversize_inputs() {
     let symlink_path = fixture.path("symlink.json");
     symlink(&original, &symlink_path).unwrap();
     assert!(read_immutable_plan(&symlink_path, 1024).is_err());
+
+    let real_parent = fixture.path("real-parent");
+    fs::create_dir(&real_parent).unwrap();
+    let nested = real_parent.join("nested.json");
+    fs::write(&nested, b"bound").unwrap();
+    let parent_alias = fixture.path("parent-alias");
+    symlink(&real_parent, &parent_alias).unwrap();
+    assert!(read_immutable_plan(&parent_alias.join("nested.json"), 1024).is_err());
 
     let directory = fixture.path("directory");
     fs::create_dir(&directory).unwrap();
