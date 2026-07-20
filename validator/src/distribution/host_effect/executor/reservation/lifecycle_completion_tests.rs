@@ -137,6 +137,7 @@ fn binding(
 }
 
 fn custody(seed: char) -> HostLifecycleCustody {
+    let target_seed = if seed == 'a' { 'b' } else { 'e' };
     let before = crate::plugin_product::lifecycle::LifecycleState {
         installed: Some(authority(seed, "1.0.0")),
         cache: Some(authority(seed, "1.0.0")),
@@ -148,12 +149,12 @@ fn custody(seed: char) -> HostLifecycleCustody {
             &before,
             &LifecycleRequest {
                 intent: LifecycleIntent::MonotonicUpdate,
-                target: Some(authority('b', "1.0.1")),
+                target: Some(authority(target_seed, "1.0.1")),
                 prior_authority: None,
                 authorization: LifecycleAuthorization {
                     allow_host_write: true,
                     allow_downgrade: false,
-                    expected_installed_sha256: Some(digest('a')),
+                    expected_installed_sha256: Some(digest(seed)),
                 },
             },
         )
