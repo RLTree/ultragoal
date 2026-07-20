@@ -1,5 +1,24 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 repository-fit local-state integration
+
+The repository-fit local-state increment is root-integrated through
+`da415538a` / tree `43d1bcfe`. Fit now carries the repository-owned
+`validation_artifacts/` ignore policy as a private prepared mutation through
+the existing compare-exchange, rollback, recovery, and root-permit authority;
+routine work separately refuses an ignored path that is already tracked.
+Warning-denied production Clippy passes, both four-case repository-fit public
+journey targets pass, and the focused tracked-runtime refusal and successful
+repeat-use routes pass. The accepted worktree is archived and removed.
+
+The exact repository marketplace catalog is now materialized at the canonical
+root path `.agents/plugins/marketplace.json` with the previously adopted
+410-byte postimage. Its relative plugin source is still absent until the exact
+current package is materialized, so this raises no marketplace, install,
+cache, discovery, runtime, daily-driver, readiness, release, or completion
+claim. The next boundary is the exact current-source package and supported
+Codex install/discovery journey.
+
 ## 2026-07-19 routine continuity and standards checkpoint
 
 Routine continuity is integrated through source commit `257743a2a`; its public

@@ -41,5 +41,13 @@ fn root_wiring_request_is_exact_but_non_authoritative() {
         read(".codex-plugin/plugin.json").matches("0.0.12").count(),
         1
     );
-    assert!(!root().join(".agents/plugins/marketplace.json").exists());
+    let marketplace: serde_json::Value =
+        serde_json::from_str(&read(".agents/plugins/marketplace.json"))
+            .unwrap_or_else(|error| panic!("repository marketplace invalid: {error}"));
+    assert_eq!(marketplace["name"], "harness-ultragoal-local");
+    assert_eq!(
+        marketplace["plugins"][0]["source"]["path"],
+        "./plugins/harness-ultragoal"
+    );
+    assert_eq!(marketplace["plugins"][0]["name"], "harness-ultragoal");
 }

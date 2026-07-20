@@ -1278,6 +1278,17 @@ source boundary is accepted may root build, install, discover, and exercise the
 exact current candidate. The Obolyn MVP prompt remains inactive in the Obolyn
 repository until this installed Ultragoal journey passes.
 
+The local-state boundary is now integrated through `da415538a` / tree
+`43d1bcfe`. The exact fit mutation, rollback, recovery, mode, and operation
+identity path is current; warning-denied production Clippy and the affected
+fit/routine behavior checks pass. The lane and disposable worktree are closed.
+Root also adopted the exact previously authorized 410-byte repository catalog
+at `.agents/plugins/marketplace.json`. The catalog's relative source remains
+unmaterialized, so the claim ceiling stays source-local. The next action is to
+build the exact package twice, materialize and reconcile its supported local
+marketplace source, use the supported Codex install path, and observe discovery
+from a fresh task before running the dirty-repository routine/recovery journey.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
