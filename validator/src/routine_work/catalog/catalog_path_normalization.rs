@@ -41,7 +41,7 @@ pub(crate) fn normalize_catalog_paths(
 }
 
 pub(crate) fn normalize_input_expectations(
-    inputs: &mut Vec<TransitiveInputExpectation>,
+    inputs: &mut [TransitiveInputExpectation],
 ) -> CatalogResult<()> {
     if inputs.is_empty() || inputs.len() > MAX_READ_SOURCES {
         return Err(error("catalog-selection-input-count-invalid"));

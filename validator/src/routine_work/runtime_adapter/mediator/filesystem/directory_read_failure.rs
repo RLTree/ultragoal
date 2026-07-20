@@ -4,10 +4,12 @@ use super::*;
 pub(crate) fn readdir_failed() -> bool {
     #[cfg(target_os = "macos")]
     {
+        // SAFETY: libc returns the current thread's valid errno storage on macOS.
         unsafe { *libc::__error() != 0 }
     }
     #[cfg(any(target_os = "linux", target_os = "android"))]
     {
+        // SAFETY: libc returns the current thread's valid errno storage on Linux and Android.
         unsafe { *libc::__errno_location() != 0 }
     }
     #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "android")))]
@@ -22,6 +24,7 @@ pub(crate) struct DirectoryStream(pub(crate) *mut libc::DIR);
 #[cfg(unix)]
 impl Drop for DirectoryStream {
     fn drop(&mut self) {
+        // SAFETY: DirectoryStream owns the successful fdopendir result and drops it once.
         unsafe {
             libc::closedir(self.0);
         }
@@ -80,7 +83,7 @@ pub(crate) fn digest_reader(reader: &mut File, limit: u64) -> Result<String, Rou
 
 pub(crate) fn decode_path(value: &str) -> Result<PathBuf, RoutineError> {
     if value.is_empty()
-        || value.len() % 2 != 0
+        || !value.len().is_multiple_of(2)
         || value.len() > 16_384
         || !value
             .bytes()

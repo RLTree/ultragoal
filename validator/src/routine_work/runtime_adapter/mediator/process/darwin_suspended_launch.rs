@@ -29,6 +29,8 @@ pub(crate) fn spawn_suspended(
     let actions = FileActions::new(root.raw_fd(), &stdin, &stdout, &stderr)?;
     let attributes = SpawnAttributes::new()?;
     let mut pid = 0;
+    // SAFETY: all C strings and pointer vectors remain live through the call, actions and
+    // attributes were initialized, and pid is writable process-id storage.
     let result = unsafe {
         libc::posix_spawn(
             &mut pid,
@@ -83,10 +85,13 @@ struct PipePair {
 impl PipePair {
     fn new() -> Result<Self, RoutineError> {
         let mut descriptors = [-1; 2];
+        // SAFETY: descriptors is writable storage for the two pipe descriptors.
         if unsafe { libc::pipe(descriptors.as_mut_ptr()) } != 0 {
             return Err(mediator_error("mediator-pipe-create-failed"));
         }
+        // SAFETY: successful pipe returns an owned read descriptor consumed once by File.
         let read = unsafe { File::from_raw_fd(descriptors[0]) };
+        // SAFETY: successful pipe returns an owned write descriptor consumed once by File.
         let write = unsafe { File::from_raw_fd(descriptors[1]) };
         set_close_on_exec(&read)?;
         set_close_on_exec(&write)?;
@@ -104,7 +109,9 @@ impl PipePair {
 
 fn set_close_on_exec(file: &File) -> Result<(), RoutineError> {
     let descriptor = file.as_raw_fd();
+    // SAFETY: descriptor is borrowed from a live File for this fcntl call.
     let flags = unsafe { libc::fcntl(descriptor, libc::F_GETFD) };
+    // SAFETY: descriptor remains borrowed from the live File and flags came from F_GETFD.
     if flags < 0 || unsafe { libc::fcntl(descriptor, libc::F_SETFD, flags | libc::FD_CLOEXEC) } < 0
     {
         return Err(mediator_error("mediator-pipe-cloexec-failed"));
@@ -122,14 +129,17 @@ impl FileActions {
         stderr: &PipePair,
     ) -> Result<Self, RoutineError> {
         let mut value = std::ptr::null_mut();
+        // SAFETY: value is writable storage for the platform file-actions initializer.
         if unsafe { libc::posix_spawn_file_actions_init(&mut value) } != 0 {
             return Err(mediator_error("mediator-spawn-actions-invalid"));
         }
         let mut actions = Self(value);
+        // SAFETY: actions was initialized and cwd is the live root directory descriptor.
         if unsafe { posix_spawn_file_actions_addfchdir_np(&mut actions.0, cwd) } != 0
             || add_dup_and_close(&mut actions.0, stdin.read.as_raw_fd(), 0).is_err()
             || add_dup_and_close(&mut actions.0, stdout.write.as_raw_fd(), 1).is_err()
             || add_dup_and_close(&mut actions.0, stderr.write.as_raw_fd(), 2).is_err()
+            // SAFETY: actions remains initialized and cwd is the descriptor recorded above.
             || unsafe { libc::posix_spawn_file_actions_addclose(&mut actions.0, cwd) } != 0
         {
             return Err(mediator_error("mediator-spawn-actions-invalid"));
@@ -143,8 +153,10 @@ fn add_dup_and_close(
     source: i32,
     target: i32,
 ) -> Result<(), ()> {
+    // SAFETY: actions is initialized and source/target are pipe or standard descriptors.
     if unsafe { libc::posix_spawn_file_actions_adddup2(actions, source, target) } != 0
         || (source != target
+            // SAFETY: actions is initialized and source is recorded for this spawn action list.
             && unsafe { libc::posix_spawn_file_actions_addclose(actions, source) } != 0)
     {
         return Err(());
@@ -154,6 +166,7 @@ fn add_dup_and_close(
 
 impl Drop for FileActions {
     fn drop(&mut self) {
+        // SAFETY: FileActions contains a successfully initialized action list and destroys it once.
         unsafe { libc::posix_spawn_file_actions_destroy(&mut self.0) };
     }
 }
@@ -163,6 +176,7 @@ struct SpawnAttributes(libc::posix_spawnattr_t);
 impl SpawnAttributes {
     fn new() -> Result<Self, RoutineError> {
         let mut value = std::ptr::null_mut();
+        // SAFETY: value is writable storage for the platform spawn-attributes initializer.
         if unsafe { libc::posix_spawnattr_init(&mut value) } != 0 {
             return Err(mediator_error("mediator-spawn-attributes-invalid"));
         }
@@ -170,7 +184,9 @@ impl SpawnAttributes {
         let flags = (libc::POSIX_SPAWN_SETPGROUP
             | libc::POSIX_SPAWN_START_SUSPENDED
             | libc::POSIX_SPAWN_CLOEXEC_DEFAULT) as i16;
+        // SAFETY: attributes was initialized and process group 0 requests the child group.
         if unsafe { libc::posix_spawnattr_setpgroup(&mut attributes.0, 0) } != 0
+            // SAFETY: attributes remains initialized and flags contain supported spawn options.
             || unsafe { libc::posix_spawnattr_setflags(&mut attributes.0, flags) } != 0
         {
             return Err(mediator_error("mediator-spawn-attributes-invalid"));
@@ -181,6 +197,7 @@ impl SpawnAttributes {
 
 impl Drop for SpawnAttributes {
     fn drop(&mut self) {
+        // SAFETY: SpawnAttributes contains initialized platform attributes and destroys them once.
         unsafe { libc::posix_spawnattr_destroy(&mut self.0) };
     }
 }

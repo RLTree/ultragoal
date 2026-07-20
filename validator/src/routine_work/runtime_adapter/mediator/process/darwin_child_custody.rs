@@ -35,6 +35,7 @@ impl BoundChild {
     }
 
     pub(crate) fn kill(&mut self) -> io::Result<()> {
+        // SAFETY: self.pid is the child PID returned by posix_spawn; kill only performs a signal.
         if unsafe { libc::kill(self.pid, libc::SIGKILL) } == 0 {
             Ok(())
         } else {
@@ -44,6 +45,7 @@ impl BoundChild {
 
     fn observe_wait(&mut self, options: i32) -> io::Result<Option<ExitStatus>> {
         let mut raw = 0;
+        // SAFETY: self.pid is a child PID, raw is writable, and options are waitpid flags.
         let result = unsafe { libc::waitpid(self.pid, &mut raw, options) };
         if result == 0 {
             return Ok(None);

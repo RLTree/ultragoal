@@ -65,11 +65,7 @@ pub(crate) fn prepare_routine_execution(
         .ok_or_else(|| adapter_error("adapter-working-directory-not-utf8"))?
         .to_owned();
     let mut bound = Vec::with_capacity(plan.checks().len());
-    for (plan_order, (check, invocation)) in plan
-        .checks()
-        .iter()
-        .zip(spec.invocations.into_iter())
-        .enumerate()
+    for (plan_order, (check, invocation)) in plan.checks().iter().zip(spec.invocations).enumerate()
     {
         let runner = exact_runner(context, check)?;
         mediator::validate_read_sources(binding.worktree_root(), &invocation.read_sources)?;

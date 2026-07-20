@@ -116,10 +116,10 @@ fn choose_tool(
             false,
         ));
     }
-    if let Some(name) = node.runner().fallback() {
-        if let Some(tool) = binding.tool(name).filter(|tool| tool.available()) {
-            return Ok((name.to_owned(), tool.identity_sha256().to_owned(), true));
-        }
+    if let Some(name) = node.runner().fallback()
+        && let Some(tool) = binding.tool(name).filter(|tool| tool.available())
+    {
+        return Ok((name.to_owned(), tool.identity_sha256().to_owned(), true));
     }
     Err(RoutineError::new(
         RoutineErrorId::CapabilityUnavailable,

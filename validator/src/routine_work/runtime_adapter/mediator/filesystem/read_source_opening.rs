@@ -140,6 +140,7 @@ pub(crate) fn open_read_component(
     } else {
         0
     };
+    // SAFETY: directory is an open directory descriptor and name is NUL-terminated.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -150,6 +151,7 @@ pub(crate) fn open_read_component(
     if descriptor < 0 {
         return Err(mediator_error("mediator-read-source-object-unsafe"));
     }
+    // SAFETY: a successful openat returns a newly owned descriptor consumed exactly once here.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 

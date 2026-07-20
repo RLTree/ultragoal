@@ -176,7 +176,7 @@ impl CaptureProvenance {
 fn normalize_changes(
     binding: &RoutineBinding,
     status_sha256: &str,
-    changes: &mut Vec<DirtyChange>,
+    changes: &mut [DirtyChange],
 ) -> Result<(), RoutineError> {
     if changes.len() > CHANGE_ROW_LIMIT {
         return Err(RoutineError::new(
@@ -190,7 +190,7 @@ fn normalize_changes(
     }
     changes.sort();
     validate_change_paths(changes)?;
-    if binding.dirty() != !changes.is_empty() {
+    if binding.dirty() == changes.is_empty() {
         return Err(RoutineError::new(
             RoutineErrorId::ContextMismatch,
             "candidate-dirty-state-disagrees-with-snapshot",

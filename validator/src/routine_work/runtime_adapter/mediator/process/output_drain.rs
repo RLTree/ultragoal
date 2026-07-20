@@ -65,7 +65,9 @@ pub(crate) fn drain(
 #[cfg(unix)]
 pub(crate) fn set_nonblocking(file: &impl AsRawFd) -> Result<(), RoutineError> {
     let descriptor = file.as_raw_fd();
+    // SAFETY: descriptor is borrowed from a live File for the duration of this fcntl call.
     let flags = unsafe { libc::fcntl(descriptor, libc::F_GETFL) };
+    // SAFETY: descriptor remains borrowed from the live File and flags came from F_GETFL.
     if flags < 0 || unsafe { libc::fcntl(descriptor, libc::F_SETFL, flags | libc::O_NONBLOCK) } < 0
     {
         return Err(mediator_error("mediator-output-nonblocking-failed"));

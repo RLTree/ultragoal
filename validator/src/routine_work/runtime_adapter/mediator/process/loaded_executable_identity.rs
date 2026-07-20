@@ -42,6 +42,7 @@ pub(crate) fn validate_loaded_executable(
     program: &PinnedExecutable,
 ) -> Result<(), RoutineError> {
     let mut process_path = [0_i8; libc::PROC_PIDPATHINFO_MAXSIZE as usize];
+    // SAFETY: child.pid is a spawned child and process_path is a writable buffer of its declared size.
     let length = unsafe {
         libc::proc_pidpath(
             child.pid(),
@@ -52,6 +53,7 @@ pub(crate) fn validate_loaded_executable(
     if length <= 0 {
         return Err(mediator_error("mediator-loaded-executable-unavailable"));
     }
+    // SAFETY: successful proc_pidpath writes a NUL-terminated path into process_path.
     let process_path = unsafe { CStr::from_ptr(process_path.as_ptr()) }.to_bytes();
     if process_path != program.path().as_os_str().as_bytes() {
         return Err(mediator_error("mediator-loaded-executable-path-mismatch"));
@@ -59,8 +61,10 @@ pub(crate) fn validate_loaded_executable(
 
     let mut address = 0_u64;
     for _ in 0..MAX_REGIONS {
+        // SAFETY: RegionWithPath is a repr(C) kernel output buffer whose all-zero state is valid.
         let mut observation: RegionWithPath = unsafe { std::mem::zeroed() };
         let expected = std::mem::size_of::<RegionWithPath>() as i32;
+        // SAFETY: observation is writable for expected bytes and child.pid identifies the child.
         let observed = unsafe {
             libc::proc_pidinfo(
                 child.pid(),
@@ -88,6 +92,7 @@ pub(crate) fn validate_loaded_executable(
         if observation.region.protection & libc::VM_PROT_EXECUTE as u32 == 0 {
             continue;
         }
+        // SAFETY: a complete PROC_PIDREGIONPATHINFO observation contains a NUL-terminated vnode path.
         let path =
             unsafe { CStr::from_ptr(observation.vnode.vip_path.as_ptr().cast::<i8>()) }.to_bytes();
         if path != process_path {

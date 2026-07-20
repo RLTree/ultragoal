@@ -2,6 +2,7 @@ use super::*;
 
 #[cfg(unix)]
 pub(crate) fn process_group_exists(group: ProcessGroupId) -> Result<bool, RoutineError> {
+    // SAFETY: signal_target validates a negative process-group target; signal 0 has no effect.
     if unsafe { libc::kill(group.signal_target()?, 0) } == 0 {
         return Ok(true);
     }
@@ -15,6 +16,7 @@ pub(crate) fn process_group_exists(group: ProcessGroupId) -> Result<bool, Routin
 
 #[cfg(unix)]
 pub(crate) fn signal_group(group: ProcessGroupId, signal: i32) -> Result<(), RoutineError> {
+    // SAFETY: signal_target validates a negative process-group target; signal is a libc signal.
     if unsafe { libc::kill(group.signal_target()?, signal) } == 0 {
         return Ok(());
     }

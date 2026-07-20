@@ -82,26 +82,20 @@ pub(super) fn validate_routine_program_path(path: &Path) -> Result<(), RoutineEr
     PinnedExecutable::open_unbound(path).map(|_| ())
 }
 
+pub(super) struct AuthorizedProcessPreparation<'a> {
+    pub(super) program: &'a PinnedExecutable,
+    pub(super) root: &'a RootAnchor,
+    pub(super) outputs: &'a OutputConfinement,
+    pub(super) reads: &'a ReadConfinement,
+    pub(super) argv: &'a [String],
+    pub(super) environment: &'a BTreeMap<String, String>,
+    pub(super) framed_input: Vec<u8>,
+    pub(super) output_budget: u64,
+    pub(super) cancellation: &'a RoutineCancellation,
+}
+
 pub(super) fn prepare_authorized_process(
-    executable: &PinnedExecutable,
-    root: &RootAnchor,
-    outputs: &OutputConfinement,
-    reads: &ReadConfinement,
-    argv: &[String],
-    environment: &BTreeMap<String, String>,
-    framed_input: Vec<u8>,
-    output_budget: u64,
-    cancellation: &RoutineCancellation,
+    preparation: AuthorizedProcessPreparation<'_>,
 ) -> Result<PreparedProcess, RoutineError> {
-    process::prepare(
-        executable,
-        root,
-        outputs,
-        reads,
-        argv,
-        environment,
-        framed_input,
-        output_budget,
-        cancellation,
-    )
+    process::prepare(preparation)
 }

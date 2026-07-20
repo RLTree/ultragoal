@@ -21,7 +21,7 @@ use crate::routine_work::{
     RoutineErrorId,
 };
 
-use super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
+use super::filesystem::{OutputConfinement, PinnedExecutable, RootAnchor};
 use super::outcome::RoutineCancellation;
 
 #[path = "configuration.rs"]

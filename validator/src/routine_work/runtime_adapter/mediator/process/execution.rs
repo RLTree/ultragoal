@@ -1,3 +1,4 @@
+use super::super::AuthorizedProcessPreparation;
 use super::*;
 
 pub(crate) enum PreparedProcess {
@@ -12,55 +13,53 @@ pub(crate) struct SuspendedProcess {
 }
 
 pub(crate) fn prepare(
-    program: &PinnedExecutable,
-    root: &RootAnchor,
-    outputs: &OutputConfinement,
-    reads: &ReadConfinement,
-    argv: &[String],
-    environment: &BTreeMap<String, String>,
-    framed_input: Vec<u8>,
-    output_budget: u64,
-    cancellation: &RoutineCancellation,
+    preparation: AuthorizedProcessPreparation<'_>,
 ) -> Result<PreparedProcess, RoutineError> {
     #[cfg(not(target_os = "macos"))]
     {
         let _ = (
-            program,
-            root,
-            outputs,
-            reads,
-            argv,
-            environment,
-            framed_input,
-            output_budget,
-            cancellation,
+            preparation.program,
+            preparation.root,
+            preparation.outputs,
+            preparation.reads,
+            preparation.argv,
+            preparation.environment,
+            preparation.framed_input,
+            preparation.output_budget,
+            preparation.cancellation,
         );
         return Err(mediator_error("mediator-confinement-substrate-unavailable"));
     }
     #[cfg(target_os = "macos")]
     {
-        validate_child_mode(environment)?;
-        if cancellation.is_cancelled() {
+        validate_child_mode(preparation.environment)?;
+        if preparation.cancellation.is_cancelled() {
             return Ok(PreparedProcess::Cancelled(cancelled_before_spawn()));
         }
-        program.validate()?;
+        preparation.program.validate()?;
         let profile = sandbox_profile(
-            root.path(),
-            &reads.absolute_sources(),
-            &outputs.absolute_scopes(),
+            preparation.root.path(),
+            &preparation.reads.absolute_sources(),
+            &preparation.outputs.absolute_scopes(),
         )?;
-        let framed_input = crate::routine_work::frame_sandboxed_input(&profile, framed_input)
-            .map_err(mediator_error)?;
-        root.validate()?;
-        outputs.validate()?;
-        if cancellation.is_cancelled() {
+        let framed_input =
+            crate::routine_work::frame_sandboxed_input(&profile, preparation.framed_input)
+                .map_err(mediator_error)?;
+        preparation.root.validate()?;
+        preparation.outputs.validate()?;
+        if preparation.cancellation.is_cancelled() {
             return Ok(PreparedProcess::Cancelled(cancelled_before_spawn()));
         }
-        let setup = spawn_exact_program(program, root, argv, environment)?;
+        let setup = spawn_exact_program(
+            preparation.program,
+            preparation.root,
+            preparation.argv,
+            preparation.environment,
+        )?;
         Ok(PreparedProcess::Suspended(SuspendedProcess {
             setup,
             framed_input,
-            output_budget,
+            output_budget: preparation.output_budget,
         }))
     }
 }

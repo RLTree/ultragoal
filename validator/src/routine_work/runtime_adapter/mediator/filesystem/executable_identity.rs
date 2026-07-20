@@ -56,7 +56,7 @@ impl PinnedExecutable {
             let canonical = path
                 .canonicalize()
                 .map_err(|_| mediator_error("mediator-executable-unavailable"))?;
-            if &canonical != path {
+            if canonical != path {
                 return Err(mediator_error("mediator-executable-not-canonical"));
             }
             let mut file = OpenOptions::new()

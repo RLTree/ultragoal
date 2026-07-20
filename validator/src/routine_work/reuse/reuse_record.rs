@@ -83,7 +83,7 @@ impl EvidenceBinding {
             && semantic_id(self.result_scope.clone()).is_ok()
             && !self.tool_program_path_hex.is_empty()
             && self.tool_program_path_hex.len() <= 8_192
-            && self.tool_program_path_hex.len() % 2 == 0
+            && self.tool_program_path_hex.len().is_multiple_of(2)
             && self
                 .tool_program_path_hex
                 .bytes()

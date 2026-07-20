@@ -99,7 +99,7 @@ pub(super) fn observe_prepared(
     cancellation: &RoutineCancellation,
     timeout: Duration,
 ) -> Result<ProcessObservation, crate::routine_work::RoutineError> {
-    match prepare(
+    match prepare(super::super::AuthorizedProcessPreparation {
         program,
         root,
         outputs,
@@ -107,9 +107,9 @@ pub(super) fn observe_prepared(
         argv,
         environment,
         framed_input,
-        budget,
+        output_budget: budget,
         cancellation,
-    )? {
+    })? {
         PreparedProcess::Cancelled(observation) => Ok(observation),
         PreparedProcess::Suspended(process) => {
             let _ = process.identity()?;
