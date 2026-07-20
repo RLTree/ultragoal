@@ -115,8 +115,8 @@ pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
         HostFailure::Unavailable => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "preprovisioned repository-fit host authority state is unavailable",
-            "install or repair the owner-only Harness Ultragoal host state, then rerun the exact accepted plan",
+            "the canonical owner-only host state root is unavailable",
+            "restore a canonical owner-only $HOME/.codex/state root, then rerun the exact accepted plan",
             "none",
             "no workspace effect is authorized or performed",
         ),
