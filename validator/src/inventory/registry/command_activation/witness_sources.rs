@@ -89,6 +89,11 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "package inventory operation API authority"
     ),
     source!(
+        "validator/src/cli/successor_public/operation_binding/package_install_test.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package_install_test.rs"),
+        "isolated package installation operation API authority"
+    ),
+    source!(
         "validator/src/cli/successor_public/output_limit.rs",
         include_bytes!("../../../cli/successor_public/output_limit.rs"),
         "public dispatcher consumption of operation authority"
@@ -97,6 +102,11 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "validator/src/cli/successor_public/package_inventory/mod.rs",
         include_bytes!("../../../cli/successor_public/package_inventory/mod.rs"),
         "package inventory production dispatch"
+    ),
+    source!(
+        "validator/src/cli/successor_public/package_install_test/mod.rs",
+        include_bytes!("../../../cli/successor_public/package_install_test/mod.rs"),
+        "isolated package installation production dispatch"
     ),
     source!(
         "validator/src/distribution/filesystem/root/workspace_context.rs",

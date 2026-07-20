@@ -97,7 +97,7 @@ impl HostLifecycleCustody {
 
     pub(crate) fn begin_effects(
         &mut self,
-        admission: DurableHostLifecycleAdmission,
+        admission: &DurableHostLifecycleAdmission,
     ) -> Result<HostEffectExecutionBinding, LifecycleError> {
         if self.effect_cursor != 0 || admission.record() != &self.pre_effect_record {
             return Err(LifecycleError::ReplayedPlan);

@@ -50,6 +50,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
         )),
         Some(PublicOperation::PackageInventory),
     );
+    assert_eq!(
+        bind(&invocation(
+            SuccessorCommand::Package(PackageAction::InstallTest),
+            EffectClass::WorkspaceWrite,
+        )),
+        Some(PublicOperation::PackageInstallTest),
+    );
     for invocation in [
         invocation(
             SuccessorCommand::Observe(ObserveAction::Export),

@@ -1,11 +1,9 @@
 mod execution;
-#[cfg(test)]
 mod host_custody;
 mod model;
 mod plan;
 
 pub use execution::{apply, recover, recovery_token, verify};
-#[cfg(test)]
 pub(crate) use host_custody::{
     HostEffectExecutionBinding, HostLifecycleCustody, HostLifecycleRecord,
 };

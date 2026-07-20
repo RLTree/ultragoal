@@ -1,7 +1,6 @@
 use super::*;
 
 pub(crate) const MAX_PUBLIC_OUTPUT: usize = 16 * 1024 * 1024;
-
 #[cfg(test)]
 pub(crate) fn parse_public(raw: &[String]) -> Result<ParseOutcome, String> {
     parse_args(raw.iter().cloned()).map_err(|failure| failure.render())
@@ -60,6 +59,9 @@ pub(crate) fn execute_invocation_with_home(
             Err(()) => return context_unavailable(),
         };
         return package_inventory::execute(&context, &invocation);
+    }
+    if operation == super::operation_binding::PublicOperation::PackageInstallTest {
+        return package_install_test::dispatch(root, &invocation);
     }
     if invocation.effect != EffectClass::Read
         && operation != super::operation_binding::PublicOperation::FitApply

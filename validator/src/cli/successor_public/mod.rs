@@ -29,6 +29,7 @@ mod migration;
 mod observe;
 mod operation_binding;
 mod orchestration;
+mod package_install_test;
 mod package_inventory;
 mod public_context;
 mod routine;

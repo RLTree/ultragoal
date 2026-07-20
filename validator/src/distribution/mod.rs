@@ -4,7 +4,6 @@ mod error;
 mod filesystem;
 mod host;
 mod host_capability;
-#[cfg(test)]
 pub(crate) mod host_effect;
 mod install;
 mod json;

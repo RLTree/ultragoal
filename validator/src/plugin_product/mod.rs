@@ -4,6 +4,7 @@
 //! typed planning, adapter boundary, verification, recovery, and build-closure
 //! logic that root-owned distribution code may wire after independent review.
 
+pub(crate) mod host_lifecycle;
 pub mod journey_matrix;
 pub mod lifecycle;
 pub mod product_fitness;

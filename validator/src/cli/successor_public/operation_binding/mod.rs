@@ -8,6 +8,7 @@ use crate::cli::successor::{
 use std::collections::BTreeSet;
 
 mod migration_plan;
+mod package_install_test;
 mod package_inventory;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -29,6 +30,7 @@ pub(crate) enum PublicOperation {
     EvaluationAudit,
     EvaluationRun,
     MigrationPlan,
+    PackageInstallTest,
     PackageInventory,
 }
 
@@ -209,12 +211,8 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
-    binding(
-        PublicOperation::PackageInventory,
-        SuccessorCommand::Package(PackageAction::Inventory),
-        EffectClass::WorkspaceWrite,
-        package_inventory::APIS,
-    ),
+    package_install_test::BINDING,
+    package_inventory::BINDING,
 ];
 
 const fn binding(
