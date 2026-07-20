@@ -10,7 +10,9 @@ pub(crate) fn plan_record(current: &CurrentPlan) -> Result<FitPlanRecord, FitAda
             &current.inspection,
             &current.observed_modes,
             &current.bundle.unix_modes,
+            &current.local_state,
         ),
+        local_state: local_state_projection(&current.local_state),
         plan: plan_projection(
             &current.plan,
             &current.observed_modes,
@@ -158,6 +160,7 @@ pub(crate) fn inspection_projection(
     inspection: &FitInspection,
     observed_modes: &BTreeMap<String, Option<u32>>,
     desired_modes: &BTreeMap<String, u32>,
+    local_state: &LocalStatePlan,
 ) -> InspectionProjection {
     InspectionProjection {
         mode: mode_name(inspection.mode).to_owned(),
@@ -175,6 +178,7 @@ pub(crate) fn inspection_projection(
             .iter()
             .map(|row| observed_projection(row, observed_modes, desired_modes))
             .collect(),
+        local_state: local_state_projection(local_state),
     }
 }
 

@@ -2,6 +2,7 @@ mod apply;
 mod error;
 mod inspect;
 mod local;
+mod local_state;
 pub(crate) mod ownership;
 mod path;
 mod product_adapter;
@@ -17,6 +18,7 @@ use sha2::{Digest, Sha256};
 pub use apply::{apply, rollback, verify};
 pub use error::{FitError, FitErrorId};
 pub use inspect::{inspect, inspect_with_managed_proofs, plan};
+pub(crate) use inspect::plan_with_local_state;
 pub use local::LocalRepository;
 pub use ownership::{ManagedPriorProof, OwnershipProvenance};
 pub use path::CanonicalPath;
@@ -41,6 +43,9 @@ pub(crate) fn valid_digest(value: &str) -> bool {
 }
 
 pub(crate) use error::error;
+pub(crate) use local_state::{
+    LOCAL_STATE_PATH, LocalStateDisposition, LocalStatePlan, inspect_local_state,
+};
 #[cfg(unix)]
 pub(crate) use local::LocalEffects;
 #[cfg(test)]

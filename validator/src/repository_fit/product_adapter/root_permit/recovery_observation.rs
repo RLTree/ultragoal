@@ -129,10 +129,9 @@ pub(crate) fn target_rollback_equivalent(
         return false;
     }
     let leaves = request
-        .desired
-        .files
+        .target_paths()
         .iter()
-        .map(|file| file.path.as_str())
+        .map(|path| path.as_str().to_owned())
         .collect::<BTreeSet<_>>();
     current
         .rows

@@ -5,19 +5,34 @@ pub(crate) fn recovery_target_spec(
     request: &super::super::OpaqueFitApplyRequest,
     ancestors: ManagedAncestorContract,
 ) -> Result<RecoveryTargetSpec, FitAdapterError> {
-    let mut rows = Vec::with_capacity(request.desired.files.len());
-    for desired in &request.desired.files {
-        let path = desired.path.as_str();
+    let target_paths = request.target_paths();
+    let mut rows = Vec::with_capacity(target_paths.len());
+    for target_path in target_paths {
+        let path = target_path.as_str();
         let post_mode = request
             .unix_modes
             .get(path)
             .copied()
             .ok_or_else(|| adapter_error(AdapterErrorId::ApplyPermitInvalid))?;
-        let mutation = request
-            .plan
-            .mutations
+        let mutations = request.all_mutations();
+        let mutation = mutations
             .iter()
-            .find(|mutation| mutation.path == desired.path);
+            .find(|mutation| mutation.path == target_path);
+        let post_sha256 = request
+            .desired
+            .files
+            .iter()
+            .find(|desired| desired.path == target_path)
+            .map(|desired| desired.sha256())
+            .or_else(|| {
+                request
+                    .plan
+                    .local_state
+                    .as_ref()
+                    .filter(|state| state.path == target_path)
+                    .map(|state| state.desired_sha256())
+            })
+            .ok_or_else(|| adapter_error(AdapterErrorId::ApplyPermitInvalid))?;
         let (pre_sha256, pre_mode) = match mutation {
             Some(mutation) => match &mutation.expected {
                 ExpectedContent::Absent => {
@@ -57,14 +72,14 @@ pub(crate) fn recovery_target_spec(
                     .copied()
                     .flatten()
                     .ok_or_else(|| adapter_error(AdapterErrorId::ApplyPermitInvalid))?;
-                (Some(desired.sha256()), Some(mode))
+                (Some(post_sha256.clone()), Some(mode))
             }
         };
         rows.push(RecoveryTargetRow {
             path: path.to_owned(),
             pre_sha256,
             pre_mode,
-            post_sha256: desired.sha256(),
+            post_sha256,
             post_mode,
         });
     }
@@ -93,15 +108,20 @@ pub(crate) fn valid_recovery_target_spec(recovery: &RecoveryTargetSpec) -> bool 
                 && row.pre_sha256.as_deref().is_none_or(valid_digest)
                 && row
                     .pre_mode
-                    .is_none_or(|mode| matches!(mode, 0o644 | 0o755))
+                    .is_none_or(|mode| valid_recovery_mode(&row.path, mode))
                 && row.pre_sha256.is_some() == row.pre_mode.is_some()
                 && valid_digest(&row.post_sha256)
-                && matches!(row.post_mode, 0o644 | 0o755)
+                && valid_recovery_mode(&row.path, row.post_mode)
         })
         && recovery
             .rows
             .windows(2)
             .all(|rows| rows[0].path.as_bytes() < rows[1].path.as_bytes())
+}
+
+fn valid_recovery_mode(path: &str, mode: u32) -> bool {
+    (path == crate::repository_fit::LOCAL_STATE_PATH && mode <= 0o7777)
+        || matches!(mode, 0o644 | 0o755)
 }
 
 pub(crate) fn refuse_existing_execution(

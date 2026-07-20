@@ -61,6 +61,7 @@ pub(crate) fn plan_digest(
     checks: &[FitCheck],
     mutations: &[Mutation],
     conflicts: &[FitConflict],
+    local_state: Option<&LocalStatePlan>,
 ) -> Result<String, FitError> {
     #[derive(Serialize)]
     struct Row<'a> {
@@ -93,6 +94,16 @@ pub(crate) fn plan_digest(
         checks,
         rows,
         conflicts,
+        local_state.map(|state| {
+            (
+                state.path.as_str(),
+                &state.expected,
+                state.desired_sha256(),
+                state.observed_mode,
+                state.desired_mode,
+                state.mutation.is_some(),
+            )
+        }),
     ))
     .map(|bytes| digest(&bytes))
     .map_err(|_| error(FitErrorId::InvalidSpec))

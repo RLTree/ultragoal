@@ -31,7 +31,7 @@ pub(crate) fn apply_with_root_permit<E: RepositoryFitPermitEffects>(
         }));
     }
 
-    let mutation_count = request.plan.mutations.len();
+    let mutation_count = request.all_mutations().len();
     match apply(&request.plan, &request.authorization, &mut lease.effects) {
         Ok(transaction) => {
             let postflight = postflight(context, &request, &permit, &mut lease.effects);

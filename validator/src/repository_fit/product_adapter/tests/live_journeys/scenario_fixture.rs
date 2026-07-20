@@ -63,6 +63,7 @@ impl Fixture {
             )
             .unwrap();
         }
+        self.write(".gitignore", b"validation_artifacts/\n");
     }
 
     pub(crate) fn commit_all(&self, message: &str) {

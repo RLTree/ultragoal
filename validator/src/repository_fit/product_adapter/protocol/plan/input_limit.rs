@@ -14,6 +14,7 @@ pub(crate) struct CurrentPlan {
     pub(crate) bundle: DesiredBundle,
     pub(crate) inspection: FitInspection,
     pub(crate) observed_modes: BTreeMap<String, Option<u32>>,
+    pub(crate) local_state: LocalStatePlan,
     pub(crate) plan: FitPlan,
 }
 
@@ -125,6 +126,24 @@ impl OpaqueFitApplyRequest {
 
     pub(crate) fn unix_modes(&self) -> &BTreeMap<String, u32> {
         &self.unix_modes
+    }
+
+    pub(crate) fn target_paths(&self) -> Vec<crate::repository_fit::CanonicalPath> {
+        self.desired
+            .files
+            .iter()
+            .map(|file| file.path.clone())
+            .chain(
+                self.plan
+                    .local_state
+                    .as_ref()
+                    .map(|state| state.path.clone()),
+            )
+            .collect()
+    }
+
+    pub(crate) fn all_mutations(&self) -> Vec<crate::repository_fit::Mutation> {
+        self.plan.all_mutations()
     }
 
     pub(crate) fn seal_matches(&self, expected: &str) -> bool {

@@ -1,5 +1,6 @@
 use std::io::Read;
 use std::process::{Child, Command, ExitStatus, Stdio};
+use std::path::Path;
 use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -77,7 +78,7 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
             .map_err(|_| capture_error("git-check-ignore-wait-failed"))?
         {
             return match status.code() {
-                Some(0) => Ok(true),
+                Some(0) => runtime_store_untracked(&git, binding),
                 Some(1) => Ok(false),
                 _ => Err(capture_error("git-check-ignore-nonzero")),
             };
@@ -85,6 +86,50 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
         if Instant::now() >= deadline {
             terminate(&mut child);
             return Err(limit_error("git-check-ignore-time-limit-exceeded"));
+        }
+        thread::sleep(Duration::from_millis(2));
+    }
+}
+
+fn runtime_store_untracked(
+    git: &Path,
+    binding: &RoutineBinding,
+) -> Result<bool, RoutineError> {
+    let mut child = Command::new(git)
+        .args([
+            "--no-optional-locks",
+            "ls-files",
+            "--error-unmatch",
+            "--",
+            "validation_artifacts/observability/spool/successor-events.jsonl",
+        ])
+        .current_dir(binding.worktree_root())
+        .env_clear()
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .env("LC_ALL", "C")
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .map_err(|_| capture_error("git-ls-files-spawn-failed"))?;
+    let deadline = Instant::now() + STATUS_TIMEOUT;
+    loop {
+        if let Some(status) = child
+            .try_wait()
+            .map_err(|_| capture_error("git-ls-files-wait-failed"))?
+        {
+            return match status.code() {
+                Some(1) => Ok(true),
+                Some(0) => Ok(false),
+                _ => Err(capture_error("git-ls-files-nonzero")),
+            };
+        }
+        if Instant::now() >= deadline {
+            terminate(&mut child);
+            return Err(limit_error("git-ls-files-time-limit-exceeded"));
         }
         thread::sleep(Duration::from_millis(2));
     }

@@ -14,8 +14,9 @@ pub fn apply(
     require_root(effects, &plan.root_binding)?;
     require_preconditions(&plan.checks, effects)?;
     require_root(effects, &plan.root_binding)?;
+    let mutations = plan.all_mutations();
     let mut applied = 0usize;
-    for mutation in &plan.mutations {
+    for mutation in &mutations {
         let result = effects.compare_exchange(
             &mutation.path,
             &mutation.expected,
@@ -26,7 +27,7 @@ pub fn apply(
             Ok(false) => {
                 return fail_with_rollback(
                     error(FitErrorId::Conflict),
-                    &plan.mutations[..applied],
+                    &mutations[..applied],
                     &plan.root_binding,
                     effects,
                 );
@@ -35,7 +36,7 @@ pub fn apply(
                 return reconcile_effect_error(
                     failure,
                     mutation,
-                    &plan.mutations[..applied],
+                    &mutations[..applied],
                     &plan.root_binding,
                     effects,
                 );
@@ -44,7 +45,7 @@ pub fn apply(
         if let Err(failure) = require_root(effects, &plan.root_binding) {
             return fail_with_rollback(
                 failure,
-                &plan.mutations[..applied],
+                &mutations[..applied],
                 &plan.root_binding,
                 effects,
             );
@@ -53,7 +54,7 @@ pub fn apply(
     if require_postconditions(&plan.checks, effects).is_err() {
         return fail_with_rollback(
             error(FitErrorId::VerificationFailed),
-            &plan.mutations[..applied],
+            &mutations[..applied],
             &plan.root_binding,
             effects,
         );
@@ -61,7 +62,7 @@ pub fn apply(
     if let Err(failure) = require_root(effects, &plan.root_binding) {
         return fail_with_rollback(
             failure,
-            &plan.mutations[..applied],
+            &mutations[..applied],
             &plan.root_binding,
             effects,
         );
@@ -69,7 +70,7 @@ pub fn apply(
     Ok(AppliedFit {
         plan_sha256: plan.plan_sha256.clone(),
         root_binding: plan.root_binding.clone(),
-        mutations: plan.mutations.clone(),
+        mutations,
     })
 }
 

@@ -14,14 +14,15 @@ use super::projection::{
     ExpectedProjection, FitInspectProjection, FitPlanRecord, FitVerificationProjection,
     INSPECT_SCHEMA, InspectionProjection, MutationProjection, ObservedFileProjection, PLAN_SCHEMA,
     PlanProjection, ProvenanceProjection, RollbackEntryProjection, SUPPORT_LIMIT, TargetProjection,
-    VERIFY_SCHEMA, VerificationFailureProjection,
+    VERIFY_SCHEMA, VerificationFailureProjection, LocalStatePolicyProjection,
 };
 use super::{AdapterErrorId, FitAdapterError, adapter_error, kernel_error};
 use crate::repository_fit::LocalEffects;
 use crate::repository_fit::{
     DesiredState, ExpectedContent, FitInspection, FitMode, FitPlan, LocalRepository,
+    LocalStatePlan,
     ObservedDisposition, Ownership, OwnershipProvenance, PlanAuthorization, RepositoryClass,
-    digest, inspect, plan, valid_digest, verify,
+    digest, inspect, inspect_local_state, plan_with_local_state, valid_digest, verify,
 };
 
 #[path = "apply_preparation.rs"]

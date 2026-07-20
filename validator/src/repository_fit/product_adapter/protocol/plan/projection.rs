@@ -1,4 +1,5 @@
 use super::*;
+use crate::repository_fit::LocalStateDisposition;
 
 pub(crate) fn plan_projection(
     plan: &FitPlan,
@@ -18,6 +19,11 @@ pub(crate) fn plan_projection(
     Ok(PlanProjection {
         plan_sha256: plan.plan_sha256.clone(),
         authorization_sha256,
+        local_state: plan
+            .local_state
+            .as_ref()
+            .map(local_state_projection)
+            .ok_or_else(|| adapter_error(AdapterErrorId::ProjectionFailed))?,
         checks: plan
             .checks
             .iter()
@@ -66,6 +72,31 @@ pub(crate) fn plan_projection(
             .collect::<Result<Vec<_>, _>>()?,
         rollback_mutation_count: plan.rollback.mutation_count,
     })
+}
+
+pub(crate) fn local_state_projection(
+    state: &LocalStatePlan,
+) -> LocalStatePolicyProjection {
+    LocalStatePolicyProjection {
+        path: state.path.as_str().to_owned(),
+        required_rule: state.required_rule.clone(),
+        disposition: match state.disposition {
+            LocalStateDisposition::Missing => "missing",
+            LocalStateDisposition::NeedsUpdate => "needs_update",
+            LocalStateDisposition::AlreadyIgnored => "already_ignored",
+        }
+        .to_owned(),
+        observed_sha256: state
+            .prior
+            .as_deref()
+            .map(crate::repository_fit::digest),
+        observed_unix_mode: state.observed_mode,
+        desired_unix_mode: state.desired_mode,
+        desired_sha256: state.desired_sha256(),
+        replacement_sha256: state.desired_sha256(),
+        replacement_byte_length: state.replacement.len(),
+        mutation_required: state.mutation.is_some(),
+    }
 }
 
 pub(crate) fn conflict_projection(

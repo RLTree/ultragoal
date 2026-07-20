@@ -30,12 +30,7 @@ pub(crate) fn capture_target_descriptor_chain(
     root: &Path,
     request: &OpaqueFitApplyRequest,
 ) -> Result<TargetCapture, FitAdapterError> {
-    let paths = request
-        .desired
-        .files
-        .iter()
-        .map(|file| file.path.clone())
-        .collect::<Vec<_>>();
+    let paths = request.target_paths();
     capture_target_descriptor_chain_for_paths(root, &paths)
 }
 

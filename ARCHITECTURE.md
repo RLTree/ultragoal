@@ -42,6 +42,15 @@ may construct, clone, settle, release, recover, roll back, register, or reopen
 routine authority. Source-shape checks are secondary regression controls, not
 semantic authority proof.
 
+Repository fit also carries one private semantic local-state policy for the
+runtime evidence path. It reconciles the required `validation_artifacts/`
+ignore rule inside an arbitrary user `.gitignore` while preserving unrelated
+bytes, newline shape, mode, and dirt. Inspection, planning, and verification
+remain zero-write; apply carries the policy as a prepared mutation through the
+existing confined compare-exchange, rollback, recovery, and revalidation
+transaction. `.gitignore` is not a template-managed file and no whole-file
+manifest authority is introduced.
+
 Local agent authority is one private production transaction under
 `plugin_product/agent_discovery/`. The public read route
 `inspect capabilities --package-root <host-path>` supplies one typed

@@ -62,6 +62,7 @@ pub(crate) fn success_outcome(
             &target_poststate.sha256,
             &permit.protected_prestate.sha256,
             mutation_count,
+            request.plan.mutations.len(),
             status,
         ))
         .expect("fixed outcome payload is serializable"),
@@ -74,7 +75,7 @@ pub(crate) fn success_outcome(
         desired_state_sha256: request.desired.state_sha256.clone(),
         verification_sha256: verification.verification_sha256.clone(),
         target_poststate_sha256: target_poststate.sha256.clone(),
-        mutation_count,
+        mutation_count: request.plan.mutations.len(),
         status,
         effect: "workspace_write",
         claim_effect: "none",
@@ -132,9 +133,8 @@ pub(crate) fn permit_binding(
     target: &TargetSnapshot,
     protected: &ProtectedSnapshot,
 ) -> Result<PermitBinding, FitAdapterError> {
-    let mutation_rows = request
-        .plan
-        .mutations
+    let mutations = request.all_mutations();
+    let mutation_rows = mutations
         .iter()
         .map(|mutation| {
             Ok((

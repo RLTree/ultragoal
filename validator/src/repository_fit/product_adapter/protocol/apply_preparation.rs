@@ -178,12 +178,33 @@ pub(crate) fn current_plan(context: &LiveContext) -> Result<CurrentPlan, FitAdap
         .revalidate()
         .map_err(|_| adapter_error(AdapterErrorId::ContextStale))?;
     let target = target_projection(context)?;
-    let bundle = compile(context)?;
+    let mut bundle = compile(context)?;
     let mut reader = LocalRepository::open(context.worktree_root()).map_err(kernel_error)?;
     let mut inspection =
         inspect(mode(context), &bundle.desired, &mut reader).map_err(kernel_error)?;
     let observed_modes = bind_authoritative_modes(context, &bundle, &mut inspection)?;
-    let plan = plan(&inspection, &bundle.desired).map_err(kernel_error)?;
+    let mut mode_reader = LocalEffects::open(context.worktree_root(), bundle.unix_modes.clone())
+        .map_err(kernel_error)?;
+    let local_state_mode = mode_reader
+        .read_unix_mode(
+            &crate::repository_fit::CanonicalPath::parse(
+                crate::repository_fit::LOCAL_STATE_PATH,
+            )
+            .map_err(kernel_error)?,
+        )
+        .map_err(kernel_error)?;
+    let local_state = inspect_local_state(&mut reader, local_state_mode).map_err(kernel_error)?;
+    let mut observed_modes = observed_modes;
+    observed_modes.insert(
+        crate::repository_fit::LOCAL_STATE_PATH.to_owned(),
+        local_state.observed_mode,
+    );
+    bundle.unix_modes.insert(
+        crate::repository_fit::LOCAL_STATE_PATH.to_owned(),
+        local_state.desired_mode,
+    );
+    let plan = plan_with_local_state(&inspection, &bundle.desired, Some(local_state.clone()))
+        .map_err(kernel_error)?;
     context
         .revalidate()
         .map_err(|_| adapter_error(AdapterErrorId::ContextStale))?;
@@ -192,6 +213,7 @@ pub(crate) fn current_plan(context: &LiveContext) -> Result<CurrentPlan, FitAdap
         bundle,
         inspection,
         observed_modes,
+        local_state,
         plan,
     })
 }

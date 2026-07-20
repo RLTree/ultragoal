@@ -40,10 +40,9 @@ pub(crate) fn collect_protected(
             return Err(adapter_error(AdapterErrorId::TargetUnavailable));
         }
         let allowed = request
-            .desired
-            .files
+            .target_paths()
             .iter()
-            .map(|file| file.path.as_str().as_bytes().to_vec())
+            .map(|path| path.as_str().as_bytes().to_vec())
             .collect::<BTreeSet<_>>();
         let mut traversal = ProtectedDescriptorTraversal::new(
             root_object.device,
