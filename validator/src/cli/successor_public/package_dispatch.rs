@@ -15,7 +15,9 @@ pub(super) fn execute(
             }))
         }
         operation_binding::PublicOperation::PackageInstallTest => {
-            Some(package_install_test::execute(root, invocation))
+            Some(with_context(root, |context| {
+                package_install_test::execute(context, invocation)
+            }))
         }
         _ => None,
     }
