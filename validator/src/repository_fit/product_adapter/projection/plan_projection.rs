@@ -21,7 +21,7 @@ impl FitPlanRecord {
     }
 
     pub(crate) fn mutation_count(&self) -> usize {
-        self.plan.mutations.len()
+        self.plan.mutations.len() + usize::from(self.plan.local_state.mutation_required)
     }
 
     pub(crate) fn conflict_count(&self) -> usize {

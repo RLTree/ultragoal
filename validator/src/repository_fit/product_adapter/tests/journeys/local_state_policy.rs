@@ -2,6 +2,22 @@ use super::*;
 use std::process::Stdio;
 
 #[test]
+pub(crate) fn local_state_only_mutation_is_counted_at_each_preparation_surface() {
+    let fixture = Fixture::new("local-state-only-count");
+    fixture.install_all_direct();
+    fs::remove_file(fixture.root.join(".gitignore")).unwrap();
+    let context = fixture.context();
+    let record = plan_target(&context).unwrap();
+    assert_eq!(record.mutation_count(), 1);
+    assert!(record.plan.local_state.mutation_required);
+    let prepared = fixture.plan(&context);
+    assert_eq!(prepared.projection().mutation_count, 1);
+    assert_eq!(prepared.request().all_mutations().len(), 1);
+    execute(&fixture, prepared).unwrap();
+    assert_eq!(fs::read(fixture.root.join(".gitignore")).unwrap(), b"validation_artifacts/\n");
+}
+
+#[test]
 pub(crate) fn absent_local_state_is_created_with_canonical_rule() {
     let fixture = Fixture::new("local-state-absent");
     let context = fixture.context();

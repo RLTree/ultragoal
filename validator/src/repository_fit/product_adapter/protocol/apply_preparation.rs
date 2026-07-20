@@ -68,7 +68,7 @@ pub(crate) fn prepare_apply_request(
         desired_state_sha256: current.bundle.desired.state_sha256.clone(),
         plan_sha256: current.plan.plan_sha256.clone(),
         accepted_plan_sha256: accepted_plan_sha256.to_owned(),
-        mutation_count: current.plan.mutations.len(),
+        mutation_count: current.plan.all_mutations().len(),
         effect: "workspace_write_not_executed".to_owned(),
         claim_effect: CLAIM_EFFECT.to_owned(),
         support_limit: SUPPORT_LIMIT.to_owned(),
