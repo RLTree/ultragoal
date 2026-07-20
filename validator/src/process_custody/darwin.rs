@@ -49,10 +49,6 @@ impl DarwinSuspendedProcess {
         self.settled = true;
     }
 
-    pub(crate) fn release_without_cleanup(&mut self) {
-        self.settled = true;
-    }
-
     pub(crate) fn take_pipes(&mut self) -> io::Result<(File, File, File)> {
         Ok((
             self.stdin

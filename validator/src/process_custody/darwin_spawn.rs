@@ -54,7 +54,7 @@ pub(super) fn spawn_suspended_descriptor(
 
 fn c_arguments(program: &Path, argv: &[String]) -> io::Result<Vec<CString>> {
     std::iter::once(program.as_os_str().as_bytes())
-        .chain(argv.iter().skip(1).map(String::as_bytes))
+        .chain(argv.iter().map(String::as_bytes))
         .map(|value| {
             CString::new(value).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "argument"))
         })

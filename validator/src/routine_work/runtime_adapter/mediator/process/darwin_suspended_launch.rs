@@ -11,10 +11,13 @@ pub(crate) fn spawn_suspended(
     argv: &[String],
     environment: &BTreeMap<String, String>,
 ) -> Result<SpawnedProcess, RoutineError> {
+    let arguments = argv
+        .get(1..)
+        .ok_or_else(|| mediator_error("mediator-process-argv-empty"))?;
     let spawned = crate::process_custody::spawn_suspended_descriptor(
         program.path(),
         root.raw_fd(),
-        argv,
+        arguments,
         environment,
     )
     .map_err(|_| mediator_error("mediator-process-launch-failed"))?;

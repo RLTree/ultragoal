@@ -124,9 +124,6 @@ fn execute_darwin(
         DarwinExecutionFailure, DarwinExecutionPolicy, execute_suspended_descriptor,
     };
     let (path, device, inode) = executable.loaded_identity();
-    let mut argv = Vec::with_capacity(command.argv().len() + 1);
-    argv.push(path.to_string_lossy().into_owned());
-    argv.extend(command.argv().iter().cloned());
     let environment = command
         .environment()
         .iter()
@@ -137,7 +134,7 @@ fn execute_darwin(
         device,
         inode,
         cwd,
-        &argv,
+        command.argv(),
         &environment,
         DarwinExecutionPolicy {
             timeout: policy.timeout(),

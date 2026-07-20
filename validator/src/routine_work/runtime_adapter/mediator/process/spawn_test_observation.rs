@@ -154,12 +154,10 @@ impl SpawnSetupGuard {
     }
 }
 
-#[cfg(target_os = "macos")]
+#[cfg(all(target_os = "macos", test))]
 impl Drop for SpawnSetupGuard {
     fn drop(&mut self) {
-        if let Some(mut process) = self.process.take() {
-            process.release_without_cleanup();
-        }
+        let _ = self.process.take();
     }
 }
 
@@ -180,8 +178,6 @@ pub(crate) struct RunningProcess {
 #[cfg(test)]
 impl Drop for RunningProcess {
     fn drop(&mut self) {
-        if let Some(mut process) = self.process.take() {
-            process.release_without_cleanup();
-        }
+        let _ = self.process.take();
     }
 }

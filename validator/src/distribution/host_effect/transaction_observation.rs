@@ -151,12 +151,17 @@ pub(crate) fn observe(
         .map(|(index, digest)| HostCommandObservation::new(index, digest, 0, 1))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|_| "host command observation binding failed")?;
-    let observations = HostLifecycleObservedBundle::from_parts(
+    let observations = HostLifecycleObservedBundle::from_observed_parts(
         installed_identity.clone(),
         cache_identity.clone(),
         registry_identity.clone(),
         discovery_identity.clone(),
         runtime_identity.clone(),
+        installed.digest.clone(),
+        cache.digest.clone(),
+        semantic_digest(&marketplace_semantic),
+        semantic_digest(&plugin_semantic),
+        runtime.digest.clone(),
         commands,
     )
     .map_err(|_| "host observation bundle invalid")?;
