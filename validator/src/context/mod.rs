@@ -13,6 +13,9 @@ mod effects;
 mod error;
 mod git;
 #[cfg(test)]
+#[path = "git_tests.rs"]
+mod git_tests;
+#[cfg(test)]
 mod path;
 mod process;
 #[path = "read/budget.rs"]
