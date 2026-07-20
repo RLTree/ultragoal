@@ -11,7 +11,7 @@ pub fn uninstall(
     match effects.compare_exchange_installed(target, &expected, None) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     if let Some(current) = read(effects, target)? {
         return Err(error(if prior_matches(&expected, Some(&current)) {
@@ -72,7 +72,7 @@ pub fn rollback_install(
 pub enum RollbackInstallError {
     Refused {
         error: DistributionError,
-        transaction: InstallTransaction,
+        transaction: Box<InstallTransaction>,
     },
     Committed {
         error: DistributionError,
@@ -81,7 +81,10 @@ pub enum RollbackInstallError {
 
 impl RollbackInstallError {
     fn refused(error: DistributionError, transaction: InstallTransaction) -> Self {
-        Self::Refused { error, transaction }
+        Self::Refused {
+            error,
+            transaction: Box::new(transaction),
+        }
     }
 
     fn committed(error: DistributionError) -> Self {
@@ -96,7 +99,7 @@ impl RollbackInstallError {
 
     pub fn into_transaction(self) -> Option<InstallTransaction> {
         match self {
-            Self::Refused { transaction, .. } => Some(transaction),
+            Self::Refused { transaction, .. } => Some(*transaction),
             Self::Committed { .. } => None,
         }
     }
@@ -155,7 +158,7 @@ fn restore_if_digest_candidate(
     match effects.compare_exchange_installed(target, &expected, previous) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::RollbackFailed)),
+        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
     }
     let restored = read(effects, target).map_err(|_| error(DistributionErrorId::RollbackFailed))?;
     if restored.as_deref() != previous {

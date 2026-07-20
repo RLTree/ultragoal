@@ -129,7 +129,7 @@ impl MaterializeEffects for TreeSink {
             .as_deref()
             .map(tree_sha256)
             .transpose()
-            .map_err(|_| ())?;
+            .map_err(|_| crate::distribution::EffectFailure)?;
         if current.as_deref() != expected {
             return Ok(false);
         }

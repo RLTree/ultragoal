@@ -59,16 +59,16 @@ fn same_byte_inode_swap_before_spawn_never_launches_or_accepts() {
     let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-same-byte-before-spawn");
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let plan = RuntimeProbePlan::from_installed_package(
+    let plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding,
-        &host,
-        installed.snapshot(),
-        &mut install_effects,
-        &package,
-        &executable,
-        valid_args(),
-        Duration::from_secs(10),
-    )
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut install_effects,
+        package: &package,
+        program: &executable,
+        argv: valid_args(),
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
 
     replace_with_same_bytes(&executable, "same-bytes-before-spawn");
@@ -85,16 +85,16 @@ fn same_byte_inode_swap_during_execution_is_not_accepted() {
     let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-same-byte-during-exec");
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let plan = RuntimeProbePlan::from_installed_package(
+    let plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding,
-        &host,
-        installed.snapshot(),
-        &mut install_effects,
-        &package,
-        &executable,
-        slow_args(),
-        Duration::from_secs(10),
-    )
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut install_effects,
+        package: &package,
+        program: &executable,
+        argv: slow_args(),
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     let executable_for_thread = executable.clone();
     let race = std::thread::spawn(move || {
@@ -117,16 +117,16 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
     let sibling = fixture.root.join("runtime/sibling-runtime-probe-bin");
     std::fs::copy(&executable, &sibling).unwrap();
     assert_eq!(
-        RuntimeProbePlan::from_installed_package(
-            binding.clone(),
-            &host,
-            installed.snapshot(),
-            &mut install_effects,
-            &package,
-            &sibling,
-            valid_args(),
-            Duration::from_secs(10),
-        )
+        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+            binding: binding.clone(),
+            host: &host,
+            install: installed.snapshot(),
+            effects: &mut install_effects,
+            package: &package,
+            program: &sibling,
+            argv: valid_args(),
+            timeout: Duration::from_secs(10),
+        })
         .unwrap_err()
         .id(),
         ErrorId::CapabilityMismatch
@@ -136,16 +136,16 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
     let mut replaced_install_effects = ScopedInstall::new(fixture.confined());
 
     assert_eq!(
-        RuntimeProbePlan::from_installed_package(
+        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
             binding,
-            &host,
-            installed.snapshot(),
-            &mut replaced_install_effects,
-            &package,
-            &executable,
-            valid_args(),
-            Duration::from_secs(10),
-        )
+            host: &host,
+            install: installed.snapshot(),
+            effects: &mut replaced_install_effects,
+            package: &package,
+            program: &executable,
+            argv: valid_args(),
+            timeout: Duration::from_secs(10),
+        })
         .unwrap_err()
         .id(),
         ErrorId::CapabilityMismatch

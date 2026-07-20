@@ -1,8 +1,8 @@
 use crate::distribution::{
     DistributionErrorId as ErrorId, ExpectedPrior, HostCapabilityDeclaration, InstallEffects,
     InstallPlan, InstallScope, InstallTransaction, JourneyBinding, PackageSnapshot,
-    RuntimeObservation, RuntimeProbePlan, RuntimeVerdict, ScopedInstall, SurfaceIdentity,
-    execute_runtime_probe, install, uninstall,
+    InstalledPackageRuntimeProbeRequest, RuntimeObservation, RuntimeProbePlan, RuntimeVerdict,
+    ScopedInstall, SurfaceIdentity, execute_runtime_probe, install, uninstall,
 };
 use crate::distribution_fixture::Fixture;
 use crate::package_journey_fixture::{JourneyFixture, runtime_probe_bytes};
@@ -103,16 +103,16 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     installed.bind_journey(&binding).unwrap();
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let stale = RuntimeProbePlan::from_installed_package(
-        binding.clone(),
-        &host,
-        installed.snapshot(),
-        &mut install_effects,
-        &package,
-        &executable,
-        stale_args(),
-        Duration::from_secs(10),
-    )
+    let stale = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+        binding: binding.clone(),
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut install_effects,
+        package: &package,
+        program: &executable,
+        argv: stale_args(),
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     assert_eq!(
         execute_runtime_probe(&stale).unwrap_err().id(),
@@ -163,16 +163,16 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     installed.bind_journey(&binding).unwrap();
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let plan = RuntimeProbePlan::from_installed_package(
+    let plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding,
-        &host,
-        installed.snapshot(),
-        &mut install_effects,
-        &package,
-        &copied,
-        slow_args(),
-        Duration::from_secs(10),
-    )
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut install_effects,
+        package: &package,
+        program: &copied,
+        argv: slow_args(),
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     let replacement = fixture.root.join("runtime-probe-replacement");
     let copied_for_thread = copied.clone();

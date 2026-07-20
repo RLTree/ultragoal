@@ -24,6 +24,7 @@ fn rename_noreplace_platform(
     new: *const libc::c_char,
 ) -> libc::c_int {
     const NOFOLLOW_AND_BENEATH: libc::c_uint = 0x10 | 0x20;
+    // SAFETY: callers pass live directory descriptors and NUL-terminated component pointers.
     unsafe {
         libc::renameatx_np(
             old_fd,
@@ -42,6 +43,7 @@ fn rename_noreplace_platform(
     new_fd: libc::c_int,
     new: *const libc::c_char,
 ) -> libc::c_int {
+    // SAFETY: callers pass live directory descriptors and NUL-terminated component pointers.
     unsafe { libc::renameat2(old_fd, old, new_fd, new, libc::RENAME_NOREPLACE) }
 }
 
@@ -63,6 +65,7 @@ fn rename_swap_platform(
     right: *const libc::c_char,
 ) -> libc::c_int {
     const NOFOLLOW_AND_BENEATH: libc::c_uint = 0x10 | 0x20;
+    // SAFETY: callers pass live directory descriptors and NUL-terminated component pointers.
     unsafe {
         libc::renameatx_np(
             left_fd,
@@ -81,6 +84,7 @@ fn rename_swap_platform(
     right_fd: libc::c_int,
     right: *const libc::c_char,
 ) -> libc::c_int {
+    // SAFETY: callers pass live directory descriptors and NUL-terminated component pointers.
     unsafe { libc::renameat2(left_fd, left, right_fd, right, libc::RENAME_EXCHANGE) }
 }
 

@@ -76,13 +76,13 @@ pub trait MaterializeEffects {
         &mut self,
         maximum_entries: usize,
         maximum_bytes: usize,
-    ) -> Result<Option<Vec<TreeObject>>, ()>;
+    ) -> Result<Option<Vec<TreeObject>>, crate::distribution::EffectFailure>;
 
     fn compare_exchange_tree(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[TreeObject]>,
-    ) -> Result<bool, ()>;
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 #[derive(Debug)]
@@ -112,7 +112,7 @@ pub fn materialize_package(
     match effects.compare_exchange_tree(previous_sha256.as_deref(), Some(&replacement)) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let verification = read(effects).and_then(|observed| {
         let observed = observed.ok_or_else(|| error(DistributionErrorId::ArchiveMismatch))?;

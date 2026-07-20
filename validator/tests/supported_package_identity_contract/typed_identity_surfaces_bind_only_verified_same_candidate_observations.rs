@@ -87,16 +87,16 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let app_registry =
         confined_registry_observation(&fixture, &binding, &host, installed.snapshot());
     let before = snapshot_tree(&fixture.0);
-    let runtime_plan = RuntimeProbePlan::from_installed_package(
-        binding.clone(),
-        &host,
-        installed.snapshot(),
-        &mut ScopedInstall::new(confined.clone()),
-        &package,
-        &runtime_program,
-        Vec::new(),
-        Duration::from_secs(5),
-    )
+    let runtime_plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+        binding: binding.clone(),
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut ScopedInstall::new(confined.clone()),
+        package: &package,
+        program: &runtime_program,
+        argv: Vec::new(),
+        timeout: Duration::from_secs(5),
+    })
     .unwrap();
     let (_, runtime) = runtime_plan.execute_bound().unwrap();
 

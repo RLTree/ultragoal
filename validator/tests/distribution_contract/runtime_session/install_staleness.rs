@@ -10,16 +10,16 @@ fn runtime_plan(
     RuntimeProbePlan,
 ) {
     let (fixture, package, installed, executable, host, binding) = runtime_fixture(label);
-    let plan = RuntimeProbePlan::from_installed_package(
+    let plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding,
-        &host,
-        installed.snapshot(),
-        &mut ScopedInstall::new(fixture.confined()),
-        &package,
-        &executable,
-        args,
-        Duration::from_secs(10),
-    )
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut ScopedInstall::new(fixture.confined()),
+        package: &package,
+        program: &executable,
+        argv: args,
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     (fixture, package, installed, executable, plan)
 }

@@ -4,12 +4,19 @@ use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 const CACHE_LIMIT: usize = 4 * 1024 * 1024;
 
 pub trait CacheReader {
-    fn read_cache(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
+    fn read_cache(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure>;
 }
 
 impl CacheReader for crate::distribution::filesystem::ScopedFile {
-    fn read_cache(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()> {
-        self.inspect(maximum).map_err(|_| ())
+    fn read_cache(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
+        self.inspect(maximum)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 }
 

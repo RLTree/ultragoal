@@ -1,8 +1,9 @@
 use crate::distribution::{
     CacheExpectation, Capability, CodexPlugin, DistributionErrorId, ExpectedPrior, ExpectedTree,
     HostCapabilityDeclaration, HostCapabilityState, IdentitySurface, InstallPlan, InstallScope,
-    JourneyBinding, MarketplaceScope, RuntimeProbePlan, RuntimeVerdict, ScopedFile, ScopedInstall,
-    ScopedTree, SurfaceIdentity, apply_marketplace, install, materialize_package,
+    InstalledPackageRuntimeProbeRequest, JourneyBinding, MarketplaceScope, RuntimeProbePlan,
+    RuntimeVerdict, ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace,
+    install, materialize_package,
     observe_codex_marketplace, observe_registry_file, observe_supported_host_discovery,
     plan_codex_marketplace, reconcile_cache_file, registry_document, verify_bound_surface_chain,
 };
@@ -146,16 +147,16 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         "all observation APIs are zero-write"
     );
 
-    let runtime_plan = RuntimeProbePlan::from_installed_package(
-        binding.clone(),
-        &host,
-        install.snapshot(),
-        &mut ScopedInstall::new(fixture.confined()),
-        &first,
-        &executable,
-        valid_args(),
-        Duration::from_secs(10),
-    )
+    let runtime_plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+        binding: binding.clone(),
+        host: &host,
+        install: install.snapshot(),
+        effects: &mut ScopedInstall::new(fixture.confined()),
+        package: &first,
+        program: &executable,
+        argv: valid_args(),
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     let before_runtime = fixture.tree();
     let (runtime, runtime_surface) = runtime_plan.execute_bound().unwrap();

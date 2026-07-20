@@ -75,8 +75,8 @@ fn build_artifact(
     if source.context_id() != context.context_id() {
         return Err(failure(ProductionPackageErrorId::ContextUnavailable));
     }
-    let version = validate_manifests(&source)?;
-    let entries = packaged_entries(&source)?;
+    let version = validate_manifests(source)?;
+    let entries = packaged_entries(source)?;
     manifest::validate(&entries, PLUGIN_ID, &version)
         .map_err(|_| failure(ProductionPackageErrorId::ManifestMismatch))?;
     let candidate_id = candidate_id(context)?;

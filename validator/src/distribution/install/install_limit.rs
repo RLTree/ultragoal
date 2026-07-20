@@ -67,22 +67,26 @@ impl InstallPlan {
 }
 
 pub trait InstallEffects {
-    fn read_installed(&mut self, target: &str, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
+    fn read_installed(
+        &mut self,
+        target: &str,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure>;
 
     fn installed_postimage(
         &mut self,
         _target: &str,
         _maximum: usize,
-    ) -> Result<Option<InstalledPostimage>, ()> {
-        Err(())
+    ) -> Result<Option<InstalledPostimage>, crate::distribution::EffectFailure> {
+        Err(crate::distribution::EffectFailure)
     }
 
     fn current_install_authority(
         &mut self,
         _snapshot: &InstallSnapshot,
         _binding: &crate::distribution::host_capability::JourneyBinding,
-    ) -> Result<CurrentInstallAuthority, ()> {
-        Err(())
+    ) -> Result<CurrentInstallAuthority, crate::distribution::EffectFailure> {
+        Err(crate::distribution::EffectFailure)
     }
 
     /// Atomically compares the current destination with `expected` and, only
@@ -91,14 +95,14 @@ pub trait InstallEffects {
     /// `Ok(true)` means the comparison and transition occurred as one
     /// indivisible effect. `Ok(false)` means the destination did not match and
     /// MUST remain unchanged. Implementations that cannot provide that
-    /// contract must return `Err(())`; callers must not emulate it with a
+    /// contract must return `Err(EffectFailure)`; callers must not emulate it with a
     /// separate read followed by an unconditional write.
     fn compare_exchange_installed(
         &mut self,
         target: &str,
         expected: &ExpectedPrior,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()>;
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 pub fn install(
@@ -123,7 +127,7 @@ pub fn install(
     ) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let verification = match read(effects, &plan.target) {
         Ok(Some(bytes)) if sha256(&bytes) == plan.package_sha256 => Ok(()),

@@ -33,10 +33,7 @@ struct MutatingRegistry {
 }
 
 impl RegistryReader for MutatingRegistry {
-    fn read_registry(
-        &mut self,
-        _: usize,
-    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
+    fn read_registry(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
         let value = self
             .rows
             .get(self.reads)

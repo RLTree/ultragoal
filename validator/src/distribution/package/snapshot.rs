@@ -76,12 +76,15 @@ impl PackageSnapshot {
 }
 
 pub trait PackageEffects {
-    fn read_package(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
+    fn read_package(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure>;
     fn compare_exchange_package(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()>;
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 pub fn build_package(
@@ -95,7 +98,7 @@ pub fn build_package(
     match effects.compare_exchange_package(expected_prior.as_deref(), Some(&archive)) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let result = match read(effects) {
         Ok(Some(bytes)) => verify_package(plan, &bytes),
@@ -170,7 +173,7 @@ fn restore(
     match effects.compare_exchange_package(Some(candidate_sha256), previous) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::RollbackFailed)),
+        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
     }
     if read(effects)
         .map_err(|_| error(DistributionErrorId::RollbackFailed))?

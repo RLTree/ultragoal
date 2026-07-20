@@ -23,6 +23,10 @@ mod spec;
 mod supply;
 mod verify;
 
+/// A bounded adapter failure. Callers retain their domain-specific failure mapping.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct EffectFailure;
+
 pub use cache::{CacheExpectation, CacheSnapshot, reconcile_cache_read_only};
 pub use cache_observation::{CacheReader, reconcile_cache_file};
 pub use error::{DistributionError, DistributionErrorId};
@@ -73,7 +77,9 @@ pub use registry_observation::{
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
     observe_registry_file, observe_supported_host_discovery, registry_document,
 };
-pub use runtime_probe::{RuntimeProbePlan, execute_runtime_probe};
+pub use runtime_probe::{
+    InstalledPackageRuntimeProbeRequest, RuntimeProbePlan, execute_runtime_probe,
+};
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,
     SignatureVerifierEffects, verify_provenance, verify_signature,

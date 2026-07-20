@@ -88,7 +88,7 @@ impl Effects {
         .map_err(AdapterError::distribution)?;
         self.mutations.push(Mutation::Installed {
             surface,
-            transaction,
+            transaction: Box::new(transaction),
         });
         self.set_surface(surface, replacement);
         self.logical.generation = self.expected_after.generation;

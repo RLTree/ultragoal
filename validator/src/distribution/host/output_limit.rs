@@ -66,7 +66,7 @@ pub fn rollback_marketplace(
     ) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::RollbackFailed)),
+        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
     }
     let observed = effects
         .read(1024 * 1024)
@@ -179,7 +179,11 @@ pub struct CommandOutput {
 }
 
 pub trait HostExecutor {
-    fn execute(&mut self, program: &str, argv: &[String]) -> Result<CommandOutput, ()>;
+    fn execute(
+        &mut self,
+        program: &str,
+        argv: &[String],
+    ) -> Result<CommandOutput, crate::distribution::EffectFailure>;
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

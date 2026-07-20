@@ -13,6 +13,7 @@ pub(crate) struct Root(File);
 pub(crate) fn open_root(path: &Path) -> Result<Root, DistributionError> {
     let name = CString::new(path.as_os_str().as_bytes())
         .map_err(|_| error(DistributionErrorId::InvalidPath))?;
+    // SAFETY: `name` is a NUL-terminated CString for the duration of this call.
     let descriptor = unsafe {
         libc::open(
             name.as_ptr(),
@@ -22,6 +23,7 @@ pub(crate) fn open_root(path: &Path) -> Result<Root, DistributionError> {
     if descriptor < 0 {
         return Err(open_error());
     }
+    // SAFETY: open returned this unique, owned file descriptor.
     let file = unsafe { File::from_raw_fd(descriptor) };
     if !file
         .metadata()
@@ -38,15 +40,18 @@ pub(crate) fn read(
     path: &str,
     maximum: usize,
 ) -> Result<(Vec<u8>, ObjectIdentity), DistributionError> {
+    // SAFETY: root owns a live descriptor and F_DUPFD_CLOEXEC has no pointer arguments.
     let duplicated = unsafe { libc::fcntl(root.0.as_raw_fd(), libc::F_DUPFD_CLOEXEC, 0) };
     if duplicated < 0 {
         return Err(error(DistributionErrorId::ObjectUnavailable));
     }
+    // SAFETY: fcntl returned this unique, owned file descriptor.
     let mut directory = unsafe { File::from_raw_fd(duplicated) };
     let parts = path.split('/').collect::<Vec<_>>();
     for component in &parts[..parts.len() - 1] {
         let name = CString::new(component.as_bytes())
             .map_err(|_| error(DistributionErrorId::InvalidPath))?;
+        // SAFETY: `directory` is live and `name` is NUL-terminated for this call.
         let descriptor = unsafe {
             libc::openat(
                 directory.as_raw_fd(),
@@ -57,10 +62,12 @@ pub(crate) fn read(
         if descriptor < 0 {
             return Err(open_error());
         }
+        // SAFETY: openat returned this unique, owned file descriptor.
         directory = unsafe { File::from_raw_fd(descriptor) };
     }
     let name = CString::new(parts[parts.len() - 1].as_bytes())
         .map_err(|_| error(DistributionErrorId::InvalidPath))?;
+    // SAFETY: `directory` is live and `name` is NUL-terminated for this call.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -71,6 +78,7 @@ pub(crate) fn read(
     if descriptor < 0 {
         return Err(open_error());
     }
+    // SAFETY: openat returned this unique, owned file descriptor.
     let mut file = unsafe { File::from_raw_fd(descriptor) };
     let before = file
         .metadata()

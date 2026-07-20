@@ -40,14 +40,14 @@ impl Snapshot {
     pub(super) fn from_stat(stat: &libc::stat) -> Self {
         Self {
             device: stat.st_dev as u64,
-            inode: stat.st_ino as u64,
+            inode: stat.st_ino,
             mode: stat.st_mode as u32,
             links: stat.st_nlink as u64,
-            size: stat.st_size as i64,
-            modified_seconds: stat.st_mtime as i64,
-            modified_nanoseconds: stat.st_mtime_nsec as i64,
-            changed_seconds: stat.st_ctime as i64,
-            changed_nanoseconds: stat.st_ctime_nsec as i64,
+            size: stat.st_size,
+            modified_seconds: stat.st_mtime,
+            modified_nanoseconds: stat.st_mtime_nsec,
+            changed_seconds: stat.st_ctime,
+            changed_nanoseconds: stat.st_ctime_nsec,
         }
     }
 

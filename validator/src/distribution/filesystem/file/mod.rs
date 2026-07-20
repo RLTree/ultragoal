@@ -174,30 +174,40 @@ impl ScopedFile {
 }
 
 impl PackageEffects for ScopedFile {
-    fn read_package(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()> {
-        self.inspect(maximum).map_err(|_| ())
+    fn read_package(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
+        self.inspect(maximum)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 
     fn compare_exchange_package(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
-        self.apply(expected_sha256, replacement).map_err(|_| ())
+    ) -> Result<bool, crate::distribution::EffectFailure> {
+        self.apply(expected_sha256, replacement)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 }
 
 impl MarketplaceEffects for ScopedFile {
-    fn read(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()> {
-        self.inspect(maximum).map_err(|_| ())
+    fn read(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
+        self.inspect(maximum)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 
     fn compare_exchange(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
-        self.apply(expected_sha256, replacement).map_err(|_| ())
+    ) -> Result<bool, crate::distribution::EffectFailure> {
+        self.apply(expected_sha256, replacement)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 }
 

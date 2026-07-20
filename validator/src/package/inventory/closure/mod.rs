@@ -22,7 +22,7 @@ fn inventory_closure_failures_inner(
         .collect::<Vec<_>>();
     let actual = scan_or_fail(actual_files(root))?;
     let symlinks = scan_or_fail(symlink_entries(root))?;
-    let invalid = invalid_listed_paths(root, &listed);
+    let invalid = invalid_listed_paths(root, listed);
     let valid = valid_listed_paths(root, &comparable);
     let listed_set = valid.iter().cloned().collect::<BTreeSet<_>>();
     let actual_set = actual.iter().cloned().collect::<BTreeSet<_>>();

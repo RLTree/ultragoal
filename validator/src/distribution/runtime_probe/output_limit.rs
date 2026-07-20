@@ -15,6 +15,17 @@ pub struct RuntimeProbePlan {
     timeout: Duration,
 }
 
+pub struct InstalledPackageRuntimeProbeRequest<'a, Effects> {
+    pub binding: JourneyBinding,
+    pub host: &'a HostCapabilityDeclaration,
+    pub install: &'a InstallSnapshot,
+    pub effects: &'a mut Effects,
+    pub package: &'a PackageSnapshot,
+    pub program: &'a Path,
+    pub argv: Vec<String>,
+    pub timeout: Duration,
+}
+
 impl RuntimeProbePlan {
     pub fn new(
         binding: JourneyBinding,
@@ -28,16 +39,19 @@ impl RuntimeProbePlan {
         Err(error(DistributionErrorId::CapabilityMismatch))
     }
 
-    pub fn from_installed_package(
-        binding: JourneyBinding,
-        host: &HostCapabilityDeclaration,
-        install: &InstallSnapshot,
-        effects: &mut impl crate::distribution::install::InstallEffects,
-        package: &PackageSnapshot,
-        program: &Path,
-        argv: Vec<String>,
-        timeout: Duration,
+    pub fn from_installed_package<Effects: crate::distribution::install::InstallEffects>(
+        request: InstalledPackageRuntimeProbeRequest<'_, Effects>,
     ) -> Result<Self, DistributionError> {
+        let InstalledPackageRuntimeProbeRequest {
+            binding,
+            host,
+            install,
+            effects,
+            package,
+            program,
+            argv,
+            timeout,
+        } = request;
         host.ensure_binding(&binding)?;
         install.revalidate_current(&binding, effects)?;
         let executable = PinnedRuntimeExecutable::open(program)?;
