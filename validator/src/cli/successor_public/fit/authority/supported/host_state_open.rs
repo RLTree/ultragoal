@@ -45,6 +45,7 @@ impl HostState {
         let Some(mut current) = open_host_state_base(home)? else {
             return Err(HostFailure::Unavailable);
         };
+        reject_target_overlap(&prospective_state_root(&current.path)?, target)?;
         for component in FIT_STATE_COMPONENTS {
             current = current.open_or_create_owned_child(component)?;
         }
@@ -61,9 +62,7 @@ impl HostState {
         existing_pending_only: bool,
     ) -> Result<Option<Self>, HostFailure> {
         let canonical_target = fs::canonicalize(target).map_err(|_| HostFailure::Invalid)?;
-        if state_root.starts_with(&canonical_target) || canonical_target.starts_with(&state_root) {
-            return Err(HostFailure::Invalid);
-        }
+        reject_target_overlap(&state_root, &canonical_target)?;
         let target_metadata =
             fs::symlink_metadata(&canonical_target).map_err(|_| HostFailure::Invalid)?;
         if !target_metadata.is_dir() {
@@ -197,3 +196,30 @@ fn open_host_state_base(home: &Path) -> Result<Option<AnchoredDirectory>, HostFa
     }
     Ok(Some(current))
 }
+
+fn prospective_state_root(base: &Path) -> Result<PathBuf, HostFailure> {
+    let canonical_base = fs::canonicalize(base).map_err(|_| HostFailure::Invalid)?;
+    if canonical_base != base {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(FIT_STATE_COMPONENTS
+        .iter()
+        .fold(canonical_base, |path, component| path.join(component)))
+}
+
+fn reject_target_overlap(state_root: &Path, target: &Path) -> Result<(), HostFailure> {
+    let canonical_target = fs::canonicalize(target).map_err(|_| HostFailure::Invalid)?;
+    let target_metadata =
+        fs::symlink_metadata(&canonical_target).map_err(|_| HostFailure::Invalid)?;
+    if !target_metadata.is_dir()
+        || state_root.starts_with(&canonical_target)
+        || canonical_target.starts_with(state_root)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+#[path = "host_state_target_confinement_tests.rs"]
+mod host_state_target_confinement_tests;
