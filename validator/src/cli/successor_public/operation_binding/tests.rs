@@ -52,6 +52,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Package(PackageAction::Build),
+            EffectClass::WorkspaceWrite,
+        )),
+        Some(PublicOperation::PackageBuild),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Package(PackageAction::InstallTest),
             EffectClass::WorkspaceWrite,
         )),
@@ -64,6 +71,10 @@ fn only_exact_supported_command_effect_pairs_bind() {
         ),
         invocation(
             SuccessorCommand::Package(PackageAction::Inventory),
+            EffectClass::Read,
+        ),
+        invocation(
+            SuccessorCommand::Package(PackageAction::Build),
             EffectClass::Read,
         ),
         invocation(SuccessorCommand::Fit(FitAction::Apply), EffectClass::Read),

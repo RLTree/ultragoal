@@ -1,0 +1,23 @@
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum PublicOperation {
+    StrictCheck,
+    RoutineCheck,
+    ContextInspection,
+    OrchestrationInspection,
+    CapabilityInspection,
+    InventoryInspection,
+    StateInspection,
+    NextAction,
+    FitInspection,
+    FitPlanning,
+    FitApply,
+    FitVerification,
+    Diagnosis,
+    ObservabilityQuery,
+    EvaluationAudit,
+    EvaluationRun,
+    MigrationPlan,
+    PackageBuild,
+    PackageInstallTest,
+    PackageInventory,
+}

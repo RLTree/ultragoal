@@ -53,15 +53,8 @@ pub(crate) fn execute_invocation_with_home(
     if operation == super::operation_binding::PublicOperation::EvaluationRun {
         return evaluation::run(&invocation);
     }
-    if operation == super::operation_binding::PublicOperation::PackageInventory {
-        let context = match workspace_context(root) {
-            Ok(context) => context,
-            Err(()) => return context_unavailable(),
-        };
-        return package_inventory::execute(&context, &invocation);
-    }
-    if operation == super::operation_binding::PublicOperation::PackageInstallTest {
-        return package_install_test::execute(root, &invocation);
+    if let Some(outcome) = package_dispatch::execute(root, &invocation, operation) {
+        return outcome;
     }
     if invocation.effect != EffectClass::Read
         && operation != super::operation_binding::PublicOperation::FitApply

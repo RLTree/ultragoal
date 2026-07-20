@@ -8,31 +8,12 @@ use crate::cli::successor::{
 use std::collections::BTreeSet;
 
 mod migration_plan;
+mod package_build;
 mod package_install_test;
 mod package_inventory;
+mod public_operation;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(crate) enum PublicOperation {
-    StrictCheck,
-    RoutineCheck,
-    ContextInspection,
-    OrchestrationInspection,
-    CapabilityInspection,
-    InventoryInspection,
-    StateInspection,
-    NextAction,
-    FitInspection,
-    FitPlanning,
-    FitApply,
-    FitVerification,
-    Diagnosis,
-    ObservabilityQuery,
-    EvaluationAudit,
-    EvaluationRun,
-    MigrationPlan,
-    PackageInstallTest,
-    PackageInventory,
-}
+pub(crate) use public_operation::PublicOperation;
 
 #[derive(Clone, Copy)]
 struct Binding {
@@ -211,6 +192,7 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
+    package_build::BINDING,
     package_install_test::BINDING,
     package_inventory::BINDING,
 ];
