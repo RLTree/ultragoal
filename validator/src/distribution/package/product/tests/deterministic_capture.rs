@@ -153,6 +153,47 @@ fn verified_artifact_archive_publication_is_repeatable() {
         artifact.snapshot().archive()
     );
 }
+
+#[test]
+fn source_change_during_archive_publication_restores_prior_output() {
+    let repo = Repo::new("supported-package-product-archive-rollback");
+    let context = repo.workspace_context();
+    let catalog = catalog(&context);
+    let artifact = capture_product_package(&context, &catalog).expect("package");
+    let output = ScopedFile::new(
+        ConfinedRoot::open_workspace(&context).expect("workspace root"),
+        "target/ultragoal/harness-ultragoal.hugpkg",
+    )
+    .expect("archive output");
+    let prior = b"prior archive";
+    assert!(output.apply(None, Some(prior)).expect("seed prior output"));
+    let source = repo.root.join("skills/prove/SKILL.md");
+    set_test_effect_hook_matching(EffectPoint::Rename, ".hul-stage-", move |_| {
+        fs::write(
+            source,
+            "---\nname: prove\n---\nchanged during publication\n",
+        )
+        .expect("mutate source");
+    });
+
+    let error = artifact
+        .publish_archive(&context, &catalog, &output)
+        .expect_err("source mutation published archive");
+
+    assert_eq!(error.id(), ProductionPackageErrorId::SourceUnavailable);
+    assert_test_effect_hook_consumed();
+    assert_eq!(
+        output.inspect(65 * 1024 * 1024).unwrap(),
+        Some(prior.to_vec())
+    );
+    assert!(
+        WalkDir::new(&repo.root)
+            .into_iter()
+            .filter_map(Result::ok)
+            .all(|entry| !entry.file_name().to_string_lossy().starts_with(".hul-")),
+        "archive publication left transaction artifacts behind",
+    );
+}
 use crate::distribution::{
     ExpectedPrior, InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest,
     RuntimeProbePlan, RuntimeVerdict, ScopedInstall, install, publish_installed_runtime_probe,
