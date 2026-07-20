@@ -24,16 +24,25 @@ change shared public dispatch, issue claims, or create a new receipt family.
 N11 and N14 are not parallel implementation lanes. This path has no useful
 implementation antichain; parallelism is reserved for the milestone reviewers.
 
-The N08 lane is now ACTIVE under
-`LEASE-N08-CURRENT-HOST-LIFECYCLE-001` in managed task
-`019f7dbd-f578-7ce2-b400-36a44aedd254`, branch
-`codex/n08-current-host-lifecycle`, worktree
-`/Users/terrynoblin/.codex/worktrees/8d58/harness-ultragoal-plugin-proposal`,
-and exact base `1862ba8c152524063c49a14eb0917d772654947c` / tree
-`46ef081c35c10d70344e2a124711d3ee7ece43fc`. Its authority is exactly the
-existing `WS-PLUGIN` scope. The lane consumes `distribution::host_effect`; it
-does not own or recreate that shared host-effect authority. Any demonstrated
-gap outside `WS-PLUGIN` returns as a root request.
+The bounded N08 lane is closed and its accepted lease-owned guard is integrated
+through `a40dca5492fb619772d6bd68e6f2d93bcf665355`. Root then sealed the
+test-gated host lifecycle operation matrix through
+`6aaa0c57a4bf5a25dc492c2c321e8d01bc35401e`: failed-update recovery requires an
+exact recovery-required state, and authorized rollback plus stale-cache
+recovery fail closed because the retained host state cannot prove an approved
+predecessor or distinguish installed from cache authority. The focused plugin
+controls pass 2/2 and the bounded host matrix passes 2/2 with warning-denied
+compilation.
+
+N08 remains blocked below current-host adoption. The surviving
+`distribution::host_effect` subtree is test-gated, rejects Darwin before any
+effect, and has no lossless transfer from the sealed plugin lifecycle plan into
+one durable host-effect owner. Promoting that subtree would compile a second
+authority model without delivering macOS behavior, so root rejected that
+false-pass architecture. Installed/current-host lifecycle, recovery,
+repeat-use, N11 dependency promotion, readiness, release, and completion remain
+withheld. The managed task is archived, its 1.1 GB worktree is removed, and no
+new WorkerResult or receipt was created.
 
 ## Late N04 repair checkpoint — 2026-07-19
 

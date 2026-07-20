@@ -9,18 +9,22 @@ recorded N08 paths are absent, and no current equivalence map binds those
 requirements to the surviving `distribution::host_effect` authority. N08 is
 therefore REWORK, not current source acceptance.
 
-N08 is the sole active implementation lane under
-`LEASE-N08-CURRENT-HOST-LIFECYCLE-001`, task
-`019f7dbd-f578-7ce2-b400-36a44aedd254`, branch
-`codex/n08-current-host-lifecycle`, and exact base
-`1862ba8c152524063c49a14eb0917d772654947c` /
-`46ef081c35c10d70344e2a124711d3ee7ece43fc`. It must map every accepted
-lifecycle obligation to the current host authority, repair only demonstrated
-gaps within `WS-PLUGIN`, and freeze current executing positive, negative,
-recovery, teardown, repeat-use, security, and false-pass controls. It must not
-restore the deleted parallel coordinator. Real package/install/cache/app/
-discovery/runtime effects remain root-owned and occur only after N08 source
-acceptance.
+The bounded N08 worktree is closed. Its accepted failed-update guard is
+root-integrated through `a40dca5492fb619772d6bd68e6f2d93bcf665355`; the
+root-owned host lifecycle operation matrix is sealed through
+`6aaa0c57a4bf5a25dc492c2c321e8d01bc35401e`. Failed-update recovery now requires
+an exact interrupted state. Authorized rollback and stale-cache recovery fail
+closed because the current host state cannot prove an approved predecessor or
+represent installed and cache authority separately. Focused plugin and host
+matrix controls each pass 2/2.
+
+N08 remains blocked below current-host adoption: `distribution::host_effect`
+is test-gated, has no Darwin exact-executable adapter, and does not consume the
+sealed plugin lifecycle plan into one durable owner. Root rejected whole-module
+promotion because it would add compiled authority without executable macOS
+behavior. The archived task emitted no new WorkerResult; its 1.1 GB worktree was
+removed. Installed lifecycle, recovery, repeat use, N11 promotion, readiness,
+release, and completion remain withheld.
 
 N11 remains blocked through its N08 dependency. N12 remains a root-only
 identity/interface rebind, not an implementation lane. N14 has no N04 consumed
