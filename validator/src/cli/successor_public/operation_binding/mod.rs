@@ -1,6 +1,6 @@
 //! Exact public-operation authority for the supported successor dispatcher.
 
-use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
+use crate::cli::successor::command_contract::{EvalAction, MigrateAction};
 use crate::cli::successor::{
     CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
     SuccessorCommand, catalog,
