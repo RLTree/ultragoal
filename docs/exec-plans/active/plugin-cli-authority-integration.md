@@ -9,14 +9,18 @@ frontiers, requires every active non-P0 lease to bind a real clean registered
 worktree at the exact gate identity, and withholds N08/N11/N12/N14-N17 while
 distribution is repaired.
 
-The product preflight failed closed at `HCT-DISTRIBUTION` because the typed
-distribution adapter is unavailable. Treat this only as routing evidence.
-Root now records N04 READY, runs the cheap compile/namespace/standards gates on
-that exact commit, creates a unique branch and Codex-managed worktree from the
-same commit, then records ACTIVE with one exact N04 lease. The lane may change
-only `WS-DISTRIBUTION`; public dispatch, schemas, dependencies, generated
-authority, claims, package adoption, install/runtime observations, and
-downstream rebind remain root-owned.
+The product preflight failed closed at `HCT-DISTRIBUTION`; treat this only as
+routing evidence. The exact N04 worktree inspection found no distribution
+source defect to repair: `ProductionPackageSession` and
+`capture_product_package` already provide the typed production package
+boundary. The worktree changed no bytes and is retired without a WorkerResult.
+The remaining defect is root-owned successor public dispatch: `package
+inventory` has no operation binding and therefore never reaches the accepted
+distribution boundary. Root must wire that one command to the existing typed
+capture/verification path, preserve the other package commands as unsupported,
+and prove output publication on the command's real workspace-write surface.
+Package, install, cache, marketplace, app-registry, discovery, runtime,
+readiness, release, and completion claims remain withheld.
 
 This is the active non-authoritative projection plan for the Harness Ultragoal
 successor. It is not contract, queue, lease, or proof authority. Normative scope remains the bundle rooted
