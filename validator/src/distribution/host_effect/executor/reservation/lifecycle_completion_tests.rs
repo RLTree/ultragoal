@@ -148,7 +148,7 @@ fn custody(seed: char) -> HostLifecycleCustody {
             &before,
             &LifecycleRequest {
                 intent: LifecycleIntent::MonotonicUpdate,
-                target: Some(authority('z', "1.0.1")),
+                target: Some(authority('b', "1.0.1")),
                 prior_authority: None,
                 authorization: LifecycleAuthorization {
                     allow_host_write: true,
