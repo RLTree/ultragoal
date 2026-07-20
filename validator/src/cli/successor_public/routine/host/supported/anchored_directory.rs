@@ -45,6 +45,11 @@ impl AnchoredDirectory {
         Self::from_file(self.path.join(name), descriptor)
     }
 
+    pub(crate) fn duplicate(&self) -> Result<Self, HostFailure> {
+        let file = self.file.try_clone().map_err(|_| HostFailure::Invalid)?;
+        Self::from_file(self.path.clone(), file)
+    }
+
     pub(crate) fn open_or_create_owned_child(
         &self,
         name: &str,
@@ -118,6 +123,31 @@ impl AnchoredDirectory {
         }
     }
 
+    pub(crate) fn publish_child_exclusive(
+        &self,
+        source: &str,
+        destination: &str,
+    ) -> Result<(), HostFailure> {
+        validate_name(source)?;
+        validate_name(destination)?;
+        let source = CString::new(source).map_err(|_| HostFailure::Invalid)?;
+        let destination = CString::new(destination).map_err(|_| HostFailure::Invalid)?;
+        // SAFETY: both names are validated, both descriptors are the same live parent, and RENAME_EXCL prevents replacement.
+        let result = unsafe {
+            libc::renameatx_np(
+                self.file.as_raw_fd(),
+                source.as_ptr(),
+                self.file.as_raw_fd(),
+                destination.as_ptr(),
+                libc::RENAME_EXCL,
+            )
+        };
+        if result != 0 {
+            return Err(HostFailure::Invalid);
+        }
+        self.file.sync_all().map_err(|_| HostFailure::Invalid)
+    }
+
     pub(crate) fn stat(&self, name: &str) -> Result<Option<Identity>, HostFailure> {
         validate_name(name)?;
         let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
@@ -172,6 +202,10 @@ impl ProcessLock {
 
 pub(crate) fn write_lock_marker(lock: &File) -> Result<(), HostFailure> {
     let mut marker = lock.try_clone().map_err(|_| HostFailure::Invalid)?;
+    marker.set_len(0).map_err(|_| HostFailure::Invalid)?;
+    marker
+        .seek(SeekFrom::Start(0))
+        .map_err(|_| HostFailure::Invalid)?;
     marker
         .write_all(LOCK_MARKER)
         .map_err(|_| HostFailure::Invalid)?;

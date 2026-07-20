@@ -6,6 +6,8 @@ pub(crate) const AUTHORITY_DIRECTORY: &str = "authority";
 pub(crate) const ADAPTER_DIRECTORY: &str = "adapter";
 pub(crate) const LOCK_NAME: &str = "adapter.lock";
 pub(crate) const LOCK_MARKER: &[u8] = b"routine-public-lock-v1\n";
+pub(crate) const BOOTSTRAP_STAGE: &str = ".routine-public-bootstrap";
+pub(crate) const LAUNCH_DIRECTORY: &str = ".routine-authority-launch";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct Identity {

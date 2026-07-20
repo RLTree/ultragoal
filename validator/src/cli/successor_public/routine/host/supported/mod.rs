@@ -10,6 +10,8 @@ use std::path::{Path, PathBuf};
 
 #[path = "anchored_directory.rs"]
 mod anchored_directory;
+#[path = "directory_entries.rs"]
+mod directory_entries;
 #[path = "host_state.rs"]
 mod host_state;
 #[path = "state_components.rs"]

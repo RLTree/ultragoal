@@ -108,6 +108,49 @@ fn fitted_routine_templates_bind_the_supported_rust_source_route() {
 }
 
 #[test]
+fn interrupted_unpublished_bootstrap_stages_do_not_block_a_fresh_retry() {
+    const INTERRUPT_STAGES: &[&[&str]] = &[
+        &[],
+        &["authority"],
+        &["authority", "adapter"],
+        &["authority", "adapter", "adapter/adapter.lock"],
+    ];
+    for descendants in INTERRUPT_STAGES.iter().copied() {
+        let mut fixture = dirty_fixture("interrupted-bootstrap-stage", false);
+        let base = fixture.home.join(".codex/state/harness-ultragoal");
+        fs::create_dir_all(&base).unwrap();
+        for path in [
+            fixture.home.join(".codex"),
+            fixture.home.join(".codex/state"),
+            base.clone(),
+        ] {
+            fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+        let stage = base.join(".routine-public-bootstrap");
+        fs::create_dir(&stage).unwrap();
+        fs::set_permissions(&stage, fs::Permissions::from_mode(0o700)).unwrap();
+        for descendant in descendants {
+            let path = stage.join(descendant);
+            if descendant.ends_with("adapter.lock") {
+                fs::write(&path, []).unwrap();
+                fs::set_permissions(&path, fs::Permissions::from_mode(0o600)).unwrap();
+            } else {
+                fs::create_dir(&path).unwrap();
+                fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).unwrap();
+            }
+        }
+
+        let output = fixture.run();
+
+        assert_eq!(output.status.code(), Some(0), "{output:?}");
+        assert_eq!(Fixture::value(&output)["status"], "executed");
+        assert!(fixture.state_root().is_dir());
+        assert!(!base.join(".routine-public-bootstrap").exists());
+        fixture.teardown_after_assertions();
+    }
+}
+
+#[test]
 fn concurrent_first_use_has_one_authoritative_effect() {
     let mut fixture = dirty_fixture("local-issuer-concurrent", false);
 

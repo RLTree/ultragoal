@@ -24,25 +24,9 @@ impl HostState {
         authority: AnchoredDirectory,
         adapter: AnchoredDirectory,
         lock: File,
-        created: bool,
+        initialize_marker: bool,
     ) -> Result<Self, HostFailure> {
-        let lock_identity = identity(&lock.metadata().map_err(|_| HostFailure::Invalid)?);
-        let lock = ProcessLock::acquire(lock)?.0;
-        if created {
-            write_lock_marker(&lock)?;
-        }
-        let mut marker_file = lock.try_clone().map_err(|_| HostFailure::Invalid)?;
-        marker_file
-            .seek(SeekFrom::Start(0))
-            .map_err(|_| HostFailure::Invalid)?;
-        let mut marker = Vec::new();
-        marker_file
-            .take((LOCK_MARKER.len() + 1) as u64)
-            .read_to_end(&mut marker)
-            .map_err(|_| HostFailure::Invalid)?;
-        if marker != LOCK_MARKER {
-            return Err(HostFailure::Invalid);
-        }
+        let (lock, lock_identity) = acquire_locked_marker(lock, initialize_marker)?;
         let state = Self {
             home,
             state,
@@ -91,8 +75,13 @@ fn open_existing_state(
     home: AnchoredDirectory,
     state: AnchoredDirectory,
 ) -> Result<HostState, HostFailure> {
+    require_entries(
+        &state,
+        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+    )?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
+    require_entries(&adapter, &[LOCK_NAME])?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
     HostState::from_locked(home, state, authority, adapter, lock, false)
 }
@@ -101,18 +90,70 @@ fn bootstrap_new_state(
     home: AnchoredDirectory,
     base: AnchoredDirectory,
 ) -> Result<HostState, HostFailure> {
-    let (state, created) = base.open_or_create_owned_child(STATE_COMPONENTS[3])?;
-    if !created {
-        return open_existing_state(home, state);
+    let (state, _) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
+    require_entries(&state, &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY])?;
+    let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
+    require_entries(&adapter, &[LOCK_NAME])?;
+    let (lock, _) = adapter.open_or_create_regular(LOCK_NAME, 0o600)?;
+    let (lock, lock_identity) = acquire_locked_marker(lock, true)?;
+    require_entries(&state, &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY])?;
+    let (authority, _) = state.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
+    require_entries(&authority, &[])?;
+    let staged = HostState {
+        home: home.duplicate()?,
+        state,
+        authority,
+        adapter,
+        lock,
+        lock_identity,
+    };
+    staged.verify()?;
+    drop(staged);
+    base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3])?;
+    let state = base.open_child(STATE_COMPONENTS[3])?;
+    open_existing_state(home, state)
+}
+
+fn require_entries(directory: &AnchoredDirectory, allowed: &[&str]) -> Result<(), HostFailure> {
+    if directory
+        .entry_names()?
+        .iter()
+        .all(|name| allowed.contains(&name.as_str()))
+    {
+        Ok(())
+    } else {
+        Err(HostFailure::Invalid)
     }
-    let (authority, authority_created) = state.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
-    let (adapter, adapter_created) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
-    if !authority_created || !adapter_created {
+}
+
+fn read_lock_marker(lock: &File) -> Result<Vec<u8>, HostFailure> {
+    let mut marker = lock.try_clone().map_err(|_| HostFailure::Invalid)?;
+    marker
+        .seek(SeekFrom::Start(0))
+        .map_err(|_| HostFailure::Invalid)?;
+    let mut bytes = Vec::new();
+    marker
+        .take((LOCK_MARKER.len() + 1) as u64)
+        .read_to_end(&mut bytes)
+        .map_err(|_| HostFailure::Invalid)?;
+    Ok(bytes)
+}
+
+fn acquire_locked_marker(
+    lock: File,
+    initialize_marker: bool,
+) -> Result<(File, Identity), HostFailure> {
+    let lock_identity = identity(&lock.metadata().map_err(|_| HostFailure::Invalid)?);
+    let lock = ProcessLock::acquire(lock)?.0;
+    let marker = read_lock_marker(&lock)?;
+    if marker != LOCK_MARKER && (!initialize_marker || marker.len() > LOCK_MARKER.len()) {
         return Err(HostFailure::Invalid);
     }
-    let (lock, created) = adapter.open_or_create_regular(LOCK_NAME, 0o600)?;
-    if !created {
+    if marker != LOCK_MARKER {
+        write_lock_marker(&lock)?;
+    }
+    if read_lock_marker(&lock)? != LOCK_MARKER {
         return Err(HostFailure::Invalid);
     }
-    HostState::from_locked(home, state, authority, adapter, lock, true)
+    Ok((lock, lock_identity))
 }
