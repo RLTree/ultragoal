@@ -1247,6 +1247,37 @@ its own identity and claim ceiling. Product Fitness records only time to value,
 human interventions, review rounds, recovery outcome, false pass/rejection when
 observed, and retained artifact/cache cost; no metrics subsystem is added.
 
+The routine continuity correction is root-integrated through source commit
+`257743a2a4a832a732d06424b052ee70cc114c68`. The public production contract
+passes 52/52, both observability boundaries pass 14/14, and the retained
+reservation controls pass 6/6. The broader successor state journey remains
+withheld because canonical authority inventory is unavailable before the
+continuity route is reached. The accepted task and worktree are closed and
+their reproducible caches are removed.
+
+The required accumulated standards checkpoint is current through source commit
+`49025aa5e2109bd1ef8b079186057f84b1a5a93b` / tree
+`4711349663b3a4db39fd9bb593792421972c9548`. Semantic namespace strict reports
+zero findings with recursive zero-write scope; all authored Rust is at or below
+250 lines; the 121-row standards entrypoint passes; production Clippy passes
+with warnings denied; the affected package-install controls pass 2/2, retained
+reservation controls pass 6/6, and the public routine contract passes 52/52.
+One bounded Terra/high review accepted the complete typed-boundary repair and
+the earlier visibility correction review accepted the exact sibling-only
+boundary. This closes the no-new-worktree standards checkpoint. It does not
+promote package, Codex install, discovery, arbitrary-repository routine,
+daily-driver, readiness, release, or completion claims.
+
+The next dependency-closed implementation boundary is the repository-fit local
+state policy required by the installed journey. It must semantically reconcile
+the required runtime ignore entry while preserving unrelated `.gitignore`
+bytes and identity, reject alias/substitution/concurrent replacement, prove
+rollback and idempotence, and join the existing routine guard that refuses
+tracked or unignored runtime state before the first effect. Only after that
+source boundary is accepted may root build, install, discover, and exercise the
+exact current candidate. The Obolyn MVP prompt remains inactive in the Obolyn
+repository until this installed Ultragoal journey passes.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,

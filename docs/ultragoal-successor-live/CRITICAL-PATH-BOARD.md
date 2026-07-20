@@ -1,5 +1,26 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-19 routine continuity and standards checkpoint
+
+Routine continuity is integrated through source commit `257743a2a`; its public
+production boundary passes 52/52 and its two observability boundaries pass
+14/14 each. The worktree and reproducible caches are removed. The ceiling
+remains source-local because the broader successor state journey is blocked by
+canonical authority inventory before reaching continuity behavior.
+
+The accumulated semantic-namespace and authored-file debt is closed through
+source commit `49025aa5e` / tree `4711349663`: namespace strict has zero
+findings, all authored Rust is at or below 250 lines, 121 standards rows pass,
+and production Clippy is warning-free. A bounded Terra/high review accepted the
+typed checkpoint, execution-control, package-install, and unsafe-boundary
+repairs. Package, Codex install, discovery, arbitrary-repository routine,
+daily-driver, readiness, release, and completion claims remain withheld.
+
+The next implementation boundary is repository-fit ownership of the local
+runtime-state ignore policy, followed by the exact source-to-package-to-install
+to-discovery daily-driver journey. The Obolyn field-use task remains ineligible
+until that installed journey passes.
+
 ## 2026-07-20 post-fit routine activation checkpoint
 
 The accepted worktree freeze `455d22678` / tree `4de4e435` is integrated
