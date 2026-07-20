@@ -6,6 +6,9 @@ use crate::plugin_product::lifecycle::{
     HostLifecycleCustody, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
     PackageAuthority, Version, plan,
 };
+use std::fs;
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 #[test]
 fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {
@@ -23,16 +26,16 @@ fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {
 
 #[test]
 fn reopen_reserve_in_flight_rejects_record_substitution() {
-    let custody = custody('a');
+    let owner = custody('a');
     let other = custody('b').pre_effect_record().clone();
-    assert!(admission_for(custody.pre_effect_record().clone(), other).is_err());
+    assert!(admission_for(owner.pre_effect_record().clone(), other).is_err());
 }
 
 #[test]
 fn expired_permit_is_rejected_at_authority_current_time() {
     let record = custody('a').pre_effect_record().clone();
-    let root = tempfile::tempdir().unwrap();
-    let path = root.path().join("ledger");
+    let root = FixtureRoot::new();
+    let path = root.path.join("ledger");
     let ledger = FileHostEffectLedger::create(&path, "fixture-ledger".to_owned()).unwrap();
     let now = unix_ms();
     let authority =
@@ -42,6 +45,8 @@ fn expired_permit_is_rejected_at_authority_current_time() {
         .issue(binding(record, &ledger.head().unwrap(), now - 2, now - 1))
         .unwrap();
     assert!(authority.verify_current(permit).is_err());
+    drop(ledger);
+    root.remove();
 }
 
 #[test]
@@ -74,8 +79,8 @@ fn admission_for(
     bound: HostLifecycleRecord,
     admitted: HostLifecycleRecord,
 ) -> Result<DurableHostLifecycleAdmission, HostEffectLedgerError> {
-    let root = tempfile::tempdir().unwrap();
-    let path = root.path().join("ledger");
+    let root = FixtureRoot::new();
+    let path = root.path.join("ledger");
     FileHostEffectLedger::create(&path, "fixture-ledger".to_owned()).unwrap();
     let ledger = FileHostEffectLedger::open(&path, "fixture-ledger".to_owned()).unwrap();
     let head = ledger.head().unwrap();
@@ -87,7 +92,10 @@ fn admission_for(
         .issue(binding(bound, &head, now, now + 1_000))
         .unwrap();
     let permit = authority.verify_current(permit).unwrap();
-    reserve_in_flight_lifecycle(&ledger, permit, admitted)
+    let result = reserve_in_flight_lifecycle(&ledger, permit, admitted);
+    drop(ledger);
+    root.remove();
+    result
 }
 
 fn binding(
@@ -96,7 +104,7 @@ fn binding(
     issued_at_unix_ms: u64,
     expires_at_unix_ms: u64,
 ) -> HostEffectPermitBinding {
-    let digest = record_digest(&record);
+    let record_sha256 = record_digest(&record);
     let (plan_id, intent) = record.permit_join();
     HostEffectPermitBinding {
         context_id: digest('1'),
@@ -123,7 +131,7 @@ fn binding(
         expires_at_unix_ms,
         expected_head_sha256: head.head_sha256().to_owned(),
         lifecycle_record: Some(record),
-        lifecycle_record_sha256: Some(digest),
+        lifecycle_record_sha256: Some(record_sha256),
         decision: HostEffectDecision::Authorize,
     }
 }
@@ -172,8 +180,14 @@ fn record_digest(record: &HostLifecycleRecord) -> String {
 
 fn intent_name(intent: LifecycleIntent) -> &'static str {
     match intent {
+        LifecycleIntent::FreshInstall => "fresh_install",
         LifecycleIntent::MonotonicUpdate => "monotonic_update",
-        _ => unreachable!(),
+        LifecycleIntent::FailedUpdateRecovery => "failed_update_recovery",
+        LifecycleIntent::AuthorizedRollback => "authorized_rollback",
+        LifecycleIntent::IdempotentReinstall => "idempotent_reinstall",
+        LifecycleIntent::UninstallTeardown => "uninstall_teardown",
+        LifecycleIntent::StaleCacheRecovery => "stale_cache_recovery",
+        LifecycleIntent::RepeatUse => "repeat_use",
     }
 }
 
@@ -188,4 +202,26 @@ fn unix_ms() -> u64 {
         .as_millis()
         .try_into()
         .unwrap()
+}
+
+static FIXTURE_SEQUENCE: AtomicU64 = AtomicU64::new(0);
+
+struct FixtureRoot {
+    path: PathBuf,
+}
+
+impl FixtureRoot {
+    fn new() -> Self {
+        let sequence = FIXTURE_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+        let path = std::env::temp_dir().join(format!(
+            "ultragoal-lifecycle-completion-{}-{sequence}",
+            std::process::id()
+        ));
+        fs::create_dir(&path).unwrap();
+        Self { path }
+    }
+
+    fn remove(self) {
+        fs::remove_dir_all(self.path).unwrap();
+    }
 }

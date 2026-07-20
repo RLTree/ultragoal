@@ -16,7 +16,6 @@ mod target;
 
 pub(crate) use lifecycle_completion::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
-    reserve_in_flight_lifecycle,
 };
 
 pub(crate) use model::{

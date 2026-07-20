@@ -99,7 +99,7 @@ impl HostLifecycleCustody {
         &mut self,
         admission: DurableHostLifecycleAdmission,
     ) -> Result<HostEffectExecutionBinding, LifecycleError> {
-        if self.effect_cursor != 0 || admission.record() != self.pre_effect_record {
+        if self.effect_cursor != 0 || admission.record() != &self.pre_effect_record {
             return Err(LifecycleError::ReplayedPlan);
         }
         self.plan.authorization_seal.consume_transferred()?;
@@ -129,7 +129,7 @@ impl HostLifecycleCustody {
         &mut self,
         completion: HostEffectCompletion,
     ) -> Result<(), LifecycleError> {
-        if self.effect_cursor != 1 || completion.binding() != self.pre_effect_record {
+        if self.effect_cursor != 1 || completion.binding() != &self.pre_effect_record {
             return Err(LifecycleError::InvalidTransition);
         }
         let exact_recovery_state = match completion.outcome() {
@@ -146,7 +146,7 @@ impl HostLifecycleCustody {
                 observed,
                 completed_effects,
             } if observed == &self.plan.expected_after
-                && completed_effects == self.plan.effects =>
+                && completed_effects == &self.plan.effects =>
             {
                 self.plan.authorization_seal.finish_apply(None)?;
             }
@@ -184,7 +184,7 @@ mod tests {
             &before,
             &LifecycleRequest {
                 intent: LifecycleIntent::MonotonicUpdate,
-                target: Some(authority("b", "1.0.1")),
+                target: Some(authority('b', "1.0.1")),
                 prior_authority: None,
                 authorization: LifecycleAuthorization {
                     allow_host_write: true,
