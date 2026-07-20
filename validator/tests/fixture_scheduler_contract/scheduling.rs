@@ -171,8 +171,10 @@ fn partial_schedule_acquisition_rolls_back_and_retains_recoverable_leases() {
     };
     #[cfg(target_os = "freebsd")]
     {
-        assert!(recovery_lease_ids.is_empty());
-        assert_eq!(scheduler.active_count(), 0);
+        let collision_id = collision.file_name().unwrap().to_str().unwrap();
+        assert_eq!(recovery_lease_ids, vec![collision_id.to_owned()]);
+        assert_eq!(scheduler.active_count(), 1);
+        assert_eq!(scheduler.run(collision_id).unwrap().lease.disposition(), &LeaseDisposition::RecoveryRequired);
     }
     #[cfg(not(target_os = "freebsd"))]
     {
