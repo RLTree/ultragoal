@@ -9,7 +9,7 @@ use super::plan::{PackageEntry, PackagePlan, entry_tree_sha256};
 use super::snapshot::{PackageSnapshot, verify_package};
 use super::spec::PackageRole;
 use crate::context::LiveContext;
-use crate::distribution::filesystem::ScopedTree;
+use crate::distribution::filesystem::{ScopedFile, ScopedTree};
 use crate::distribution::host_capability::JourneyBinding;
 use crate::distribution::reader::sha256;
 use crate::inventory::AuthorityCatalog;
@@ -24,6 +24,8 @@ include!("plugin_id.rs");
 include!("verify_artifact_against_source.rs");
 
 include!("packaged_entries.rs");
+
+include!("inventory_publication.rs");
 
 #[cfg(test)]
 mod tests;

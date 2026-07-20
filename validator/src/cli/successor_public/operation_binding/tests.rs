@@ -43,6 +43,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
         )),
         Some(PublicOperation::MigrationPlan),
     );
+    assert_eq!(
+        bind(&invocation(
+            SuccessorCommand::Package(PackageAction::Inventory),
+            EffectClass::WorkspaceWrite,
+        )),
+        Some(PublicOperation::PackageInventory),
+    );
     for invocation in [
         invocation(
             SuccessorCommand::Observe(ObserveAction::Export),
@@ -74,7 +81,6 @@ fn only_exact_supported_command_effect_pairs_bind() {
 fn unsupported_api_families_do_not_gain_dispatcher_authority() {
     let active = active_api_identifiers();
     for api in [
-        "PackageSnapshot",
         "InstallSnapshot",
         "MarketplaceSnapshot",
         "DiscoveryObservation",

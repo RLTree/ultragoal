@@ -29,6 +29,11 @@ pub use product::{
     ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
     ProductionPackageSession, capture_product_package, verify_product_package,
 };
+#[cfg(test)]
+pub(crate) use product::{
+    ProductionPackageArtifact, ProductionPackageErrorId, capture_product_package,
+    verify_product_package,
+};
 pub use spec::PackageRole;
 
 fn insert_prefix_free_path(paths: &mut BTreeSet<String>, path: &str) -> bool {

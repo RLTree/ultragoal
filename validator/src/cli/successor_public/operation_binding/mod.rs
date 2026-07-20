@@ -1,6 +1,6 @@
 //! Exact public-operation authority for the supported successor dispatcher.
 
-use crate::cli::successor::command_contract::{EvalAction, MigrateAction};
+use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
 use crate::cli::successor::{
     CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
     SuccessorCommand, catalog,
@@ -8,6 +8,7 @@ use crate::cli::successor::{
 use std::collections::BTreeSet;
 
 mod migration_plan;
+mod package_inventory;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum PublicOperation {
@@ -28,6 +29,7 @@ pub(crate) enum PublicOperation {
     EvaluationAudit,
     EvaluationRun,
     MigrationPlan,
+    PackageInventory,
 }
 
 #[derive(Clone, Copy)]
@@ -92,7 +94,6 @@ const EVALUATION_AUDIT: &[&str] = &[
     "TaskAudit",
 ];
 const EVALUATION_RUN: &[&str] = &["EvalRunUnsupportedCapability"];
-
 const BINDINGS: &[Binding] = &[
     binding(
         PublicOperation::StrictCheck,
@@ -208,6 +209,12 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
+    binding(
+        PublicOperation::PackageInventory,
+        SuccessorCommand::Package(PackageAction::Inventory),
+        EffectClass::WorkspaceWrite,
+        package_inventory::APIS,
+    ),
 ];
 
 const fn binding(
@@ -235,13 +242,7 @@ fn bind_command(command: SuccessorCommand, effect: EffectClass) -> Option<Public
         .map(|binding| binding.operation)
 }
 
-pub(crate) fn active_api_identifiers() -> BTreeSet<&'static str> {
-    BINDINGS
-        .iter()
-        .flat_map(|binding| binding.apis)
-        .copied()
-        .collect()
-}
+include!("api_identifiers.rs");
 
 include!("groups.rs");
 

@@ -31,7 +31,8 @@ impl ConfinedRoot {
         let name = canonical
             .file_name()
             .and_then(|row| row.to_str())
-            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?;
+            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?
+            .to_owned();
         if canonical.parent() != Some(temporary.as_path())
             || !name.starts_with("hul-distribution-")
             || !metadata.is_dir()
@@ -39,7 +40,16 @@ impl ConfinedRoot {
         {
             return Err(error(DistributionErrorId::InvalidPath));
         }
-        let parent = Directory::open_path(&temporary)?;
+        Self::open_bound(canonical, &temporary, &name)
+    }
+
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    fn open_bound(
+        canonical: PathBuf,
+        parent_path: &Path,
+        name: &str,
+    ) -> Result<Self, DistributionError> {
+        let parent = Directory::open_path(parent_path)?;
         let root = parent.open_directory(name)?.retain_confined_root()?;
         let identity = root.identity();
         let root_id = sha256(

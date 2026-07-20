@@ -84,9 +84,29 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "complete command-group activation authority"
     ),
     source!(
+        "validator/src/cli/successor_public/operation_binding/package_inventory.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package_inventory.rs"),
+        "package inventory operation API authority"
+    ),
+    source!(
         "validator/src/cli/successor_public/output_limit.rs",
         include_bytes!("../../../cli/successor_public/output_limit.rs"),
         "public dispatcher consumption of operation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/package_inventory/mod.rs",
+        include_bytes!("../../../cli/successor_public/package_inventory/mod.rs"),
+        "package inventory production dispatch"
+    ),
+    source!(
+        "validator/src/distribution/filesystem/root/workspace_context.rs",
+        include_bytes!("../../../distribution/filesystem/root/workspace_context.rs"),
+        "workspace-bound package output authority"
+    ),
+    source!(
+        "validator/src/distribution/package/product/inventory_publication.rs",
+        include_bytes!("../../../distribution/package/product/inventory_publication.rs"),
+        "atomic package inventory publication"
     ),
     source!(
         "validator/src/cli/successor_public/evaluation/run.rs",

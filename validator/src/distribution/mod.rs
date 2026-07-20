@@ -72,6 +72,11 @@ pub use package::{
     ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
     ProductionPackageSession, capture_product_package, verify_product_package,
 };
+#[cfg(test)]
+pub(crate) use package::{
+    ProductionPackageArtifact, ProductionPackageErrorId, capture_product_package,
+    verify_product_package,
+};
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,

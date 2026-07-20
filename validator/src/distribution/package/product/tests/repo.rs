@@ -75,6 +75,7 @@ impl Repo {
             .status()
             .expect("git init");
         assert!(status.success());
+        fs::write(root.join(".git/info/exclude"), "target/\n").expect("git output exclusion");
         Self { root }
     }
 
@@ -85,6 +86,16 @@ impl Repo {
                 .expect_worktree_root(&self.root),
         )
         .expect("live context")
+    }
+
+    fn workspace_context(&self) -> LiveContext {
+        LiveContext::build(
+            BuildRequest::new(&self.root)
+                .expect_repository_root(&self.root)
+                .expect_worktree_root(&self.root)
+                .with_root_workspace_grant(&self.root),
+        )
+        .expect("workspace-write live context")
     }
 }
 
