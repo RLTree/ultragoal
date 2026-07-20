@@ -1,16 +1,11 @@
 use super::HostFailure;
-use std::ffi::CString;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom};
-use std::mem::MaybeUninit;
-use std::os::fd::{AsRawFd, FromRawFd};
-use std::os::unix::ffi::OsStrExt;
+use std::os::fd::AsRawFd;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 
-#[path = "anchored_directory.rs"]
 mod anchored_directory;
-#[path = "continuity.rs"]
 mod continuity;
 #[path = "directory_entries.rs"]
 mod directory_entries;
