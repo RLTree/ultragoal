@@ -1,5 +1,28 @@
 # Plugin and CLI Authority Integration
 
+## Isolated package-to-runtime integration — 2026-07-20
+
+Root integrated the accepted production increment through `0866fa8aa`. The
+public `package install-test` route now recaptures the exact current package,
+requires its input archive bytes to match, and executes one disposable
+descriptor-confined transaction across the marketplace source, archive
+install, cache, app registry, and packaged runtime. The marketplace manifest
+and its `./plugins/harness-ultragoal` source share one root, the runtime is
+executed from that reverified source tree, and cleanup uses retained parent and
+root identity rather than reopening a temporary pathname.
+
+Warning-denied production compilation, focused marketplace substitution and
+cleanup-swap controls, and the exact public command pass. A bounded Terra/high
+review accepted the correction after rejecting the disconnected marketplace,
+install, runtime, and path-based cleanup predecessor.
+
+The result deliberately names `marketplace_source_tree_sha256` and separately
+describes the archive install. It does not claim Codex installation or
+discovery. The next boundary is two byte-identical packages from the final
+documented root, supported Codex installation of that exact materialized
+source, and discovery from a fresh Codex task before repository-fit and
+routine/recovery work.
+
 ## Installed daily-driver root convergence — 2026-07-20
 
 The managed N08 task on branch `codex/n08-installed-daily-driver` returned a

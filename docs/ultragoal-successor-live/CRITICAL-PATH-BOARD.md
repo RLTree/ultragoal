@@ -1,5 +1,24 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 isolated distribution/runtime checkpoint
+
+Accepted root source through `0866fa8aa` replaces the fail-closed
+`package install-test` outcome with one exact current-source isolated
+transaction. The command binds a marketplace manifest to its real relative
+source, verifies a separate archive install and cache/app-registry state,
+executes the runtime from the reverified marketplace source, and removes the
+disposable root through retained descriptor identity. Focused marketplace
+substitution and cleanup-root replacement controls pass, warning-denied
+production compilation passes, and the bounded Terra/high correction review
+accepted the exact source freeze.
+
+The ceiling rises only for isolated marketplace-source, archive-install,
+cache, app-registry, and runtime behavior. Codex installation, fresh-task
+discovery, repository fit, routine work, interruption/recovery, repeat use,
+daily-driver value, readiness, release, and completion remain withheld. N08
+stays ready while root advances the supported host journey from this accepted
+checkpoint.
+
 ## 2026-07-20 installed daily-driver root convergence
 
 The exact N08 worktree on branch `codex/n08-installed-daily-driver` returned no

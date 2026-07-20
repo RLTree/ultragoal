@@ -32,6 +32,12 @@ path `./plugins/harness-ultragoal`; catalog bytes are invalid evidence until
 that relative target exists and its package identity is independently
 reconciled.
 
+The packaged runtime entry remains `runtime/runtime-probe-bin`. Once the
+package is materialized at the catalog source, the supported host execution
+path is `plugins/harness-ultragoal/runtime/runtime-probe-bin`; running a
+separate copy outside that resolved source cannot support the installed
+journey.
+
 A repository marketplace is non-default host configuration. After the root has
 accepted the catalog and materialized the exact package, an authorized operator
 may plan these host effects:
