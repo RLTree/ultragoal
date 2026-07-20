@@ -3,7 +3,7 @@ use super::super::{
     HostState,
 };
 use super::checkpoint::ContinuationCheckpoint;
-use super::checkpoint_validation::validate_checkpoint;
+use super::continuity_validation::validate_checkpoint;
 use std::io::Read;
 use std::path::Path;
 

@@ -1,6 +1,6 @@
 use super::super::{HostFailure, HostState};
 use super::checkpoint_storage::write_checkpoint;
-use super::checkpoint_validation::{checkpoint, validate_checkpoint};
+use super::continuity_validation::{checkpoint, validate_checkpoint};
 use std::path::Path;
 
 impl HostState {

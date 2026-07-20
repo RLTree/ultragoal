@@ -1,7 +1,7 @@
 use super::super::{HostFailure, HostState};
 use super::checkpoint::ContinuationCheckpoint;
 use super::checkpoint_storage::write_checkpoint;
-use super::checkpoint_validation::{event_projection, terminal_event_id};
+use super::continuity_validation::{event_projection, terminal_event_id};
 use std::path::Path;
 
 impl HostState {
