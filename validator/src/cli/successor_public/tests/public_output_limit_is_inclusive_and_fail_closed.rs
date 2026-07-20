@@ -92,7 +92,7 @@ pub(crate) fn fit_target_option_selects_the_context_root_instead_of_being_ignore
 }
 
 #[test]
-pub(crate) fn fit_apply_fails_closed_without_preprovisioned_host_authority() {
+pub(crate) fn fit_apply_fails_closed_without_existing_host_state_root() {
     let repo = Repository::new("fit-apply-authority-unavailable");
     let ParseOutcome::Invocation(plan_invocation) = parse_args(["--json", "fit", "plan"]).unwrap()
     else {

@@ -1,7 +1,7 @@
 use super::*;
 
-pub(crate) const STATE_COMPONENTS: &[&str] =
-    &[".codex", "state", "harness-ultragoal", "repository-fit"];
+pub(crate) const HOST_STATE_COMPONENTS: &[&str] = &[".codex", "state"];
+pub(crate) const FIT_STATE_COMPONENTS: &[&str] = &["harness-ultragoal", "repository-fit"];
 pub(crate) const AUTHORITY_DIRECTORY: &str = "authority";
 pub(crate) const PENDING_DIRECTORY: &str = "pending";
 pub(crate) const PENDING_SCHEMA: &str = "harness-ultragoal.repository-fit-pending.v1";

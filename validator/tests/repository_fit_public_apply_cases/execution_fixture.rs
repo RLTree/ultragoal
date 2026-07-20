@@ -42,22 +42,14 @@ impl Fixture {
         git(&root, &["add", "-A"]);
         git(&root, &["commit", "--quiet", "-m", "public fit fixture"]);
 
-        let state = home.join(".codex/state/harness-ultragoal/repository-fit");
-        let authority = state.join("authority");
-        let pending = state.join("pending");
-        fs::create_dir_all(&authority).unwrap();
-        fs::create_dir_all(&pending).unwrap();
-        for path in [
-            &home,
-            &home.join(".codex"),
-            &home.join(".codex/state"),
-            &home.join(".codex/state/harness-ultragoal"),
-            &state,
-            &authority,
-            &pending,
-        ] {
+        let state = home.join(".codex/state");
+        fs::create_dir_all(&state).unwrap();
+        for path in [&home, &home.join(".codex"), &state] {
             fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
         }
+        let fit_state = state.join("harness-ultragoal/repository-fit");
+        let authority = fit_state.join("authority");
+        let pending = fit_state.join("pending");
 
         Self {
             container,
@@ -143,6 +135,24 @@ impl Fixture {
 
     pub(crate) fn plan_path(&self) -> PathBuf {
         self.temp.join("fit-plan.json")
+    }
+
+    pub(crate) fn fit_state(&self) -> PathBuf {
+        self.home
+            .join(".codex/state/harness-ultragoal/repository-fit")
+    }
+
+    pub(crate) fn provision_fit_state(&self) {
+        fs::create_dir_all(&self.authority).unwrap();
+        fs::create_dir_all(&self.pending).unwrap();
+        for path in [
+            self.home.join(".codex/state/harness-ultragoal"),
+            self.fit_state(),
+            self.authority.clone(),
+            self.pending.clone(),
+        ] {
+            fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+        }
     }
 
     pub(crate) fn verify_zero_write(&self) -> Value {

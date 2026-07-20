@@ -9,6 +9,7 @@ pub(crate) fn exercise_public_refusals() {
     let fixture = Fixture::new("refusals");
     let (plan_sha256, plan_bytes) = fixture.plan();
     let bad_digest = format!("sha256:{}", "0".repeat(64));
+    assert!(!fixture.fit_state().exists());
 
     let before_root = snapshot(&fixture.root);
     let before_home = snapshot(&fixture.home);
@@ -23,6 +24,7 @@ pub(crate) fn exercise_public_refusals() {
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
     assert_eq!(snapshot(&fixture.temp), before_temp);
+    assert!(!fixture.fit_state().exists());
     assert!(!fixture.root.join("AGENTS.md").exists());
 
     OpenOptions::new()
@@ -44,8 +46,10 @@ pub(crate) fn exercise_public_refusals() {
     assert_eq!(snapshot(&fixture.root), before_root);
     assert_eq!(snapshot(&fixture.home), before_home);
     assert_eq!(snapshot(&fixture.temp), before_temp);
+    assert!(!fixture.fit_state().exists());
 
     fs::write(fixture.plan_path(), plan_bytes).unwrap();
+    fixture.provision_fit_state();
     fs::remove_dir(&fixture.pending).unwrap();
     let substituted = fixture.container.join("substituted-pending");
     fs::create_dir(&substituted).unwrap();

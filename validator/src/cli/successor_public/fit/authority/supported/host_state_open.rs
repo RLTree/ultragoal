@@ -2,35 +2,68 @@ use super::*;
 
 impl HostState {
     pub(crate) fn open(home: &Path, target: &Path) -> Result<Self, HostFailure> {
-        Self::open_inner(home, target, false)?.ok_or(HostFailure::Unavailable)
+        match Self::open_complete(home, target, false)? {
+            Some(state) => Ok(state),
+            None => Self::initialize(home, target),
+        }
     }
     pub(crate) fn open_existing_pending(
         home: &Path,
         target: &Path,
     ) -> Result<Option<Self>, HostFailure> {
-        Self::open_inner(home, target, true)
+        Self::open_complete(home, target, true)
     }
-    pub(crate) fn open_inner(
+    fn open_complete(
         home: &Path,
         target: &Path,
         existing_pending_only: bool,
     ) -> Result<Option<Self>, HostFailure> {
-        if !home.is_absolute()
-            || fs::canonicalize(home).map_err(|_| HostFailure::Unavailable)? != home
-        {
-            return Err(HostFailure::Invalid);
+        let Some(mut current) = open_host_state_base(home)? else {
+            return Ok(None);
+        };
+        for component in FIT_STATE_COMPONENTS {
+            let Some(child) = current.open_child_optional(component, true)? else {
+                return Ok(None);
+            };
+            current = child;
         }
-        let mut current = AnchoredDirectory::open_absolute(home, false)?;
-        for component in STATE_COMPONENTS {
-            current = current.open_child(component, false)?;
+        let authority = current.open_child_optional(AUTHORITY_DIRECTORY, true)?;
+        let pending = current.open_child_optional(PENDING_DIRECTORY, true)?;
+        let (Some(authority), Some(pending)) = (authority, pending) else {
+            return Ok(None);
+        };
+        Self::assemble(
+            current.path,
+            authority,
+            pending,
+            target,
+            existing_pending_only,
+        )
+    }
+
+    fn initialize(home: &Path, target: &Path) -> Result<Self, HostFailure> {
+        let Some(mut current) = open_host_state_base(home)? else {
+            return Err(HostFailure::Unavailable);
+        };
+        for component in FIT_STATE_COMPONENTS {
+            current = current.open_or_create_owned_child(component)?;
         }
-        let state_root = current.path.clone();
+        let authority = current.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
+        let pending = current.open_or_create_owned_child(PENDING_DIRECTORY)?;
+        Self::assemble(current.path, authority, pending, target, false)?.ok_or(HostFailure::Invalid)
+    }
+
+    fn assemble(
+        state_root: PathBuf,
+        authority: AnchoredDirectory,
+        pending: AnchoredDirectory,
+        target: &Path,
+        existing_pending_only: bool,
+    ) -> Result<Option<Self>, HostFailure> {
         let canonical_target = fs::canonicalize(target).map_err(|_| HostFailure::Invalid)?;
         if state_root.starts_with(&canonical_target) || canonical_target.starts_with(&state_root) {
             return Err(HostFailure::Invalid);
         }
-        let authority = current.open_child(AUTHORITY_DIRECTORY, true)?;
-        let pending = current.open_child(PENDING_DIRECTORY, true)?;
         let target_metadata =
             fs::symlink_metadata(&canonical_target).map_err(|_| HostFailure::Invalid)?;
         if !target_metadata.is_dir() {
@@ -143,4 +176,24 @@ impl HostState {
             identity: opened,
         }))
     }
+}
+
+fn open_host_state_base(home: &Path) -> Result<Option<AnchoredDirectory>, HostFailure> {
+    if !home.is_absolute() {
+        return Err(HostFailure::Invalid);
+    }
+    let Ok(canonical_home) = fs::canonicalize(home) else {
+        return Ok(None);
+    };
+    if canonical_home != home {
+        return Err(HostFailure::Invalid);
+    }
+    let mut current = AnchoredDirectory::open_absolute(home, false)?;
+    for component in HOST_STATE_COMPONENTS {
+        let Some(child) = current.open_child_optional(component, false)? else {
+            return Ok(None);
+        };
+        current = child;
+    }
+    Ok(Some(current))
 }

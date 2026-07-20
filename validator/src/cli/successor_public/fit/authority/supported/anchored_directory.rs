@@ -42,6 +42,48 @@ impl AnchoredDirectory {
         Self::finish(self.path.join(name), file, exact_owner_only)
     }
 
+    pub(crate) fn open_child_optional(
+        &self,
+        name: &str,
+        exact_owner_only: bool,
+    ) -> Result<Option<Self>, HostFailure> {
+        self.verify(false)?;
+        let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+        // SAFETY: the descriptor is borrowed and the C string is NUL-terminated.
+        let descriptor = unsafe {
+            libc::openat(
+                self.file.as_raw_fd(),
+                encoded.as_ptr(),
+                libc::O_RDONLY
+                    | libc::O_DIRECTORY
+                    | libc::O_NOFOLLOW
+                    | libc::O_CLOEXEC
+                    | libc::O_NONBLOCK,
+            )
+        };
+        if descriptor < 0 {
+            return match std::io::Error::last_os_error().raw_os_error() {
+                Some(libc::ENOENT) => Ok(None),
+                _ => Err(HostFailure::Invalid),
+            };
+        }
+        // SAFETY: the successful descriptor is uniquely owned by this File.
+        Self::finish(
+            self.path.join(name),
+            unsafe { File::from_raw_fd(descriptor) },
+            exact_owner_only,
+        )
+        .map(Some)
+    }
+
+    pub(crate) fn open_or_create_owned_child(&self, name: &str) -> Result<Self, HostFailure> {
+        if let Some(child) = self.open_child_optional(name, true)? {
+            return Ok(child);
+        }
+        let _created = mkdirat_owned(&self.file, name)?;
+        self.open_child(name, true)
+    }
+
     pub(crate) fn finish(
         path: PathBuf,
         file: File,

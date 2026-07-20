@@ -121,6 +121,9 @@ pub(crate) fn apply(
         Ok(prepared) => prepared,
         Err(outcome) => return *outcome,
     };
+    if context.revalidate().is_err() {
+        return stale_context();
+    }
     authority::execute(context, prepared, home)
 }
 

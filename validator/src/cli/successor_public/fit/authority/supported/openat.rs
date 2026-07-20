@@ -23,6 +23,19 @@ pub(crate) fn openat(
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
+pub(crate) fn mkdirat_owned(directory: &File, name: &str) -> Result<bool, HostFailure> {
+    let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+    // SAFETY: the directory descriptor is borrowed and the C string is NUL-terminated.
+    if unsafe { libc::mkdirat(directory.as_raw_fd(), encoded.as_ptr(), 0o700) } == 0 {
+        sync_directory(directory)?;
+        return Ok(true);
+    }
+    match std::io::Error::last_os_error().raw_os_error() {
+        Some(libc::EEXIST) => Ok(false),
+        _ => Err(HostFailure::Persistence),
+    }
+}
+
 pub(crate) fn rename_exclusive(directory: &File, old: &str, new: &str) -> Result<(), HostFailure> {
     let old = CString::new(old).map_err(|_| HostFailure::Invalid)?;
     let new = CString::new(new).map_err(|_| HostFailure::Invalid)?;
