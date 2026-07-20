@@ -53,11 +53,12 @@ to be current.
 
 The source-local `HostCommandPlan` binds those exact argv rows to the package
 identity and carries an empty scrubbed environment, a 30-second timeout, and
-one attempt. Its executor accepts only that typed command and must enforce the
-fields or return `InvalidPolicy`; bounded command output, backend failure,
-timeout, non-zero exit, output overflow, partial completion, and replay are
-reported as separate fail-closed outcomes. This source contract is not
-evidence of host mutation, installation, or fresh-task discovery.
+one attempt. The frozen source joins that plan to sealed lifecycle admission
+and typed fail-closed outcome records in its focused authority tests, but it
+does not yet provide the root-owned production caller or Darwin process
+backend that would consume and enforce those fields. Therefore this source
+contract is not evidence of command execution, host mutation, installation,
+or fresh-task discovery; those claims remain outside this candidate's ceiling.
 
 ## Personal marketplace
 
