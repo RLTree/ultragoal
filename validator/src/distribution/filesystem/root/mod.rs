@@ -21,6 +21,7 @@ mod tests {
     use std::os::unix::ffi::OsStrExt;
     use std::os::unix::fs::{MetadataExt, PermissionsExt};
     use std::path::{Path, PathBuf};
+    use std::process::Command;
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
@@ -143,6 +144,68 @@ mod tests {
         assert_eq!(
             root.revalidate().unwrap_err().id(),
             DistributionErrorId::ObjectChanged
+        );
+    }
+
+    #[test]
+    fn workspace_open_rejects_same_candidate_root_substitution() {
+        let parent = std::env::temp_dir().join(format!(
+            "hul-distribution-workspace-swap-{}-{}",
+            std::process::id(),
+            NEXT_ROOT.fetch_add(1, Ordering::Relaxed),
+        ));
+        let root = parent.join("worktree");
+        let replacement = parent.join("replacement");
+        let original = parent.join("original");
+        fs::create_dir_all(&root).unwrap();
+        run_git(&root, &["init", "-q"]);
+        run_git(
+            &root,
+            &["config", "user.email", "distribution@example.invalid"],
+        );
+        run_git(&root, &["config", "user.name", "Distribution Test"]);
+        fs::write(root.join("tracked.txt"), b"same candidate\n").unwrap();
+        run_git(&root, &["add", "tracked.txt"]);
+        run_git(&root, &["commit", "-qm", "fixture"]);
+        let clone = Command::new("git")
+            .args(["clone", "-q", "--no-hardlinks", "--"])
+            .arg(&root)
+            .arg(&replacement)
+            .status()
+            .unwrap();
+        assert!(clone.success());
+        let context = crate::context::LiveContext::build(
+            crate::context::BuildRequest::new(&root).with_root_workspace_grant(&root),
+        )
+        .unwrap();
+        let root_for_swap = root.clone();
+        let replacement_for_swap = replacement.clone();
+        let original_for_swap = original.clone();
+        set_test_effect_hook_matching(EffectPoint::OpenDirectory, "worktree", move |_| {
+            fs::rename(&root_for_swap, &original_for_swap).unwrap();
+            fs::rename(&replacement_for_swap, &root_for_swap).unwrap();
+        });
+
+        let failure = ConfinedRoot::open_workspace(&context).unwrap_err();
+
+        assert_test_effect_hook_consumed();
+        assert_eq!(failure.id(), DistributionErrorId::ObjectChanged);
+        assert!(
+            !root
+                .join("target/ultragoal/package-inventory.json")
+                .exists()
+        );
+        fs::remove_dir_all(parent).unwrap();
+    }
+
+    fn run_git(root: &Path, args: &[&str]) {
+        assert!(
+            Command::new("git")
+                .args(args)
+                .current_dir(root)
+                .status()
+                .unwrap()
+                .success()
         );
     }
 

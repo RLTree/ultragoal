@@ -29,6 +29,12 @@ impl ConfinedRoot {
             .ok_or_else(|| error(DistributionErrorId::InvalidPath))?
             .to_owned();
         let root = Self::open_bound(canonical, &parent, &name)?;
+        if !context.matches_worktree_directory(
+            root.authority.identity.device,
+            root.authority.identity.inode,
+        ) {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
         context
             .revalidate()
             .map_err(|_| error(DistributionErrorId::ObjectChanged))?;

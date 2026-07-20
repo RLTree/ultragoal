@@ -1,3 +1,5 @@
+#[cfg(unix)]
+use super::bound_context::WorktreeDirectoryIdentity;
 use super::bound_context::{
     ContextPayload, ContextPayloadInput, EffectBoundary, EffectClass, LiveContext,
     PermissionIdentity, RootIdentity, SelectedInputIdentity,

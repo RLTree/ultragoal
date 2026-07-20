@@ -1,5 +1,24 @@
 use super::*;
 
+#[cfg(unix)]
+fn worktree_directory_identity(
+    worktree: &std::path::Path,
+) -> Result<WorktreeDirectoryIdentity, ContextError> {
+    use std::os::unix::fs::MetadataExt;
+
+    let metadata =
+        std::fs::symlink_metadata(worktree).map_err(|error| io_error(worktree, error))?;
+    if !metadata.is_dir() || metadata.file_type().is_symlink() {
+        return Err(ContextError::ConcurrentMutation(
+            "worktree directory identity".to_owned(),
+        ));
+    }
+    Ok(WorktreeDirectoryIdentity::new(
+        metadata.dev(),
+        metadata.ino(),
+    ))
+}
+
 impl LiveContext {
     pub fn build(request: BuildRequest) -> Result<Self, ContextError> {
         let grant = request.root_grant.as_ref();
@@ -14,6 +33,8 @@ impl LiveContext {
         let git_path = capability::resolve_git()?;
         let git_before = capability::executable_identity("git", &git_path)?;
         let (repository, worktree) = git::resolve_roots(&request.start, &git_path)?;
+        #[cfg(unix)]
+        let captured_worktree_directory = worktree_directory_identity(&worktree)?;
         match_expected(
             "repository",
             request.expected_repository_root.as_ref(),
@@ -63,6 +84,12 @@ impl LiveContext {
                 "root permissions".to_owned(),
             ));
         }
+        #[cfg(unix)]
+        if captured_worktree_directory != worktree_directory_identity(&worktree)? {
+            return Err(ContextError::ConcurrentMutation(
+                "worktree directory identity".to_owned(),
+            ));
+        }
         let roots = RootIdentity {
             repository_root: path_text(&repository)?,
             worktree_root: path_text(&worktree)?,
@@ -86,7 +113,12 @@ impl LiveContext {
         });
         let serialized = serde_json::to_vec(&payload)
             .map_err(|error| ContextError::Serialization(error.to_string()))?;
-        let context = Self::from_payload(payload, format!("sha256:{}", sha256_hex(&serialized)));
+        let context = Self::from_payload(
+            payload,
+            format!("sha256:{}", sha256_hex(&serialized)),
+            #[cfg(unix)]
+            captured_worktree_directory,
+        );
         context.revalidate()?;
         Ok(context)
     }

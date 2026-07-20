@@ -5,6 +5,17 @@ use super::error::ContextError;
 use super::git;
 use std::path::{Path, PathBuf};
 
+#[cfg(unix)]
+fn worktree_identity_matches(context: &LiveContext, worktree: &Path) -> bool {
+    use std::os::unix::fs::MetadataExt;
+
+    std::fs::symlink_metadata(worktree).is_ok_and(|metadata| {
+        metadata.is_dir()
+            && !metadata.file_type().is_symlink()
+            && context.matches_worktree_directory(metadata.dev(), metadata.ino())
+    })
+}
+
 fn changed(dimension: &str) -> ContextError {
     ContextError::ConcurrentMutation(format!("{dimension} changed after context construction"))
 }
@@ -33,6 +44,10 @@ impl LiveContext {
         };
         if &roots != self.roots() {
             return Err(changed("repository or worktree root"));
+        }
+        #[cfg(unix)]
+        if !worktree_identity_matches(self, &worktree) {
+            return Err(changed("worktree directory identity"));
         }
         if &git::capture_candidate(&git_path, &worktree)? != self.candidate() {
             return Err(changed("Git candidate identity"));

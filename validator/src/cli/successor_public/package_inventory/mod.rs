@@ -58,13 +58,29 @@ fn output_path(invocation: &ParsedInvocation) -> Option<&str> {
             ..
         } => match arguments.as_slice() {
             [argument] if argument.name == OptionName::Output => match &argument.value {
-                ParsedValue::RelativePath(path) => Some(path.as_str()),
+                ParsedValue::RelativePath(path) if inventory_output_allowed(path.as_str()) => {
+                    Some(path.as_str())
+                }
                 _ => None,
             },
             _ => None,
         },
         _ => None,
     }
+}
+
+fn inventory_output_allowed(path: &str) -> bool {
+    let Some(name) = path.strip_prefix("target/ultragoal/") else {
+        return false;
+    };
+    let Some(stem) = name.strip_suffix(".json") else {
+        return false;
+    };
+    !stem.is_empty()
+        && !name.contains('/')
+        && name
+            .bytes()
+            .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
 }
 
 fn success(
@@ -171,4 +187,28 @@ fn diagnostic(
             },
         ),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::inventory_output_allowed;
+
+    #[test]
+    fn inventory_output_is_confined_to_disposable_product_namespace() {
+        assert!(inventory_output_allowed(
+            "target/ultragoal/package-inventory.json"
+        ));
+        assert!(inventory_output_allowed(
+            "target/ultragoal/n04_inventory-1.json"
+        ));
+        for rejected in [
+            ".git/HEAD",
+            "plugin-manifest-draft.json",
+            "target/ultragoal/nested/inventory.json",
+            "target/ultragoal/inventory",
+            "target/ultragoal/.json",
+        ] {
+            assert!(!inventory_output_allowed(rejected), "{rejected}");
+        }
+    }
 }

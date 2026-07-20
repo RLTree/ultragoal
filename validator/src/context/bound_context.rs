@@ -3,6 +3,24 @@ use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+#[cfg(unix)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct WorktreeDirectoryIdentity {
+    device: u64,
+    inode: u64,
+}
+
+#[cfg(unix)]
+impl WorktreeDirectoryIdentity {
+    pub(super) fn new(device: u64, inode: u64) -> Self {
+        Self { device, inode }
+    }
+
+    pub(crate) fn matches(self, device: u64, inode: u64) -> bool {
+        self.device == device && self.inode == inode
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum EffectClass {
@@ -173,6 +191,9 @@ pub struct LiveContext {
     context_id: String,
     #[serde(flatten)]
     payload: ContextPayload,
+    #[cfg(unix)]
+    #[serde(skip)]
+    worktree_directory_identity: WorktreeDirectoryIdentity,
 }
 
 impl LiveContext {
@@ -204,10 +225,21 @@ impl LiveContext {
         Path::new(&self.payload.roots.worktree_root)
     }
 
-    pub(super) fn from_payload(payload: ContextPayload, context_id: String) -> Self {
+    #[cfg(unix)]
+    pub(crate) fn matches_worktree_directory(self: &Self, device: u64, inode: u64) -> bool {
+        self.worktree_directory_identity.matches(device, inode)
+    }
+
+    pub(super) fn from_payload(
+        payload: ContextPayload,
+        context_id: String,
+        #[cfg(unix)] worktree_directory_identity: WorktreeDirectoryIdentity,
+    ) -> Self {
         Self {
             context_id,
             payload,
+            #[cfg(unix)]
+            worktree_directory_identity,
         }
     }
 }
