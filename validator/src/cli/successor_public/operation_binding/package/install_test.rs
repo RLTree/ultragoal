@@ -1,4 +1,4 @@
-use super::{Binding, PublicOperation, binding};
+use super::super::{Binding, PublicOperation, binding};
 use crate::cli::successor::command_contract::PackageAction;
 use crate::cli::successor::{EffectClass, SuccessorCommand};
 

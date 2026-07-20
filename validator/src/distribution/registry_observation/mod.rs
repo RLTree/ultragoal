@@ -9,15 +9,16 @@ use crate::plugin_manifest::Version;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
-include!("registry_limit.rs");
+include!("registry/model.rs");
 
 include!("validate_app_registry.rs");
 
 include!("discovery_publication.rs");
 
-include!("registry_publication.rs");
+include!("registry/publication.rs");
 
 include!("observe_discovery.rs");
 
 #[cfg(test)]
-mod registry_reader_race_tests;
+#[path = "registry/reader_race_tests.rs"]
+mod reader_race_tests;

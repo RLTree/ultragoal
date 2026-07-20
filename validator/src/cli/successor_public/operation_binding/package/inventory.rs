@@ -1,4 +1,4 @@
-use super::{Binding, PublicOperation, binding};
+use super::super::{Binding, PublicOperation, binding};
 use crate::cli::successor::command_contract::PackageAction;
 use crate::cli::successor::{EffectClass, SuccessorCommand};
 
@@ -7,14 +7,14 @@ pub(super) const APIS: &[&str] = &[
     "EffectClass",
     "InventoryBuilder",
     "AuthorityCatalog",
-    "ProductionPackageArtifact",
+    "ProductionPackageSession",
     "PackageSnapshot",
     "ScopedFile",
 ];
 
 pub(super) const BINDING: Binding = binding(
-    PublicOperation::PackageBuild,
-    SuccessorCommand::Package(PackageAction::Build),
+    PublicOperation::PackageInventory,
+    SuccessorCommand::Package(PackageAction::Inventory),
     EffectClass::WorkspaceWrite,
     APIS,
 );

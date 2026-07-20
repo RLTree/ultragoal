@@ -8,9 +8,7 @@ use crate::cli::successor::{
 use std::collections::BTreeSet;
 
 mod migration_plan;
-mod package_build;
-mod package_install_test;
-mod package_inventory;
+mod package;
 mod public_operation;
 
 pub(crate) use public_operation::PublicOperation;
@@ -192,9 +190,9 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
-    package_build::BINDING,
-    package_install_test::BINDING,
-    package_inventory::BINDING,
+    package::BUILD,
+    package::INSTALL_TEST,
+    package::INVENTORY,
 ];
 
 const fn binding(

@@ -84,13 +84,13 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "complete command-group activation authority"
     ),
     source!(
-        "validator/src/cli/successor_public/operation_binding/package_inventory.rs",
-        include_bytes!("../../../cli/successor_public/operation_binding/package_inventory.rs"),
+        "validator/src/cli/successor_public/operation_binding/package/inventory.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package/inventory.rs"),
         "package inventory operation API authority"
     ),
     source!(
-        "validator/src/cli/successor_public/operation_binding/package_install_test.rs",
-        include_bytes!("../../../cli/successor_public/operation_binding/package_install_test.rs"),
+        "validator/src/cli/successor_public/operation_binding/package/install_test.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package/install_test.rs"),
         "isolated package installation operation API authority"
     ),
     source!(
