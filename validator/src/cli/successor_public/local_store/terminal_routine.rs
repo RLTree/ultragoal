@@ -1,4 +1,5 @@
 use super::*;
+use crate::routine_work::require_runtime_store_ignored;
 use sha2::{Digest, Sha256};
 
 /// A terminal routine observation. It is diagnostic-only: it names neither a
@@ -19,8 +20,26 @@ pub(crate) struct RoutineTerminalEvent<'a> {
 pub(crate) fn append_routine_terminal(
     root: &Path,
     context: &LiveContext,
+    binding: &crate::routine_work::RoutineBinding,
     terminal: RoutineTerminalEvent<'_>,
 ) -> Result<bool, LocalStoreFailure> {
+    append_routine_terminal_with_hook(root, context, binding, terminal, None)
+}
+
+pub(super) fn append_routine_terminal_with_hook(
+    root: &Path,
+    context: &LiveContext,
+    binding: &crate::routine_work::RoutineBinding,
+    terminal: RoutineTerminalEvent<'_>,
+    mut before_append_admission: Option<&mut dyn FnMut()>,
+) -> Result<bool, LocalStoreFailure> {
+    require_runtime_store_ignored(binding)
+        .map_err(|error| LocalStoreFailure::append(error.cause()))?;
+    if let Some(hook) = before_append_admission.as_mut() {
+        hook();
+    }
+    require_runtime_store_ignored(binding)
+        .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     ensure_store_parent(root)?;
     let path = store_path(root);
     let store_absent_before = store_absent(&path)?;
@@ -67,6 +86,8 @@ pub(crate) fn append_routine_terminal(
     }
     let store = EventStore::for_context(&path, context, RUNTIME_SOURCE_ID)
         .map_err(|error| LocalStoreFailure::append(&error))?;
+    require_runtime_store_ignored(binding)
+        .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     let appended = store
         .append(&event)
         .map_err(|error| LocalStoreFailure::append(&error))?;

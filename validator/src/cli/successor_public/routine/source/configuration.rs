@@ -97,7 +97,7 @@ pub(crate) fn execute_inner(
         });
     if let Some(checkpoint) = checkpoint.as_ref() {
         if checkpoint.is_terminal() && !checkpoint.is_complete() {
-            join_terminal_event(&target, &context, &state, checkpoint)?;
+            join_terminal_event(&target, &context, &state, plan.binding(), checkpoint)?;
             return Err(PublicFailure::ContinuationUnavailable);
         }
         if checkpoint.is_complete() {
@@ -117,7 +117,7 @@ pub(crate) fn execute_inner(
                     return Err(PublicFailure::PersistenceAfterEffect);
                 }
             };
-            join_terminal_event(&target, &context, &state, checkpoint)?;
+            join_terminal_event(&target, &context, &state, plan.binding(), checkpoint)?;
             return Ok(outcome::mediation(
                 &result,
                 mediation_context(&context, &plan, &graph, &snapshot, &source_id),
@@ -178,7 +178,7 @@ pub(crate) fn execute_inner(
                         )
                         .map_err(PublicFailure::Host)?
                         .ok_or(PublicFailure::PersistenceAfterEffect)?;
-                    join_terminal_event(&target, &context, &state, &persisted)?;
+                    join_terminal_event(&target, &context, &state, plan.binding(), &persisted)?;
                     return Ok(outcome::mediation(
                         &result,
                         mediation_context(&context, &plan, &graph, &snapshot, &source_id),
@@ -283,7 +283,7 @@ pub(crate) fn execute_inner(
             )
             .map_err(PublicFailure::Host)?
             .ok_or(PublicFailure::PersistenceAfterEffect)?;
-        join_terminal_event(&target, &context, &state, &persisted)?;
+        join_terminal_event(&target, &context, &state, plan.binding(), &persisted)?;
     }
     Ok(outcome::mediation(
         &result,
@@ -314,6 +314,7 @@ fn join_terminal_event(
     target: &Path,
     context: &LiveContext,
     state: &HostState,
+    binding: &crate::routine_work::RoutineBinding,
     checkpoint: &host::ContinuationCheckpoint,
 ) -> Result<(), PublicFailure> {
     if !checkpoint.is_terminal() || checkpoint.state() == "terminal-event-joined" {
@@ -333,7 +334,7 @@ fn join_terminal_event(
             .ok_or(PublicFailure::PersistenceAfterEffect)?,
         finding_binding: checkpoint.finding_binding(),
     };
-    append_routine_terminal(target, context, event)
+    append_routine_terminal(target, context, binding, event)
         .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
     state
         .mark_event_joined(checkpoint)

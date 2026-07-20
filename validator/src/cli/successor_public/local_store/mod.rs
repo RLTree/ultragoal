@@ -13,6 +13,8 @@ pub(super) const RUNTIME_SOURCE_ID: &str = "successor-runtime";
 
 mod failure;
 mod terminal_routine;
+#[cfg(test)]
+mod terminal_routine_tests;
 pub(super) use failure::LocalStoreFailure;
 pub(super) use terminal_routine::routine_observations_from_events;
 #[allow(unused_imports)]
