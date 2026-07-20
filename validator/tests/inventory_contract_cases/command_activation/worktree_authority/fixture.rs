@@ -1,18 +1,11 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn establish_fixture_authority(repo: &TestRepo) {
     repo.commit();
     let alternate = repo.root.join(".git/objects/info/alternates");
     fs::create_dir_all(alternate.parent().unwrap()).unwrap();
-    fs::write(
-        alternate,
-        format!(
-            "{}\n",
-            git_output_path(&live_root(), &["rev-parse", "--git-path", "objects"])
-        ),
-    )
-    .unwrap();
+    fs::write(alternate, format!("{}\n", live_objects_path())).unwrap();
     let tree = git_output(repo, &["rev-parse", "HEAD^{tree}"]);
     let base = source_base_commit();
     let authority = git_output(
@@ -20,6 +13,20 @@ fn establish_fixture_authority(repo: &TestRepo) {
         &["commit-tree", &tree, "-p", &base, "-m", "fixture authority"],
     );
     run_git(repo, &["reset", "--hard", "-q", &authority]);
+}
+
+fn live_objects_path() -> String {
+    let raw = git_output_path(&live_root(), &["rev-parse", "--git-path", "objects"]);
+    let path = Path::new(&raw);
+    let path = if path.is_absolute() {
+        PathBuf::from(path)
+    } else {
+        live_root().join(path)
+    };
+    path.canonicalize()
+        .expect("Git object directory exists")
+        .display()
+        .to_string()
 }
 
 fn source_base_commit() -> String {
