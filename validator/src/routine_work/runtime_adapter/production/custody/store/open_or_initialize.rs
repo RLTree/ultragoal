@@ -5,8 +5,20 @@ impl FileLedger {
         root: &Path,
     ) -> Result<(Self, LocalHead), RoutineError> {
         let store = Store::open(root)?;
-        if !store.names()?.is_empty() {
-            return Err(error("routine-production-session-continuity-required"));
+        let names = store.names()?;
+        if names
+            == BTreeSet::from([
+                KEY_NAME.to_owned(),
+                LOCK_NAME.to_owned(),
+                STATE_NAME.to_owned(),
+            ])
+        {
+            let lock = store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+            let lock_identity = store.exact_identity(LOCK_NAME, &lock, 0o600)?;
+            return Self::load_complete(store, ProcessLock::acquire(lock)?, lock_identity);
+        }
+        if !names.is_empty() {
+            return Err(error("routine-production-authority-store-incomplete"));
         }
         let guard = store.acquire_initial_lock()?;
         let lock_identity = store.exact_identity(LOCK_NAME, &guard.0, 0o600)?;

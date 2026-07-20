@@ -151,6 +151,41 @@ pub enum ProductGoalState {
     NoAction,
 }
 
+/// Diagnostic evidence associated with a terminal routine event.
+///
+/// This is intentionally outside `findings`, `repairs`, and claim ceilings:
+/// the event may help an operator explain interruption, recovery, or reuse,
+/// but it cannot create or settle a product finding.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct RoutineFindingObservation {
+    pub event_id: String,
+    pub continuation_id: String,
+    pub terminal_ledger_head: String,
+    pub transition: RoutineObservationTransition,
+    pub outcome: String,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum RoutineObservationTransition {
+    Interrupted,
+    Recovered,
+    Reused,
+    Executed,
+    Failed,
+    Cancelled,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum RoutineObservationWindow {
+    NotQueried,
+    Absent,
+    Available,
+    Saturated,
+    Unavailable,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct ProductState {
     pub(crate) schema_version: &'static str,
@@ -165,6 +200,8 @@ pub struct ProductState {
     pub(crate) repairs: Vec<Repair>,
     pub(crate) claim_ceilings: Vec<ClaimCeiling>,
     pub(crate) next_action: NextAction,
+    pub(crate) routine_observations: Vec<RoutineFindingObservation>,
+    pub(crate) routine_observation_window: RoutineObservationWindow,
 }
 
 impl ProductState {
@@ -197,6 +234,24 @@ impl ProductState {
     }
     pub fn next_action(&self) -> &NextAction {
         &self.next_action
+    }
+    pub fn routine_observations(&self) -> &[RoutineFindingObservation] {
+        &self.routine_observations
+    }
+    pub fn routine_observation_window(&self) -> RoutineObservationWindow {
+        self.routine_observation_window
+    }
+
+    /// The public observation adapter is the only caller. Keeping this
+    /// crate-visible prevents event data from becoming a state-derivation
+    /// input or a finding mutation API.
+    pub(crate) fn attach_routine_observations(
+        &mut self,
+        observations: Vec<RoutineFindingObservation>,
+        window: RoutineObservationWindow,
+    ) {
+        self.routine_observations = observations;
+        self.routine_observation_window = window;
     }
 }
 

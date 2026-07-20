@@ -4,6 +4,8 @@ use std::path::Path;
 #[path = "supported/mod.rs"]
 mod supported;
 
+pub(crate) use supported::ContinuationCheckpoint;
+
 #[path = "host_failure.rs"]
 mod host_failure;
 

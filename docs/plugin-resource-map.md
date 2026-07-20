@@ -100,6 +100,14 @@ and compare the full declared workspace boundary before and after. A strict
 claim boundary follows through `prove`; routine work does not become release
 ceremony.
 
+For a public routine interruption, `check routine` accepts only the typed
+`--interrupt-after reservation` control and returns an opaque continuation.
+Resuming requires that exact continuation and the host-authenticated binding.
+An exact completed binding returns its authenticated prior result without a new
+effect; stale, cross-binding, forged, or ambiguous records remain refusals.
+Use `diagnose-and-observe` to read the resulting finding and event evidence;
+those read routes do not reconcile or mutate routine state.
+
 ### Failure and diagnosis
 
 Use `diagnose-and-observe`. Inspect the current candidate and findings, query

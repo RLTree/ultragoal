@@ -21,6 +21,8 @@ pub enum OptionName {
     Registry,
     ApproveRetirement,
     PackageRoot,
+    InterruptAfter,
+    Continuation,
 }
 
 impl OptionName {
@@ -42,6 +44,8 @@ impl OptionName {
             Self::Registry => "--registry",
             Self::ApproveRetirement => "--approve-retirement",
             Self::PackageRoot => "--package-root",
+            Self::InterruptAfter => "--interrupt-after",
+            Self::Continuation => "--continuation",
         }
     }
 }

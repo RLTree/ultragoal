@@ -174,6 +174,15 @@ fn valid_terminal(terminal: &TerminalRecord) -> bool {
             .failure_evidence
             .as_ref()
             .is_none_or(ReservationFailureEvidence::shape_is_valid)
+        && (terminal.state == AttemptState::Complete) == terminal.mediation.is_some()
+        && terminal.mediation.as_ref().is_none_or(|mediation| {
+            !mediation.nodes.is_empty()
+                && mediation.nodes.iter().all(|node| {
+                    !node.intent_id.is_empty()
+                        && !node.node_id.is_empty()
+                        && valid(&node.result_artifact_sha256)
+                })
+        })
 }
 
 fn valid_publication_ambiguity(ambiguity: &PublicationAmbiguity, record: &ProtocolRecord) -> bool {
@@ -201,6 +210,17 @@ fn valid_terminal_binding(record: &ProtocolRecord) -> bool {
                 && record.launch_stage.is_none()
                 && record.terminal.as_ref().is_some_and(|terminal| {
                     terminal.state == record.state
+                        && (record.state != AttemptState::Complete || terminal.mediation.is_some())
+                        && terminal.mediation.as_ref().is_none_or(|mediation| {
+                            mediation.nodes.len() == record.intents.len()
+                                && mediation.nodes.iter().zip(&record.intents).all(
+                                    |(node, intent)| {
+                                        node.intent_id == intent.intent_id
+                                            && node.node_id == intent.node_id
+                                            && node.plan_order == intent.plan_order
+                                    },
+                                )
+                        })
                         && terminal.failure_evidence.as_ref().is_none_or(|evidence| {
                             evidence.protocol_id == record.binding.protocol_id
                                 && evidence.grant_id == record.grant_id

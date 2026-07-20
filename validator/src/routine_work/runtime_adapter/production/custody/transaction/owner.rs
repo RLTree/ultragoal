@@ -109,6 +109,31 @@ impl ReservationOwner {
         }
     }
 
+    pub(super) fn continuation_id(&self) -> Result<String, RoutineError> {
+        let binding = self.failure_binding();
+        Ok(format!(
+            "routine-cont-{}",
+            crate::routine_work::digest::digest_of(&(
+                "routine-public-continuation-v1",
+                binding.protocol_id,
+                binding.grant_id,
+                binding.recovery_marker,
+            ))?
+        ))
+    }
+
+    pub(super) fn recovery_marker(&self) -> String {
+        self.failure_binding().recovery_marker.to_owned()
+    }
+
+    pub(super) fn attempt_grant(&self) -> String {
+        self.failure_binding().grant_id.to_owned()
+    }
+
+    pub(super) fn authenticated_head(&self) -> String {
+        self.ledger.authenticated_head()
+    }
+
     pub(super) fn started(&self) -> bool {
         self.started.get()
     }
@@ -183,11 +208,11 @@ impl ReservationOwner {
     ) -> Result<(), RoutineError> {
         let terminal = TerminalObservation::mediated(
             outcome,
-            digest_of(result)?,
+            result,
             artifacts.clone(),
             cleanup_state(self.started.get()),
             cleanup_state(self.launch_cleaned.get()),
-        );
+        )?;
         self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 

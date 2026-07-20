@@ -81,7 +81,7 @@ fn open_existing_state(
     )?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
-    require_entries(&adapter, &[LOCK_NAME])?;
+    require_entries(&adapter, &[LOCK_NAME, CONTINUITY_CHECKPOINT_NAME])?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
     HostState::from_locked(home, state, authority, adapter, lock, false)
 }

@@ -156,6 +156,14 @@ impl Fixture {
         self.state_root().join("adapter/adapter.lock")
     }
 
+    pub fn checkpoint_path(&self) -> PathBuf {
+        self.state_root().join("adapter/routine-continuation.json")
+    }
+
+    pub fn checkpoint_stage_path(&self) -> PathBuf {
+        self.state_root().join("adapter/.routine-continuation.next")
+    }
+
     pub(crate) fn binary_path(&self) -> &Path {
         &self.binary
     }

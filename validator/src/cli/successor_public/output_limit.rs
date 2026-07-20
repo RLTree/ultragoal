@@ -113,7 +113,7 @@ pub(crate) fn execute_invocation_with_home(
         }
         SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
-                Ok(state) => diagnose::diagnose_local(root, &context, &state, &invocation),
+                Ok(state) => diagnose::diagnose_local(root, &context, state, &invocation),
                 Err(_) => state_unavailable(),
             },
             Err(_) => inventory_unavailable(),

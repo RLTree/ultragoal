@@ -148,6 +148,49 @@ impl AnchoredDirectory {
         self.file.sync_all().map_err(|_| HostFailure::Invalid)
     }
 
+    pub(crate) fn replace_regular_atomically(
+        &self,
+        name: &str,
+        stage_name: &str,
+        mode: u32,
+        bytes: &[u8],
+        expected_existing: bool,
+    ) -> Result<(), HostFailure> {
+        validate_name(name)?;
+        validate_name(stage_name)?;
+        if self.stat(name)?.is_some() != expected_existing || self.stat(stage_name)?.is_some() {
+            return Err(HostFailure::Busy);
+        }
+        let (mut stage, created) = self.open_or_create_regular(stage_name, mode)?;
+        if !created {
+            return Err(HostFailure::Busy);
+        }
+        stage.write_all(bytes).map_err(|_| HostFailure::Invalid)?;
+        stage.sync_all().map_err(|_| HostFailure::Invalid)?;
+        let source = CString::new(stage_name).map_err(|_| HostFailure::Invalid)?;
+        let destination = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+        let flags = if expected_existing {
+            0
+        } else {
+            libc::RENAME_EXCL
+        };
+        // SAFETY: both names are validated, both descriptors are the same live
+        // parent, and the caller holds the host process lock for the replacement.
+        let result = unsafe {
+            libc::renameatx_np(
+                self.file.as_raw_fd(),
+                source.as_ptr(),
+                self.file.as_raw_fd(),
+                destination.as_ptr(),
+                flags,
+            )
+        };
+        if result != 0 {
+            return Err(HostFailure::Busy);
+        }
+        self.file.sync_all().map_err(|_| HostFailure::Invalid)
+    }
+
     pub(crate) fn stat(&self, name: &str) -> Result<Option<Identity>, HostFailure> {
         validate_name(name)?;
         let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;

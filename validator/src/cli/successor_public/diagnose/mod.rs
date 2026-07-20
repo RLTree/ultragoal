@@ -1,10 +1,12 @@
+use super::local_store::{LocalStore, RUNTIME_SOURCE_ID, routine_observations_from_events};
 use super::public_output_allowed;
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
     EffectClass, ExitClass, OptionName, ParsedInvocation, ParsedValue, SuccessorCommand,
 };
 use crate::context::LiveContext;
-use crate::state::{Finding, ProductState};
+use crate::observability::{EventQuery, EventStore};
+use crate::state::{Finding, ProductState, RoutineFindingObservation, RoutineObservationWindow};
 use serde_json::Value;
 use std::path::Path;
 
@@ -13,12 +15,14 @@ mod causal;
 pub(super) fn diagnose_local(
     root: &Path,
     context: &LiveContext,
-    state: &ProductState,
+    mut state: ProductState,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Diagnose || invocation.effect != EffectClass::Read {
         return invalid_invocation();
     }
+    let (routine_observations, routine_window) = read_routine_observations(root, context, &state);
+    state.attach_routine_observations(routine_observations, routine_window);
     let requested = match invocation.arguments.as_slice() {
         [] => None,
         [argument]
@@ -33,7 +37,7 @@ pub(super) fn diagnose_local(
         _ => return invalid_invocation(),
     };
     let selected = match requested {
-        Some(identifier) => match select_finding(state, identifier) {
+        Some(identifier) => match select_finding(&state, identifier) {
             Some(finding) => Some(finding),
             None => return finding_not_present(),
         },
@@ -78,6 +82,46 @@ pub(super) fn diagnose_local(
         ),
         _ => diagnosis_unavailable(),
     }
+}
+
+fn read_routine_observations(
+    root: &Path,
+    context: &LiveContext,
+    state: &ProductState,
+) -> (Vec<RoutineFindingObservation>, RoutineObservationWindow) {
+    let store = match LocalStore::open(root, context, RUNTIME_SOURCE_ID) {
+        Ok(store) if store.status() == "available" => store,
+        Ok(_) => return (Vec::new(), RoutineObservationWindow::Absent),
+        Err(_) => return (Vec::new(), RoutineObservationWindow::Unavailable),
+    };
+    let query = match EventQuery::for_context(context, RUNTIME_SOURCE_ID)
+        .and_then(|query| query.limit(EventStore::supported_result_limit()))
+    {
+        Ok(query) => query,
+        Err(_) => return (Vec::new(), RoutineObservationWindow::Unavailable),
+    };
+    let events = match store.query_diagnostic(&query) {
+        Ok(events) => events,
+        Err(_) => return (Vec::new(), RoutineObservationWindow::Unavailable),
+    };
+    if store.revalidate().is_err() {
+        return (Vec::new(), RoutineObservationWindow::Unavailable);
+    }
+    if events.len() == EventStore::supported_result_limit() {
+        return (Vec::new(), RoutineObservationWindow::Saturated);
+    }
+    let bound_events = events
+        .iter()
+        .filter(|event| {
+            state.findings().iter().any(|finding| {
+                event.finding_refs().contains(&finding.finding_id)
+                    && event.repair_refs().contains(&finding.repair.repair_id)
+            })
+        })
+        .cloned()
+        .collect::<Vec<_>>();
+    let observations = routine_observations_from_events(&bound_events);
+    (observations, RoutineObservationWindow::Available)
 }
 
 fn select_finding<'a>(state: &'a ProductState, identifier: &str) -> Option<&'a Finding> {

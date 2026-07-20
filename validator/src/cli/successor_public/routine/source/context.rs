@@ -1,28 +1,80 @@
 use super::*;
 
-pub(crate) fn target_root(
-    root: &Path,
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineInvocationOptions {
+    target: Option<String>,
+    interruption: Option<ReservationInterruption>,
+    continuation: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ReservationInterruption {
+    AfterReservation,
+}
+
+impl RoutineInvocationOptions {
+    pub(crate) fn interruption(&self) -> Option<ReservationInterruption> {
+        self.interruption
+    }
+
+    pub(crate) fn continuation(&self) -> Option<&str> {
+        self.continuation.as_deref()
+    }
+}
+
+pub(crate) fn options(
     invocation: &ParsedInvocation,
-) -> Result<PathBuf, PublicFailure> {
+) -> Result<RoutineInvocationOptions, PublicFailure> {
     if invocation.command != SuccessorCommand::Check(CheckProfile::Routine)
         || invocation.effect != EffectClass::WorkspaceWrite
     {
         return Err(PublicFailure::InvalidInvocation);
     }
-    let mut relative = None;
+    let mut target = None;
+    let mut interruption = None;
+    let mut continuation = None;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(path)) if relative.is_none() => {
-                relative = Some(path.as_str())
+            (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
+                target = Some(path.as_str().to_owned());
+            }
+            (OptionName::InterruptAfter, ParsedValue::Identifier(value))
+                if interruption.is_none() && value == "reservation" =>
+            {
+                interruption = Some(ReservationInterruption::AfterReservation);
+            }
+            (OptionName::Continuation, ParsedValue::Identifier(value))
+                if continuation.is_none()
+                    && value.starts_with("routine-cont-")
+                    && value.len() > "routine-cont-".len() =>
+            {
+                continuation = Some(value.to_owned());
             }
             _ => return Err(PublicFailure::InvalidInvocation),
         }
     }
+    if interruption.is_some() && continuation.is_some() {
+        return Err(PublicFailure::InvalidInvocation);
+    }
+    Ok(RoutineInvocationOptions {
+        target,
+        interruption,
+        continuation,
+    })
+}
+
+pub(crate) fn target_root(
+    root: &Path,
+    options: &RoutineInvocationOptions,
+) -> Result<PathBuf, PublicFailure> {
     let canonical_root = fs::canonicalize(root).map_err(|_| PublicFailure::Context)?;
     if canonical_root != root {
         return Err(PublicFailure::Context);
     }
-    let requested = relative.map_or_else(|| root.to_path_buf(), |path| root.join(path));
+    let requested = options
+        .target
+        .as_deref()
+        .map_or_else(|| root.to_path_buf(), |path| root.join(path));
     let metadata = fs::symlink_metadata(&requested).map_err(|_| PublicFailure::Context)?;
     if !metadata.is_dir() || metadata.file_type().is_symlink() {
         return Err(PublicFailure::Context);

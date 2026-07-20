@@ -81,6 +81,15 @@ fn validate_terminal(terminal: &TerminalRecord) -> Result<(), RoutineError> {
                 || terminal.process_cleanup != evidence.process_cleanup
                 || terminal.staged_cleanup != evidence.staged_cleanup
         })
+        || (terminal.state == AttemptState::Complete) != terminal.mediation.is_some()
+        || terminal.mediation.as_ref().is_some_and(|mediation| {
+            mediation.nodes.is_empty()
+                || mediation.nodes.iter().any(|node| {
+                    node.intent_id.is_empty()
+                        || node.node_id.is_empty()
+                        || !valid(&node.result_artifact_sha256)
+                })
+        })
     {
         return Err(error("routine-production-settlement-invalid"));
     }

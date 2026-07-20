@@ -3,9 +3,15 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 pub(crate) fn copy_current_inventory_inputs(live: &Path, root: &Path) {
+    copy_contract_bundle(live, root);
+    copy_file(live, root, "migration/authority-routes.json");
     crate::authority_inputs::copy_declared_files(live, root);
+    copy_file(live, root, "migration/non-authoritative-contexts.json");
     copy_file(live, root, "LANE_REGISTRY.json");
     copy_file(live, root, "templates/LANE_REGISTRY.json");
+    copy_file(live, root, ".codex-plugin/plugin.json");
+    copy_file(live, root, "schemas/product-success-contract.schema.json");
+    copy_registry_references(live, root);
 }
 
 pub(crate) fn establish_fixture_authority(live: &Path, root: &Path) {
@@ -100,4 +106,54 @@ fn copy_file(live: &Path, root: &Path, relative: &str) {
     fs::create_dir_all(target.parent().expect("fixture authority parent"))
         .expect("create fixture authority parent");
     fs::copy(live.join(relative), target).expect("copy fixture authority input");
+}
+
+fn copy_contract_bundle(live: &Path, root: &Path) {
+    let relative = "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT";
+    let source = live.join(relative);
+    let mut files = fs::read_dir(&source)
+        .expect("read fixture contract bundle")
+        .map(|entry| entry.expect("fixture contract entry").path())
+        .filter(|path| path.is_file())
+        .collect::<Vec<_>>();
+    files.sort();
+    for file in files {
+        let name = file.file_name().expect("fixture contract file name");
+        let target = root.join(relative).join(name);
+        fs::create_dir_all(target.parent().expect("fixture contract parent"))
+            .expect("create fixture contract parent");
+        fs::copy(file, target).expect("copy fixture contract file");
+    }
+    for name in ["FINAL-HANDOFF-MANIFEST.sha256", "README.md"] {
+        copy_file(
+            live,
+            root,
+            &format!("docs/ultragoal-contract-2026-07-successor-v2/{name}"),
+        );
+    }
+}
+
+fn copy_registry_references(live: &Path, root: &Path) {
+    let registry: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("LANE_REGISTRY.json")).expect("read fixture lane registry"),
+    )
+    .expect("parse fixture lane registry");
+    for reference in registry["source_context"]["refs"]
+        .as_object()
+        .expect("fixture source context refs")
+        .values()
+        .chain(
+            registry["root_freeze"]["payload_refs"]
+                .as_array()
+                .expect("fixture root freeze refs")
+                .iter(),
+        )
+    {
+        let Some(relative) = reference.get("path").and_then(serde_json::Value::as_str) else {
+            continue;
+        };
+        if live.join(relative).is_file() {
+            copy_file(live, root, relative);
+        }
+    }
 }

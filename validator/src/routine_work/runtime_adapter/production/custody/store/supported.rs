@@ -26,6 +26,8 @@ pub(super) mod record_authentication;
 mod record_identity;
 #[path = "reservation_lifecycle.rs"]
 mod reservation_lifecycle;
+#[path = "reserved_reconciliation.rs"]
+pub(super) mod reserved_reconciliation;
 #[path = "settle.rs"]
 mod settle;
 #[path = "state_publication.rs"]

@@ -2,7 +2,8 @@ use super::super::command_contract::{
     CheckProfile, CommandDescriptor, FitAction, SuccessorCommand,
 };
 use super::options::{
-    CLAIM_OUTPUT, FINDING_OPTION, FIT_APPLY, STRICT_OPTIONS, TARGET_OPTION, descriptor,
+    CLAIM_OUTPUT, FINDING_OPTION, FIT_APPLY, ROUTINE_OPTIONS, STRICT_OPTIONS, TARGET_OPTION,
+    descriptor,
 };
 use crate::context::EffectClass;
 
@@ -40,7 +41,7 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         Some("routine"),
         EffectClass::WorkspaceWrite,
         "Run conservative affected validation with declared local build artifacts.",
-        TARGET_OPTION,
+        ROUTINE_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Check(CheckProfile::Strict),

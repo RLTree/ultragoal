@@ -137,13 +137,15 @@ mod tests {
     }
 
     fn git(root: &Path, args: &[&str]) {
-        assert!(Command::new("git")
-            .arg("-C")
-            .arg(root)
-            .args(args)
-            .status()
-            .unwrap()
-            .success());
+        assert!(
+            Command::new("git")
+                .arg("-C")
+                .arg(root)
+                .args(args)
+                .status()
+                .unwrap()
+                .success()
+        );
     }
 
     fn git_output(root: &Path, args: &[&str]) -> String {

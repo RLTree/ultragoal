@@ -40,5 +40,6 @@ pub use engine::StateEngine;
 pub use product_state::{
     AuthorityRequest, AuthorityRequirement, CeilingReduction, Finding, FindingSeverity,
     FindingSource, NextAction, NextActionKind, NoLegalRoute, ProductGoalState, ProductState,
-    Repair, RepairTarget, RepairTargetKind, Scope, StateError,
+    Repair, RepairTarget, RepairTargetKind, RoutineFindingObservation,
+    RoutineObservationTransition, RoutineObservationWindow, Scope, StateError,
 };

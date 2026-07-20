@@ -96,6 +96,15 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
+        PublicFailure::ContinuationUnavailable => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the routine custody already has a terminal or pending record and no exact continuation was supplied",
+            "routine continuation authority",
+            "retry only with the opaque continuation emitted by a reservation interruption; selectors never grant reuse or recovery authority",
+            "none",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
         PublicFailure::PersistenceAfterEffect => (
             ExitClass::InternalFailure,
             DiagnosticId::ProjectionFailed,

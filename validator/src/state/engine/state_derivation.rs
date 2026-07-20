@@ -113,6 +113,9 @@ pub(crate) fn derive_bound(
         repairs,
         claim_ceilings,
         next_action,
+        routine_observations: Vec::new(),
+        routine_observation_window:
+            super::super::product_state::RoutineObservationWindow::NotQueried,
     })
 }
 

@@ -68,19 +68,24 @@ fn missing_local_host_bootstraps_once_before_the_authoritative_effect() {
     assert_eq!(Fixture::value(&first)["status"], "executed");
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.lock_path().is_file());
+    assert!(
+        String::from_utf8(
+            fs::read(fixture.authority_root().join("routine-authority.state")).unwrap(),
+        )
+        .unwrap()
+        .contains("\"state\":\"complete\"")
+    );
     let before_repeat = tree(&fixture.root);
-    assert_session_continuity_refusal(&fixture.run());
+    assert_terminal_reuse(&fixture.run());
     assert_eq!(tree(&fixture.root), before_repeat);
     fixture.teardown_after_assertions();
 }
 
-fn assert_session_continuity_refusal(output: &Output) {
-    assert_ne!(output.status.code(), Some(0), "{output:?}");
-    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(
-        diagnostic["cause"],
-        "routine-production-session-continuity-required"
-    );
+fn assert_terminal_reuse(output: &Output) {
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    assert_eq!(Fixture::value(output)["status"], "reused");
+    assert_eq!(Fixture::value(output)["effect"], "none");
 }
 
 #[test]
@@ -168,8 +173,7 @@ fn concurrent_first_use_has_one_authoritative_effect() {
         );
         for output in outputs {
             if !output.status.success() {
-                assert_not_transition_invalid(&output);
-                assert_public_refusal(&output);
+                assert_concurrent_loser_refusal(&output);
             }
         }
     });
@@ -179,12 +183,15 @@ fn concurrent_first_use_has_one_authoritative_effect() {
     fixture.teardown_after_assertions();
 }
 
-fn assert_not_transition_invalid(output: &Output) {
+fn assert_concurrent_loser_refusal(output: &Output) {
     let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_ne!(
-        diagnostic["cause"],
-        "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe"
-    );
+    if diagnostic["cause"]
+        == "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe"
+    {
+        assert_eq!(diagnostic["effect"], "none");
+    } else {
+        assert_public_refusal(output);
+    }
 }
 
 #[test]

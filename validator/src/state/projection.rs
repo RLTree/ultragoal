@@ -1,7 +1,8 @@
 use super::catalog::{HostGoalObservation, RuntimeMetadata};
 use super::ceiling::ClaimCeiling;
 use super::product_state::{
-    Finding, NextAction, ProductGoalState, ProductState, Repair, StateError,
+    Finding, NextAction, ProductGoalState, ProductState, Repair, RoutineFindingObservation,
+    RoutineObservationWindow, StateError,
 };
 use serde::Serialize;
 
@@ -18,6 +19,8 @@ struct InspectProjection<'a> {
     findings: &'a [Finding],
     claim_ceilings: &'a [ClaimCeiling],
     next_action: &'a NextAction,
+    routine_observations: &'a [RoutineFindingObservation],
+    routine_observation_window: RoutineObservationWindow,
 }
 
 #[derive(Serialize)]
@@ -29,6 +32,8 @@ struct DiagnoseProjection<'a> {
     repairs: &'a [Repair],
     claim_ceilings: &'a [ClaimCeiling],
     next_action: &'a NextAction,
+    routine_observations: &'a [RoutineFindingObservation],
+    routine_observation_window: RoutineObservationWindow,
 }
 
 #[derive(Serialize)]
@@ -81,6 +86,8 @@ impl ProductState {
             findings: &self.findings,
             claim_ceilings: &self.claim_ceilings,
             next_action: &self.next_action,
+            routine_observations: &self.routine_observations,
+            routine_observation_window: self.routine_observation_window,
         })
     }
 
@@ -93,6 +100,8 @@ impl ProductState {
             repairs: &self.repairs,
             claim_ceilings: &self.claim_ceilings,
             next_action: &self.next_action,
+            routine_observations: &self.routine_observations,
+            routine_observation_window: self.routine_observation_window,
         })
     }
 
@@ -165,6 +174,8 @@ impl ProductState {
             repairs: std::slice::from_ref(&finding.repair),
             claim_ceilings: &self.claim_ceilings,
             next_action: &self.next_action,
+            routine_observations: &self.routine_observations,
+            routine_observation_window: self.routine_observation_window,
         })
         .map(Some)
     }

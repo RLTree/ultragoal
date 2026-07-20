@@ -31,6 +31,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     request: RoutineEffectRequest,
     cancellation: RoutineCancellation,
     reuse: PreflightedProductionReuse,
+    control: super::super::PublicRoutineControl,
 ) -> Result<RoutineMediationResult, RoutineError> {
     preflight_production_request(context, plan, &request)?;
     let launch_root = launch_root(authority_root)?;
@@ -41,6 +42,9 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     let scopes = allowed_output_scopes(&request);
     let journal = super::super::output_journal::observe(context.worktree_root(), &scopes)?;
     let owner = ReservationOwner::reserve(authority_root, &request, binding, journal)?;
+    if control == super::super::PublicRoutineControl::InterruptAfterReservation {
+        return interrupted_after_reservation(&request, &owner);
+    }
     let output = RefCell::new(None);
     let outcome = catch_unwind(AssertUnwindSafe(|| {
         owner.validate_reserved()?;
@@ -83,7 +87,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
             mediation.observe_intent(intent, observation)?;
         }
         let observed = mediation.finish()?;
-        let (result, settlement, artifacts, claimed) = observed.into_parts();
+        let (mut result, settlement, artifacts, claimed) = observed.into_parts();
         let authenticated = validate_observed_mediation(&result, settlement, &artifacts, &claimed)?;
         let settlement_artifacts = if settlement == DurableSettlement::Complete {
             authenticated
@@ -91,6 +95,9 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
             BTreeMap::new()
         };
         owner.settle(settlement, &result, &settlement_artifacts)?;
+        result.continuation = Some(owner.continuation_id()?);
+        result.attempt_grant = Some(owner.attempt_grant());
+        result.checkpoint_head = Some(owner.authenticated_head());
         output
             .borrow_mut()
             .take()
@@ -119,6 +126,33 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
             finish_panic(payload, owner.finish_failure(&record))
         }
     }
+}
+
+pub(in crate::routine_work::runtime_adapter::production) fn reconcile_reserved_effect(
+    authority_root: &Path,
+    request: &RoutineEffectRequest,
+    attempt_grant: &str,
+    expected_head: &str,
+) -> Result<super::super::super::mediator::RoutineContinuationOutcome, RoutineError> {
+    let binding = authority_binding(request)?;
+    DurableCustody::reconcile_reserved(authority_root, &binding, attempt_grant, expected_head)
+}
+
+fn interrupted_after_reservation(
+    request: &RoutineEffectRequest,
+    owner: &ReservationOwner,
+) -> Result<RoutineMediationResult, RoutineError> {
+    Ok(RoutineMediationResult {
+        request_id: Some(request.request_id().to_owned()),
+        protocol_id: Some(request.protocol_id().to_owned()),
+        status: super::super::super::mediator::RoutineMediatorStatus::IncompleteExecution,
+        nodes: Vec::new(),
+        recovery_marker: Some(owner.recovery_marker()),
+        continuation: Some(owner.continuation_id()?),
+        attempt_grant: Some(owner.attempt_grant()),
+        checkpoint_head: Some(owner.authenticated_head()),
+        support_limit: super::super::super::mediator::PRODUCTION_SUPPORT_LIMIT,
+    })
 }
 
 fn execute_intent(

@@ -185,4 +185,7 @@ impl SemanticEvent {
     pub fn outcome(&self) -> &str {
         &self.outcome
     }
+    pub fn public_attributes(&self) -> &BTreeMap<String, String> {
+        &self.public_attributes
+    }
 }

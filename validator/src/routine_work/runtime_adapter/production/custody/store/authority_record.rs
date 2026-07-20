@@ -99,11 +99,30 @@ pub(super) struct TerminalRecord {
     pub(super) state: AttemptState,
     pub(super) result_sha256: String,
     pub(super) artifacts: BTreeMap<String, String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(super) mediation: Option<TerminalMediation>,
     pub(super) process_cleanup: CleanupEvidence,
     pub(super) staged_cleanup: CleanupEvidence,
     pub(super) prior_head_sha256: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub(super) failure_evidence: Option<ReservationFailureEvidence>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalMediation {
+    pub(in crate::routine_work::runtime_adapter::production::custody) nodes:
+        Vec<TerminalNodeMediation>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalNodeMediation {
+    pub(in crate::routine_work::runtime_adapter::production::custody) intent_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) node_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) plan_order: usize,
+    pub(in crate::routine_work::runtime_adapter::production::custody) result_artifact_sha256:
+        String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

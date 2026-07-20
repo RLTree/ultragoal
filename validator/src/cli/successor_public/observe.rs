@@ -1,6 +1,8 @@
 #[cfg(test)]
 pub(super) use super::local_store::store_path;
-use super::local_store::{LocalStore, LocalStoreFailure, local_policy};
+use super::local_store::{
+    LocalStore, LocalStoreFailure, local_policy, routine_observations_from_events,
+};
 use super::public_output_allowed;
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
@@ -90,6 +92,7 @@ pub(super) fn query_local(
         "filter": filter,
         "store_status": store_status,
         "event_count": count,
+        "routine_observations": routine_observations_from_events(&events),
         "events": events,
         "causal_status": "not_evaluated",
         "claim_effect": "none",

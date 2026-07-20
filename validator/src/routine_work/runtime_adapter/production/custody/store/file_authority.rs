@@ -1,4 +1,5 @@
 use super::*;
+use crate::routine_work::runtime_adapter::mediator::RoutineContinuationOutcome;
 use crate::routine_work::runtime_adapter::production::DurableSettlement;
 use crate::routine_work::runtime_adapter::production::custody::observations::{
     ChildObservation, IntentObservation, LaunchObservation, OwnerObservation, TerminalObservation,
@@ -14,6 +15,39 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Durable
     child: RefCell<Option<ChildLease>>,
 }
 impl DurableCustody {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn reconcile_reserved(
+        root: &Path,
+        binding: &AuthorityBinding,
+        attempt_grant: &str,
+        expected_head: &str,
+    ) -> Result<RoutineContinuationOutcome, RoutineError> {
+        #[cfg(target_vendor = "apple")]
+        {
+            let (inner, mut head) =
+                supported::record_authentication::FileLedger::open_or_initialize(root)?;
+            match inner.reconcile_reserved(&mut head, binding, attempt_grant, expected_head)? {
+                DurableWrite::Committed(ContinuationDisposition::Complete(result)) => {
+                    Ok(RoutineContinuationOutcome::Complete(result))
+                }
+                DurableWrite::Committed(ContinuationDisposition::Reserved) => {
+                    Ok(RoutineContinuationOutcome::Reserved {
+                        authenticated_head: head.head_sha256().to_owned(),
+                    })
+                }
+                DurableWrite::Precommit(_) => {
+                    Err(error("routine-production-authority-publish-precommit"))
+                }
+                DurableWrite::Ambiguous(_, _) => {
+                    Err(error("routine-production-authority-publish-ambiguous"))
+                }
+            }
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (root, binding, attempt_grant, expected_head);
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
     pub(in crate::routine_work::runtime_adapter::production::custody) fn reserve(
         root: &Path,
         spec: &ReservationSpec,
@@ -57,6 +91,11 @@ impl DurableCustody {
             &self.token.grant_id,
             &self.token.recovery_marker,
         )
+    }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn authenticated_head(
+        &self,
+    ) -> String {
+        self.head.borrow().head_sha256().to_owned()
     }
     pub(in crate::routine_work::runtime_adapter::production::custody) fn output_journal(
         &self,
@@ -160,6 +199,7 @@ impl DurableCustody {
             state: terminal_state(observation.outcome),
             result_sha256: observation.result_sha256,
             artifacts: observation.artifacts,
+            mediation: observation.mediation,
             process_cleanup: observation.process_cleanup,
             staged_cleanup: observation.staged_cleanup,
             prior_head_sha256: self.head.borrow().head_sha256().to_owned(),

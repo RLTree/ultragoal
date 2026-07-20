@@ -1,5 +1,17 @@
 use super::*;
 
+/// Authenticated continuity classification. Durable custody keeps the record,
+/// key, and grant material private; callers receive only the safe next action.
+#[derive(Debug)]
+pub(crate) enum RoutineContinuationOutcome {
+    /// The exact authenticated attempt already completed. This classification
+    /// is read-only and safe to reuse without another effect.
+    Complete(RoutineMediationResult),
+    /// The exact authenticated attempt was reserved without a child, staged
+    /// launch, or provisioned output and was durably rolled back.
+    Reserved { authenticated_head: String },
+}
+
 impl RoutineMediationResult {
     pub(crate) fn status(&self) -> RoutineMediatorStatus {
         self.status
@@ -19,6 +31,22 @@ impl RoutineMediationResult {
 
     pub(crate) fn recovery_required(&self) -> bool {
         self.recovery_marker.is_some()
+    }
+
+    pub(crate) fn recovery_marker(&self) -> Option<&str> {
+        self.recovery_marker.as_deref()
+    }
+
+    pub(crate) fn continuation(&self) -> Option<&str> {
+        self.continuation.as_deref()
+    }
+
+    pub(crate) fn attempt_grant(&self) -> Option<&str> {
+        self.attempt_grant.as_deref()
+    }
+
+    pub(crate) fn checkpoint_head(&self) -> Option<&str> {
+        self.checkpoint_head.as_deref()
     }
 
     pub(crate) fn support_limit(&self) -> &'static str {

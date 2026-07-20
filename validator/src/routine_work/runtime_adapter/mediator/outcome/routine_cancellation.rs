@@ -77,5 +77,8 @@ pub(crate) struct RoutineMediationResult {
     pub(crate) status: RoutineMediatorStatus,
     pub(crate) nodes: Vec<RoutineNodeMediation>,
     pub(crate) recovery_marker: Option<String>,
+    pub(crate) continuation: Option<String>,
+    pub(crate) attempt_grant: Option<String>,
+    pub(crate) checkpoint_head: Option<String>,
     pub(crate) support_limit: &'static str,
 }

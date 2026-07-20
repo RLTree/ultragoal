@@ -205,38 +205,4 @@ pub(crate) fn catalog() -> Catalog {
 pub(crate) fn copy_authority_inputs(root: &Path) {
     let live = live_root();
     crate::observability_authority_fixture::copy_current_inventory_inputs(&live, root);
-    let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    fs::create_dir_all(&target).expect("contract target");
-    let mut files = fs::read_dir(&source)
-        .expect("contract directory")
-        .map(|entry| entry.expect("contract entry").path())
-        .filter(|path| path.is_file())
-        .collect::<Vec<_>>();
-    files.sort();
-    for path in files {
-        fs::copy(&path, target.join(path.file_name().expect("contract name")))
-            .expect("copy contract file");
-    }
-    for name in ["FINAL-HANDOFF-MANIFEST.sha256", "README.md"] {
-        fs::copy(
-            source.parent().expect("contract parent").join(name),
-            target.parent().expect("target parent").join(name),
-        )
-        .expect("copy handoff input");
-    }
-    fs::create_dir_all(root.join("migration")).expect("migration directory");
-    for name in ["authority-routes.json", "generated-surface-authority.json"] {
-        fs::copy(
-            live.join("migration").join(name),
-            root.join("migration").join(name),
-        )
-        .expect("copy migration input");
-    }
-    fs::create_dir_all(root.join(".codex-plugin")).expect("plugin directory");
-    fs::write(
-        root.join(".codex-plugin/plugin.json"),
-        b"{\"name\":\"harness-ultragoal\",\"version\":\"0.0.0-test\"}\n",
-    )
-    .expect("plugin descriptor");
 }

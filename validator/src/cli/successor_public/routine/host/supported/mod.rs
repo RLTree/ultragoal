@@ -10,6 +10,8 @@ use std::path::{Path, PathBuf};
 
 #[path = "anchored_directory.rs"]
 mod anchored_directory;
+#[path = "continuity.rs"]
+mod continuity;
 #[path = "directory_entries.rs"]
 mod directory_entries;
 #[path = "host_state.rs"]
@@ -20,5 +22,6 @@ mod state_components;
 mod validate_name;
 
 pub(crate) use anchored_directory::write_lock_marker;
+pub(crate) use continuity::ContinuationCheckpoint;
 pub(crate) use state_components::*;
 pub(crate) use validate_name::*;

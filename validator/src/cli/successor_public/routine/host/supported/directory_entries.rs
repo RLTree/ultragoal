@@ -3,7 +3,23 @@ use std::collections::BTreeSet;
 
 impl AnchoredDirectory {
     pub(crate) fn entry_names(&self) -> Result<BTreeSet<String>, HostFailure> {
-        let descriptor = unsafe { libc::dup(self.file.as_raw_fd()) };
+        let current = c".";
+        // SAFETY: the parent descriptor is live and the static name is
+        // NUL-terminated. Reopening `.` creates an independent directory
+        // cursor; `dup` would share and exhaust the anchored descriptor's
+        // cursor across successive scans.
+        let descriptor = unsafe {
+            libc::openat(
+                self.file.as_raw_fd(),
+                current.as_ptr(),
+                libc::O_RDONLY
+                    | libc::O_DIRECTORY
+                    | libc::O_CLOEXEC
+                    | libc::O_NOFOLLOW
+                    | libc::O_NONBLOCK,
+                0,
+            )
+        };
         if descriptor < 0 {
             return Err(HostFailure::Invalid);
         }

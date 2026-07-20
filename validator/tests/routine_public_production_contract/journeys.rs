@@ -75,7 +75,7 @@ fn clean_public_routine_is_a_zero_effect_noop() {
     fixture.teardown_after_assertions();
 }
 #[test]
-fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
+fn dirty_public_effect_executes_once_then_exact_repeat_reuses_without_mutation() {
     let mut fixture = Fixture::new(
         "execute-reuse",
         &[pass_node("compile", &[])],
@@ -100,12 +100,12 @@ fn dirty_public_effect_executes_once_then_repeat_refuses_without_mutation() {
     }
 
     let before_repeat = tree(&fixture.root);
-    assert_session_continuity_refusal(&fixture.run());
+    assert_reused_without_effect(&fixture.run());
     assert_eq!(tree(&fixture.root), before_repeat);
     fixture.teardown_after_assertions();
 }
 #[test]
-fn authorized_fresh_execution_then_exact_repeat_requires_session_continuity() {
+fn authorized_fresh_execution_then_exact_repeat_reuses_without_a_second_effect() {
     let mut fixture = Fixture::new(
         "authorized-fresh-repeat",
         &[pass_node("compile", &[])],
@@ -125,8 +125,89 @@ fn authorized_fresh_execution_then_exact_repeat_requires_session_continuity() {
     assert!(scope.is_dir());
     assert_eq!(fs::read_dir(&scope).unwrap().count(), 0);
 
-    assert_session_continuity_refusal(&fixture.run());
+    assert_reused_without_effect(&fixture.run());
     assert_eq!(fs::read_dir(scope).unwrap().count(), 0);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn reservation_interruption_reconciles_once_through_the_public_continuation_route() {
+    let mut fixture = Fixture::new(
+        "reservation-interruption-continuation",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let before = tree(&fixture.root);
+    let mut interrupted = fixture.base_command();
+    interrupted.args([
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    let interrupted = interrupted.output().unwrap();
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    assert!(interrupted.stderr.is_empty(), "{interrupted:?}");
+    let interrupted_value = Fixture::value(&interrupted);
+    assert_eq!(
+        interrupted_value["schema_version"],
+        "RoutinePublicProductionOutcome-v2"
+    );
+    assert_eq!(interrupted_value["status"], "interrupted-reservation");
+    assert_eq!(interrupted_value["effect"], "none");
+    assert_eq!(interrupted_value["recovery_required"], true);
+    let continuation = interrupted_value["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    assert!(continuation.starts_with("routine-cont-"));
+    assert_eq!(tree(&fixture.root), before);
+
+    let before_foreign = tree(&fixture.root);
+    let mut foreign = fixture.base_command();
+    foreign.args([
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        "routine-cont-foreign",
+    ]);
+    let foreign = foreign.output().unwrap();
+    assert_eq!(foreign.status.code(), Some(3), "{foreign:?}");
+    assert!(foreign.stdout.is_empty(), "{foreign:?}");
+    assert_eq!(tree(&fixture.root), before_foreign);
+
+    let mut recovered = fixture.base_command();
+    recovered.args([
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    let recovered = recovered.output().unwrap();
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert!(recovered.stderr.is_empty(), "{recovered:?}");
+    let recovered_value = Fixture::value(&recovered);
+    assert_eq!(recovered_value["status"], "executed");
+    assert_eq!(recovered_value["nodes"][0]["disposition"], "executed");
+
+    let before_replay = tree(&fixture.root);
+    let mut replay = fixture.base_command();
+    replay.args([
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    let replay = replay.output().unwrap();
+    assert_eq!(replay.status.code(), Some(3), "{replay:?}");
+    assert!(replay.stdout.is_empty(), "{replay:?}");
+    assert_eq!(tree(&fixture.root), before_replay);
     fixture.teardown_after_assertions();
 }
 
@@ -200,12 +281,12 @@ fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() 
     assert_eq!(value["status"], "incomplete");
     assert_eq!(value["recovery_required"], false);
     assert_eq!(value["nodes"][0]["disposition"], "failed");
-    assert_session_continuity_refusal(&fixture.run());
+    assert_ambiguous_terminal_refusal(&fixture.run());
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn independent_fresh_authority_roots_execute_once_and_refuse_repeat() {
+fn independent_fresh_authority_roots_execute_once_and_reuse_their_own_bindings() {
     let mut first = Fixture::new(
         "binding-first",
         &[pass_node("compile", &[])],
@@ -222,23 +303,29 @@ fn independent_fresh_authority_roots_execute_once_and_refuse_repeat() {
     );
     assert_status(&first, "executed");
     assert_status(&second, "executed");
-    assert_session_continuity_refusal(&first.run());
-    assert_session_continuity_refusal(&second.run());
+    assert_reused_without_effect(&first.run());
+    assert_reused_without_effect(&second.run());
     second.teardown_after_assertions();
     first.teardown_after_assertions();
 }
 
-fn assert_session_continuity_refusal(output: &std::process::Output) {
+fn assert_ambiguous_terminal_refusal(output: &std::process::Output) {
     assert_eq!(output.status.code(), Some(3), "{output:?}");
     assert!(output.stdout.is_empty(), "{output:?}");
     let value: Value = serde_json::from_slice(&output.stderr).unwrap();
     assert_eq!(
         value["cause"],
-        "routine-production-session-continuity-required"
+        "routine-production-continuation-effect-ambiguous"
     );
-    let ceiling = value["resulting_ceiling"].as_str().unwrap();
-    assert!(ceiling.contains("reuse, repeat execution"), "{ceiling}");
-    assert!(ceiling.contains("external monotonic head"), "{ceiling}");
+}
+
+fn assert_reused_without_effect(output: &std::process::Output) {
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    let value = Fixture::value(output);
+    assert_eq!(value["status"], "reused");
+    assert_eq!(value["effect"], "none");
+    assert_eq!(value["nodes"][0]["disposition"], "reused");
 }
 
 fn assert_status(fixture: &Fixture, expected: &str) {

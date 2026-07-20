@@ -2,15 +2,23 @@ use crate::context::LiveContext;
 use crate::observability::{CausalExplanation, EventQuery, EventStore, SemanticEvent};
 use serde_json::{Value, json};
 use std::ffi::OsString;
+use std::fs;
 use std::path::{Path, PathBuf};
 
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 
 const STORE_PATH: &str = "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(super) const RUNTIME_SOURCE_ID: &str = "successor-runtime";
 
 mod failure;
+mod terminal_routine;
 pub(super) use failure::LocalStoreFailure;
+pub(super) use terminal_routine::routine_observations_from_events;
+#[allow(unused_imports)]
+pub(super) use terminal_routine::{
+    RoutineTerminalEvent, append_routine_terminal, terminal_event_id,
+};
 
 pub(super) struct LocalStore {
     root: PathBuf,

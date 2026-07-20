@@ -15,8 +15,8 @@ use crate::routine_work::{
 
 use super::execution_authority::{PreparedRoutineExecution, RoutineEffectRequest};
 use super::mediator::{
-    DurableSettlement, PreflightedProductionReuse, mediate_noop, preflight_production_request,
-    preflight_production_reuse_input, recovery_identity,
+    DurableSettlement, PreflightedProductionReuse, RoutineContinuationOutcome, mediate_noop,
+    preflight_production_request, preflight_production_reuse_input, recovery_identity,
 };
 use super::{RoutineCancellation, RoutineMediationResult, RoutineReuseInput};
 #[path = "custody/mod.rs"]
@@ -43,8 +43,15 @@ pub(crate) use launch_custody::{
 };
 use production_mediation::error;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum PublicRoutineControl {
+    Run,
+    InterruptAfterReservation,
+}
+
 /// Canonical public production entry. Issuer construction, reservation,
 /// recovery lookup, and raw settlement stay inside this leaf.
+#[cfg(test)]
 pub(crate) fn mediate_public_routine_execution(
     authority_root: Option<&Path>,
     context: &LiveContext,
@@ -52,6 +59,26 @@ pub(crate) fn mediate_public_routine_execution(
     prepared: PreparedRoutineExecution,
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
+) -> Result<RoutineMediationResult, RoutineError> {
+    mediate_public_routine_execution_with_control(
+        authority_root,
+        context,
+        plan,
+        prepared,
+        cancellation,
+        reuse,
+        PublicRoutineControl::Run,
+    )
+}
+
+pub(crate) fn mediate_public_routine_execution_with_control(
+    authority_root: Option<&Path>,
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    prepared: PreparedRoutineExecution,
+    cancellation: RoutineCancellation,
+    reuse: RoutineReuseInput,
+    control: PublicRoutineControl,
 ) -> Result<RoutineMediationResult, RoutineError> {
     if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
         if !reuse.is_empty() {
@@ -70,5 +97,28 @@ pub(crate) fn mediate_public_routine_execution(
     let reuse = preflight_production_reuse_input(reuse, &request, reuse_supplied)?;
     let authority_root =
         authority_root.ok_or_else(|| error("routine-production-authority-root-missing"))?;
-    custody::mediate_reserved_effect(authority_root, context, plan, request, cancellation, reuse)
+    custody::mediate_reserved_effect(
+        authority_root,
+        context,
+        plan,
+        request,
+        cancellation,
+        reuse,
+        control,
+    )
+}
+
+pub(crate) fn reconcile_public_routine_reservation(
+    authority_root: &Path,
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    prepared: PreparedRoutineExecution,
+    attempt_grant: &str,
+    expected_head: &str,
+) -> Result<RoutineContinuationOutcome, RoutineError> {
+    let PreparedRoutineExecution::Effect(request) = prepared else {
+        return Err(error("routine-production-continuation-effect-required"));
+    };
+    preflight_production_request(context, plan, &request)?;
+    custody::reconcile_reserved_effect(authority_root, &request, attempt_grant, expected_head)
 }

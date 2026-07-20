@@ -62,12 +62,16 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation,
-    RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
-    mediate_public_routine_execution, prepare_routine_execution,
-    validate_immutable_routine_program,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, PublicRoutineControl, RoutineAdapterSpec,
+    RoutineCancellation, RoutineContinuationOutcome, RoutineInvocationSpec, RoutineMediationResult,
+    RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
+    bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution_with_control, prepare_routine_execution,
+    reconcile_public_routine_reservation, validate_immutable_routine_program,
 };
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::mediate_public_routine_execution;
 
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use runtime_adapter::{
