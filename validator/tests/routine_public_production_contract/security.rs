@@ -97,6 +97,40 @@ fn malformed_host_component_refuses_without_repair() {
 }
 
 #[test]
+fn forged_short_staged_marker_refuses_without_publication() {
+    let mut fixture = Fixture::new(
+        "forged-staged-marker",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    let stage = fixture
+        .home
+        .join(".codex/state/harness-ultragoal/.routine-public-bootstrap");
+    for path in [
+        fixture.home.join(".codex"),
+        fixture.home.join(".codex/state"),
+        fixture.home.join(".codex/state/harness-ultragoal"),
+        stage.join("authority"),
+        stage.join("adapter"),
+    ] {
+        fs::create_dir_all(&path).unwrap();
+        fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+    }
+    let lock = stage.join("adapter/adapter.lock");
+    fs::write(&lock, b"forged").unwrap();
+    fs::set_permissions(&lock, fs::Permissions::from_mode(0o600)).unwrap();
+    let before_root = tree(&fixture.root);
+    let output = fixture.run();
+    assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(fs::read(&lock).unwrap(), b"forged");
+    assert!(!fixture.state_root().exists());
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn host_lock_symlink_substitution_fails_closed() {
     let mut fixture = Fixture::new(
         "lock-substitution",

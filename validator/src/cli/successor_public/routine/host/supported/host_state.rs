@@ -108,8 +108,13 @@ fn bootstrap_new_state(
         lock_identity,
     };
     staged.verify()?;
+    if let Err(error) = base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3]) {
+        return match base.open_child(STATE_COMPONENTS[3]) {
+            Ok(_) => Err(HostFailure::Busy),
+            Err(_) => Err(error),
+        };
+    }
     drop(staged);
-    base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3])?;
     let state = base.open_child(STATE_COMPONENTS[3])?;
     open_existing_state(home, state)
 }
@@ -146,7 +151,7 @@ fn acquire_locked_marker(
     let lock_identity = identity(&lock.metadata().map_err(|_| HostFailure::Invalid)?);
     let lock = ProcessLock::acquire(lock)?.0;
     let marker = read_lock_marker(&lock)?;
-    if marker != LOCK_MARKER && (!initialize_marker || marker.len() > LOCK_MARKER.len()) {
+    if marker != LOCK_MARKER && (!initialize_marker || !LOCK_MARKER.starts_with(&marker)) {
         return Err(HostFailure::Invalid);
     }
     if marker != LOCK_MARKER {
