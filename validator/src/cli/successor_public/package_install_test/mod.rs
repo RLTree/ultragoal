@@ -23,7 +23,7 @@ struct InstallTestOutcome<'a> {
     candidate_id: &'a str,
     catalog_id: &'a str,
     package_sha256: &'a str,
-    installed_tree_sha256: &'a str,
+    marketplace_source_tree_sha256: &'a str,
     cache_observation_sha256: &'a str,
     marketplace_observation_sha256: &'a str,
     app_registry_observation_sha256: &'a str,
@@ -58,7 +58,7 @@ pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> R
         candidate_id: artifact.candidate_id(),
         catalog_id: artifact.catalog_id(),
         package_sha256: artifact.snapshot().package_sha256(),
-        installed_tree_sha256: observation.installed_tree_sha256(),
+        marketplace_source_tree_sha256: observation.marketplace_source_tree_sha256(),
         cache_observation_sha256: observation.cache_observation_sha256(),
         marketplace_observation_sha256: observation.marketplace_observation_sha256(),
         app_registry_observation_sha256: observation.app_registry_observation_sha256(),
@@ -66,7 +66,7 @@ pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> R
         journey_binding_sha256: observation.journey_binding_sha256(),
         discovery_status: "pending-fresh-codex-task",
         output: output_path,
-        claim_ceiling: "isolated package/install/cache/marketplace/app-registry/runtime verified; Codex discovery and installed product claims withheld",
+        claim_ceiling: "isolated marketplace-source/archive-install/cache/app-registry/runtime verified; Codex discovery and installed product claims withheld",
     };
     publish_outcome(context, output_path, &record)
 }

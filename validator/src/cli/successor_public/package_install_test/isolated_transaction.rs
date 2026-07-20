@@ -105,11 +105,8 @@ fn execute_bound(
         artifact.snapshot().identity().clone(),
     )
     .map_err(|_| "marketplace plan failed")?;
-    let mut marketplace_file = ScopedFile::new(
-        confined.clone(),
-        "marketplace/.codex-plugin/marketplace.json",
-    )
-    .map_err(|_| "marketplace target failed")?;
+    let mut marketplace_file = ScopedFile::new(confined.clone(), ".codex-plugin/marketplace.json")
+        .map_err(|_| "marketplace target failed")?;
     apply_marketplace(&marketplace_plan, &mut marketplace_file)
         .map_err(|_| "marketplace publication failed")?;
     let marketplace_bytes = marketplace_file
@@ -210,7 +207,7 @@ fn execute_bound(
         .verify_marketplace_source(context, catalog, &package_tree)
         .map_err(|_| "materialized package changed during transaction")?;
     Ok(IsolatedObservation {
-        installed_tree_sha256: artifact.snapshot().identity().tree_sha256().into(),
+        marketplace_source_tree_sha256: artifact.snapshot().identity().tree_sha256().into(),
         cache_observation_sha256: cache.observation_sha256().into(),
         marketplace_observation_sha256: marketplace
             .catalog_sha256()
