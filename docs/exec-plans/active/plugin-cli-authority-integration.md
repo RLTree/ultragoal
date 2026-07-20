@@ -1,5 +1,23 @@
 # Plugin and CLI Authority Integration
 
+## Late N04 repair checkpoint — 2026-07-19
+
+The closed P0 checkpoint is terminal and cannot be reissued. Exact root
+authority `8afac04a176255ca5b2694b9379ed07935cc3353` /
+`5bdbeaae0b991885a80e01d9bf2ddbb72e929f47` adds explicit N04 READY and ACTIVE
+frontiers, requires every active non-P0 lease to bind a real clean registered
+worktree at the exact gate identity, and withholds N08/N11/N12/N14-N17 while
+distribution is repaired.
+
+The product preflight failed closed at `HCT-DISTRIBUTION` because the typed
+distribution adapter is unavailable. Treat this only as routing evidence.
+Root now records N04 READY, runs the cheap compile/namespace/standards gates on
+that exact commit, creates a unique branch and Codex-managed worktree from the
+same commit, then records ACTIVE with one exact N04 lease. The lane may change
+only `WS-DISTRIBUTION`; public dispatch, schemas, dependencies, generated
+authority, claims, package adoption, install/runtime observations, and
+downstream rebind remain root-owned.
+
 This is the active non-authoritative projection plan for the Harness Ultragoal
 successor. It is not contract, queue, lease, or proof authority. Normative scope remains the bundle rooted
 at `docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/00-READ-ME-FIRST.md`.

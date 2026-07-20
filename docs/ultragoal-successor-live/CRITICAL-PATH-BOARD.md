@@ -1,5 +1,23 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-19 late distribution repair frontier
+
+P0 is terminal, closed, and non-reissuable. Root accepted the exact authority
+checkpoint at `8afac04a176255ca5b2694b9379ed07935cc3353` /
+`5bdbeaae0b991885a80e01d9bf2ddbb72e929f47`. The next selectable work is the
+existing N04 `WS-DISTRIBUTION` scope because the current product preflight
+failed closed at `HCT-DISTRIBUTION` with
+`successor_runtime_downstream_tool_unavailable`. This observation is advisory:
+it does not establish package, install, discovery, runtime, journey, readiness,
+release, or completion behavior.
+
+The canonical frontier is N04 READY only. N08, N11, N12, and N14 are blocked
+for exact dependency reobservation, and N13/N15/N16/N17 remain blocked. Root
+must run compile, namespace, and standards gates on the exact READY commit,
+then create one unique branch and one clean registered Codex-managed worktree
+from that same identity before recording N04 ACTIVE. No N04 source work is
+authorized before that lease.
+
 Current recovery note (2026-07-16): durable host goal
 `019f5f39-507b-78a2-a96a-0b566a5a2126` remains active. The P0 root-freeze
 literal protected checkpoint is commit `97e24c9706e7b489bdbdc6184ff9520a7116c6fd`,
