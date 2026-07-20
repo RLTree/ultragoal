@@ -197,7 +197,7 @@ fn open_host_state_base(home: &Path) -> Result<Option<AnchoredDirectory>, HostFa
     Ok(Some(current))
 }
 
-fn prospective_state_root(base: &Path) -> Result<PathBuf, HostFailure> {
+pub(super) fn prospective_state_root(base: &Path) -> Result<PathBuf, HostFailure> {
     let canonical_base = fs::canonicalize(base).map_err(|_| HostFailure::Invalid)?;
     if canonical_base != base {
         return Err(HostFailure::Invalid);
