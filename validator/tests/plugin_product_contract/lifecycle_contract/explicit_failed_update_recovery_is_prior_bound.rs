@@ -26,6 +26,27 @@ fn explicit_failed_update_recovery_is_prior_bound() {
 }
 
 #[test]
+fn failed_update_recovery_refuses_a_normal_state_before_effects_are_planned() {
+    let prior = installed(authority("0.0.12", D1));
+    let normal = installed(authority("0.0.13", D2));
+    let recovery = LifecycleRequest {
+        intent: LifecycleIntent::FailedUpdateRecovery,
+        target: None,
+        prior_authority: Some(prior),
+        authorization: LifecycleAuthorization {
+            allow_host_write: true,
+            allow_downgrade: true,
+            expected_installed_sha256: Some(D2.to_owned()),
+        },
+    };
+
+    assert_eq!(
+        plan(&normal, &recovery),
+        Err(LifecycleError::InvalidTransition)
+    );
+}
+
+#[test]
 fn downgrade_requires_specific_authority_and_expected_prior() {
     let current = authority("0.0.13", D2);
     let before = installed(current.clone());
