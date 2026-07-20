@@ -124,12 +124,24 @@ fn readdir_failed() -> bool {
     unsafe { *libc::__error() != 0 }
 }
 
-#[cfg(all(unix, not(target_os = "macos")))]
+#[cfg(target_os = "linux")]
+fn clear_readdir_error() {
+    // SAFETY: Linux exposes the calling thread's writable errno location.
+    unsafe { *libc::__errno_location() = 0 };
+}
+
+#[cfg(target_os = "linux")]
+fn readdir_failed() -> bool {
+    // SAFETY: Linux exposes the calling thread's readable errno location.
+    unsafe { *libc::__errno_location() != 0 }
+}
+
+#[cfg(all(unix, not(any(target_os = "macos", target_os = "linux"))))]
 fn clear_readdir_error() {}
 
-#[cfg(all(unix, not(target_os = "macos")))]
+#[cfg(all(unix, not(any(target_os = "macos", target_os = "linux"))))]
 fn readdir_failed() -> bool {
-    false
+    true
 }
 
 #[cfg(not(unix))]
@@ -148,14 +160,7 @@ pub(crate) fn open_relative(
     let mode = libc::c_uint::from(mode);
     // SAFETY: `directory` owns a live directory descriptor, `name` is a
     // NUL-terminated relative path, and `mode` has the ABI type for `openat`.
-    let descriptor = unsafe {
-        libc::openat(
-            directory.as_raw_fd(),
-            name.as_ptr(),
-            flags,
-            mode,
-        )
-    };
+    let descriptor = unsafe { libc::openat(directory.as_raw_fd(), name.as_ptr(), flags, mode) };
     if descriptor < 0 {
         return Err(match std::io::Error::last_os_error().raw_os_error() {
             Some(libc::EEXIST) => OrchestrationError::JournalConflict,

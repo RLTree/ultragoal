@@ -70,10 +70,121 @@ fn git_output(repo: &TestRepo, args: &[&str]) -> String {
 }
 
 fn run_git(repo: &TestRepo, args: &[&str]) {
-    assert!(Command::new("git")
-        .args(args)
-        .current_dir(&repo.root)
-        .status()
+    assert!(
+        Command::new("git")
+            .args(args)
+            .current_dir(&repo.root)
+            .status()
+            .unwrap()
+            .success()
+    );
+}
+
+fn synthetic_request(repo: &TestRepo) -> crate::context::BuildRequest {
+    use sha2::Digest;
+
+    let manifest = repo
+        .root
+        .join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256");
+    let digest = format!("{:x}", sha2::Sha256::digest(fs::read(manifest).unwrap()));
+    crate::context::BuildRequest::new(&repo.root)
+        .bind_non_secret_configuration(crate::inventory::ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, digest)
+}
+
+fn close_synthetic_graph(repo: &TestRepo) {
+    use sha2::Digest;
+
+    let schema = "schemas/product-success-contract.schema.json";
+    repo.write(schema, &fs::read(live_root().join(schema)).unwrap());
+    let path = repo.root.join(
+        "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+    );
+    let mut graph: serde_json::Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    let n12 = graph["nodes"]
+        .as_array_mut()
         .unwrap()
-        .success());
+        .iter_mut()
+        .find(|node| node["node_id"] == "N12-CLAIMS")
+        .unwrap();
+    n12["depends_on"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|dependency| dependency != "N11-EVAL-RESEARCH");
+    let bytes = serde_json::to_vec(&graph).unwrap();
+    fs::write(&path, &bytes).unwrap();
+    let digest = format!("{:x}", sha2::Sha256::digest(&bytes));
+    let contract_manifest = repo
+        .root
+        .join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CONTRACT_MANIFEST.json");
+    let mut contract: serde_json::Value =
+        serde_json::from_slice(&fs::read(&contract_manifest).unwrap()).unwrap();
+    let row = contract["contract_entries"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|row| row["path"] == "FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json")
+        .unwrap();
+    row["sha256"] = digest.clone().into();
+    row["bytes"] = (bytes.len() as u64).into();
+    let contract_bytes = serde_json::to_vec(&contract).unwrap();
+    fs::write(&contract_manifest, &contract_bytes).unwrap();
+    let manifest = repo
+        .root
+        .join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256");
+    let entry = "  FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json";
+    let contract_entry = "  FINAL-CONTRACT/CONTRACT_MANIFEST.json";
+    let rewritten = fs::read_to_string(&manifest)
+        .unwrap()
+        .lines()
+        .map(|line| {
+            line.strip_suffix(entry)
+                .filter(|_| line.len() == entry.len() + 64)
+                .map_or_else(
+                    || {
+                        line.strip_suffix(contract_entry)
+                            .filter(|_| line.len() == contract_entry.len() + 64)
+                            .map_or_else(
+                                || line.to_owned(),
+                                |_| {
+                                    format!(
+                                        "{:x}{contract_entry}",
+                                        sha2::Sha256::digest(&contract_bytes)
+                                    )
+                                },
+                            )
+                    },
+                    |_| format!("{digest}{entry}"),
+                )
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    let manifest_bytes = format!("{rewritten}\n").into_bytes();
+    fs::write(manifest, &manifest_bytes).unwrap();
+    let registry_path = repo.root.join("LANE_REGISTRY.json");
+    let mut registry: serde_json::Value =
+        serde_json::from_slice(&fs::read(&registry_path).unwrap()).unwrap();
+    rewrite_graph_digests(&mut registry, &format!("sha256:{digest}"));
+    registry["source_context"]["refs"]["graph"]["digest"] = format!("sha256:{digest}").into();
+    registry["pre_adoption_source"]["contract_bundle_ref"]["digest"] =
+        format!("sha256:{:x}", sha2::Sha256::digest(manifest_bytes)).into();
+    fs::write(registry_path, serde_json::to_vec(&registry).unwrap()).unwrap();
+}
+
+fn rewrite_graph_digests(value: &mut serde_json::Value, digest: &str) {
+    if value.get("path").and_then(serde_json::Value::as_str)
+        == Some(
+            "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json",
+        )
+    {
+        value["digest"] = digest.into();
+    }
+    match value {
+        serde_json::Value::Array(values) => values
+            .iter_mut()
+            .for_each(|value| rewrite_graph_digests(value, digest)),
+        serde_json::Value::Object(values) => values
+            .values_mut()
+            .for_each(|value| rewrite_graph_digests(value, digest)),
+        _ => {}
+    }
 }

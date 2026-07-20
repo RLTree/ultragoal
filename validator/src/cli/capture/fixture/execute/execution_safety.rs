@@ -1,5 +1,20 @@
 use super::*;
 
+pub(crate) fn digest(bytes: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+    format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+#[cfg(test)]
+pub(crate) static TEST_PRE_LAUNCH_PAUSED: AtomicBool = AtomicBool::new(false);
+
+#[cfg(test)]
+pub(crate) fn pre_launch_hook() -> &'static std::sync::Mutex<Option<(std::path::PathBuf, u64)>> {
+    static HOOK: std::sync::OnceLock<std::sync::Mutex<Option<(std::path::PathBuf, u64)>>> =
+        std::sync::OnceLock::new();
+    HOOK.get_or_init(|| std::sync::Mutex::new(None))
+}
+
 #[cfg(test)]
 pub(crate) fn test_pre_launch_pause(path: &Path) {
     let milliseconds = {

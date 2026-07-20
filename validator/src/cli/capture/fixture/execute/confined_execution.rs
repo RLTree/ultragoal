@@ -1,56 +1,20 @@
 use super::*;
 
-type ConfinedResult =
-    Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError>;
-type ConfinedRunner = for<'a> fn(
-    &'a FixtureSpec,
-    &'a Path,
-    PinnedExecutableKind,
-    &'a [u8],
-    &'a [std::ffi::OsString],
-    &'a Path,
-    &'a BTreeMap<String, String>,
-    usize,
-    &'a Arc<AtomicBool>,
-) -> ConfinedResult;
-
-pub(crate) const RUN_CONFINED: ConfinedRunner =
-    |fixture,
-     source_executable,
-     executable_kind,
-     executable_bytes,
-     arguments,
-     cwd,
-     environment,
-     output_limit,
-     interrupt| {
-        run_confined_inner(ConfinedExecution {
-            fixture,
-            source_executable,
-            executable_kind,
-            executable_bytes,
-            arguments,
-            cwd,
-            environment,
-            output_limit,
-            interrupt,
-        })
-    };
-pub(crate) use RUN_CONFINED as run_confined;
-
-struct ConfinedExecution<'a> {
-    fixture: &'a FixtureSpec,
-    source_executable: &'a Path,
-    executable_kind: PinnedExecutableKind,
-    executable_bytes: &'a [u8],
-    arguments: &'a [std::ffi::OsString],
-    cwd: &'a Path,
-    environment: &'a BTreeMap<String, String>,
-    output_limit: usize,
-    interrupt: &'a Arc<AtomicBool>,
+pub(crate) struct ConfinedExecution<'a> {
+    pub(crate) fixture: &'a FixtureSpec,
+    pub(crate) source_executable: &'a Path,
+    pub(crate) executable_kind: PinnedExecutableKind,
+    pub(crate) executable_bytes: &'a [u8],
+    pub(crate) arguments: &'a [std::ffi::OsString],
+    pub(crate) cwd: &'a Path,
+    pub(crate) environment: &'a BTreeMap<String, String>,
+    pub(crate) output_limit: usize,
+    pub(crate) interrupt: &'a Arc<AtomicBool>,
 }
 
-fn run_confined_inner(request: ConfinedExecution<'_>) -> ConfinedResult {
+pub(crate) fn run_confined(
+    request: ConfinedExecution<'_>,
+) -> Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError> {
     let ConfinedExecution {
         fixture,
         source_executable,
@@ -281,19 +245,4 @@ impl Drop for TestNativeSnapshot {
             );
         }
     }
-}
-
-pub(crate) fn digest(bytes: &[u8]) -> String {
-    use sha2::{Digest, Sha256};
-    format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
-#[cfg(test)]
-pub(crate) static TEST_PRE_LAUNCH_PAUSED: AtomicBool = AtomicBool::new(false);
-
-#[cfg(test)]
-pub(crate) fn pre_launch_hook() -> &'static std::sync::Mutex<Option<(std::path::PathBuf, u64)>> {
-    static HOOK: std::sync::OnceLock<std::sync::Mutex<Option<(std::path::PathBuf, u64)>>> =
-        std::sync::OnceLock::new();
-    HOOK.get_or_init(|| std::sync::Mutex::new(None))
 }
