@@ -80,6 +80,18 @@ fn late_distribution_repair_keeps_downstream_lanes_blocked() {
     }
 }
 
+#[test]
+fn integrated_distribution_repair_requires_dependency_reobservation() {
+    let nodes = scheduler_nodes(&registry(
+        &repair_states("integrated"),
+        &[],
+        "N04_REPAIR_INTEGRATED_DEPENDENTS_REOBSERVATION_REQUIRED",
+    ))
+    .unwrap();
+    assert!(nodes.ready.is_empty());
+    assert!(nodes.active_worktree_lanes.is_empty());
+}
+
 fn repair_states(n04: &'static str) -> Vec<(&'static str, &'static str)> {
     vec![
         ("N04", n04),

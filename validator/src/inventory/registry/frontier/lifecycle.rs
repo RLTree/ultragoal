@@ -86,6 +86,11 @@ pub(super) fn expected(
             repair_dependents(states)?;
             (&[][..], &["N04"][..])
         }
+        "N04_REPAIR_INTEGRATED_DEPENDENTS_REOBSERVATION_REQUIRED" => {
+            exact_state(states, "N04", "integrated")?;
+            repair_dependents(states)?;
+            (&[][..], &[][..])
+        }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };
     Ok(ExpectedLifecycle {

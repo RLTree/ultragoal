@@ -2,6 +2,19 @@
 
 ## Late N04 repair checkpoint — 2026-07-19
 
+N04 is now root-integrated at exact source `d9525e027a9e0aeecf0ec3e4680f9818f2950455`
+/ tree `dd32cd9e200bee99370d0bbb0aeadb8883a71c1d`. One bounded Terra/high
+correction review accepted the complete workspace-identity and output-authority
+invariant. The real public command produced the same 4,061-byte inventory twice
+at SHA-256 `b7375c1b7b5a19638f7e5c23f465c47ff8f5597aae25928aca07d1a955c26dcb`;
+protected output attempts were zero-write. This promotes no package-build,
+install, discovery, runtime, fitness, readiness, or release claim.
+
+The immediate root-only checkpoint is dependency reobservation for N08, N11,
+N12, and N14. No new implementation worktree is selectable until those
+consumed N04 interfaces and identities are classified on the containing clean
+candidate. The disposable inventory file is not retained after this checkpoint.
+
 The closed P0 checkpoint is terminal and cannot be reissued. Exact root
 authority `8afac04a176255ca5b2694b9379ed07935cc3353` /
 `5bdbeaae0b991885a80e01d9bf2ddbb72e929f47` adds explicit N04 READY and ACTIVE
