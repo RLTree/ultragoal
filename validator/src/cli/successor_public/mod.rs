@@ -15,31 +15,6 @@ use crate::inventory::{
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
-pub(crate) struct HostCustodyIssuance {
-    authority_root: PathBuf,
-    _seal: HostCustodySeal,
-}
-
-struct HostCustodySeal;
-
-impl HostCustodyIssuance {
-    fn new(authority_root: PathBuf) -> Self {
-        Self {
-            authority_root,
-            _seal: HostCustodySeal,
-        }
-    }
-
-    #[cfg(test)]
-    pub(crate) fn for_test(authority_root: &Path) -> Self {
-        Self::new(authority_root.to_path_buf())
-    }
-
-    pub(crate) fn into_authority_root(self) -> PathBuf {
-        self.authority_root
-    }
-}
-
 #[path = "output_emission.rs"]
 mod output_emission;
 #[path = "output_limit.rs"]
@@ -59,7 +34,7 @@ mod package_dispatch;
 mod package_install_test;
 mod package_inventory;
 mod public_context;
-mod routine;
+pub(crate) mod routine;
 mod strict;
 
 #[cfg(test)]

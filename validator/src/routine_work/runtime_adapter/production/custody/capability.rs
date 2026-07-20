@@ -1,5 +1,5 @@
 use super::*;
-use crate::cli::successor_public::HostCustodyIssuance;
+use crate::cli::successor_public::routine::HostCustodyIssuance;
 
 /// Opaque authority to enter the private routine custody transaction.
 ///

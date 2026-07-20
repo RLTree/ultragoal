@@ -41,6 +41,7 @@ mod source_context;
 #[path = "source/selection.rs"]
 mod source_selection;
 
+pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;
 pub(crate) use source_configuration::*;
 pub(crate) use source_selection::*;
