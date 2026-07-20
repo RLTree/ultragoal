@@ -934,6 +934,13 @@ actual caller instead of retaining a line-expensive compatibility wrapper.
 This is a support-only semantic split: no diagnostic set, public API, behavior,
 schema, dispatch, dependency, receipt, or claim authority changes.
 
+The bounded correction review found that removing the over-limit inline Git
+query tests also removed the only direct stale-session execution control.
+The same lease therefore additionally owns
+`validator/src/context/git_tests.rs` solely as the semantic test module for the
+recorded-capability positive query and fail-closed stale-session cases. This
+does not broaden production Git authority, public API, diagnostics, or claims.
+
 The nearest product milestone is one exact current-source journey:
 source -> package -> install -> discovery -> repository fit -> dirty routine
 work -> interruption/diagnosis/recovery -> repeat use. Each truth surface keeps
