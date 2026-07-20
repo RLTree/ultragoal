@@ -168,6 +168,7 @@ fn concurrent_first_use_has_one_authoritative_effect() {
         );
         for output in outputs {
             if !output.status.success() {
+                assert_not_transition_invalid(&output);
                 assert_public_refusal(&output);
             }
         }
@@ -176,6 +177,14 @@ fn concurrent_first_use_has_one_authoritative_effect() {
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
     fixture.teardown_after_assertions();
+}
+
+fn assert_not_transition_invalid(output: &Output) {
+    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_ne!(
+        diagnostic["cause"],
+        "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe"
+    );
 }
 
 #[test]

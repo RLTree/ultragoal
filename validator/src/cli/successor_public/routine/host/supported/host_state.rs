@@ -90,6 +90,17 @@ fn bootstrap_new_state(
     home: AnchoredDirectory,
     base: AnchoredDirectory,
 ) -> Result<HostState, HostFailure> {
+    match bootstrap_stage(home, &base) {
+        Ok(state) => Ok(state),
+        Err(_) if base.open_child(STATE_COMPONENTS[3]).is_ok() => Err(HostFailure::Busy),
+        Err(error) => Err(error),
+    }
+}
+
+fn bootstrap_stage(
+    home: AnchoredDirectory,
+    base: &AnchoredDirectory,
+) -> Result<HostState, HostFailure> {
     let (state, _) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
     require_entries(&state, &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY])?;
     let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
@@ -108,12 +119,7 @@ fn bootstrap_new_state(
         lock_identity,
     };
     staged.verify()?;
-    if let Err(error) = base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3]) {
-        return match base.open_child(STATE_COMPONENTS[3]) {
-            Ok(_) => Err(HostFailure::Busy),
-            Err(_) => Err(error),
-        };
-    }
+    base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3])?;
     drop(staged);
     let state = base.open_child(STATE_COMPONENTS[3])?;
     open_existing_state(home, state)
