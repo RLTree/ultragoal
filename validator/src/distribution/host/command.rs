@@ -32,11 +32,45 @@ impl HostCommand {
     }
 }
 
-#[derive(Clone, Eq, PartialEq)]
 pub struct HostCommandPlan {
     package: PackageIdentity,
     commands: Vec<HostCommand>,
     plan_sha256: String,
+    consumed: std::sync::Arc<std::sync::atomic::AtomicBool>,
+}
+
+impl Clone for HostCommandPlan {
+    fn clone(&self) -> Self {
+        Self {
+            package: self.package.clone(),
+            commands: self.commands.clone(),
+            plan_sha256: self.plan_sha256.clone(),
+            consumed: std::sync::Arc::clone(&self.consumed),
+        }
+    }
+}
+
+impl PartialEq for HostCommandPlan {
+    fn eq(&self, other: &Self) -> bool {
+        self.package == other.package
+            && self.commands == other.commands
+            && self.plan_sha256 == other.plan_sha256
+    }
+}
+
+impl Eq for HostCommandPlan {}
+
+impl HostCommandPlan {
+    pub(super) fn consume_once(&self) -> bool {
+        self.consumed
+            .compare_exchange(
+                false,
+                true,
+                std::sync::atomic::Ordering::AcqRel,
+                std::sync::atomic::Ordering::Acquire,
+            )
+            .is_ok()
+    }
 }
 
 impl std::fmt::Debug for HostCommandPlan {
@@ -155,6 +189,7 @@ fn bound_plan(
         package: package.clone(),
         commands,
         plan_sha256,
+        consumed: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
     })
 }
 

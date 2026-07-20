@@ -1,9 +1,8 @@
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct HostAuthorization {
     pub(super) context_id: String,
     pub(super) candidate_id: String,
     pub(super) plan_sha256: String,
-    pub(super) consumed: bool,
 }
 
 impl HostAuthorization {
@@ -19,15 +18,31 @@ impl HostAuthorization {
             context_id,
             candidate_id,
             plan_sha256,
-            consumed: false,
         })
     }
 }
 
 pub struct CommandOutput {
-    pub exit_code: i32,
-    pub stdout: Vec<u8>,
-    pub stderr: Vec<u8>,
+    exit_code: i32,
+    stdout: Vec<u8>,
+    stderr: Vec<u8>,
+}
+
+impl CommandOutput {
+    pub fn new(
+        exit_code: i32,
+        stdout: Vec<u8>,
+        stderr: Vec<u8>,
+    ) -> Result<Self, HostExecutorError> {
+        if stdout.len() > OUTPUT_LIMIT || stderr.len() > OUTPUT_LIMIT {
+            return Err(HostExecutorError::OutputLimit);
+        }
+        Ok(Self {
+            exit_code,
+            stdout,
+            stderr,
+        })
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -36,6 +51,7 @@ pub enum HostExecutorError {
     TimedOut,
     Interrupted,
     InvalidPolicy,
+    OutputLimit,
 }
 
 pub trait HostExecutor {

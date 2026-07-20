@@ -12,14 +12,6 @@ pub fn execute_authorized_report(
     authorization: &mut HostAuthorization,
     executor: &mut impl HostExecutor,
 ) -> Result<HostExecutionSnapshot, HostCommandFailure> {
-    if authorization.consumed {
-        return Err(HostCommandFailure {
-            failed_index: 0,
-            completed_count: 0,
-            exit: HostCommandExit::ReplayRejected,
-            retry_allowed: false,
-        });
-    }
     if authorization.plan_sha256 != plan.plan_sha256
         || authorization.context_id != plan.package.source().context_id()
         || authorization.candidate_id != plan.package.source().candidate_id()
@@ -31,7 +23,14 @@ pub fn execute_authorized_report(
             retry_allowed: false,
         });
     }
-    authorization.consumed = true;
+    if !plan.consume_once() {
+        return Err(HostCommandFailure {
+            failed_index: 0,
+            completed_count: 0,
+            exit: HostCommandExit::ReplayRejected,
+            retry_allowed: false,
+        });
+    }
     let mut output_sha256 = Vec::with_capacity(plan.commands.len());
     for (failed_index, row) in plan.commands.iter().enumerate() {
         let output = match executor.execute_with_policy(row) {
@@ -42,6 +41,7 @@ pub fn execute_authorized_report(
                     HostExecutorError::TimedOut => HostCommandExit::TimedOut,
                     HostExecutorError::Interrupted => HostCommandExit::Interrupted,
                     HostExecutorError::InvalidPolicy => HostCommandExit::EffectUnavailable,
+                    HostExecutorError::OutputLimit => HostCommandExit::OutputLimit,
                 };
                 return Err(HostCommandFailure {
                     failed_index,
@@ -51,14 +51,6 @@ pub fn execute_authorized_report(
                 });
             }
         };
-        if output.stdout.len() > OUTPUT_LIMIT || output.stderr.len() > OUTPUT_LIMIT {
-            return Err(HostCommandFailure {
-                failed_index,
-                completed_count: output_sha256.len(),
-                exit: HostCommandExit::OutputLimit,
-                retry_allowed: false,
-            });
-        }
         if output.exit_code != 0 {
             return Err(HostCommandFailure {
                 failed_index,
@@ -130,24 +122,20 @@ mod tests {
         }
     }
 
-    fn authorization(plan: &HostCommandPlan) -> HostAuthorization {
+    fn authorization_for(plan: &HostCommandPlan) -> HostAuthorization {
         HostAuthorization::new(CONTEXT.into(), CANDIDATE.into(), plan.plan_sha256().into())
             .expect("authorization")
     }
 
     fn ok() -> Result<CommandOutput, HostExecutorError> {
-        Ok(CommandOutput {
-            exit_code: 0,
-            stdout: b"ok".to_vec(),
-            stderr: Vec::new(),
-        })
+        Ok(CommandOutput::new(0, b"ok".to_vec(), Vec::new()).expect("output"))
     }
 
     #[test]
     fn policy_boundary_reports_partial_timeout_and_rejects_replay() {
         let plan = HostCommandPlan::repository_install(&package(), "/tmp/repository", "local-repo")
             .expect("plan");
-        let mut authorization = authorization(&plan);
+        let mut authorization = authorization_for(&plan);
         let mut executor = ScriptedExecutor {
             steps: VecDeque::from([ok(), Err(HostExecutorError::TimedOut)]),
             ..Default::default()
@@ -165,6 +153,11 @@ mod tests {
         let replay = execute_authorized_report(&plan, &mut authorization, &mut executor)
             .expect_err("replay");
         assert_eq!(replay.exit(), HostCommandExit::ReplayRejected);
+        let mut fresh_authorization = authorization_for(&plan);
+        let fresh_replay =
+            execute_authorized_report(&plan, &mut fresh_authorization, &mut executor)
+                .expect_err("fresh authorization replay");
+        assert_eq!(fresh_replay.exit(), HostCommandExit::ReplayRejected);
         assert_eq!(executor.seen.len(), 2);
     }
 
@@ -187,7 +180,7 @@ mod tests {
             (ok_with_output_limit(), HostCommandExit::OutputLimit),
         ] {
             let plan = HostCommandPlan::personal_install(&package(), "local-repo").expect("plan");
-            let mut authorization = authorization(&plan);
+            let mut authorization = authorization_for(&plan);
             let mut executor = ScriptedExecutor {
                 steps: VecDeque::from([step]),
                 ..Default::default()
@@ -202,18 +195,10 @@ mod tests {
     }
 
     fn ok_with_exit(exit_code: i32) -> Result<CommandOutput, HostExecutorError> {
-        Ok(CommandOutput {
-            exit_code,
-            stdout: Vec::new(),
-            stderr: Vec::new(),
-        })
+        Ok(CommandOutput::new(exit_code, Vec::new(), Vec::new()).expect("output"))
     }
 
     fn ok_with_output_limit() -> Result<CommandOutput, HostExecutorError> {
-        Ok(CommandOutput {
-            exit_code: 0,
-            stdout: vec![0; OUTPUT_LIMIT + 1],
-            stderr: Vec::new(),
-        })
+        Err(HostExecutorError::OutputLimit)
     }
 }

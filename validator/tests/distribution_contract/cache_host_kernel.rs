@@ -96,11 +96,7 @@ impl HostExecutor for Executor {
         assert_eq!(command.max_attempts(), 1);
         self.calls
             .push((command.program().into(), command.argv().to_vec()));
-        Ok(CommandOutput {
-            exit_code: 0,
-            stdout: b"ok".to_vec(),
-            stderr: Vec::new(),
-        })
+        CommandOutput::new(0, b"ok".to_vec(), Vec::new())
     }
 }
 
