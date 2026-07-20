@@ -1,7 +1,8 @@
 use crate::distribution::{
     CacheExpectation, CommandOutput, DistributionErrorId as ErrorId, ExpectedPrior,
-    HostAuthorization, HostCommandPlan, HostExecutor, InstallPlan, InstallScope, PackageIdentity,
-    SourceIdentity, execute_authorized, reconcile_cache_read_only, reject_stale_version_reuse,
+    HostAuthorization, HostCommandPlan, HostExecutor, HostExecutorError, InstallPlan, InstallScope,
+    PackageIdentity, SourceIdentity, execute_authorized, reconcile_cache_read_only,
+    reject_stale_version_reuse,
 };
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde_json::json;
@@ -86,12 +87,15 @@ struct Executor {
 }
 
 impl HostExecutor for Executor {
-    fn execute(
+    fn execute_with_policy(
         &mut self,
-        program: &str,
-        argv: &[String],
-    ) -> Result<CommandOutput, crate::distribution::EffectFailure> {
-        self.calls.push((program.into(), argv.to_vec()));
+        command: &crate::distribution::HostCommand,
+    ) -> Result<CommandOutput, HostExecutorError> {
+        assert!(command.environment().is_empty());
+        assert_eq!(command.timeout_ms(), 30_000);
+        assert_eq!(command.max_attempts(), 1);
+        self.calls
+            .push((command.program().into(), command.argv().to_vec()));
         Ok(CommandOutput {
             exit_code: 0,
             stdout: b"ok".to_vec(),
@@ -107,33 +111,33 @@ fn host_operations_use_exact_argv_authorization_and_explicit_rollback_plans() {
     let plan =
         HostCommandPlan::repository_install(&identity, root, "harness-ultragoal-repo").unwrap();
     assert!(!format!("{plan:?}").contains(root));
-    let authorization = HostAuthorization::new(
+    let mut authorization = HostAuthorization::new(
         CONTEXT_ID.into(),
         CANDIDATE_ID.into(),
         plan.plan_sha256().into(),
     )
     .unwrap();
-    let unauthorized =
+    let mut unauthorized =
         HostAuthorization::new(CONTEXT_ID.into(), CANDIDATE_ID.into(), D.into()).unwrap();
     let mut blocked = Executor::default();
     assert_eq!(
-        execute_authorized(&plan, &unauthorized, &mut blocked)
+        execute_authorized(&plan, &mut unauthorized, &mut blocked)
             .unwrap_err()
             .id(),
         ErrorId::EffectFailed
     );
     assert!(blocked.calls.is_empty());
-    let wrong_candidate =
+    let mut wrong_candidate =
         HostAuthorization::new(CONTEXT_ID.into(), D.into(), plan.plan_sha256().into()).unwrap();
     assert_eq!(
-        execute_authorized(&plan, &wrong_candidate, &mut blocked)
+        execute_authorized(&plan, &mut wrong_candidate, &mut blocked)
             .unwrap_err()
             .id(),
         ErrorId::EffectFailed
     );
     assert!(blocked.calls.is_empty());
     let mut executor = Executor::default();
-    execute_authorized(&plan, &authorization, &mut executor).unwrap();
+    execute_authorized(&plan, &mut authorization, &mut executor).unwrap();
     assert_eq!(executor.calls.len(), 2);
     assert_eq!(
         executor.calls[0],

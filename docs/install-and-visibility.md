@@ -51,6 +51,13 @@ Do not execute those commands during source validation. They mutate host state
 and require the selected repository marketplace, package bytes, and authority
 to be current.
 
+The source-local `HostCommandPlan` binds those exact argv rows to the package
+identity. Its executor accepts only the typed command, with an empty scrubbed
+environment, a 30-second timeout, and one attempt; backend failure, timeout,
+non-zero exit, output overflow, partial completion, and replay are reported as
+separate fail-closed outcomes. This contract is not evidence of host mutation,
+installation, or fresh-task discovery.
+
 ## Personal marketplace
 
 The default personal marketplace file is

@@ -7,4 +7,8 @@ use serde::Serialize;
 
 include!("output_limit.rs");
 
+include!("command.rs");
+
+include!("authorization.rs");
+
 include!("execute_authorized.rs");

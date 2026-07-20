@@ -36,8 +36,9 @@ pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
 pub use host::{
-    CommandOutput, HostAuthorization, HostCommand, HostCommandPlan, HostExecutionSnapshot,
-    HostExecutor, execute_authorized,
+    CommandOutput, HostAuthorization, HostCommand, HostCommandExit, HostCommandFailure,
+    HostCommandPlan, HostExecutionSnapshot, HostExecutor, HostExecutorError, execute_authorized,
+    execute_authorized_report,
 };
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
@@ -69,8 +70,9 @@ pub use package::{
 };
 #[cfg(not(test))]
 pub use package::{
-    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-    ProductionPackageSession, capture_product_package, verify_product_package,
+    MarketplaceSourceObservation, ProductionPackageArtifact, ProductionPackageError,
+    ProductionPackageErrorId, ProductionPackageSession, capture_product_package,
+    verify_product_package,
 };
 #[cfg(test)]
 pub(crate) use package::{
