@@ -41,7 +41,7 @@ impl PackageEffects for Sink {
     fn read_package(
         &mut self,
         _: usize,
-    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
+    ) -> Result<Option<Vec<u8>>, ultragoal::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
 
@@ -49,7 +49,7 @@ impl PackageEffects for Sink {
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, crate::distribution::EffectFailure> {
+    ) -> Result<bool, ultragoal::distribution::EffectFailure> {
         if self.0.as_deref().map(digest).as_deref() != expected {
             return Ok(false);
         }
