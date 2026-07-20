@@ -35,10 +35,11 @@ const SOURCES: &[&str] = &[
     "validator/src/inventory/registry/frontier/change_impact.rs",
     "validator/src/inventory/registry/frontier/envelope_codec.rs",
     "validator/src/inventory/registry/frontier/handoff_adjacency.rs",
+    "validator/src/inventory/registry/frontier/lifecycle.rs",
     "validator/src/inventory/registry/frontier/lease_issuance/mod.rs",
+    "validator/src/inventory/registry/frontier/lease_issuance/worktree_identity.rs",
     "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/mod.rs",
     "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
-    "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/live_worktree.rs",
     "validator/src/inventory/registry/frontier/scope_ownership.rs",
     "validator/src/inventory/registry/frontier/scope_consumption.rs",
     "validator/src/inventory/registry/load.rs",
@@ -61,23 +62,11 @@ fn copy_sources(repo: &TestRepo) {
 
 fn source_repo(label: &str) -> TestRepo {
     let repo = TestRepo::new(label);
-    repo.write(".gitignore", b"target/\n");
+    repo.write(".gitignore", b"target/\n.fixture-worktrees/\n");
     copy_sources(&repo);
     copy_source_context_refs(&repo);
     establish_fixture_authority(&repo);
     repo
-}
-
-fn copy_source_context_refs(repo: &TestRepo) {
-    let root = live_root();
-    let registry: serde_json::Value = serde_json::from_slice(&fs::read(root.join("LANE_REGISTRY.json")).unwrap()).unwrap();
-    for reference in registry["source_context"]["refs"].as_object().unwrap().values() {
-        let Some(path) = reference.get("path").and_then(serde_json::Value::as_str) else { continue };
-        let source = root.join(path);
-        if source.is_file() {
-            repo.write(path, &fs::read(source).unwrap());
-        }
-    }
 }
 
 #[test]
@@ -91,15 +80,19 @@ fn exact_current_witness_sources_activate_only_bound_operations() {
         before, after,
         "inventory read path wrote into the repository"
     );
-    assert!(!catalog
-        .findings()
-        .iter()
-        .any(|finding| finding.code == "activation_witness_source_set_unverified"));
-    assert!(catalog
-        .entries()
-        .iter()
-        .filter(|entry| entry.stable_id.starts_with("API:"))
-        .any(|entry| entry.active_status == ActiveStatus::Active));
+    assert!(
+        !catalog
+            .findings()
+            .iter()
+            .any(|finding| finding.code == "activation_witness_source_set_unverified")
+    );
+    assert!(
+        catalog
+            .entries()
+            .iter()
+            .filter(|entry| entry.stable_id.starts_with("API:"))
+            .any(|entry| entry.active_status == ActiveStatus::Active)
+    );
     let active_commands = catalog
         .entries()
         .iter()
@@ -148,9 +141,11 @@ fn exact_current_witness_sources_activate_only_bound_operations() {
     }
     let closure = catalog.closure_status();
     assert!(!closure.is_closed());
-    assert!(closure
-        .open_obligations_by_code()
-        .contains_key("candidate_component_not_active"));
+    assert!(
+        closure
+            .open_obligations_by_code()
+            .contains_key("candidate_component_not_active")
+    );
 }
 
 #[test]

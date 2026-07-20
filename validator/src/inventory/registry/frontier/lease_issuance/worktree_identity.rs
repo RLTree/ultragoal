@@ -10,20 +10,18 @@ pub(super) fn validate(
     record: &Value,
     base: (&str, &str),
 ) -> Result<(), InventoryError> {
-    let declared = text(record, "worktree", "P0 worktree is missing")?;
-    let branch = text(record, "branch", "P0 branch is missing")?;
+    let declared = text(record, "worktree", "active lease worktree is missing")?;
+    let branch = text(record, "branch", "active lease branch is missing")?;
     let worktree = fs::canonicalize(declared)
-        .map_err(|_| invalid("P0 worktree does not exist or cannot be resolved"))?;
+        .map_err(|_| invalid("active lease worktree cannot be resolved"))?;
     let worktree_root = registry
         .pointer("/lease_state/worktree_root")
         .and_then(Value::as_str)
-        .ok_or_else(|| invalid("P0 worktree root is missing"))?;
+        .ok_or_else(|| invalid("active lease worktree root is missing"))?;
     let worktree_root = fs::canonicalize(worktree_root)
-        .map_err(|_| invalid("P0 worktree root does not exist or cannot be resolved"))?;
+        .map_err(|_| invalid("active lease worktree root cannot be resolved"))?;
     if !worktree.starts_with(&worktree_root) {
-        return Err(invalid(
-            "P0 worktree is outside the configured worktree root",
-        ));
+        return Err(invalid("active lease worktree is outside its root"));
     }
     let inventory = git(root, &["worktree", "list", "--porcelain"])?;
     let entry = inventory
@@ -36,14 +34,16 @@ pub(super) fn validate(
                 .as_ref()
                 == Some(&worktree)
         })
-        .ok_or_else(|| invalid("P0 worktree is not registered"))?;
+        .ok_or_else(|| invalid("active lease worktree is not registered"))?;
     if field(entry, "HEAD ") != Some(base.0)
         || field(entry, "branch ") != Some(&format!("refs/heads/{branch}"))
     {
-        return Err(invalid("P0 worktree head or branch differs from its lease"));
+        return Err(invalid(
+            "active lease worktree identity differs from its lease",
+        ));
     }
     if git(&worktree, &["rev-parse", "HEAD^{tree}"])? != base.1 {
-        return Err(invalid("P0 worktree tree differs from its lease"));
+        return Err(invalid("active lease worktree tree differs from its lease"));
     }
     if !git(
         &worktree,
@@ -51,7 +51,7 @@ pub(super) fn validate(
     )?
     .is_empty()
     {
-        return Err(invalid("P0 worktree is dirty"));
+        return Err(invalid("active lease worktree is dirty"));
     }
     Ok(())
 }
@@ -66,13 +66,13 @@ fn git(root: &Path, arguments: &[&str]) -> Result<String, InventoryError> {
         .arg(root)
         .args(arguments)
         .output()
-        .map_err(|_| invalid("cannot inspect P0 worktree identity"))?;
+        .map_err(|_| invalid("cannot inspect active lease worktree identity"))?;
     if !output.status.success() {
-        return Err(invalid("cannot inspect P0 worktree identity"));
+        return Err(invalid("cannot inspect active lease worktree identity"));
     }
     String::from_utf8(output.stdout)
         .map(|value| value.trim().to_owned())
-        .map_err(|_| invalid("P0 worktree identity is not UTF-8"))
+        .map_err(|_| invalid("active lease worktree identity is not UTF-8"))
 }
 
 fn text<'a>(record: &'a Value, field: &str, message: &str) -> Result<&'a str, InventoryError> {

@@ -162,7 +162,12 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
     registry_source!("frontier/change_impact.rs", "change authority"),
     registry_source!("frontier/envelope_codec.rs", "envelope integrity"),
     registry_source!("frontier/handoff_adjacency.rs", "handoff authority"),
+    registry_source!("frontier/lifecycle.rs", "lane lifecycle authority"),
     registry_source!("frontier/lease_issuance/mod.rs", "lease authority"),
+    registry_source!(
+        "frontier/lease_issuance/worktree_identity.rs",
+        "active worktree identity authority"
+    ),
     registry_source!(
         "frontier/lease_issuance/debt_worktree/mod.rs",
         "P0 worktree lease authority"
@@ -170,10 +175,6 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
     registry_source!(
         "frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
         "P0 diagnostic source authority"
-    ),
-    registry_source!(
-        "frontier/lease_issuance/debt_worktree/live_worktree.rs",
-        "P0 live worktree authority"
     ),
     registry_source!("frontier/scope_ownership.rs", "scope authority"),
     registry_source!("frontier/scope_consumption.rs", "consumption authority"),

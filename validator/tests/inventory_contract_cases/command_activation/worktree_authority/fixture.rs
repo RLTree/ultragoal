@@ -1,6 +1,27 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+fn register_n11_worktree(repo: &TestRepo, base: &str) -> (PathBuf, PathBuf) {
+    let root = repo.root.join(".fixture-worktrees");
+    let worktree = root.join("n11");
+    run_git(
+        repo,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "-b",
+            "codex/test-n11",
+            worktree.to_str().expect("UTF-8 worktree path"),
+            base,
+        ],
+    );
+    (
+        root.canonicalize().expect("fixture worktree root"),
+        worktree.canonicalize().expect("fixture worktree"),
+    )
+}
+
 fn establish_fixture_authority(repo: &TestRepo) {
     repo.commit();
     let alternate = repo.root.join(".git/objects/info/alternates");

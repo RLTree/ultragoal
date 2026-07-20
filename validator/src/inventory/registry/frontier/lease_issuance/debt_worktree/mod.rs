@@ -7,7 +7,6 @@ use std::path::Path;
 const EXCEPTION: &str = "P0-DEBT-REPAIR";
 
 mod diagnostic_source;
-mod live_worktree;
 
 pub(super) fn is_record(record: &Value) -> bool {
     record.get("exception_id").and_then(Value::as_str) == Some(EXCEPTION)
@@ -57,7 +56,7 @@ pub(super) fn validate(
         unique(record, "lease_id", &mut lease_ids)?;
         unique(record, "branch", &mut branches)?;
         unique(record, "worktree", &mut worktrees)?;
-        live_worktree::validate(root, registry, record, base)?;
+        super::worktree_identity::validate(root, registry, record, base)?;
         let diagnostic = strings(
             record.get("diagnostic_paths"),
             "P0 diagnostic paths are missing",

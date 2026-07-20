@@ -76,12 +76,29 @@ pub(super) fn expected(
             exact_state(states, "N15", "blocked")?;
             (&[][..], &[][..])
         }
+        "N04_REPAIR_READY_N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED" => {
+            exact_state(states, "N04", "ready")?;
+            repair_dependents(states)?;
+            (&["N04"][..], &[][..])
+        }
+        "N04_REPAIR_ACTIVE_N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED" => {
+            active_state(states, "N04")?;
+            repair_dependents(states)?;
+            (&[][..], &["N04"][..])
+        }
         _ => return Err(invalid("scheduler frontier is unknown")),
     };
     Ok(ExpectedLifecycle {
         ready: named(ready),
         active_worktree_lanes: named(active_worktree_lanes),
     })
+}
+
+fn repair_dependents(states: &BTreeMap<String, String>) -> Result<(), InventoryError> {
+    for lane in ["N08", "N11", "N12", "N14", "N15", "N16", "N17"] {
+        exact_state(states, lane, "blocked")?;
+    }
+    Ok(())
 }
 
 fn exact_state(

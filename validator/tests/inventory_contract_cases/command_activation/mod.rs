@@ -7,6 +7,7 @@ use std::fs;
 include!("worktree_authority/fixture.rs");
 include!("worktree_authority/issuance.rs");
 include!("worktree_authority/envelopes.rs");
+include!("source_context_refs.rs");
 include!("sources.rs");
 include!("unsupported_product_apis_remain_inactive.rs");
 

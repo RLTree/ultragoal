@@ -2,7 +2,7 @@
 fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
     let valid = source_repo("lease-derived-envelope-valid");
     close_synthetic_graph(&valid);
-    mutate_registry(&valid, activate_n11_lease);
+    mutate_registry(&valid, |registry| activate_n11_lease(&valid, registry));
     let context = LiveContext::build(synthetic_request(&valid)).unwrap();
     InventoryBuilder::new(&context)
         .build()
@@ -43,7 +43,7 @@ fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
         let repo = source_repo(&format!("lease-derived-envelope-{label}"));
         close_synthetic_graph(&repo);
         mutate_registry(&repo, |registry| {
-            activate_n11_lease(registry);
+            activate_n11_lease(&repo, registry);
             mutate(&mut registry["lease_state"]["active_records"][0]);
         });
         let context = LiveContext::build(synthetic_request(&repo)).unwrap();
@@ -57,7 +57,7 @@ fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
     }
 }
 
-fn activate_n11_lease(registry: &mut serde_json::Value) {
+fn activate_n11_lease(repo: &TestRepo, registry: &mut serde_json::Value) {
     registry["pre_adoption_source"]["frontier"] =
         "N10_INTEGRATED_N11_ACTIVE_SOURCE_FRONTIER".into();
     registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!([]);
@@ -96,8 +96,6 @@ fn activate_n11_lease(registry: &mut serde_json::Value) {
     record["lane_id"] = "N11".into();
     record["owner"] = lane["owner"].clone();
     record["scope_ids"] = lane["scope_ids"].clone();
-    record["branch"] = "codex/test-n11".into();
-    record["worktree"] = "/tmp/test-n11".into();
     record["owned_files"] = scope["owned_roots"].clone();
     record["owned_symbols"] = scope["owned_symbols"].clone();
     record["generated_outputs"] = scope["generated_roots"].clone();
@@ -110,6 +108,10 @@ fn activate_n11_lease(registry: &mut serde_json::Value) {
         .expect("current source base");
     record["base_commit"] = base["commit"].clone();
     record["base_tree"] = base["tree"].clone();
+    let (worktree_root, worktree) = register_n11_worktree(repo, base["commit"].as_str().unwrap());
+    registry["lease_state"]["worktree_root"] = worktree_root.to_string_lossy().into_owned().into();
+    record["branch"] = "codex/test-n11".into();
+    record["worktree"] = worktree.to_string_lossy().into_owned().into();
     record["consumed_set"]["dependency_identities"] =
         serde_json::Value::Array(dependency_identities);
     populate_envelopes(registry, &lane, &mut record);

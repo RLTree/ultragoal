@@ -163,8 +163,12 @@ mod tests {
                 "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
             ),
             (
-                "P0-worktree-mutate-restore",
-                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/live_worktree.rs",
+                "worktree-identity-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/worktree_identity.rs",
+            ),
+            (
+                "lifecycle-mutate-restore",
+                "validator/src/inventory/registry/frontier/lifecycle.rs",
             ),
         ] {
             assert_mutate_restore_rejected(label, relative);

@@ -1,4 +1,4 @@
-use super::{change_impact, handoff_adjacency, lease_base, SchedulerNodes};
+use super::{SchedulerNodes, change_impact, handoff_adjacency, lease_base};
 use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
@@ -6,6 +6,7 @@ use std::collections::BTreeSet;
 use std::path::Path;
 
 mod debt_worktree;
+mod worktree_identity;
 
 pub(super) fn validate(
     reads: &ReadSession,
@@ -51,6 +52,7 @@ pub(super) fn validate(
         {
             return Err(invalid("active lease base differs from source base"));
         }
+        worktree_identity::validate(root, registry, record, base)?;
         let lane = find(lanes, "id", lane_id, "active lease names an unknown lane")?;
         exact_field(
             record,
