@@ -13,6 +13,7 @@ pub mod source_closure;
 // duplicate production modules inside an integration-test crate. Host
 // mutation remains crate-private and is reachable only through the sealed
 // production transaction facade.
+#[cfg(test)]
 pub(crate) mod distribution_adapter;
 
 // The registry control plane consumes the sealed read-only agent authority

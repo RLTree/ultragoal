@@ -143,6 +143,7 @@ fn native_darwin_backend_refuses_before_spawn_or_output() {
             &plan.commands()[0],
             &HostEffectExecutionPolicy::strict(10_000, &[]).unwrap(),
             &HostEffectCancellation::default(),
+            0,
         )
         .unwrap_err();
     assert_eq!(failure.id, HostEffectExecutorErrorId::UnsupportedPlatform);

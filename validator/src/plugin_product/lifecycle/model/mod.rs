@@ -10,6 +10,8 @@ include!("sha256_prefix.rs");
 
 include!("plan_authorization_seal_issue.rs");
 
+include!("recovery_types.rs");
+
 include!("recovery_authorization_seal_issue.rs");
 
 include!("validate_digest.rs");

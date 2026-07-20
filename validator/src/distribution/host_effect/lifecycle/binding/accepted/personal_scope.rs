@@ -1,4 +1,19 @@
 impl AcceptedHostScope {
+    pub(in crate::distribution::host_effect) fn binding_sha256(
+        &self,
+    ) -> Result<String, SupportedHostLifecycleError> {
+        #[derive(Serialize)]
+        struct Binding<'a> {
+            schema: &'static str,
+            scope: &'a AcceptedHostScope,
+        }
+        digest_json(&Binding {
+            schema: "harness-ultragoal.accepted-host-scope.v1",
+            scope: self,
+        })
+    }
+
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn personal(
         journey: &JourneyBinding,
         marketplace: String,
@@ -32,6 +47,7 @@ impl AcceptedHostScope {
 
     fn validate_for(&self, journey: &JourneyBinding) -> Result<(), SupportedHostLifecycleError> {
         let (home_id, project_id, host_id, marketplace) = match self {
+            #[cfg(test)]
             Self::Personal {
                 home_id,
                 host_id,
@@ -74,9 +90,11 @@ impl AcceptedHostScope {
     ) -> Result<(), SupportedHostLifecycleError> {
         let remove = operation == AcceptedLifecycleOperation::UninstallTeardown;
         let expected = match self {
+            #[cfg(test)]
             Self::Personal { marketplace, .. } if remove => {
                 HostCommandPlan::personal_remove(package, marketplace)
             }
+            #[cfg(test)]
             Self::Personal { marketplace, .. } => {
                 HostCommandPlan::personal_install(package, marketplace)
             }
@@ -98,10 +116,21 @@ impl AcceptedHostScope {
                     })
                     .map(|command| command.argv()[3].as_str())
                     .ok_or_else(invalid)?;
+                let isolated_home = plan
+                    .commands()
+                    .first()
+                    .and_then(|command| command.environment().iter().find(|(key, _)| key == "HOME"))
+                    .map(|(_, value)| Path::new(value))
+                    .ok_or_else(invalid)?;
                 if project_identity(repository_root)? != *project_id {
                     return Err(invalid());
                 }
-                HostCommandPlan::repository_install(package, repository_root, marketplace)
+                HostCommandPlan::repository_install_in_isolated_codex_home(
+                    package,
+                    repository_root,
+                    marketplace,
+                    isolated_home,
+                )
             }
         }
         .map_err(|_| invalid())?;

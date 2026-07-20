@@ -43,6 +43,26 @@ pub(crate) struct HostCommandObservation {
     attempts: u8,
 }
 
+impl HostCommandObservation {
+    pub(crate) fn new(
+        command_index: usize,
+        outcome_sha256: String,
+        exit_code: i32,
+        attempts: u8,
+    ) -> Result<Self, ()> {
+        let observation = Self {
+            command_index,
+            outcome_sha256,
+            exit_code,
+            attempts,
+        };
+        if !is_digest(&observation.outcome_sha256) || observation.attempts != 1 {
+            return Err(());
+        }
+        Ok(observation)
+    }
+}
+
 impl HostLifecycleObservedBundle {
     pub(crate) fn from_parts(
         installed_sha256: String,

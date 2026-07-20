@@ -1,13 +1,17 @@
 impl HostEffectExecutionPolicy {
-    /// The accepted argv binding requires a cleared environment and a one MiB
-    /// output ceiling. This constructor deliberately rejects every supplied
-    /// environment entry instead of inventing unbound HOME, PATH, locale, or
-    /// loader variables at the executor boundary.
+    /// The accepted argv binding permits only the two exact paths of the
+    /// disposable Codex home. No inherited, loader, locale, or PATH entries
+    /// cross this boundary.
     pub(in crate::distribution::host_effect) fn strict(
         timeout_ms: u64,
         environment: &[(String, String)],
     ) -> Result<Self, HostEffectExecutorFailure> {
-        if !environment.is_empty() {
+        if environment.len() != 2
+            || environment[0].0 != "CODEX_HOME"
+            || environment[1].0 != "HOME"
+            || environment[0].1 != environment[1].1
+            || !std::path::Path::new(&environment[0].1).is_absolute()
+        {
             return Err(HostEffectExecutorFailure::new(
                 HostEffectExecutorErrorId::EnvironmentInjection,
             ));
@@ -18,15 +22,17 @@ impl HostEffectExecutionPolicy {
             ));
         }
         #[derive(Serialize)]
-        struct EmptyEnvironment {
+        struct BoundEnvironment<'a> {
             schema: &'static str,
             inherited: bool,
             entries: usize,
+            values: &'a [(String, String)],
         }
-        let environment_sha256 = digest_json(&EmptyEnvironment {
+        let environment_sha256 = digest_json(&BoundEnvironment {
             schema: "harness-ultragoal.cleared-host-environment.v1",
             inherited: false,
-            entries: 0,
+            entries: environment.len(),
+            values: environment,
         })?;
         #[derive(Serialize)]
         struct Policy<'a> {
@@ -54,23 +60,20 @@ impl HostEffectExecutionPolicy {
             descriptor_stdout_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
             descriptor_stderr_limit_bytes: EXACT_OUTPUT_LIMIT_BYTES,
             inherited_environment: false,
-            environment_entries: 0,
+            environment_entries: environment.len(),
             environment_sha256,
             policy_sha256,
         })
     }
 
-    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) const fn timeout(&self) -> std::time::Duration {
         std::time::Duration::from_millis(self.descriptor_timeout_ms)
     }
 
-    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) const fn stdout_limit(&self) -> usize {
         self.descriptor_stdout_limit_bytes
     }
 
-    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) const fn stderr_limit(&self) -> usize {
         self.descriptor_stderr_limit_bytes
     }
@@ -90,6 +93,7 @@ pub(crate) struct HostEffectCancellation {
 }
 
 impl HostEffectCancellation {
+    #[cfg(test)]
     pub(crate) fn cancel(&self) {
         self.cancelled.store(true, Ordering::SeqCst);
     }
@@ -101,11 +105,11 @@ impl HostEffectCancellation {
 
 pub(crate) struct HostEffectExecutionReceipt {
     effect_identity_sha256: String,
-    outcome: HostEffectOutcome,
+    _outcome: HostEffectOutcome,
     terminal_ledger_head: HostEffectLedgerHead,
     command_output_sha256: Vec<String>,
-    acknowledgement: PublicationAcknowledgementIdentity,
-    acknowledgement_json: Vec<u8>,
+    _acknowledgement: PublicationAcknowledgementIdentity,
+    _acknowledgement_json: Vec<u8>,
     publication_classification: PublicationClassification,
 }
 
@@ -136,23 +140,26 @@ impl HostEffectExecutionReceipt {
     ) -> Self {
         Self {
             effect_identity_sha256,
-            outcome,
+            _outcome: outcome,
             terminal_ledger_head,
             command_output_sha256,
-            acknowledgement,
-            acknowledgement_json,
+            _acknowledgement: acknowledgement,
+            _acknowledgement_json: acknowledgement_json,
             publication_classification,
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn effect_identity_sha256(&self) -> &str {
         &self.effect_identity_sha256
     }
 
+    #[cfg(test)]
     pub(crate) fn outcome(&self) -> &HostEffectOutcome {
-        &self.outcome
+        &self._outcome
     }
 
+    #[cfg(test)]
     pub(crate) fn terminal_ledger_head(&self) -> &HostEffectLedgerHead {
         &self.terminal_ledger_head
     }
@@ -161,16 +168,19 @@ impl HostEffectExecutionReceipt {
         &self.command_output_sha256
     }
 
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn acknowledgement(
         &self,
     ) -> &PublicationAcknowledgementIdentity {
-        &self.acknowledgement
+        &self._acknowledgement
     }
 
+    #[cfg(test)]
     pub(crate) fn acknowledgement_json(&self) -> &[u8] {
-        &self.acknowledgement_json
+        &self._acknowledgement_json
     }
 
+    #[cfg(test)]
     pub(crate) fn publication_classification(&self) -> &PublicationClassification {
         &self.publication_classification
     }

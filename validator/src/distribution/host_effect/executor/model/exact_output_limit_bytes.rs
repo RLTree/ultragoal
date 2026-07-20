@@ -105,6 +105,7 @@ impl HostEffectExecutorFailure {
         self.id
     }
 
+    #[cfg(test)]
     pub(crate) const fn terminal_state(&self) -> Option<HostEffectState> {
         self.terminal_state
     }

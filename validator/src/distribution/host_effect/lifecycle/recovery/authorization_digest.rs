@@ -1,3 +1,4 @@
+#[cfg(test)]
 fn authorization_digest(
     schema_version: &str,
     classification_sha256: &str,
@@ -71,6 +72,7 @@ fn digest_bytes(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
 }
 
+#[cfg(test)]
 fn recovery_authorization_required() -> SupportedHostLifecycleError {
     lifecycle_error(SupportedHostLifecycleErrorId::RecoveryAuthorizationRequired)
 }

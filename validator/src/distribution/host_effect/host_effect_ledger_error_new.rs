@@ -3,6 +3,7 @@ impl HostEffectLedgerError {
         Self { id }
     }
 
+    #[cfg(test)]
     pub(crate) const fn id(&self) -> HostEffectLedgerErrorId {
         self.id
     }
@@ -78,8 +79,26 @@ impl PinnedHostExecutable {
         &self.file
     }
 
+    #[cfg(target_os = "macos")]
+    pub(in crate::distribution::host_effect) fn loaded_identity(&self) -> (&Path, u64, u64) {
+        (
+            Path::new(&self.identity.canonical_path),
+            self.identity.device,
+            self.identity.inode,
+        )
+    }
+
     pub(crate) fn identity(&self) -> &PinnedHostExecutableIdentity {
         &self.identity
+    }
+
+    pub(in crate::distribution::host_effect) fn duplicate(
+        &self,
+    ) -> Result<Self, HostEffectLedgerError> {
+        Ok(Self {
+            file: self.file.try_clone().map_err(|_| ledger_io())?,
+            identity: self.identity.clone(),
+        })
     }
 
     pub(in crate::distribution::host_effect) fn revalidate(

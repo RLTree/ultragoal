@@ -81,13 +81,21 @@ pub(super) struct CommandCaptureDigest {
 }
 
 #[derive(Debug)]
-pub(super) struct CommandCapture {
+pub(crate) struct CommandCapture {
     pub(super) exit_code: i32,
     pub(super) stdout: Vec<u8>,
     pub(super) stderr: Vec<u8>,
 }
 
 impl CommandCapture {
+    pub(crate) const fn exit_code(&self) -> i32 {
+        self.exit_code
+    }
+
+    pub(crate) fn stdout(&self) -> &[u8] {
+        &self.stdout
+    }
+
     pub(super) fn empty_failure() -> Self {
         Self {
             exit_code: -1,

@@ -1,3 +1,4 @@
+#[cfg(test)]
 impl HostEffectRecoveryHandoff {
     pub(crate) fn prior_publication_observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {

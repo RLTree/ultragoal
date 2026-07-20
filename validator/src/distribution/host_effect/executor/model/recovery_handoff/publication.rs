@@ -179,6 +179,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn permit_id(&self) -> &str {
         match self {
             Self::Publication { permit_id, .. }
@@ -188,6 +189,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn ledger_head(&self) -> &HostEffectLedgerHead {
         match self {
             Self::Publication { ledger_head, .. }
@@ -199,6 +201,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
             Self::Publication { observation, .. } => Some(observation),

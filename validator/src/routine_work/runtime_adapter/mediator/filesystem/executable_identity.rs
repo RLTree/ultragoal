@@ -83,22 +83,6 @@ impl PinnedExecutable {
         &self.path
     }
 
-    #[cfg(target_os = "macos")]
-    pub(crate) fn validate_loaded_vnode(
-        &self,
-        device: u64,
-        inode: u64,
-    ) -> Result<(), RoutineError> {
-        if self.identity.device != device || self.identity.inode != inode {
-            return Err(RoutineError::new(
-                RoutineErrorId::ConcurrentMutation,
-                "mediator-loaded-executable-replaced",
-                None,
-            ));
-        }
-        Ok(())
-    }
-
     #[cfg(unix)]
     pub(crate) fn identity_length(&self) -> u64 {
         self.identity.length

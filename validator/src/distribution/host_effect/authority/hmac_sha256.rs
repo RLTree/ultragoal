@@ -11,6 +11,7 @@ const PERMIT_SCHEMA: &str = "harness-ultragoal.host-effect-permit.v1";
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum HostEffectDecision {
     Authorize,
+    #[cfg(test)]
     Refuse,
 }
 
@@ -185,6 +186,7 @@ impl HostEffectAuthority {
         Ok(VerifiedHostEffectPermit { permit })
     }
 
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn verify_current(
         &self,
         permit: HostEffectPermit,

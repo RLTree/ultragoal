@@ -1,4 +1,5 @@
 impl<'a> SupportedHostLifecycleCoordinator<'a> {
+    #[cfg(test)]
     pub(super) fn recovery_proposal(
         &self,
         classification: &PublicationClassification,
@@ -71,6 +72,7 @@ impl DescriptorExecutionHandoff {
     /// Keeps the target lease owned by the opaque handoff for the complete
     /// synchronous adapter call. Neither effect authority nor the lease can
     /// escape as an owned value.
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn with_retained_authority<R>(
         mut self,
         adapter: impl FnOnce(

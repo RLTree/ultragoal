@@ -69,9 +69,9 @@ impl HostCommandPlanRecord {
         }
         for command in &self.commands {
             if command.program() != "codex"
-                || !command.environment().is_empty()
                 || command.timeout_ms() != 30_000
                 || command.max_attempts() != 1
+                || !valid_isolated_environment(command.environment())
             {
                 return Err(LifecycleError::InvalidTransition);
             }
@@ -120,6 +120,27 @@ impl HostCommandPlanRecord {
     pub(crate) fn plan_sha256(&self) -> &str {
         &self.plan_sha256
     }
+}
+
+fn valid_isolated_environment(environment: &[(String, String)]) -> bool {
+    if environment.is_empty() {
+        return true;
+    }
+    if environment.len() != 2
+        || environment[0].0 != "CODEX_HOME"
+        || environment[1].0 != "HOME"
+        || environment[0].1 != environment[1].1
+    {
+        return false;
+    }
+    let path = std::path::Path::new(&environment[0].1);
+    path.is_absolute()
+        && path.components().all(|component| {
+            matches!(
+                component,
+                std::path::Component::RootDir | std::path::Component::Normal(_)
+            )
+        })
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

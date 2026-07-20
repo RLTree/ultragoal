@@ -88,6 +88,8 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             .issue(binding)
             .map_err(|_| authority_rejected())?;
         #[cfg(not(test))]
+        let _ = &reservation;
+        #[cfg(not(test))]
         let verified = self
             .authority
             .authority
@@ -164,6 +166,7 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
         })
     }
 
+    #[cfg(test)]
     pub(super) fn authorize_recovery(
         &self,
         classification: &PublicationClassification,

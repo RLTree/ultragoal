@@ -32,6 +32,7 @@ impl HostEffectLedgerHead {
         })
     }
 
+    #[cfg(test)]
     pub(crate) const fn generation(&self) -> u64 {
         self.generation
     }
@@ -79,6 +80,7 @@ impl HostEffectReservation {
         &self.permit_id
     }
 
+    #[cfg(test)]
     pub(crate) fn semantic_key_sha256(&self) -> &str {
         &self.semantic_key_sha256
     }

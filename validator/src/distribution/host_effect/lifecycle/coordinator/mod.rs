@@ -4,6 +4,7 @@ use super::super::{
 #[cfg(test)]
 use super::super::{HostEffectState, HostEffectTransition};
 use super::binding::{AcceptedHostEffect, HostEffectAcceptanceRequest, ObservedTargetIdentity};
+#[cfg(test)]
 use super::recovery::{
     PublicationClassification, RecoveryAuthorization, RecoveryProposal,
     issue_recovery_authorization, propose_recovery,

@@ -12,11 +12,11 @@ mod coordinator;
 mod recovery;
 
 pub(in crate::distribution::host_effect) use binding::HostEffectAcceptanceRequest;
+pub(crate) use binding::{AcceptedHostScope, HostObjectIdentity, ObservedTargetIdentity};
 pub(crate) use binding::{
-    AcceptedHostEffect, AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
+    AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy,
 };
-pub(crate) use binding::{AcceptedHostScope, HostObjectIdentity, ObservedTargetIdentity};
 pub(in crate::distribution::host_effect) use coordinator::HostEffectPreparationRequest;
 pub(crate) use coordinator::TrustedTimeSample;
 pub(crate) use coordinator::{
@@ -41,6 +41,7 @@ pub(crate) use recovery::{
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum SupportedHostLifecycleErrorId {
+    #[cfg(test)]
     UnsupportedPlatform,
     DescriptorExecutionUnavailable,
     InvalidAcceptedIdentity,
@@ -54,6 +55,7 @@ pub(crate) enum SupportedHostLifecycleErrorId {
     AuthorityRejected,
     LedgerRejected,
     HandoffConstructionFailed,
+    #[cfg(test)]
     RecoveryAuthorizationRequired,
     RecoveryUnsafe,
 }
@@ -64,12 +66,13 @@ pub(crate) struct SupportedHostLifecycleError {
 }
 
 impl SupportedHostLifecycleError {
+    #[cfg(test)]
     pub(crate) const fn id(&self) -> SupportedHostLifecycleErrorId {
         self.id
     }
 }
 
-pub(super) const fn lifecycle_error(
+pub(in crate::distribution::host_effect) const fn lifecycle_error(
     id: SupportedHostLifecycleErrorId,
 ) -> SupportedHostLifecycleError {
     SupportedHostLifecycleError { id }

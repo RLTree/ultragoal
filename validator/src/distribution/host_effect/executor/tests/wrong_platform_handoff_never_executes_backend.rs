@@ -10,6 +10,7 @@ impl RetainedDescriptorProcessBackend for CountingBackend {
         _command: &crate::distribution::HostCommand,
         _policy: &HostEffectExecutionPolicy,
         _cancellation: &HostEffectCancellation,
+        _cwd: std::os::fd::RawFd,
     ) -> Result<CommandCapture, BackendFailure> {
         self.calls += 1;
         Err(BackendFailure::before_start(

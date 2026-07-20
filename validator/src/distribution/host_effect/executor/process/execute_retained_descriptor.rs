@@ -4,6 +4,7 @@ fn execute_retained_descriptor(
     command: &HostCommand,
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,
+    environment_entries: &[(String, String)],
     primitive: DescriptorExecutionPrimitive,
 ) -> Result<CommandCapture, BackendFailure> {
     use std::ffi::CString;
@@ -23,7 +24,18 @@ fn execute_retained_descriptor(
         .map(|argument| argument.as_ptr())
         .collect::<Vec<_>>();
     argv.push(std::ptr::null());
-    let environment = [std::ptr::null::<libc::c_char>()];
+    let environment_values = environment_entries
+        .iter()
+        .map(|(key, value)| CString::new(format!("{key}={value}")))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|_| {
+            BackendFailure::before_start(HostEffectExecutorErrorId::EnvironmentInjection)
+        })?;
+    let mut environment = environment_values
+        .iter()
+        .map(|value| value.as_ptr())
+        .collect::<Vec<_>>();
+    environment.push(std::ptr::null());
 
     let (stdout_read, stdout_write) = create_pipe()?;
     let (stderr_read, stderr_write) = match create_pipe() {

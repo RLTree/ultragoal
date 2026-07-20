@@ -57,3 +57,9 @@ impl std::fmt::Debug for ConfinedHostEffectTarget {
             .finish_non_exhaustive()
     }
 }
+
+impl ConfinedHostEffectTarget {
+    pub(in crate::distribution::host_effect) fn cwd_fd(&self) -> std::os::fd::RawFd {
+        self.anchor.directory.as_raw_fd()
+    }
+}

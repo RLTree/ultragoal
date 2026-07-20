@@ -3,6 +3,7 @@ use super::super::{
     HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectReservation,
     HostEffectState, HostEffectTransition, PinnedHostExecutable,
 };
+use super::binding::AcceptedHostEffect;
 use super::recovery::{
     ExpectedPublicationObjectIdentity, PublicationAcknowledgementIdentity, PublicationExpectation,
 };

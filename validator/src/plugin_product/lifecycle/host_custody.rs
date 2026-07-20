@@ -1,4 +1,3 @@
-use super::execution::recovery_state_after_completed_prefix;
 use super::model::{
     LifecycleEffect, LifecycleError, LifecycleIntent, LifecyclePlan, LifecycleState,
 };
@@ -12,6 +11,7 @@ use serde::{Deserialize, Serialize};
 include!("host_custody_observations.rs");
 include!("host_custody_binding.rs");
 include!("host_custody_record.rs");
+include!("host_custody_recovery.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
@@ -80,14 +80,29 @@ impl HostLifecycleCustody {
         &self.pre_effect_record
     }
 
+    pub(crate) fn completion_binding(&self) -> HostEffectExecutionBinding {
+        HostEffectExecutionBinding {
+            record: self.pre_effect_record.clone(),
+        }
+    }
+
     pub(crate) fn before(&self) -> &LifecycleState {
         &self.plan.before
+    }
+
+    pub(crate) fn intent(&self) -> LifecycleIntent {
+        self.plan.intent
+    }
+
+    pub(crate) fn plan(&self) -> &LifecyclePlan {
+        &self.plan
     }
 
     pub(crate) fn expected_after(&self) -> &LifecycleState {
         &self.plan.expected_after
     }
 
+    #[cfg(test)]
     pub(crate) fn effects(&self) -> &[LifecycleEffect] {
         &self.plan.effects
     }
@@ -108,10 +123,12 @@ impl HostLifecycleCustody {
             .ok_or(LifecycleError::ReplayedPlan)
     }
 
+    #[cfg(test)]
     pub(crate) fn is_released(&self) -> bool {
         self.command_plan.is_none()
     }
 
+    #[cfg(test)]
     pub(crate) fn commit_release(&mut self) -> Result<(), LifecycleError> {
         self.command_plan
             .take()

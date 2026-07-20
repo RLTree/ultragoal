@@ -32,8 +32,8 @@ mod security;
 
 use crate::distribution::{ConfinedRoot, PackagePlan, PackageSnapshot};
 use crate::plugin_product::lifecycle::{
-    ApplyReport, LifecycleEffect, LifecycleError, LifecyclePlan, LifecycleState, RecoveryToken,
-    apply, recover, recovery_token,
+    ApplyReport, LifecycleError, LifecyclePlan, LifecycleState, RecoveryToken, apply, recover,
+    recovery_token,
 };
 
 pub(crate) struct DistributionLifecycleOperation {
@@ -104,9 +104,5 @@ impl DistributionLifecycleOperation {
 
     pub(crate) fn observe_state(&self) -> Result<LifecycleState, AdapterError> {
         self.effects.observed_state()
-    }
-
-    pub(crate) fn completed_effects(&self) -> &[LifecycleEffect] {
-        self.effects.completed_effects()
     }
 }

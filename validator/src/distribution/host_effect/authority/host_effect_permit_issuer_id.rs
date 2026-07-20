@@ -66,6 +66,7 @@ pub(crate) struct HostEffectAuthorityError {
 }
 
 impl HostEffectAuthorityError {
+    #[cfg(test)]
     pub(crate) const fn id(&self) -> HostEffectAuthorityErrorId {
         self.id
     }

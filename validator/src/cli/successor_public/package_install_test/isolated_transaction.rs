@@ -1,14 +1,10 @@
 use super::*;
 use crate::distribution::{
-    CacheExpectation, Capability, CodexPlugin, ExpectedPrior, HostCapabilityDeclaration,
-    InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest, JourneyBinding,
-    MarketplaceScope, RuntimeProbePlan, ScopedInstall, ScopedTree, SurfaceIdentity,
-    apply_marketplace, install, observe_codex_marketplace, observe_registry_file,
-    plan_codex_marketplace, publish_cache_file, publish_registry_file, reconcile_cache_file,
+    Capability, HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, ScopedTree,
 };
 use crate::inventory::AuthorityCatalog;
 use std::fs;
-use std::time::Duration;
+use std::path::Path;
 
 use super::isolated_observation::IsolatedObservation;
 use super::temporary_root;
@@ -82,6 +78,7 @@ fn execute_inner(
         host,
         binding,
         package_tree,
+        root_path: root_path.to_path_buf(),
         runtime_path,
     })
 }
@@ -94,6 +91,7 @@ struct InstallTransaction<'a> {
     host: HostCapabilityDeclaration,
     binding: JourneyBinding,
     package_tree: ScopedTree,
+    root_path: std::path::PathBuf,
     runtime_path: std::path::PathBuf,
 }
 
@@ -102,138 +100,86 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         context,
         catalog,
         artifact,
-        confined,
+        confined: _confined,
         host,
         binding,
         package_tree,
+        root_path,
         runtime_path,
     } = transaction;
-    let marketplace_plan = plan_codex_marketplace(
-        None,
-        None,
+    let package = artifact.snapshot().identity().clone();
+    let authority = crate::plugin_product::lifecycle::PackageAuthority {
+        version: crate::plugin_product::lifecycle::Version::parse(package.source().version())
+            .map_err(|_| "package version is lifecycle-valid")?,
+        package_sha256: package.archive_sha256().to_owned(),
+        inventory_sha256: package.source().accepted_inventory_sha256().to_owned(),
+        candidate_id: package.source().candidate_id().to_owned(),
+    };
+    let plan = crate::plugin_product::lifecycle::plan(
+        &crate::plugin_product::lifecycle::LifecycleState::default(),
+        &crate::plugin_product::lifecycle::LifecycleRequest {
+            intent: crate::plugin_product::lifecycle::LifecycleIntent::FreshInstall,
+            target: Some(authority),
+            prior_authority: None,
+            authorization: crate::plugin_product::lifecycle::LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: None,
+            },
+        },
+    )
+    .map_err(|_| "lifecycle plan failed")?;
+    let command_plan = HostCommandPlan::repository_install_in_isolated_codex_home(
+        &package,
+        root_path.to_str().ok_or("isolated root path is not utf8")?,
         "local-harness-plugins",
-        "Local Harness Plugins",
-        CodexPlugin::harness_ultragoal(),
-        artifact.snapshot().identity().clone(),
+        &root_path,
     )
-    .map_err(|_| "marketplace plan failed")?;
-    let mut marketplace_file =
-        ScopedFile::new(confined.clone(), ".agents/plugins/marketplace.json")
-            .map_err(|_| "marketplace target failed")?;
-    apply_marketplace(&marketplace_plan, &mut marketplace_file)
-        .map_err(|_| "marketplace publication failed")?;
-    let marketplace_bytes = marketplace_file
-        .inspect(1024 * 1024)
-        .map_err(|_| "marketplace observation failed")?
-        .ok_or("marketplace observation unavailable")?;
-    let marketplace = observe_codex_marketplace(
-        &marketplace_bytes,
-        &marketplace_plan,
-        MarketplaceScope::Personal,
-    )
-    .map_err(|_| "marketplace verification failed")?;
-    let marketplace_surface = SurfaceIdentity::from_verified_marketplace(&marketplace, &binding)
-        .map_err(|_| "marketplace identity failed")?;
-
-    let install_plan = InstallPlan::new(
-        artifact.context_id().into(),
-        artifact.candidate_id().into(),
-        InstallScope::Personal,
-        "plugins/harness-ultragoal.hugpkg".into(),
-        artifact.snapshot().package_sha256().into(),
-        ExpectedPrior::Absent,
-    )
-    .map_err(|_| "install plan failed")?;
-    let mut install_effects = ScopedInstall::new(confined.clone());
-    let mut installed = install(&install_plan, artifact.snapshot(), &mut install_effects)
-        .map_err(|_| "install failed")?;
-    installed
-        .bind_journey(&binding)
-        .map_err(|_| "install journey binding failed")?;
-    let install_surface = SurfaceIdentity::from_verified_install(
-        installed.snapshot(),
-        &binding,
-        &mut ScopedInstall::new(confined.clone()),
-    )
-    .map_err(|_| "installed identity failed")?;
-
-    let cache_file = ScopedFile::new(confined.clone(), "cache/observation.json")
-        .map_err(|_| "cache target failed")?;
-    let source = artifact.snapshot().identity().source();
-    let cache_expected = CacheExpectation::new(
-        artifact.context_id().into(),
-        artifact.candidate_id().into(),
-        binding.home_id().into(),
-        "local-harness-plugins".into(),
-        source.plugin_id().into(),
-        source.version().into(),
-        artifact.snapshot().identity().tree_sha256().into(),
-    )
-    .map_err(|_| "cache expectation failed")?;
-    publish_cache_file(&cache_file, &cache_expected).map_err(|_| "cache publication failed")?;
-    let cache = reconcile_cache_file(&mut cache_file.clone(), &cache_expected)
-        .map_err(|_| "cache observation failed")?;
-    let cache_surface = SurfaceIdentity::from_verified_cache(&cache, &binding)
-        .map_err(|_| "cache identity failed")?;
-
-    let mut registry_file = ScopedFile::new(confined.clone(), "app/registry.json")
-        .map_err(|_| "registry target failed")?;
-    publish_registry_file(&mut registry_file, &binding, &host, true, true)
-        .map_err(|_| "app registry publication failed")?;
-    let app = observe_registry_file(&mut registry_file, &binding, &host)
-        .map_err(|_| "app registry observation failed")?;
-    let app_surface = SurfaceIdentity::from_verified_app_registry(&app, &binding)
-        .map_err(|_| "app registry identity failed")?;
-
-    let runtime_plan =
-        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
-            binding: binding.clone(),
-            host: &host,
-            install: installed.snapshot(),
-            effects: &mut ScopedInstall::new(confined),
-            package: artifact.snapshot(),
-            program: &runtime_path,
-            argv: vec!["valid".into()],
-            timeout: Duration::from_secs(10),
-        })
-        .map_err(|_| "runtime plan failed")?;
-    let (runtime, runtime_surface) = runtime_plan
-        .execute_bound()
-        .map_err(|_| "runtime execution failed")?;
-    if !runtime.is_current_execution() {
-        return Err("runtime execution was not current");
-    }
-    let surfaces = [
-        install_surface,
-        cache_surface,
-        marketplace_surface,
-        app_surface,
-        runtime_surface,
-    ];
-    if surfaces.iter().any(|surface| {
-        surface.package() != binding.package()
-            || surface.journey_binding_sha256() != Some(binding.binding_sha256())
-    }) {
-        return Err("isolated identity surfaces diverged");
-    }
+    .map_err(|_| "isolated Codex command plan failed")?;
+    let binding_sha256 = binding.binding_sha256().to_owned();
+    let executable = codex_executable()?;
+    let result = crate::distribution::host_effect::execute_host_lifecycle_transaction(
+        plan,
+        package.clone(),
+        command_plan,
+        binding,
+        host,
+        &root_path,
+        "isolated-codex-install-test".to_owned(),
+        "harness-ultragoal-package-install-test".to_owned(),
+        &executable,
+        &root_path,
+        crate::distribution::host_effect::HostLifecycleObservationInput {
+            installed_path: root_path.join("plugins/harness-ultragoal"),
+            cache_path: root_path.join("plugins/cache/local-harness-plugins/harness-ultragoal"),
+            runtime_path,
+            marketplace: "local-harness-plugins".to_owned(),
+            plugin: "harness-ultragoal".to_owned(),
+        },
+    )?;
     artifact
         .verify_marketplace_source(context, catalog, &package_tree)
         .map_err(|_| "materialized package changed during transaction")?;
+    let surfaces = result.surfaces;
     Ok(IsolatedObservation {
         marketplace_source_tree_sha256: artifact.snapshot().identity().tree_sha256().into(),
-        cache_observation_sha256: cache.observation_sha256().into(),
-        marketplace_observation_sha256: marketplace
-            .catalog_sha256()
-            .ok_or("marketplace digest unavailable")?
-            .into(),
-        app_registry_observation_sha256: app
-            .observation_sha256()
-            .ok_or("app registry digest unavailable")?
-            .into(),
-        runtime_observation_sha256: runtime
-            .output_sha256()
-            .ok_or("runtime digest unavailable")?
-            .into(),
-        journey_binding_sha256: binding.binding_sha256().into(),
+        installed_observation_sha256: surfaces.installed,
+        cache_observation_sha256: surfaces.cache,
+        marketplace_observation_sha256: surfaces.registry,
+        app_registry_observation_sha256: surfaces.discovery,
+        runtime_observation_sha256: surfaces.runtime,
+        journey_binding_sha256: binding_sha256,
     })
+}
+
+fn codex_executable() -> Result<std::path::PathBuf, &'static str> {
+    let candidates = [
+        std::path::PathBuf::from("/opt/homebrew/bin/codex"),
+        std::path::PathBuf::from("/usr/local/bin/codex"),
+        std::path::PathBuf::from("/usr/bin/codex"),
+    ]
+    .into_iter()
+    .filter_map(|path| path.canonicalize().ok())
+    .find(|path| path.is_file());
+    candidates.ok_or("pinned Codex executable unavailable")
 }

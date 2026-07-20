@@ -166,10 +166,14 @@ fn host_plugin_plan(
 }
 
 fn command(argv: &[&str]) -> HostCommand {
+    command_with_environment(argv, &[])
+}
+
+fn command_with_environment(argv: &[&str], environment: &[(String, String)]) -> HostCommand {
     HostCommand {
         program: "codex".to_owned(),
         argv: argv.iter().map(|row| (*row).to_owned()).collect(),
-        environment: Vec::new(),
+        environment: environment.to_vec(),
         timeout_ms: COMMAND_TIMEOUT_MS,
         max_attempts: COMMAND_MAX_ATTEMPTS,
     }

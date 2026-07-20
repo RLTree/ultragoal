@@ -6,8 +6,6 @@ use crate::distribution::{
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256};
-use std::path::Path;
-
 mod isolated_observation;
 mod isolated_transaction;
 mod temporary_root;
@@ -23,6 +21,7 @@ struct InstallTestOutcome<'a> {
     candidate_id: &'a str,
     catalog_id: &'a str,
     package_sha256: &'a str,
+    installed_observation_sha256: &'a str,
     marketplace_source_tree_sha256: &'a str,
     cache_observation_sha256: &'a str,
     marketplace_observation_sha256: &'a str,
@@ -58,6 +57,7 @@ pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> R
         candidate_id: artifact.candidate_id(),
         catalog_id: artifact.catalog_id(),
         package_sha256: artifact.snapshot().package_sha256(),
+        installed_observation_sha256: observation.installed_observation_sha256(),
         marketplace_source_tree_sha256: observation.marketplace_source_tree_sha256(),
         cache_observation_sha256: observation.cache_observation_sha256(),
         marketplace_observation_sha256: observation.marketplace_observation_sha256(),

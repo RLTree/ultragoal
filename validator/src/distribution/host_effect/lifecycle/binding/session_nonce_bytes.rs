@@ -220,6 +220,7 @@ fn matches_lifecycle_operation(
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "kebab-case")]
 pub(crate) enum AcceptedHostScope {
+    #[cfg(test)]
     Personal {
         home_id: String,
         host_id: String,

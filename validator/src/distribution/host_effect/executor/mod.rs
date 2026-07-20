@@ -29,8 +29,9 @@ pub(crate) use model::{
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };
-use process::NativeRetainedDescriptorProcessBackend;
+pub(crate) use process::NativeRetainedDescriptorProcessBackend;
 use process::RetainedDescriptorProcessBackend;
+pub(crate) use process::execute_bounded_observation;
 pub(crate) use target::ConfinedHostEffectTarget;
 
 use self::model::{

@@ -1,5 +1,6 @@
 pub(super) struct IsolatedObservation {
     pub(super) marketplace_source_tree_sha256: String,
+    pub(super) installed_observation_sha256: String,
     pub(super) cache_observation_sha256: String,
     pub(super) marketplace_observation_sha256: String,
     pub(super) app_registry_observation_sha256: String,
@@ -14,6 +15,10 @@ impl IsolatedObservation {
 
     pub(super) fn cache_observation_sha256(&self) -> &str {
         &self.cache_observation_sha256
+    }
+
+    pub(super) fn installed_observation_sha256(&self) -> &str {
+        &self.installed_observation_sha256
     }
 
     pub(super) fn marketplace_observation_sha256(&self) -> &str {

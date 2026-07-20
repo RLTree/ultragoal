@@ -1,5 +1,8 @@
 use super::super::AuthorizedProcessPreparation;
+#[cfg(target_os = "macos")]
+use super::darwin_hooks::{RoutineDarwinHooks, inject, validate_child_mode};
 use super::*;
+use std::time::Duration;
 
 pub(crate) enum PreparedProcess {
     Cancelled(ProcessObservation),
@@ -67,65 +70,149 @@ pub(crate) fn prepare(
 impl SuspendedProcess {
     pub(crate) fn identity(&self) -> Result<StartedProcessIdentity, RoutineError> {
         Ok(StartedProcessIdentity::new(
-            self.setup.child()?,
+            self.setup.process_id()?,
             self.setup.process_group()?,
         ))
     }
 
     pub(crate) fn observe(
-        self,
+        mut self,
         program: &PinnedExecutable,
         root: &RootAnchor,
         outputs: &OutputConfinement,
         timeout: Duration,
         cancellation: &RoutineCancellation,
     ) -> Result<ProcessObservation, RoutineError> {
-        let configured = configure_process(
-            self.setup,
-            root,
-            outputs,
-            self.framed_input,
-            self.output_budget,
-        )?;
-        observe_process(configured, program, root, outputs, timeout, cancellation)
-    }
-
-    pub(crate) fn fail(self, primary: RoutineError) -> RoutineError {
-        match self.setup.configure::<()>(|_| Err(primary)) {
-            Err(error) => error,
-            Ok(_) => mediator_error("mediator-suspended-cleanup-outcome-invalid"),
-        }
-    }
-
-    pub(crate) fn resume_after_cleanup(self, payload: Box<dyn std::any::Any + Send>) -> ! {
-        match self
-            .setup
-            .configure::<()>(|_| std::panic::resume_unwind(payload))
-        {
-            Ok(_) | Err(_) => {
-                std::panic::resume_unwind(Box::new("mediator-suspended-cleanup-outcome-invalid"))
+        let (setup, ()) = self.setup.configure(|_| {
+            for (point, cause) in [
+                (
+                    ProcessFailurePoint::ProcessGroup,
+                    "mediator-process-group-setup-injected",
+                ),
+                (
+                    ProcessFailurePoint::StdoutNonblocking,
+                    "mediator-stdout-nonblocking-injected",
+                ),
+                (
+                    ProcessFailurePoint::StderrNonblocking,
+                    "mediator-stderr-nonblocking-injected",
+                ),
+                (
+                    ProcessFailurePoint::StdoutReaderStart,
+                    "mediator-stdout-reader-start-injected",
+                ),
+                (
+                    ProcessFailurePoint::StderrReaderStart,
+                    "mediator-stderr-reader-start-injected",
+                ),
+                (
+                    ProcessFailurePoint::StdinWriterStart,
+                    "mediator-stdin-writer-start-injected",
+                ),
+            ] {
+                inject(point, cause)?;
+            }
+            Ok(())
+        })?;
+        self.setup = setup;
+        let (setup, ()) = self.setup.configure(|_| {
+            root.validate()?;
+            outputs.validate()?;
+            Ok(())
+        })?;
+        self.setup = setup;
+        let process = self.setup.take_process()?;
+        let mut hooks = RoutineDarwinHooks;
+        let result = crate::process_custody::execute_process(
+            process,
+            &self.framed_input,
+            crate::process_custody::DarwinProcessPolicy {
+                timeout,
+                stdout_limit: self.output_budget as usize,
+                stderr_limit: self.output_budget as usize,
+            },
+            || cancellation.is_cancelled(),
+            &mut hooks,
+        );
+        match result {
+            Ok(result) => {
+                program.validate()?;
+                root.validate()?;
+                outputs.validate()?;
+                let termination = match result.termination {
+                    crate::process_custody::DarwinProcessTermination::Exited(code) => {
+                        ProcessTermination::Exited(code)
+                    }
+                    crate::process_custody::DarwinProcessTermination::Signaled(signal) => {
+                        ProcessTermination::Signaled(signal)
+                    }
+                    crate::process_custody::DarwinProcessTermination::DescendantSurvived => {
+                        ProcessTermination::DescendantSurvived
+                    }
+                };
+                Ok(ProcessObservation {
+                    termination,
+                    stdout: result.stdout,
+                    stderr_sha256: result.stderr_sha256,
+                    output_byte_length: result.output_byte_length,
+                })
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Cancelled) => {
+                Ok(observation(ProcessTermination::Cancelled))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Timeout) => {
+                Ok(observation(ProcessTermination::TimedOut))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::OutputOverflow) => {
+                Ok(observation(ProcessTermination::OutputLimit))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Resume) => {
+                Err(mediator_error("mediator-process-resume-failed"))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Wait) => {
+                Err(mediator_error("mediator-process-wait-failed"))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Capture) => {
+                Err(mediator_error("mediator-output-capture-failed"))
+            }
+            Err(crate::process_custody::DarwinProcessFailure::Cleanup) => {
+                Ok(observation(ProcessTermination::CleanupFailed))
             }
         }
     }
-}
 
-#[cfg(target_os = "macos")]
-fn validate_child_mode(environment: &BTreeMap<String, String>) -> Result<(), RoutineError> {
-    if environment
-        .get(crate::routine_work::CHILD_MODE_ENV)
-        .map(String::as_str)
-        == Some(crate::routine_work::CHILD_MODE_VALUE)
-    {
-        Ok(())
-    } else {
-        Err(mediator_error("mediator-child-mode-binding-invalid"))
+    pub(crate) fn fail(mut self, primary: RoutineError) -> RoutineError {
+        match self.setup.cleanup() {
+            Ok(()) => primary,
+            Err(error) => error,
+        }
+    }
+
+    pub(crate) fn resume_after_cleanup(mut self, payload: Box<dyn std::any::Any + Send>) -> ! {
+        let _ = self.setup.cleanup();
+        std::panic::resume_unwind(payload)
     }
 }
 
 #[cfg(target_os = "macos")]
 fn cancelled_before_spawn() -> ProcessObservation {
+    observation(ProcessTermination::Cancelled)
+}
+
+#[cfg(target_os = "macos")]
+fn observation(termination: ProcessTermination) -> ProcessObservation {
     ProcessObservation {
-        termination: ProcessTermination::Cancelled,
+        termination,
+        stdout: Vec::new(),
+        stderr_sha256: digest_bytes(&[]),
+        output_byte_length: 0,
+    }
+}
+
+#[cfg(not(target_os = "macos"))]
+fn observation(termination: ProcessTermination) -> ProcessObservation {
+    ProcessObservation {
+        termination,
         stdout: Vec::new(),
         stderr_sha256: digest_bytes(&[]),
         output_byte_length: 0,
