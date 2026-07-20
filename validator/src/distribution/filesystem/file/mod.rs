@@ -116,6 +116,27 @@ impl ScopedFile {
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
     ) -> Result<bool, DistributionError> {
+        self.apply_with_mode(expected_sha256, replacement, 0o600)
+    }
+
+    /// Atomically publishes a regular executable whose bytes have already been
+    /// authenticated by the caller's package boundary.
+    #[cfg(unix)]
+    pub fn apply_executable(
+        &self,
+        expected_sha256: Option<&str>,
+        replacement: Option<&[u8]>,
+    ) -> Result<bool, DistributionError> {
+        self.apply_with_mode(expected_sha256, replacement, 0o755)
+    }
+
+    #[cfg(unix)]
+    fn apply_with_mode(
+        &self,
+        expected_sha256: Option<&str>,
+        replacement: Option<&[u8]>,
+        mode: u32,
+    ) -> Result<bool, DistributionError> {
         if replacement.is_some_and(|row| row.len() > FILE_LIMIT) {
             return Err(error(DistributionErrorId::ObjectTooLarge));
         }
@@ -135,7 +156,7 @@ impl ScopedFile {
         );
         let mut stage = replacement
             .map(|bytes| {
-                OwnedFile::create(root.duplicate()?, stage_name.clone(), bytes, 0o600, false)
+                OwnedFile::create(root.duplicate()?, stage_name.clone(), bytes, mode, false)
             })
             .transpose()?;
         let current = read_file(&parent, &name, FILE_LIMIT)?;
@@ -165,6 +186,15 @@ impl ScopedFile {
 
     #[cfg(not(unix))]
     pub fn apply(
+        &self,
+        _expected_sha256: Option<&str>,
+        _replacement: Option<&[u8]>,
+    ) -> Result<bool, DistributionError> {
+        Err(error(DistributionErrorId::CapabilityMismatch))
+    }
+
+    #[cfg(not(unix))]
+    pub fn apply_executable(
         &self,
         _expected_sha256: Option<&str>,
         _replacement: Option<&[u8]>,

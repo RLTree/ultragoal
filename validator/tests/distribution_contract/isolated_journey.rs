@@ -3,14 +3,14 @@ use crate::distribution::{
     HostCapabilityDeclaration, HostCapabilityState, IdentitySurface, InstallPlan, InstallScope,
     InstalledPackageRuntimeProbeRequest, JourneyBinding, MarketplaceScope, RuntimeProbePlan,
     RuntimeVerdict, ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace,
-    install, materialize_package,
-    observe_codex_marketplace, observe_registry_file, observe_supported_host_discovery,
-    plan_codex_marketplace, reconcile_cache_file, registry_document, verify_bound_surface_chain,
+    install, materialize_package, observe_codex_marketplace, observe_discovery_file,
+    observe_registry_file, plan_codex_marketplace, publish_cache_file, publish_discovery_file,
+    publish_installed_runtime_probe, publish_registry_file, reconcile_cache_file,
+    verify_bound_surface_chain,
 };
 use crate::distribution_fixture::{PLUGIN_ID, VERSION};
-use crate::package_journey_fixture::{JourneyFixture, write_scoped};
-use crate::runtime_session::{installed_program, valid_args};
-use serde_json::json;
+use crate::package_journey_fixture::JourneyFixture;
+use crate::runtime_session::valid_args;
 use std::time::Duration;
 
 #[test]
@@ -72,7 +72,9 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         .unwrap();
     assert_eq!(installed, first.archive());
 
-    let executable = installed_program(&fixture.root);
+    let executable_file = ScopedFile::new(fixture.confined(), "runtime/runtime-probe-bin").unwrap();
+    publish_installed_runtime_probe(&first, &executable_file).unwrap();
+    let executable = fixture.root.join("runtime/runtime-probe-bin");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
@@ -99,17 +101,7 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
     let binding =
         JourneyBinding::new(first.identity().clone(), &host, "local-harness-plugins").unwrap();
     install.bind_journey(&binding).unwrap();
-    let cache_bytes = serde_json::to_vec(&json!({
-        "schema":"harness-ultragoal.codex-cache-observation.v1",
-        "context_id":first.context_id(), "candidate_id":first.candidate_id(),
-        "cache_root_id":host.home_id(),
-        "entries":[{
-            "marketplace":"local-harness-plugins", "plugin_id":PLUGIN_ID,
-            "version":VERSION, "package_tree_sha256":first.identity().tree_sha256()
-        }]
-    }))
-    .unwrap();
-    let mut cache_file = write_scoped(fixture.confined(), "cache/observation.json", &cache_bytes);
+    let cache_file = ScopedFile::new(fixture.confined(), "cache/observation.json").unwrap();
     let cache_expected = CacheExpectation::new(
         first.context_id().into(),
         first.candidate_id().into(),
@@ -120,26 +112,17 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         first.identity().tree_sha256().into(),
     )
     .unwrap();
-    let cache = reconcile_cache_file(&mut cache_file, &cache_expected).unwrap();
+    publish_cache_file(&cache_file, &cache_expected).unwrap();
+    let cache = reconcile_cache_file(&mut cache_file.clone(), &cache_expected).unwrap();
 
-    let registry_bytes = registry_document(&binding, true, true).unwrap();
-    let mut registry_file = write_scoped(fixture.confined(), "app/registry.json", &registry_bytes);
-    let before_reads = fixture.tree();
+    let mut registry_file = ScopedFile::new(fixture.confined(), "app/registry.json").unwrap();
+    publish_registry_file(&mut registry_file, &binding, &host, true, true).unwrap();
     let app = observe_registry_file(&mut registry_file, &binding, &host).unwrap();
-    let mut installed_file =
-        ScopedFile::new(fixture.confined(), "plugins/harness-ultragoal.hugpkg").unwrap();
-    let discovery = observe_supported_host_discovery(
-        &mut installed_file,
-        &binding,
-        &host,
-        install.snapshot(),
-        &app,
-    );
-    assert_eq!(
-        discovery.unwrap_err().id(),
-        DistributionErrorId::ObjectUnavailable,
-        "package and registry presence cannot mint discovery without fresh host visibility"
-    );
+    let discovery_file = ScopedFile::new(fixture.confined(), "host/discovery.json").unwrap();
+    publish_discovery_file(&discovery_file, &binding, &host).unwrap();
+    let before_reads = fixture.tree();
+    let discovery = observe_discovery_file(&discovery_file, &binding, &host).unwrap();
+    assert!(discovery.is_current_visible());
     assert!(app.observation_sha256().is_some());
     assert_eq!(
         fixture.tree(),
@@ -147,17 +130,18 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         "all observation APIs are zero-write"
     );
 
-    let runtime_plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
-        binding: binding.clone(),
-        host: &host,
-        install: install.snapshot(),
-        effects: &mut ScopedInstall::new(fixture.confined()),
-        package: &first,
-        program: &executable,
-        argv: valid_args(),
-        timeout: Duration::from_secs(10),
-    })
-    .unwrap();
+    let runtime_plan =
+        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+            binding: binding.clone(),
+            host: &host,
+            install: install.snapshot(),
+            effects: &mut ScopedInstall::new(fixture.confined()),
+            package: &first,
+            program: &executable,
+            argv: valid_args(),
+            timeout: Duration::from_secs(10),
+        })
+        .unwrap();
     let before_runtime = fixture.tree();
     let (runtime, runtime_surface) = runtime_plan.execute_bound().unwrap();
     assert_eq!(runtime.runtime_verdict(), RuntimeVerdict::Executed);

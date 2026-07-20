@@ -28,7 +28,7 @@ mod verify;
 pub struct EffectFailure;
 
 pub use cache::{CacheExpectation, CacheSnapshot, reconcile_cache_read_only};
-pub use cache_observation::{CacheReader, reconcile_cache_file};
+pub use cache_observation::{CacheReader, publish_cache_file, reconcile_cache_file};
 pub use error::{DistributionError, DistributionErrorId};
 pub use filesystem::{ConfinedRoot, ScopedFile, ScopedInstall, ScopedTree};
 #[cfg(all(test, unix))]
@@ -80,10 +80,12 @@ pub(crate) use package::{
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
-    observe_registry_file, observe_supported_host_discovery, registry_document,
+    observe_registry_file, observe_supported_host_discovery, publish_discovery_file,
+    publish_registry_file, registry_document,
 };
 pub use runtime_probe::{
     InstalledPackageRuntimeProbeRequest, RuntimeProbePlan, execute_runtime_probe,
+    publish_installed_runtime_probe,
 };
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,

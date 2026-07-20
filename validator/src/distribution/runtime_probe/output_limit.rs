@@ -26,6 +26,43 @@ pub struct InstalledPackageRuntimeProbeRequest<'a, Effects> {
     pub timeout: Duration,
 }
 
+/// Publishes the sole executable authenticated by `package` at the supported
+/// host path. The postimage is read back before the path is returned, so a
+/// package entry and a host executable cannot be silently conflated.
+pub fn publish_installed_runtime_probe(
+    package: &PackageSnapshot,
+    executable: &crate::distribution::filesystem::ScopedFile,
+) -> Result<(), DistributionError> {
+    if executable.relative_path() != SUPPORTED_RUNTIME_PROGRAM {
+        return Err(error(DistributionErrorId::ProvenanceMismatch));
+    }
+    let entries = package
+        .entries()
+        .iter()
+        .filter(|row| row.role() == PackageRole::Executable)
+        .collect::<Vec<_>>();
+    let Some(entry) = entries.first() else {
+        return Err(error(DistributionErrorId::CapabilityMismatch));
+    };
+    if entries.len() != 1 || entry.path() != SUPPORTED_RUNTIME_PROGRAM {
+        return Err(error(DistributionErrorId::CapabilityMismatch));
+    }
+    let current = executable.inspect(EXECUTABLE_LIMIT)?;
+    let expected = current.as_deref().map(sha256);
+    if current.as_deref() != Some(entry.bytes())
+        && !executable.apply_executable(expected.as_deref(), Some(entry.bytes()))?
+    {
+        return Err(error(DistributionErrorId::InstallConflict));
+    }
+    let observed = executable
+        .inspect(EXECUTABLE_LIMIT)?
+        .ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
+    if observed != entry.bytes() || sha256(&observed) != entry.sha256() {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
+    Ok(())
+}
+
 impl RuntimeProbePlan {
     pub fn new(
         binding: JourneyBinding,

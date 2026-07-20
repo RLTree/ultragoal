@@ -1,15 +1,3 @@
-pub fn observe_discovery_file(
-    reader: &mut crate::distribution::filesystem::ScopedFile,
-    binding: &JourneyBinding,
-    host: &HostCapabilityDeclaration,
-) -> Result<DiscoveryObservation, DistributionError> {
-    if reader.root_id() != binding.home_id() || reader.relative_path() != DISCOVERY_PATH {
-        return Err(error(DistributionErrorId::ProvenanceMismatch));
-    }
-    host.ensure_binding(binding)?;
-    Err(error(DistributionErrorId::ProvenanceMismatch))
-}
-
 pub fn observe_supported_host_discovery(
     installed: &mut crate::distribution::filesystem::ScopedFile,
     binding: &JourneyBinding,

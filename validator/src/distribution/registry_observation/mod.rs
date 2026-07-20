@@ -13,6 +13,10 @@ include!("registry_limit.rs");
 
 include!("validate_app_registry.rs");
 
+include!("discovery_publication.rs");
+
+include!("registry_publication.rs");
+
 include!("observe_discovery.rs");
 
 #[cfg(test)]
