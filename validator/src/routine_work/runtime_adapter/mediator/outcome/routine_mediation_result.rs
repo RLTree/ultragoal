@@ -49,6 +49,10 @@ impl RoutineMediationResult {
         self.checkpoint_head.as_deref()
     }
 
+    pub(crate) fn terminal_outcome(&self) -> Option<RoutineTerminalOutcome> {
+        self.terminal_outcome
+    }
+
     pub(crate) fn support_limit(&self) -> &'static str {
         self.support_limit
     }

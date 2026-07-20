@@ -4,6 +4,12 @@ use sha2::{Digest, Sha256};
 
 const MAX_CHECKPOINT_BYTES: u64 = 16 * 1024;
 
+#[derive(Clone, Copy, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+enum RoutineCheckpointOperation {
+    Terminal,
+}
+
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct ContinuationCheckpoint {
@@ -19,6 +25,8 @@ pub(crate) struct ContinuationCheckpoint {
     attempt_grant: String,
     authenticated_ledger_head: String,
     finding_binding: Option<crate::state::RoutineFindingBinding>,
+    operation: RoutineCheckpointOperation,
+    terminal_outcome: Option<crate::routine_work::RoutineTerminalOutcome>,
     state: String,
     event_id: String,
     event_observed_at_unix_ms: u64,
@@ -46,9 +54,14 @@ impl ContinuationCheckpoint {
     }
 
     pub(crate) fn is_complete(&self) -> bool {
+        self.is_terminal()
+            && self.terminal_outcome == Some(crate::routine_work::RoutineTerminalOutcome::Complete)
+    }
+
+    pub(crate) fn is_terminal(&self) -> bool {
         matches!(
             self.state.as_str(),
-            "complete-event-pending" | "complete-event-joined"
+            "terminal-event-pending" | "terminal-event-joined"
         )
     }
 
@@ -77,6 +90,10 @@ impl ContinuationCheckpoint {
     pub(crate) fn event_transition(&self) -> &str {
         &self.event_transition
     }
+
+    pub(crate) fn terminal_outcome(&self) -> Option<crate::routine_work::RoutineTerminalOutcome> {
+        self.terminal_outcome
+    }
 }
 
 impl HostState {
@@ -102,9 +119,31 @@ impl HostState {
         {
             return Err(HostFailure::Invalid);
         }
-        if self.read_optional_checkpoint()?.is_some() {
-            return Err(HostFailure::Busy);
-        }
+        let previous = self.read_optional_checkpoint()?;
+        let (generation, expected_existing) = match previous {
+            None => (1, false),
+            Some(previous) => {
+                validate_checkpoint(
+                    &previous,
+                    target,
+                    context_id,
+                    candidate_id,
+                    plan_id,
+                    snapshot_id,
+                    None,
+                )?;
+                if previous.state != "reconciled" {
+                    return Err(HostFailure::Busy);
+                }
+                (
+                    previous
+                        .generation
+                        .checked_add(1)
+                        .ok_or(HostFailure::Invalid)?,
+                    true,
+                )
+            }
+        };
         let checkpoint = checkpoint(
             target,
             context_id,
@@ -116,14 +155,15 @@ impl HostState {
             attempt_grant,
             authenticated_ledger_head,
             finding_binding,
+            None,
             "reserved",
-            1,
+            generation,
         )?;
-        write_checkpoint(&self.adapter, &checkpoint, false)?;
+        write_checkpoint(&self.adapter, &checkpoint, expected_existing)?;
         self.verify()
     }
 
-    pub(crate) fn record_complete_checkpoint(
+    pub(crate) fn record_terminal_checkpoint(
         &self,
         target: &Path,
         context_id: &str,
@@ -134,31 +174,29 @@ impl HostState {
         attempt_grant: &str,
         authenticated_ledger_head: &str,
         finding_binding: Option<&crate::state::RoutineFindingBinding>,
+        terminal_outcome: crate::routine_work::RoutineTerminalOutcome,
     ) -> Result<(), HostFailure> {
-        let previous = self.read_optional_checkpoint()?;
-        if let Some(previous) = &previous {
-            validate_checkpoint(
-                previous,
-                target,
-                context_id,
-                candidate_id,
-                plan_id,
-                snapshot_id,
-                None,
-            )?;
-            if previous.state != "reconciled"
-                || previous.finding_binding.as_ref() != finding_binding
-            {
-                return Err(HostFailure::Busy);
-            }
+        let previous = self.read_optional_checkpoint()?.ok_or(HostFailure::Busy)?;
+        validate_checkpoint(
+            &previous,
+            target,
+            context_id,
+            candidate_id,
+            plan_id,
+            snapshot_id,
+            None,
+        )?;
+        if (!previous.is_reserved() && previous.state != "reconciled")
+            || previous.finding_binding.as_ref() != finding_binding
+            || previous.continuation != continuation
+            || previous.attempt_grant != attempt_grant
+        {
+            return Err(HostFailure::Busy);
         }
-        let generation = match &previous {
-            Some(value) => value
-                .generation
-                .checked_add(1)
-                .ok_or(HostFailure::Invalid)?,
-            None => 1,
-        };
+        let generation = previous
+            .generation
+            .checked_add(1)
+            .ok_or(HostFailure::Invalid)?;
         let next = checkpoint(
             target,
             context_id,
@@ -166,14 +204,15 @@ impl HostState {
             plan_id,
             snapshot_id,
             continuation,
-            "",
+            &previous.recovery_marker,
             attempt_grant,
             authenticated_ledger_head,
             finding_binding,
-            "complete-event-pending",
+            Some(terminal_outcome),
+            "terminal-event-pending",
             generation,
         )?;
-        write_checkpoint(&self.adapter, &next, previous.is_some())?;
+        write_checkpoint(&self.adapter, &next, true)?;
         self.verify()
     }
 
@@ -191,14 +230,14 @@ impl HostState {
                 Some(&checkpoint.continuation),
             )?
             .ok_or(HostFailure::Invalid)?;
-        if current.state != "complete-event-pending"
+        if current.state != "terminal-event-pending"
             || current.generation != checkpoint.generation
             || current.event_id != checkpoint.event_id
         {
             return Err(HostFailure::Busy);
         }
         let mut next = current;
-        next.state = "complete-event-joined".to_owned();
+        next.state = "terminal-event-joined".to_owned();
         next.generation = next.generation.checked_add(1).ok_or(HostFailure::Invalid)?;
         write_checkpoint(&self.adapter, &next, true)?;
         self.verify()
@@ -259,6 +298,36 @@ impl HostState {
         self.verify()
     }
 
+    pub(crate) fn mark_checkpoint_ambiguous(
+        &self,
+        checkpoint: &ContinuationCheckpoint,
+    ) -> Result<(), HostFailure> {
+        let current = self
+            .exact_checkpoint(
+                Path::new(&checkpoint.target),
+                &checkpoint.context_id,
+                &checkpoint.candidate_id,
+                &checkpoint.plan_id,
+                &checkpoint.snapshot_id,
+                Some(&checkpoint.continuation),
+            )?
+            .ok_or(HostFailure::Invalid)?;
+        if (!current.is_reserved() && current.state != "reconciled")
+            || current.generation != checkpoint.generation
+        {
+            return Err(HostFailure::Busy);
+        }
+        let mut next = current;
+        next.state = "ambiguous".to_owned();
+        next.terminal_outcome = Some(crate::routine_work::RoutineTerminalOutcome::Ambiguous);
+        next.generation = next.generation.checked_add(1).ok_or(HostFailure::Invalid)?;
+        let (status, transition) = event_projection(next.terminal_outcome);
+        next.event_status = status.to_owned();
+        next.event_transition = transition.to_owned();
+        write_checkpoint(&self.adapter, &next, true)?;
+        self.verify()
+    }
+
     fn read_optional_checkpoint(&self) -> Result<Option<ContinuationCheckpoint>, HostFailure> {
         if !self
             .adapter
@@ -295,6 +364,7 @@ fn checkpoint(
     attempt_grant: &str,
     authenticated_ledger_head: &str,
     finding_binding: Option<&crate::state::RoutineFindingBinding>,
+    terminal_outcome: Option<crate::routine_work::RoutineTerminalOutcome>,
     state: &str,
     generation: u64,
 ) -> Result<ContinuationCheckpoint, HostFailure> {
@@ -308,7 +378,7 @@ fn checkpoint(
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
-        schema_version: "RoutineContinuationCheckpoint-v3".to_owned(),
+        schema_version: "RoutineContinuationCheckpoint-v4".to_owned(),
         generation,
         target: target.to_str().ok_or(HostFailure::Invalid)?.to_owned(),
         context_id: context_id.to_owned(),
@@ -320,23 +390,15 @@ fn checkpoint(
         attempt_grant: attempt_grant.to_owned(),
         authenticated_ledger_head: authenticated_ledger_head.to_owned(),
         finding_binding: finding_binding.cloned(),
+        operation: RoutineCheckpointOperation::Terminal,
+        terminal_outcome,
         state: state.to_owned(),
         event_id: terminal_event_id(continuation, authenticated_ledger_head),
         event_observed_at_unix_ms: 0,
         event_sequence: generation,
         event_parent_id: None,
-        event_status: if state.starts_with("complete") {
-            "pass"
-        } else {
-            "blocked"
-        }
-        .to_owned(),
-        event_transition: if state.starts_with("complete") {
-            "executed"
-        } else {
-            "interrupted"
-        }
-        .to_owned(),
+        event_status: event_projection(terminal_outcome).0.to_owned(),
+        event_transition: event_projection(terminal_outcome).1.to_owned(),
     })
 }
 
@@ -349,11 +411,15 @@ fn validate_checkpoint(
     snapshot_id: &str,
     continuation: Option<&str>,
 ) -> Result<(), HostFailure> {
-    if checkpoint.schema_version != "RoutineContinuationCheckpoint-v3"
+    if checkpoint.schema_version != "RoutineContinuationCheckpoint-v4"
         || checkpoint.generation == 0
         || !matches!(
             checkpoint.state.as_str(),
-            "reserved" | "reconciled" | "complete-event-pending" | "complete-event-joined"
+            "reserved"
+                | "reconciled"
+                | "ambiguous"
+                | "terminal-event-pending"
+                | "terminal-event-joined"
         )
         || checkpoint.target != target.to_str().ok_or(HostFailure::Invalid)?
         || checkpoint.context_id != context_id
@@ -363,6 +429,7 @@ fn validate_checkpoint(
         || !checkpoint.continuation.starts_with("routine-cont-")
         || checkpoint.attempt_grant.is_empty()
         || checkpoint.authenticated_ledger_head.is_empty()
+        || checkpoint.operation != RoutineCheckpointOperation::Terminal
         || checkpoint.event_id
             != terminal_event_id(
                 &checkpoint.continuation,
@@ -371,16 +438,42 @@ fn validate_checkpoint(
         || checkpoint.event_sequence == 0
         || checkpoint.event_status.is_empty()
         || checkpoint.event_transition.is_empty()
+        || (
+            checkpoint.event_status.as_str(),
+            checkpoint.event_transition.as_str(),
+        ) != event_projection(checkpoint.terminal_outcome)
         || checkpoint
             .finding_binding
             .as_ref()
             .is_some_and(|binding| binding.finding_id.is_empty() || binding.repair_id.is_empty())
         || (checkpoint.state == "reserved" && checkpoint.recovery_marker.is_empty())
+        || ((checkpoint.is_reserved() || checkpoint.state == "reconciled")
+            && checkpoint.terminal_outcome.is_some())
+        || (checkpoint.is_terminal()
+            && checkpoint.terminal_outcome.is_none_or(|outcome| {
+                outcome == crate::routine_work::RoutineTerminalOutcome::Ambiguous
+            }))
+        || (checkpoint.state == "ambiguous"
+            && checkpoint.terminal_outcome
+                != Some(crate::routine_work::RoutineTerminalOutcome::Ambiguous))
         || continuation.is_some_and(|value| checkpoint.continuation != value)
     {
         return Err(HostFailure::Invalid);
     }
     Ok(())
+}
+
+fn event_projection(
+    terminal_outcome: Option<crate::routine_work::RoutineTerminalOutcome>,
+) -> (&'static str, &'static str) {
+    match terminal_outcome {
+        Some(crate::routine_work::RoutineTerminalOutcome::Complete) => ("pass", "executed"),
+        Some(crate::routine_work::RoutineTerminalOutcome::Failed) => ("fail", "failed"),
+        Some(crate::routine_work::RoutineTerminalOutcome::Cancelled) => ("blocked", "cancelled"),
+        Some(crate::routine_work::RoutineTerminalOutcome::Incomplete)
+        | Some(crate::routine_work::RoutineTerminalOutcome::Ambiguous)
+        | None => ("blocked", "interrupted"),
+    }
 }
 
 fn terminal_event_id(continuation: &str, terminal_head: &str) -> String {

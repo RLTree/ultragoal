@@ -32,6 +32,7 @@ pub(crate) fn mediate_noop(
         continuation: None,
         attempt_grant: None,
         checkpoint_head: None,
+        terminal_outcome: None,
         support_limit: MEDIATOR_SUPPORT_LIMIT,
     })
 }

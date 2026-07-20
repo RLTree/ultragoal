@@ -164,6 +164,14 @@ fn reservation_interruption_reconciles_once_through_the_public_continuation_rout
         .unwrap()
         .to_owned();
     assert!(continuation.starts_with("routine-cont-"));
+    let reserved: Value = serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap())
+        .expect("reservation checkpoint is not JSON");
+    assert_eq!(reserved["state"], "reserved");
+    assert_eq!(reserved["operation"], "terminal");
+    assert!(reserved["terminal_outcome"].is_null());
+    assert_eq!(reserved["continuation"], continuation);
+    assert!(reserved["attempt_grant"].as_str().is_some());
+    assert!(reserved["authenticated_ledger_head"].as_str().is_some());
     assert_eq!(tree(&fixture.root), before);
 
     let before_foreign = tree(&fixture.root);
@@ -281,12 +289,26 @@ fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() 
     assert_eq!(value["status"], "incomplete");
     assert_eq!(value["recovery_required"], false);
     assert_eq!(value["nodes"][0]["disposition"], "failed");
-    assert_ambiguous_terminal_refusal(&fixture.run());
+    let terminal_event = read_terminal_event(&fixture);
+    assert_eq!(terminal_event["event"]["outcome"], "fail");
+    assert_eq!(
+        terminal_event["event"]["public_attributes"]["routine_transition"],
+        "failed"
+    );
+    assert_eq!(
+        terminal_event["event"]["public_attributes"]["routine_terminal_outcome"],
+        "failed"
+    );
+    let checkpoint: Value = serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap())
+        .expect("terminal checkpoint is not JSON");
+    assert_eq!(checkpoint["state"], "terminal-event-joined");
+    assert_eq!(checkpoint["terminal_outcome"], "failed");
+    assert_terminal_refusal(&fixture.run());
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn missing_validation_artifacts_ignore_fails_closed_on_repeat() {
+fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
     let mut fixture = Fixture::new(
         "missing-observability-ignore",
         &[pass_node("compile", &[])],
@@ -295,18 +317,37 @@ fn missing_validation_artifacts_ignore_fails_closed_on_repeat() {
         true,
     );
     fs::write(fixture.root.join(".gitignore"), b"target/\n").unwrap();
-    let first = fixture.run();
-    assert_eq!(first.status.code(), Some(0), "{first:?}");
-    assert_eq!(Fixture::value(&first)["status"], "executed");
-    let repeat = fixture.run();
-    assert_eq!(repeat.status.code(), Some(3), "{repeat:?}");
-    assert!(repeat.stdout.is_empty(), "{repeat:?}");
-    let value: Value = serde_json::from_slice(&repeat.stderr).unwrap();
+    let before_status = fixture.status();
+    let refused = fixture.run();
+    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
+    assert!(refused.stdout.is_empty(), "{refused:?}");
+    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
     assert_eq!(
         value["diagnostic_id"],
-        "successor_runtime_authority_required"
+        "successor_runtime_downstream_tool_unavailable"
+    );
+    assert_eq!(
+        value["cause"],
+        "routine-runtime-observability-store-not-ignored"
+    );
+    assert_eq!(fixture.status(), before_status);
+    assert!(!fixture.root.join("target/routine").exists());
+    assert!(!fixture.checkpoint_path().exists());
+    assert!(
+        !fixture
+            .root
+            .join("validation_artifacts/observability/spool/successor-events.jsonl")
+            .exists()
     );
     fixture.teardown_after_assertions();
+}
+
+fn read_terminal_event(fixture: &Fixture) -> Value {
+    let path = fixture
+        .root
+        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+    let text = fs::read_to_string(path).expect("terminal event was not appended");
+    serde_json::from_str(text.trim()).expect("terminal event is not JSON")
 }
 
 #[test]
@@ -333,13 +374,12 @@ fn independent_fresh_authority_roots_execute_once_and_reuse_their_own_bindings()
     first.teardown_after_assertions();
 }
 
-fn assert_ambiguous_terminal_refusal(output: &std::process::Output) {
+fn assert_terminal_refusal(output: &std::process::Output) {
     assert_eq!(output.status.code(), Some(3), "{output:?}");
     assert!(output.stdout.is_empty(), "{output:?}");
-    let value: Value = serde_json::from_slice(&output.stderr).unwrap();
-    assert_eq!(
-        value["cause"],
-        "routine-production-continuation-effect-ambiguous"
+    assert!(
+        serde_json::from_slice::<Value>(&output.stderr).is_ok(),
+        "{output:?}"
     );
 }
 

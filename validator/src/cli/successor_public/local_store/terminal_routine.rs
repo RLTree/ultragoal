@@ -12,6 +12,7 @@ pub(crate) struct RoutineTerminalEvent<'a> {
     pub(crate) parent_event_id: Option<&'a str>,
     pub(crate) status: &'a str,
     pub(crate) transition: &'a str,
+    pub(crate) terminal_outcome: crate::routine_work::RoutineTerminalOutcome,
     pub(crate) finding_binding: Option<&'a crate::state::RoutineFindingBinding>,
 }
 
@@ -49,6 +50,10 @@ pub(crate) fn append_routine_terminal(
         ("continuation_id", terminal.continuation_id),
         ("terminal_ledger_head", terminal.terminal_ledger_head),
         ("routine_transition", terminal.transition),
+        (
+            "routine_terminal_outcome",
+            terminal.terminal_outcome.as_str(),
+        ),
     ] {
         event
             .add_public_attribute(key, value)
@@ -123,7 +128,7 @@ pub(crate) fn routine_observations_from_events(
                 finding_id,
                 repair_id,
                 transition,
-                outcome: event.outcome().to_owned(),
+                outcome: attributes.get("routine_terminal_outcome")?.to_owned(),
             })
         })
         .collect()
@@ -201,6 +206,9 @@ mod tests {
         unbound
             .add_public_attribute("routine_transition", "executed")
             .unwrap();
+        unbound
+            .add_public_attribute("routine_terminal_outcome", "complete")
+            .unwrap();
         assert!(routine_observations_from_events(&[unbound]).is_empty());
 
         let mut bound = event();
@@ -208,6 +216,7 @@ mod tests {
             ("continuation_id", "routine-cont-test"),
             ("terminal_ledger_head", "sha256:head"),
             ("routine_transition", "executed"),
+            ("routine_terminal_outcome", "complete"),
         ] {
             bound.add_public_attribute(key, value).unwrap();
         }
@@ -217,12 +226,14 @@ mod tests {
         assert_eq!(observations.len(), 1);
         assert_eq!(observations[0].finding_id, "sha256:finding");
         assert_eq!(observations[0].repair_id, "repair-test");
+        assert_eq!(observations[0].outcome, "complete");
 
         let mut ambiguous = event();
         for (key, value) in [
             ("continuation_id", "routine-cont-test"),
             ("terminal_ledger_head", "sha256:head"),
             ("routine_transition", "executed"),
+            ("routine_terminal_outcome", "complete"),
         ] {
             ambiguous.add_public_attribute(key, value).unwrap();
         }

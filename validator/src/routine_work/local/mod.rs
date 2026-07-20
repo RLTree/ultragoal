@@ -9,10 +9,22 @@ use super::digest::sha256;
 use super::{DirtyChange, DirtySnapshot, RoutineBinding, RoutineError, RoutineErrorId};
 use crate::context::LiveContext;
 use file::{RootAnchor, content_identity};
-use git::{parse_status, status_bytes};
+use git::{parse_status, runtime_store_ignored, status_bytes};
 use tree::WorktreeShape;
 
 pub struct LocalDirtyTree;
+
+pub(crate) fn require_runtime_store_ignored(binding: &RoutineBinding) -> Result<(), RoutineError> {
+    if runtime_store_ignored(binding)? {
+        Ok(())
+    } else {
+        Err(RoutineError::new(
+            RoutineErrorId::CapabilityUnavailable,
+            "routine-runtime-observability-store-not-ignored",
+            None,
+        ))
+    }
+}
 
 pub(super) struct CompleteCapture {
     binding: RoutineBinding,

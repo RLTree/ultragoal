@@ -42,6 +42,55 @@ pub(crate) fn status_bytes(binding: &RoutineBinding) -> Result<Vec<u8>, RoutineE
     collect_bounded(&mut child)
 }
 
+pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, RoutineError> {
+    let git = binding
+        .tool("git")
+        .filter(|tool| tool.available())
+        .and_then(|tool| tool.executable())
+        .ok_or_else(|| capability_error("bound-git-unavailable"))?;
+    if !git.is_absolute() {
+        return Err(capability_error("bound-git-path-not-absolute"));
+    }
+    let mut child = Command::new(git)
+        .args([
+            "--no-optional-locks",
+            "check-ignore",
+            "--no-index",
+            "--quiet",
+            "validation_artifacts/observability/spool/successor-events.jsonl",
+        ])
+        .current_dir(binding.worktree_root())
+        .env_clear()
+        .env("GIT_CONFIG_NOSYSTEM", "1")
+        .env("GIT_CONFIG_GLOBAL", "/dev/null")
+        .env("GIT_OPTIONAL_LOCKS", "0")
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .env("LC_ALL", "C")
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .map_err(|_| capture_error("git-check-ignore-spawn-failed"))?;
+    let deadline = Instant::now() + STATUS_TIMEOUT;
+    loop {
+        if let Some(status) = child
+            .try_wait()
+            .map_err(|_| capture_error("git-check-ignore-wait-failed"))?
+        {
+            return match status.code() {
+                Some(0) => Ok(true),
+                Some(1) => Ok(false),
+                _ => Err(capture_error("git-check-ignore-nonzero")),
+            };
+        }
+        if Instant::now() >= deadline {
+            terminate(&mut child);
+            return Err(limit_error("git-check-ignore-time-limit-exceeded"));
+        }
+        thread::sleep(Duration::from_millis(2));
+    }
+}
+
 fn collect_bounded(child: &mut Child) -> Result<Vec<u8>, RoutineError> {
     let stdout = child
         .stdout

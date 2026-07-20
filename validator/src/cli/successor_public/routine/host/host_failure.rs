@@ -135,7 +135,7 @@ impl HostState {
         }
     }
 
-    pub(crate) fn record_complete_checkpoint(
+    pub(crate) fn record_terminal_checkpoint(
         &self,
         target: &Path,
         context_id: &str,
@@ -146,10 +146,11 @@ impl HostState {
         attempt_grant: &str,
         authenticated_ledger_head: &str,
         finding_binding: Option<&RoutineFindingBinding>,
+        terminal_outcome: crate::routine_work::RoutineTerminalOutcome,
     ) -> Result<(), HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            self.inner.record_complete_checkpoint(
+            self.inner.record_terminal_checkpoint(
                 target,
                 context_id,
                 candidate_id,
@@ -159,6 +160,7 @@ impl HostState {
                 attempt_grant,
                 authenticated_ledger_head,
                 finding_binding,
+                terminal_outcome,
             )
         }
         #[cfg(not(target_vendor = "apple"))]
@@ -173,6 +175,7 @@ impl HostState {
                 attempt_grant,
                 authenticated_ledger_head,
                 finding_binding,
+                terminal_outcome,
             );
             unreachable!("unsupported host state cannot be constructed")
         }
@@ -206,6 +209,21 @@ impl HostState {
         #[cfg(not(target_vendor = "apple"))]
         {
             let _ = (checkpoint, authenticated_ledger_head);
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
+    pub(crate) fn mark_checkpoint_ambiguous(
+        &self,
+        checkpoint: &supported::ContinuationCheckpoint,
+    ) -> Result<(), HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.mark_checkpoint_ambiguous(checkpoint)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = checkpoint;
             unreachable!("unsupported host state cannot be constructed")
         }
     }

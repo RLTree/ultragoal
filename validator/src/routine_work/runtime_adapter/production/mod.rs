@@ -50,6 +50,47 @@ pub(crate) enum PublicRoutineControl {
     InterruptAfterReservation,
 }
 
+/// Private host checkpoint data published after the durable reservation and
+/// before any workspace effect can begin.
+pub(crate) struct RoutineReservationPublication {
+    continuation: String,
+    recovery_marker: String,
+    attempt_grant: String,
+    authenticated_ledger_head: String,
+}
+
+impl RoutineReservationPublication {
+    pub(in crate::routine_work::runtime_adapter::production) fn new(
+        continuation: String,
+        recovery_marker: String,
+        attempt_grant: String,
+        authenticated_ledger_head: String,
+    ) -> Self {
+        Self {
+            continuation,
+            recovery_marker,
+            attempt_grant,
+            authenticated_ledger_head,
+        }
+    }
+
+    pub(crate) fn continuation(&self) -> &str {
+        &self.continuation
+    }
+
+    pub(crate) fn recovery_marker(&self) -> &str {
+        &self.recovery_marker
+    }
+
+    pub(crate) fn attempt_grant(&self) -> &str {
+        &self.attempt_grant
+    }
+
+    pub(crate) fn authenticated_ledger_head(&self) -> &str {
+        &self.authenticated_ledger_head
+    }
+}
+
 /// Canonical public production entry. Issuer construction, reservation,
 /// recovery lookup, and raw settlement stay inside this leaf.
 #[cfg(test)]
@@ -70,6 +111,7 @@ pub(crate) fn mediate_public_routine_execution(
         cancellation,
         reuse,
         PublicRoutineControl::Run,
+        None,
     )
 }
 
@@ -81,6 +123,7 @@ pub(crate) fn mediate_public_routine_execution_with_control(
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
     control: PublicRoutineControl,
+    on_reserved: Option<&mut dyn FnMut(&RoutineReservationPublication) -> Result<(), RoutineError>>,
 ) -> Result<RoutineMediationResult, RoutineError> {
     if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
         if !reuse.is_empty() {
@@ -106,6 +149,7 @@ pub(crate) fn mediate_public_routine_execution_with_control(
         cancellation,
         reuse,
         control,
+        on_reserved,
     )
 }
 

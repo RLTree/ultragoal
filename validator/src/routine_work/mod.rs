@@ -39,6 +39,7 @@ pub(crate) use error::{
 };
 pub use error::{RoutineError, RoutineErrorId};
 pub use local::LocalDirtyTree;
+pub(crate) use local::require_runtime_store_ignored;
 pub use path::RepoPath;
 pub use plan::{
     AffectedSet, CoverageDimensions, PlanMode, PlanRequest, PlannedCheck, RoutinePlan,
@@ -65,7 +66,8 @@ pub(crate) use runtime_adapter::{
     PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, PublicRoutineControl, RoutineAdapterSpec,
     RoutineCancellation, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
+    RoutineReservationPublication, RoutineReuseInput, RoutineTerminalOutcome,
+    bind_rust_source_syntax_invocation, fixed_environment,
     mediate_public_routine_execution_with_control, prepare_routine_execution,
     reconcile_public_routine_reservation, validate_immutable_routine_program,
 };

@@ -2,17 +2,34 @@
 #![allow(dead_code)]
 
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
+
+pub(crate) struct HostCustodyIssuance(PathBuf);
+
+impl HostCustodyIssuance {
+    fn new(authority_root: PathBuf) -> Self {
+        Self(authority_root)
+    }
+}
 
 mod routine_work {
-    use super::PathBuf;
+    use super::{Deserialize, Serialize};
 
     pub(crate) struct RoutineCustodyCapability;
 
     impl RoutineCustodyCapability {
-        pub(crate) fn issue_from_host(_: PathBuf) -> Self {
+        pub(crate) fn issue_from_host(_: super::HostCustodyIssuance) -> Self {
             Self
         }
+    }
+
+    #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+    pub(crate) enum RoutineTerminalOutcome {
+        Complete,
+        Failed,
+        Cancelled,
+        Incomplete,
+        Ambiguous,
     }
 }
 

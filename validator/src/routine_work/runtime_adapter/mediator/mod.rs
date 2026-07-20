@@ -35,7 +35,7 @@ pub(crate) use filesystem::{
 use outcome::{ExecutedArtifact, ResultArtifactWire, project_executed_intent};
 pub(crate) use outcome::{
     RoutineCancellation, RoutineContinuationOutcome, RoutineMediationResult, RoutineMediatorStatus,
-    RoutineNodeDisposition, RoutineNodeMediation, RoutineReuseInput,
+    RoutineNodeDisposition, RoutineNodeMediation, RoutineReuseInput, RoutineTerminalOutcome,
 };
 pub(in crate::routine_work) use process::ObservedProcessCustody;
 pub(super) use process::PreparedProcess;

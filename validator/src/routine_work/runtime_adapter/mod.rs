@@ -32,6 +32,7 @@ pub(in crate::routine_work) use mediator::ObservedProcessCustody;
 pub(crate) use mediator::{
     PRODUCTION_SUPPORT_LIMIT, RoutineCancellation, RoutineContinuationOutcome,
     RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
+    RoutineTerminalOutcome,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
@@ -42,8 +43,8 @@ pub(crate) use mediator::{
 pub(crate) use production::mediate_public_routine_execution;
 pub(in crate::routine_work) use production::{LaunchCleanupEvidence, ObservedLaunchCleanup};
 pub(crate) use production::{
-    PublicRoutineControl, RoutineCustodyCapability, mediate_public_routine_execution_with_control,
-    reconcile_public_routine_reservation,
+    PublicRoutineControl, RoutineCustodyCapability, RoutineReservationPublication,
+    mediate_public_routine_execution_with_control, reconcile_public_routine_reservation,
 };
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use production::{

@@ -214,6 +214,7 @@ impl EffectMediation<'_> {
                 continuation: None,
                 attempt_grant: None,
                 checkpoint_head: None,
+                terminal_outcome: None,
                 support_limit: PRODUCTION_SUPPORT_LIMIT,
             },
             settlement,

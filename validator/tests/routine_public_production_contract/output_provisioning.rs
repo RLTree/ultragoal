@@ -67,11 +67,20 @@ fn foreign_output_is_preserved_and_fresh_process_recovery_refuses() {
             .unwrap()
             .contains("\"state\":\"failed\"")
     );
+    let checkpoint: Value = serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap())
+        .expect("ambiguous checkpoint is not JSON");
+    assert_eq!(checkpoint["state"], "ambiguous");
+    assert_eq!(checkpoint["terminal_outcome"], "ambiguous");
+    assert_eq!(checkpoint["operation"], "terminal");
 
     let recovered = fixture.run();
     assert_eq!(recovered.status.code(), Some(3), "{recovered:?}");
+    assert!(recovered.stdout.is_empty(), "{recovered:?}");
     let diagnostic: Value = serde_json::from_slice(&recovered.stderr).unwrap();
-    assert_eq!(diagnostic["cause"], "mediator-output-scope-not-empty");
+    assert_eq!(
+        diagnostic["cause"],
+        "the routine custody already has a terminal or pending record and no exact continuation was supplied"
+    );
     assert_eq!(fs::read(&foreign).unwrap(), b"foreign-user-work");
     fixture.teardown_after_assertions();
 }

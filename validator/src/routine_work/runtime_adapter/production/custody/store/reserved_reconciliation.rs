@@ -104,6 +104,9 @@ fn reuse_result(
         continuation: Some(format!("routine-cont-{continuation}")),
         attempt_grant: Some(record.grant_id.clone()),
         checkpoint_head: Some(authenticated_head.to_owned()),
+        terminal_outcome: Some(
+            crate::routine_work::runtime_adapter::mediator::RoutineTerminalOutcome::Complete,
+        ),
         support_limit: crate::routine_work::runtime_adapter::mediator::PRODUCTION_SUPPORT_LIMIT,
     })
 }

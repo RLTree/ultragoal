@@ -32,6 +32,9 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     cancellation: RoutineCancellation,
     reuse: PreflightedProductionReuse,
     control: super::super::PublicRoutineControl,
+    mut on_reserved: Option<
+        &mut dyn FnMut(&super::super::RoutineReservationPublication) -> Result<(), RoutineError>,
+    >,
 ) -> Result<RoutineMediationResult, RoutineError> {
     preflight_production_request(context, plan, &request)?;
     let launch_root = launch_root(&custody)?;
@@ -42,6 +45,15 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     let scopes = allowed_output_scopes(&request);
     let journal = super::super::output_journal::observe(context.worktree_root(), &scopes)?;
     let owner = ReservationOwner::reserve(&custody, &request, binding, journal)?;
+    if let Some(publish) = on_reserved.as_mut() {
+        let publication = super::super::RoutineReservationPublication::new(
+            owner.continuation_id()?,
+            owner.recovery_marker(),
+            owner.attempt_grant(),
+            owner.authenticated_head(),
+        );
+        publish(&publication)?;
+    }
     if control == super::super::PublicRoutineControl::InterruptAfterReservation {
         return interrupted_after_reservation(&request, &owner);
     }
@@ -98,6 +110,20 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
         result.continuation = Some(owner.continuation_id()?);
         result.attempt_grant = Some(owner.attempt_grant());
         result.checkpoint_head = Some(owner.authenticated_head());
+        result.terminal_outcome = Some(match settlement {
+            DurableSettlement::Complete => {
+                super::super::super::mediator::RoutineTerminalOutcome::Complete
+            }
+            DurableSettlement::Failed => {
+                super::super::super::mediator::RoutineTerminalOutcome::Failed
+            }
+            DurableSettlement::Cancelled => {
+                super::super::super::mediator::RoutineTerminalOutcome::Cancelled
+            }
+            DurableSettlement::Incomplete => {
+                super::super::super::mediator::RoutineTerminalOutcome::Incomplete
+            }
+        });
         output
             .borrow_mut()
             .take()
@@ -151,6 +177,7 @@ fn interrupted_after_reservation(
         continuation: Some(owner.continuation_id()?),
         attempt_grant: Some(owner.attempt_grant()),
         checkpoint_head: Some(owner.authenticated_head()),
+        terminal_outcome: None,
         support_limit: super::super::super::mediator::PRODUCTION_SUPPORT_LIMIT,
     })
 }

@@ -3,9 +3,9 @@ use std::os::unix::fs::DirBuilderExt;
 
 use super::routine_plan_fixture::{RoutinePlanFixture, authority_path, isolate_fixture_test};
 use super::routine_work::{
-    RoutineCancellation, RoutineReuseInput, mediate_public_routine_execution,
-    set_test_publication_ambiguity_after, set_test_publication_refusal_after,
-    test_last_spawn_group_absent,
+    RoutineCancellation, RoutineMediatorStatus, RoutineReuseInput, RoutineTerminalOutcome,
+    mediate_public_routine_execution, set_test_publication_ambiguity_after,
+    set_test_publication_refusal_after, test_last_spawn_group_absent,
 };
 
 #[test]
@@ -38,6 +38,40 @@ fn reservation_publication_ambiguity_is_durable_before_workspace_effects() {
         fs::read_to_string(authority_path(&fixture).join("routine-authority.state")).unwrap();
     assert!(state.contains("\"state\":\"ambiguous\""), "{state}");
     assert!(state.contains("\"cause\":\"reserve\""), "{state}");
+    fixture.finish();
+}
+
+#[test]
+fn cancelled_effect_keeps_a_cancelled_typed_terminal_outcome() {
+    if isolate_fixture_test(
+        "reservation_publication_controls::cancelled_effect_keeps_a_cancelled_typed_terminal_outcome",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("cancelled-terminal-outcome");
+    let prepared = fixture.prepare().unwrap();
+    prepare_authority(&fixture);
+    let cancellation = RoutineCancellation::new();
+    cancellation.cancel();
+
+    let result = mediate_public_routine_execution(
+        Some(&authority_path(&fixture)),
+        &fixture.context,
+        &fixture.plan,
+        prepared,
+        cancellation,
+        RoutineReuseInput::default(),
+    )
+    .expect("cancelled routine settles durably");
+
+    assert_eq!(result.status(), RoutineMediatorStatus::Cancelled);
+    assert_eq!(
+        result.terminal_outcome(),
+        Some(RoutineTerminalOutcome::Cancelled)
+    );
+    let state =
+        fs::read_to_string(authority_path(&fixture).join("routine-authority.state")).unwrap();
+    assert!(state.contains("\"state\":\"cancelled\""), "{state}");
     fixture.finish();
 }
 
