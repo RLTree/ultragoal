@@ -26,6 +26,16 @@ behavior. The archived task emitted no new WorkerResult; its 1.1 GB worktree was
 removed. Installed lifecycle, recovery, repeat use, N11 promotion, readiness,
 release, and completion remain withheld.
 
+Root now owns one serial N08 convergence batch across the plugin/distribution
+authority seam. Its acceptance boundary is a single opaque lifecycle custody
+owner with full durable effect-prefix/recovery state, complete Darwin suspended
+exact-object custody, same-surface installed/cache/registry/discovery/runtime
+observation before settlement, one production caller, and retirement of the
+parallel accepted-host lifecycle construction routes. Repeat-use and
+idempotent-reinstall must execute through a zero-write observation branch.
+Rollback and stale-cache recovery remain refused without exact predecessor
+authority. This is not a new node, lease, receipt family, or claim.
+
 N11 remains blocked through its N08 dependency. N12 remains a root-only
 identity/interface rebind, not an implementation lane. N14 has no N04 consumed
 intersection and retains its source-accepted/external-blocked outcome under

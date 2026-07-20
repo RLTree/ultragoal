@@ -44,6 +44,50 @@ repeat-use, N11 dependency promotion, readiness, release, and completion remain
 withheld. The managed task is archived, its 1.1 GB worktree is removed, and no
 new WorkerResult or receipt was created.
 
+### Root-owned N08 current-host closure
+
+This is one serial root authority lane, not a new DAG node or worktree lease.
+The missing boundary crosses `WS-PLUGIN` and the shared `WS-DISTRIBUTION`
+authority, so delegating it as an independently accepting worktree would violate
+root ownership. Read-only mapping and review may run in parallel; source
+mutation and integration remain serial here.
+
+The governing invariant is:
+
+> A host mutation is admitted only by consuming one sealed plugin lifecycle
+> plan into one opaque, non-Clone durable custody owner. That owner persists the
+> complete installed/cache/generation/recovery/effect-prefix/package binding
+> before effects, observes every claimed host surface before settlement, and is
+> the only authority for recovery or terminal transition.
+
+The coherent repair batch must:
+
+1. add a private consuming plugin-plan transfer so every clone becomes unusable
+   for ordinary apply after transfer;
+2. version the existing host ledger to retain the full lifecycle state, effect
+   cursor, bound roots, package identity, and recovery state before mutation;
+3. keep `IdempotentReinstall` and `RepeatUse` on an executing zero-write
+   observation branch and continue refusing rollback or stale-cache recovery
+   without exact predecessor authority;
+4. implement Darwin execution with the complete established suspended-launch
+   algorithm: exact staged executable bytes, scrubbed environment and bound
+   roots, child/group/pipe custody before resume, loaded-vnode verification,
+   immediate executable revalidation, and explicit cleanup for every failure,
+   panic, cancellation, timeout, or ambiguity;
+5. settle only after typed installed bytes, cache, registry, discovery, and
+   runtime observations match the custody record; an unknown observation stays
+   recovery-required;
+6. compile one crate-private production transaction and caller, then retire the
+   parallel accepted-host lifecycle construction routes rather than promoting
+   them.
+
+Focused decision-boundary proof must cover transfer replay/substitution, every
+effect prefix, durable reopen and ambiguous recovery, loaded-object mutation,
+timeout/cancellation/panic cleanup, observation mismatch, zero-write repeat
+use, package identity substitution, and sibling-route retirement. No installed,
+runtime, repeat-use, or N11 dependency claim is available before the exact
+integrated candidate passes that boundary.
+
 ## Late N04 repair checkpoint — 2026-07-19
 
 N04 is now root-integrated at exact source `d9525e027a9e0aeecf0ec3e4680f9818f2950455`
