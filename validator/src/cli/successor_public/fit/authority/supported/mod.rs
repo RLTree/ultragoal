@@ -17,13 +17,22 @@ use std::path::{Path, PathBuf};
 
 #[path = "anchored_directory.rs"]
 mod anchored_directory;
-mod host;
 #[path = "openat.rs"]
 mod openat;
+#[path = "pending_publication.rs"]
+mod pending_publication;
 #[path = "process_lock.rs"]
 mod process_lock;
+#[path = "state_components.rs"]
+mod state_components;
+#[path = "state_open.rs"]
+mod state_open;
+#[cfg(test)]
+#[path = "target_confinement.rs"]
+mod target_confinement;
 
 pub(crate) use anchored_directory::*;
-pub(crate) use host::*;
 pub(crate) use openat::*;
+pub(crate) use pending_publication::*;
 pub(crate) use process_lock::*;
+pub(crate) use state_components::*;
