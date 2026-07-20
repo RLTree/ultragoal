@@ -1,5 +1,29 @@
 # Plugin and CLI Authority Integration
 
+## Fail-closed install-test public boundary — 2026-07-20
+
+Exact root candidate `0fc93039a1daa29ec68e5c26ee47cbbca30e318c` /
+tree `2cc839a64825ad2805ca420ed3d65b041f02b6b4` now binds the canonical
+`package install-test` command to one typed public outcome. A bounded Terra/high
+review rejected an earlier isolated-success implementation because it marked
+unexecuted runtime effects complete, validated self-authored cache evidence,
+lost recovery after durable admission, exposed raw admission construction, and
+did not exercise repeat use. Root replaced that false pass with an explicit
+`UnsupportedCapability` result before context construction or mutation.
+
+Warning-denied production compilation passes, and the exact focused public
+control passes 1/1 while recursively preserving the supplied workspace and
+existing output bytes. Dormant host-effect and lifecycle-custody authority
+remains test-gated; no suppression or dummy reachability was added.
+
+This closes only the public command-truth boundary. Package install, cache,
+marketplace, app registry, discovery, runtime, real-host behavior, repeat use,
+N08 dependency promotion, readiness, release, and completion remain withheld.
+The next N08 implementation boundary is one canonical installed-journey owner
+that performs and independently observes the complete lifecycle effect set;
+an isolated state mirror or partial lifecycle intent is not an accepted
+substitute.
+
 ## Current-host to installed frontier — 2026-07-19
 
 Root dependency reobservation found N08 material REWORK: its historical

@@ -132,6 +132,10 @@ fn verify_staging_lane(
         && lane.state == "planned"
         && lane.current_identity.is_none()
         && lane.ceiling == "adopted_reobservation_required";
+    let invalidated = matches!(mode, StagingMode::Declared)
+        && lane.state == "blocked"
+        && lane.ceiling == "adopted_reobservation_required"
+        && valid_staged_identity(lane.current_identity.as_ref());
     let staged = matches!(lane.state.as_str(), "integrating" | "integrated")
         && lane.ceiling == "source_accepted"
         && valid_staged_identity(lane.current_identity.as_ref());
@@ -142,7 +146,7 @@ fn verify_staging_lane(
             .iter()
             .map(String::as_str)
             .ne(DEPENDENCIES)
-        || !(planned || staged)
+        || !(planned || invalidated || staged)
     {
         return Err(invalid("adopted-staging-lane-invalid"));
     }
@@ -164,4 +168,32 @@ fn valid_git_id(value: &str) -> bool {
 
 fn invalid(code: &str) -> StateError {
     StateError::InvalidCatalog(code.to_owned())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{LaneRegistry, StagingMode, verify_staging_lane};
+
+    #[test]
+    fn invalidated_source_identity_cannot_enter_root_accepted_mode() {
+        let registry: LaneRegistry = serde_json::from_value(serde_json::json!({
+            "lanes": [{
+                "id": "N12",
+                "state": "blocked",
+                "dependencies": ["N03", "N04", "N05", "N06", "N07", "N10", "N11"],
+                "scope_ids": [],
+                "authority": "root_only",
+                "current_identity": {
+                    "lane_id": "N12",
+                    "commit": "0123456789abcdef0123456789abcdef01234567",
+                    "tree": "89abcdef0123456789abcdef0123456789abcdef"
+                },
+                "ceiling": "adopted_reobservation_required"
+            }]
+        }))
+        .unwrap();
+
+        assert!(verify_staging_lane(&registry, StagingMode::Declared).is_ok());
+        assert!(verify_staging_lane(&registry, StagingMode::RootAccepted).is_err());
+    }
 }

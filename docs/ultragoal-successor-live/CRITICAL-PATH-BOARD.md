@@ -1,5 +1,27 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-20 fail-closed package install-test boundary
+
+Root candidate `0fc93039a1daa29ec68e5c26ee47cbbca30e318c` / tree
+`2cc839a64825ad2805ca420ed3d65b041f02b6b4` binds the canonical
+`package install-test` public operation and refuses it with typed
+`UnsupportedCapability` before context construction, custody admission, host
+effects, or output mutation. Warning-denied production compilation passes and
+the exact zero-write public control passes 1/1.
+
+The rejected predecessor attempted to treat an isolated install/cache fixture
+as terminal lifecycle success even though runtime was unavailable, cache proof
+was self-authored, post-admission recovery was absent, raw admission remained
+crate-forgeable, and repeat use was not exercised. Those routes were removed;
+dormant host-effect and lifecycle-custody authority is test-gated again.
+
+N08 remains blocked. The changed ceiling is precise: the public command outcome
+is current and honest, while package install, cache, marketplace, app registry,
+discovery, runtime, real-host behavior, repeat use, N11 dependency promotion,
+readiness, release, and completion remain withheld. The next legal transition
+is a canonical installed-journey owner that executes and independently observes
+the complete lifecycle effect set without a parallel state mirror.
+
 ## 2026-07-19 current-host lifecycle repair frontier
 
 Exact dependency reobservation on root `0d1722a206825330e9a6c132f150e2410e061370`
