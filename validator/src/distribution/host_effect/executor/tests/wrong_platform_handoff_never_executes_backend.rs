@@ -59,8 +59,8 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     let journey = JourneyBinding::new(package.clone(), &host, "fixture-marketplace").unwrap();
     let (scope, target, expected_target) = fixture.scope_and_target();
     let mut target_observer = target.observer();
-    let ledger = FileHostEffectLedger::create(&fixture.ledger_root, "fixture-ledger".to_owned())
-        .unwrap();
+    let ledger =
+        FileHostEffectLedger::create(&fixture.ledger_root, "fixture-ledger".to_owned()).unwrap();
     let coordinator = SupportedHostLifecycleCoordinator::bind(
         "fixture-authority".to_owned(),
         "fixture-ledger".to_owned(),
@@ -80,9 +80,10 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             executable: &pinned,
             expected_target,
             expected_head: ledger.head().unwrap(),
+            lifecycle_record: None,
         })
         .unwrap();
-    let mut custody = RootPlanCustody::bind(plan, &accepted).unwrap();
+    let mut custody = lifecycle_custody(&fixture, &plan);
     let mut clock = TestClock { sequence: 0 };
     let mut adapter = LinuxDescriptorAdapter;
     let handoff = coordinator

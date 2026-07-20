@@ -37,8 +37,8 @@ impl VerifiedHostEffectPermit {
         self.permit.binding()
     }
 
-    pub(in crate::distribution::host_effect) fn into_reservation(self) -> HostEffectReservation {
-        HostEffectReservation::from_permit(&self.permit)
+    pub(in crate::distribution::host_effect) fn into_permit(self) -> HostEffectPermit {
+        self.permit
     }
 }
 

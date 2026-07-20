@@ -1,15 +1,18 @@
 use super::super::{
-    AuthorizedHostEffect, DurableHostEffectLedger, HostEffectAuthority, HostEffectState,
-    HostEffectTransition, PinnedHostExecutable,
+    AuthorizedHostEffect, DurableHostEffectLedger, HostEffectAuthority, PinnedHostExecutable,
 };
-use super::binding::{
-    AcceptedHostEffect, HostEffectAcceptanceRequest, ObservedTargetIdentity, RootPlanCustody,
-};
+#[cfg(test)]
+use super::super::{HostEffectState, HostEffectTransition};
+use super::binding::{AcceptedHostEffect, HostEffectAcceptanceRequest, ObservedTargetIdentity};
 use super::recovery::{
-    PublicationClassification, RecoveryAuthorization, RecoveryProposal,
-    issue_recovery_authorization, propose_recovery,
+    issue_recovery_authorization, propose_recovery, PublicationClassification,
+    RecoveryAuthorization, RecoveryProposal,
 };
-use super::{SupportedHostLifecycleError, SupportedHostLifecycleErrorId, lifecycle_error};
+use super::{lifecycle_error, SupportedHostLifecycleError, SupportedHostLifecycleErrorId};
+#[cfg(test)]
+use crate::plugin_product::lifecycle::HostLifecycleCustody;
+#[cfg(not(test))]
+use crate::plugin_product::lifecycle::HostLifecycleCustody;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 

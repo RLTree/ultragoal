@@ -1,9 +1,11 @@
 use crate::distribution::host_effect::{
     DurableHostEffectLedger, HostEffectLedgerError, HostEffectLedgerErrorId,
-    HostEffectLedgerRecord, HostEffectState, HostEffectTransition, VerifiedHostEffectPermit,
+    HostEffectLedgerRecord, HostEffectPermit, HostEffectReservation, HostEffectState,
+    HostEffectTransition, VerifiedHostEffectPermit,
 };
 use crate::plugin_product::lifecycle::{
-    HostEffectExecutionBinding, HostLifecycleRecord, LifecycleEffect, LifecycleState,
+    HostEffectExecutionBinding, HostLifecycleObservedBundle, HostLifecycleRecord, LifecycleEffect,
+    LifecycleState,
 };
 use sha2::{Digest, Sha256};
 
@@ -12,6 +14,8 @@ use sha2::{Digest, Sha256};
 pub(crate) struct DurableHostLifecycleAdmission {
     record: HostLifecycleRecord,
     _in_flight: HostEffectLedgerRecord,
+    #[cfg(not(test))]
+    permit: Option<HostEffectPermit>,
 }
 
 impl DurableHostLifecycleAdmission {
@@ -19,6 +23,7 @@ impl DurableHostLifecycleAdmission {
         record: HostLifecycleRecord,
         reserved: HostEffectLedgerRecord,
         in_flight: HostEffectLedgerRecord,
+        permit: HostEffectPermit,
     ) -> Result<Self, HostEffectLedgerError> {
         let reservation = in_flight.reservation();
         let digest_matches = reservation.lifecycle_record_sha256().is_some_and(|digest| {
@@ -39,14 +44,29 @@ impl DurableHostLifecycleAdmission {
                 HostEffectLedgerErrorId::InvalidRecord,
             ));
         }
+        #[cfg(test)]
+        let _ = permit;
         Ok(Self {
             record,
             _in_flight: in_flight,
+            #[cfg(not(test))]
+            permit: Some(permit),
         })
     }
 
     pub(crate) fn record(&self) -> &HostLifecycleRecord {
         &self.record
+    }
+
+    #[cfg(not(test))]
+    pub(crate) fn take_effect_parts(
+        mut self,
+    ) -> Result<(HostEffectPermit, HostEffectLedgerRecord), HostEffectLedgerError> {
+        let permit = self
+            .permit
+            .take()
+            .ok_or_else(|| HostEffectLedgerError::new(HostEffectLedgerErrorId::Replay))?;
+        Ok((permit, self._in_flight))
     }
 }
 
@@ -60,7 +80,8 @@ pub(crate) fn reserve_in_flight_lifecycle(
             HostEffectLedgerErrorId::InvalidRecord,
         ));
     }
-    let reservation = permit.into_reservation();
+    let permit = permit.into_permit();
+    let reservation = HostEffectReservation::from_permit(&permit);
     let reserved = ledger.reserve(reservation)?;
     let in_flight = ledger.transition(HostEffectTransition::new(
         reserved.reservation().permit_id().to_owned(),
@@ -69,7 +90,7 @@ pub(crate) fn reserve_in_flight_lifecycle(
         reserved.current_head().clone(),
         None,
     )?)?;
-    DurableHostLifecycleAdmission::from_transition(record, reserved, in_flight)
+    DurableHostLifecycleAdmission::from_transition(record, reserved, in_flight, permit)
 }
 
 /// A host-effect executor terminal observation for one transferred plan.
@@ -84,10 +105,12 @@ pub(crate) enum HostEffectCompletionOutcome {
     Settled {
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
+        observations: HostLifecycleObservedBundle,
     },
     Ambiguous {
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
+        observations: HostLifecycleObservedBundle,
     },
 }
 
@@ -96,12 +119,14 @@ impl HostEffectCompletion {
         binding: HostEffectExecutionBinding,
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
+        observations: HostLifecycleObservedBundle,
     ) -> Self {
         Self {
             binding,
             outcome: HostEffectCompletionOutcome::Settled {
                 observed,
                 completed_effects,
+                observations,
             },
         }
     }
@@ -110,12 +135,14 @@ impl HostEffectCompletion {
         binding: HostEffectExecutionBinding,
         observed: LifecycleState,
         completed_effects: Vec<LifecycleEffect>,
+        observations: HostLifecycleObservedBundle,
     ) -> Self {
         Self {
             binding,
             outcome: HostEffectCompletionOutcome::Ambiguous {
                 observed,
                 completed_effects,
+                observations,
             },
         }
     }

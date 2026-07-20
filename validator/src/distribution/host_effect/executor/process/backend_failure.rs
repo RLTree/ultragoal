@@ -91,7 +91,26 @@ impl RetainedDescriptorProcessBackend for NativeRetainedDescriptorProcessBackend
             );
         }
 
-        #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+        #[cfg(target_os = "macos")]
+        {
+            if capability.platform() != super::super::lifecycle::DescriptorExecutionPlatform::Darwin
+                || capability.primitive()
+                    != super::super::lifecycle::DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode
+            {
+                return Err(BackendFailure::before_start(
+                    HostEffectExecutorErrorId::UnsupportedPlatform,
+                ));
+            }
+            let _ = (executable, policy);
+            // The Darwin launch kernel is intentionally isolated behind the
+            // routine process-custody extraction. Until that adapter is
+            // linked, the descriptor boundary fails closed before spawn.
+            Err(BackendFailure::before_start(
+                HostEffectExecutorErrorId::UnsupportedPlatform,
+            ))
+        }
+
+        #[cfg(not(any(target_os = "linux", target_os = "freebsd", target_os = "macos")))]
         {
             let _ = (capability, executable, policy);
             // The accepted lifecycle coordinator refuses Darwin before it

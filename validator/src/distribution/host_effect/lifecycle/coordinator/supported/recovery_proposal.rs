@@ -53,6 +53,8 @@ pub(crate) struct DescriptorExecutionHandoff {
     capability: DescriptorExecutionCapability,
     effect: AuthorizedHostEffect,
     target: Box<dyn HostTargetLease>,
+    #[cfg(not(test))]
+    lifecycle_binding: crate::plugin_product::lifecycle::HostEffectExecutionBinding,
 }
 
 impl std::fmt::Debug for DescriptorExecutionHandoff {
@@ -78,6 +80,24 @@ impl DescriptorExecutionHandoff {
         ) -> R,
     ) -> R {
         adapter(&self.capability, &self.effect, self.target.as_mut())
+    }
+
+    #[cfg(not(test))]
+    pub(in crate::distribution::host_effect) fn with_retained_lifecycle<R>(
+        mut self,
+        adapter: impl FnOnce(
+            &DescriptorExecutionCapability,
+            &AuthorizedHostEffect,
+            &mut dyn HostTargetLease,
+            &crate::plugin_product::lifecycle::HostEffectExecutionBinding,
+        ) -> R,
+    ) -> R {
+        adapter(
+            &self.capability,
+            &self.effect,
+            self.target.as_mut(),
+            &self.lifecycle_binding,
+        )
     }
 }
 

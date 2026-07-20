@@ -38,9 +38,7 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             clock,
             adapter,
         } = request;
-        // This must remain the first observable decision. In particular,
-        // Darwin may not contact clocks, targets, ledgers, permit authority, or
-        // descriptor adapters and may not release the plan.
+        #[cfg(test)]
         if platform == DescriptorExecutionPlatform::Darwin {
             return Err(lifecycle_error(
                 SupportedHostLifecycleErrorId::UnsupportedPlatform,
@@ -89,15 +87,31 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             .authority
             .issue(binding)
             .map_err(|_| authority_rejected())?;
+        #[cfg(not(test))]
+        let verified = self
+            .authority
+            .authority
+            .verify_at(permit, time_after.unix_ms())
+            .map_err(|_| authority_rejected())?;
+        #[cfg(not(test))]
+        let admission = crate::distribution::host_effect::executor::reserve_in_flight_lifecycle(
+            self.ledger.ledger,
+            verified,
+            accepted.lifecycle_record().clone(),
+        )
+        .map_err(|_| ledger_rejected())?;
+        #[cfg(test)]
         self.authority
             .authority
             .verify(&permit, time_after.unix_ms())
             .map_err(|_| authority_rejected())?;
+        #[cfg(test)]
         let reserved = self
             .ledger
             .ledger
             .reserve(reservation)
             .map_err(|_| ledger_rejected())?;
+        #[cfg(test)]
         let in_flight = self
             .ledger
             .ledger
@@ -117,18 +131,36 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             return Err(lifecycle_error(SupportedHostLifecycleErrorId::TargetRace));
         }
         accepted.require_target(&target_final)?;
-        // Construct against a non-authoritative plan copy so a final
-        // executable revalidation failure cannot consume root plan custody.
-        let plan = custody.candidate_plan()?;
+        #[cfg(not(test))]
+        let lifecycle_binding = custody
+            .begin_effects(&admission)
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))?;
+        #[cfg(not(test))]
+        let (permit, in_flight) = admission
+            .take_effect_parts()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::LedgerRejected))?;
+        #[cfg(not(test))]
+        let plan = custody
+            .take_command_plan()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))?;
+        #[cfg(test)]
+        let plan = custody
+            .candidate_plan()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))?;
+        #[cfg(test)]
+        custody
+            .commit_release()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))?;
         let effect =
             AuthorizedHostEffect::new(permit, in_flight, executable, plan).map_err(|_| {
                 lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed)
             })?;
-        custody.commit_release()?;
         Ok(DescriptorExecutionHandoff {
             capability,
             effect,
             target: target_lease,
+            #[cfg(not(test))]
+            lifecycle_binding,
         })
     }
 
@@ -150,7 +182,10 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
 
 pub(in crate::distribution::host_effect) struct HostEffectPreparationRequest<'a> {
     pub accepted: &'a AcceptedHostEffect,
-    pub custody: &'a mut RootPlanCustody,
+    #[cfg(not(test))]
+    pub custody: &'a mut HostLifecycleCustody,
+    #[cfg(test)]
+    pub custody: &'a mut HostLifecycleCustody,
     pub executable: PinnedHostExecutable,
     pub target: &'a mut dyn HostTargetObserver,
     pub clock: &'a mut dyn RootTrustedClock,

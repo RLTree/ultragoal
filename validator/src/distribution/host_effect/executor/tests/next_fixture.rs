@@ -1,3 +1,8 @@
+use crate::plugin_product::lifecycle::{
+    plan, HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, PackageAuthority, Version,
+};
+
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(0);
 
 struct Fixture {
@@ -79,6 +84,49 @@ impl Fixture {
             ConfinedHostEffectTarget::bind(&self.target_root, scope.clone(), 1).unwrap();
         (scope, target, identity)
     }
+}
+
+fn lifecycle_custody(fixture: &Fixture, command_plan: &HostCommandPlan) -> HostLifecycleCustody {
+    let package = fixture.package();
+    let authority = PackageAuthority {
+        version: Version::parse(package.source().version()).unwrap(),
+        package_sha256: package.archive_sha256().to_owned(),
+        inventory_sha256: package.tree_sha256().to_owned(),
+        candidate_id: package.source().candidate_id().to_owned(),
+    };
+    let lifecycle = plan(
+        &crate::plugin_product::lifecycle::LifecycleState::default(),
+        &LifecycleRequest {
+            intent: LifecycleIntent::FreshInstall,
+            target: Some(authority),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: None,
+            },
+        },
+    )
+    .unwrap();
+    HostLifecycleCustody::take(
+        lifecycle,
+        HostLifecycleBinding::new(
+            package,
+            command_plan.clone(),
+            digest('1'),
+            digest('2'),
+            HostLifecycleExpectedObservations {
+                installed_sha256: digest('3'),
+                cache_sha256: digest('4'),
+                registry_sha256: digest('5'),
+                discovery_sha256: digest('6'),
+                runtime_sha256: digest('7'),
+                command_count: command_plan.commands().len(),
+            },
+        )
+        .unwrap(),
+    )
+    .unwrap()
 }
 
 impl Drop for Fixture {

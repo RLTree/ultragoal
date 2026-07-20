@@ -34,60 +34,20 @@ impl AcceptedHostEffect {
             issued_at_unix_ms,
             expires_at_unix_ms,
             expected_head_sha256: current_head.head_sha256().to_owned(),
+            #[cfg(not(test))]
+            lifecycle_record: Some(self.lifecycle_record.clone()),
+            #[cfg(not(test))]
+            lifecycle_record_sha256: Some(
+                serde_json::to_vec(&self.lifecycle_record)
+                    .map(|bytes| format!("sha256:{:x}", Sha256::digest(bytes)))
+                    .map_err(|_| invalid())?,
+            ),
+            #[cfg(test)]
             lifecycle_record: None,
+            #[cfg(test)]
             lifecycle_record_sha256: None,
             decision: HostEffectDecision::Authorize,
         })
-    }
-}
-
-pub(crate) struct RootPlanCustody {
-    plan: Option<HostCommandPlan>,
-}
-
-impl std::fmt::Debug for RootPlanCustody {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("RootPlanCustody")
-            .field("released", &self.is_released())
-            .finish_non_exhaustive()
-    }
-}
-
-impl RootPlanCustody {
-    pub(in crate::distribution::host_effect) fn bind(
-        plan: HostCommandPlan,
-        accepted: &AcceptedHostEffect,
-    ) -> Result<Self, SupportedHostLifecycleError> {
-        if plan.plan_sha256() != accepted.command_plan_sha256 {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::PlanSubstitution,
-            ));
-        }
-        Ok(Self { plan: Some(plan) })
-    }
-
-    pub(crate) fn is_released(&self) -> bool {
-        self.plan.is_none()
-    }
-
-    pub(super) fn plan_sha256(&self) -> Option<&str> {
-        self.plan.as_ref().map(HostCommandPlan::plan_sha256)
-    }
-
-    /// Returns non-authoritative plan data for effect construction while this
-    /// custody token remains live. Only `commit_release` consumes authority.
-    pub(super) fn candidate_plan(&self) -> Result<HostCommandPlan, SupportedHostLifecycleError> {
-        self.plan
-            .clone()
-            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
-    }
-
-    pub(super) fn commit_release(&mut self) -> Result<(), SupportedHostLifecycleError> {
-        self.plan
-            .take()
-            .map(|_| ())
-            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
     }
 }
 

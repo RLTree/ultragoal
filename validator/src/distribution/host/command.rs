@@ -11,6 +11,23 @@ pub struct HostCommand {
 }
 
 impl HostCommand {
+    #[cfg(test)]
+    pub(crate) fn from_untrusted_record(
+        program: String,
+        argv: Vec<String>,
+        environment: Vec<(String, String)>,
+        timeout_ms: u64,
+        max_attempts: u8,
+    ) -> Self {
+        Self {
+            program,
+            argv,
+            environment,
+            timeout_ms,
+            max_attempts,
+        }
+    }
+
     pub fn program(&self) -> &str {
         &self.program
     }
@@ -36,7 +53,6 @@ pub struct HostCommandPlan {
     package: PackageIdentity,
     commands: Vec<HostCommand>,
     plan_sha256: String,
-    consumed: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 
 impl Clone for HostCommandPlan {
@@ -45,7 +61,6 @@ impl Clone for HostCommandPlan {
             package: self.package.clone(),
             commands: self.commands.clone(),
             plan_sha256: self.plan_sha256.clone(),
-            consumed: std::sync::Arc::clone(&self.consumed),
         }
     }
 }
@@ -59,19 +74,6 @@ impl PartialEq for HostCommandPlan {
 }
 
 impl Eq for HostCommandPlan {}
-
-impl HostCommandPlan {
-    pub(super) fn consume_once(&self) -> bool {
-        self.consumed
-            .compare_exchange(
-                false,
-                true,
-                std::sync::atomic::Ordering::AcqRel,
-                std::sync::atomic::Ordering::Acquire,
-            )
-            .is_ok()
-    }
-}
 
 impl std::fmt::Debug for HostCommandPlan {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -137,6 +139,11 @@ impl HostCommandPlan {
         &self.commands
     }
 
+    #[cfg(test)]
+    pub(crate) fn package(&self) -> &PackageIdentity {
+        &self.package
+    }
+
     pub fn plan_sha256(&self) -> &str {
         &self.plan_sha256
     }
@@ -189,7 +196,6 @@ fn bound_plan(
         package: package.clone(),
         commands,
         plan_sha256,
-        consumed: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
     })
 }
 

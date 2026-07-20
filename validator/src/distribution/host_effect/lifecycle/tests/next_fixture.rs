@@ -1,3 +1,8 @@
+use crate::plugin_product::lifecycle::{
+    plan, HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, PackageAuthority, Version,
+};
+
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
 
 fn d(byte: char) -> String {
@@ -114,12 +119,13 @@ fn acceptance<'a>(
         executable,
         expected_target: fixture.target.clone(),
         expected_head,
+        lifecycle_record: None,
     }
 }
 
 fn preparation<'a>(
     accepted: &'a AcceptedHostEffect,
-    custody: &'a mut RootPlanCustody,
+    custody: &'a mut HostLifecycleCustody,
     executable: PinnedHostExecutable,
     target: &'a mut dyn HostTargetObserver,
     clock: &'a mut dyn RootTrustedClock,
@@ -133,6 +139,49 @@ fn preparation<'a>(
         clock,
         adapter,
     }
+}
+
+fn lifecycle_custody(fixture: &Fixture) -> HostLifecycleCustody {
+    let package = &fixture.package;
+    let authority = PackageAuthority {
+        version: Version::parse(package.source().version()).unwrap(),
+        package_sha256: package.archive_sha256().to_owned(),
+        inventory_sha256: package.tree_sha256().to_owned(),
+        candidate_id: package.source().candidate_id().to_owned(),
+    };
+    let lifecycle = plan(
+        &crate::plugin_product::lifecycle::LifecycleState::default(),
+        &LifecycleRequest {
+            intent: LifecycleIntent::FreshInstall,
+            target: Some(authority),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: None,
+            },
+        },
+    )
+    .unwrap();
+    HostLifecycleCustody::take(
+        lifecycle,
+        HostLifecycleBinding::new(
+            package.clone(),
+            fixture.plan.clone(),
+            d('1'),
+            d('2'),
+            HostLifecycleExpectedObservations {
+                installed_sha256: d('3'),
+                cache_sha256: d('4'),
+                registry_sha256: d('5'),
+                discovery_sha256: d('6'),
+                runtime_sha256: d('7'),
+                command_count: fixture.plan.commands().len(),
+            },
+        )
+        .unwrap(),
+    )
+    .unwrap()
 }
 
 fn lifecycle(package: &PackageIdentity) -> AcceptedLifecyclePlan {

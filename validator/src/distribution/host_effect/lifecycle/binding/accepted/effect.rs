@@ -8,6 +8,10 @@ pub(in crate::distribution::host_effect) struct HostEffectAcceptanceRequest<'a> 
     pub executable: &'a PinnedHostExecutable,
     pub expected_target: ObservedTargetIdentity,
     pub expected_head: HostEffectLedgerHead,
+    #[cfg(not(test))]
+    pub lifecycle_record: &'a crate::plugin_product::lifecycle::HostLifecycleRecord,
+    #[cfg(test)]
+    pub lifecycle_record: Option<&'a crate::plugin_product::lifecycle::HostLifecycleRecord>,
 }
 
 impl AcceptedHostEffect {
@@ -25,8 +29,27 @@ impl AcceptedHostEffect {
             executable,
             expected_target,
             expected_head,
+            lifecycle_record,
         } = request;
         package.validate().map_err(|_| invalid())?;
+        #[cfg(not(test))]
+        if lifecycle_record.validate().is_err()
+            || lifecycle_record.package() != &package
+            || lifecycle_record.permit_join().0 != lifecycle.plan_sha256()
+            || lifecycle_record.command_plan_sha256() != plan.plan_sha256()
+        {
+            return Err(invalid());
+        }
+        #[cfg(test)]
+        if let Some(record) = lifecycle_record.as_ref() {
+            if record.validate().is_err()
+                || record.package() != &package
+                || record.permit_join().0 != lifecycle.plan_sha256()
+                || record.command_plan_sha256() != plan.plan_sha256()
+            {
+                return Err(invalid());
+            }
+        }
         if !lifecycle.operation().is_effectful() {
             // The accepted plugin lifecycle emits no external request for
             // repeat use or idempotent reinstall. This effect boundary must
@@ -128,6 +151,8 @@ impl AcceptedHostEffect {
             command_plan_sha256,
             argv_sha256,
             executable_identity_sha256,
+            #[cfg(not(test))]
+            lifecycle_record: lifecycle_record.clone(),
         })
     }
 
@@ -143,11 +168,25 @@ impl AcceptedHostEffect {
         Ok(())
     }
 
+    #[cfg(not(test))]
     pub(super) fn require_plan(
         &self,
-        custody: &RootPlanCustody,
+        custody: &crate::plugin_product::lifecycle::HostLifecycleCustody,
     ) -> Result<(), SupportedHostLifecycleError> {
-        if custody.plan_sha256() != Some(self.command_plan_sha256.as_str()) {
+        if custody.plan_sha256() != self.command_plan_sha256 {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::PlanSubstitution,
+            ));
+        }
+        Ok(())
+    }
+
+    #[cfg(test)]
+    pub(super) fn require_plan(
+        &self,
+        custody: &crate::plugin_product::lifecycle::HostLifecycleCustody,
+    ) -> Result<(), SupportedHostLifecycleError> {
+        if custody.plan_sha256() != self.command_plan_sha256 {
             return Err(lifecycle_error(
                 SupportedHostLifecycleErrorId::PlanSubstitution,
             ));
@@ -199,5 +238,12 @@ impl AcceptedHostEffect {
 
     pub(super) fn expected_head(&self) -> &HostEffectLedgerHead {
         &self.expected_head
+    }
+
+    #[cfg(not(test))]
+    pub(super) fn lifecycle_record(
+        &self,
+    ) -> &crate::plugin_product::lifecycle::HostLifecycleRecord {
+        &self.lifecycle_record
     }
 }

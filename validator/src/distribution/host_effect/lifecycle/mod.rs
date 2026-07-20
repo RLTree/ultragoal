@@ -16,15 +16,16 @@ pub(in crate::distribution::host_effect) use binding::HostEffectAcceptanceReques
 #[cfg(test)]
 pub(crate) use binding::{
     AcceptedHostEffect, AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
-    AcceptedReconciliationPolicy, AcceptedRollbackPolicy, RootPlanCustody,
+    AcceptedReconciliationPolicy, AcceptedRollbackPolicy,
 };
 pub(crate) use binding::{AcceptedHostScope, HostObjectIdentity, ObservedTargetIdentity};
 #[cfg(test)]
 pub(in crate::distribution::host_effect) use coordinator::HostEffectPreparationRequest;
 #[cfg(test)]
+pub(crate) use coordinator::TrustedTimeSample;
+#[cfg(test)]
 pub(crate) use coordinator::{
     DescriptorExecutionAdapter, DescriptorExecutionPrimitive, SupportedHostLifecycleCoordinator,
-    TrustedTimeSample,
 };
 pub(crate) use coordinator::{
     DescriptorExecutionCapability, DescriptorExecutionHandoff, DescriptorExecutionPlatform,

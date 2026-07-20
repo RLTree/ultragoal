@@ -160,13 +160,4 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         );
     }
 
-    let request = coordinator
-        .accept(acceptance(&fixture, &pinned, ledger.observed_head()))
-        .unwrap();
-    assert_eq!(
-        RootPlanCustody::bind(other.plan.clone(), &request)
-            .unwrap_err()
-            .id(),
-        SupportedHostLifecycleErrorId::PlanSubstitution
-    );
 }

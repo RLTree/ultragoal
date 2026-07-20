@@ -175,6 +175,16 @@ impl HostEffectAuthority {
         Ok(())
     }
 
+    #[cfg(not(test))]
+    pub(in crate::distribution::host_effect) fn verify_at(
+        &self,
+        permit: HostEffectPermit,
+        trusted_now_unix_ms: u64,
+    ) -> Result<VerifiedHostEffectPermit, HostEffectAuthorityError> {
+        self.verify(&permit, trusted_now_unix_ms)?;
+        Ok(VerifiedHostEffectPermit { permit })
+    }
+
     pub(in crate::distribution::host_effect) fn verify_current(
         &self,
         permit: HostEffectPermit,

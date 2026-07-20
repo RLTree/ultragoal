@@ -52,7 +52,7 @@ fn accepted<'a>(
 ) -> (
     SupportedHostLifecycleCoordinator<'a>,
     AcceptedHostEffect,
-    RootPlanCustody,
+    HostLifecycleCustody,
 ) {
     let coordinator = SupportedHostLifecycleCoordinator::bind(
         "root-lifecycle-authority".to_owned(),
@@ -64,7 +64,7 @@ fn accepted<'a>(
     let request = coordinator
         .accept(acceptance(fixture, &pinned, head))
         .unwrap();
-    let custody = RootPlanCustody::bind(fixture.plan.clone(), &request).unwrap();
+    let custody = lifecycle_custody(fixture);
     (coordinator, request, custody)
 }
 

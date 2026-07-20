@@ -14,14 +14,18 @@ mod model;
 mod process;
 mod target;
 
+#[cfg(not(test))]
+pub(crate) use lifecycle_completion::reserve_in_flight_lifecycle;
 pub(crate) use lifecycle_completion::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
 };
 
+#[cfg(test)]
+pub(crate) use model::HostEffectPostPublicationRecoveryClassification;
 pub(crate) use model::{
     HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,
     HostEffectExecutorErrorId, HostEffectExecutorFailure,
-    HostEffectPostPublicationRecoveryClassification, HostEffectPostReservationLedgerClassification,
+    HostEffectPostReservationLedgerClassification,
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };
@@ -31,8 +35,8 @@ use process::RetainedDescriptorProcessBackend;
 pub(crate) use target::ConfinedHostEffectTarget;
 
 use self::model::{
-    CommandCaptureDigest, PostReservationRecoveryRequest, TerminalTransitionRecoveryRequest,
-    digest_json,
+    digest_json, CommandCaptureDigest, PostReservationRecoveryRequest,
+    TerminalTransitionRecoveryRequest,
 };
 use self::process::BackendFailure;
 use self::target::{CommittedPublication, PublicationFailure};

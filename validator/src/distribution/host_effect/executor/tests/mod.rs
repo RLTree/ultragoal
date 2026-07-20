@@ -7,7 +7,7 @@ use crate::distribution::host_effect::lifecycle::{
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy, DescriptorExecutionAdapter,
     DescriptorExecutionCapability, DescriptorExecutionPrimitive, HostEffectAcceptanceRequest,
     HostEffectPreparationRequest, HostTargetObserver, PublicationAcknowledgementIdentity,
-    PublicationClassificationId, RootPlanCustody, SupportedHostLifecycleCoordinator,
+    PublicationClassificationId, SupportedHostLifecycleCoordinator,
     SupportedHostLifecycleError, SupportedHostLifecycleErrorId, TrustedTimeSample, lifecycle_error,
 };
 use crate::distribution::host_effect::{

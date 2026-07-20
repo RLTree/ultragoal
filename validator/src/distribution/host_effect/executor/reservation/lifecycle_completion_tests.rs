@@ -2,24 +2,41 @@ use super::*;
 use crate::distribution::host_effect::{
     FileHostEffectLedger, HostEffectAuthority, HostEffectDecision, HostEffectPermitBinding,
 };
+use crate::distribution::{HostCommandPlan, PackageIdentity, SourceIdentity};
 use crate::plugin_product::lifecycle::{
-    HostLifecycleCustody, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
+    HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    HostLifecycleObservedBundle, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
     PackageAuthority, Version, plan,
 };
 use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
+include!("lifecycle_completion_fixture.rs");
+
 #[test]
 fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {
     let mut custody = custody('a');
     let admission = admission(custody.pre_effect_record().clone()).unwrap();
-    let binding = custody.begin_effects(admission).unwrap();
+    let binding = custody.begin_effects(&admission).unwrap();
     let expected = custody.expected_after().clone();
     let effects = custody.effects().to_vec();
     assert!(
         custody
-            .settle(HostEffectCompletion::settled(binding, expected, effects))
+            .settle(HostEffectCompletion::settled(
+                binding,
+                expected,
+                effects,
+                HostLifecycleObservedBundle::from_parts(
+                    digest('9'),
+                    digest('a'),
+                    digest('b'),
+                    digest('c'),
+                    digest('d'),
+                    Vec::new(),
+                )
+                .unwrap(),
+            ))
             .is_ok()
     );
 }
@@ -53,7 +70,7 @@ fn expired_permit_is_rejected_at_authority_current_time() {
 fn ambiguous_terminal_observation_arms_recovery_after_durable_admission() {
     let mut custody = custody('a');
     let admission = admission(custody.pre_effect_record().clone()).unwrap();
-    let binding = custody.begin_effects(admission).unwrap();
+    let binding = custody.begin_effects(&admission).unwrap();
     let mut observed = custody.expected_after().clone();
     observed.cache = custody.before().cache.clone();
     observed.recovery_required = true;
@@ -63,6 +80,15 @@ fn ambiguous_terminal_observation_arms_recovery_after_durable_admission() {
                 binding,
                 observed,
                 custody.effects()[..1].to_vec(),
+                HostLifecycleObservedBundle::from_parts(
+                    digest('9'),
+                    digest('a'),
+                    digest('b'),
+                    digest('c'),
+                    digest('d'),
+                    Vec::new(),
+                )
+                .unwrap(),
             ))
             .is_ok()
     );
@@ -144,85 +170,52 @@ fn custody(seed: char) -> HostLifecycleCustody {
         generation: 1,
         recovery_required: false,
     };
+    let lifecycle = plan(
+        &before,
+        &LifecycleRequest {
+            intent: LifecycleIntent::MonotonicUpdate,
+            target: Some(authority(target_seed, "1.0.1")),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: Some(digest(seed)),
+            },
+        },
+    )
+    .unwrap();
+    let package = PackageIdentity::new(
+        SourceIdentity::new(
+            digest('1'),
+            digest('2'),
+            "harness-ultragoal".to_owned(),
+            "1.0.1".to_owned(),
+            digest('3'),
+            digest('4'),
+        )
+        .unwrap(),
+        digest('5'),
+        digest('6'),
+    )
+    .unwrap();
+    let command_plan = HostCommandPlan::personal_install(&package, "local-marketplace").unwrap();
     HostLifecycleCustody::take(
-        plan(
-            &before,
-            &LifecycleRequest {
-                intent: LifecycleIntent::MonotonicUpdate,
-                target: Some(authority(target_seed, "1.0.1")),
-                prior_authority: None,
-                authorization: LifecycleAuthorization {
-                    allow_host_write: true,
-                    allow_downgrade: false,
-                    expected_installed_sha256: Some(digest(seed)),
-                },
+        lifecycle,
+        HostLifecycleBinding::new(
+            package,
+            command_plan,
+            digest('7'),
+            digest('8'),
+            HostLifecycleExpectedObservations {
+                installed_sha256: digest('9'),
+                cache_sha256: digest('a'),
+                registry_sha256: digest('b'),
+                discovery_sha256: digest('c'),
+                runtime_sha256: digest('d'),
+                command_count: 0,
             },
         )
         .unwrap(),
     )
     .unwrap()
-}
-
-fn authority(seed: char, version: &str) -> PackageAuthority {
-    PackageAuthority {
-        version: Version::parse(version).unwrap(),
-        package_sha256: digest(seed),
-        inventory_sha256: digest('c'),
-        candidate_id: digest('d'),
-    }
-}
-
-fn record_digest(record: &HostLifecycleRecord) -> String {
-    format!(
-        "sha256:{:x}",
-        Sha256::digest(serde_json::to_vec(record).unwrap())
-    )
-}
-
-fn intent_name(intent: LifecycleIntent) -> &'static str {
-    match intent {
-        LifecycleIntent::FreshInstall => "fresh_install",
-        LifecycleIntent::MonotonicUpdate => "monotonic_update",
-        LifecycleIntent::FailedUpdateRecovery => "failed_update_recovery",
-        LifecycleIntent::AuthorizedRollback => "authorized_rollback",
-        LifecycleIntent::IdempotentReinstall => "idempotent_reinstall",
-        LifecycleIntent::UninstallTeardown => "uninstall_teardown",
-        LifecycleIntent::StaleCacheRecovery => "stale_cache_recovery",
-        LifecycleIntent::RepeatUse => "repeat_use",
-    }
-}
-
-fn digest(seed: char) -> String {
-    format!("sha256:{}", seed.to_string().repeat(64))
-}
-
-fn unix_ms() -> u64 {
-    std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis()
-        .try_into()
-        .unwrap()
-}
-
-static FIXTURE_SEQUENCE: AtomicU64 = AtomicU64::new(0);
-
-struct FixtureRoot {
-    path: PathBuf,
-}
-
-impl FixtureRoot {
-    fn new() -> Self {
-        let sequence = FIXTURE_SEQUENCE.fetch_add(1, Ordering::Relaxed);
-        let path = std::env::temp_dir().join(format!(
-            "ultragoal-lifecycle-completion-{}-{sequence}",
-            std::process::id()
-        ));
-        fs::create_dir(&path).unwrap();
-        Self { path }
-    }
-
-    fn remove(self) {
-        fs::remove_dir_all(self.path).unwrap();
-    }
 }
