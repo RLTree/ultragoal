@@ -72,8 +72,6 @@ pub(crate) fn reserve_in_flight_lifecycle(
     DurableHostLifecycleAdmission::from_transition(record, reserved, in_flight)
 }
 
-include!("isolated_admission.rs");
-
 /// A host-effect executor terminal observation for one transferred plan.
 /// Only this executor leaf can mint a terminal outcome; plugin custody can
 /// validate it but cannot mint success or recovery authority for itself.

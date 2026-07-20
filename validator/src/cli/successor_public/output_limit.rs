@@ -61,7 +61,7 @@ pub(crate) fn execute_invocation_with_home(
         return package_inventory::execute(&context, &invocation);
     }
     if operation == super::operation_binding::PublicOperation::PackageInstallTest {
-        return package_install_test::dispatch(root, &invocation);
+        return package_install_test::execute(root, &invocation);
     }
     if invocation.effect != EffectClass::Read
         && operation != super::operation_binding::PublicOperation::FitApply

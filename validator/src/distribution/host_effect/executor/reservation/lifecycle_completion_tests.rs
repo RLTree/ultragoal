@@ -14,7 +14,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {
     let mut custody = custody('a');
     let admission = admission(custody.pre_effect_record().clone()).unwrap();
-    let binding = custody.begin_effects(&admission).unwrap();
+    let binding = custody.begin_effects(admission).unwrap();
     let expected = custody.expected_after().clone();
     let effects = custody.effects().to_vec();
     assert!(
@@ -53,7 +53,7 @@ fn expired_permit_is_rejected_at_authority_current_time() {
 fn ambiguous_terminal_observation_arms_recovery_after_durable_admission() {
     let mut custody = custody('a');
     let admission = admission(custody.pre_effect_record().clone()).unwrap();
-    let binding = custody.begin_effects(&admission).unwrap();
+    let binding = custody.begin_effects(admission).unwrap();
     let mut observed = custody.expected_after().clone();
     observed.cache = custody.before().cache.clone();
     observed.recovery_required = true;

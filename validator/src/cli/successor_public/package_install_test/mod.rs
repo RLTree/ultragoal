@@ -1,34 +1,32 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
-use crate::plugin_product::host_lifecycle::{InstallTestError, execute as run_install_test};
 use std::path::Path;
 
-pub(super) fn dispatch(root: &Path, invocation: &ParsedInvocation) -> RuntimeOutcome {
-    let context = match super::workspace_context(root) {
-        Ok(context) => context,
-        Err(()) => return super::context_unavailable(),
-    };
-    execute(&context, invocation)
-}
+#[cfg(test)]
+use crate::cli::successor::command_contract::{OptionArgument, RelativePath};
 
-pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
-    let Some((input, output)) = paths(invocation) else {
+pub(super) fn execute(_root: &Path, invocation: &ParsedInvocation) -> RuntimeOutcome {
+    if !valid_invocation(invocation) {
         return invalid_invocation();
-    };
-    match run_install_test(context, input, output) {
-        Ok(report) => match serde_json::to_vec(&report) {
-            Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(
-                ExitClass::Success,
-                machine,
-                "isolated package install and cache observations completed".to_owned(),
-            ),
-            _ => output_failure(),
-        },
-        Err(error) => failure(error),
     }
+    RuntimeOutcome::failure(
+        ExitClass::UnsupportedCapability,
+        Diagnostic::new(
+            DiagnosticId::DownstreamToolUnavailable,
+            ExitClass::UnsupportedCapability,
+            DiagnosticDetails {
+                cause: "no canonical runtime, discovery, and real-host adoption owner is available for package install-test",
+                affected_surface: "HCT-DISTRIBUTION package install-test",
+                repair: "complete the canonical installed-journey owner before retrying package installation",
+                effect: "none",
+                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json",
+                ceiling: "no package install, cache, runtime, discovery, registry, readiness, or real-host claim is raised",
+            },
+        ),
+    )
 }
 
-fn paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
+fn valid_invocation(invocation: &ParsedInvocation) -> bool {
     let ParsedInvocation {
         command: SuccessorCommand::Package(PackageAction::InstallTest),
         effect: EffectClass::WorkspaceWrite,
@@ -36,25 +34,22 @@ fn paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
         ..
     } = invocation
     else {
-        return None;
+        return false;
     };
     if arguments.len() != 2 {
-        return None;
+        return false;
     }
     let input = arguments
         .iter()
-        .find(|argument| argument.name == OptionName::Input)?;
+        .find(|argument| argument.name == OptionName::Input);
     let output = arguments
         .iter()
-        .find(|argument| argument.name == OptionName::Output)?;
-    match (&input.value, &output.value) {
-        (ParsedValue::RelativePath(input), ParsedValue::RelativePath(output))
-            if output_allowed(output.as_str()) =>
-        {
-            Some((input.as_str(), output.as_str()))
-        }
-        _ => None,
-    }
+        .find(|argument| argument.name == OptionName::Output);
+    matches!(
+        (input.map(|argument| &argument.value), output.map(|argument| &argument.value)),
+        (Some(ParsedValue::RelativePath(_)), Some(ParsedValue::RelativePath(output)))
+            if output_allowed(output.as_str())
+    )
 }
 
 fn output_allowed(path: &str) -> bool {
@@ -72,74 +67,18 @@ fn output_allowed(path: &str) -> bool {
 }
 
 fn invalid_invocation() -> RuntimeOutcome {
-    diagnostic(
-        DiagnosticId::UnexpectedArguments,
-        ExitClass::InvalidInvocation,
-        "package install-test requires bounded --input and disposable --output relative paths",
-        "supply a current package archive and target/ultragoal/*.json output",
-        "package, install, cache, discovery, and runtime claims remain withheld",
-    )
-}
-
-fn failure(error: InstallTestError) -> RuntimeOutcome {
-    let (cause, repair) = match error {
-        InstallTestError::Context => (
-            "the workspace context is no longer current",
-            "refresh the workspace and retry",
-        ),
-        InstallTestError::Input => (
-            "the requested package input is unavailable or unsafe",
-            "use one confined current package input",
-        ),
-        InstallTestError::Package => (
-            "the input does not match the current source-bound package",
-            "rebuild the current package and retry",
-        ),
-        InstallTestError::Custody => (
-            "isolated host custody could not settle safely",
-            "inspect the retained isolated recovery state before retry",
-        ),
-        InstallTestError::Effect => (
-            "isolated install or cache observation did not match",
-            "repair the isolated package or host effect and retry",
-        ),
-        InstallTestError::Output => (
-            "the local verification result could not be atomically written",
-            "use a fresh disposable output path",
-        ),
-    };
-    diagnostic(
-        DiagnosticId::DownstreamToolUnavailable,
-        ExitClass::UnsupportedCapability,
-        cause,
-        repair,
-        "only isolated package, install, and cache observations may be available; marketplace, app-registry, discovery, runtime, and real-host claims remain withheld",
-    )
-}
-
-fn output_failure() -> RuntimeOutcome {
-    failure(InstallTestError::Output)
-}
-
-fn diagnostic(
-    id: DiagnosticId,
-    exit: ExitClass,
-    cause: &'static str,
-    repair: &'static str,
-    ceiling: &'static str,
-) -> RuntimeOutcome {
     RuntimeOutcome::failure(
-        exit,
+        ExitClass::InvalidInvocation,
         Diagnostic::new(
-            id,
-            exit,
+            DiagnosticId::UnexpectedArguments,
+            ExitClass::InvalidInvocation,
             DiagnosticDetails {
-                cause,
+                cause: "package install-test requires bounded --input and disposable --output relative paths",
                 affected_surface: "HCT-DISTRIBUTION package install-test",
-                repair,
-                effect: "workspace_write",
+                repair: "supply a package input and target/ultragoal/*.json output",
+                effect: "none",
                 rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json",
-                ceiling,
+                ceiling: "no package, install, cache, discovery, or runtime claim is available",
             },
         ),
     )
@@ -147,12 +86,65 @@ fn diagnostic(
 
 #[cfg(test)]
 mod tests {
-    use super::output_allowed;
+    use super::*;
+    use crate::cli::successor::{EffectClass, OutputMode};
+    use std::fs;
+    use std::path::PathBuf;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    static NEXT: AtomicU64 = AtomicU64::new(0);
 
     #[test]
-    fn install_test_output_stays_in_disposable_product_namespace() {
-        assert!(output_allowed("target/ultragoal/install-test.json"));
-        assert!(!output_allowed("target/ultragoal/nested/install-test.json"));
-        assert!(!output_allowed("plugin-manifest.json"));
+    fn valid_install_test_is_fail_closed_without_output_mutation() {
+        let root = fixture_root();
+        let output = root.join("target/ultragoal/install-test.json");
+        fs::create_dir_all(output.parent().unwrap()).unwrap();
+        fs::write(&output, b"preserve").unwrap();
+        let invocation = ParsedInvocation {
+            command: SuccessorCommand::Package(PackageAction::InstallTest),
+            effect: EffectClass::WorkspaceWrite,
+            output_mode: OutputMode::Json,
+            arguments: vec![
+                option(OptionName::Input, "target/ultragoal/package.hugpkg"),
+                option(OptionName::Output, "target/ultragoal/install-test.json"),
+            ],
+        };
+        let before = snapshot(&root);
+        let outcome = execute(&root, &invocation);
+        let after = snapshot(&root);
+        fs::remove_dir_all(&root).unwrap();
+        assert_eq!(outcome.exit_class, ExitClass::UnsupportedCapability);
+        assert_eq!(after, before);
+    }
+
+    fn option(name: OptionName, path: &str) -> OptionArgument {
+        OptionArgument {
+            name,
+            value: ParsedValue::RelativePath(RelativePath(path.to_owned())),
+        }
+    }
+
+    fn fixture_root() -> PathBuf {
+        let root = std::env::temp_dir().join(format!(
+            "ultragoal-package-install-test-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir(&root).unwrap();
+        root
+    }
+
+    fn snapshot(root: &Path) -> Vec<(PathBuf, Vec<u8>)> {
+        let mut entries = Vec::new();
+        for entry in fs::read_dir(root).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_dir() {
+                entries.extend(snapshot(&path));
+            } else {
+                entries.push((path, fs::read(&path).unwrap()));
+            }
+        }
+        entries.sort_by(|left, right| left.0.cmp(&right.0));
+        entries
     }
 }

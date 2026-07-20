@@ -18,7 +18,6 @@ pub(crate) use authority::{
 };
 pub(crate) use executor::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
-    IsolatedHostLifecycleAdmission, admit_isolated_lifecycle,
 };
 pub(crate) use ledger::FileHostEffectLedger;
 
