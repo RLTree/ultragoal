@@ -1,5 +1,3 @@
-use std::path::Path;
-
 #[cfg(target_vendor = "apple")]
 #[path = "supported/mod.rs"]
 mod supported;

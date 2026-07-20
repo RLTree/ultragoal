@@ -1,6 +1,8 @@
 use super::*;
+use crate::cli::successor_public::HostCustodyIssuance;
 use crate::routine_work::RoutineCustodyCapability;
 use crate::state::RoutineFindingBinding;
+use std::path::Path;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum HostFailure {
@@ -32,7 +34,9 @@ impl HostState {
     pub(crate) fn issue_custody_capability(&self) -> RoutineCustodyCapability {
         #[cfg(target_vendor = "apple")]
         {
-            RoutineCustodyCapability::issue_from_host(self.inner.authority.path.clone())
+            RoutineCustodyCapability::issue_from_host(HostCustodyIssuance::new(
+                self.inner.authority.path.clone(),
+            ))
         }
         #[cfg(not(target_vendor = "apple"))]
         {

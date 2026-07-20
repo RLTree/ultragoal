@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor_public::HostCustodyIssuance;
 
 /// Opaque authority to enter the private routine custody transaction.
 ///
@@ -13,16 +14,16 @@ pub(crate) struct RoutineCustodyCapability {
 struct CapabilitySeal;
 
 impl RoutineCustodyCapability {
-    pub(crate) fn issue_from_host(authority_root: PathBuf) -> Self {
+    pub(crate) fn issue_from_host(issuance: HostCustodyIssuance) -> Self {
         Self {
-            authority_root,
+            authority_root: issuance.into_authority_root(),
             _seal: CapabilitySeal,
         }
     }
 
     #[cfg(test)]
     pub(super) fn issue_for_test(authority_root: &Path) -> Self {
-        Self::issue_from_host(authority_root.to_path_buf())
+        Self::issue_from_host(HostCustodyIssuance::for_test(authority_root))
     }
 
     pub(in crate::routine_work::runtime_adapter::production) fn authority_root(&self) -> &Path {
