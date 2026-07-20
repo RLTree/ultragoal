@@ -1,27 +1,3 @@
-#[cfg(all(test, unix))]
-thread_local! {
-    static BEFORE_CAPTURE_HOOK: std::cell::RefCell<Option<Box<dyn FnMut(&OsStr)>>> =
-        std::cell::RefCell::new(None);
-}
-
-#[cfg(all(test, unix))]
-pub(crate) fn set_before_capture_hook(hook: Option<Box<dyn FnMut(&OsStr)>>) {
-    BEFORE_CAPTURE_HOOK.with(|slot| *slot.borrow_mut() = hook);
-}
-
-#[cfg(all(test, unix))]
-fn run_before_capture_hook(name: &CStr) {
-    let name = OsStr::from_bytes(name.to_bytes());
-    BEFORE_CAPTURE_HOOK.with(|slot| {
-        if let Some(hook) = slot.borrow_mut().as_mut() {
-            hook(name);
-        }
-    });
-}
-
-#[cfg(all(not(test), unix))]
-fn run_before_capture_hook(_name: &CStr) {}
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ResourceBinding {
     pub kind: ResourceKind,
@@ -51,23 +27,20 @@ pub struct IsolationLease {
 }
 
 #[derive(Debug)]
-pub(crate) enum LeaseAcquisitionFailure { Failed(FixtureScheduleError), RecoveryRequired { lease: IsolationLease, source: FixtureScheduleError } }
+pub(crate) enum LeaseAcquisitionFailure {
+    Failed(FixtureScheduleError),
+    RecoveryRequired {
+        lease: Box<IsolationLease>,
+        source: FixtureScheduleError,
+    },
+}
 
-#[cfg(all(test, unix))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(crate) enum LeaseAcquisitionStage { Pin, Marker, ResourceDirectory, PortBind, PortAddress, ReservationWrite, BeforeInsertion }
-
-#[cfg(all(test, unix))]
-thread_local! { static LEASE_ACQUISITION_HOOK: std::cell::RefCell<Option<Box<dyn FnMut(LeaseAcquisitionStage, &Path)>>> = std::cell::RefCell::new(None); }
-
-#[cfg(all(test, unix))]
-pub(crate) fn set_lease_acquisition_hook(hook: Option<Box<dyn FnMut(LeaseAcquisitionStage, &Path)>>) { LEASE_ACQUISITION_HOOK.with(|slot| *slot.borrow_mut() = hook); }
-
-#[cfg(all(test, unix))]
-pub(crate) fn run_lease_acquisition_hook(stage: LeaseAcquisitionStage, root: &Path) { LEASE_ACQUISITION_HOOK.with(|slot| if let Some(hook) = slot.borrow_mut().as_mut() { hook(stage, root) }); }
-
-#[cfg(unix)] #[derive(Debug)]
-enum LeaseRootCustody { Unpinned, Pinned(PinnedLeaseRoot) }
+#[cfg(unix)]
+#[derive(Debug)]
+enum LeaseRootCustody {
+    Unpinned,
+    Pinned(PinnedLeaseRoot),
+}
 
 impl IsolationLease {
     pub(crate) fn acquire(
@@ -81,7 +54,9 @@ impl IsolationLease {
             stable_digest(&format!("{}:{ordinal}", spec.metadata_digest))
         );
         let lease_root = root.join(&id);
-        fs::create_dir_all(root).map_err(FixtureScheduleError::Io).map_err(LeaseAcquisitionFailure::Failed)?;
+        fs::create_dir_all(root)
+            .map_err(FixtureScheduleError::Io)
+            .map_err(LeaseAcquisitionFailure::Failed)?;
         let root_created = fs::create_dir(&lease_root).map_err(|source| {
             if source.kind() == std::io::ErrorKind::AlreadyExists {
                 FixtureScheduleError::Collision(id.clone())
@@ -101,11 +76,22 @@ impl IsolationLease {
                     reserved_port: None,
                     disposition: LeaseDisposition::RecoveryRequired,
                 };
-                let failure = FixtureScheduleError::cleanup(lease.id(), io::Error::new(io::ErrorKind::AlreadyExists, "deterministic provisional lease root exists"));
-                return Err(LeaseAcquisitionFailure::RecoveryRequired { lease, source: failure });
+                let failure = FixtureScheduleError::cleanup(
+                    lease.id(),
+                    io::Error::new(
+                        io::ErrorKind::AlreadyExists,
+                        "deterministic provisional lease root exists",
+                    ),
+                );
+                return Err(LeaseAcquisitionFailure::RecoveryRequired {
+                    lease: Box::new(lease),
+                    source: failure,
+                });
             }
             #[cfg(not(unix))]
-            return Err(LeaseAcquisitionFailure::Failed(FixtureScheduleError::Collision(id)));
+            return Err(LeaseAcquisitionFailure::Failed(
+                FixtureScheduleError::Collision(id),
+            ));
         }
         root_created.map_err(LeaseAcquisitionFailure::Failed)?;
         let mut lease = Self {
@@ -127,7 +113,7 @@ impl IsolationLease {
                 lease.disposition = LeaseDisposition::RecoveryRequired;
                 let failure = FixtureScheduleError::cleanup(lease.id(), source);
                 return Err(LeaseAcquisitionFailure::RecoveryRequired {
-                    lease,
+                    lease: Box::new(lease),
                     source: failure,
                 });
             }
@@ -142,7 +128,10 @@ impl IsolationLease {
             for kind in &spec.resources {
                 let resource_root = lease.root.join(kind.label());
                 #[cfg(all(test, unix))]
-                run_lease_acquisition_hook(LeaseAcquisitionStage::ResourceDirectory, &resource_root);
+                run_lease_acquisition_hook(
+                    LeaseAcquisitionStage::ResourceDirectory,
+                    &resource_root,
+                );
                 let key = if *kind == ResourceKind::Port {
                     #[cfg(all(test, unix))]
                     run_lease_acquisition_hook(LeaseAcquisitionStage::PortBind, &resource_root);
@@ -152,29 +141,55 @@ impl IsolationLease {
                     let address = listener.local_addr()?.to_string();
                     fs::create_dir(&resource_root)?;
                     #[cfg(all(test, unix))]
-                    run_lease_acquisition_hook(LeaseAcquisitionStage::ReservationWrite, &resource_root);
+                    run_lease_acquisition_hook(
+                        LeaseAcquisitionStage::ReservationWrite,
+                        &resource_root,
+                    );
                     fs::write(resource_root.join("reservation"), &address)?;
                     lease.reserved_port = Some(listener);
                     address
                 } else {
                     fs::create_dir(&resource_root)?;
-                    resource_root.to_str().ok_or_else(|| {
-                        FixtureScheduleError::InvalidMetadata("non UTF-8 lease root".to_owned())
-                    })?.to_owned()
+                    resource_root
+                        .to_str()
+                        .ok_or_else(|| {
+                            FixtureScheduleError::InvalidMetadata("non UTF-8 lease root".to_owned())
+                        })?
+                        .to_owned()
                 };
-                lease.bindings.push(ResourceBinding { kind: kind.clone(), key });
+                lease.bindings.push(ResourceBinding {
+                    kind: kind.clone(),
+                    key,
+                });
             }
             Ok(())
         })();
         match provision {
             Ok(()) => {
-                #[cfg(unix)] let snapshot = match &mut lease.custody { LeaseRootCustody::Pinned(pinned) => pinned.snapshot_provisioned_entries(), LeaseRootCustody::Unpinned => Err(io::Error::other("pinned lease lost custody")) };
-                #[cfg(unix)] if let Err(source) = snapshot { lease.disposition = LeaseDisposition::RecoveryRequired; let source = FixtureScheduleError::cleanup(lease.id(), source); return Err(LeaseAcquisitionFailure::RecoveryRequired { lease, source }); }
+                #[cfg(unix)]
+                let snapshot = match &mut lease.custody {
+                    LeaseRootCustody::Pinned(pinned) => pinned.snapshot_provisioned_entries(),
+                    LeaseRootCustody::Unpinned => {
+                        Err(io::Error::other("pinned lease lost custody"))
+                    }
+                };
+                #[cfg(unix)]
+                if let Err(source) = snapshot {
+                    lease.disposition = LeaseDisposition::RecoveryRequired;
+                    let source = FixtureScheduleError::cleanup(lease.id(), source);
+                    return Err(LeaseAcquisitionFailure::RecoveryRequired {
+                        lease: Box::new(lease),
+                        source,
+                    });
+                }
                 Ok(lease)
             }
             Err(source) => match lease.cleanup() {
                 Ok(()) => Err(LeaseAcquisitionFailure::Failed(source)),
-                Err(_) => Err(LeaseAcquisitionFailure::RecoveryRequired { lease, source }),
+                Err(_) => Err(LeaseAcquisitionFailure::RecoveryRequired {
+                    lease: Box::new(lease),
+                    source,
+                }),
             },
         }
     }
@@ -209,7 +224,10 @@ impl IsolationLease {
             LeaseRootCustody::Unpinned => {
                 return Err(FixtureScheduleError::cleanup(
                     &self.id,
-                    io::Error::new(io::ErrorKind::Unsupported, "lease root is unpinned and retained for recovery"),
+                    io::Error::new(
+                        io::ErrorKind::Unsupported,
+                        "lease root is unpinned and retained for recovery",
+                    ),
                 ));
             }
         }
@@ -223,28 +241,4 @@ impl IsolationLease {
     pub fn recover(&mut self) -> Result<(), FixtureScheduleError> {
         self.cleanup()
     }
-}
-
-#[cfg(unix)]
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum EntryKind {
-    Directory,
-    RegularFile,
-}
-
-#[cfg(unix)]
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-struct EntryIdentity {
-    device: u64,
-    inode: u64,
-    kind: EntryKind,
-}
-#[cfg(unix)]
-#[derive(Debug)]
-struct PinnedLeaseRoot {
-    parent: fs::File,
-    root: OwnedFd,
-    name: CString,
-    identity: EntryIdentity,
-    initial_entries: BTreeMap<PathBuf, EntryIdentity>,
 }

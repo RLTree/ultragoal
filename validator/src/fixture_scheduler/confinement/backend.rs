@@ -3,16 +3,13 @@ use crate::fixture_scheduler::FixtureScheduleError;
 use std::collections::BTreeMap;
 use std::ffi::OsString;
 use std::fs;
-use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
-
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 #[cfg(unix)]
 use std::os::unix::process::CommandExt;
-
+use std::path::{Path, PathBuf};
+use std::process::{Command, Stdio};
 const DARWIN_SANDBOX: &str = "/usr/bin/sandbox-exec";
-
 pub(crate) struct ConfinementPlan {
     backend: PathBuf,
     profile: String,
@@ -22,7 +19,6 @@ pub(crate) struct ConfinementPlan {
     lease_identity: RootIdentity,
     address_space_limit: u64,
 }
-
 #[cfg(target_os = "macos")]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct RootIdentity {
@@ -112,6 +108,8 @@ impl ConfinementPlan {
         {
             let policy = self.policy.clone();
             let address_space_limit = self.address_space_limit;
+            // SAFETY: `pre_exec` registers the closure for the child only; its
+            // captured policy is owned and the closure performs no allocation.
             unsafe {
                 command.pre_exec(move || apply_limits(&policy, address_space_limit));
             }
@@ -194,6 +192,8 @@ fn darwin_address_space_limit(budget: u64) -> Result<u64, FixtureScheduleError> 
     // SAFETY: this copies the process-global Mach task port value; no reference
     // to the mutable foreign static is created or retained.
     let task = unsafe { MACH_TASK_SELF_PORT };
+    // SAFETY: the Mach task port and output buffer are valid for this query;
+    // `count` supplies the exact buffer size required by `task_info`.
     let status = unsafe {
         libc::task_info(
             task,
@@ -207,7 +207,9 @@ fn darwin_address_space_limit(budget: u64) -> Result<u64, FixtureScheduleError> 
             "fixture confinement could not observe the Darwin address-space baseline".to_owned(),
         ));
     }
+    // SAFETY: successful `task_info` with the expected count initialized `info`.
     let info = unsafe { info.assume_init() };
+    // SAFETY: `info` is initialized and the field address is valid to read.
     let baseline = unsafe { std::ptr::addr_of!(info.virtual_size).read_unaligned() };
     let limit = baseline.checked_add(budget).ok_or_else(|| {
         FixtureScheduleError::InvalidMetadata(
@@ -227,6 +229,7 @@ fn apply_limits(policy: &ConfinementPolicy, address_space_limit: u64) -> std::io
     set_limit(libc::RLIMIT_CPU, policy.cpu_seconds)?;
     set_limit(libc::RLIMIT_AS, address_space_limit)?;
     set_limit(libc::RLIMIT_FSIZE, policy.maximum_file_bytes)?;
+    // SAFETY: zero selects the current child process and its own process group.
     if unsafe { libc::setpgid(0, 0) } != 0 {
         return Err(std::io::Error::last_os_error());
     }
@@ -239,6 +242,7 @@ fn set_limit(resource: libc::c_int, value: u64) -> std::io::Result<()> {
         rlim_cur: value as libc::rlim_t,
         rlim_max: value as libc::rlim_t,
     };
+    // SAFETY: `limit` is initialized and remains valid for the duration of the call.
     if unsafe { libc::setrlimit(resource as _, &limit) } != 0 {
         return Err(std::io::Error::last_os_error());
     }

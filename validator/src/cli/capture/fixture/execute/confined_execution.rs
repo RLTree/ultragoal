@@ -12,9 +12,11 @@ pub(crate) struct ConfinedExecution<'a> {
     pub(crate) interrupt: &'a Arc<AtomicBool>,
 }
 
+type ConfinedExecutionOutcome = (Option<i32>, Vec<u8>, bool, Option<&'static str>);
+
 pub(crate) fn run_confined(
     request: ConfinedExecution<'_>,
-) -> Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError> {
+) -> Result<ConfinedExecutionOutcome, FixtureScheduleError> {
     let ConfinedExecution {
         fixture,
         source_executable,

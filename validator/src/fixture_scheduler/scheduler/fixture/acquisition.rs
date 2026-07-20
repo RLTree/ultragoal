@@ -9,6 +9,7 @@ impl FixtureScheduler {
             Ok(lease) => lease,
             Err(LeaseAcquisitionFailure::Failed(source)) => return Err(source),
             Err(LeaseAcquisitionFailure::RecoveryRequired { lease, source }) => {
+                let lease = *lease;
                 let lease_id = lease.id().to_owned();
                 self.active.insert(
                     lease_id.clone(),
@@ -18,7 +19,10 @@ impl FixtureScheduler {
                         lease,
                     },
                 );
-                return Err(FixtureScheduleError::schedule_rollback(source, vec![lease_id]));
+                return Err(FixtureScheduleError::schedule_rollback(
+                    source,
+                    vec![lease_id],
+                ));
             }
         };
         let environment = isolated_environment(&lease);
