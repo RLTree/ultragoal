@@ -13,7 +13,7 @@ use super::transaction_recovery::ObservedRecoveryAdapter;
 use super::{
     ConfinedHostEffectTarget, DurableHostEffectLedger, FileHostEffectLedger,
     HostEffectCancellation, HostEffectCompletion, NativeRetainedDescriptorProcessBackend,
-    PinnedHostExecutable, SupportedHostEffectExecutor,
+    SelectedCodexExecutable, SupportedHostEffectExecutor,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
 use crate::plugin_product::lifecycle::{
@@ -34,7 +34,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
     ledger_root: &Path,
     ledger_id: String,
     issuer_id: String,
-    executable: PinnedHostExecutable,
+    executable: SelectedCodexExecutable,
     target_root: &Path,
     observation: HostLifecycleObservationInput,
 ) -> Result<HostLifecycleTransactionResult, &'static str> {
@@ -74,6 +74,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
         .map_err(|_| "host lifecycle ledger creation failed")?;
     let coordinator = SupportedHostLifecycleCoordinator::bind(issuer_id, ledger_id, &ledger)
         .map_err(|_| "host lifecycle coordinator binding failed")?;
+    let executable = executable.into_pinned();
     let observation_executable = executable
         .duplicate()
         .map_err(|_| "host executable duplicate failed")?;

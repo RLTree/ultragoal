@@ -35,10 +35,10 @@ pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
 pub use host::{HostCommand, HostCommandPlan};
-pub(crate) use host_capability::resolve_codex_executable;
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
+pub(crate) use host_effect::resolve_codex_executable;
 pub use install::{
     ExpectedPrior, InstallEffects, InstallPlan, InstallScope, InstallSnapshot, InstallTransaction,
     RollbackInstallError, install, rollback_install, uninstall,

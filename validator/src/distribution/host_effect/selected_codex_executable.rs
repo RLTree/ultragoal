@@ -1,13 +1,24 @@
+use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use std::env;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 
-use crate::distribution::host_effect::PinnedHostExecutable;
-
 const CODEX_PROGRAM: &str = "codex";
 const MAX_PATH_BYTES: usize = 64 * 1024;
 
-pub(crate) fn resolve_codex_executable() -> Result<PinnedHostExecutable, DistributionError> {
+/// The only cross-module executable authority: PATH selection and descriptor
+/// acquisition happen before this move-only capability leaves host_effect.
+pub(crate) struct SelectedCodexExecutable {
+    executable: PinnedHostExecutable,
+}
+
+impl SelectedCodexExecutable {
+    pub(in crate::distribution::host_effect) fn into_pinned(self) -> PinnedHostExecutable {
+        self.executable
+    }
+}
+
+pub(crate) fn resolve_codex_executable() -> Result<SelectedCodexExecutable, DistributionError> {
     let path = env::var_os("PATH").ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
     if path_byte_length(&path) > MAX_PATH_BYTES {
         return Err(error(DistributionErrorId::ObjectTooLarge));
@@ -30,21 +41,21 @@ fn path_byte_length(path: &OsStr) -> usize {
 
 fn resolve_from_path(
     paths: impl IntoIterator<Item = PathBuf>,
-) -> Result<PinnedHostExecutable, DistributionError> {
+) -> Result<SelectedCodexExecutable, DistributionError> {
     for directory in paths {
         if !directory.is_absolute() {
             continue;
         }
         let candidate = directory.join(CODEX_PROGRAM);
         if let Ok(executable) = PinnedHostExecutable::pin(&candidate) {
-            return Ok(executable);
+            return Ok(SelectedCodexExecutable { executable });
         }
     }
     Err(error(DistributionErrorId::ObjectUnavailable))
 }
 
 #[cfg(all(test, unix))]
-mod tests {
+mod selected_tests {
     use super::{path_byte_length, resolve_from_path};
     use std::ffi::OsString;
     use std::fs;
@@ -84,10 +95,12 @@ mod tests {
         fs::set_permissions(&executable, fs::Permissions::from_mode(0o755))
             .expect("executable mode");
 
-        let pinned = resolve_from_path([root.clone()]).expect("resolved");
+        let pinned = resolve_from_path([root.clone()])
+            .expect("resolved")
+            .into_pinned();
         fs::write(&executable, b"replacement").expect("replacement bytes");
 
-        assert!(pinned.revalidate_for_test().is_err());
+        assert!(pinned.revalidate().is_err());
         fs::remove_dir_all(root).expect("cleanup");
     }
 
@@ -105,13 +118,15 @@ mod tests {
         let executable = root.join("codex");
         symlink(&first, &executable).expect("codex symlink");
 
-        let pinned = resolve_from_path([root.clone()]).expect("resolved");
+        let pinned = resolve_from_path([root.clone()])
+            .expect("resolved")
+            .into_pinned();
         fs::remove_file(&executable).expect("remove symlink");
         symlink(&second, &executable).expect("replacement symlink");
 
-        assert!(pinned.revalidate_for_test().is_ok());
+        assert!(pinned.revalidate().is_ok());
         assert_eq!(
-            pinned.canonical_path_for_test(),
+            pinned.identity().canonical_path,
             first
                 .canonicalize()
                 .expect("canonical target")

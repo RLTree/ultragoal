@@ -31,6 +31,7 @@ use std::os::unix::fs::{FileExt, MetadataExt, OpenOptionsExt};
 include!("max_pinned_executable_bytes.rs");
 include!("host_effect_ledger_error_new.rs");
 include!("same_executable_object.rs");
+include!("selected_codex_executable.rs");
 mod transaction;
 mod transaction_identity;
 mod transaction_observation;

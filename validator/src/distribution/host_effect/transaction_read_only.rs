@@ -3,7 +3,9 @@ use super::transaction_observation::{
 };
 use super::transaction_observation_transition::validate_read_only_transition;
 use super::transaction_policy;
-use super::{HostEffectCancellation, NativeRetainedDescriptorProcessBackend, PinnedHostExecutable};
+use super::{
+    HostEffectCancellation, NativeRetainedDescriptorProcessBackend, SelectedCodexExecutable,
+};
 use crate::distribution::PackageIdentity;
 use crate::plugin_product::lifecycle::{HostLifecycleExpectedObservations, LifecyclePlan};
 use std::os::fd::AsRawFd;
@@ -13,12 +15,13 @@ pub(super) fn observe_read_only(
     package: &PackageIdentity,
     plan: &LifecyclePlan,
     command_plan: &super::HostCommandPlan,
-    executable: PinnedHostExecutable,
+    executable: SelectedCodexExecutable,
     target_root: &Path,
     observation: HostLifecycleObservationInput,
     expected: HostLifecycleExpectedObservations,
 ) -> Result<HostLifecycleSurfaceDigests, &'static str> {
     let root = std::fs::File::open(target_root).map_err(|_| "host observation root unavailable")?;
+    let executable = executable.into_pinned();
     let environment = command_plan
         .commands()
         .first()

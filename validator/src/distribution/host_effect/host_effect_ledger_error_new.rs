@@ -50,7 +50,9 @@ pub(crate) struct PinnedHostExecutable {
 }
 
 impl PinnedHostExecutable {
-    pub(crate) fn pin(path: &Path) -> Result<Self, HostEffectLedgerError> {
+    pub(in crate::distribution::host_effect) fn pin(
+        path: &Path,
+    ) -> Result<Self, HostEffectLedgerError> {
         #[cfg(unix)]
         {
             let canonical = fs::canonicalize(path).map_err(|_| ledger_io())?;
@@ -117,16 +119,6 @@ impl PinnedHostExecutable {
         {
             Err(invalid_record())
         }
-    }
-
-    #[cfg(test)]
-    pub(crate) fn revalidate_for_test(&self) -> Result<(), HostEffectLedgerError> {
-        self.revalidate()
-    }
-
-    #[cfg(test)]
-    pub(crate) fn canonical_path_for_test(&self) -> &str {
-        &self.identity.canonical_path
     }
 }
 

@@ -11,5 +11,3 @@ include!("supported_runtime_route.rs");
 include!("host_adapter_kind.rs");
 
 include!("journey_binding_new.rs");
-
-include!("codex_executable.rs");
