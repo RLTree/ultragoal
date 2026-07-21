@@ -95,7 +95,8 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
         output.map(|argument| &argument.value),
     ) {
         (Some(ParsedValue::RelativePath(input)), Some(ParsedValue::RelativePath(output)))
-            if output_allowed(output.as_str()) =>
+            if super::package_dispatch::package_archive_input_allowed(input.as_str())
+                && output_allowed(output.as_str()) =>
         {
             Some((input.as_str(), output.as_str()))
         }

@@ -30,6 +30,26 @@ fn output_must_remain_a_single_bounded_json_leaf() {
     assert!(!output_allowed("target/ultragoal/install-test.txt"));
 }
 
+#[test]
+fn package_archive_input_stays_in_the_disposable_package_namespace() {
+    assert!(
+        super::super::package_dispatch::package_archive_input_allowed(
+            "target/ultragoal/package.hugpkg"
+        )
+    );
+    for path in [
+        "package.hugpkg",
+        "target/ultragoal/nested/package.hugpkg",
+        "target/ultragoal/package.zip",
+        "target/ultragoal/.hugpkg",
+    ] {
+        assert!(
+            !super::super::package_dispatch::package_archive_input_allowed(path),
+            "{path}"
+        );
+    }
+}
+
 fn option(name: OptionName, path: &str) -> OptionArgument {
     OptionArgument {
         name,

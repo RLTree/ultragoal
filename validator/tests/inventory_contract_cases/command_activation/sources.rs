@@ -18,6 +18,7 @@ const SOURCES: &[&str] = &[
     "validator/src/cli/successor_public/operation_binding/package/inventory.rs",
     "validator/src/cli/successor_public/evaluation/run.rs",
     "validator/src/cli/successor_public/output_limit.rs",
+    "validator/src/cli/successor_public/package_dispatch.rs",
     "validator/src/cli/successor_public/package_inventory/mod.rs",
     "validator/src/cli/successor_public/orchestration.rs",
     "validator/src/distribution/filesystem/root/workspace_context.rs",

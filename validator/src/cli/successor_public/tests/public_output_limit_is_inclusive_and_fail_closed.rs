@@ -12,6 +12,13 @@ pub(crate) fn public_router_adopts_only_live_successor_authority() {
         vec!["next"],
         vec!["--json", "inspect", "inventory"],
         vec!["package", "build", "--output", "out.json"],
+        vec![
+            "--json",
+            "package",
+            "verify",
+            "--input",
+            "target/ultragoal/package.hugpkg",
+        ],
         vec!["observe", "query"],
         vec![
             "observe",

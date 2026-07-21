@@ -66,6 +66,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Package(PackageAction::Verify),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::PackageVerify),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Package(PackageAction::InstallTest),
             EffectClass::WorkspaceWrite,
         )),

@@ -99,6 +99,11 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "public dispatcher consumption of operation authority"
     ),
     source!(
+        "validator/src/cli/successor_public/package_dispatch.rs",
+        include_bytes!("../../../cli/successor_public/package_dispatch.rs"),
+        "package verification dispatcher authority"
+    ),
+    source!(
         "validator/src/cli/successor_public/package_inventory/mod.rs",
         include_bytes!("../../../cli/successor_public/package_inventory/mod.rs"),
         "package inventory production dispatch"

@@ -205,6 +205,7 @@ const BINDINGS: &[Binding] = &[
     package::BUILD,
     package::INSTALL_TEST,
     package::INVENTORY,
+    package::VERIFY,
 ];
 
 const fn binding(
