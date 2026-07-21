@@ -15,7 +15,7 @@ pub(super) fn create() -> Result<PathBuf, &'static str> {
         .map_err(|_| "temporary parent unavailable")?;
     for _ in 0..16 {
         let path = parent.join(format!(
-            "hul-supported-host-effect-{}-{}",
+            "hul-distribution-host-effect-{}-{}",
             std::process::id(),
             NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
         ));
