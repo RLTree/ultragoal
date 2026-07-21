@@ -1857,7 +1857,7 @@
     "validator/src/audit/plugin/registry/live/raw.rs",
     "validator/src/audit/plugin/registry/live/reviewers.rs",
     "validator/src/audit/plugin/registry/mod.rs",
-    "validator/src/audit/product/fitness/evidence.rs",
+    "validator/src/audit/product/fitness/evidence/mod.rs",
     "validator/src/audit/product/fitness/mod.rs",
     "validator/src/audit/product/fitness/receipt/fields.rs",
     "validator/src/audit/product/fitness/receipt/mod.rs",

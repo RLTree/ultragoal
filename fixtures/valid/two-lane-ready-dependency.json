@@ -4376,7 +4376,7 @@
       "validator/src/audit/plugin/registry/live/mod.rs",
       "validator/src/audit/plugin/registry/mod.rs",
       "validator/src/audit/product/fitness/mod.rs",
-      "validator/src/audit/product/fitness/evidence.rs",
+      "validator/src/audit/product/fitness/evidence/mod.rs",
       "validator/src/audit/product/fitness/receipt/mod.rs",
       "validator/src/audit/product/fitness/substitutions.rs",
       "validator/src/audit/product/mod.rs",
@@ -20664,8 +20664,8 @@
           "path": "validator/src/audit/product/fitness/mod.rs"
         },
         {
-          "digest": "sha256:7589b97a8fcb86cad8e848b580bc3d0a31b776bcda1cdecc34fbfa96c7f7e0be",
-          "path": "validator/src/audit/product/fitness/evidence.rs"
+          "digest": "sha256:73a5338fa2d041ca985aebd2a2bb827de0ad0f7e995198b85007d067efd60929",
+          "path": "validator/src/audit/product/fitness/evidence/mod.rs"
         },
         {
           "digest": "sha256:93bc1f62210b609a69b26803d41d199c60268293fdc99e4780db36e1c6c16b76",
