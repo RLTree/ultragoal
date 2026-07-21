@@ -1,6 +1,7 @@
 impl ConfinedHostEffectTarget {
-    /// Binds one dedicated target root below `/private/tmp`. Opening and
-    /// observing the root performs no mutation.
+    /// Binds one dedicated target root below the same configured temporary
+    /// parent as isolated package custody. Opening and observing the root
+    /// performs no mutation.
     pub(in crate::distribution::host_effect) fn bind(
         path: &Path,
         scope: AcceptedHostScope,
@@ -11,24 +12,27 @@ impl ConfinedHostEffectTarget {
                 HostEffectExecutorErrorId::InvalidTargetRoot,
             ));
         }
-        let private_tmp = fs::canonicalize("/private/tmp").map_err(|_| io_failure())?;
+        let temporary_parent = crate::distribution::filesystem::canonical_temporary_parent()
+            .map_err(|_| io_failure())?;
         let canonical = fs::canonicalize(path).map_err(|_| io_failure())?;
         let name = canonical
             .file_name()
             .and_then(|value| value.to_str())
-            .filter(|value| value.starts_with(ROOT_PREFIX))
+            .filter(|value| {
+                value.starts_with(ROOT_PREFIX) || value.starts_with(ISOLATED_PACKAGE_ROOT_PREFIX)
+            })
             .ok_or_else(|| {
                 HostEffectExecutorFailure::new(HostEffectExecutorErrorId::InvalidTargetRoot)
             })?;
         if path != canonical
-            || canonical.parent() != Some(private_tmp.as_path())
+            || canonical.parent() != Some(temporary_parent.as_path())
             || !valid_component(name)
         {
             return Err(HostEffectExecutorFailure::new(
                 HostEffectExecutorErrorId::InvalidTargetRoot,
             ));
         }
-        let parent = open_directory_path(&private_tmp)?;
+        let parent = open_directory_path(&temporary_parent)?;
         let name = CString::new(name).map_err(|_| io_failure())?;
         let descriptor = unsafe {
             libc::openat(

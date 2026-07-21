@@ -8,10 +8,7 @@ use std::os::unix::fs::DirBuilderExt;
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 pub(super) fn create() -> Result<PathBuf, &'static str> {
-    let parent = std::env::var_os("CODEX_WORKTREE_TMP")
-        .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from("/tmp"))
-        .canonicalize()
+    let parent = crate::distribution::filesystem::canonical_temporary_parent()
         .map_err(|_| "temporary parent unavailable")?;
     for _ in 0..16 {
         let path = parent.join(format!(

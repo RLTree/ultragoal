@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use super::descriptor::{Directory, DirectoryIdentity, EntryKind};
 
 include!("confined_root.rs");
+include!("temporary_parent.rs");
 include!("workspace_context.rs");
 
 #[cfg(all(test, unix))]

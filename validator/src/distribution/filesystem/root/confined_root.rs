@@ -18,11 +18,7 @@ struct RootAuthority {
 impl ConfinedRoot {
     #[cfg(any(target_os = "macos", target_os = "linux"))]
     pub fn open(path: &Path) -> Result<Self, DistributionError> {
-        let temporary = std::env::var_os("CODEX_WORKTREE_TMP")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .canonicalize()
-            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        let temporary = canonical_temporary_parent()?;
         let canonical = path
             .canonicalize()
             .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
