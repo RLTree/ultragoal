@@ -1336,6 +1336,23 @@ build the exact package twice, materialize and reconcile its supported local
 marketplace source, use the supported Codex install path, and observe discovery
 from a fresh task before running the dirty-repository routine/recovery journey.
 
+The evidence-led Product Fitness increment is source-accepted and integrated
+through `2b0510c4a2469e0047885833900beeb02e687122` / tree
+`f85d001cf5b973cba3576b8aef1a5c95465a3dfb`. Typed and audit v2 authority now
+share the exact nine Product Fitness truth surfaces, bind one claimed surface,
+require every live surface's predecessors, and verify repository evidence by
+the same path/digest/candidate boundary as other evidence. Focused audit and
+plugin-product controls pass 6/6 and 16/16, warning-denied production
+compilation passes, generated authority and 121 standards rows are current,
+and one Terra/medium correction review accepted the three previously rejected
+counterexamples. The ceiling is source/schema only; install, runtime, Product
+Fitness, daily-driver, readiness, release, and completion remain withheld.
+
+Before another implementation worktree launches, root must close the two
+remaining semantic-namespace families introduced by the integrated host
+lifecycle: reservation lifecycle completion and plugin host custody. This is a
+path/module-authority correction, not a new product node or claim surface.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
