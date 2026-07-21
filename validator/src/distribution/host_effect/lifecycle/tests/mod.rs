@@ -2,7 +2,7 @@ use super::super::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectLedgerError,
     HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectReservation,
     HostEffectState, HostEffectTransition, SelectedCodexExecutable,
-    SelectedCodexExecutableTestFixture, test_fixture,
+    SelectedCodexExecutableTestFixture, selected_test_fixture,
 };
 use super::binding::AcceptedHostEffect;
 use super::recovery::{

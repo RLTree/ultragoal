@@ -23,9 +23,6 @@ use super::HostCommandPlan;
 use serde::Serialize;
 use std::fs::{self, File};
 
-#[cfg(test)]
-use std::fs::OpenOptions;
-
 #[cfg(unix)]
 use std::os::unix::fs::{FileExt, MetadataExt};
 
@@ -36,7 +33,7 @@ mod selected_codex_executable;
 pub(crate) use selected_codex_executable::{resolve_codex_executable, SelectedCodexExecutable};
 #[cfg(test)]
 pub(crate) use selected_codex_executable::{
-    test_fixture, SelectedCodexExecutableTestFixture,
+    selected_test_fixture, SelectedCodexExecutableTestFixture,
 };
 mod transaction;
 mod transaction_identity;

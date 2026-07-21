@@ -9,7 +9,6 @@ struct Fixture {
     roots: Vec<PathBuf>,
     target_root: PathBuf,
     ledger_root: PathBuf,
-    executable: PathBuf,
     executable_fixture: SelectedCodexExecutableTestFixture,
     home: PathBuf,
     project: PathBuf,
@@ -31,18 +30,15 @@ impl Fixture {
         let project = support_root.join("project");
         create_mode(&home, 0o700);
         create_mode(&project, 0o700);
-        let executable_fixture = test_fixture("executor-next", b"#!/bin/sh\nexit 0\n");
-        let executable = executable_fixture.path.clone();
+        let executable_fixture = selected_test_fixture("executor-next", b"#!/bin/sh\nexit 0\n");
         Self {
             roots: vec![
                 target_root.clone(),
                 ledger_root.clone(),
                 support_root,
-                executable_fixture.root.clone(),
             ],
             target_root,
             ledger_root,
-            executable,
             executable_fixture,
             home,
             project,
@@ -70,13 +66,10 @@ impl Fixture {
         crate::distribution::host_effect::lifecycle::ObservedTargetIdentity,
     ) {
         let package = self.package();
-        let host = HostCapabilityDeclaration::isolated(
-            &self.home,
-            &self.project,
-            "fixture-host",
-            Some(&self.executable),
-        )
-        .unwrap();
+        let host = self
+            .executable_fixture
+            .host_capability(&self.home, &self.project, "fixture-host")
+            .unwrap();
         let journey = JourneyBinding::new(package, &host, "fixture-marketplace").unwrap();
         let scope =
             AcceptedHostScope::personal(&journey, "fixture-marketplace".to_owned()).unwrap();
@@ -155,7 +148,7 @@ fn permit_binding(
 ) -> HostEffectPermitBinding {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = fixture.executable_fixture.selected.duplicate().unwrap();
+    let executable = fixture.executable_fixture.selected().unwrap();
     let head = ledger.head().unwrap();
     HostEffectPermitBinding {
         context_id: package.source().context_id().to_owned(),
@@ -194,7 +187,7 @@ fn authorized_effect(
 ) -> AuthorizedHostEffect {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = fixture.executable_fixture.selected.duplicate().unwrap();
+    let executable = fixture.executable_fixture.selected().unwrap();
     let binding = permit_binding(fixture, ledger, target, '2');
     let authority =
         HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())

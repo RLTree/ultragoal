@@ -50,13 +50,10 @@ fn fresh_lifecycle(package: &PackageIdentity) -> AcceptedLifecyclePlan {
 fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     let fixture = Fixture::new();
     let package = fixture.package();
-    let host = HostCapabilityDeclaration::isolated(
-        &fixture.home,
-        &fixture.project,
-        "fixture-host",
-        Some(&fixture.executable),
-    )
-    .unwrap();
+    let host = fixture
+        .executable_fixture
+        .host_capability(&fixture.home, &fixture.project, "fixture-host")
+        .unwrap();
     let journey = JourneyBinding::new(package.clone(), &host, "fixture-marketplace").unwrap();
     let (scope, target, expected_target) = fixture.scope_and_target();
     let mut target_observer = target.observer();
@@ -69,7 +66,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     )
     .unwrap();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let pinned = fixture.executable_fixture.selected.duplicate().unwrap();
+    let pinned = fixture.executable_fixture.selected().unwrap();
     let accepted = coordinator
         .accept(HostEffectAcceptanceRequest {
             package: package.clone(),
@@ -93,7 +90,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             HostEffectPreparationRequest {
                 accepted: &accepted,
                 custody: &mut custody,
-                executable: fixture.executable_fixture.selected.duplicate().unwrap(),
+                executable: fixture.executable_fixture.selected().unwrap(),
                 target: &mut target_observer,
                 clock: &mut clock,
                 adapter: &mut adapter,

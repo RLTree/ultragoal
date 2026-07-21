@@ -118,14 +118,12 @@ fn ledger_transition_graph_forbids_retry_and_terminal_revival() {
 #[cfg(unix)]
 #[test]
 fn pinned_executable_revalidates_exact_object_and_content() {
-    let fixture = test_fixture("authority-digest", b"#!/bin/sh\nexit 0\n");
-    let pinned = fixture.selected.duplicate().unwrap();
+    let fixture = selected_test_fixture("authority-digest", b"#!/bin/sh\nexit 0\n");
+    let pinned = fixture.selected().unwrap();
     assert!(is_digest(&pinned.binding_sha256().unwrap()));
     pinned.revalidate().unwrap();
 
-    let mut changed = OpenOptions::new().write(true).open(&fixture.path).unwrap();
-    changed.write_all(b"#!/bin/sh\nexit 9\n").unwrap();
-    changed.sync_all().unwrap();
+    fixture.replace_contents(b"#!/bin/sh\nexit 9\n");
     assert_eq!(
         pinned.revalidate().unwrap_err().id(),
         HostEffectLedgerErrorId::Tampered
@@ -135,24 +133,18 @@ fn pinned_executable_revalidates_exact_object_and_content() {
 #[cfg(unix)]
 #[test]
 fn pinned_executable_rejects_named_replacement_and_hardlinks() {
-    let fixture = test_fixture("authority-replacement", b"#!/bin/sh\nexit 0\n");
-    let pinned = fixture.selected.duplicate().unwrap();
-    let held = fixture.root.join("held");
-    fs::rename(&fixture.path, &held).unwrap();
-    fs::write(&fixture.path, b"#!/bin/sh\nexit 1\n").unwrap();
-    fs::set_permissions(&fixture.path, fs::Permissions::from_mode(0o700)).unwrap();
+    let fixture = selected_test_fixture("authority-replacement", b"#!/bin/sh\nexit 0\n");
+    let pinned = fixture.selected().unwrap();
+    fixture.rename_and_replace(b"#!/bin/sh\nexit 1\n");
     assert_eq!(
         pinned.revalidate().unwrap_err().id(),
         HostEffectLedgerErrorId::Tampered
     );
 
-    let hardlink = fixture.root.join("hardlink");
-    fs::hard_link(&fixture.path, &hardlink).unwrap();
-    let hardlink_fixture = test_fixture("authority-hardlink", b"#!/bin/sh\nexit 1\n");
-    fs::remove_file(&hardlink_fixture.path).unwrap();
-    fs::hard_link(&fixture.path, &hardlink_fixture.path).unwrap();
+    let hardlink_fixture = selected_test_fixture("authority-hardlink", b"#!/bin/sh\nexit 1\n");
+    hardlink_fixture.replace_with_hard_link_from(&fixture);
     assert_eq!(
-        hardlink_fixture.selected.revalidate().unwrap_err().id(),
+        hardlink_fixture.selected().unwrap().revalidate().unwrap_err().id(),
         HostEffectLedgerErrorId::Tampered
     );
 }

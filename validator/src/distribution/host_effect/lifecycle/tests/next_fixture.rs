@@ -41,10 +41,9 @@ impl Fixture {
         fs::create_dir(&home).unwrap();
         fs::create_dir(&project).unwrap();
         let selected_fixture =
-            test_fixture("lifecycle-primary", b"descriptor-execution-fixture-v1");
+            selected_test_fixture("lifecycle-primary", b"descriptor-execution-fixture-v1");
         let alternate_fixture =
-            test_fixture("lifecycle-alternate", b"descriptor-execution-fixture-v1");
-        let executable = selected_fixture.path.clone();
+            selected_test_fixture("lifecycle-alternate", b"descriptor-execution-fixture-v1");
         let source = SourceIdentity::new(
             d(seed),
             d(next_hex(seed)),
@@ -55,13 +54,9 @@ impl Fixture {
         )
         .unwrap();
         let package = PackageIdentity::new(source, d('e'), d('f')).unwrap();
-        let host = HostCapabilityDeclaration::isolated(
-            &home,
-            &project,
-            "host-lifecycle-063-v1",
-            Some(&executable),
-        )
-        .unwrap();
+        let host = selected_fixture
+            .host_capability(&home, &project, "host-lifecycle-063-v1")
+            .unwrap();
         let journey = JourneyBinding::new(package.clone(), &host, "local-marketplace").unwrap();
         let lifecycle = lifecycle(&package);
         let scope = AcceptedHostScope::personal(&journey, "local-marketplace".to_owned()).unwrap();
@@ -86,11 +81,11 @@ impl Fixture {
     }
 
     fn pin(&self) -> SelectedCodexExecutable {
-        self.selected_fixture.selected.duplicate().unwrap()
+        self.selected_fixture.selected().unwrap()
     }
 
     fn pin_alternate(&self) -> SelectedCodexExecutable {
-        self.alternate_fixture.selected.duplicate().unwrap()
+        self.alternate_fixture.selected().unwrap()
     }
 }
 

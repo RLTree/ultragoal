@@ -14,10 +14,10 @@ use crate::distribution::host_effect::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectDecision,
     HostEffectLedgerError, HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord,
     HostEffectPermitBinding, HostEffectReservation, HostEffectState, HostEffectTransition,
-    SelectedCodexExecutable, SelectedCodexExecutableTestFixture, test_fixture,
+    SelectedCodexExecutable, SelectedCodexExecutableTestFixture, selected_test_fixture,
 };
 use crate::distribution::{
-    HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
+    HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
 };
 use std::collections::VecDeque;
 use std::fs::{self, OpenOptions};

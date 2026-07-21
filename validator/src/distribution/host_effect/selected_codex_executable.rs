@@ -224,4 +224,4 @@ fn validate_executable_metadata(metadata: &fs::Metadata) -> Result<(), HostEffec
 mod selected_tests;
 
 #[cfg(all(test, unix))]
-pub(crate) use selected_tests::{SelectedCodexExecutableTestFixture, test_fixture};
+pub(crate) use selected_tests::{SelectedCodexExecutableTestFixture, selected_test_fixture};

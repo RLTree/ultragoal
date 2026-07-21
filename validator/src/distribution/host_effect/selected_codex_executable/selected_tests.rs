@@ -1,4 +1,5 @@
-use super::{path_byte_length, resolve_from_path};
+use super::{HostEffectLedgerError, path_byte_length, resolve_from_path};
+use crate::distribution::error::DistributionError;
 use std::ffi::OsString;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
@@ -9,9 +10,51 @@ use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 pub(crate) struct SelectedCodexExecutableTestFixture {
-    pub(crate) root: PathBuf,
-    pub(crate) path: PathBuf,
-    pub(crate) selected: super::SelectedCodexExecutable,
+    root: PathBuf,
+    path: PathBuf,
+    selected: super::SelectedCodexExecutable,
+}
+
+impl SelectedCodexExecutableTestFixture {
+    pub(crate) fn selected(&self) -> Result<super::SelectedCodexExecutable, HostEffectLedgerError> {
+        self.selected.duplicate()
+    }
+
+    pub(crate) fn host_capability(
+        &self,
+        home: &std::path::Path,
+        project: &std::path::Path,
+        host_version: &str,
+    ) -> Result<crate::distribution::HostCapabilityDeclaration, DistributionError> {
+        crate::distribution::HostCapabilityDeclaration::isolated(
+            home,
+            project,
+            host_version,
+            Some(&self.path),
+        )
+    }
+
+    pub(crate) fn replace_contents(&self, bytes: &[u8]) {
+        let mut file = fs::OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .open(&self.path)
+            .expect("fixture executable replacement");
+        std::io::Write::write_all(&mut file, bytes).expect("fixture executable bytes");
+        file.sync_all().expect("fixture executable sync");
+    }
+
+    pub(crate) fn rename_and_replace(&self, bytes: &[u8]) {
+        fs::rename(&self.path, self.root.join("held")).expect("fixture executable rename");
+        fs::write(&self.path, bytes).expect("fixture executable replacement");
+        fs::set_permissions(&self.path, fs::Permissions::from_mode(0o700))
+            .expect("fixture executable mode");
+    }
+
+    pub(crate) fn replace_with_hard_link_from(&self, source: &Self) {
+        fs::remove_file(&self.path).expect("fixture executable removal");
+        fs::hard_link(&source.path, &self.path).expect("fixture executable hard link");
+    }
 }
 
 impl Drop for SelectedCodexExecutableTestFixture {
@@ -20,7 +63,10 @@ impl Drop for SelectedCodexExecutableTestFixture {
     }
 }
 
-pub(crate) fn test_fixture(label: &str, bytes: &[u8]) -> SelectedCodexExecutableTestFixture {
+pub(crate) fn selected_test_fixture(
+    label: &str,
+    bytes: &[u8],
+) -> SelectedCodexExecutableTestFixture {
     let root = std::env::temp_dir().join(format!(
         "harness-ultragoal-selected-executable-{label}-{}-{}",
         std::process::id(),
