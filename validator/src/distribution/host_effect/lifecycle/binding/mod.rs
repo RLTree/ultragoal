@@ -14,6 +14,8 @@ use super::super::{
 
 include!("session_nonce_bytes.rs");
 
+include!("accepted_intent.rs");
+
 include!("accepted/personal_scope.rs");
 
 include!("observed_target_identity_new.rs");

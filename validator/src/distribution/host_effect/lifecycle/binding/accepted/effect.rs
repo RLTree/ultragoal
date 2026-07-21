@@ -35,7 +35,7 @@ impl AcceptedHostEffect {
         #[cfg(not(test))]
         if lifecycle_record.validate().is_err()
             || lifecycle_record.package() != &package
-            || lifecycle_record.permit_join().0 != lifecycle.plan_sha256()
+            || !matches_accepted_intent(lifecycle.operation(), lifecycle_record.permit_join().1)
             || lifecycle_record.command_plan_sha256() != plan.plan_sha256()
         {
             return Err(invalid());
@@ -44,7 +44,7 @@ impl AcceptedHostEffect {
         if let Some(record) = lifecycle_record.as_ref() {
             if record.validate().is_err()
                 || record.package() != &package
-                || record.permit_join().0 != lifecycle.plan_sha256()
+                || !matches_accepted_intent(lifecycle.operation(), record.permit_join().1)
                 || record.command_plan_sha256() != plan.plan_sha256()
             {
                 return Err(invalid());
