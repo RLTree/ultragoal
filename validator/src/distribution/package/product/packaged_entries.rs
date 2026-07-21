@@ -6,6 +6,9 @@ fn packaged_entries(
         let bytes = source
             .bytes(path)
             .ok_or_else(|| failure(ProductionPackageErrorId::MembershipMismatch))?;
+        if path == MARKETPLACE_CATALOG_PATH && !is_canonical_marketplace_catalog(bytes) {
+            return Err(failure(ProductionPackageErrorId::MembershipMismatch));
+        }
         let mode = source
             .unix_mode(path)
             .ok_or_else(|| failure(ProductionPackageErrorId::MembershipMismatch))?;
@@ -45,6 +48,8 @@ fn packaged_entries(
 fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageError> {
     let role = if path == SUPPORTED_MANIFEST_PATH {
         PackageRole::Manifest
+    } else if path == MARKETPLACE_CATALOG_PATH {
+        PackageRole::Data
     } else if path == "runtime/runtime-probe-bin" {
         PackageRole::Executable
     } else if CANONICAL_SKILLS

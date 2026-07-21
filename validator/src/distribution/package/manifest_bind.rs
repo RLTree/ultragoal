@@ -52,6 +52,9 @@ pub(super) fn bind(entries: &[PackageEntry], roots: &[Root]) -> Result<(), Distr
         .iter()
         .filter(|entry| entry.path != ".codex-plugin/plugin.json")
     {
+        if entry.path == ".agents/plugins/marketplace.json" && entry.role == PackageRole::Data {
+            continue;
+        }
         if entry.path == "runtime/runtime-probe-bin" && entry.role == PackageRole::Executable {
             continue;
         }

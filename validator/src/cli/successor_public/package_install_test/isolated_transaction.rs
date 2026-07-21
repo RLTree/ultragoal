@@ -1,6 +1,7 @@
 use super::*;
 use crate::distribution::{
-    Capability, HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, ScopedTree,
+    Capability, HostCapabilityDeclaration, HostCommandPlan, ISOLATED_MARKETPLACE_NAME,
+    JourneyBinding, ScopedFile, ScopedTree,
 };
 use crate::inventory::AuthorityCatalog;
 use std::path::Path;
@@ -34,6 +35,11 @@ fn execute_inner(
     let package_publication = artifact
         .materialize_marketplace_source(context, catalog, &mut package_tree)
         .map_err(|_| "package materialization failed")?;
+    let marketplace_catalog = ScopedFile::new(confined.clone(), ".agents/plugins/marketplace.json")
+        .map_err(|_| "isolated marketplace catalog target failed")?;
+    artifact
+        .materialize_marketplace_catalog(context, catalog, &marketplace_catalog)
+        .map_err(|_| "isolated marketplace catalog materialization failed")?;
     let runtime_path = root_path.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
     let host = HostCapabilityDeclaration::isolated(
         root_path,
@@ -59,7 +65,7 @@ fn execute_inner(
     let binding = JourneyBinding::new(
         artifact.snapshot().identity().clone(),
         &host,
-        "local-harness-plugins",
+        ISOLATED_MARKETPLACE_NAME,
     )
     .map_err(|_| "journey binding failed")?;
     if package_publication.root_id() != binding.home_id()
@@ -126,7 +132,7 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
     let command_plan = HostCommandPlan::repository_install_in_isolated_codex_home(
         &package,
         root_path.to_str().ok_or("isolated root path is not utf8")?,
-        "local-harness-plugins",
+        ISOLATED_MARKETPLACE_NAME,
         &root_path,
     )
     .map_err(|_| "isolated Codex command plan failed")?;
@@ -148,7 +154,7 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         crate::distribution::host_effect::HostLifecycleObservationInput {
             marketplace_source_path: root_path.join("plugins/harness-ultragoal"),
             marketplace_source_root: root_path.to_path_buf(),
-            marketplace: "local-harness-plugins".to_owned(),
+            marketplace: ISOLATED_MARKETPLACE_NAME.to_owned(),
             plugin: "harness-ultragoal".to_owned(),
         },
     )?;

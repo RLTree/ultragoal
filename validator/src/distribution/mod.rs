@@ -58,6 +58,7 @@ pub use model::{
     reject_stale_version_reuse, verify_bound_surface_chain,
 };
 pub use observations::{RuntimeObservation, RuntimeVerdict};
+pub(crate) use package::ISOLATED_MARKETPLACE_NAME;
 pub use package::{
     ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
     PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,

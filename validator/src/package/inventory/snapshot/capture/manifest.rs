@@ -106,7 +106,11 @@ pub(super) fn capture_supported_package_paths(
         return Err("package snapshot skill roots are not unique".to_string());
     }
 
-    let mut required = BTreeSet::from([supported_manifest.to_string(), runtime_probe.to_string()]);
+    let mut required = BTreeSet::from([
+        supported_manifest.to_string(),
+        runtime_probe.to_string(),
+        MARKETPLACE_CATALOG_PATH.to_string(),
+    ]);
     for root in &roots {
         required.insert(format!("{root}/SKILL.md"));
         required.insert(format!("{root}/agents/openai.yaml"));
@@ -143,6 +147,17 @@ pub(super) fn capture_supported_package_paths(
             packaged.push(runtime_probe.to_string());
         }
         _ => return Err("package snapshot runtime probe is unavailable or unsafe".to_string()),
+    }
+    match tree.get(MARKETPLACE_CATALOG_PATH) {
+        Some(PackageEntryKind::Regular { single_link: true }) => {
+            source.read(MARKETPLACE_CATALOG_PATH, anchored::MAX_RESOURCE_BYTES)?;
+            packaged.push(MARKETPLACE_CATALOG_PATH.to_string());
+        }
+        _ => {
+            return Err(
+                "package snapshot marketplace catalog is unavailable or unsafe".to_string(),
+            );
+        }
     }
     if tree
         .keys()

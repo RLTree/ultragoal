@@ -25,6 +25,8 @@ include!("verify_artifact_against_source.rs");
 
 include!("packaged_entries.rs");
 
+include!("marketplace_catalog.rs");
+
 include!("inventory_publication.rs");
 
 include!("archive_publication.rs");

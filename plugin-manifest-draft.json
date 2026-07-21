@@ -1513,6 +1513,7 @@
   ],
   "purpose": "Repository fit, routine work, diagnosis, orchestration, strict proof, product-journey review, evaluation, and migration through one Harness Ultragoal front door.",
   "resources": [
+    ".agents/plugins/marketplace.json",
     ".cargo/config.toml",
     ".codex-plugin/plugin.json",
     ".codex/environments/environment.toml",
