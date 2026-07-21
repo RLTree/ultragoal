@@ -1,4 +1,5 @@
-use super::{HostEffectLedgerError, path_byte_length, resolve_from_path};
+use super::super::HostEffectLedgerError;
+use super::{path_byte_length, resolve_from_path};
 use crate::distribution::error::DistributionError;
 use std::ffi::OsString;
 use std::fs;
@@ -76,7 +77,7 @@ pub(crate) fn selected_test_fixture(
     let path = root.join("codex");
     fs::write(&path, bytes).expect("fixture executable bytes");
     fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).expect("fixture executable mode");
-    let selected = super::SelectedCodexExecutable::pin(&path).expect("fixture executable pin");
+    let selected = resolve_from_path([root.clone()]).expect("fixture executable selection");
     SelectedCodexExecutableTestFixture {
         root,
         path,
@@ -134,6 +135,9 @@ fn pinned_selection_keeps_original_target_after_symlink_replacement() {
     symlink(&first, &executable).expect("codex symlink");
 
     let pinned = resolve_from_path([root.clone()]).expect("resolved");
+    let original_binding = pinned
+        .binding_sha256()
+        .expect("selected executable binding");
     fs::remove_file(&executable).expect("remove symlink");
     symlink(&second, &executable).expect("replacement symlink");
 
@@ -142,10 +146,7 @@ fn pinned_selection_keeps_original_target_after_symlink_replacement() {
         pinned
             .binding_sha256()
             .expect("selected executable binding"),
-        super::SelectedCodexExecutable::pin(&first)
-            .expect("reselected original target")
-            .binding_sha256()
-            .expect("selected executable binding")
+        original_binding
     );
     fs::remove_dir_all(root).expect("cleanup");
 }
