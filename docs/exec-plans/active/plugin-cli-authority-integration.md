@@ -1433,6 +1433,44 @@ negative proving a host-effect sibling cannot construct or re-pin the raw
 descriptor. This is the required invariant-level narrowing after repeated
 authority bypasses; it adds no scheduler, tracker, receipt, or analyzer.
 
+### Evidence-led installed-journey checkpoint
+
+Root integrated the AMEND-004 source interfaces and bound the current
+`PRODUCT_SUCCESS_BRIEF.json` v2 at `efd5659977704c1dd279f4f18b688d6f86d7ef1e`
+/ tree `1d94844ed4393ed04a609abc2a0968ff2029f3a5`. `inspect inception` reads the
+brief as an active source-local truth loop, and `next` selects its first legal
+transition, `inspect-real-repository`, without promoting an installed, runtime,
+Product Fitness, daily-driver, readiness, release, or completion claim. A
+read-only fit inspection of the source repository returned the expected
+unfitted/conflicted finding and preserved the repository state; that finding is
+not a substitute for a successful real-repository journey.
+
+The exact package build and verification path currently produces a candidate
+bound HUGPKG archive, but a HUGPKG is not itself a Codex marketplace source.
+The existing isolated install transaction already materializes its verified
+contents under `plugins/harness-ultragoal` and writes the relative marketplace
+catalog before it invokes Codex. The checked-in catalog deliberately remains
+unmaterialized. Root will not copy package bytes into the source tree, repoint
+the catalog to arbitrary source, or treat an old target receipt as current
+install evidence.
+
+Two dependency-independent source lanes are active from that exact root:
+
+| Lane | Codex task / worktree | Owned result | Root-held boundary |
+| --- | --- | --- | --- |
+| sealed Darwin execution | `019f86e7-3ca1-77c0-95d8-10bc22008ace` / `cc0f` | Fresh private verified executable-copy custody below the selected-Codex capability | public host effects, claims, docs, and live install |
+| exact marketplace materialization | `019f86e7-3cad-7c02-9fe8-d33d86112e8f` / `3c7f` | Crate-private typed materialization entrypoint for a verified HUGPKG and catalog layout | CLI/dispatch, schemas, generated authority, claims, and live install |
+
+Each lane may claim only source-local behavior after one bounded Terra/medium
+review and at most one coherent correction. Root integrates accepted commits
+serially, reruns the affected strict boundary, rebuilds the exact package, then
+performs the isolated Codex install, fresh-task discovery, and separate dirty
+real-repository routine/recovery/repeat-use journey. The plugin's current
+agent-capability inspection assumes legacy `.codex/agents/*.toml` bytes while
+the package advertises skill `openai.yaml` files; that is a separate
+PS-AGENTS/catalog migration and is not being papered over by copied agent
+files in this install path.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
