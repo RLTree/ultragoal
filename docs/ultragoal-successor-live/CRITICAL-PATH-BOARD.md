@@ -275,6 +275,8 @@ the Product Fitness v2 source/schema authority is current at
 `2b0510c4a2469e0047885833900beeb02e687122` / tree
 `f85d001cf5b973cba3576b8aef1a5c95465a3dfb`, with install, runtime, product,
 readiness, release, and completion claims withheld;
+the post-integration host-lifecycle namespace debt is closed at
+`df842387b7da732281a0c76772925c85b08fb3bf` without changing behavior or claims;
 N12-A is integrated only at its source ceiling and no N11 or evaluation claim
 is promoted. The post-N11 semantic namespace and source-law
 debt checkpoint is clean at `f19e389c688df008ebac93e9555d0d83e4ad5a15` /

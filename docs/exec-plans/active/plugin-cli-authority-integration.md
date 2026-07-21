@@ -1353,6 +1353,12 @@ remaining semantic-namespace families introduced by the integrated host
 lifecycle: reservation lifecycle completion and plugin host custody. This is a
 path/module-authority correction, not a new product node or claim surface.
 
+That namespace checkpoint is closed at `df842387b7da732281a0c76772925c85b08fb3bf`.
+Both flat families now use semantic module directories; strict namespace,
+warning-denied compilation, four lifecycle-completion controls, two host-custody
+controls, standards, generated authority, line limits, and a bounded
+Terra/medium review pass. No product claim advances from the path-only change.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
