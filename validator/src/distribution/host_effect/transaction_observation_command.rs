@@ -1,4 +1,4 @@
-use super::PinnedHostExecutable;
+use super::SelectedCodexExecutable;
 use super::transaction_observation::HostLifecycleObservationInput;
 use crate::distribution::HostCommand;
 use crate::distribution::host_effect::executor::{
@@ -14,7 +14,7 @@ use std::path::Path;
 pub(super) fn run_json(
     backend: &mut NativeRetainedDescriptorProcessBackend,
     capability: &DescriptorExecutionCapability,
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,
     cwd: RawFd,

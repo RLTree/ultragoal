@@ -35,7 +35,7 @@ impl RetainedDescriptorProcessBackend for ScriptedBackend {
     fn execute(
         &mut self,
         _capability: &DescriptorExecutionCapability,
-        _executable: &PinnedHostExecutable,
+        _executable: &SelectedCodexExecutable,
         _command: &crate::distribution::HostCommand,
         _policy: &HostEffectExecutionPolicy,
         _cancellation: &HostEffectCancellation,

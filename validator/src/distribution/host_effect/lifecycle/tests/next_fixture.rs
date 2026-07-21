@@ -89,12 +89,12 @@ impl Fixture {
         }
     }
 
-    fn pin(&self) -> PinnedHostExecutable {
-        PinnedHostExecutable::pin(&self.executable).unwrap()
+    fn pin(&self) -> SelectedCodexExecutable {
+        SelectedCodexExecutable::pin_for_test_fixture(&self.executable).unwrap()
     }
 
-    fn pin_alternate(&self) -> PinnedHostExecutable {
-        PinnedHostExecutable::pin(&self.alternate_executable).unwrap()
+    fn pin_alternate(&self) -> SelectedCodexExecutable {
+        SelectedCodexExecutable::pin_for_test_fixture(&self.alternate_executable).unwrap()
     }
 }
 
@@ -106,7 +106,7 @@ impl Drop for Fixture {
 
 fn acceptance<'a>(
     fixture: &'a Fixture,
-    executable: &'a PinnedHostExecutable,
+    executable: &'a SelectedCodexExecutable,
     expected_head: HostEffectLedgerHead,
 ) -> HostEffectAcceptanceRequest<'a> {
     HostEffectAcceptanceRequest {
@@ -126,7 +126,7 @@ fn acceptance<'a>(
 fn preparation<'a>(
     accepted: &'a AcceptedHostEffect,
     custody: &'a mut HostLifecycleCustody,
-    executable: PinnedHostExecutable,
+    executable: SelectedCodexExecutable,
     target: &'a mut dyn HostTargetObserver,
     clock: &'a mut dyn RootTrustedClock,
     adapter: &'a mut dyn DescriptorExecutionAdapter,

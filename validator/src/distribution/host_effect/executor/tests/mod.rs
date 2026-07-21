@@ -14,7 +14,7 @@ use crate::distribution::host_effect::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectDecision,
     HostEffectLedgerError, HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord,
     HostEffectPermitBinding, HostEffectReservation, HostEffectState, HostEffectTransition,
-    PinnedHostExecutable,
+    SelectedCodexExecutable,
 };
 use crate::distribution::{
     HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,

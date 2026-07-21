@@ -1,4 +1,4 @@
-use super::PinnedHostExecutable;
+use super::SelectedCodexExecutable;
 use super::transaction_identity::absent_digest;
 use super::transaction_observation_command::{
     observation_command, run_json, validate_input, validate_paths,
@@ -54,7 +54,7 @@ pub(crate) fn observe(
     plan: &LifecyclePlan,
     input: &HostLifecycleObservationInput,
     expected: &HostLifecycleExpectedObservations,
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
     capability: &DescriptorExecutionCapability,
     backend: &mut NativeRetainedDescriptorProcessBackend,
     policy: &HostEffectExecutionPolicy,

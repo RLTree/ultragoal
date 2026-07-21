@@ -17,7 +17,7 @@ fn package() -> PackageIdentity {
 
 fn permit_binding(
     plan: &HostCommandPlan,
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
 ) -> HostEffectPermitBinding {
     HostEffectPermitBinding {
         context_id: repeated_digest('1'),
@@ -119,7 +119,7 @@ fn ledger_transition_graph_forbids_retry_and_terminal_revival() {
 #[test]
 fn pinned_executable_revalidates_exact_object_and_content() {
     let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
+    let pinned = SelectedCodexExecutable::pin_for_test_fixture(&fixture.path).unwrap();
     assert!(is_digest(&pinned.identity().binding_sha256().unwrap()));
     pinned.revalidate().unwrap();
 
@@ -136,7 +136,7 @@ fn pinned_executable_revalidates_exact_object_and_content() {
 #[test]
 fn pinned_executable_rejects_named_replacement_and_hardlinks() {
     let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
+    let pinned = SelectedCodexExecutable::pin_for_test_fixture(&fixture.path).unwrap();
     let held = fixture.root.join("held");
     fs::rename(&fixture.path, &held).unwrap();
     fixture.write_executable(&fixture.path, b"#!/bin/sh\nexit 1\n");
@@ -147,7 +147,7 @@ fn pinned_executable_rejects_named_replacement_and_hardlinks() {
 
     let hardlink = fixture.root.join("hardlink");
     fs::hard_link(&fixture.path, &hardlink).unwrap();
-    let error = match PinnedHostExecutable::pin(&fixture.path) {
+    let error = match SelectedCodexExecutable::pin_for_test_fixture(&fixture.path) {
         Ok(_) => panic!("hard-linked executable unexpectedly pinned"),
         Err(error) => error,
     };

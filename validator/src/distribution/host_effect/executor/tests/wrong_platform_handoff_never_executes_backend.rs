@@ -6,7 +6,7 @@ impl RetainedDescriptorProcessBackend for CountingBackend {
     fn execute(
         &mut self,
         _capability: &DescriptorExecutionCapability,
-        _executable: &PinnedHostExecutable,
+        _executable: &SelectedCodexExecutable,
         _command: &crate::distribution::HostCommand,
         _policy: &HostEffectExecutionPolicy,
         _cancellation: &HostEffectCancellation,
@@ -69,7 +69,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     )
     .unwrap();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let pinned = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let pinned = SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap();
     let accepted = coordinator
         .accept(HostEffectAcceptanceRequest {
             package: package.clone(),
@@ -93,7 +93,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             HostEffectPreparationRequest {
                 accepted: &accepted,
                 custody: &mut custody,
-                executable: PinnedHostExecutable::pin(&fixture.executable).unwrap(),
+                executable: SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap(),
                 target: &mut target_observer,
                 clock: &mut clock,
                 adapter: &mut adapter,

@@ -155,7 +155,7 @@ fn permit_binding(
 ) -> HostEffectPermitBinding {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let executable = SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap();
     let head = ledger.head().unwrap();
     HostEffectPermitBinding {
         context_id: package.source().context_id().to_owned(),
@@ -194,7 +194,7 @@ fn authorized_effect(
 ) -> AuthorizedHostEffect {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let executable = SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap();
     let binding = permit_binding(fixture, ledger, target, '2');
     let authority =
         HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())

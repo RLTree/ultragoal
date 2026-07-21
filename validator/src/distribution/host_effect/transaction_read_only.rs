@@ -21,7 +21,6 @@ pub(super) fn observe_read_only(
     expected: HostLifecycleExpectedObservations,
 ) -> Result<HostLifecycleSurfaceDigests, &'static str> {
     let root = std::fs::File::open(target_root).map_err(|_| "host observation root unavailable")?;
-    let executable = executable.into_pinned();
     let environment = command_plan
         .commands()
         .first()

@@ -5,7 +5,7 @@ pub(in crate::distribution::host_effect) struct HostEffectAcceptanceRequest<'a> 
     pub lifecycle: AcceptedLifecyclePlan,
     pub scope: AcceptedHostScope,
     pub plan: &'a HostCommandPlan,
-    pub executable: &'a PinnedHostExecutable,
+    pub executable: &'a SelectedCodexExecutable,
     pub expected_target: ObservedTargetIdentity,
     pub expected_head: HostEffectLedgerHead,
     #[cfg(not(test))]
@@ -196,7 +196,7 @@ impl AcceptedHostEffect {
 
     pub(super) fn require_executable(
         &self,
-        executable: &PinnedHostExecutable,
+        executable: &SelectedCodexExecutable,
     ) -> Result<(), SupportedHostLifecycleError> {
         executable
             .revalidate()

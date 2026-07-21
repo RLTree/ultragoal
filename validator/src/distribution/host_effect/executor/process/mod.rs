@@ -1,4 +1,4 @@
-use super::super::PinnedHostExecutable;
+use super::super::SelectedCodexExecutable;
 use super::super::lifecycle::{
     DescriptorExecutionCapability, DescriptorExecutionPlatform, DescriptorExecutionPrimitive,
 };
@@ -16,7 +16,7 @@ include!("create_pipe.rs");
 pub(crate) fn execute_bounded_observation(
     backend: &mut dyn RetainedDescriptorProcessBackend,
     capability: &DescriptorExecutionCapability,
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
     command: &HostCommand,
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,

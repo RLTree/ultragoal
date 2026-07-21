@@ -21,7 +21,7 @@ pub(crate) trait RetainedDescriptorProcessBackend {
     fn execute(
         &mut self,
         capability: &DescriptorExecutionCapability,
-        executable: &PinnedHostExecutable,
+        executable: &SelectedCodexExecutable,
         command: &HostCommand,
         policy: &HostEffectExecutionPolicy,
         cancellation: &HostEffectCancellation,
@@ -36,7 +36,7 @@ impl RetainedDescriptorProcessBackend for NativeRetainedDescriptorProcessBackend
     fn execute(
         &mut self,
         capability: &DescriptorExecutionCapability,
-        executable: &PinnedHostExecutable,
+        executable: &SelectedCodexExecutable,
         command: &HostCommand,
         policy: &HostEffectExecutionPolicy,
         cancellation: &HostEffectCancellation,
@@ -114,7 +114,7 @@ impl RetainedDescriptorProcessBackend for NativeRetainedDescriptorProcessBackend
 
 #[cfg(target_os = "macos")]
 fn execute_darwin(
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
     command: &HostCommand,
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,

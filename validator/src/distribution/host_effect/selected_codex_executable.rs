@@ -1,20 +1,102 @@
-use crate::distribution::error::{DistributionError, DistributionErrorId, error};
+use super::{
+    invalid_record, ledger_io, read_at_retry, same_executable_object, tampered,
+    HostEffectLedgerError, HostEffectLedgerErrorId, MAX_PINNED_EXECUTABLE_BYTES,
+};
+use crate::distribution::error::{error, DistributionError, DistributionErrorId};
+use sha2::{Digest, Sha256};
 use std::env;
 use std::ffi::OsStr;
-use std::path::PathBuf;
+use std::fs::{self, File, OpenOptions};
+use std::path::{Path, PathBuf};
 
-const CODEX_PROGRAM: &str = "codex";
-const MAX_PATH_BYTES: usize = 64 * 1024;
+#[cfg(unix)]
+use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
-/// The only cross-module executable authority: PATH selection and descriptor
-/// acquisition happen before this move-only capability leaves host_effect.
+mod identity;
+use identity::SelectedCodexExecutableIdentity;
+
 pub(crate) struct SelectedCodexExecutable {
-    executable: PinnedHostExecutable,
+    file: File,
+    identity: SelectedCodexExecutableIdentity,
 }
 
 impl SelectedCodexExecutable {
-    pub(in crate::distribution::host_effect) fn into_pinned(self) -> PinnedHostExecutable {
-        self.executable
+    fn pin(path: &Path) -> Result<Self, HostEffectLedgerError> {
+        #[cfg(unix)]
+        {
+            let canonical = fs::canonicalize(path).map_err(|_| ledger_io())?;
+            if !canonical.is_absolute() {
+                return Err(invalid_record());
+            }
+            let mut options = OpenOptions::new();
+            options
+                .read(true)
+                .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_NONBLOCK);
+            let file = options.open(&canonical).map_err(|_| ledger_io())?;
+            let identity = capture_executable_identity(&file, &canonical)?;
+            Ok(Self { file, identity })
+        }
+        #[cfg(not(unix))]
+        {
+            let _ = path;
+            Err(invalid_record())
+        }
+    }
+
+    #[cfg(test)]
+    pub(in crate::distribution::host_effect) fn pin_for_test_fixture(
+        path: &Path,
+    ) -> Result<Self, HostEffectLedgerError> {
+        Self::pin(path)
+    }
+
+    #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+    pub(in crate::distribution::host_effect) fn file(&self) -> &File {
+        &self.file
+    }
+
+    #[cfg(target_os = "macos")]
+    pub(in crate::distribution::host_effect) fn loaded_identity(&self) -> (&Path, u64, u64) {
+        (
+            Path::new(&self.identity.canonical_path),
+            self.identity.device,
+            self.identity.inode,
+        )
+    }
+
+    pub(in crate::distribution::host_effect) fn identity(
+        &self,
+    ) -> &SelectedCodexExecutableIdentity {
+        &self.identity
+    }
+
+    pub(in crate::distribution::host_effect) fn duplicate(
+        &self,
+    ) -> Result<Self, HostEffectLedgerError> {
+        Ok(Self {
+            file: self.file.try_clone().map_err(|_| ledger_io())?,
+            identity: self.identity.clone(),
+        })
+    }
+
+    pub(in crate::distribution::host_effect) fn revalidate(
+        &self,
+    ) -> Result<(), HostEffectLedgerError> {
+        #[cfg(unix)]
+        {
+            let current =
+                capture_executable_identity(&self.file, Path::new(&self.identity.canonical_path))?;
+            if current != self.identity {
+                return Err(HostEffectLedgerError::new(
+                    HostEffectLedgerErrorId::Tampered,
+                ));
+            }
+            Ok(())
+        }
+        #[cfg(not(unix))]
+        {
+            Err(invalid_record())
+        }
     }
 }
 
@@ -25,6 +107,9 @@ pub(crate) fn resolve_codex_executable() -> Result<SelectedCodexExecutable, Dist
     }
     resolve_from_path(env::split_paths(&path))
 }
+
+const CODEX_PROGRAM: &str = "codex";
+const MAX_PATH_BYTES: usize = 64 * 1024;
 
 fn path_byte_length(path: &OsStr) -> usize {
     #[cfg(unix)]
@@ -47,126 +132,88 @@ fn resolve_from_path(
             continue;
         }
         let candidate = directory.join(CODEX_PROGRAM);
-        if let Ok(executable) = PinnedHostExecutable::pin(&candidate) {
-            return Ok(SelectedCodexExecutable { executable });
+        if let Ok(executable) = SelectedCodexExecutable::pin(&candidate) {
+            return Ok(executable);
         }
     }
     Err(error(DistributionErrorId::ObjectUnavailable))
 }
 
-#[cfg(all(test, unix))]
-mod selected_tests {
-    use super::{path_byte_length, resolve_from_path};
-    use std::ffi::OsString;
-    use std::fs;
-    use std::os::unix::fs::PermissionsExt;
-    use std::os::unix::fs::symlink;
-    use std::path::PathBuf;
-    use std::sync::atomic::{AtomicU64, Ordering};
-
-    static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
-
-    #[test]
-    fn path_limit_counts_operating_system_string_bytes() {
-        let path = OsString::from("é".repeat(64));
-        assert_eq!(path_byte_length(&path), 128);
+#[cfg(unix)]
+fn capture_executable_identity(
+    file: &File,
+    canonical_path: &Path,
+) -> Result<SelectedCodexExecutableIdentity, HostEffectLedgerError> {
+    let path_before = fs::symlink_metadata(canonical_path).map_err(|_| ledger_io())?;
+    let descriptor_before = file.metadata().map_err(|_| ledger_io())?;
+    validate_executable_metadata(&path_before)?;
+    validate_executable_metadata(&descriptor_before)?;
+    if !same_executable_object(&path_before, &descriptor_before) {
+        return Err(tampered());
     }
 
-    #[test]
-    fn path_resolution_accepts_a_user_local_executable_without_a_private_allowlist() {
-        let root = test_root("path-resolution");
-        fs::create_dir_all(&root).expect("directory");
-        let target = root.join("codex-target");
-        fs::write(&target, b"codex").expect("executable bytes");
-        fs::set_permissions(&target, fs::Permissions::from_mode(0o755)).expect("executable mode");
-        let executable = root.join("codex");
-        symlink(&target, &executable).expect("codex symlink");
-
-        assert!(resolve_from_path([root.clone()]).is_ok());
-        fs::remove_dir_all(root).expect("cleanup");
-    }
-
-    #[test]
-    fn pinned_selection_rejects_in_place_replacement_after_path_resolution() {
-        let root = test_root("path-resolution-replacement");
-        fs::create_dir_all(&root).expect("directory");
-        let executable = root.join("codex");
-        fs::write(&executable, b"first").expect("executable bytes");
-        fs::set_permissions(&executable, fs::Permissions::from_mode(0o755))
-            .expect("executable mode");
-
-        let pinned = resolve_from_path([root.clone()])
-            .expect("resolved")
-            .into_pinned();
-        fs::write(&executable, b"replacement").expect("replacement bytes");
-
-        assert!(pinned.revalidate().is_err());
-        fs::remove_dir_all(root).expect("cleanup");
-    }
-
-    #[test]
-    fn pinned_selection_keeps_original_target_after_symlink_replacement() {
-        let root = test_root("path-resolution-symlink-replacement");
-        fs::create_dir_all(&root).expect("directory");
-        let first = root.join("codex-first");
-        let second = root.join("codex-second");
-        fs::write(&first, b"first").expect("first executable bytes");
-        fs::write(&second, b"second").expect("second executable bytes");
-        for path in [&first, &second] {
-            fs::set_permissions(path, fs::Permissions::from_mode(0o755)).expect("executable mode");
+    let mut hasher = Sha256::new();
+    let mut offset = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+    while offset < descriptor_before.len() {
+        let remaining = (descriptor_before.len() - offset).min(buffer.len() as u64) as usize;
+        let count = read_at_retry(file, &mut buffer[..remaining], offset)?;
+        if count == 0 {
+            return Err(tampered());
         }
-        let executable = root.join("codex");
-        symlink(&first, &executable).expect("codex symlink");
-
-        let pinned = resolve_from_path([root.clone()])
-            .expect("resolved")
-            .into_pinned();
-        fs::remove_file(&executable).expect("remove symlink");
-        symlink(&second, &executable).expect("replacement symlink");
-
-        assert!(pinned.revalidate().is_ok());
-        assert_eq!(
-            pinned.identity().canonical_path,
-            first
-                .canonicalize()
-                .expect("canonical target")
-                .display()
-                .to_string()
-        );
-        fs::remove_dir_all(root).expect("cleanup");
+        hasher.update(&buffer[..count]);
+        offset = offset
+            .checked_add(count as u64)
+            .ok_or_else(invalid_record)?;
+    }
+    let mut extra = [0_u8; 1];
+    if read_at_retry(file, &mut extra, descriptor_before.len())? != 0 {
+        return Err(tampered());
     }
 
-    #[test]
-    fn path_resolution_skips_relative_and_non_executable_entries() {
-        let root = test_root("path-resolution-negative");
-        fs::create_dir_all(&root).expect("directory");
-        let executable = root.join("codex");
-        fs::write(&executable, b"codex").expect("executable bytes");
-        fs::set_permissions(&executable, fs::Permissions::from_mode(0o644))
-            .expect("non-executable mode");
-
-        assert!(resolve_from_path([PathBuf::from("relative"), root.clone()]).is_err());
-        fs::remove_dir_all(root).expect("cleanup");
+    let descriptor_after = file.metadata().map_err(|_| ledger_io())?;
+    let path_after = fs::symlink_metadata(canonical_path).map_err(|_| ledger_io())?;
+    validate_executable_metadata(&descriptor_after)?;
+    validate_executable_metadata(&path_after)?;
+    if !same_executable_object(&descriptor_before, &descriptor_after)
+        || !same_executable_object(&descriptor_after, &path_after)
+        || fs::canonicalize(canonical_path).map_err(|_| ledger_io())? != canonical_path
+    {
+        return Err(tampered());
     }
-
-    #[test]
-    fn path_resolution_rejects_a_hard_linked_executable() {
-        let root = test_root("path-resolution-hard-link");
-        fs::create_dir_all(&root).expect("directory");
-        let target = root.join("codex-target");
-        fs::write(&target, b"codex").expect("executable bytes");
-        fs::set_permissions(&target, fs::Permissions::from_mode(0o755)).expect("executable mode");
-        fs::hard_link(&target, root.join("codex")).expect("hard link");
-
-        assert!(resolve_from_path([root.clone()]).is_err());
-        fs::remove_dir_all(root).expect("cleanup");
-    }
-
-    fn test_root(label: &str) -> PathBuf {
-        std::env::temp_dir().join(format!(
-            "harness-ultragoal-codex-executable-{label}-{}-{}",
-            std::process::id(),
-            NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
-        ))
-    }
+    let canonical_path = canonical_path
+        .to_str()
+        .ok_or_else(invalid_record)?
+        .to_owned();
+    Ok(SelectedCodexExecutableIdentity {
+        canonical_path,
+        content_sha256: format!("sha256:{:x}", hasher.finalize()),
+        device: descriptor_after.dev(),
+        inode: descriptor_after.ino(),
+        mode: descriptor_after.mode(),
+        uid: descriptor_after.uid(),
+        gid: descriptor_after.gid(),
+        hard_links: descriptor_after.nlink(),
+        size: descriptor_after.len(),
+        modified_seconds: descriptor_after.mtime(),
+        modified_nanoseconds: descriptor_after.mtime_nsec(),
+        changed_seconds: descriptor_after.ctime(),
+        changed_nanoseconds: descriptor_after.ctime_nsec(),
+    })
 }
+
+#[cfg(unix)]
+fn validate_executable_metadata(metadata: &fs::Metadata) -> Result<(), HostEffectLedgerError> {
+    if !metadata.file_type().is_file()
+        || metadata.len() == 0
+        || metadata.len() > MAX_PINNED_EXECUTABLE_BYTES
+        || metadata.nlink() != 1
+        || metadata.mode() & 0o111 == 0
+    {
+        return Err(invalid_record());
+    }
+    Ok(())
+}
+
+#[cfg(all(test, unix))]
+mod selected_tests;

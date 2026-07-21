@@ -1,5 +1,5 @@
 use super::super::{
-    AuthorizedHostEffect, DurableHostEffectLedger, HostEffectAuthority, PinnedHostExecutable,
+    AuthorizedHostEffect, DurableHostEffectLedger, HostEffectAuthority, SelectedCodexExecutable,
 };
 #[cfg(test)]
 use super::super::{HostEffectState, HostEffectTransition};

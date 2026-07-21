@@ -9,7 +9,7 @@ use std::fs::Metadata;
 use std::path::Path;
 
 use super::super::{
-    HostEffectDecision, HostEffectLedgerHead, HostEffectPermitBinding, PinnedHostExecutable,
+    HostEffectDecision, HostEffectLedgerHead, HostEffectPermitBinding, SelectedCodexExecutable,
 };
 
 include!("session_nonce_bytes.rs");

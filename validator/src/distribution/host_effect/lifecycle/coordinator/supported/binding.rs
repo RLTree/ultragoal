@@ -189,7 +189,7 @@ pub(in crate::distribution::host_effect) struct HostEffectPreparationRequest<'a>
     pub custody: &'a mut HostLifecycleCustody,
     #[cfg(test)]
     pub custody: &'a mut HostLifecycleCustody,
-    pub executable: PinnedHostExecutable,
+    pub executable: SelectedCodexExecutable,
     pub target: &'a mut dyn HostTargetObserver,
     pub clock: &'a mut dyn RootTrustedClock,
     pub adapter: &'a mut dyn DescriptorExecutionAdapter,

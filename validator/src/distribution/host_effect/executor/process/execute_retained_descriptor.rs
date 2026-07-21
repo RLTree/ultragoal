@@ -1,6 +1,6 @@
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn execute_retained_descriptor(
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
     command: &HostCommand,
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,

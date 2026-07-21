@@ -3,8 +3,8 @@
 fn authorized_effect_enforces_exact_live_executable_identity() {
     let first_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
     let second_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let first = PinnedHostExecutable::pin(&first_fixture.path).unwrap();
-    let second = PinnedHostExecutable::pin(&second_fixture.path).unwrap();
+    let first = SelectedCodexExecutable::pin_for_test_fixture(&first_fixture.path).unwrap();
+    let second = SelectedCodexExecutable::pin_for_test_fixture(&second_fixture.path).unwrap();
     let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
     let authority =
         HostEffectAuthority::generate("root-actor".to_owned(), "host-ledger".to_owned()).unwrap();
@@ -19,7 +19,7 @@ fn authorized_effect_enforces_exact_live_executable_identity() {
         HostEffectLedgerErrorId::InvalidRecord
     );
 
-    let pinned = PinnedHostExecutable::pin(&first_fixture.path).unwrap();
+    let pinned = SelectedCodexExecutable::pin_for_test_fixture(&first_fixture.path).unwrap();
     let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
     let (permit, reservation) = authority.issue(permit_binding(&plan, &pinned)).unwrap();
     authority.verify(&permit, 1_500).unwrap();
@@ -28,7 +28,7 @@ fn authorized_effect_enforces_exact_live_executable_identity() {
     authorized.executable().revalidate().unwrap();
 
     let changed_fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let changed = PinnedHostExecutable::pin(&changed_fixture.path).unwrap();
+    let changed = SelectedCodexExecutable::pin_for_test_fixture(&changed_fixture.path).unwrap();
     let plan = HostCommandPlan::personal_install(&package(), "local-harness").unwrap();
     let (permit, reservation) = authority.issue(permit_binding(&plan, &changed)).unwrap();
     authority.verify(&permit, 1_500).unwrap();

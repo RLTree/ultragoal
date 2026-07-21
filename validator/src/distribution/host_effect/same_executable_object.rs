@@ -46,7 +46,7 @@ fn ledger_io() -> HostEffectLedgerError {
 pub(crate) struct AuthorizedHostEffect {
     permit: HostEffectPermit,
     record: HostEffectLedgerRecord,
-    executable: PinnedHostExecutable,
+    executable: SelectedCodexExecutable,
     plan: HostCommandPlan,
 }
 
@@ -54,7 +54,7 @@ impl AuthorizedHostEffect {
     pub(in crate::distribution::host_effect) fn new(
         permit: HostEffectPermit,
         record: HostEffectLedgerRecord,
-        executable: PinnedHostExecutable,
+        executable: SelectedCodexExecutable,
         plan: HostCommandPlan,
     ) -> Result<Self, HostEffectLedgerError> {
         executable.revalidate()?;
@@ -85,7 +85,7 @@ impl AuthorizedHostEffect {
         &self.record
     }
 
-    pub(in crate::distribution::host_effect) fn executable(&self) -> &PinnedHostExecutable {
+    pub(in crate::distribution::host_effect) fn executable(&self) -> &SelectedCodexExecutable {
         &self.executable
     }
 

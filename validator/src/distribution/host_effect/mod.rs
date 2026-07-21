@@ -21,17 +21,21 @@ pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;
 use serde::Serialize;
-use sha2::{Digest, Sha256};
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, File};
+
+#[cfg(test)]
+use std::fs::OpenOptions;
+#[cfg(test)]
 use std::path::Path;
 
 #[cfg(unix)]
-use std::os::unix::fs::{FileExt, MetadataExt, OpenOptionsExt};
+use std::os::unix::fs::{FileExt, MetadataExt};
 
 include!("max_pinned_executable_bytes.rs");
 include!("host_effect_ledger_error_new.rs");
 include!("same_executable_object.rs");
-include!("selected_codex_executable.rs");
+mod selected_codex_executable;
+pub(crate) use selected_codex_executable::{resolve_codex_executable, SelectedCodexExecutable};
 mod transaction;
 mod transaction_identity;
 mod transaction_observation;

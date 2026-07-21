@@ -1,7 +1,7 @@
 use super::super::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectLedgerError,
     HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectReservation,
-    HostEffectState, HostEffectTransition, PinnedHostExecutable,
+    HostEffectState, HostEffectTransition, SelectedCodexExecutable,
 };
 use super::binding::AcceptedHostEffect;
 use super::recovery::{
