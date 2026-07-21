@@ -3,6 +3,8 @@ use super::state_authority::{AuthorityRequest, AuthorityRequirement};
 use crate::context::EffectClass;
 use serde::Serialize;
 
+use super::catalog::ActionPriorityClass;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum NextActionKind {
@@ -32,5 +34,11 @@ pub struct NextAction {
     pub exact_command: Option<Vec<String>>,
     pub authority_request: Option<AuthorityRequest>,
     pub no_legal_route: Option<NoLegalRoute>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority_class: Option<ActionPriorityClass>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_transition: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub brief_digest: Option<String>,
     pub selection_rule: &'static str,
 }

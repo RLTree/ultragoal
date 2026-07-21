@@ -11,9 +11,11 @@ use crate::state::StateError;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
-const AMENDMENT_ID: &str = "AMEND-003";
+const AMENDMENT_ID: &str = "AMEND-004";
 const AMENDMENT_HASH: &str =
-    "sha256:ea134939717ab2422a444f40eed9ca6b388e2d86846a74ce2f0aff823cb95600";
+    "sha256:a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26";
+const PREVIOUS_CONTRACT_HASH: &str =
+    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
 const GOAL_BYTES: &[u8] = include_bytes!("../../../../GOAL_CONTRACT.md");
 const AMENDMENT_BYTES: &[u8] = include_bytes!("../../../../AMENDMENTS.jsonl");
 const PRODUCT_CONTRACT_BYTES: &[u8] =
@@ -193,9 +195,9 @@ fn verify_amendment(goal_contract_sha256: &str) -> Result<ValidatedCurrentAmendm
         CurrentAmendmentBinding {
             amendment_id: AMENDMENT_ID,
             amendment_hash: AMENDMENT_HASH,
-            previous_contract_hash: goal_contract_sha256,
+            previous_contract_hash: PREVIOUS_CONTRACT_HASH,
             new_contract_hash: goal_contract_sha256,
-            change_class: "clarifies",
+            change_class: "strengthens",
             backlog_updates: &[ExpectedArtifactBinding {
                 path: PRODUCT_CONTRACT_PATH,
                 digest: &output_hash,

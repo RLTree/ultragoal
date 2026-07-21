@@ -8,7 +8,7 @@ const SOURCE: &str = "GOAL_CONTRACT.md";
 const SCHEMA: &str = "schemas/product-success-contract.schema.json";
 const AMENDMENTS: &str = "AMENDMENTS.jsonl";
 const ZERO: &str = "0000000000000000000000000000000000000000000000000000000000000000";
-const AMENDMENT_HASH: &str = "ea134939717ab2422a444f40eed9ca6b388e2d86846a74ce2f0aff823cb95600";
+const AMENDMENT_HASH: &str = "a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26";
 const OUTPUT_BYTES: &[u8] =
     include_bytes!("../../../../../examples/generated/PRODUCT_SUCCESS_CONTRACT.json");
 const SOURCE_BYTES: &[u8] = include_bytes!("../../../../../GOAL_CONTRACT.md");
@@ -87,7 +87,7 @@ fn write_contract(root: &Path, receipt: &str) {
             "source_contract": SOURCE,
             "source_contract_sha256": source_digest,
             "amendment_log": AMENDMENTS,
-            "amendment_id": "AMEND-003",
+            "amendment_id": "AMEND-004",
             "amendment_hash": AMENDMENT_HASH,
             "claim_ceiling": "contract_authority_only"
         }]

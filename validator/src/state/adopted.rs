@@ -96,6 +96,7 @@ fn live_spec(
             authority: AuthorityRequirement::Root,
             command_id: Some("migrate-plan".to_owned()),
             authority_request: None,
+            evidence_led: None,
         })
         .collect();
     DependencyActionSpec {

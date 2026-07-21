@@ -155,6 +155,7 @@ pub(super) fn command(id: &str, repair_id: &str, priority: u32) -> ActionDefinit
         authority: AuthorityRequirement::None,
         command_id: Some("check".to_owned()),
         authority_request: None,
+        evidence_led: None,
     }
 }
 

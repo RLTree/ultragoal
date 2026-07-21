@@ -44,6 +44,12 @@ quality-in-use metrics, accessibility gate, cognitive-load gate, recovery gate,
 continuance signal when repeated use is claimed, proof surface, actor-disjoint
 review, and claim ceiling.
 
+The v2 receipt keeps this one canonical receipt family and adds typed operator,
+evidence-class, independent source-to-journey identities, public-entry/bypass,
+real-work, and minimal manual journey observations. Every identity is observed
+or explicitly withheld. Legacy dogfood receipts remain non-product
+orchestration records and are forbidden substitutions for this receipt.
+
 ## Claim Ceiling
 
 Package/static/fixture Product Fitness proof supports only the plugin

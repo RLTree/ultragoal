@@ -123,6 +123,7 @@ fn blocked_external_dependency_selects_one_exact_authority_request() {
             EffectClass::Read,
         )
         .authority_decision,
+        evidence_led: None,
     });
     let state = derive_bound(inputs(), &catalog(spec)).unwrap();
     assert_eq!(state.next_action().kind, NextActionKind::AuthorityRequest);

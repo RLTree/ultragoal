@@ -93,7 +93,7 @@ fn rejects_adopted_contract_that_can_raise_claims() {
             "source_contract": "GOAL_CONTRACT.md",
             "source_contract_sha256": LOWER_DIGEST,
             "amendment_log": "AMENDMENTS.jsonl",
-            "amendment_id": "AMEND-003",
+            "amendment_id": "AMEND-004",
             "amendment_hash": LOWER_DIGEST,
             "claim_ceiling": "claim_authority"
         }]

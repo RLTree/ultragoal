@@ -1,11 +1,11 @@
 {
   "schema": "harness-ultragoal.product-success-contract.v1",
   "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
-  "contract_version": "2.1.0",
+  "contract_version": "2.2.0",
   "goal_id": "harness-ultragoal-successor-contract-v2-live",
   "target_revision": {
     "path": "GOAL_CONTRACT.md",
-    "digest": "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9"
+    "digest": "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b"
   },
   "claim_ids": [
     "CL-SOURCE",
@@ -75,6 +75,6 @@
   "claim_ceiling": "Contract authority only. N11 positive execution and CL-EVAL-IMPROVEMENT remain externally blocked; package, install, discovery, runtime, Product Fitness, real-repository journeys, readiness, release, completion, and mastery remain withheld pending exact same-surface evidence.",
   "producer_actor_id": "OWN-ULTRA-ROOT",
   "review_owner": "OWN-INDEPENDENT-REVIEW",
-  "generated_at": "2026-07-19T10:39:47Z",
+  "generated_at": "2026-07-21T00:32:41Z",
   "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
 }

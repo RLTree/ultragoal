@@ -59,6 +59,25 @@ pub enum ActionKind {
     AuthorityRequest,
 }
 
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum ActionPriorityClass {
+    ProtectedInvariant,
+    ActiveTruthLoopTransition,
+    FalsePassOrRejection,
+    RepeatedCrossContextGap,
+    BoundedExperiment,
+    Speculative,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct EvidenceLedActionBinding {
+    pub class: ActionPriorityClass,
+    pub brief_digest: String,
+    pub transition_id: Option<String>,
+    pub transition_order: Option<u32>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct CommandBinding {
     pub command_id: String,
@@ -78,6 +97,8 @@ pub struct ActionDefinition {
     pub authority: AuthorityRequirement,
     pub command_id: Option<String>,
     pub authority_request: Option<AuthorityRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evidence_led: Option<EvidenceLedActionBinding>,
 }
 
 /// A caller-authored policy proposal. It is untrusted until the root-owned

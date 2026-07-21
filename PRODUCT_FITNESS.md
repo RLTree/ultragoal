@@ -39,6 +39,15 @@ interventions, review rounds, recovery outcome, retained artifact/cache cost,
 and any observed false pass or false rejection. Do not create telemetry
 infrastructure solely to collect this row.
 
+Product Fitness v2 also records the operator kind and evidence class; exact
+source, package, marketplace, install, cache, app-registry, discovery, runtime,
+and journey identities as separately observed or withheld; the public entry and
+any rejected bypass; the real repository, task, useful outcome, representative
+failure, diagnosis, recovery, and repeat-use result. Agent-use evidence cannot
+be relabeled as human use. A legacy `dogfood-receipt.v1` is orchestration and
+cleanup context only and cannot satisfy Product Fitness, real-use, human-use,
+daily-driver, readiness, release, or completion evidence.
+
 Reviewer agreement, install success, smoke tests, test pass counts, fixture pass
 counts, package publication, first use, feature delivery, and Product Cohesion
 receipts alone MUST NOT prove product success.

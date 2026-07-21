@@ -111,6 +111,35 @@ ceiling.
   retained artifact/cache cost, and any observed false pass or false rejection.
   No telemetry platform is added solely for these measurements.
 
+### Evidence-led sequencing
+
+- Project initiation and recovery select one high-information first truth loop
+  bound to a real operator, job, repository, task, public entry surface, first
+  value event, protected invariants, causal failure or recovery control,
+  evidence class, and honest claim ceiling.
+- The Product Success Brief is a typed inception projection, not a second goal
+  contract. The Product Success Contract and append-only amendments remain
+  normative. The inception route is read-only and cannot create, update, or
+  approve the brief or promote a claim.
+- Among dependency-legal actions, integration of an accepted candidate remains
+  first. Remaining work ranks protected invariants before the first broken
+  transition of the active truth loop, then false passes or false rejections,
+  repeated cross-context gaps, bounded experiments, and speculative work.
+  Numeric priority and caller-authored prose cannot bypass this ordering.
+- Additional depth activates only from a protected invariant, a current typed
+  observed failure, a repeated cross-context gap, or an explicit bounded
+  experiment. Parked depth is derived on read; no trigger-state mirror,
+  scheduler, tracker, receipt family, or permanent operator/observer pair is
+  introduced.
+- Repository fit, routine work, goal execution, diagnosis, and product-journey
+  review remain the execution and observation authorities. Routine observations
+  stay ephemeral until an existing canonical Product Fitness claim boundary
+  requires one receipt.
+- Intent, research, prototype, source, package, installed, runtime, agent-use,
+  human-use, and repeated-human-use evidence remain distinct. Legacy dogfood
+  orchestration receipts cannot substitute for Product Fitness, real use,
+  human use, daily-driver status, readiness, release, or completion.
+
 ### Calibrated enforcement
 
 - Security, privacy, destructive-effect, and authority boundaries remain
@@ -129,10 +158,11 @@ ceiling.
 ## Current Claim Ceiling
 
 This amendment promotes no claim. The adopted contract and accepted bounded
-source increments remain preserved. N06, its dependent N10/N11 increments,
-current-source package/install/discovery/runtime behavior, Product Fitness,
-real-repository journeys, readiness, release, completion, and mastery remain
-withheld until their exact dependency-closed, same-surface evidence passes.
+source increments remain preserved. The sealed host-lifecycle source increment
+is integrated, but current-source package/install/discovery/runtime behavior,
+Product Fitness, real-repository journeys, readiness, release, completion, and
+mastery remain withheld until their exact dependency-closed, same-surface
+evidence passes.
 
 ## Dependency and evidence semantics
 

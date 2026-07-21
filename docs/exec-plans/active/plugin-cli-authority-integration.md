@@ -1,5 +1,52 @@
 # Plugin and CLI Authority Integration
 
+## Evidence-led sequencing checkpoint — 2026-07-20
+
+Root integrated the sealed host-lifecycle custody series through `12faa2b17` /
+tree `52d0a9b1`. One move-only production owner now binds command execution and
+independently derived installed, cache, marketplace, plugin, and runtime
+observations. Source/integration controls pass, but current Codex JSON has not
+yet proved the required typed host identities, so install, discovery, runtime,
+daily-driver, Product Fitness, readiness, release, and completion remain
+withheld.
+
+AMEND-004 monotonically strengthens all fourteen adopted claim boundaries and
+advances the Product Success Contract to 2.2.0 without promoting a claim. The
+new sequencing law adds one typed read-only inception projection and ranks
+dependency-legal work by protected invariant, active truth-loop transition,
+false pass or rejection, repeated cross-context gap, bounded experiment, then
+speculative work. It reuses the existing state engine, `next` selector,
+repository-fit, routine-work, goal-run, diagnosis, journey-review, and Product
+Fitness authorities. No second scheduler, lifecycle, tracker, receipt family,
+or permanent operator/observer pair is authorized.
+
+The Product Success Brief schema now preserves v1 history and defines the v2
+operator, real-work, public-entry, protected-invariant, truth-loop, depth-trigger,
+evidence-class, and ceiling interface. Product Fitness v2 preserves the existing
+canonical receipt family while separating operator/evidence class and every
+source-to-journey identity. Legacy dogfood receipts remain compatibility-only
+orchestration records and cannot substitute for product use.
+
+| Audit | Trigger | Owner | Exact identity | Evidence surface | Claims withheld before pass |
+| --- | --- | --- | --- | --- | --- |
+| Lane checks | Changed implementation before freeze | Lane owner | Lane HEAD/tree | Focused positive, negative, recovery, race, security, format, warnings, namespace, LOC | Lane source acceptance |
+| Bounded invariant review | One clean worktree freeze | Terra/medium reviewer | Exact lane HEAD/tree | One exhaustive material review; at most one coherent correction | Lane acceptance and integration |
+| Root integration | Each accepted increment after serial landing | Root | Containing clean root commit/tree | Affected strict compile, cross-lane behavior, schemas, generated authority, docs | Integrated source and affected behavior |
+| Product milestone | Exact installed Research Run candidate | Root plus four Sol/high personas | Source/package/install/cache/registry/discovery/runtime/journey identities | Installed journey, Product Fitness, Cohesion, security, recovery, claim falsification | Installed product, daily-driver, broad reuse |
+| Release/completion | Final immutable candidate | Root plus four Sol/high personas | Final commit/tree and two identical inventories | Full standards, coverage, migration, retirement, release and requirement audit | Readiness, release, completion |
+
+The next two implementation owners are disjoint: project inception owns the
+secure read-only brief projection and front-door behavior; real-use evidence
+owns Product Fitness disposition behavior and legacy dogfood substitution
+rejection. Root retains schemas, public CLI catalog/dispatch, shared state
+ranking, migrations, generated authority, claims, and integration.
+
+`COMPLETION_MANIFEST.json` remains a deliberately withheld projection with
+pre-AMEND-004 lineage and historical N08 wording. Root must regenerate its
+goal/amendment digests, candidate identity, and all fourteen claim reasons only
+after both implementation increments are integrated; until then it cannot
+support source, product, release, or completion claims.
+
 ## Post-fit routine activation integration — 2026-07-20
 
 Root integrated the accepted routine-activation series through
@@ -289,7 +336,7 @@ adapter, package, install, runtime, Product Fitness, readiness, release, and
 completion remain withheld until one jointly capable host substrate is
 implemented and independently observed.
 
-AMEND-003 preserves the three N11 dimensions and seals the adopted static
+AMEND-004 preserves the three N11 dimensions and seals the adopted static
 product-success contract without promoting a claim: source acceptance is
 accepted, positive execution is externally blocked, and all dependent claims
 remain withheld. This terminal blocker releases only root-owned N12-A claim

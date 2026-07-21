@@ -50,7 +50,14 @@ pub(crate) fn select(
         })
         .filter(|action| shape_is_valid(action))
         .collect::<Vec<_>>();
-    legal.sort_by(|a, b| (a.priority, &a.action_id).cmp(&(b.priority, &b.action_id)));
+    let evidence_led = legal.iter().any(|action| action.evidence_led.is_some());
+    legal.sort_by(|a, b| {
+        if evidence_led {
+            evidence_rank(a).cmp(&evidence_rank(b))
+        } else {
+            (a.priority, &a.action_id).cmp(&(b.priority, &b.action_id))
+        }
+    });
     if let Some(action) = legal.first()
         && let Some(next) = from_definition(action, commands)
     {
@@ -63,12 +70,40 @@ pub(crate) fn select(
 }
 
 pub(crate) fn shape_is_valid(action: &ActionDefinition) -> bool {
-    match action.kind {
+    let action_shape = match action.kind {
         ActionKind::Command => action.command_id.is_some() && action.authority_request.is_none(),
         ActionKind::AuthorityRequest => {
             action.command_id.is_none() && action.authority_request.is_some()
         }
+    };
+    action_shape && evidence_binding_is_valid(action)
+}
+
+fn evidence_binding_is_valid(action: &ActionDefinition) -> bool {
+    let Some(binding) = &action.evidence_led else {
+        return true;
+    };
+    if !valid_digest(&binding.brief_digest) {
+        return false;
     }
+    if binding.class == super::catalog::ActionPriorityClass::ActiveTruthLoopTransition {
+        binding
+            .transition_id
+            .as_ref()
+            .is_some_and(|id| !id.is_empty())
+            && binding.transition_order.is_some_and(|order| order > 0)
+    } else {
+        binding.transition_id.is_none() && binding.transition_order.is_none()
+    }
+}
+
+fn valid_digest(value: &str) -> bool {
+    value.strip_prefix("sha256:").is_some_and(|digest| {
+        digest.len() == 64
+            && digest
+                .bytes()
+                .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+    })
 }
 
 fn from_definition(action: &ActionDefinition, commands: &[CommandBinding]) -> Option<NextAction> {
@@ -93,7 +128,20 @@ fn from_definition(action: &ActionDefinition, commands: &[CommandBinding]) -> Op
         exact_command: command.map(|item| item.argv.clone()),
         authority_request: action.authority_request.clone(),
         no_legal_route: None,
-        selection_rule: "lowest-priority-number-then-lexical-action-id",
+        priority_class: action.evidence_led.as_ref().map(|binding| binding.class),
+        active_transition: action
+            .evidence_led
+            .as_ref()
+            .and_then(|binding| binding.transition_id.clone()),
+        brief_digest: action
+            .evidence_led
+            .as_ref()
+            .map(|binding| binding.brief_digest.clone()),
+        selection_rule: if action.evidence_led.is_some() {
+            "evidence-class-then-transition-order-then-priority-then-action-id"
+        } else {
+            "lowest-priority-number-then-lexical-action-id"
+        },
     })
 }
 
@@ -109,6 +157,9 @@ fn no_op() -> NextAction {
         exact_command: None,
         authority_request: None,
         no_legal_route: None,
+        priority_class: None,
+        active_transition: None,
+        brief_digest: None,
         selection_rule: "no-actionable-findings",
     }
 }
@@ -131,8 +182,25 @@ fn no_route(finding: &Finding, rule: &'static str) -> NextAction {
             reason: "The dependency/action catalog contains no legal route for this repair"
                 .to_owned(),
         }),
+        priority_class: None,
+        active_transition: None,
+        brief_digest: None,
         selection_rule: rule,
     }
+}
+
+fn evidence_rank(action: &ActionDefinition) -> (u8, u32, u32, &str) {
+    let Some(binding) = &action.evidence_led else {
+        return (u8::MAX, u32::MAX, action.priority, &action.action_id);
+    };
+    let class = binding.class as u8;
+    let transition =
+        if binding.class == super::catalog::ActionPriorityClass::ActiveTruthLoopTransition {
+            binding.transition_order.unwrap_or(u32::MAX)
+        } else {
+            0
+        };
+    (class, transition, action.priority, &action.action_id)
 }
 
 fn preferred_finding(findings: &[Finding]) -> &Finding {

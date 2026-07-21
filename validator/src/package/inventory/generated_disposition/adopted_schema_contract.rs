@@ -5,6 +5,9 @@ use crate::contract_amendment::{
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use serde_json::Value;
 
+const PREVIOUS_CONTRACT_HASH: &str =
+    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
+
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
     pub(super) sha256: &'a Sha256Digest,
@@ -67,9 +70,9 @@ fn verify_amendment(
         CurrentAmendmentBinding {
             amendment_id: binding.amendment_id,
             amendment_hash: &expected_hash,
-            previous_contract_hash: &source_digest,
+            previous_contract_hash: PREVIOUS_CONTRACT_HASH,
             new_contract_hash: &source_digest,
-            change_class: "clarifies",
+            change_class: "strengthens",
             backlog_updates: &[ExpectedArtifactBinding {
                 path: binding.output.as_str(),
                 digest: &output_digest,
