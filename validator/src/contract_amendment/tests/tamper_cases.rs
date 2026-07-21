@@ -58,3 +58,28 @@ fn duplicate_current_row_and_backlog_substitution_fail_closed() {
     let bytes = fixture::reseal(&mut mismatch);
     assert!(validate_current(&bytes, fixture::binding()).is_err());
 }
+
+#[test]
+fn omitted_reordered_and_extra_backlog_bindings_fail_closed() {
+    for mutation in 0..3 {
+        let mut rows = fixture::rows();
+        let original = rows[2]["backlog_updates"][0].clone();
+        match mutation {
+            0 => rows[2]["backlog_updates"] = json!([]),
+            1 => {
+                rows[2]["backlog_updates"] = json!([
+                    {"path": "schemas/other.json", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+                    original
+                ])
+            }
+            _ => {
+                rows[2]["backlog_updates"] = json!([
+                    original,
+                    {"path": "schemas/other.json", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}
+                ])
+            }
+        }
+        let bytes = fixture::reseal(&mut rows);
+        assert!(validate_current(&bytes, fixture::binding()).is_err());
+    }
+}

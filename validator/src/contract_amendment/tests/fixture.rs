@@ -1,4 +1,4 @@
-use super::super::CurrentAmendmentBinding;
+use super::super::{CurrentAmendmentBinding, ExpectedArtifactBinding};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 
@@ -10,14 +10,19 @@ const CONTRACT_HASH: &str =
     "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
 const OUTPUT: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
 const OUTPUT_HASH: &str = "sha256:fc6c87b5888d250608bb5bc0b53155534d5b5638284e29076a3edd5d0768da55";
+const BACKLOG: [ExpectedArtifactBinding<'static>; 1] = [ExpectedArtifactBinding {
+    path: OUTPUT,
+    digest: OUTPUT_HASH,
+}];
 
 pub(super) fn binding() -> CurrentAmendmentBinding<'static> {
     CurrentAmendmentBinding {
         amendment_id: CURRENT_ID,
         amendment_hash: CURRENT_HASH,
-        contract_hash: CONTRACT_HASH,
-        output_path: OUTPUT,
-        output_hash: OUTPUT_HASH,
+        previous_contract_hash: CONTRACT_HASH,
+        new_contract_hash: CONTRACT_HASH,
+        change_class: "clarifies",
+        backlog_updates: &BACKLOG,
     }
 }
 

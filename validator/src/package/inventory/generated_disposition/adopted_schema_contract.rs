@@ -1,5 +1,7 @@
 use super::{MAX_OUTPUT_BYTES, Source, digest_hex};
-use crate::contract_amendment::{CurrentAmendmentBinding, validate_current};
+use crate::contract_amendment::{
+    CurrentAmendmentBinding, ExpectedArtifactBinding, validate_current,
+};
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use serde_json::Value;
 
@@ -65,9 +67,13 @@ fn verify_amendment(
         CurrentAmendmentBinding {
             amendment_id: binding.amendment_id,
             amendment_hash: &expected_hash,
-            contract_hash: &source_digest,
-            output_path: binding.output.as_str(),
-            output_hash: &output_digest,
+            previous_contract_hash: &source_digest,
+            new_contract_hash: &source_digest,
+            change_class: "clarifies",
+            backlog_updates: &[ExpectedArtifactBinding {
+                path: binding.output.as_str(),
+                digest: &output_digest,
+            }],
         },
     )
     .map(|_| ())

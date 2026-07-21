@@ -1,9 +1,15 @@
 pub(crate) struct CurrentAmendmentBinding<'a> {
     pub(crate) amendment_id: &'a str,
     pub(crate) amendment_hash: &'a str,
-    pub(crate) contract_hash: &'a str,
-    pub(crate) output_path: &'a str,
-    pub(crate) output_hash: &'a str,
+    pub(crate) previous_contract_hash: &'a str,
+    pub(crate) new_contract_hash: &'a str,
+    pub(crate) change_class: &'a str,
+    pub(crate) backlog_updates: &'a [ExpectedArtifactBinding<'a>],
+}
+
+pub(crate) struct ExpectedArtifactBinding<'a> {
+    pub(crate) path: &'a str,
+    pub(crate) digest: &'a str,
 }
 
 pub(crate) struct ValidatedCurrentAmendment {

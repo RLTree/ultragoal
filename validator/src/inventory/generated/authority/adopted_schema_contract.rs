@@ -1,5 +1,7 @@
 use crate::context::ReadSession;
-use crate::contract_amendment::{CurrentAmendmentBinding, validate_current};
+use crate::contract_amendment::{
+    CurrentAmendmentBinding, ExpectedArtifactBinding, validate_current,
+};
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use crate::inventory::digest::file_identity_regular;
 use crate::inventory::fs::read_bounded;
@@ -86,9 +88,13 @@ fn verify_amendment(
         CurrentAmendmentBinding {
             amendment_id: binding.amendment_id,
             amendment_hash: &expected_hash,
-            contract_hash: &format!("sha256:{source_digest}"),
-            output_path: binding.output.as_str(),
-            output_hash: &format!("sha256:{output_digest}"),
+            previous_contract_hash: &format!("sha256:{source_digest}"),
+            new_contract_hash: &format!("sha256:{source_digest}"),
+            change_class: "clarifies",
+            backlog_updates: &[ExpectedArtifactBinding {
+                path: binding.output.as_str(),
+                digest: &format!("sha256:{output_digest}"),
+            }],
         },
     )
     .map(|_| ())

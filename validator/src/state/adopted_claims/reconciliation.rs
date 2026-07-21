@@ -4,7 +4,7 @@ use super::lane_binding::{
 };
 use crate::context::{CandidateIdentity, LiveContext};
 use crate::contract_amendment::{
-    CurrentAmendmentBinding, ValidatedCurrentAmendment, validate_current,
+    CurrentAmendmentBinding, ExpectedArtifactBinding, ValidatedCurrentAmendment, validate_current,
 };
 use crate::inventory::AuthorityCatalog;
 use crate::state::StateError;
@@ -193,9 +193,13 @@ fn verify_amendment(goal_contract_sha256: &str) -> Result<ValidatedCurrentAmendm
         CurrentAmendmentBinding {
             amendment_id: AMENDMENT_ID,
             amendment_hash: AMENDMENT_HASH,
-            contract_hash: goal_contract_sha256,
-            output_path: PRODUCT_CONTRACT_PATH,
-            output_hash: &output_hash,
+            previous_contract_hash: goal_contract_sha256,
+            new_contract_hash: goal_contract_sha256,
+            change_class: "clarifies",
+            backlog_updates: &[ExpectedArtifactBinding {
+                path: PRODUCT_CONTRACT_PATH,
+                digest: &output_hash,
+            }],
         },
     )
     .map_err(|code| invalid(&format!("adopted-amendment-invalid:{code}")))

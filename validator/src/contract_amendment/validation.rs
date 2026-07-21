@@ -141,14 +141,19 @@ fn validate_current_binding(
     row: &AmendmentRow,
     binding: CurrentAmendmentBinding<'_>,
 ) -> Result<(), &'static str> {
-    let backlog_matches = row.backlog_updates.len() == 1
-        && row.backlog_updates[0].path == binding.output_path
-        && row.backlog_updates[0].digest == binding.output_hash;
+    let backlog_matches = row.backlog_updates.len() == binding.backlog_updates.len()
+        && row
+            .backlog_updates
+            .iter()
+            .zip(binding.backlog_updates)
+            .all(|(actual, expected)| {
+                actual.path == expected.path && actual.digest == expected.digest
+            });
     if row.amendment_id != binding.amendment_id
         || row.amendment_hash != binding.amendment_hash
-        || row.previous_contract_hash != binding.contract_hash
-        || row.new_contract_hash != binding.contract_hash
-        || row.change_class != "clarifies"
+        || row.previous_contract_hash != binding.previous_contract_hash
+        || row.new_contract_hash != binding.new_contract_hash
+        || row.change_class != binding.change_class
         || !backlog_matches
     {
         return Err("current_amendment_binding_invalid");
