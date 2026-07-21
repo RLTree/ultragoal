@@ -20,27 +20,37 @@ When the binary is exposed, probe only read paths:
 ultragoal --json --help
 ultragoal --json inspect capabilities
 ultragoal --json inspect context
+ultragoal --json inspect inception
 ```
 
 Do not infer availability, model, mode, reasoning, permissions, installation,
 discovery, or runtime identity from the prompt or source tree.
 
+For project initiation or recovery, the inception read is the first truth
+loop. It reads the repository-root `PRODUCT_SUCCESS_BRIEF.json` without
+writing it; a missing brief returns the typed fields still owed. Historical v1
+briefs are readable context only, while a valid v2 brief is eligible for
+evidence-led ranking after the public dispatcher binds the route.
+
 ## Select exactly one route
 
 Apply this order to the immediate outcome:
 
-1. Independent falsification or quality-in-use review ->
+1. Project initiation or recovery needing a first truth loop -> the typed
+   `inspect inception` read route, then exactly one downstream workflow after
+   its projection is available.
+2. Independent falsification or quality-in-use review ->
    `$harness-ultragoal:product-journey-review`.
-2. One named claim and strict proof -> `$harness-ultragoal:prove`.
-3. Symptom, failure, causal diagnosis, event query, repair plan, or next action
+3. One named claim and strict proof -> `$harness-ultragoal:prove`.
+4. Symptom, failure, causal diagnosis, event query, repair plan, or next action
    -> `$harness-ultragoal:diagnose-and-observe`.
-4. Fresh setup, partial fit, retrofit, or authority conflict ->
+5. Fresh setup, partial fit, retrofit, or authority conflict ->
    `$harness-ultragoal:repository-fit`.
-5. Affected checks, routine validation, or verified reuse ->
+6. Affected checks, routine validation, or verified reuse ->
    `$harness-ultragoal:routine-work`.
-6. Coordinated dependency-bound execution across multiple scopes ->
+7. Coordinated dependency-bound execution across multiple scopes ->
    `$harness-ultragoal:goal-run`.
-7. Evaluation, research refresh, compatibility, migration, or retirement ->
+8. Evaluation, research refresh, compatibility, migration, or retirement ->
    `$harness-ultragoal:improve-and-maintain`.
 
 For a multi-outcome prompt, choose the earliest outcome the operator must

@@ -35,6 +35,7 @@ pub mod orchestration;
 mod output_path;
 mod package;
 mod plugin_manifest;
+pub(crate) mod product_inception;
 pub mod plugin_product;
 mod process_custody;
 mod red;
