@@ -186,7 +186,7 @@ impl HostLifecycleCustody {
         }
         let command_cursor = completion.observations().command_cursor();
         let effect_cursor = completion.effect_cursor();
-        if command_cursor > self.command_plan.as_ref().map_or(0, HostCommandPlan::len)
+        if command_cursor > self.pre_effect_record.command_count()
             || effect_cursor > self.plan.effects.len()
         {
             return Err(LifecycleError::InvalidTransition);

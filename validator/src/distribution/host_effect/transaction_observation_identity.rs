@@ -2,7 +2,7 @@ use super::transaction_observation::HostLifecycleObservationInput;
 use crate::plugin_product::lifecycle::{PackageAuthority, Version};
 use serde_json::{Map, Value};
 use sha2::{Digest, Sha256};
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 
 pub(crate) struct HostSurfaceLocations {
     pub(crate) installed: PathBuf,
@@ -52,8 +52,8 @@ pub(crate) fn observe_marketplace(
             Ok(None)
         };
     };
-    let source_root = string_field(row, &["source_root", "source", "path"])
-        .ok_or("Codex marketplace JSON lacks a typed source root")?;
+    let source_root =
+        marketplace_root(row).ok_or("Codex marketplace JSON lacks a typed source root")?;
     let expected_root = canonical_path(&input.marketplace_source_root)?;
     if source_root != expected_root {
         return Err("Codex marketplace source root does not match the bound repository root");
@@ -70,7 +70,6 @@ pub(crate) fn observe_plugin(
     authority: Option<&PackageAuthority>,
     target_root: &Path,
 ) -> Result<(Option<String>, HostSurfaceLocations), &'static str> {
-    let fallback = adapter_locations(target_root, input)?;
     let Some(authority) = authority else {
         let present = find_object(value, &|row| {
             string_field(row, &["id", "plugin_id", "name"]) == Some(input.plugin.as_str())
@@ -78,7 +77,7 @@ pub(crate) fn observe_plugin(
         if present.is_some() {
             return Err("Codex plugin JSON retains an unexpected candidate row");
         }
-        return Ok((None, fallback));
+        return Ok((None, adapter_locations(target_root, input)?));
     };
     let row = find_object(value, &|row| {
         string_field(row, &["id", "plugin_id", "name"]) == Some(input.plugin.as_str())
@@ -89,20 +88,14 @@ pub(crate) fn observe_plugin(
     if version != version_text(authority.version) {
         return Err("Codex plugin version does not match the lifecycle authority");
     }
-    for (key, expected) in [
-        ("package_sha256", authority.package_sha256.as_str()),
-        ("inventory_sha256", authority.inventory_sha256.as_str()),
-        ("candidate_id", authority.candidate_id.as_str()),
-    ] {
-        if string_field(row, &[key]) != Some(expected) {
-            return Err("Codex plugin identity does not match the lifecycle authority");
-        }
+    if string_field(row, &["marketplaceName", "marketplace"]) != Some(input.marketplace.as_str()) {
+        return Err("Codex plugin marketplace does not match the lifecycle authority");
     }
-    let locations = HostSurfaceLocations {
-        installed: bound_path(row, "installed_path", target_root)?,
-        cache: bound_path(row, "cache_path", target_root)?,
-        runtime: bound_path(row, "runtime_path", target_root)?,
-    };
+    let source = plugin_source_path(row).ok_or("Codex plugin JSON lacks a typed source path")?;
+    if canonical_path(Path::new(source))? != canonical_path(&input.marketplace_source_path)? {
+        return Err("Codex plugin source does not match the materialized package authority");
+    }
+    let locations = installed_cache_locations(target_root, input, version);
     if locations.installed == input.marketplace_source_path
         || locations.cache == input.marketplace_source_path
         || locations.runtime == input.marketplace_source_path
@@ -143,18 +136,40 @@ fn adapter_locations(
     Ok(locations)
 }
 
-fn bound_path(row: &Map<String, Value>, key: &str, root: &Path) -> Result<PathBuf, &'static str> {
-    let raw = string_field(row, &[key]).ok_or("Codex plugin JSON lacks a surface path")?;
-    let path = PathBuf::from(raw);
-    if !path.is_absolute()
-        || path
-            .components()
-            .any(|part| matches!(part, Component::ParentDir))
-        || !path.starts_with(root)
-    {
-        return Err("Codex plugin surface path is outside the confined home");
+fn installed_cache_locations(
+    target_root: &Path,
+    input: &HostLifecycleObservationInput,
+    version: &str,
+) -> HostSurfaceLocations {
+    let cache = target_root
+        .join("plugins/cache")
+        .join(&input.marketplace)
+        .join(&input.plugin)
+        .join(version);
+    HostSurfaceLocations {
+        installed: cache.clone(),
+        cache: cache.clone(),
+        runtime: cache.join("runtime/runtime-probe-bin"),
     }
-    Ok(path)
+}
+
+fn marketplace_root(row: &Map<String, Value>) -> Option<&str> {
+    string_field(row, &["root", "source_root"])
+        .or_else(|| nested_string_field(row, "marketplaceSource", &["source"]))
+}
+
+fn plugin_source_path(row: &Map<String, Value>) -> Option<&str> {
+    nested_string_field(row, "source", &["path"])
+}
+
+fn nested_string_field<'a>(
+    row: &'a Map<String, Value>,
+    container: &str,
+    keys: &[&str],
+) -> Option<&'a str> {
+    row.get(container)
+        .and_then(Value::as_object)
+        .and_then(|nested| string_field(nested, keys))
 }
 
 fn typed_digest(label: &str, fields: &[String]) -> Result<String, &'static str> {
@@ -208,6 +223,7 @@ mod tests {
             marketplace: "local-marketplace".to_owned(),
             plugin: "harness-ultragoal".to_owned(),
         };
+        std::fs::create_dir_all(&input.marketplace_source_path).unwrap();
         let canonical_root = root.canonicalize().unwrap();
         let marketplace = json!([{
             "name": "local-marketplace",
@@ -226,16 +242,15 @@ mod tests {
         let plugin = json!([{
             "id": "harness-ultragoal",
             "version": "1.2.3",
-            "package_sha256": authority.package_sha256,
-            "inventory_sha256": authority.inventory_sha256,
-            "candidate_id": authority.candidate_id,
-            "installed_path": root.join("plugins/installed").display().to_string(),
-            "cache_path": root.join("cache/plugin").display().to_string(),
-            "runtime_path": root.join("plugins/installed/runtime/probe").display().to_string()
+            "marketplaceName": "local-marketplace",
+            "source": {
+                "source": "local",
+                "path": input.marketplace_source_path.display().to_string()
+            }
         }]);
         assert!(observe_plugin(&plugin, &input, Some(&authority), &root).is_ok());
         let mut altered_plugin = plugin.clone();
-        altered_plugin[0]["candidate_id"] = json!(digest('d'));
+        altered_plugin[0]["source"]["path"] = json!(root.join("other").display().to_string());
         assert!(observe_plugin(&altered_plugin, &input, Some(&authority), &root).is_err());
         let _ = std::fs::remove_dir_all(root);
     }

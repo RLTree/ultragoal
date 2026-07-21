@@ -232,6 +232,10 @@ impl HostLifecycleRecord {
         self.command_plan.plan_sha256()
     }
 
+    pub(crate) fn command_count(&self) -> usize {
+        self.command_plan.commands.len()
+    }
+
     pub(crate) const fn command_cursor(&self) -> usize {
         self.command_cursor
     }
