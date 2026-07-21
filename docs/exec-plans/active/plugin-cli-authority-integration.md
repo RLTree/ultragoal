@@ -1375,15 +1375,36 @@ The second, exact-candidate confirmation then found that widening
 `PinnedHostExecutable::pin` to crate visibility would let any validator caller
 mint the host-execution capability from an arbitrary path. Root therefore
 retains the existing `PinnedHostExecutable` design and narrows its construction
-boundary: raw-path pinning stays private to `distribution::host_effect`; the
-only cross-module route is one atomically selected Codex executable capability
-that contains the retained descriptor. Effectful and repeat-use observation
-consume that capability; neither accepts a raw executable path. This is a
-replacement decision for the shared selection authority, not another resolver
-patch or proof layer. The active lane must enumerate its selection, pin,
+boundary: the raw descriptor and its pinning constructor belong only to the
+selected-executable implementation, not to the broader
+`distribution::host_effect` namespace. The only cross-module route is one
+move-only atomically selected Codex executable capability that contains the
+retained descriptor. Effectful and repeat-use observation consume that
+capability; neither accepts a raw executable path. This is a replacement
+decision for the shared selection authority, not another resolver patch or
+proof layer. The active lane must enumerate its selection, pin,
 pre-execution, retry/recovery, and repeat-use siblings, then return one new
 clean source freeze for bounded confirmation. Package, install, discovery,
 runtime, and product claims remain withheld.
+
+### Selected-executable construction refinement
+
+Parent review of exact lane candidate `64954f34b948d5c67ca8400c1b202bb1790448a2`
+found that `pub(in crate::distribution::host_effect)` still lets a sibling or
+descendant mint `PinnedHostExecutable` from an arbitrary raw path. That is a
+material bypass of the same custody invariant, so the earlier broad
+`host_effect` boundary is insufficient.
+
+Root retains the selected-capability architecture and makes its sharper
+construction rule explicit: only the selector-owned implementation may hold
+or construct the raw pinned descriptor. `SelectedCodexExecutable` is the sole
+move-only value crossing into effectful and read-only transaction paths. Test
+construction, if needed, stays `cfg(test)` in selector-owned fixtures. The
+correction must cover the whole sibling family in one batch, preserve the
+existing replacement and symlink controls, and add a direct same-crate
+negative proving a host-effect sibling cannot construct or re-pin the raw
+descriptor. This is the required invariant-level narrowing after repeated
+authority bypasses; it adds no scheduler, tracker, receipt, or analyzer.
 
 ## Stop and escalation rules
 
