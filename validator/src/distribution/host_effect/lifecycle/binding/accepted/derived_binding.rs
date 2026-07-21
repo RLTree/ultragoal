@@ -10,6 +10,13 @@ impl AcceptedHostEffect {
                 SupportedHostLifecycleErrorId::StaleLedgerHead,
             ));
         }
+        #[cfg(not(test))]
+        let lifecycle_intent = serde_json::to_string(&self.lifecycle_record.permit_join().1)
+            .map_err(|_| invalid())?
+            .trim_matches('"')
+            .to_owned();
+        #[cfg(test)]
+        let lifecycle_intent = self.lifecycle.operation().as_str().to_owned();
         Ok(HostEffectPermitBinding {
             context_id: self.package.source().context_id().to_owned(),
             candidate_id: self.package.source().candidate_id().to_owned(),
@@ -24,7 +31,7 @@ impl AcceptedHostEffect {
             lifecycle_plan_sha256: self.lifecycle_record.permit_join().0.to_owned(),
             #[cfg(test)]
             lifecycle_plan_sha256: self.lifecycle.plan_sha256().to_owned(),
-            lifecycle_intent: self.lifecycle.operation().as_str().to_owned(),
+            lifecycle_intent,
             expected_pre_state_sha256: self.expected_pre_state_sha256.clone(),
             expected_post_state_sha256: self.expected_post_state_sha256.clone(),
             rollback_policy_sha256: self.rollback_policy_sha256.clone(),

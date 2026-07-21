@@ -14,6 +14,7 @@ pub(crate) enum AcceptedLifecycleOperation {
 }
 
 impl AcceptedLifecycleOperation {
+    #[cfg(test)]
     pub(crate) const fn as_str(self) -> &'static str {
         match self {
             Self::FreshInstall => "fresh-install",
