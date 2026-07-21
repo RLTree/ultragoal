@@ -25,8 +25,6 @@ use std::fs::{self, File};
 
 #[cfg(test)]
 use std::fs::OpenOptions;
-#[cfg(test)]
-use std::path::Path;
 
 #[cfg(unix)]
 use std::os::unix::fs::{FileExt, MetadataExt};
@@ -36,6 +34,10 @@ include!("host_effect_ledger_error_new.rs");
 include!("same_executable_object.rs");
 mod selected_codex_executable;
 pub(crate) use selected_codex_executable::{resolve_codex_executable, SelectedCodexExecutable};
+#[cfg(test)]
+pub(crate) use selected_codex_executable::{
+    test_fixture, SelectedCodexExecutableTestFixture,
+};
 mod transaction;
 mod transaction_identity;
 mod transaction_observation;

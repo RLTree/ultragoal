@@ -82,9 +82,9 @@ pub(super) struct CommandCaptureDigest {
 
 #[derive(Debug)]
 pub(crate) struct CommandCapture {
-    pub(super) exit_code: i32,
-    pub(super) stdout: Vec<u8>,
-    pub(super) stderr: Vec<u8>,
+    pub(in crate::distribution::host_effect) exit_code: i32,
+    pub(in crate::distribution::host_effect) stdout: Vec<u8>,
+    pub(in crate::distribution::host_effect) stderr: Vec<u8>,
 }
 
 impl CommandCapture {
@@ -96,7 +96,7 @@ impl CommandCapture {
         &self.stdout
     }
 
-    pub(super) fn empty_failure() -> Self {
+    pub(in crate::distribution::host_effect) fn empty_failure() -> Self {
         Self {
             exit_code: -1,
             stdout: Vec::new(),

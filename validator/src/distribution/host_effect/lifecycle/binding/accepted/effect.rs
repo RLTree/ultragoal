@@ -87,10 +87,7 @@ impl AcceptedHostEffect {
             return Err(invalid());
         }
         let argv_sha256 = argv_sha256(plan)?;
-        let executable_identity_sha256 = executable
-            .identity()
-            .binding_sha256()
-            .map_err(|_| invalid())?;
+        let executable_identity_sha256 = executable.binding_sha256().map_err(|_| invalid())?;
         let expected_pre_state_sha256 = digest_json(&StateBinding {
             schema: "harness-ultragoal.accepted-pre-state.v1",
             state: &lifecycle.before,
@@ -202,7 +199,6 @@ impl AcceptedHostEffect {
             .revalidate()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
         let observed = executable
-            .identity()
             .binding_sha256()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
         if observed != self.executable_identity_sha256 {

@@ -58,7 +58,7 @@ impl AuthorizedHostEffect {
         plan: HostCommandPlan,
     ) -> Result<Self, HostEffectLedgerError> {
         executable.revalidate()?;
-        let executable_identity_sha256 = executable.identity().binding_sha256()?;
+        let executable_identity_sha256 = executable.binding_sha256()?;
         let expected_reservation = HostEffectReservation::from_permit(&permit);
         if record.state != HostEffectState::InFlight
             || record.reservation != expected_reservation

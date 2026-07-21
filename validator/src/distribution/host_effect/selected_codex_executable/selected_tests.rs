@@ -1,12 +1,42 @@
 use super::{path_byte_length, resolve_from_path};
 use std::ffi::OsString;
 use std::fs;
-use std::os::unix::fs::symlink;
 use std::os::unix::fs::PermissionsExt;
+use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
+
+pub(crate) struct SelectedCodexExecutableTestFixture {
+    pub(crate) root: PathBuf,
+    pub(crate) path: PathBuf,
+    pub(crate) selected: super::SelectedCodexExecutable,
+}
+
+impl Drop for SelectedCodexExecutableTestFixture {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.root);
+    }
+}
+
+pub(crate) fn test_fixture(label: &str, bytes: &[u8]) -> SelectedCodexExecutableTestFixture {
+    let root = std::env::temp_dir().join(format!(
+        "harness-ultragoal-selected-executable-{label}-{}-{}",
+        std::process::id(),
+        NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
+    ));
+    fs::create_dir_all(&root).expect("fixture directory");
+    let path = root.join("codex");
+    fs::write(&path, bytes).expect("fixture executable bytes");
+    fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).expect("fixture executable mode");
+    let selected = super::SelectedCodexExecutable::pin(&path).expect("fixture executable pin");
+    SelectedCodexExecutableTestFixture {
+        root,
+        path,
+        selected,
+    }
+}
 
 #[test]
 fn path_limit_counts_operating_system_string_bytes() {
@@ -63,12 +93,13 @@ fn pinned_selection_keeps_original_target_after_symlink_replacement() {
 
     assert!(pinned.revalidate().is_ok());
     assert_eq!(
-        pinned.identity().canonical_path,
-        first
-            .canonicalize()
-            .expect("canonical target")
-            .display()
-            .to_string()
+        pinned
+            .binding_sha256()
+            .expect("selected executable binding"),
+        super::SelectedCodexExecutable::pin(&first)
+            .expect("reselected original target")
+            .binding_sha256()
+            .expect("selected executable binding")
     );
     fs::remove_dir_all(root).expect("cleanup");
 }

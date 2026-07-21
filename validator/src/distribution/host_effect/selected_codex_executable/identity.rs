@@ -3,8 +3,8 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub(in crate::distribution::host_effect) struct SelectedCodexExecutableIdentity {
-    pub(in crate::distribution::host_effect) canonical_path: String,
+pub(super) struct SelectedCodexExecutableIdentity {
+    pub(super) canonical_path: String,
     pub(super) content_sha256: String,
     pub(super) device: u64,
     pub(super) inode: u64,
@@ -20,9 +20,7 @@ pub(in crate::distribution::host_effect) struct SelectedCodexExecutableIdentity 
 }
 
 impl SelectedCodexExecutableIdentity {
-    pub(in crate::distribution::host_effect) fn binding_sha256(
-        &self,
-    ) -> Result<String, HostEffectLedgerError> {
+    pub(super) fn binding_sha256(&self) -> Result<String, HostEffectLedgerError> {
         #[derive(Serialize)]
         struct Binding<'a> {
             schema: &'static str,

@@ -87,15 +87,15 @@ impl HostEffectExecutionPolicy {
         })
     }
 
-    pub(super) const fn timeout(&self) -> std::time::Duration {
+    pub(in crate::distribution::host_effect) const fn timeout(&self) -> std::time::Duration {
         std::time::Duration::from_millis(self.descriptor_timeout_ms)
     }
 
-    pub(super) const fn stdout_limit(&self) -> usize {
+    pub(in crate::distribution::host_effect) const fn stdout_limit(&self) -> usize {
         self.descriptor_stdout_limit_bytes
     }
 
-    pub(super) const fn stderr_limit(&self) -> usize {
+    pub(in crate::distribution::host_effect) const fn stderr_limit(&self) -> usize {
         self.descriptor_stderr_limit_bytes
     }
 

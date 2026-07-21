@@ -23,13 +23,13 @@ pub(crate) use lifecycle_completion::{
 #[cfg(test)]
 pub(crate) use model::HostEffectPostPublicationRecoveryClassification;
 pub(crate) use model::{
-    HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,
+    CommandCapture, HostEffectCancellation, HostEffectExecutionPolicy, HostEffectExecutionReceipt,
     HostEffectExecutorErrorId, HostEffectExecutorFailure,
     HostEffectPostReservationLedgerClassification,
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };
-pub(crate) use process::NativeRetainedDescriptorProcessBackend;
+pub(crate) use process::{BackendFailure, NativeRetainedDescriptorProcessBackend};
 use process::RetainedDescriptorProcessBackend;
 pub(crate) use process::execute_bounded_observation;
 pub(crate) use target::ConfinedHostEffectTarget;
@@ -38,7 +38,6 @@ use self::model::{
     CommandCaptureDigest, PostReservationRecoveryRequest, TerminalTransitionRecoveryRequest,
     digest_json,
 };
-use self::process::BackendFailure;
 use self::target::{CommittedPublication, PublicationFailure};
 use super::lifecycle::{
     DescriptorExecutionCapability, DescriptorExecutionHandoff, DescriptorExecutionPlatform,

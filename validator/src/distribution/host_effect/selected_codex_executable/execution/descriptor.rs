@@ -1,5 +1,17 @@
+use super::super::SelectedCodexExecutable;
+use super::process_group::{
+    close_fd, create_pipe, drain, last_errno, reap, set_nonblocking, terminate_descendant_group,
+    terminate_process_group,
+};
+use crate::distribution::HostCommand;
+use crate::distribution::host_effect::executor::{
+    BackendFailure, CommandCapture, HostEffectCancellation, HostEffectExecutionPolicy,
+    HostEffectExecutorErrorId,
+};
+use crate::distribution::host_effect::lifecycle::DescriptorExecutionPrimitive;
+
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn execute_retained_descriptor(
+pub(super) fn execute(
     executable: &SelectedCodexExecutable,
     command: &HostCommand,
     policy: &HostEffectExecutionPolicy,
@@ -72,7 +84,7 @@ fn execute_retained_descriptor(
                 #[cfg(target_os = "linux")]
                 DescriptorExecutionPrimitive::ExecveAtEmptyPath => {
                     libc::execveat(
-                        executable.file().as_raw_fd(),
+                        executable.raw_file().as_raw_fd(),
                         c"".as_ptr(),
                         argv.as_ptr(),
                         environment.as_ptr(),
@@ -82,7 +94,7 @@ fn execute_retained_descriptor(
                 #[cfg(target_os = "freebsd")]
                 DescriptorExecutionPrimitive::Fexecve => {
                     libc::fexecve(
-                        executable.file().as_raw_fd(),
+                        executable.raw_file().as_raw_fd(),
                         argv.as_ptr(),
                         environment.as_ptr(),
                     );

@@ -2,6 +2,7 @@ use super::super::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectLedgerError,
     HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord, HostEffectReservation,
     HostEffectState, HostEffectTransition, SelectedCodexExecutable,
+    SelectedCodexExecutableTestFixture, test_fixture,
 };
 use super::binding::AcceptedHostEffect;
 use super::recovery::{
@@ -19,7 +20,7 @@ use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 #[cfg(unix)]
-use std::os::unix::fs::{MetadataExt, PermissionsExt};
+use std::os::unix::fs::MetadataExt;
 
 include!("next_fixture.rs");
 

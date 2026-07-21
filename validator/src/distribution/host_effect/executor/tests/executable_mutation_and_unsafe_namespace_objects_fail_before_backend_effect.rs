@@ -132,7 +132,7 @@ fn started_timeout_is_ambiguous_and_never_publishes() {
 #[test]
 fn native_darwin_backend_refuses_before_spawn_or_output() {
     let fixture = Fixture::new();
-    let executable = SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap();
+    let executable = fixture.executable_fixture.selected.duplicate().unwrap();
     let plan =
         HostCommandPlan::personal_install(&fixture.package(), "fixture-marketplace").unwrap();
     let mut backend = NativeRetainedDescriptorProcessBackend;

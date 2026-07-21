@@ -1,8 +1,8 @@
 use super::{
-    invalid_record, ledger_io, read_at_retry, same_executable_object, tampered,
-    HostEffectLedgerError, HostEffectLedgerErrorId, MAX_PINNED_EXECUTABLE_BYTES,
+    HostEffectLedgerError, HostEffectLedgerErrorId, MAX_PINNED_EXECUTABLE_BYTES, invalid_record,
+    ledger_io, read_at_retry, same_executable_object, tampered,
 };
-use crate::distribution::error::{error, DistributionError, DistributionErrorId};
+use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use sha2::{Digest, Sha256};
 use std::env;
 use std::ffi::OsStr;
@@ -14,6 +14,7 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
 mod identity;
 use identity::SelectedCodexExecutableIdentity;
+mod execution;
 
 pub(crate) struct SelectedCodexExecutable {
     file: File,
@@ -43,20 +44,13 @@ impl SelectedCodexExecutable {
         }
     }
 
-    #[cfg(test)]
-    pub(in crate::distribution::host_effect) fn pin_for_test_fixture(
-        path: &Path,
-    ) -> Result<Self, HostEffectLedgerError> {
-        Self::pin(path)
-    }
-
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-    pub(in crate::distribution::host_effect) fn file(&self) -> &File {
+    fn raw_file(&self) -> &File {
         &self.file
     }
 
     #[cfg(target_os = "macos")]
-    pub(in crate::distribution::host_effect) fn loaded_identity(&self) -> (&Path, u64, u64) {
+    fn raw_loaded_identity(&self) -> (&Path, u64, u64) {
         (
             Path::new(&self.identity.canonical_path),
             self.identity.device,
@@ -64,10 +58,10 @@ impl SelectedCodexExecutable {
         )
     }
 
-    pub(in crate::distribution::host_effect) fn identity(
+    pub(in crate::distribution::host_effect) fn binding_sha256(
         &self,
-    ) -> &SelectedCodexExecutableIdentity {
-        &self.identity
+    ) -> Result<String, HostEffectLedgerError> {
+        self.identity.binding_sha256()
     }
 
     pub(in crate::distribution::host_effect) fn duplicate(
@@ -97,6 +91,17 @@ impl SelectedCodexExecutable {
         {
             Err(invalid_record())
         }
+    }
+
+    pub(in crate::distribution::host_effect) fn execute(
+        &self,
+        capability: &super::lifecycle::DescriptorExecutionCapability,
+        command: &super::super::HostCommand,
+        policy: &super::executor::HostEffectExecutionPolicy,
+        cancellation: &super::executor::HostEffectCancellation,
+        cwd: std::os::fd::RawFd,
+    ) -> Result<super::executor::CommandCapture, super::executor::BackendFailure> {
+        execution::execute(self, capability, command, policy, cancellation, cwd)
     }
 }
 
@@ -217,3 +222,6 @@ fn validate_executable_metadata(metadata: &fs::Metadata) -> Result<(), HostEffec
 
 #[cfg(all(test, unix))]
 mod selected_tests;
+
+#[cfg(all(test, unix))]
+pub(crate) use selected_tests::{SelectedCodexExecutableTestFixture, test_fixture};

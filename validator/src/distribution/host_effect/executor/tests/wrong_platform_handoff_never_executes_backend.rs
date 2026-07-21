@@ -69,7 +69,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     )
     .unwrap();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let pinned = SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap();
+    let pinned = fixture.executable_fixture.selected.duplicate().unwrap();
     let accepted = coordinator
         .accept(HostEffectAcceptanceRequest {
             package: package.clone(),
@@ -93,7 +93,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             HostEffectPreparationRequest {
                 accepted: &accepted,
                 custody: &mut custody,
-                executable: SelectedCodexExecutable::pin_for_test_fixture(&fixture.executable).unwrap(),
+                executable: fixture.executable_fixture.selected.duplicate().unwrap(),
                 target: &mut target_observer,
                 clock: &mut clock,
                 adapter: &mut adapter,

@@ -1,5 +1,8 @@
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn create_pipe() -> Result<(libc::c_int, libc::c_int), BackendFailure> {
+use crate::distribution::host_effect::executor::{BackendFailure, HostEffectExecutorErrorId};
+
+#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+pub(super) fn create_pipe() -> Result<(libc::c_int, libc::c_int), BackendFailure> {
     let mut descriptors = [-1; 2];
     if unsafe { libc::pipe(descriptors.as_mut_ptr()) } != 0 {
         return Err(BackendFailure::before_start(
@@ -19,7 +22,7 @@ fn create_pipe() -> Result<(libc::c_int, libc::c_int), BackendFailure> {
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn set_nonblocking(descriptor: libc::c_int) -> Result<(), ()> {
+pub(super) fn set_nonblocking(descriptor: libc::c_int) -> Result<(), ()> {
     let flags = unsafe { libc::fcntl(descriptor, libc::F_GETFL) };
     if flags < 0 || unsafe { libc::fcntl(descriptor, libc::F_SETFL, flags | libc::O_NONBLOCK) } != 0
     {
@@ -29,7 +32,7 @@ fn set_nonblocking(descriptor: libc::c_int) -> Result<(), ()> {
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn drain(
+pub(super) fn drain(
     descriptor: libc::c_int,
     output: &mut Vec<u8>,
     limit: usize,
@@ -63,7 +66,7 @@ fn drain(
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn terminate_process_group(child: libc::pid_t) {
+pub(super) fn terminate_process_group(child: libc::pid_t) {
     unsafe {
         libc::kill(-child, libc::SIGKILL);
         libc::kill(child, libc::SIGKILL);
@@ -71,14 +74,14 @@ fn terminate_process_group(child: libc::pid_t) {
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn terminate_descendant_group(child: libc::pid_t) {
+pub(super) fn terminate_descendant_group(child: libc::pid_t) {
     unsafe {
         libc::kill(-child, libc::SIGKILL);
     }
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn reap(child: libc::pid_t) {
+pub(super) fn reap(child: libc::pid_t) {
     let mut status = 0;
     loop {
         let waited = unsafe { libc::waitpid(child, &mut status, 0) };
@@ -89,7 +92,7 @@ fn reap(child: libc::pid_t) {
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn close_fd(descriptor: libc::c_int) {
+pub(super) fn close_fd(descriptor: libc::c_int) {
     if descriptor >= 0 {
         unsafe {
             libc::close(descriptor);
@@ -98,6 +101,6 @@ fn close_fd(descriptor: libc::c_int) {
 }
 
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-fn last_errno() -> Option<i32> {
+pub(super) fn last_errno() -> Option<i32> {
     std::io::Error::last_os_error().raw_os_error()
 }

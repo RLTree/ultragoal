@@ -17,8 +17,8 @@ struct Fixture {
     root: PathBuf,
     home: PathBuf,
     project: PathBuf,
-    executable: PathBuf,
-    alternate_executable: PathBuf,
+    selected_fixture: SelectedCodexExecutableTestFixture,
+    alternate_fixture: SelectedCodexExecutableTestFixture,
     package: PackageIdentity,
     host: HostCapabilityDeclaration,
     journey: JourneyBinding,
@@ -40,15 +40,11 @@ impl Fixture {
         let project = root.join("project");
         fs::create_dir(&home).unwrap();
         fs::create_dir(&project).unwrap();
-        let executable = root.join("codex");
-        let alternate_executable = root.join("codex-other");
-        fs::write(&executable, b"descriptor-execution-fixture-v1").unwrap();
-        fs::write(&alternate_executable, b"descriptor-execution-fixture-v1").unwrap();
-        #[cfg(unix)]
-        {
-            fs::set_permissions(&executable, fs::Permissions::from_mode(0o700)).unwrap();
-            fs::set_permissions(&alternate_executable, fs::Permissions::from_mode(0o700)).unwrap();
-        }
+        let selected_fixture =
+            test_fixture("lifecycle-primary", b"descriptor-execution-fixture-v1");
+        let alternate_fixture =
+            test_fixture("lifecycle-alternate", b"descriptor-execution-fixture-v1");
+        let executable = selected_fixture.path.clone();
         let source = SourceIdentity::new(
             d(seed),
             d(next_hex(seed)),
@@ -77,8 +73,8 @@ impl Fixture {
             root,
             home,
             project,
-            executable,
-            alternate_executable,
+            selected_fixture,
+            alternate_fixture,
             package,
             host,
             journey,
@@ -90,11 +86,11 @@ impl Fixture {
     }
 
     fn pin(&self) -> SelectedCodexExecutable {
-        SelectedCodexExecutable::pin_for_test_fixture(&self.executable).unwrap()
+        self.selected_fixture.selected.duplicate().unwrap()
     }
 
     fn pin_alternate(&self) -> SelectedCodexExecutable {
-        SelectedCodexExecutable::pin_for_test_fixture(&self.alternate_executable).unwrap()
+        self.alternate_fixture.selected.duplicate().unwrap()
     }
 }
 
