@@ -6,7 +6,7 @@ pub(crate) fn failures(root: &Path, value: &Value, pointer: &str, out: &mut Vec<
         Value::Object(map) => {
             for (key, item) in map {
                 let next = format!("{pointer}/{key}");
-                if key == "evidence" {
+                if matches!(key.as_str(), "evidence" | "repository_evidence") {
                     evidence_ref_failure(root, item, &next, out);
                 } else {
                     failures(root, item, &next, out);
@@ -21,6 +21,9 @@ pub(crate) fn failures(root: &Path, value: &Value, pointer: &str, out: &mut Vec<
         _ => {}
     }
 }
+
+#[cfg(test)]
+mod tests;
 
 fn evidence_ref_failure(root: &Path, value: &Value, pointer: &str, out: &mut Vec<String>) {
     let Some(obj) = value.as_object() else {

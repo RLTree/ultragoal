@@ -47,6 +47,18 @@ pub const TRUTH_LAYERS: [TruthLayer; 10] = [
     TruthLayer::Journey,
 ];
 
+pub const PRODUCT_FITNESS_SURFACES: [TruthLayer; 9] = [
+    TruthLayer::Source,
+    TruthLayer::Package,
+    TruthLayer::Marketplace,
+    TruthLayer::Install,
+    TruthLayer::Cache,
+    TruthLayer::AppRegistry,
+    TruthLayer::Discovery,
+    TruthLayer::Runtime,
+    TruthLayer::Journey,
+];
+
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ClaimCeiling {
@@ -198,6 +210,8 @@ pub struct ProductFitnessDisposition {
     pub real_work_observation: Option<RealWorkObservation>,
     #[serde(default)]
     pub manual_journey_row: Option<ManualJourneyRow>,
+    #[serde(default)]
+    pub claimed_surface: Option<TruthLayer>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

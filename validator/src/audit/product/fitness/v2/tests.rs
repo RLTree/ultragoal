@@ -108,10 +108,30 @@ fn runtime_claim_requires_its_live_predecessors() {
     receipt["surface_claim_ceilings"]["runtime"] = json!("live_same_surface_proven");
     let failures = super::failures(&receipt);
     assert!(failures.iter().any(|failure| {
-        failure == "product_fitness_claimed_surface_predecessor_missing:runtime:install"
+        failure == "product_fitness_surface_predecessor_missing:runtime:install"
     }));
     assert!(failures.iter().any(|failure| {
-        failure == "product_fitness_claimed_surface_predecessor_missing:runtime:discovery"
+        failure == "product_fitness_surface_predecessor_missing:runtime:discovery"
+    }));
+}
+
+#[test]
+fn every_live_surface_requires_its_own_predecessors() {
+    let mut receipt = receipt();
+    let candidate = receipt["target_revision"]["value"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    receipt["evidence_class"] = json!("runtime");
+    receipt["claimed_surface"] = json!("source");
+    receipt["surface_identities"]["runtime"] = observed("runtime", &candidate);
+    receipt["surface_claim_ceilings"]["runtime"] = json!("live_same_surface_proven");
+    let failures = super::failures(&receipt);
+    assert!(failures.iter().any(|failure| {
+        failure == "product_fitness_surface_predecessor_missing:runtime:install"
+    }));
+    assert!(failures.iter().any(|failure| {
+        failure == "product_fitness_surface_predecessor_missing:runtime:discovery"
     }));
 }
 

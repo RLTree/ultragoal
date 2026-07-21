@@ -3,10 +3,10 @@ mod ladder;
 mod model;
 mod v2;
 
-pub use ladder::source_candidate_ceilings;
+pub use ladder::{product_fitness_candidate_ceilings, source_candidate_ceilings};
 pub use model::{
     ClaimCeiling, DimensionDisposition, DimensionEvidence, EvidenceBinding, EvidenceClass,
-    FitnessDimension, ManualJourneyRow, OperatorKind, OverallDisposition,
+    FitnessDimension, ManualJourneyRow, OperatorKind, OverallDisposition, PRODUCT_FITNESS_SURFACES,
     ProductFitnessDisposition, ProductFitnessError, PublicEntryObservation, RealWorkObservation,
     SurfaceIdentities, SurfaceIdentity, SurfaceStatus, TRUTH_LAYERS, TruthLayer,
 };
@@ -38,13 +38,18 @@ impl ProductFitnessDisposition {
         validate_overall(self)?;
         if self.schema_version == "HarnessProductFitnessDisposition-v2" {
             v2::validate(self, root)?;
-            ladder::validate(&self.truth_layer_ceilings)?;
+            ladder::validate_product_fitness(
+                &self.truth_layer_ceilings,
+                self.claimed_surface
+                    .ok_or(ProductFitnessError::MissingV2Field)?,
+            )?;
         } else if self.operator_kind.is_some()
             || self.evidence_class.is_some()
             || self.surface_identities.is_some()
             || self.public_entry_observation.is_some()
             || self.real_work_observation.is_some()
             || self.manual_journey_row.is_some()
+            || self.claimed_surface.is_some()
         {
             return Err(ProductFitnessError::InvalidDisposition);
         } else {

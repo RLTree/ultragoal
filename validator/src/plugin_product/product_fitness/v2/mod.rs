@@ -1,10 +1,12 @@
 use super::evidence;
 use super::model::{
-    ClaimCeiling, DimensionDisposition, EvidenceClass, OperatorKind, ProductFitnessDisposition,
+    DimensionDisposition, EvidenceClass, OperatorKind, ProductFitnessDisposition,
     ProductFitnessError, SurfaceIdentities, SurfaceStatus, TruthLayer,
 };
 use std::collections::BTreeSet;
 use std::path::Path;
+
+mod ceiling;
 
 pub(super) fn validate(
     disposition: &ProductFitnessDisposition,
@@ -31,7 +33,7 @@ pub(super) fn validate(
     validate_entry(disposition, root)?;
     validate_work(disposition, root)?;
     validate_journey(disposition)?;
-    validate_ceiling(disposition, class, surfaces)
+    ceiling::validate(disposition, class, surfaces)
 }
 
 fn validate_operator_class(
@@ -189,82 +191,4 @@ fn validate_journey(disposition: &ProductFitnessDisposition) -> Result<(), Produ
         return Err(ProductFitnessError::MissingObservation);
     }
     Ok(())
-}
-
-fn validate_ceiling(
-    disposition: &ProductFitnessDisposition,
-    class: EvidenceClass,
-    surfaces: &SurfaceIdentities,
-) -> Result<(), ProductFitnessError> {
-    for layer in super::model::TRUTH_LAYERS {
-        let ceiling = disposition
-            .truth_layer_ceilings
-            .get(&layer)
-            .ok_or(ProductFitnessError::MissingTruthLayer)?;
-        if *ceiling != ClaimCeiling::LiveSameSurfaceProven {
-            continue;
-        }
-        if !supports_live_layer(layer, class) {
-            return Err(ProductFitnessError::UnsupportedClaimCeiling);
-        }
-        let observed = match layer {
-            TruthLayer::Source => surfaces.source.status,
-            TruthLayer::Package => surfaces.package.status,
-            TruthLayer::Marketplace => surfaces.marketplace.status,
-            TruthLayer::Install => surfaces.install.status,
-            TruthLayer::Cache => surfaces.cache.status,
-            TruthLayer::AppRegistry => surfaces.app_registry.status,
-            TruthLayer::PluginsUi => return Err(ProductFitnessError::UnsupportedClaimCeiling),
-            TruthLayer::Discovery => surfaces.discovery.status,
-            TruthLayer::Runtime => surfaces.runtime.status,
-            TruthLayer::Journey => surfaces.journey.status,
-        };
-        if observed != SurfaceStatus::Observed {
-            return Err(ProductFitnessError::MissingObservation);
-        }
-        if class == EvidenceClass::AgentUse && layer == TruthLayer::Journey {
-            return Err(ProductFitnessError::UnsupportedClaimCeiling);
-        }
-    }
-    Ok(())
-}
-
-fn supports_live_layer(layer: TruthLayer, class: EvidenceClass) -> bool {
-    match class {
-        EvidenceClass::Intent | EvidenceClass::Research | EvidenceClass::Prototype => false,
-        EvidenceClass::Source => layer == TruthLayer::Source,
-        EvidenceClass::Package => matches!(layer, TruthLayer::Source | TruthLayer::Package),
-        EvidenceClass::Installed => {
-            matches!(
-                layer,
-                TruthLayer::Source
-                    | TruthLayer::Package
-                    | TruthLayer::Marketplace
-                    | TruthLayer::Install
-            )
-        }
-        EvidenceClass::Runtime | EvidenceClass::AgentUse => matches!(
-            layer,
-            TruthLayer::Source
-                | TruthLayer::Package
-                | TruthLayer::Marketplace
-                | TruthLayer::Install
-                | TruthLayer::Cache
-                | TruthLayer::AppRegistry
-                | TruthLayer::Discovery
-                | TruthLayer::Runtime
-        ),
-        EvidenceClass::HumanUse | EvidenceClass::RepeatedHumanUse => matches!(
-            layer,
-            TruthLayer::Source
-                | TruthLayer::Package
-                | TruthLayer::Marketplace
-                | TruthLayer::Install
-                | TruthLayer::Cache
-                | TruthLayer::AppRegistry
-                | TruthLayer::Discovery
-                | TruthLayer::Runtime
-                | TruthLayer::Journey
-        ),
-    }
 }

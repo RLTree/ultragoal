@@ -100,6 +100,7 @@ fn disposition(
         public_entry_observation: None,
         real_work_observation: None,
         manual_journey_row: None,
+        claimed_surface: None,
     }
 }
 

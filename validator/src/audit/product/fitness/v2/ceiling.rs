@@ -23,9 +23,11 @@ pub(super) fn failures(receipt: &Value, out: &mut Vec<String>) {
     }
     for surface in SURFACES {
         validate_surface_ceiling(receipt, surface, &class, out);
-    }
-    if global == "live_same_surface_proven" {
-        require_live_predecessors(receipt, &claimed, out);
+        if string(receipt, &format!("/surface_claim_ceilings/{surface}"))
+            == "live_same_surface_proven"
+        {
+            require_live_predecessors(receipt, surface, out);
+        }
     }
     if (claimed == "journey" || matches!(class.as_str(), "human_use" | "repeated_human_use"))
         && string(receipt, "/surface_identities/journey/status") != "observed"
@@ -50,8 +52,8 @@ fn validate_surface_ceiling(receipt: &Value, surface: &str, class: &str, out: &m
     }
 }
 
-fn require_live_predecessors(receipt: &Value, claimed: &str, out: &mut Vec<String>) {
-    for predecessor in predecessors(claimed) {
+fn require_live_predecessors(receipt: &Value, surface: &str, out: &mut Vec<String>) {
+    for predecessor in predecessors(surface) {
         if string(receipt, &format!("/surface_claim_ceilings/{predecessor}"))
             != "live_same_surface_proven"
             || string(
@@ -60,7 +62,7 @@ fn require_live_predecessors(receipt: &Value, claimed: &str, out: &mut Vec<Strin
             ) != "observed"
         {
             out.push(format!(
-                "product_fitness_claimed_surface_predecessor_missing:{claimed}:{predecessor}"
+                "product_fitness_surface_predecessor_missing:{surface}:{predecessor}"
             ));
         }
     }

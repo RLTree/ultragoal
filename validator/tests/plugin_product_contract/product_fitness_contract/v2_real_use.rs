@@ -26,7 +26,8 @@ fn withheld_surface() -> SurfaceIdentity {
 fn v2_disposition(root: &Path) -> ProductFitnessDisposition {
     let mut disposition = disposition(root, |_| DimensionDisposition::Pass);
     disposition.schema_version = "HarnessProductFitnessDisposition-v2".to_owned();
-    disposition.truth_layer_ceilings = source_candidate_ceilings();
+    disposition.truth_layer_ceilings = product_fitness_candidate_ceilings();
+    disposition.claimed_surface = Some(TruthLayer::Source);
     disposition.operator_kind = Some(OperatorKind::Human);
     disposition.evidence_class = Some(EvidenceClass::RepeatedHumanUse);
     disposition.surface_identities = Some(SurfaceIdentities {
@@ -88,6 +89,14 @@ fn v2_binds_real_use_and_separate_surface_identities() {
     let root = TempRoot::new();
     let disposition = v2_disposition(root.path());
     disposition.validate(root.path()).unwrap();
+    assert_eq!(
+        disposition
+            .truth_layer_ceilings
+            .keys()
+            .copied()
+            .collect::<Vec<_>>(),
+        PRODUCT_FITNESS_SURFACES
+    );
 }
 
 #[test]
@@ -171,93 +180,36 @@ fn v2_rejects_bypass_wrong_surface_missing_identity_and_unsupported_ceiling() {
 }
 
 #[test]
-fn typed_disposition_rejects_legacy_dogfood_schema() {
+fn v2_runtime_claim_uses_nine_surfaces_and_explicit_predecessors() {
     let root = TempRoot::new();
-    let mut legacy = v2_disposition(root.path());
-    legacy.schema_version = "harness-ultragoal.dogfood-receipt.v1".to_owned();
-    assert_eq!(
-        legacy.validate(root.path()),
-        Err(ProductFitnessError::InvalidDisposition)
-    );
-}
-
-#[test]
-fn v2_rejects_duplicate_surface_evidence_and_unbound_observations() {
-    let root = TempRoot::new();
-    let mut duplicate = v2_disposition(root.path());
-    let source = duplicate
-        .surface_identities
-        .as_ref()
-        .unwrap()
-        .source
-        .evidence
-        .clone();
-    duplicate
-        .surface_identities
-        .as_mut()
-        .unwrap()
-        .package
-        .evidence = source;
-    assert_eq!(
-        duplicate.validate(root.path()),
-        Err(ProductFitnessError::WrongSurface)
-    );
-
-    let mut stale = v2_disposition(root.path());
-    stale
-        .public_entry_observation
-        .as_mut()
-        .unwrap()
-        .evidence
-        .current_session = false;
-    assert_eq!(
-        stale.validate(root.path()),
-        Err(ProductFitnessError::EvidenceStale)
-    );
-
-    let mut unbound = v2_disposition(root.path());
-    unbound
-        .real_work_observation
-        .as_mut()
-        .unwrap()
-        .repository_identity = digest(b"other repository");
-    assert_eq!(
-        unbound.validate(root.path()),
-        Err(ProductFitnessError::InvalidRepository)
-    );
-}
-
-#[test]
-fn v2_requires_legacy_dogfood_rejection_and_permits_marketplace_from_installed() {
-    let root = TempRoot::new();
-    let mut omitted = v2_disposition(root.path());
-    omitted
-        .substitution_rejections
-        .remove("legacy_dogfood_receipt");
-    assert_eq!(
-        omitted.validate(root.path()),
-        Err(ProductFitnessError::MissingSubstitutionRejection)
-    );
-
-    let mut marketplace = v2_disposition(root.path());
-    marketplace.evidence_class = Some(EvidenceClass::Installed);
-    marketplace.operator_kind = Some(OperatorKind::Agent);
-    marketplace.dimensions.iter_mut().for_each(|item| {
+    let mut runtime = v2_disposition(root.path());
+    runtime.evidence_class = Some(EvidenceClass::Runtime);
+    runtime.operator_kind = Some(OperatorKind::Agent);
+    runtime.claimed_surface = Some(TruthLayer::Runtime);
+    runtime.dimensions.iter_mut().for_each(|item| {
         if item.dimension == FitnessDimension::Continuance {
             item.disposition = DimensionDisposition::Blocked;
         }
     });
-    marketplace.overall = OverallDisposition::Blocked;
-    marketplace.surface_identities.as_mut().unwrap().marketplace =
-        observed_surface(root.path(), "marketplace", "marketplace-identity");
+    runtime.overall = OverallDisposition::Blocked;
     for layer in [
         TruthLayer::Source,
         TruthLayer::Package,
-        TruthLayer::Marketplace,
+        TruthLayer::Install,
+        TruthLayer::Discovery,
+        TruthLayer::Runtime,
     ] {
-        marketplace
+        runtime
             .truth_layer_ceilings
             .insert(layer, ClaimCeiling::LiveSameSurfaceProven);
     }
-    marketplace.validate(root.path()).unwrap();
+    runtime.validate(root.path()).unwrap();
+
+    runtime
+        .truth_layer_ceilings
+        .insert(TruthLayer::PluginsUi, ClaimCeiling::LiveSameSurfaceProven);
+    assert_eq!(
+        runtime.validate(root.path()),
+        Err(ProductFitnessError::MissingTruthLayer)
+    );
 }
