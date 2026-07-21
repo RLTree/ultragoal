@@ -1359,6 +1359,14 @@ warning-denied compilation, four lifecycle-completion controls, two host-custody
 controls, standards, generated authority, line limits, and a bounded
 Terra/medium review pass. No product claim advances from the path-only change.
 
+The installed-daily-driver implementation lane is active in Codex task
+`019f8279-902d-7861-b6c3-0ec51ffe1d4e`, worktree `6896`, branch
+`codex/installed-daily-driver-6896`, from exact base
+`dc15090165b1a71e1bba7e095102b93624b59e57` / tree
+`3cf5c262fcd161140caefdc13c09d8d74fddde16`. Its ceiling is source-local and
+isolated-install-path only. Root retains public wiring, live host installation,
+fresh-task discovery, real-repository execution, Product Fitness, and claims.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
