@@ -8,10 +8,10 @@ use crate::distribution::host_effect::{
 use crate::distribution::{HostCommand, HostCommandPlan, PackageIdentity};
 use serde::{Deserialize, Serialize};
 
-include!("host_custody_observations.rs");
-include!("host_custody_binding.rs");
-include!("host_custody_record.rs");
-include!("host_custody_recovery.rs");
+include!("observations.rs");
+include!("binding.rs");
+include!("record.rs");
+include!("recovery.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
@@ -206,5 +206,4 @@ impl HostLifecycleCustody {
 }
 
 #[cfg(test)]
-#[path = "host_custody_tests.rs"]
 mod tests;

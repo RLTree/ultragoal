@@ -8,7 +8,7 @@
 //! backend for Linux/FreeBSD, and descriptor-relative durable publication used
 //! by the executor after a retained-authority handoff.
 
-#[path = "reservation/lifecycle_completion.rs"]
+#[path = "reservation/lifecycle_completion/mod.rs"]
 mod lifecycle_completion;
 mod model;
 mod process;

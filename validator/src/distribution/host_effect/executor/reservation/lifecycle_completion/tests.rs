@@ -12,7 +12,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
-include!("lifecycle_completion_fixture.rs");
+include!("fixture.rs");
 
 #[test]
 fn reopen_reserve_in_flight_admits_only_the_signed_exact_record() {

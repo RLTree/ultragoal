@@ -173,5 +173,4 @@ impl HostEffectCompletion {
 }
 
 #[cfg(test)]
-#[path = "lifecycle_completion_tests.rs"]
 mod tests;
