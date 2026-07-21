@@ -130,6 +130,12 @@ fn semantic_validation_rejects_candidate_and_claim_substitution() {
 }
 
 #[test]
+fn product_success_contract_facts_require_version_2_2_0() {
+    assert!(super::reader::product_contract_version_supported("2.2.0"));
+    assert!(!super::reader::product_contract_version_supported("2.1.0"));
+}
+
+#[test]
 fn semantic_validation_rejects_noncontiguous_truth_loop() {
     let mut value = brief();
     value.first_truth_loop.positive_path[0].order = 2;

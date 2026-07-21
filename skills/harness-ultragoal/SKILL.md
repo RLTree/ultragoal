@@ -20,25 +20,29 @@ When the binary is exposed, probe only read paths:
 ultragoal --json --help
 ultragoal --json inspect capabilities
 ultragoal --json inspect context
-ultragoal --json inspect inception
 ```
 
 Do not infer availability, model, mode, reasoning, permissions, installation,
 discovery, or runtime identity from the prompt or source tree.
 
-For project initiation or recovery, the inception read is the first truth
-loop. It reads the repository-root `PRODUCT_SUCCESS_BRIEF.json` without
-writing it; a missing brief returns the typed fields still owed. Historical v1
-briefs are readable context only, while a valid v2 brief is eligible for
-evidence-led ranking after the public dispatcher binds the route.
+`inspect inception` is source-local until root wires it into the public CLI
+catalog and dispatcher. Do not invoke or select it from this skill before the
+current capability output exposes that read-only route. The root-owned wiring
+request is to bind the inception projection to the canonical public authority
+catalog and dispatcher; only then may an exposed `inspect inception` route be
+probed. Its read, once exposed, reads the repository-root
+`PRODUCT_SUCCESS_BRIEF.json` without writing it; a missing brief returns the
+typed fields still owed. Historical v1 briefs are readable context only, while
+a valid v2 brief is eligible for evidence-led ranking.
 
 ## Select exactly one route
 
 Apply this order to the immediate outcome:
 
-1. Project initiation or recovery needing a first truth loop -> the typed
-   `inspect inception` read route, then exactly one downstream workflow after
-   its projection is available.
+1. Project initiation or recovery needing a first truth loop -> use the typed
+   `inspect inception` read route only when the current capability output
+   exposes it; otherwise select no inception route and request the root-owned
+   public catalog and dispatcher wiring.
 2. Independent falsification or quality-in-use review ->
    `$harness-ultragoal:product-journey-review`.
 3. One named claim and strict proof -> `$harness-ultragoal:prove`.

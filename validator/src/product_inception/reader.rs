@@ -17,6 +17,7 @@ const SURFACE_CATALOG_PATH: &str =
     "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json";
 const GENERATED_CONTRACT_AUTHORITY_PATH: &str =
     "migration/generated-surface-authority/product-success-contract.json";
+const PRODUCT_SUCCESS_CONTRACT_VERSION: &str = "2.2.0";
 const MAX_BRIEF_BYTES: u64 = 1024 * 1024;
 const MAX_CONTRACT_BYTES: u64 = 16 * 1024 * 1024;
 pub(crate) struct ReadResult {
@@ -83,6 +84,9 @@ fn facts(
     let surface_value = parse_json(surfaces, "surface_catalog_invalid")?;
     let product_contract_id = text(&contract_value, "product_success_contract_id")?;
     let contract_version = text(&contract_value, "contract_version")?;
+    if !product_contract_version_supported(&contract_version) {
+        return Err(InceptionError::ContractBindingInvalid);
+    }
     let authority_contract_id = text(&claim_value, "contract_id")?;
     let contract_claim_ids = string_array(&contract_value, "claim_ids")?;
     let claim_ids = rows(&claim_value, "claims")?
@@ -122,6 +126,9 @@ fn facts(
         surface_ids,
     })
 }
+pub(super) fn product_contract_version_supported(version: &str) -> bool {
+    version == PRODUCT_SUCCESS_CONTRACT_VERSION
+}
 fn generated_surface_digest(value: &Value) -> Result<String, InceptionError> {
     let row = value
         .get("surfaces")
@@ -134,7 +141,6 @@ fn generated_surface_digest(value: &Value) -> Result<String, InceptionError> {
         .ok_or(InceptionError::ContractBindingInvalid)?;
     text(row, "sha256")
 }
-
 fn catalog_has_digest(catalog: &AuthorityCatalog, path: &str, digest: &str) -> bool {
     catalog.entries().iter().any(|entry| {
         entry.relative_path == path && format!("sha256:{}", entry.digest_sha256) == digest
@@ -152,7 +158,6 @@ fn read_required(
         .read_bounded(&path, maximum)
         .map_err(|_| InceptionError::UnsafeInput)
 }
-
 fn read_optional(
     reads: &ReadSession,
     root: &Path,
@@ -172,7 +177,6 @@ fn read_optional(
         Err(_) => Err(InceptionError::UnsafeInput),
     }
 }
-
 pub(super) fn regular_file(path: &Path) -> Result<(), InceptionError> {
     let metadata = fs::symlink_metadata(path).map_err(|_| InceptionError::UnsafeInput)?;
     if !metadata.is_file() || metadata.file_type().is_symlink() || is_hard_linked(&metadata) {
@@ -180,18 +184,15 @@ pub(super) fn regular_file(path: &Path) -> Result<(), InceptionError> {
     }
     Ok(())
 }
-
 #[cfg(unix)]
 fn is_hard_linked(metadata: &fs::Metadata) -> bool {
     use std::os::unix::fs::MetadataExt;
     metadata.nlink() != 1
 }
-
 #[cfg(not(unix))]
 fn is_hard_linked(_metadata: &fs::Metadata) -> bool {
     false
 }
-
 pub(super) fn confined(root: &Path, relative: &str) -> Result<PathBuf, InceptionError> {
     let path = root.join(relative);
     if path.strip_prefix(root).is_err()
@@ -203,7 +204,6 @@ pub(super) fn confined(root: &Path, relative: &str) -> Result<PathBuf, Inception
     }
     Ok(path)
 }
-
 fn parse_json(bytes: &[u8], code: &'static str) -> Result<Value, InceptionError> {
     serde_json::from_slice(bytes).map_err(|_| InceptionError::Code(code))
 }
