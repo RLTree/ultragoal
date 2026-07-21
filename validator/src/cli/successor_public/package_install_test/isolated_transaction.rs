@@ -136,13 +136,14 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
     let binding_sha256 = binding.binding_sha256().to_owned();
     let executable = crate::distribution::resolve_codex_executable()
         .map_err(|_| "pinned Codex executable unavailable")?;
+    let ledger_root = isolated_ledger_root(&root_path)?;
     let result = crate::distribution::host_effect::execute_host_lifecycle_transaction(
         plan,
         package.clone(),
         command_plan,
         binding,
         host,
-        &root_path,
+        &ledger_root,
         "isolated-codex-install-test".to_owned(),
         "harness-ultragoal-package-install-test".to_owned(),
         executable,
@@ -167,4 +168,18 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         runtime_observation_sha256: surfaces.runtime,
         journey_binding_sha256: binding_sha256,
     })
+}
+
+fn isolated_ledger_root(root: &Path) -> Result<std::path::PathBuf, &'static str> {
+    let ledger = root.join("host-lifecycle-ledger");
+    let mut builder = std::fs::DirBuilder::new();
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::DirBuilderExt;
+        builder.mode(0o700);
+    }
+    builder
+        .create(&ledger)
+        .map_err(|_| "isolated host ledger root creation failed")?;
+    Ok(ledger)
 }
