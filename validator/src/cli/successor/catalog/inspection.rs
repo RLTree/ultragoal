@@ -25,6 +25,13 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         &[],
     ),
     descriptor(
+        SuccessorCommand::Inspect(InspectTarget::Inception),
+        Some("inception"),
+        EffectClass::Read,
+        "Inspect the current Product Success Brief and first truth loop without writes.",
+        &[],
+    ),
+    descriptor(
         SuccessorCommand::Inspect(InspectTarget::Inventory),
         Some("inventory"),
         EffectClass::Read,

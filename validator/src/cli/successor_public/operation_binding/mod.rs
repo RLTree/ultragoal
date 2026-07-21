@@ -25,6 +25,12 @@ const CONTEXT: &[&str] = &["LiveContext::build", "EffectClass"];
 const CONTEXT_INSPECTION: &[&str] = &["LiveContext::build", "EffectClass", "CandidateIdentity"];
 const CAPABILITIES: &[&str] = &["LiveContext::build", "EffectClass", "CapabilitySet"];
 const ORCHESTRATION: &[&str] = &["LiveContext::build", "EffectClass", "SchedulerFrontier"];
+const INCEPTION: &[&str] = &[
+    "LiveContext::build",
+    "EffectClass",
+    "ProductInception",
+    "ProductSuccessBrief",
+];
 const INVENTORY: &[&str] = &[
     "LiveContext::build",
     "EffectClass",
@@ -105,6 +111,12 @@ const BINDINGS: &[Binding] = &[
         SuccessorCommand::Inspect(InspectTarget::Orchestration),
         EffectClass::Read,
         ORCHESTRATION,
+    ),
+    binding(
+        PublicOperation::InceptionInspection,
+        SuccessorCommand::Inspect(InspectTarget::Inception),
+        EffectClass::Read,
+        INCEPTION,
     ),
     binding(
         PublicOperation::InventoryInspection,

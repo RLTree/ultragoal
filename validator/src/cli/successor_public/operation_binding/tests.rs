@@ -17,6 +17,13 @@ fn invocation(command: SuccessorCommand, effect: EffectClass) -> ParsedInvocatio
 fn only_exact_supported_command_effect_pairs_bind() {
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Inspect(InspectTarget::Inception),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::InceptionInspection),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Observe(ObserveAction::Query),
             EffectClass::Read,
         )),

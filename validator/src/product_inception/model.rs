@@ -37,7 +37,7 @@ pub(crate) struct BriefV2 {
     pub(crate) depth_triggers: Vec<DepthTrigger>,
     pub(crate) evidence_class: EvidenceClass,
     pub(crate) evidence_ladder: String,
-    pub(crate) claim_ceiling: String,
+    pub(crate) claim_ceiling: InceptionClaimCeiling,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -107,6 +107,9 @@ pub(crate) struct TruthLoop {
 #[serde(deny_unknown_fields)]
 pub(crate) struct Transition {
     pub(crate) transition_id: String,
+    pub(crate) action_id: String,
+    pub(crate) command_id: String,
+    pub(crate) effect: InceptionEffect,
     pub(crate) order: u32,
     pub(crate) dependency_ids: Vec<String>,
     pub(crate) capability_ids: Vec<String>,
@@ -130,6 +133,7 @@ pub(crate) struct FailureControl {
 #[serde(deny_unknown_fields)]
 pub(crate) struct DepthTrigger {
     pub(crate) trigger_id: String,
+    pub(crate) action_id: String,
     pub(crate) kind: DepthTriggerKind,
     pub(crate) risk_or_claim: String,
     pub(crate) activation_finding_codes: Vec<String>,
@@ -160,6 +164,32 @@ pub(crate) enum EvidenceClass {
     AgentUse,
     HumanUse,
     RepeatedHumanUse,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum InceptionEffect {
+    Read,
+    PlannedWrite,
+    WorkspaceWrite,
+    ExternalWrite,
+    Destructive,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum InceptionClaimCeiling {
+    WithheldOrBlocked,
+    IntentOnly,
+    ResearchOnly,
+    PrototypeOnly,
+    SourceOnly,
+    PackageOnly,
+    InstalledOnly,
+    RuntimeOnly,
+    AgentUseOnly,
+    HumanUseOnly,
+    RepeatedHumanUseOnly,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

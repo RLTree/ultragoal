@@ -3,6 +3,8 @@ use super::normalize;
 use super::parser::{ParsedBrief, parse};
 use super::reader::{confined, regular_file};
 use super::validation::validate_v2;
+use crate::context::EffectClass;
+use crate::state::{ActionDefinition, ActionKind, AuthorityRequirement};
 use serde_json::json;
 use std::fs;
 use std::path::Path;
@@ -72,6 +74,9 @@ fn brief() -> BriefV2 {
             "loop_id": "loop-1",
             "positive_path": [{
                 "transition_id": "inspect",
+                "action_id": "inspect-product-inception",
+                "command_id": "inspect-inception",
+                "effect": "read",
                 "order": 1,
                 "dependency_ids": [],
                 "capability_ids": ["read"],
@@ -94,7 +99,7 @@ fn brief() -> BriefV2 {
         "depth_triggers": [],
         "evidence_class": "source",
         "evidence_ladder": "source",
-        "claim_ceiling": "source only"
+        "claim_ceiling": "source_only"
     }))
     .expect("valid v2 brief")
 }
@@ -143,6 +148,50 @@ fn semantic_validation_rejects_noncontiguous_truth_loop() {
         validate_v2(&value, &facts(), &candidate()),
         Err("brief_truth_loop_invalid")
     );
+}
+
+#[test]
+fn semantic_validation_rejects_claim_ceiling_above_evidence_class() {
+    let mut value = brief();
+    value.claim_ceiling = super::model::InceptionClaimCeiling::InstalledOnly;
+    assert_eq!(
+        validate_v2(&value, &facts(), &candidate()),
+        Err("brief_claim_ceiling_exceeds_evidence")
+    );
+}
+
+#[test]
+fn validated_transition_binds_only_the_exact_root_action() {
+    let mut actions = vec![ActionDefinition {
+        action_id: "inspect-product-inception".to_owned(),
+        priority: 50,
+        kind: ActionKind::Command,
+        repair_id: "repair-product-inception".to_owned(),
+        requires_dependencies: Vec::new(),
+        required_capabilities: vec!["read".to_owned()],
+        effect: EffectClass::Read,
+        authority: AuthorityRequirement::Root,
+        command_id: Some("inspect-inception".to_owned()),
+        authority_request: None,
+        evidence_led: None,
+    }];
+    assert!(matches!(
+        super::ranking::bind_validated(&brief(), &digest('f'), &mut actions, &Default::default(),),
+        Ok(super::ranking::RankingDisposition::Active)
+    ));
+    let binding = actions[0]
+        .evidence_led
+        .as_ref()
+        .expect("root binding issued");
+    assert_eq!(binding.transition_id.as_deref(), Some("inspect"));
+    assert_eq!(binding.transition_order, Some(1));
+
+    let mut wrong = brief();
+    wrong.first_truth_loop.positive_path[0].command_id = "wrong-command".to_owned();
+    assert!(matches!(
+        super::ranking::bind_validated(&wrong, &digest('f'), &mut actions, &Default::default(),),
+        Ok(super::ranking::RankingDisposition::InceptionRequired)
+    ));
 }
 
 #[test]

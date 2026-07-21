@@ -25,12 +25,9 @@ ultragoal --json inspect context
 Do not infer availability, model, mode, reasoning, permissions, installation,
 discovery, or runtime identity from the prompt or source tree.
 
-`inspect inception` is source-local until root wires it into the public CLI
-catalog and dispatcher. Do not invoke or select it from this skill before the
-current capability output exposes that read-only route. The root-owned wiring
-request is to bind the inception projection to the canonical public authority
-catalog and dispatcher; only then may an exposed `inspect inception` route be
-probed. Its read, once exposed, reads the repository-root
+Select `inspect inception` only when the current `ultragoal --json --help`
+catalog exposes that exact read-only route; the capabilities projection reports
+tool authority, not command availability. The route reads the repository-root
 `PRODUCT_SUCCESS_BRIEF.json` without writing it; a missing brief returns the
 typed fields still owed. Historical v1 briefs are readable context only, while
 a valid v2 brief is eligible for evidence-led ranking.
@@ -40,9 +37,8 @@ a valid v2 brief is eligible for evidence-led ranking.
 Apply this order to the immediate outcome:
 
 1. Project initiation or recovery needing a first truth loop -> use the typed
-   `inspect inception` read route only when the current capability output
-   exposes it; otherwise select no inception route and request the root-owned
-   public catalog and dispatcher wiring.
+   `inspect inception` read route only when current help exposes it; otherwise
+   report that the installed/public command surface is unavailable.
 2. Independent falsification or quality-in-use review ->
    `$harness-ultragoal:product-journey-review`.
 3. One named claim and strict proof -> `$harness-ultragoal:prove`.

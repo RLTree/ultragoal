@@ -15,8 +15,7 @@ const CLAIM_REGISTRY_PATH: &str =
     "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json";
 const SURFACE_CATALOG_PATH: &str =
     "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json";
-const GENERATED_CONTRACT_AUTHORITY_PATH: &str =
-    "migration/generated-surface-authority/product-success-contract.json";
+const GENERATED_AUTHORITY_PATH: &str = "migration/generated-surface-authority.json";
 const PRODUCT_SUCCESS_CONTRACT_VERSION: &str = "2.2.0";
 const MAX_BRIEF_BYTES: u64 = 1024 * 1024;
 const MAX_CONTRACT_BYTES: u64 = 16 * 1024 * 1024;
@@ -28,21 +27,22 @@ pub(crate) struct ReadResult {
 }
 pub(crate) fn read(context: &LiveContext) -> Result<ReadResult, InceptionError> {
     context.revalidate().map_err(InceptionError::context)?;
-    let initial_candidate = candidate(context);
     let catalog = InventoryBuilder::new(context)
         .build()
         .map_err(|_| InceptionError::CatalogUnavailable)?;
+    read_with_catalog(context, catalog)
+}
+pub(crate) fn read_with_catalog(
+    context: &LiveContext,
+    catalog: AuthorityCatalog,
+) -> Result<ReadResult, InceptionError> {
+    let initial_candidate = candidate(context);
     let reads = context
         .begin_read_session()
         .map_err(InceptionError::context)?;
     let root = reads.root().to_path_buf();
     let contract = read_required(&reads, &root, PRODUCT_CONTRACT_PATH, MAX_CONTRACT_BYTES)?;
-    let generated = read_required(
-        &reads,
-        &root,
-        GENERATED_CONTRACT_AUTHORITY_PATH,
-        MAX_CONTRACT_BYTES,
-    )?;
+    let generated = read_required(&reads, &root, GENERATED_AUTHORITY_PATH, MAX_CONTRACT_BYTES)?;
     let claims = read_required(&reads, &root, CLAIM_REGISTRY_PATH, MAX_CONTRACT_BYTES)?;
     let surfaces = read_required(&reads, &root, SURFACE_CATALOG_PATH, MAX_CONTRACT_BYTES)?;
     let facts = facts(&catalog, &contract, &generated, &claims, &surfaces)?;
@@ -110,6 +110,7 @@ fn facts(
     let expected_contract_digest = generated_surface_digest(&generated_value)?;
     let contract_digest = digest::bytes(contract);
     if contract_digest != expected_contract_digest
+        || !catalog_has_digest(catalog, GENERATED_AUTHORITY_PATH, &digest::bytes(generated))
         || !catalog_has_digest(catalog, CLAIM_REGISTRY_PATH, &digest::bytes(claims))
         || !catalog_has_digest(catalog, SURFACE_CATALOG_PATH, &digest::bytes(surfaces))
     {
@@ -139,12 +140,15 @@ fn generated_surface_digest(value: &Value) -> Result<String, InceptionError> {
             })
         })
         .ok_or(InceptionError::ContractBindingInvalid)?;
-    text(row, "sha256")
+    text(row, "sha256").map(|digest| format!("sha256:{digest}"))
 }
 fn catalog_has_digest(catalog: &AuthorityCatalog, path: &str, digest: &str) -> bool {
-    catalog.entries().iter().any(|entry| {
-        entry.relative_path == path && format!("sha256:{}", entry.digest_sha256) == digest
-    })
+    let rows = catalog
+        .entries()
+        .iter()
+        .filter(|entry| entry.relative_path == path)
+        .collect::<Vec<_>>();
+    rows.len() == 1 && format!("sha256:{}", rows[0].digest_sha256) == digest
 }
 fn read_required(
     reads: &ReadSession,
@@ -207,7 +211,6 @@ pub(super) fn confined(root: &Path, relative: &str) -> Result<PathBuf, Inception
 fn parse_json(bytes: &[u8], code: &'static str) -> Result<Value, InceptionError> {
     serde_json::from_slice(bytes).map_err(|_| InceptionError::Code(code))
 }
-
 fn rows<'a>(value: &'a Value, key: &'static str) -> Result<&'a [Value], InceptionError> {
     value
         .get(key)
@@ -215,7 +218,6 @@ fn rows<'a>(value: &'a Value, key: &'static str) -> Result<&'a [Value], Inceptio
         .map(Vec::as_slice)
         .ok_or(InceptionError::ContractBindingInvalid)
 }
-
 fn string_array(value: &Value, key: &'static str) -> Result<Vec<String>, InceptionError> {
     value
         .get(key)
@@ -231,7 +233,6 @@ fn string_array(value: &Value, key: &'static str) -> Result<Vec<String>, Incepti
         })
         .collect()
 }
-
 fn text(value: &Value, key: &'static str) -> Result<String, InceptionError> {
     value
         .get(key)
@@ -240,11 +241,9 @@ fn text(value: &Value, key: &'static str) -> Result<String, InceptionError> {
         .map(ToOwned::to_owned)
         .ok_or(InceptionError::Code(key))
 }
-
 fn unique(values: &[String]) -> bool {
     !values.is_empty() && values.iter().collect::<BTreeSet<_>>().len() == values.len()
 }
-
 fn same_set(left: &[String], right: &[String]) -> bool {
     left.iter().collect::<BTreeSet<_>>() == right.iter().collect::<BTreeSet<_>>()
 }

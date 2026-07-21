@@ -4,6 +4,7 @@ pub(crate) enum PublicOperation {
     RoutineCheck,
     ContextInspection,
     OrchestrationInspection,
+    InceptionInspection,
     CapabilityInspection,
     InventoryInspection,
     StateInspection,

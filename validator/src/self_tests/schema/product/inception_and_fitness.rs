@@ -54,6 +54,9 @@ fn historical_and_evidence_led_product_briefs_have_distinct_valid_shapes() {
             "loop_id": "loop-1",
             "positive_path": [{
                 "transition_id": "inspect",
+                "action_id": "inspect-product-inception",
+                "command_id": "inspect-inception",
+                "effect": "read",
                 "order": 1,
                 "dependency_ids": [],
                 "capability_ids": ["read-repository"],
@@ -75,6 +78,7 @@ fn historical_and_evidence_led_product_briefs_have_distinct_valid_shapes() {
         },
         "depth_triggers": [{
             "trigger_id": "observed-failure",
+            "action_id": "inspect-product-inception",
             "kind": "observed_failure",
             "risk_or_claim": "CL-SOURCE",
             "activation_finding_codes": ["candidate-changed"],
@@ -84,7 +88,7 @@ fn historical_and_evidence_led_product_briefs_have_distinct_valid_shapes() {
         }],
         "evidence_class": "source",
         "evidence_ladder": "source",
-        "claim_ceiling": "source only"
+        "claim_ceiling": "source_only"
     });
     assert_valid(&store, "product-success-brief.schema.json", &v2);
 }

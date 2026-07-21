@@ -89,6 +89,9 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Inspect(InspectTarget::Orchestration) => {
             orchestration::project(&context, &invocation)
         }
+        SuccessorCommand::Inspect(InspectTarget::Inception) => {
+            inception::project(&context, &invocation)
+        }
         SuccessorCommand::Inspect(InspectTarget::Capabilities) => {
             capabilities::project(&context, &invocation, home)
         }

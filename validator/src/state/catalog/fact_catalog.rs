@@ -76,6 +76,8 @@ pub struct EvidenceLedActionBinding {
     pub brief_digest: String,
     pub transition_id: Option<String>,
     pub transition_order: Option<u32>,
+    pub active_trigger_ids: Vec<String>,
+    pub parked_trigger_ids: Vec<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

@@ -118,6 +118,8 @@ fn evidence_class_outranks_numeric_priority_without_bypassing_dependencies() {
         brief_digest: brief_digest(),
         transition_id: Some("transition-2".to_owned()),
         transition_order: Some(2),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
     });
     spec.actions = vec![speculation, loop_action];
     let state = derive_bound(inputs(), &catalog(spec)).unwrap();
@@ -138,6 +140,8 @@ fn earliest_active_truth_loop_transition_wins_deterministically() {
         brief_digest: brief_digest(),
         transition_id: Some("transition-2".to_owned()),
         transition_order: Some(2),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
     });
     let mut first = command("first-action", "repair-first", 999);
     first.evidence_led = Some(EvidenceLedActionBinding {
@@ -145,6 +149,8 @@ fn earliest_active_truth_loop_transition_wins_deterministically() {
         brief_digest: brief_digest(),
         transition_id: Some("transition-1".to_owned()),
         transition_order: Some(1),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
     });
     spec.actions = vec![second, first];
     let state = derive_bound(inputs(), &catalog(spec)).unwrap();
@@ -161,6 +167,8 @@ fn binding(class: ActionPriorityClass) -> EvidenceLedActionBinding {
         brief_digest: brief_digest(),
         transition_id: None,
         transition_order: None,
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
     }
 }
 

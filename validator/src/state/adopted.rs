@@ -82,7 +82,7 @@ fn live_spec(
         .iter()
         .map(|code| inventory_policy(code, &reductions))
         .collect();
-    let actions = codes
+    let mut actions = codes
         .iter()
         .enumerate()
         .map(|(index, code)| ActionDefinition {
@@ -98,34 +98,83 @@ fn live_spec(
             authority_request: None,
             evidence_led: None,
         })
-        .collect();
+        .collect::<Vec<_>>();
+    let inception =
+        crate::product_inception::bind_actions(context, authority_catalog, &mut actions, &codes);
+    let mut dependencies = vec![DependencyFact {
+        dependency_id: "reconciliation-kernel".to_owned(),
+        observation_id: staged_reconciliation_id.to_owned(),
+        status: DependencyStatus::Missing,
+        authority: FactAuthority::DirectProbe,
+        scope: Scope {
+            surface: "claim-graph".to_owned(),
+            relative_path: None,
+        },
+        cause: "canonical claim reconciliation is not yet supplied".to_owned(),
+        repair: Some(repair(
+            "repair-reconciliation-kernel",
+            RepairTargetKind::Dependency,
+            "reconciliation-kernel",
+            "Implement the canonical reconciliation kernel",
+        )),
+        ceiling_reductions: reductions.clone(),
+    }];
+    if matches!(
+        inception,
+        crate::product_inception::RankingDisposition::InceptionRequired
+    ) {
+        dependencies.push(DependencyFact {
+            dependency_id: "product-inception".to_owned(),
+            observation_id: context.context_id().to_owned(),
+            status: DependencyStatus::Missing,
+            authority: FactAuthority::DirectProbe,
+            scope: Scope {
+                surface: "product-success-brief".to_owned(),
+                relative_path: Some("PRODUCT_SUCCESS_BRIEF.json".to_owned()),
+            },
+            cause: "a current valid Product Success Brief v2 is required".to_owned(),
+            repair: Some(repair(
+                "repair-product-inception",
+                RepairTargetKind::Dependency,
+                "product-inception",
+                "Inspect and repair the current Product Success Brief",
+            )),
+            ceiling_reductions: reductions.clone(),
+        });
+        actions.push(ActionDefinition {
+            action_id: "inspect-product-inception".to_owned(),
+            priority: 1,
+            kind: ActionKind::Command,
+            repair_id: "repair-product-inception".to_owned(),
+            requires_dependencies: Vec::new(),
+            required_capabilities: Vec::new(),
+            effect: EffectClass::Read,
+            authority: AuthorityRequirement::Root,
+            command_id: Some("inspect-inception".to_owned()),
+            authority_request: None,
+            evidence_led: None,
+        });
+    }
     DependencyActionSpec {
         expected_context_id: context.context_id().to_owned(),
         expected_authority_catalog_id: authority_catalog.catalog_id().to_owned(),
         claims: claims.to_vec(),
-        dependencies: vec![DependencyFact {
-            dependency_id: "reconciliation-kernel".to_owned(),
-            observation_id: staged_reconciliation_id.to_owned(),
-            status: DependencyStatus::Missing,
-            authority: FactAuthority::DirectProbe,
-            scope: Scope {
-                surface: "claim-graph".to_owned(),
-                relative_path: None,
-            },
-            cause: "canonical claim reconciliation is not yet supplied".to_owned(),
-            repair: Some(repair(
-                "repair-reconciliation-kernel",
-                RepairTargetKind::Dependency,
-                "reconciliation-kernel",
-                "Implement the canonical reconciliation kernel",
-            )),
-            ceiling_reductions: reductions,
-        }],
+        dependencies,
         inventory_policies,
         capability_requirements: Vec::new(),
         runtime_metadata: RuntimeMetadata::default(),
         runtime_requirements: Vec::new(),
         commands: vec![
+            CommandBinding {
+                command_id: "inspect-inception".to_owned(),
+                argv: vec![
+                    "ultragoal".to_owned(),
+                    "--json".to_owned(),
+                    "inspect".to_owned(),
+                    "inception".to_owned(),
+                ],
+                effect: EffectClass::Read,
+            },
             CommandBinding {
                 command_id: "inspect-json".to_owned(),
                 argv: vec![

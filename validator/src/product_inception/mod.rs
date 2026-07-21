@@ -1,6 +1,7 @@
 mod model;
 mod normalize;
 mod parser;
+mod ranking;
 mod reader;
 mod validation;
 
@@ -10,6 +11,8 @@ mod tests;
 use model::{BriefV1, BriefV2, CandidateBinding, ContractBinding, ContractFacts};
 use parser::ParsedBrief;
 use serde::Serialize;
+
+pub(crate) use ranking::{RankingDisposition, bind_actions};
 
 const MISSING_FIELDS: &[&str] = &[
     "schema",
@@ -55,15 +58,16 @@ impl InceptionError {
         Self::Context
     }
 
-    pub(crate) fn code(&self) -> &'static str {
+    pub(crate) fn cause(&self) -> &'static str {
         match self {
-            Self::Context => "inception_context_unavailable",
-            Self::CatalogUnavailable => "inception_authority_catalog_unavailable",
-            Self::ContractBindingInvalid => "inception_contract_binding_invalid",
-            Self::UnsafeInput => "inception_input_unsafe",
+            Self::Context => "the live context changed during inception inspection",
+            Self::CatalogUnavailable => "the canonical authority catalog is unavailable",
+            Self::ContractBindingInvalid => "the inception contract bindings are stale or invalid",
+            Self::UnsafeInput => "the Product Success Brief input is not a safe regular file",
             Self::Code(code) => code,
         }
     }
+
 }
 
 impl From<&'static str> for InceptionError {

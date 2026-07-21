@@ -1,4 +1,7 @@
-use super::model::{BriefV1, BriefV2, CandidateBinding, ContractFacts};
+use super::model::{
+    BriefV1, BriefV2, CandidateBinding, ContractFacts, EvidenceClass, InceptionClaimCeiling,
+    OperatorKind,
+};
 use std::collections::BTreeSet;
 
 pub(crate) fn validate_v1(brief: &BriefV1, facts: &ContractFacts) -> Result<(), &'static str> {
@@ -47,6 +50,13 @@ pub(crate) fn validate_v2(
     if !unique_known(&brief.claim_ids, &facts.claim_ids) {
         return Err("brief_claim_unknown");
     }
+    if matches!(
+        brief.evidence_class,
+        EvidenceClass::HumanUse | EvidenceClass::RepeatedHumanUse
+    ) && !matches!(brief.operator.kind, OperatorKind::Human)
+    {
+        return Err("brief_human_evidence_requires_human_operator");
+    }
     if brief.public_entry_surface.surface_id != "PS-ENTRY"
         || brief.public_entry_surface.route != "harness-ultragoal"
         || !known_surface("PS-ENTRY", facts)
@@ -82,8 +92,12 @@ pub(crate) fn validate_v2(
             .any(|(index, transition)| transition.order != index as u32 + 1)
         || !unique_ids(path.iter().map(|row| row.transition_id.as_str()))
         || !path.iter().all(|transition| {
-            brief_texts_valid([&transition.transition_id, &transition.expected_observation])
-                && unique_texts(&transition.dependency_ids, false)
+            brief_texts_valid([
+                &transition.transition_id,
+                &transition.action_id,
+                &transition.command_id,
+                &transition.expected_observation,
+            ]) && unique_texts(&transition.dependency_ids, false)
                 && unique_texts(&transition.capability_ids, false)
                 && unique_known(&transition.claim_ids, &facts.claim_ids)
                 && unique_texts(&transition.product_surfaces, true)
@@ -112,7 +126,7 @@ pub(crate) fn validate_v2(
         return Err("brief_depth_trigger_duplicate");
     }
     if brief.depth_triggers.iter().any(|trigger| {
-        !brief_texts_valid([&trigger.trigger_id])
+        !brief_texts_valid([&trigger.trigger_id, &trigger.action_id])
             || !unique_texts(&trigger.activation_finding_codes, true)
             || !brief_texts_valid([
                 &trigger.risk_or_claim,
@@ -122,6 +136,9 @@ pub(crate) fn validate_v2(
             ])
     }) {
         return Err("brief_depth_trigger_invalid");
+    }
+    if ceiling_rank(brief.claim_ceiling) > evidence_rank(brief.evidence_class) {
+        return Err("brief_claim_ceiling_exceeds_evidence");
     }
     if !brief_texts_valid([
         &brief.target_problem,
@@ -143,11 +160,41 @@ pub(crate) fn validate_v2(
         &brief.first_truth_loop.failure_control.recovery,
         &brief.first_truth_loop.failure_control.preservation,
         &brief.evidence_ladder,
-        &brief.claim_ceiling,
     ]) {
         return Err("brief_text_invalid");
     }
     Ok(())
+}
+
+fn evidence_rank(class: EvidenceClass) -> u8 {
+    match class {
+        EvidenceClass::Intent => 1,
+        EvidenceClass::Research => 2,
+        EvidenceClass::Prototype => 3,
+        EvidenceClass::Source => 4,
+        EvidenceClass::Package => 5,
+        EvidenceClass::Installed => 6,
+        EvidenceClass::Runtime => 7,
+        EvidenceClass::AgentUse => 8,
+        EvidenceClass::HumanUse => 9,
+        EvidenceClass::RepeatedHumanUse => 10,
+    }
+}
+
+fn ceiling_rank(ceiling: InceptionClaimCeiling) -> u8 {
+    match ceiling {
+        InceptionClaimCeiling::WithheldOrBlocked => 0,
+        InceptionClaimCeiling::IntentOnly => 1,
+        InceptionClaimCeiling::ResearchOnly => 2,
+        InceptionClaimCeiling::PrototypeOnly => 3,
+        InceptionClaimCeiling::SourceOnly => 4,
+        InceptionClaimCeiling::PackageOnly => 5,
+        InceptionClaimCeiling::InstalledOnly => 6,
+        InceptionClaimCeiling::RuntimeOnly => 7,
+        InceptionClaimCeiling::AgentUseOnly => 8,
+        InceptionClaimCeiling::HumanUseOnly => 9,
+        InceptionClaimCeiling::RepeatedHumanUseOnly => 10,
+    }
 }
 
 fn unique_known(values: &[String], known: &[String]) -> bool {

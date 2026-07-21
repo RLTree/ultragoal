@@ -40,5 +40,9 @@ pub struct NextAction {
     pub active_transition: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub brief_digest: Option<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub active_trigger_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub parked_trigger_ids: Vec<String>,
     pub selection_rule: &'static str,
 }

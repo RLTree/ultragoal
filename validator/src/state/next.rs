@@ -137,6 +137,16 @@ fn from_definition(action: &ActionDefinition, commands: &[CommandBinding]) -> Op
             .evidence_led
             .as_ref()
             .map(|binding| binding.brief_digest.clone()),
+        active_trigger_ids: action
+            .evidence_led
+            .as_ref()
+            .map(|binding| binding.active_trigger_ids.clone())
+            .unwrap_or_default(),
+        parked_trigger_ids: action
+            .evidence_led
+            .as_ref()
+            .map(|binding| binding.parked_trigger_ids.clone())
+            .unwrap_or_default(),
         selection_rule: if action.evidence_led.is_some() {
             "evidence-class-then-transition-order-then-priority-then-action-id"
         } else {
@@ -160,6 +170,8 @@ fn no_op() -> NextAction {
         priority_class: None,
         active_transition: None,
         brief_digest: None,
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
         selection_rule: "no-actionable-findings",
     }
 }
@@ -185,6 +197,8 @@ fn no_route(finding: &Finding, rule: &'static str) -> NextAction {
         priority_class: None,
         active_transition: None,
         brief_digest: None,
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
         selection_rule: rule,
     }
 }
