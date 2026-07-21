@@ -1,11 +1,11 @@
 use super::transaction_observation::HostLifecycleObservationInput;
+use super::transaction_observation_rows::{installed_plugin_row, marketplace_row, string_field};
 use crate::plugin_product::lifecycle::{PackageAuthority, Version};
 use serde_json::{Map, Value};
 use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
 
 pub(crate) struct HostSurfaceLocations {
-    pub(crate) installed: PathBuf,
     pub(crate) cache: PathBuf,
     pub(crate) runtime: PathBuf,
 }
@@ -43,9 +43,7 @@ pub(crate) fn observe_marketplace(
     input: &HostLifecycleObservationInput,
     required: bool,
 ) -> Result<Option<String>, &'static str> {
-    let Some(row) = find_object(value, &|row| {
-        string_field(row, &["name", "marketplace"]) == Some(input.marketplace.as_str())
-    }) else {
+    let Some(row) = marketplace_row(value, &input.marketplace)? else {
         return if required {
             Err("Codex marketplace JSON lacks the expected marketplace row")
         } else {
@@ -71,18 +69,14 @@ pub(crate) fn observe_plugin(
     target_root: &Path,
 ) -> Result<(Option<String>, HostSurfaceLocations), &'static str> {
     let Some(authority) = authority else {
-        let present = find_object(value, &|row| {
-            string_field(row, &["id", "plugin_id", "name"]) == Some(input.plugin.as_str())
-        });
+        let present = installed_plugin_row(value, &input.plugin)?;
         if present.is_some() {
             return Err("Codex plugin JSON retains an unexpected candidate row");
         }
         return Ok((None, adapter_locations(target_root, input)?));
     };
-    let row = find_object(value, &|row| {
-        string_field(row, &["id", "plugin_id", "name"]) == Some(input.plugin.as_str())
-    })
-    .ok_or("Codex plugin JSON lacks the expected plugin row")?;
+    let row = installed_plugin_row(value, &input.plugin)?
+        .ok_or("Codex plugin JSON lacks the expected plugin row")?;
     let version = string_field(row, &["version"])
         .ok_or("Codex plugin JSON lacks the typed plugin version")?;
     if version != version_text(authority.version) {
@@ -96,7 +90,7 @@ pub(crate) fn observe_plugin(
         return Err("Codex plugin source does not match the materialized package authority");
     }
     let locations = installed_cache_locations(target_root, input, version);
-    if locations.installed == input.marketplace_source_path
+    if locations.cache == input.marketplace_source_path
         || locations.cache == input.marketplace_source_path
         || locations.runtime == input.marketplace_source_path
     {
@@ -120,7 +114,6 @@ fn adapter_locations(
     input: &HostLifecycleObservationInput,
 ) -> Result<HostSurfaceLocations, &'static str> {
     let locations = HostSurfaceLocations {
-        installed: target_root.join("plugins").join(&input.plugin),
         cache: target_root
             .join("plugins/cache")
             .join(&input.marketplace)
@@ -130,7 +123,7 @@ fn adapter_locations(
             .join(&input.plugin)
             .join("runtime/runtime-probe-bin"),
     };
-    if locations.installed == input.marketplace_source_path {
+    if locations.cache == input.marketplace_source_path {
         return Err("Codex adapter installed path aliases the marketplace source");
     }
     Ok(locations)
@@ -147,7 +140,6 @@ fn installed_cache_locations(
         .join(&input.plugin)
         .join(version);
     HostSurfaceLocations {
-        installed: cache.clone(),
         cache: cache.clone(),
         runtime: cache.join("runtime/runtime-probe-bin"),
     }
@@ -188,25 +180,6 @@ fn version_text(version: Version) -> String {
     format!("{}.{}.{}", version.major, version.minor, version.patch)
 }
 
-fn string_field<'a>(row: &'a Map<String, Value>, keys: &[&str]) -> Option<&'a str> {
-    keys.iter()
-        .find_map(|key| row.get(*key).and_then(Value::as_str))
-}
-
-fn find_object<'a>(
-    value: &'a Value,
-    predicate: &dyn Fn(&Map<String, Value>) -> bool,
-) -> Option<&'a Map<String, Value>> {
-    match value {
-        Value::Object(row) if predicate(row) => Some(row),
-        Value::Object(row) => row
-            .values()
-            .find_map(|child| find_object(child, &predicate)),
-        Value::Array(rows) => rows.iter().find_map(|child| find_object(child, &predicate)),
-        _ => None,
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -225,13 +198,14 @@ mod tests {
         };
         std::fs::create_dir_all(&input.marketplace_source_path).unwrap();
         let canonical_root = root.canonicalize().unwrap();
-        let marketplace = json!([{
+        let marketplace = json!({"marketplaces": [{
             "name": "local-marketplace",
             "source_root": canonical_root.display().to_string()
-        }]);
+        }]});
         assert!(observe_marketplace(&marketplace, &input, true).is_ok());
         let mut altered_marketplace = marketplace.clone();
-        altered_marketplace[0]["source_root"] = json!(root.join("other").display().to_string());
+        altered_marketplace["marketplaces"][0]["source_root"] =
+            json!(root.join("other").display().to_string());
         assert!(observe_marketplace(&altered_marketplace, &input, true).is_err());
         let authority = PackageAuthority {
             version: Version::parse("1.2.3").unwrap(),
@@ -239,7 +213,7 @@ mod tests {
             inventory_sha256: digest('b'),
             candidate_id: digest('c'),
         };
-        let plugin = json!([{
+        let plugin = json!({"installed": [{
             "id": "harness-ultragoal",
             "version": "1.2.3",
             "marketplaceName": "local-marketplace",
@@ -247,10 +221,11 @@ mod tests {
                 "source": "local",
                 "path": input.marketplace_source_path.display().to_string()
             }
-        }]);
+        }]});
         assert!(observe_plugin(&plugin, &input, Some(&authority), &root).is_ok());
         let mut altered_plugin = plugin.clone();
-        altered_plugin[0]["source"]["path"] = json!(root.join("other").display().to_string());
+        altered_plugin["installed"][0]["source"]["path"] =
+            json!(root.join("other").display().to_string());
         assert!(observe_plugin(&altered_plugin, &input, Some(&authority), &root).is_err());
         let _ = std::fs::remove_dir_all(root);
     }

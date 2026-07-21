@@ -90,9 +90,7 @@ pub(super) fn derive_effect_prefix(
                     && runtime == SurfacePresence::Absent
             }
             LifecycleEffect::ProbeRuntime => {
-                runtime == SurfacePresence::Present
-                    && registry == SurfacePresence::Present
-                    && discovery == SurfacePresence::Present
+                runtime == SurfacePresence::Present && registry == SurfacePresence::Present
             }
         };
         if !valid {

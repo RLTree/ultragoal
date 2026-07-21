@@ -41,6 +41,7 @@ mod transaction_identity;
 mod transaction_observation;
 mod transaction_observation_command;
 mod transaction_observation_identity;
+mod transaction_observation_rows;
 mod transaction_observation_transition;
 mod transaction_policy;
 mod transaction_read_only;

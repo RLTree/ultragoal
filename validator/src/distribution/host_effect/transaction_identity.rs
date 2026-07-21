@@ -16,17 +16,17 @@ pub(crate) fn expected_observations(
     let installed = plan.expected_after.installed.is_some();
     let cache = plan.expected_after.cache.is_some();
     let authority = plan.expected_after.installed.as_ref();
+    let plugin = authority
+        .map(|authority| expected_plugin_digest(input, authority))
+        .transpose()?;
     Ok(HostLifecycleExpectedObservations {
-        installed_sha256: expected_or_absent(installed, &content.installed),
+        installed_sha256: plugin.clone().unwrap_or_else(absent_digest),
         cache_sha256: expected_or_absent(cache, &content.cache),
         registry_sha256: match authority {
             Some(_) => expected_marketplace_digest(input)?,
             None => absent_digest(),
         },
-        discovery_sha256: match authority {
-            Some(authority) => expected_plugin_digest(input, authority)?,
-            None => absent_digest(),
-        },
+        discovery_sha256: absent_digest(),
         runtime_sha256: expected_or_absent(installed, &content.runtime),
         command_count,
     })

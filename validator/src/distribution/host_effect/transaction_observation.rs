@@ -28,7 +28,6 @@ pub(crate) struct HostLifecycleObservationInput {
 }
 
 pub(crate) struct HostLifecycleExpectedContent {
-    pub(crate) installed: String,
     pub(crate) cache: String,
     pub(crate) runtime: String,
 }
@@ -37,7 +36,6 @@ pub(crate) struct HostLifecycleSurfaceDigests {
     pub(crate) installed: String,
     pub(crate) cache: String,
     pub(crate) registry: String,
-    pub(crate) discovery: String,
     pub(crate) runtime: String,
 }
 
@@ -92,14 +90,9 @@ pub(crate) fn observe(
         target_root,
     )?;
     validate_locations(input, target_root, &locations)?;
-    let installed = observe_tree(&locations.installed)?;
     let cache = observe_tree(&locations.cache)?;
     let runtime = observe_file(&locations.runtime)?;
-    let observed_installed = if installed.present {
-        installed.digest.clone()
-    } else {
-        absent_digest()
-    };
+    let observed_installed = plugin_identity.clone().unwrap_or_else(absent_digest);
     let observed_cache = if cache.present {
         cache.digest.clone()
     } else {
@@ -111,7 +104,10 @@ pub(crate) fn observe(
         absent_digest()
     };
     let observed_registry = marketplace_identity.clone().unwrap_or_else(absent_digest);
-    let observed_discovery = plugin_identity.clone().unwrap_or_else(absent_digest);
+    let observed_discovery = absent_digest();
+    if observed_installed == observed_cache {
+        return Err("Codex installed-plugin record aliases the physical cache observation");
+    }
     if [
         &observed_installed,
         &observed_cache,
@@ -144,7 +140,7 @@ pub(crate) fn observe(
     .map_err(|_| "host observation bundle invalid")?;
     let completed_effects = derive_effect_prefix(
         plan,
-        SurfacePresence::from_path(installed.present),
+        SurfacePresence::from_json(plugin_identity.as_ref()),
         SurfacePresence::from_path(cache.present),
         SurfacePresence::from_path(runtime.present),
         SurfacePresence::from_json(marketplace_identity.as_ref()),
@@ -168,7 +164,6 @@ pub(crate) fn observe(
             installed: observed_installed,
             cache: observed_cache,
             registry: observed_registry,
-            discovery: observed_discovery,
             runtime: observed_runtime,
         },
     })
@@ -191,7 +186,6 @@ pub(crate) fn expected_content(
         return Err("materialized runtime object is unavailable for expected authority");
     }
     Ok(HostLifecycleExpectedContent {
-        installed: source.digest.clone(),
         cache: source.digest,
         runtime: runtime.digest,
     })
@@ -202,7 +196,7 @@ fn validate_locations(
     target_root: &Path,
     locations: &HostSurfaceLocations,
 ) -> Result<(), &'static str> {
-    for path in [&locations.installed, &locations.cache, &locations.runtime] {
+    for path in [&locations.cache, &locations.runtime] {
         if !path.is_absolute()
             || path
                 .components()

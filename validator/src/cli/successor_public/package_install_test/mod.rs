@@ -25,7 +25,6 @@ struct InstallTestOutcome<'a> {
     marketplace_source_tree_sha256: &'a str,
     cache_observation_sha256: &'a str,
     marketplace_observation_sha256: &'a str,
-    app_registry_observation_sha256: &'a str,
     runtime_observation_sha256: &'a str,
     journey_binding_sha256: &'a str,
     discovery_status: &'static str,
@@ -67,12 +66,11 @@ pub(super) fn execute(
         marketplace_source_tree_sha256: observation.marketplace_source_tree_sha256(),
         cache_observation_sha256: observation.cache_observation_sha256(),
         marketplace_observation_sha256: observation.marketplace_observation_sha256(),
-        app_registry_observation_sha256: observation.app_registry_observation_sha256(),
         runtime_observation_sha256: observation.runtime_observation_sha256(),
         journey_binding_sha256: observation.journey_binding_sha256(),
         discovery_status: "pending-fresh-codex-task",
         output: output_path,
-        claim_ceiling: "isolated marketplace-source/archive-install/cache/app-registry/runtime verified; Codex discovery and installed product claims withheld",
+        claim_ceiling: "isolated source/archive, public plugin-install record, marketplace, cache, and runtime object verified; app-registry, Codex discovery, and installed-product claims withheld",
     };
     publish_outcome(output_context, output_path, &record)
 }

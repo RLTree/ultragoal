@@ -167,7 +167,6 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         installed_observation_sha256: surfaces.installed,
         cache_observation_sha256: surfaces.cache,
         marketplace_observation_sha256: surfaces.registry,
-        app_registry_observation_sha256: surfaces.discovery,
         runtime_observation_sha256: surfaces.runtime,
         journey_binding_sha256: binding_sha256,
     })
