@@ -86,7 +86,7 @@ pub enum SurfaceStatus {
     Withheld,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EvidenceBinding {
     pub path: String,
@@ -134,15 +134,18 @@ pub struct PublicEntryObservation {
     pub route: String,
     pub bypass_attempted: bool,
     pub bypass_rejected: bool,
+    pub evidence: EvidenceBinding,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct RealWorkObservation {
     pub repository_identity: String,
+    pub repository_evidence: EvidenceBinding,
     pub task_id: String,
     pub task: String,
     pub useful_outcome: String,
+    pub evidence: EvidenceBinding,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

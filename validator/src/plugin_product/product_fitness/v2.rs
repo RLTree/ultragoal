@@ -20,10 +20,16 @@ pub(super) fn validate(
         .surface_identities
         .as_ref()
         .ok_or(ProductFitnessError::MissingV2Field)?;
+    if !disposition
+        .substitution_rejections
+        .contains("legacy_dogfood_receipt")
+    {
+        return Err(ProductFitnessError::MissingSubstitutionRejection);
+    }
     validate_operator_class(operator, class, disposition)?;
     validate_surfaces(root, &disposition.candidate_id, surfaces)?;
-    validate_entry(disposition)?;
-    validate_work(disposition)?;
+    validate_entry(disposition, root)?;
+    validate_work(disposition, root)?;
     validate_journey(disposition)?;
     validate_ceiling(disposition, class, surfaces)
 }
@@ -76,6 +82,8 @@ fn validate_surfaces(
         (&surfaces.journey, TruthLayer::Journey),
     ];
     let mut identities = BTreeSet::new();
+    let mut paths = BTreeSet::new();
+    let mut bindings = BTreeSet::new();
     for (surface, _) in items {
         match surface.status {
             SurfaceStatus::Withheld => {
@@ -103,13 +111,19 @@ fn validate_surfaces(
                 if !binding.current_session {
                     return Err(ProductFitnessError::EvidenceStale);
                 }
+                if !paths.insert(binding.path.clone()) || !bindings.insert(binding.clone()) {
+                    return Err(ProductFitnessError::WrongSurface);
+                }
             }
         }
     }
     Ok(())
 }
 
-fn validate_entry(disposition: &ProductFitnessDisposition) -> Result<(), ProductFitnessError> {
+fn validate_entry(
+    disposition: &ProductFitnessDisposition,
+    root: &Path,
+) -> Result<(), ProductFitnessError> {
     let entry = disposition
         .public_entry_observation
         .as_ref()
@@ -120,21 +134,44 @@ fn validate_entry(disposition: &ProductFitnessDisposition) -> Result<(), Product
     if entry.bypass_attempted && !entry.bypass_rejected {
         return Err(ProductFitnessError::BypassAttempt);
     }
-    Ok(())
+    validate_observation_evidence(root, &disposition.candidate_id, &entry.evidence)
 }
 
-fn validate_work(disposition: &ProductFitnessDisposition) -> Result<(), ProductFitnessError> {
+fn validate_work(
+    disposition: &ProductFitnessDisposition,
+    root: &Path,
+) -> Result<(), ProductFitnessError> {
     let work = disposition
         .real_work_observation
         .as_ref()
         .ok_or(ProductFitnessError::MissingV2Field)?;
     evidence::validate_digest(&work.repository_identity)
         .map_err(|_| ProductFitnessError::InvalidRepository)?;
+    if work.repository_identity != work.repository_evidence.sha256 {
+        return Err(ProductFitnessError::InvalidRepository);
+    }
+    validate_observation_evidence(root, &disposition.candidate_id, &work.repository_evidence)?;
+    validate_observation_evidence(root, &disposition.candidate_id, &work.evidence)?;
     if work.task_id.trim().is_empty()
         || work.task.trim().is_empty()
         || work.useful_outcome.trim().is_empty()
     {
         return Err(ProductFitnessError::InvalidTask);
+    }
+    Ok(())
+}
+
+fn validate_observation_evidence(
+    root: &Path,
+    candidate_id: &str,
+    binding: &super::model::EvidenceBinding,
+) -> Result<(), ProductFitnessError> {
+    evidence::validate(root, candidate_id, binding)?;
+    if !binding.same_surface {
+        return Err(ProductFitnessError::WrongSurface);
+    }
+    if !binding.current_session {
+        return Err(ProductFitnessError::EvidenceStale);
     }
     Ok(())
 }
@@ -200,13 +237,17 @@ fn supports_live_layer(layer: TruthLayer, class: EvidenceClass) -> bool {
         EvidenceClass::Installed => {
             matches!(
                 layer,
-                TruthLayer::Source | TruthLayer::Package | TruthLayer::Install
+                TruthLayer::Source
+                    | TruthLayer::Package
+                    | TruthLayer::Marketplace
+                    | TruthLayer::Install
             )
         }
         EvidenceClass::Runtime | EvidenceClass::AgentUse => matches!(
             layer,
             TruthLayer::Source
                 | TruthLayer::Package
+                | TruthLayer::Marketplace
                 | TruthLayer::Install
                 | TruthLayer::Cache
                 | TruthLayer::AppRegistry
@@ -217,6 +258,7 @@ fn supports_live_layer(layer: TruthLayer, class: EvidenceClass) -> bool {
             layer,
             TruthLayer::Source
                 | TruthLayer::Package
+                | TruthLayer::Marketplace
                 | TruthLayer::Install
                 | TruthLayer::Cache
                 | TruthLayer::AppRegistry

@@ -45,13 +45,15 @@ fn v2_disposition(root: &Path) -> ProductFitnessDisposition {
         route: "harness-ultragoal".to_owned(),
         bypass_attempted: true,
         bypass_rejected: true,
+        evidence: observed_binding(root, "entry", "public entry observed"),
     });
     disposition.real_work_observation = Some(RealWorkObservation {
-        repository_identity:
-            "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb".to_owned(),
+        repository_identity: digest(b"repository observed"),
+        repository_evidence: observed_binding(root, "repository", "repository observed"),
         task_id: "task-1".to_owned(),
         task: "complete a real repository task".to_owned(),
         useful_outcome: "verified repository outcome".to_owned(),
+        evidence: observed_binding(root, "work", "real work observed"),
     });
     disposition.manual_journey_row = Some(ManualJourneyRow {
         time_to_verified_value_ms: 10,
@@ -67,6 +69,18 @@ fn v2_disposition(root: &Path) -> ProductFitnessDisposition {
         false_rejections: 0,
     });
     disposition
+}
+
+fn observed_binding(root: &Path, name: &str, contents: &str) -> EvidenceBinding {
+    let path = format!("{name}.json");
+    fs::write(root.join(&path), contents).unwrap();
+    EvidenceBinding {
+        path,
+        sha256: digest(contents.as_bytes()),
+        candidate_id: CANDIDATE.to_owned(),
+        same_surface: true,
+        current_session: true,
+    }
 }
 
 #[test]
@@ -165,4 +179,85 @@ fn typed_disposition_rejects_legacy_dogfood_schema() {
         legacy.validate(root.path()),
         Err(ProductFitnessError::InvalidDisposition)
     );
+}
+
+#[test]
+fn v2_rejects_duplicate_surface_evidence_and_unbound_observations() {
+    let root = TempRoot::new();
+    let mut duplicate = v2_disposition(root.path());
+    let source = duplicate
+        .surface_identities
+        .as_ref()
+        .unwrap()
+        .source
+        .evidence
+        .clone();
+    duplicate
+        .surface_identities
+        .as_mut()
+        .unwrap()
+        .package
+        .evidence = source;
+    assert_eq!(
+        duplicate.validate(root.path()),
+        Err(ProductFitnessError::WrongSurface)
+    );
+
+    let mut stale = v2_disposition(root.path());
+    stale
+        .public_entry_observation
+        .as_mut()
+        .unwrap()
+        .evidence
+        .current_session = false;
+    assert_eq!(
+        stale.validate(root.path()),
+        Err(ProductFitnessError::EvidenceStale)
+    );
+
+    let mut unbound = v2_disposition(root.path());
+    unbound
+        .real_work_observation
+        .as_mut()
+        .unwrap()
+        .repository_identity = digest(b"other repository");
+    assert_eq!(
+        unbound.validate(root.path()),
+        Err(ProductFitnessError::InvalidRepository)
+    );
+}
+
+#[test]
+fn v2_requires_legacy_dogfood_rejection_and_permits_marketplace_from_installed() {
+    let root = TempRoot::new();
+    let mut omitted = v2_disposition(root.path());
+    omitted
+        .substitution_rejections
+        .remove("legacy_dogfood_receipt");
+    assert_eq!(
+        omitted.validate(root.path()),
+        Err(ProductFitnessError::MissingSubstitutionRejection)
+    );
+
+    let mut marketplace = v2_disposition(root.path());
+    marketplace.evidence_class = Some(EvidenceClass::Installed);
+    marketplace.operator_kind = Some(OperatorKind::Agent);
+    marketplace.dimensions.iter_mut().for_each(|item| {
+        if item.dimension == FitnessDimension::Continuance {
+            item.disposition = DimensionDisposition::Blocked;
+        }
+    });
+    marketplace.overall = OverallDisposition::Blocked;
+    marketplace.surface_identities.as_mut().unwrap().marketplace =
+        observed_surface(root.path(), "marketplace", "marketplace-identity");
+    for layer in [
+        TruthLayer::Source,
+        TruthLayer::Package,
+        TruthLayer::Marketplace,
+    ] {
+        marketplace
+            .truth_layer_ceilings
+            .insert(layer, ClaimCeiling::LiveSameSurfaceProven);
+    }
+    marketplace.validate(root.path()).unwrap();
 }

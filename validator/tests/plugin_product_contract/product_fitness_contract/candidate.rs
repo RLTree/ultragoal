@@ -87,6 +87,7 @@ fn disposition(
             "documentation_only".to_owned(),
             "fixture_pass".to_owned(),
             "install_success".to_owned(),
+            "legacy_dogfood_receipt".to_owned(),
             "package_publication".to_owned(),
             "receipt_only".to_owned(),
             "reviewer_agreement".to_owned(),

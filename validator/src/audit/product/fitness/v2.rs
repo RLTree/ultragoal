@@ -3,10 +3,11 @@ use std::collections::BTreeSet;
 
 pub(super) fn failures(receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
+    let candidate = string(receipt, "/target_revision/value");
     operator_and_class(receipt, &mut out);
-    surface_identities(receipt, &mut out);
-    public_entry(receipt, &mut out);
-    real_work(receipt, &mut out);
+    surface_identities(receipt, &candidate, &mut out);
+    public_entry(receipt, &candidate, &mut out);
+    real_work(receipt, &candidate, &mut out);
     manual_journey(receipt, &mut out);
     ceiling(receipt, &mut out);
     out
@@ -42,7 +43,7 @@ fn operator_and_class(receipt: &Value, out: &mut Vec<String>) {
     }
 }
 
-fn surface_identities(receipt: &Value, out: &mut Vec<String>) {
+fn surface_identities(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
     let Some(surfaces) = receipt.pointer("/surface_identities") else {
         out.push("product_fitness_v2_observation_missing:surface_identities".to_string());
         return;
@@ -78,19 +79,26 @@ fn surface_identities(receipt: &Value, out: &mut Vec<String>) {
             continue;
         }
         let identity = string(item, "/identity");
-        let path = string(item, "/evidence/path");
+        let evidence = item.pointer("/evidence").unwrap_or(&Value::Null);
+        let path = string(evidence, "/path");
         if identity.is_empty() || path.is_empty() {
             out.push(format!(
                 "product_fitness_surface_observation_missing:{name}"
             ));
         }
+        bound_evidence(
+            evidence,
+            candidate,
+            &format!("surface_identities/{name}"),
+            out,
+        );
         if !identities.insert(identity) || !paths.insert(path) {
             out.push(format!("product_fitness_surface_wrong_identity:{name}"));
         }
     }
 }
 
-fn public_entry(receipt: &Value, out: &mut Vec<String>) {
+fn public_entry(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
     if string(receipt, "/public_entry_observation/surface_id") != "PS-ENTRY"
         || string(receipt, "/public_entry_observation/route") != "harness-ultragoal"
     {
@@ -109,9 +117,17 @@ fn public_entry(receipt: &Value, out: &mut Vec<String>) {
         (Some(_), Some(_)) => {}
         _ => out.push("product_fitness_public_entry_observation_missing".to_string()),
     }
+    bound_evidence(
+        receipt
+            .pointer("/public_entry_observation/evidence")
+            .unwrap_or(&Value::Null),
+        candidate,
+        "public_entry_observation",
+        out,
+    );
 }
 
-fn real_work(receipt: &Value, out: &mut Vec<String>) {
+fn real_work(receipt: &Value, candidate: &str, out: &mut Vec<String>) {
     let repository = string(receipt, "/real_work_observation/repository_identity");
     let valid_digest = repository
         .strip_prefix("sha256:")
@@ -119,6 +135,26 @@ fn real_work(receipt: &Value, out: &mut Vec<String>) {
     if !valid_digest {
         out.push("product_fitness_real_repository_missing".to_string());
     }
+    let repository_evidence = receipt
+        .pointer("/real_work_observation/repository_evidence")
+        .unwrap_or(&Value::Null);
+    if string(repository_evidence, "/digest") != repository {
+        out.push("product_fitness_real_repository_unbound".to_string());
+    }
+    bound_evidence(
+        repository_evidence,
+        candidate,
+        "real_work_observation/repository",
+        out,
+    );
+    bound_evidence(
+        receipt
+            .pointer("/real_work_observation/evidence")
+            .unwrap_or(&Value::Null),
+        candidate,
+        "real_work_observation",
+        out,
+    );
     for field in ["task_id", "task", "useful_outcome"] {
         if string(receipt, &format!("/real_work_observation/{field}"))
             .trim()
@@ -131,15 +167,24 @@ fn real_work(receipt: &Value, out: &mut Vec<String>) {
 
 fn manual_journey(receipt: &Value, out: &mut Vec<String>) {
     for field in [
+        "time_to_verified_value_ms",
+        "human_interventions",
+        "review_rounds",
         "failure",
         "diagnosis",
         "recovery_outcome",
         "repeat_use_outcome",
+        "retained_artifact_bytes",
+        "retained_cache_bytes",
+        "false_passes",
+        "false_rejections",
     ] {
-        if string(receipt, &format!("/manual_journey_row/{field}"))
-            .trim()
-            .is_empty()
-        {
+        let value = receipt.pointer(&format!("/manual_journey_row/{field}"));
+        if value.is_none_or(|value| match value {
+            Value::String(value) => value.trim().is_empty(),
+            Value::Number(value) => value.as_u64().is_none(),
+            _ => true,
+        }) {
             out.push(format!("product_fitness_manual_journey_missing:{field}"));
         }
     }
@@ -149,11 +194,71 @@ fn ceiling(receipt: &Value, out: &mut Vec<String>) {
     if string(receipt, "/claim_ceiling") != "live_same_surface_proven" {
         return;
     }
-    if string(receipt, "/surface_identities/journey/status") != "observed" {
+    let class = string(receipt, "/evidence_class");
+    if class != "repeated_human_use"
+        || string(receipt, "/surface_identities/journey/status") != "observed"
+    {
         out.push("product_fitness_unsupported_claim_ceiling".to_string());
     }
-    if string(receipt, "/evidence_class") == "agent_use" {
-        out.push("product_fitness_unsupported_claim_ceiling".to_string());
+    for layer in [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey",
+    ] {
+        if string(receipt, &format!("/surface_identities/{layer}/status")) == "observed"
+            && !supports_live_layer(layer, &class)
+        {
+            out.push("product_fitness_unsupported_claim_ceiling".to_string());
+        }
+    }
+}
+
+fn bound_evidence(evidence: &Value, candidate: &str, name: &str, out: &mut Vec<String>) {
+    if string(evidence, "/path").is_empty()
+        || string(evidence, "/digest").is_empty()
+        || string(evidence, "/candidate_id") != candidate
+        || evidence.get("same_surface").and_then(Value::as_bool) != Some(true)
+        || evidence.get("current_session").and_then(Value::as_bool) != Some(true)
+    {
+        out.push(format!("product_fitness_evidence_unbound:{name}"));
+    }
+}
+
+fn supports_live_layer(layer: &str, class: &str) -> bool {
+    match class {
+        "source" => layer == "source",
+        "package" => matches!(layer, "source" | "package"),
+        "installed" => matches!(layer, "source" | "package" | "marketplace" | "install"),
+        "runtime" | "agent_use" => matches!(
+            layer,
+            "source"
+                | "package"
+                | "marketplace"
+                | "install"
+                | "cache"
+                | "app_registry"
+                | "discovery"
+                | "runtime"
+        ),
+        "human_use" | "repeated_human_use" => matches!(
+            layer,
+            "source"
+                | "package"
+                | "marketplace"
+                | "install"
+                | "cache"
+                | "app_registry"
+                | "discovery"
+                | "runtime"
+                | "journey"
+        ),
+        _ => false,
     }
 }
 
