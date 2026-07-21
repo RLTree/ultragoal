@@ -51,24 +51,36 @@ pub(super) fn validate_input(
     target_root: &Path,
     cwd: RawFd,
 ) -> Result<(), &'static str> {
+    validate_paths(input, target_root)?;
+    // SAFETY: cwd is the live descriptor supplied by the confined target and stat is writable.
+    let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
+    // SAFETY: fstat only reads the descriptor identity into the writable stat buffer.
+    if unsafe { libc::fstat(cwd, &mut stat) } != 0 {
+        return Err("host observation cwd is not the bound root");
+    }
     let root =
         std::fs::symlink_metadata(target_root).map_err(|_| "host observation root unavailable")?;
     if root.file_type().is_symlink() || !root.is_dir() {
         return Err("host observation root is not a directory");
     }
-    // SAFETY: cwd is the live descriptor supplied by the confined target and stat is writable.
-    let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
-    // SAFETY: fstat only reads the descriptor identity into the writable stat buffer.
-    if unsafe { libc::fstat(cwd, &mut stat) } != 0
-        || stat.st_dev as u64 != root.dev()
-        || stat.st_ino as u64 != root.ino()
-    {
+    if stat.st_dev as u64 != root.dev() || stat.st_ino as u64 != root.ino() {
         return Err("host observation cwd is not the bound root");
     }
+    Ok(())
+}
+
+pub(super) fn validate_paths(
+    input: &HostLifecycleObservationInput,
+    target_root: &Path,
+) -> Result<(), &'static str> {
+    let root =
+        std::fs::symlink_metadata(target_root).map_err(|_| "host observation root unavailable")?;
+    if root.file_type().is_symlink() || !root.is_dir() {
+        return Err("host observation root is not a directory");
+    }
     for path in [
-        &input.installed_path,
-        &input.cache_path,
-        &input.runtime_path,
+        &input.marketplace_source_path,
+        &input.marketplace_source_root,
     ] {
         if !path.is_absolute()
             || path

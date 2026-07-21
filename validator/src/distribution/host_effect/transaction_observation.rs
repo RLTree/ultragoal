@@ -1,9 +1,12 @@
 use super::PinnedHostExecutable;
-use super::transaction_identity::{identity, normalized_json, semantic_digest};
-use super::transaction_observation_command::{observation_command, run_json, validate_input};
-use super::transaction_observation_transition::{
-    SurfacePresence, derive_effect_prefix, expected_presence,
+use super::transaction_identity::absent_digest;
+use super::transaction_observation_command::{
+    observation_command, run_json, validate_input, validate_paths,
 };
+use super::transaction_observation_identity::{
+    HostSurfaceLocations, observe_marketplace, observe_plugin,
+};
+use super::transaction_observation_transition::{SurfacePresence, derive_effect_prefix};
 use super::transaction_tree::{observe_file, observe_tree};
 use crate::distribution::PackageIdentity;
 use crate::distribution::host_effect::executor::{
@@ -18,11 +21,16 @@ use std::os::fd::RawFd;
 use std::path::{Path, PathBuf};
 
 pub(crate) struct HostLifecycleObservationInput {
-    pub(crate) installed_path: PathBuf,
-    pub(crate) cache_path: PathBuf,
-    pub(crate) runtime_path: PathBuf,
+    pub(crate) marketplace_source_path: PathBuf,
+    pub(crate) marketplace_source_root: PathBuf,
     pub(crate) marketplace: String,
     pub(crate) plugin: String,
+}
+
+pub(crate) struct HostLifecycleExpectedContent {
+    pub(crate) installed: String,
+    pub(crate) cache: String,
+    pub(crate) runtime: String,
 }
 
 pub(crate) struct HostLifecycleSurfaceDigests {
@@ -42,7 +50,7 @@ pub(crate) struct HostLifecycleObservationResult {
 }
 
 pub(crate) fn observe(
-    package: &PackageIdentity,
+    _package: &PackageIdentity,
     plan: &LifecyclePlan,
     input: &HostLifecycleObservationInput,
     expected: &HostLifecycleExpectedObservations,
@@ -75,75 +83,49 @@ pub(crate) fn observe(
         cwd,
         observation_command(&["plugin", "list", "--json"], environment),
     )?;
-    let installed = observe_tree(&input.installed_path)?;
-    let cache = observe_tree(&input.cache_path)?;
-    let runtime = observe_file(&input.runtime_path)?;
-    let marketplace_semantic = normalized_json(&marketplace_json, &input.marketplace);
-    let plugin_semantic = normalized_json(&plugin_json, &input.plugin);
-    let installed_identity = identity(
-        "installed",
-        package,
-        plan,
+    let required = plan.expected_after.installed.is_some();
+    let marketplace_identity = observe_marketplace(&marketplace_json, input, required)?;
+    let (plugin_identity, locations) = observe_plugin(
+        &plugin_json,
         input,
         plan.expected_after.installed.as_ref(),
-    );
-    let cache_identity = identity(
-        "cache",
-        package,
-        plan,
-        input,
-        plan.expected_after.cache.as_ref(),
-    );
-    let registry_identity = identity(
-        "registry",
-        package,
-        plan,
-        input,
-        plan.expected_after.installed.as_ref(),
-    );
-    let discovery_identity = identity(
-        "discovery",
-        package,
-        plan,
-        input,
-        plan.expected_after.installed.as_ref(),
-    );
-    let runtime_identity = identity(
-        "runtime",
-        package,
-        plan,
-        input,
-        plan.expected_after.installed.as_ref(),
-    );
-    let expected_identity = [
+        target_root,
+    )?;
+    validate_locations(input, target_root, &locations)?;
+    let installed = observe_tree(&locations.installed)?;
+    let cache = observe_tree(&locations.cache)?;
+    let runtime = observe_file(&locations.runtime)?;
+    let observed_installed = if installed.present {
+        installed.digest.clone()
+    } else {
+        absent_digest()
+    };
+    let observed_cache = if cache.present {
+        cache.digest.clone()
+    } else {
+        absent_digest()
+    };
+    let observed_runtime = if runtime.present {
+        runtime.digest.clone()
+    } else {
+        absent_digest()
+    };
+    let observed_registry = marketplace_identity.clone().unwrap_or_else(absent_digest);
+    let observed_discovery = plugin_identity.clone().unwrap_or_else(absent_digest);
+    if [
+        &observed_installed,
+        &observed_cache,
+        &observed_registry,
+        &observed_discovery,
+        &observed_runtime,
+    ] != [
         &expected.installed_sha256,
         &expected.cache_sha256,
         &expected.registry_sha256,
         &expected.discovery_sha256,
         &expected.runtime_sha256,
-    ];
-    let observed_identity = [
-        &installed_identity,
-        &cache_identity,
-        &registry_identity,
-        &discovery_identity,
-        &runtime_identity,
-    ];
-    if SurfacePresence::from_path(installed.present)
-        != expected_presence(plan.expected_after.installed.as_ref())
-        || SurfacePresence::from_path(cache.present)
-            != expected_presence(plan.expected_after.cache.as_ref())
-        || SurfacePresence::from_json(marketplace_semantic.as_ref())
-            != expected_presence(plan.expected_after.installed.as_ref())
-        || SurfacePresence::from_json(plugin_semantic.as_ref())
-            != expected_presence(plan.expected_after.installed.as_ref())
-        || SurfacePresence::from_path(runtime.present)
-            != expected_presence(plan.expected_after.installed.as_ref())
-    {
-        return Err("host surface presence does not match candidate authority");
-    }
-    if expected_identity != observed_identity {
-        return Err("host observations do not match the candidate identity");
+    ] {
+        return Err("independent host content does not match candidate authority");
     }
     let commands = command_digests
         .into_iter()
@@ -151,17 +133,12 @@ pub(crate) fn observe(
         .map(|(index, digest)| HostCommandObservation::new(index, digest, 0, 1))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|_| "host command observation binding failed")?;
-    let observations = HostLifecycleObservedBundle::from_observed_parts(
-        installed_identity.clone(),
-        cache_identity.clone(),
-        registry_identity.clone(),
-        discovery_identity.clone(),
-        runtime_identity.clone(),
-        installed.digest.clone(),
-        cache.digest.clone(),
-        semantic_digest(&marketplace_semantic),
-        semantic_digest(&plugin_semantic),
-        runtime.digest.clone(),
+    let observations = HostLifecycleObservedBundle::from_parts(
+        observed_installed.clone(),
+        observed_cache.clone(),
+        observed_registry.clone(),
+        observed_discovery.clone(),
+        observed_runtime.clone(),
         commands,
     )
     .map_err(|_| "host observation bundle invalid")?;
@@ -170,8 +147,8 @@ pub(crate) fn observe(
         SurfacePresence::from_path(installed.present),
         SurfacePresence::from_path(cache.present),
         SurfacePresence::from_path(runtime.present),
-        SurfacePresence::from_json(marketplace_semantic.as_ref()),
-        SurfacePresence::from_json(plugin_semantic.as_ref()),
+        SurfacePresence::from_json(marketplace_identity.as_ref()),
+        SurfacePresence::from_json(plugin_identity.as_ref()),
     )?;
     let observed = if completed_effects.len() == plan.effects.len() {
         plan.expected_after.clone()
@@ -188,11 +165,53 @@ pub(crate) fn observe(
         observed,
         effect_cursor: completed_effects.len(),
         surfaces: HostLifecycleSurfaceDigests {
-            installed: installed.digest,
-            cache: cache.digest,
-            registry: semantic_digest(&marketplace_semantic),
-            discovery: semantic_digest(&plugin_semantic),
-            runtime: runtime.digest,
+            installed: observed_installed,
+            cache: observed_cache,
+            registry: observed_registry,
+            discovery: observed_discovery,
+            runtime: observed_runtime,
         },
     })
+}
+
+pub(crate) fn expected_content(
+    input: &HostLifecycleObservationInput,
+    target_root: &Path,
+) -> Result<HostLifecycleExpectedContent, &'static str> {
+    validate_paths(input, target_root)?;
+    let source = observe_tree(&input.marketplace_source_path)?;
+    if !source.present {
+        return Err("materialized marketplace source is unavailable for expected authority");
+    }
+    let runtime_path = input
+        .marketplace_source_path
+        .join("runtime/runtime-probe-bin");
+    let runtime = observe_file(&runtime_path)?;
+    if !runtime.present {
+        return Err("materialized runtime object is unavailable for expected authority");
+    }
+    Ok(HostLifecycleExpectedContent {
+        installed: source.digest.clone(),
+        cache: source.digest,
+        runtime: runtime.digest,
+    })
+}
+
+fn validate_locations(
+    input: &HostLifecycleObservationInput,
+    target_root: &Path,
+    locations: &HostSurfaceLocations,
+) -> Result<(), &'static str> {
+    for path in [&locations.installed, &locations.cache, &locations.runtime] {
+        if !path.is_absolute()
+            || path
+                .components()
+                .any(|component| matches!(component, std::path::Component::ParentDir))
+            || !path.starts_with(target_root)
+            || *path == input.marketplace_source_path
+        {
+            return Err("Codex host surface path is not independently confined");
+        }
+    }
+    Ok(())
 }

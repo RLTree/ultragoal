@@ -21,15 +21,6 @@ impl SurfacePresence {
     }
 }
 
-pub(super) fn expected_presence(
-    authority: Option<&crate::plugin_product::lifecycle::PackageAuthority>,
-) -> SurfacePresence {
-    match authority {
-        Some(_) => SurfacePresence::Present,
-        None => SurfacePresence::Absent,
-    }
-}
-
 struct ReadOnlyLifecycleAdapter {
     completed: Vec<LifecycleEffect>,
     observed: LifecycleState,

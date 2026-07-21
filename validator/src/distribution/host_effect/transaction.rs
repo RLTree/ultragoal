@@ -4,7 +4,7 @@ use super::lifecycle::{
 };
 use super::transaction_identity::expected_observations;
 use super::transaction_observation::{
-    HostLifecycleObservationInput, HostLifecycleSurfaceDigests, observe,
+    HostLifecycleObservationInput, HostLifecycleSurfaceDigests, expected_content, observe,
 };
 use super::transaction_policy;
 use super::transaction_policy::{CurrentDescriptorAdapter, SystemTrustedClock, accepted_lifecycle};
@@ -42,7 +42,8 @@ pub(crate) fn execute_host_lifecycle_transaction(
         plan.intent,
         LifecycleIntent::RepeatUse | LifecycleIntent::IdempotentReinstall
     ) {
-        let expected = expected_observations(&package, &plan, &observation, 0);
+        let content = expected_content(&observation, target_root)?;
+        let expected = expected_observations(&package, &plan, &observation, &content, 0)?;
         let surfaces = observe_read_only(
             &package,
             &plan,
@@ -54,7 +55,9 @@ pub(crate) fn execute_host_lifecycle_transaction(
         )?;
         return Ok(HostLifecycleTransactionResult { surfaces });
     }
-    let expected = expected_observations(&package, &plan, &observation, command_plan.len());
+    let content = expected_content(&observation, target_root)?;
+    let expected =
+        expected_observations(&package, &plan, &observation, &content, command_plan.len())?;
     let scope = AcceptedHostScope::repository(&journey, journey.marketplace().to_owned())
         .map_err(|_| "repository host scope unavailable")?;
     let binding = HostLifecycleBinding::new(

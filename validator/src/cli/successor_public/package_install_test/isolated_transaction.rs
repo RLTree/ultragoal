@@ -79,7 +79,6 @@ fn execute_inner(
         binding,
         package_tree,
         root_path: root_path.to_path_buf(),
-        runtime_path,
     })
 }
 
@@ -92,7 +91,6 @@ struct InstallTransaction<'a> {
     binding: JourneyBinding,
     package_tree: ScopedTree,
     root_path: std::path::PathBuf,
-    runtime_path: std::path::PathBuf,
 }
 
 fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservation, &'static str> {
@@ -105,7 +103,6 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         binding,
         package_tree,
         root_path,
-        runtime_path,
     } = transaction;
     let package = artifact.snapshot().identity().clone();
     let authority = crate::plugin_product::lifecycle::PackageAuthority {
@@ -150,9 +147,8 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         &executable,
         &root_path,
         crate::distribution::host_effect::HostLifecycleObservationInput {
-            installed_path: root_path.join("plugins/harness-ultragoal"),
-            cache_path: root_path.join("plugins/cache/local-harness-plugins/harness-ultragoal"),
-            runtime_path,
+            marketplace_source_path: root_path.join("plugins/harness-ultragoal"),
+            marketplace_source_root: root_path.to_path_buf(),
             marketplace: "local-harness-plugins".to_owned(),
             plugin: "harness-ultragoal".to_owned(),
         },
