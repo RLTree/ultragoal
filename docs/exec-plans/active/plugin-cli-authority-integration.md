@@ -1,5 +1,32 @@
 # Plugin and CLI Authority Integration
 
+## Sealed host-lifecycle root integration — 2026-07-21
+
+Root integrated the accepted immutable-launch correction through
+`57345b8daddf3cc140d5805f85982eacf11b79f0` / tree
+`6fa2ac30e23d82e20429387c049da4a7f078b691`. Linux and FreeBSD now execute a
+sealed private-memory copy of the selected executable bytes and bind the child
+to the authority-owned working-directory descriptor before `exec`; a failure to
+bind the directory exits before an effect. The raw Darwin host-execution bridge
+is retired, and the remaining Darwin routine-only spawn primitive is private to
+the typed `PinnedExecutable` mediation path.
+
+The dependency-closed root contract passed 7/7. The initial bounded Terra/medium
+review found the missing confined-cwd binding, residual raw Darwin spawn route,
+and stale source control; the one coherent correction and Terra/medium
+confirmation closed those material findings. A root compile then exposed a
+platform-vocabulary mismatch, corrected at `57345b8d`: Darwin production builds
+neither construct nor map the Linux/FreeBSD-only timeout outcome.
+
+The macOS descriptor-launch feasibility probe remains negative: the local SDK
+has no usable `fexecve`/`execveat` equivalent and `/dev/fd` execution is denied.
+Accordingly, macOS host effects fail closed before spawn. This strengthens source
+and focused host-lifecycle behavior only; local macOS install, runtime,
+interruption/recovery, repeat use, daily-driver, Product Fitness, readiness,
+release, and completion claims remain withheld. The two clean lifecycle
+worktrees are eligible for archival/removal after this checkpoint; no receipt
+or generated artifact was created.
+
 ## Evidence-led sequencing checkpoint — 2026-07-20
 
 Root integrated the sealed host-lifecycle custody series through `12faa2b17` /

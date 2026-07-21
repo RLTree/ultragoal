@@ -1,5 +1,19 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-21 sealed host-lifecycle integration
+
+Root integrated `57345b8daddf3cc140d5805f85982eacf11b79f0` /
+`6fa2ac30e23d82e20429387c049da4a7f078b691`: Linux/FreeBSD launch from sealed
+private-memory executable bytes and `fchdir` to the authority-owned directory
+before effect; Darwin's raw host-execution bridge is retired and its remaining
+routine-only primitive is private to typed `PinnedExecutable` mediation. The
+dependency-closed host-effect contract passes 7/7 after one bounded Terra/medium
+REWORK and one confirmation ACCEPT. Darwin descriptor execution is explicitly
+unsupported/fail-closed because no local byte-sealing primitive survived the
+feasibility probe. This closes the source integration gate but does not advance
+macOS install, discovery, runtime, recovery, repeat-use, daily-driver, Product
+Fitness, readiness, release, or completion claims.
+
 ## 2026-07-20 repository-fit local-state integration
 
 The repository-fit local-state increment is root-integrated through
