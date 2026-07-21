@@ -36,6 +36,7 @@ pub(crate) use selected_codex_executable::{
     selected_test_fixture, SelectedCodexExecutableTestFixture,
 };
 mod transaction;
+mod transaction_failure;
 mod transaction_identity;
 mod transaction_observation;
 mod transaction_observation_command;

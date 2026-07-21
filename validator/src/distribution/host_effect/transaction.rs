@@ -1,7 +1,8 @@
 use super::lifecycle::{
     AcceptedHostScope, HostEffectAcceptanceRequest, HostEffectPreparationRequest,
-    SupportedHostLifecycleCoordinator, SupportedHostLifecycleError, SupportedHostLifecycleErrorId,
+    SupportedHostLifecycleCoordinator,
 };
+use super::transaction_failure::{execution_failure, preparation_failure};
 use super::transaction_identity::expected_observations;
 use super::transaction_observation::{
     HostLifecycleObservationInput, HostLifecycleSurfaceDigests, expected_content, observe,
@@ -140,7 +141,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
         SupportedHostEffectExecutor::new(&ledger, target, &mut backend, policy.clone());
     let receipt = executor
         .execute_handoff(handoff, &mut clock, &cancellation)
-        .map_err(|_| "host lifecycle execution failed")?;
+        .map_err(execution_failure)?;
     let capability = transaction_policy::current_capability()
         .map_err(|_| "host lifecycle observation capability unavailable")?;
     let observation_package = custody.pre_effect_record().package().clone();
@@ -202,27 +203,4 @@ pub(crate) fn execute_host_lifecycle_transaction(
     Ok(HostLifecycleTransactionResult {
         surfaces: result.surfaces,
     })
-}
-
-fn preparation_failure(error: SupportedHostLifecycleError) -> &'static str {
-    use SupportedHostLifecycleErrorId as Id;
-    match error.id() {
-        Id::DescriptorExecutionUnavailable => "host lifecycle descriptor execution unavailable",
-        Id::InvalidAcceptedIdentity => "host lifecycle accepted identity rejected",
-        Id::CoordinatorSubstitution => "host lifecycle coordinator binding rejected",
-        Id::PlanSubstitution => "host lifecycle plan binding rejected",
-        Id::ExecutableSubstitution => "host lifecycle executable binding rejected",
-        Id::TargetSubstitution => "host lifecycle target binding rejected",
-        Id::TargetRace => "host lifecycle target changed during reservation",
-        Id::UntrustedTime => "host lifecycle trusted clock unavailable",
-        Id::StaleLedgerHead => "host lifecycle ledger head changed before reservation",
-        Id::AuthorityRejected => "host lifecycle authority issuance rejected",
-        Id::LedgerRejected => "host lifecycle durable reservation rejected",
-        Id::HandoffConstructionFailed => "host lifecycle execution handoff rejected",
-        #[cfg(test)]
-        Id::UnsupportedPlatform => "host lifecycle platform unsupported",
-        #[cfg(test)]
-        Id::RecoveryAuthorizationRequired => "host lifecycle recovery authorization required",
-        Id::RecoveryUnsafe => "host lifecycle recovery rejected",
-    }
 }
