@@ -169,13 +169,6 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
 }
 
 fn codex_executable() -> Result<std::path::PathBuf, &'static str> {
-    let candidates = [
-        std::path::PathBuf::from("/opt/homebrew/bin/codex"),
-        std::path::PathBuf::from("/usr/local/bin/codex"),
-        std::path::PathBuf::from("/usr/bin/codex"),
-    ]
-    .into_iter()
-    .filter_map(|path| path.canonicalize().ok())
-    .find(|path| path.is_file());
-    candidates.ok_or("pinned Codex executable unavailable")
+    crate::distribution::resolve_codex_executable()
+        .map_err(|_| "pinned Codex executable unavailable")
 }

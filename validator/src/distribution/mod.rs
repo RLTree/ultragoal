@@ -35,6 +35,7 @@ pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
 pub use host::{HostCommand, HostCommandPlan};
+pub(crate) use host_capability::resolve_codex_executable;
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
