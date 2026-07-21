@@ -44,6 +44,7 @@ pub(super) fn execution_failure(error: HostEffectExecutorFailure) -> &'static st
         Id::ProcessSpawnFailed => "host lifecycle process could not start",
         Id::ProcessFailed => "host lifecycle process failed",
         Id::OutputOverflow => "host lifecycle process output exceeded limit",
+        #[cfg(any(target_os = "linux", target_os = "freebsd", test))]
         Id::Timeout => "host lifecycle process timed out",
         Id::Cancelled => "host lifecycle process cancelled",
         Id::PartialAcknowledgement => "host lifecycle execution acknowledgement incomplete",
