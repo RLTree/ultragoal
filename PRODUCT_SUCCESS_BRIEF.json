@@ -1,0 +1,92 @@
+{
+  "schema": "harness-ultragoal.product-success-brief.v2",
+  "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
+  "product_success_contract_digest": "sha256:f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0",
+  "claim_ids": [
+    "CL-FIT",
+    "CL-INSTALL",
+    "CL-PACKAGE",
+    "CL-ROUTINE",
+    "CL-RUNTIME"
+  ],
+  "target_problem": "Prove the nearest useful installed-daily-driver transition before expanding Ultragoal product scope.",
+  "audience": "Repository operator supervising current-source Harness Ultragoal work.",
+  "job_to_be_done": "Safely inspect the real current repository through the public front door, then use its observed result to drive the shortest honest package, install, discovery, routine-work, recovery, and repeat-use journey.",
+  "context_of_use": "The exact current Harness Ultragoal source repository on a clean subject candidate; later routine work must preserve an operator-owned dirty change.",
+  "desired_outcome": "A useful, inspectable repository-fit observation that identifies the next dependency-legal transition without claiming any unobserved product surface.",
+  "first_value_event": "The public read-only fit route produces an exact repository observation and an honest next action.",
+  "operator": {
+    "kind": "agent_with_human_supervision",
+    "actor_reference": "OWN-ULTRA-ROOT"
+  },
+  "real_work": {
+    "repository_identity": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170",
+    "starting_candidate": "sha256:04a0cb4d57e282e074f51d2e3d16cc50448806e5a0fef2db036328da354b2249",
+    "dirty_state_expectation": "clean",
+    "task_id": "current-source-installed-daily-driver",
+    "task": "Establish the first truthful transition of the real UltraGoal installed-daily-driver journey before creating or promoting broader product evidence.",
+    "expected_useful_outcome": "A zero-write fit observation with a deterministic next action; later journey stages remain separately evidenced or withheld."
+  },
+  "public_entry_surface": {
+    "surface_id": "PS-ENTRY",
+    "route": "harness-ultragoal",
+    "forbidden_bypasses": [
+      "direct internal CLI invocation",
+      "manual claim promotion",
+      "receipt substitution for behavior"
+    ]
+  },
+  "protected_invariants": [
+    {
+      "id": "preserve-unrelated-repository-state",
+      "claim_ids": [
+        "CL-FIT",
+        "CL-ROUTINE"
+      ],
+      "surfaces": [
+        "PS-ENTRY",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE"
+      ],
+      "required_condition": "Read-only fit performs no repository or Git mutation, and later routine work preserves unrelated operator-owned state.",
+      "disposition": "fail_closed"
+    }
+  ],
+  "first_truth_loop": {
+    "loop_id": "current-source-installed-daily-driver",
+    "positive_path": [
+      {
+        "transition_id": "inspect-real-repository",
+        "action_id": "inspect-installed-daily-driver",
+        "command_id": "fit-inspect",
+        "effect": "read",
+        "order": 1,
+        "dependency_ids": [],
+        "capability_ids": [],
+        "claim_ids": [
+          "CL-FIT"
+        ],
+        "product_surfaces": [
+          "PS-ENTRY",
+          "PS-FIT-RETROFIT"
+        ],
+        "expected_observation": "A current, read-only repository-fit observation identifies the first dependency-legal journey action.",
+        "evidence_class": "source"
+      }
+    ],
+    "first_value_transition": "inspect-real-repository",
+    "failure_control": {
+      "transition_id": "inspect-real-repository",
+      "failure": "Unsafe, stale, or incomplete repository input is refused before a product effect occurs.",
+      "diagnosis": "Inspect the fit finding and current inception projection through the public read route.",
+      "recovery": "Repair the named repository input or use the next valid dependency-legal route, then re-observe from the same public entry.",
+      "preservation": "Unrelated repository state remains unchanged throughout inspection and failed inspection."
+    },
+    "preservation_expectation": "The fit transition is recursively zero-write and does not alter repository, Git, or operator-owned state.",
+    "repeat_use_expectation": "The same public fit route can be repeated after a controlled routine-work interruption without turning prior observations into runtime or human-use claims."
+  },
+  "depth_triggers": [],
+  "evidence_class": "source",
+  "evidence_ladder": "Current source evidence is limited to the exact read-only inception and fit transition; package, install, discovery, runtime, agent-use, human-use, and repeat-use evidence require separate observations.",
+  "claim_ceiling": "source_only"
+}
