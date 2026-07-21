@@ -50,6 +50,12 @@ real-work, and minimal manual journey observations. Every identity is observed
 or explicitly withheld. Legacy dogfood receipts remain non-product
 orchestration records and are forbidden substitutions for this receipt.
 
+The typed disposition keeps v1 compatibility and validates v2 operator kind,
+evidence class, exact observed-or-withheld surface identities, public entry and
+bypass rejection, real repository/task outcome, manual journey observations,
+candidate freshness, and claim-ceiling support. `dogfood-receipt.v1` is rejected
+by both typed and audit Product Fitness paths.
+
 ## Claim Ceiling
 
 Package/static/fixture Product Fitness proof supports only the plugin

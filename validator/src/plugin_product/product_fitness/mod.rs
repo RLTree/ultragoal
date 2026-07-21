@@ -1,18 +1,24 @@
 mod evidence;
 mod ladder;
 mod model;
+mod v2;
 
 pub use ladder::source_candidate_ceilings;
 pub use model::{
-    ClaimCeiling, DimensionDisposition, DimensionEvidence, EvidenceBinding, FitnessDimension,
-    OverallDisposition, ProductFitnessDisposition, ProductFitnessError, TRUTH_LAYERS, TruthLayer,
+    ClaimCeiling, DimensionDisposition, DimensionEvidence, EvidenceBinding, EvidenceClass,
+    FitnessDimension, ManualJourneyRow, OperatorKind, OverallDisposition,
+    ProductFitnessDisposition, ProductFitnessError, PublicEntryObservation, RealWorkObservation,
+    SurfaceIdentities, SurfaceIdentity, SurfaceStatus, TRUTH_LAYERS, TruthLayer,
 };
 use std::collections::BTreeSet;
 use std::path::Path;
 
 impl ProductFitnessDisposition {
     pub fn validate(&self, root: &Path) -> Result<(), ProductFitnessError> {
-        if self.schema_version != "HarnessProductFitnessDisposition-v1" {
+        if !matches!(
+            self.schema_version.as_str(),
+            "HarnessProductFitnessDisposition-v1" | "HarnessProductFitnessDisposition-v2"
+        ) {
             return Err(ProductFitnessError::InvalidDisposition);
         }
         evidence::validate_digest(&self.candidate_id)?;
@@ -28,9 +34,23 @@ impl ProductFitnessDisposition {
             return Err(ProductFitnessError::ReviewerAuthorityInvalid);
         }
         validate_dimensions(self, root)?;
-        ladder::validate(&self.truth_layer_ceilings)?;
         validate_substitutions(self)?;
-        validate_overall(self)
+        validate_overall(self)?;
+        if self.schema_version == "HarnessProductFitnessDisposition-v2" {
+            v2::validate(self, root)?;
+            ladder::validate(&self.truth_layer_ceilings)?;
+        } else if self.operator_kind.is_some()
+            || self.evidence_class.is_some()
+            || self.surface_identities.is_some()
+            || self.public_entry_observation.is_some()
+            || self.real_work_observation.is_some()
+            || self.manual_journey_row.is_some()
+        {
+            return Err(ProductFitnessError::InvalidDisposition);
+        } else {
+            ladder::validate(&self.truth_layer_ceilings)?;
+        }
+        Ok(())
     }
 }
 

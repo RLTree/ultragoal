@@ -1,6 +1,7 @@
 pub(crate) mod evidence;
 pub(crate) mod receipt;
 pub(crate) mod substitutions;
+pub(crate) mod v2;
 use serde_json::Value;
 use std::path::Path;
 

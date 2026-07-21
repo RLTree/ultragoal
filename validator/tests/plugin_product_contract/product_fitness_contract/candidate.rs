@@ -93,6 +93,12 @@ fn disposition(
             "smoke_test".to_owned(),
         ]),
         overall,
+        operator_kind: None,
+        evidence_class: None,
+        surface_identities: None,
+        public_entry_observation: None,
+        real_work_observation: None,
+        manual_journey_row: None,
     }
 }
 

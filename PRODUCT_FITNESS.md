@@ -48,6 +48,11 @@ be relabeled as human use. A legacy `dogfood-receipt.v1` is orchestration and
 cleanup context only and cannot satisfy Product Fitness, real-use, human-use,
 daily-driver, readiness, release, or completion evidence.
 
+The typed Product Fitness disposition accepts v1 records unchanged. A v2
+disposition requires every v2 observation, candidate/current same-surface
+evidence, exact surface identities, a rejected bypass when attempted, and an
+honest ceiling. The audit path rejects `dogfood-receipt.v1` explicitly.
+
 Reviewer agreement, install success, smoke tests, test pass counts, fixture pass
 counts, package publication, first use, feature delivery, and Product Cohesion
 receipts alone MUST NOT prove product success.
