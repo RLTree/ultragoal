@@ -34,7 +34,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
     ledger_root: &Path,
     ledger_id: String,
     issuer_id: String,
-    executable_path: &Path,
+    executable: PinnedHostExecutable,
     target_root: &Path,
     observation: HostLifecycleObservationInput,
 ) -> Result<HostLifecycleTransactionResult, &'static str> {
@@ -48,7 +48,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
             &package,
             &plan,
             &command_plan,
-            executable_path,
+            executable,
             target_root,
             observation,
             expected,
@@ -74,8 +74,6 @@ pub(crate) fn execute_host_lifecycle_transaction(
         .map_err(|_| "host lifecycle ledger creation failed")?;
     let coordinator = SupportedHostLifecycleCoordinator::bind(issuer_id, ledger_id, &ledger)
         .map_err(|_| "host lifecycle coordinator binding failed")?;
-    let executable =
-        PinnedHostExecutable::pin(executable_path).map_err(|_| "host executable pin failed")?;
     let observation_executable = executable
         .duplicate()
         .map_err(|_| "host executable duplicate failed")?;

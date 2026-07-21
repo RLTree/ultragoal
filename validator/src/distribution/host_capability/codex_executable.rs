@@ -2,10 +2,12 @@ use std::env;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 
+use crate::distribution::host_effect::PinnedHostExecutable;
+
 const CODEX_PROGRAM: &str = "codex";
 const MAX_PATH_BYTES: usize = 64 * 1024;
 
-pub(crate) fn resolve_codex_executable() -> Result<PathBuf, DistributionError> {
+pub(crate) fn resolve_codex_executable() -> Result<PinnedHostExecutable, DistributionError> {
     let path = env::var_os("PATH").ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
     if path_byte_length(&path) > MAX_PATH_BYTES {
         return Err(error(DistributionErrorId::ObjectTooLarge));
@@ -28,42 +30,17 @@ fn path_byte_length(path: &OsStr) -> usize {
 
 fn resolve_from_path(
     paths: impl IntoIterator<Item = PathBuf>,
-) -> Result<PathBuf, DistributionError> {
+) -> Result<PinnedHostExecutable, DistributionError> {
     for directory in paths {
         if !directory.is_absolute() {
             continue;
         }
         let candidate = directory.join(CODEX_PROGRAM);
-        let Ok(canonical) = candidate.canonicalize() else {
-            continue;
-        };
-        let Ok(metadata) = std::fs::symlink_metadata(&canonical) else {
-            continue;
-        };
-        if !metadata.is_file()
-            || metadata.file_type().is_symlink()
-            || !has_executable_mode(&metadata)
-        {
-            continue;
+        if let Ok(executable) = PinnedHostExecutable::pin(&candidate) {
+            return Ok(executable);
         }
-        return Ok(canonical);
     }
     Err(error(DistributionErrorId::ObjectUnavailable))
-}
-
-fn has_executable_mode(metadata: &std::fs::Metadata) -> bool {
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::MetadataExt;
-        use std::os::unix::fs::PermissionsExt;
-
-        metadata.permissions().mode() & 0o111 != 0 && metadata.nlink() == 1
-    }
-    #[cfg(not(unix))]
-    {
-        let _ = metadata;
-        true
-    }
 }
 
 #[cfg(all(test, unix))]
@@ -94,9 +71,52 @@ mod tests {
         let executable = root.join("codex");
         symlink(&target, &executable).expect("codex symlink");
 
+        assert!(resolve_from_path([root.clone()]).is_ok());
+        fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn pinned_selection_rejects_in_place_replacement_after_path_resolution() {
+        let root = test_root("path-resolution-replacement");
+        fs::create_dir_all(&root).expect("directory");
+        let executable = root.join("codex");
+        fs::write(&executable, b"first").expect("executable bytes");
+        fs::set_permissions(&executable, fs::Permissions::from_mode(0o755))
+            .expect("executable mode");
+
+        let pinned = resolve_from_path([root.clone()]).expect("resolved");
+        fs::write(&executable, b"replacement").expect("replacement bytes");
+
+        assert!(pinned.revalidate_for_test().is_err());
+        fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn pinned_selection_keeps_original_target_after_symlink_replacement() {
+        let root = test_root("path-resolution-symlink-replacement");
+        fs::create_dir_all(&root).expect("directory");
+        let first = root.join("codex-first");
+        let second = root.join("codex-second");
+        fs::write(&first, b"first").expect("first executable bytes");
+        fs::write(&second, b"second").expect("second executable bytes");
+        for path in [&first, &second] {
+            fs::set_permissions(path, fs::Permissions::from_mode(0o755)).expect("executable mode");
+        }
+        let executable = root.join("codex");
+        symlink(&first, &executable).expect("codex symlink");
+
+        let pinned = resolve_from_path([root.clone()]).expect("resolved");
+        fs::remove_file(&executable).expect("remove symlink");
+        symlink(&second, &executable).expect("replacement symlink");
+
+        assert!(pinned.revalidate_for_test().is_ok());
         assert_eq!(
-            resolve_from_path([root.clone()]).expect("resolved"),
-            target.canonicalize().expect("canonical target")
+            pinned.canonical_path_for_test(),
+            first
+                .canonicalize()
+                .expect("canonical target")
+                .display()
+                .to_string()
         );
         fs::remove_dir_all(root).expect("cleanup");
     }

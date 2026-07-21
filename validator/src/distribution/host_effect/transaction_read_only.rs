@@ -13,14 +13,12 @@ pub(super) fn observe_read_only(
     package: &PackageIdentity,
     plan: &LifecyclePlan,
     command_plan: &super::HostCommandPlan,
-    executable_path: &Path,
+    executable: PinnedHostExecutable,
     target_root: &Path,
     observation: HostLifecycleObservationInput,
     expected: HostLifecycleExpectedObservations,
 ) -> Result<HostLifecycleSurfaceDigests, &'static str> {
     let root = std::fs::File::open(target_root).map_err(|_| "host observation root unavailable")?;
-    let executable =
-        PinnedHostExecutable::pin(executable_path).map_err(|_| "host executable pin failed")?;
     let environment = command_plan
         .commands()
         .first()

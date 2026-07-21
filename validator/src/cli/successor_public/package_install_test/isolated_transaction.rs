@@ -134,7 +134,8 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
     )
     .map_err(|_| "isolated Codex command plan failed")?;
     let binding_sha256 = binding.binding_sha256().to_owned();
-    let executable = codex_executable()?;
+    let executable = crate::distribution::resolve_codex_executable()
+        .map_err(|_| "pinned Codex executable unavailable")?;
     let result = crate::distribution::host_effect::execute_host_lifecycle_transaction(
         plan,
         package.clone(),
@@ -144,7 +145,7 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         &root_path,
         "isolated-codex-install-test".to_owned(),
         "harness-ultragoal-package-install-test".to_owned(),
-        &executable,
+        executable,
         &root_path,
         crate::distribution::host_effect::HostLifecycleObservationInput {
             marketplace_source_path: root_path.join("plugins/harness-ultragoal"),
@@ -166,9 +167,4 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         runtime_observation_sha256: surfaces.runtime,
         journey_binding_sha256: binding_sha256,
     })
-}
-
-fn codex_executable() -> Result<std::path::PathBuf, &'static str> {
-    crate::distribution::resolve_codex_executable()
-        .map_err(|_| "pinned Codex executable unavailable")
 }
