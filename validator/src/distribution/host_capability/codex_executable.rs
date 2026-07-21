@@ -1,4 +1,5 @@
 use std::env;
+use std::ffi::OsStr;
 use std::path::PathBuf;
 
 const CODEX_PROGRAM: &str = "codex";
@@ -6,10 +7,23 @@ const MAX_PATH_BYTES: usize = 64 * 1024;
 
 pub(crate) fn resolve_codex_executable() -> Result<PathBuf, DistributionError> {
     let path = env::var_os("PATH").ok_or_else(|| error(DistributionErrorId::ObjectUnavailable))?;
-    if path.to_string_lossy().len() > MAX_PATH_BYTES {
+    if path_byte_length(&path) > MAX_PATH_BYTES {
         return Err(error(DistributionErrorId::ObjectTooLarge));
     }
     resolve_from_path(env::split_paths(&path))
+}
+
+fn path_byte_length(path: &OsStr) -> usize {
+    #[cfg(unix)]
+    {
+        use std::os::unix::ffi::OsStrExt;
+
+        path.as_bytes().len()
+    }
+    #[cfg(not(unix))]
+    {
+        path.to_string_lossy().len()
+    }
 }
 
 fn resolve_from_path(
@@ -54,7 +68,8 @@ fn has_executable_mode(metadata: &std::fs::Metadata) -> bool {
 
 #[cfg(all(test, unix))]
 mod tests {
-    use super::resolve_from_path;
+    use super::{path_byte_length, resolve_from_path};
+    use std::ffi::OsString;
     use std::fs;
     use std::os::unix::fs::PermissionsExt;
     use std::os::unix::fs::symlink;
@@ -62,6 +77,12 @@ mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
+
+    #[test]
+    fn path_limit_counts_operating_system_string_bytes() {
+        let path = OsString::from("é".repeat(64));
+        assert_eq!(path_byte_length(&path), 128);
+    }
 
     #[test]
     fn path_resolution_accepts_a_user_local_executable_without_a_private_allowlist() {
