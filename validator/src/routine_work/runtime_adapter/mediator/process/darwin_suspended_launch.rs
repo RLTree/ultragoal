@@ -14,8 +14,8 @@ pub(crate) fn spawn_suspended(
     let arguments = argv
         .get(1..)
         .ok_or_else(|| mediator_error("mediator-process-argv-empty"))?;
-    let spawned = crate::process_custody::spawn_suspended_descriptor(
-        program.path(),
+    let spawned = super::darwin_spawn::spawn_suspended_descriptor(
+        program,
         root.raw_fd(),
         arguments,
         environment,

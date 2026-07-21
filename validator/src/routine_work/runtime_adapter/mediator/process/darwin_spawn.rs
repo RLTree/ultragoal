@@ -1,4 +1,5 @@
-use super::darwin::DarwinSuspendedProcess;
+use super::PinnedExecutable;
+use crate::process_custody::DarwinSuspendedProcess;
 use std::collections::BTreeMap;
 use std::ffi::{CString, c_char};
 use std::fs::File;
@@ -8,14 +9,14 @@ use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 
 pub(super) fn spawn_suspended_descriptor(
-    program: &Path,
+    program: &PinnedExecutable,
     cwd: RawFd,
     argv: &[String],
     environment: &BTreeMap<String, String>,
 ) -> io::Result<DarwinSuspendedProcess> {
-    let path = CString::new(program.as_os_str().as_bytes())
+    let path = CString::new(program.path().as_os_str().as_bytes())
         .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "program path"))?;
-    let arguments = c_arguments(program, argv)?;
+    let arguments = c_arguments(program.path(), argv)?;
     let variables = c_environment(environment)?;
     let mut argument_pointers = pointers(&arguments);
     let mut variable_pointers = pointers(&variables);

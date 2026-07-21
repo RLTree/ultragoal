@@ -18,6 +18,9 @@ mod custody_settlement;
 #[path = "darwin_hooks.rs"]
 mod darwin_hooks;
 #[cfg(target_os = "macos")]
+#[path = "darwin_spawn.rs"]
+mod darwin_spawn;
+#[cfg(target_os = "macos")]
 #[path = "darwin_suspended_launch.rs"]
 mod darwin_suspended_launch;
 #[path = "execution.rs"]

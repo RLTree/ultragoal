@@ -47,6 +47,7 @@ pub(super) fn execute(
             policy,
             cancellation,
             command.environment(),
+            cwd,
             DescriptorExecutionPrimitive::ExecveAtEmptyPath,
         );
     }
@@ -65,6 +66,7 @@ pub(super) fn execute(
             policy,
             cancellation,
             command.environment(),
+            cwd,
             DescriptorExecutionPrimitive::Fexecve,
         );
     }

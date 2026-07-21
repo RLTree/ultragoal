@@ -17,6 +17,7 @@ pub(super) fn execute(
     policy: &HostEffectExecutionPolicy,
     cancellation: &HostEffectCancellation,
     environment_entries: &[(String, String)],
+    cwd: std::os::fd::RawFd,
     primitive: DescriptorExecutionPrimitive,
 ) -> Result<CommandCapture, BackendFailure> {
     use std::ffi::CString;
@@ -72,6 +73,13 @@ pub(super) fn execute(
         unsafe {
             libc::close(stdout_read);
             libc::close(stderr_read);
+            // The caller supplies an authority-owned directory descriptor. Bind
+            // the child to it before any exec attempt; ambient cwd is never a
+            // valid fallback for a confined host effect.
+            if libc::fchdir(cwd) != 0 {
+                libc::_exit(126);
+            }
+            libc::close(cwd);
             if libc::setpgid(0, 0) != 0
                 || libc::dup2(stdout_write, libc::STDOUT_FILENO) < 0
                 || libc::dup2(stderr_write, libc::STDERR_FILENO) < 0

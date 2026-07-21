@@ -1,9 +1,7 @@
 //! Neutral Darwin suspended launch kernel.
 
-use std::collections::BTreeMap;
 use std::fs::File;
 use std::io;
-use std::os::fd::RawFd;
 use std::path::Path;
 
 pub(crate) struct DarwinSuspendedProcess {
@@ -62,13 +60,4 @@ impl DarwinSuspendedProcess {
                 .ok_or_else(|| io::Error::other("stderr already transferred"))?,
         ))
     }
-}
-
-pub(crate) fn spawn_suspended_descriptor(
-    program: &Path,
-    cwd: RawFd,
-    argv: &[String],
-    environment: &BTreeMap<String, String>,
-) -> io::Result<DarwinSuspendedProcess> {
-    super::darwin_spawn::spawn_suspended_descriptor(program, cwd, argv, environment)
 }

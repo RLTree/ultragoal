@@ -15,15 +15,12 @@ mod darwin_loaded;
 #[cfg(target_os = "macos")]
 #[path = "darwin_process.rs"]
 pub(crate) mod darwin_process;
-#[cfg(target_os = "macos")]
-#[path = "darwin_spawn.rs"]
-mod darwin_spawn;
 
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_cleanup::cleanup_process;
 
 #[cfg(target_os = "macos")]
-pub(crate) use darwin::{DarwinSuspendedProcess, spawn_suspended_descriptor};
+pub(crate) use darwin::DarwinSuspendedProcess;
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_process::{
     DarwinProcessFailure, DarwinProcessHooks, DarwinProcessPolicy, DarwinProcessTermination,
