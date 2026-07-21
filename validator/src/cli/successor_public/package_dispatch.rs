@@ -13,24 +13,29 @@ pub(super) fn execute(
     operation: operation_binding::PublicOperation,
 ) -> Option<RuntimeOutcome> {
     match operation {
-        operation_binding::PublicOperation::PackageBuild => Some(with_context(root, |context| {
-            package_build::execute(context, invocation)
-        })),
+        operation_binding::PublicOperation::PackageBuild => Some(with_package_contexts(
+            root,
+            |source_context, output_context| {
+                package_build::execute(source_context, output_context, invocation)
+            },
+        )),
         operation_binding::PublicOperation::PackageVerify => {
             Some(with_read_context(root, |context| {
                 verify_current_package(context, invocation)
             }))
         }
-        operation_binding::PublicOperation::PackageInventory => {
-            Some(with_context(root, |context| {
-                package_inventory::execute(context, invocation)
-            }))
-        }
-        operation_binding::PublicOperation::PackageInstallTest => {
-            Some(with_context(root, |context| {
-                package_install_test::execute(context, invocation)
-            }))
-        }
+        operation_binding::PublicOperation::PackageInventory => Some(with_package_contexts(
+            root,
+            |source_context, output_context| {
+                package_inventory::execute(source_context, output_context, invocation)
+            },
+        )),
+        operation_binding::PublicOperation::PackageInstallTest => Some(with_package_contexts(
+            root,
+            |source_context, output_context| {
+                package_install_test::execute(source_context, output_context, invocation)
+            },
+        )),
         _ => None,
     }
 }
@@ -45,13 +50,13 @@ fn with_read_context(
     }
 }
 
-fn with_context(
+fn with_package_contexts(
     root: &Path,
-    execute: impl FnOnce(&LiveContext) -> RuntimeOutcome,
+    execute: impl FnOnce(&LiveContext, &LiveContext) -> RuntimeOutcome,
 ) -> RuntimeOutcome {
-    match workspace_context(root) {
-        Ok(context) => execute(&context),
-        Err(()) => context_unavailable(),
+    match (read_context(root), workspace_context(root)) {
+        (Ok(source_context), Ok(output_context)) => execute(&source_context, &output_context),
+        (Err(()), _) | (_, Err(())) => context_unavailable(),
     }
 }
 

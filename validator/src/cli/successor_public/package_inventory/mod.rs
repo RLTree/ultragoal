@@ -17,31 +17,35 @@ struct PackageInventoryOutcome<'a> {
     claim_ceiling: &'static str,
 }
 
-pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
+pub(super) fn execute(
+    source_context: &LiveContext,
+    output_context: &LiveContext,
+    invocation: &ParsedInvocation,
+) -> RuntimeOutcome {
     let Some(output_path) = output_path(invocation) else {
         return invalid_invocation();
     };
-    let catalog = match InventoryBuilder::new(context).build() {
+    let catalog = match InventoryBuilder::new(source_context).build() {
         Ok(catalog) => catalog,
         Err(_) => return inventory_unavailable(),
     };
-    let artifact = match capture_product_package(context, &catalog) {
+    let artifact = match capture_product_package(source_context, &catalog) {
         Ok(artifact) => artifact,
         Err(error) => return package_failure(error.id()),
     };
-    if verify_product_package(&artifact, context, &catalog).is_err()
+    if verify_product_package(&artifact, source_context, &catalog).is_err()
         || !public_output_allowed(artifact.snapshot().inventory().len())
     {
         return package_failure(ProductionPackageErrorId::InventoryMismatch);
     }
-    let output = match ConfinedRoot::open_workspace(context)
+    let output = match ConfinedRoot::open_workspace(output_context)
         .and_then(|root| ScopedFile::new(root, output_path))
     {
         Ok(output) => output,
         Err(_) => return output_failure(),
     };
     if artifact
-        .publish_inventory(context, &catalog, &output)
+        .publish_inventory(source_context, &catalog, &output)
         .is_err()
     {
         return output_failure();

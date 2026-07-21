@@ -33,22 +33,28 @@ struct InstallTestOutcome<'a> {
     claim_ceiling: &'static str,
 }
 
-pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
+pub(super) fn execute(
+    source_context: &LiveContext,
+    output_context: &LiveContext,
+    invocation: &ParsedInvocation,
+) -> RuntimeOutcome {
     let Some((input_path, output_path)) = invocation_paths(invocation) else {
         return invalid_invocation();
     };
-    let catalog = match InventoryBuilder::new(context).build() {
+    let catalog = match InventoryBuilder::new(source_context).build() {
         Ok(catalog) => catalog,
         Err(_) => return transaction_failure("authority inventory is unavailable"),
     };
-    let artifact = match capture_product_package(context, &catalog) {
-        Ok(artifact) if verify_product_package(&artifact, context, &catalog).is_ok() => artifact,
+    let artifact = match capture_product_package(source_context, &catalog) {
+        Ok(artifact) if verify_product_package(&artifact, source_context, &catalog).is_ok() => {
+            artifact
+        }
         _ => return transaction_failure("current-source package capture failed"),
     };
-    if !input_matches(context, input_path, &artifact) {
+    if !input_matches(output_context, input_path, &artifact) {
         return transaction_failure("input package is not the exact current-source archive");
     }
-    let observation = match isolated_transaction::execute(context, &catalog, &artifact) {
+    let observation = match isolated_transaction::execute(source_context, &catalog, &artifact) {
         Ok(observation) => observation,
         Err(cause) => return transaction_failure(cause),
     };
@@ -68,7 +74,7 @@ pub(super) fn execute(context: &LiveContext, invocation: &ParsedInvocation) -> R
         output: output_path,
         claim_ceiling: "isolated marketplace-source/archive-install/cache/app-registry/runtime verified; Codex discovery and installed product claims withheld",
     };
-    publish_outcome(context, output_path, &record)
+    publish_outcome(output_context, output_path, &record)
 }
 
 fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
