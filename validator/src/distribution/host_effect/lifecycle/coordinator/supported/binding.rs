@@ -38,10 +38,9 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             clock,
             adapter,
         } = request;
-        #[cfg(test)]
         if platform == DescriptorExecutionPlatform::Darwin {
             return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::UnsupportedPlatform,
+                SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
             ));
         }
         if !platform.supports_descriptor_execution() {

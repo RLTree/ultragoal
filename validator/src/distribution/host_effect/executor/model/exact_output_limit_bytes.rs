@@ -21,6 +21,7 @@ pub(crate) enum HostEffectExecutorErrorId {
     ProcessSpawnFailed,
     ProcessFailed,
     OutputOverflow,
+    #[cfg(any(target_os = "linux", target_os = "freebsd", test))]
     Timeout,
     Cancelled,
     PartialAcknowledgement,

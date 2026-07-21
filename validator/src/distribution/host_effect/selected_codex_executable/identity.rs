@@ -27,7 +27,7 @@ impl SelectedCodexExecutableIdentity {
             identity: &'a SelectedCodexExecutableIdentity,
         }
         serde_json::to_vec(&Binding {
-            schema: "harness-ultragoal.pinned-host-executable.v1",
+            schema: "harness-ultragoal.pinned-host-executable.v2-sealed-launch",
             identity: self,
         })
         .map(|bytes| format!("sha256:{:x}", Sha256::digest(bytes)))

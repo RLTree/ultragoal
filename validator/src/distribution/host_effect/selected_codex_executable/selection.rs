@@ -3,6 +3,7 @@ use super::super::{
     ledger_io, read_at_retry, same_executable_object, tampered,
 };
 use super::identity::SelectedCodexExecutableIdentity;
+use super::immutable_launch::ImmutableExecutable;
 use sha2::{Digest, Sha256};
 use std::fs::{self, File, OpenOptions};
 use std::path::{Path, PathBuf};
@@ -12,6 +13,7 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
 pub(crate) struct SelectedCodexExecutable {
     file: File,
+    launch: ImmutableExecutable,
     identity: SelectedCodexExecutableIdentity,
 }
 
@@ -29,7 +31,17 @@ impl SelectedCodexExecutable {
                 .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_NONBLOCK);
             let file = options.open(&canonical).map_err(|_| ledger_io())?;
             let identity = capture_identity(&file, &canonical)?;
-            Ok(Self { file, identity })
+            let launch = ImmutableExecutable::stage(
+                &file,
+                identity.mode,
+                identity.size,
+                &identity.content_sha256,
+            )?;
+            Ok(Self {
+                file,
+                launch,
+                identity,
+            })
         }
         #[cfg(not(unix))]
         {
@@ -39,17 +51,8 @@ impl SelectedCodexExecutable {
     }
 
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-    pub(super) fn raw_file(&self) -> &File {
-        &self.file
-    }
-
-    #[cfg(target_os = "macos")]
-    pub(super) fn raw_loaded_identity(&self) -> (&Path, u64, u64) {
-        (
-            Path::new(&self.identity.canonical_path),
-            self.identity.device,
-            self.identity.inode,
-        )
+    pub(super) fn launch_file(&self) -> &File {
+        self.launch.file()
     }
 
     pub(in crate::distribution::host_effect) fn binding_sha256(
@@ -63,6 +66,7 @@ impl SelectedCodexExecutable {
     ) -> Result<Self, HostEffectLedgerError> {
         Ok(Self {
             file: self.file.try_clone().map_err(|_| ledger_io())?,
+            launch: self.launch.duplicate()?,
             identity: self.identity.clone(),
         })
     }
@@ -95,6 +99,11 @@ impl SelectedCodexExecutable {
         cwd: std::os::fd::RawFd,
     ) -> Result<super::super::executor::CommandCapture, super::super::executor::BackendFailure>
     {
+        self.revalidate().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
         super::execution::execute(self, capability, command, policy, cancellation, cwd)
     }
 }

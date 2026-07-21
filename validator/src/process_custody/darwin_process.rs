@@ -24,7 +24,6 @@ pub(crate) enum DarwinProcessTermination {
 pub(crate) struct DarwinProcessResult {
     pub(crate) termination: DarwinProcessTermination,
     pub(crate) stdout: Vec<u8>,
-    pub(crate) stderr: Vec<u8>,
     pub(crate) stderr_sha256: String,
     pub(crate) output_byte_length: u64,
 }
@@ -49,10 +48,6 @@ pub(crate) trait DarwinProcessHooks {
         Ok(())
     }
 }
-
-pub(crate) struct DarwinNoopHooks;
-
-impl DarwinProcessHooks for DarwinNoopHooks {}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum DarwinProcessFailure {
@@ -227,7 +222,6 @@ fn execute_inner(
             status_code(status)
         },
         stdout: stdout.retained,
-        stderr: stderr.retained,
         stderr_sha256: stderr.digest,
         output_byte_length: stdout.bytes.saturating_add(stderr.bytes),
     })

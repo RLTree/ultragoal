@@ -5,6 +5,7 @@ use std::path::PathBuf;
 
 mod execution;
 mod identity;
+mod immutable_launch;
 mod selection;
 pub(crate) use selection::SelectedCodexExecutable;
 

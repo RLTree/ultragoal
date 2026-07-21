@@ -10,9 +10,6 @@ mod darwin_capture;
 #[path = "darwin_cleanup.rs"]
 pub(crate) mod darwin_cleanup;
 #[cfg(target_os = "macos")]
-#[path = "darwin_execute.rs"]
-mod darwin_execute;
-#[cfg(target_os = "macos")]
 #[path = "darwin_loaded.rs"]
 mod darwin_loaded;
 #[cfg(target_os = "macos")]
@@ -27,10 +24,6 @@ pub(crate) use darwin_cleanup::cleanup_process;
 
 #[cfg(target_os = "macos")]
 pub(crate) use darwin::{DarwinSuspendedProcess, spawn_suspended_descriptor};
-#[cfg(target_os = "macos")]
-pub(crate) use darwin_execute::{
-    DarwinExecutionFailure, DarwinExecutionPolicy, execute_suspended_descriptor,
-};
 #[cfg(target_os = "macos")]
 pub(crate) use darwin_process::{
     DarwinProcessFailure, DarwinProcessHooks, DarwinProcessPolicy, DarwinProcessTermination,

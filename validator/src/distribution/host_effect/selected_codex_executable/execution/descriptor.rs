@@ -84,7 +84,7 @@ pub(super) fn execute(
                 #[cfg(target_os = "linux")]
                 DescriptorExecutionPrimitive::ExecveAtEmptyPath => {
                     libc::execveat(
-                        executable.raw_file().as_raw_fd(),
+                        executable.launch_file().as_raw_fd(),
                         c"".as_ptr(),
                         argv.as_ptr(),
                         environment.as_ptr(),
@@ -94,7 +94,7 @@ pub(super) fn execute(
                 #[cfg(target_os = "freebsd")]
                 DescriptorExecutionPrimitive::Fexecve => {
                     libc::fexecve(
-                        executable.raw_file().as_raw_fd(),
+                        executable.launch_file().as_raw_fd(),
                         argv.as_ptr(),
                         environment.as_ptr(),
                     );

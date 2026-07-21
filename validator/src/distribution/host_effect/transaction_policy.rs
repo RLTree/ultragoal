@@ -125,22 +125,39 @@ impl DescriptorExecutionAdapter for CurrentDescriptorAdapter {
 
 pub(crate) fn current_capability()
 -> Result<DescriptorExecutionCapability, SupportedHostLifecycleError> {
-    let (platform, primitive) = if cfg!(target_os = "macos") {
-        (
+    let (platform, primitive) = match DescriptorExecutionPlatform::current() {
+        DescriptorExecutionPlatform::Darwin => (
             DescriptorExecutionPlatform::Darwin,
             DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode,
-        )
-    } else if cfg!(target_os = "linux") {
-        (
+        ),
+        DescriptorExecutionPlatform::Linux => (
             DescriptorExecutionPlatform::Linux,
             DescriptorExecutionPrimitive::ExecveAtEmptyPath,
-        )
-    } else {
-        (
+        ),
+        DescriptorExecutionPlatform::FreeBsd => (
             DescriptorExecutionPlatform::FreeBsd,
             DescriptorExecutionPrimitive::Fexecve,
-        )
+        ),
+        DescriptorExecutionPlatform::Other => {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
+            ));
+        }
     };
+    if platform == DescriptorExecutionPlatform::Darwin {
+        // Keep the platform probe typed, but do not issue a usable capability:
+        // the Darwin launch primitive is intentionally unsupported until a
+        // byte-sealing handoff exists.
+        let _candidate = DescriptorExecutionCapability::new(
+            platform,
+            primitive,
+            "harness-host-effect".into(),
+            "v1".into(),
+        )?;
+        return Err(lifecycle_error(
+            SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
+        ));
+    }
     DescriptorExecutionCapability::new(
         platform,
         primitive,
