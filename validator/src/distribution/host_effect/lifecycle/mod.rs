@@ -66,7 +66,6 @@ pub(crate) struct SupportedHostLifecycleError {
 }
 
 impl SupportedHostLifecycleError {
-    #[cfg(test)]
     pub(crate) const fn id(&self) -> SupportedHostLifecycleErrorId {
         self.id
     }

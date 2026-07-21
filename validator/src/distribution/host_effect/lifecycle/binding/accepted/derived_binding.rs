@@ -16,6 +16,13 @@ impl AcceptedHostEffect {
             package_identity_sha256: self.package_identity_sha256.clone(),
             journey_binding_sha256: self.journey_binding_sha256.clone(),
             session_issuance_sha256: self.session_issuance_sha256.clone(),
+            // The permit carries the durable lifecycle-plan identity. The
+            // accepted projection remains bound through the session and
+            // external-request digests below, but it cannot replace the
+            // record that the ledger will persist with the permit.
+            #[cfg(not(test))]
+            lifecycle_plan_sha256: self.lifecycle_record.permit_join().0.to_owned(),
+            #[cfg(test)]
             lifecycle_plan_sha256: self.lifecycle.plan_sha256().to_owned(),
             lifecycle_intent: self.lifecycle.operation().as_str().to_owned(),
             expected_pre_state_sha256: self.expected_pre_state_sha256.clone(),
