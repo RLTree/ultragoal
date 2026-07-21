@@ -103,6 +103,16 @@ fn product_fitness_v2_requires_separate_truth_surfaces_and_real_use_fields() {
     receipt["schema"] = json!("harness-ultragoal.product-fitness-receipt.v2");
     receipt["operator_kind"] = json!("agent");
     receipt["evidence_class"] = json!("agent_use");
+    let candidate = receipt["target_revision"]["value"].clone();
+    let binding = |path: &str, digest: Value| {
+        json!({
+            "path": path,
+            "digest": digest,
+            "candidate_id": candidate,
+            "same_surface": true,
+            "current_session": true
+        })
+    };
     let withheld = json!({"status": "withheld"});
     receipt["surface_identities"] = json!({
         "source": withheld,
@@ -117,11 +127,15 @@ fn product_fitness_v2_requires_separate_truth_surfaces_and_real_use_fields() {
     });
     receipt["public_entry_observation"] = json!({
         "surface_id": "PS-ENTRY", "route": "harness-ultragoal",
-        "bypass_attempted": true, "bypass_rejected": true
+        "bypass_attempted": true, "bypass_rejected": true,
+        "evidence": binding("entry.json", json!(digest('5')))
     });
     receipt["real_work_observation"] = json!({
-        "repository_identity": digest('4'), "task_id": "task-1",
-        "task": "Apply one repair", "useful_outcome": "Repair verified"
+        "repository_identity": digest('4'),
+        "repository_evidence": binding("repository.json", json!(digest('4'))),
+        "task_id": "task-1", "task": "Apply one repair",
+        "useful_outcome": "Repair verified",
+        "evidence": binding("work.json", json!(digest('6')))
     });
     receipt["manual_journey_row"] = json!({
         "time_to_verified_value_ms": 1, "human_interventions": 0,
@@ -130,7 +144,43 @@ fn product_fitness_v2_requires_separate_truth_surfaces_and_real_use_fields() {
         "retained_artifact_bytes": 0, "retained_cache_bytes": 0,
         "false_passes": 0, "false_rejections": 0
     });
+    receipt["claimed_surface"] = json!("source");
+    receipt["surface_claim_ceilings"] = json!({
+        "source": "package_static_fixture_only",
+        "package": "withheld_or_blocked",
+        "marketplace": "withheld_or_blocked",
+        "install": "withheld_or_blocked",
+        "cache": "withheld_or_blocked",
+        "app_registry": "withheld_or_blocked",
+        "discovery": "withheld_or_blocked",
+        "runtime": "withheld_or_blocked",
+        "journey": "withheld_or_blocked"
+    });
+    receipt["substitution_rejections"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!({
+            "rejected_substitute": "legacy_dogfood_receipt",
+            "reason": "orchestration cleanup is not product-use evidence"
+        }));
     assert_valid(&store, "product-fitness-receipt.schema.json", &receipt);
+
+    let mut missing_legacy = receipt.clone();
+    missing_legacy["substitution_rejections"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|item| item["rejected_substitute"] != "legacy_dogfood_receipt");
+    assert_invalid(
+        &store,
+        "product-fitness-receipt.schema.json",
+        &missing_legacy,
+    );
+
+    receipt["surface_identities"]["source"] = json!({
+        "status": "withheld",
+        "identity": "forbidden"
+    });
+    assert_invalid(&store, "product-fitness-receipt.schema.json", &receipt);
 }
 
 fn store() -> crate::schema_catalog::SchemaStore {
@@ -140,6 +190,10 @@ fn store() -> crate::schema_catalog::SchemaStore {
 fn assert_valid(store: &crate::schema_catalog::SchemaStore, schema: &str, value: &Value) {
     let errors = crate::schema_catalog::schema_errors(store, schema, value);
     assert!(errors.is_empty(), "{errors:?}");
+}
+
+fn assert_invalid(store: &crate::schema_catalog::SchemaStore, schema: &str, value: &Value) {
+    assert!(!crate::schema_catalog::schema_errors(store, schema, value).is_empty());
 }
 
 fn digest(character: char) -> String {

@@ -48,7 +48,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "0b411cb1a872cd44bab8fa91ae6cd07d22f7f50e5d1b7762cda27c665bae29e9"
+      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
     },
     {
       "disposition": "source_projection",
@@ -401,7 +401,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "0b411cb1a872cd44bab8fa91ae6cd07d22f7f50e5d1b7762cda27c665bae29e9"
+      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
     },
     {
       "disposition": "source_projection",

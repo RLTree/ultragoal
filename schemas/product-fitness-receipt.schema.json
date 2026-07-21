@@ -75,6 +75,12 @@
     "manual_journey_row": {
       "$ref": "#/$defs/manualJourneyRow"
     },
+    "claimed_surface": {
+      "$ref": "#/$defs/truthSurface"
+    },
+    "surface_claim_ceilings": {
+      "$ref": "#/$defs/surfaceClaimCeilings"
+    },
     "claim": {
       "type": "object",
       "required": [
@@ -331,12 +337,82 @@
           "surface_identities",
           "public_entry_observation",
           "real_work_observation",
-          "manual_journey_row"
-        ]
+          "manual_journey_row",
+          "claimed_surface",
+          "surface_claim_ceilings"
+        ],
+        "properties": {
+          "substitution_rejections": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "rejected_substitute",
+                "reason"
+              ],
+              "properties": {
+                "rejected_substitute": {
+                  "const": "legacy_dogfood_receipt"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "minContains": 1,
+            "maxContains": 1
+          }
+        }
       }
     }
   ],
   "$defs": {
+    "truthSurface": {
+      "enum": [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey"
+      ]
+    },
+    "surfaceClaimCeiling": {
+      "enum": [
+        "package_static_fixture_only",
+        "withheld_or_blocked",
+        "live_same_surface_proven"
+      ]
+    },
+    "surfaceClaimCeilings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "package": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "marketplace": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "install": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "cache": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "app_registry": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "discovery": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "runtime": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "journey": { "$ref": "#/$defs/surfaceClaimCeiling" }
+      }
+    },
     "surfaceIdentity": {
       "type": "object",
       "additionalProperties": false,
@@ -355,7 +431,7 @@
           "minLength": 1
         },
         "evidence": {
-          "$ref": "#/$defs/evidenceRef"
+          "$ref": "#/$defs/v2EvidenceBinding"
         }
       },
       "allOf": [
@@ -372,6 +448,14 @@
               "identity",
               "evidence"
             ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                { "required": ["identity"] },
+                { "required": ["evidence"] }
+              ]
+            }
           }
         }
       ]
@@ -409,13 +493,15 @@
         "surface_id",
         "route",
         "bypass_attempted",
-        "bypass_rejected"
+        "bypass_rejected",
+        "evidence"
       ],
       "properties": {
         "surface_id": { "const": "PS-ENTRY" },
         "route": { "const": "harness-ultragoal" },
         "bypass_attempted": { "type": "boolean" },
-        "bypass_rejected": { "type": "boolean" }
+        "bypass_rejected": { "type": "boolean" },
+        "evidence": { "$ref": "#/$defs/v2EvidenceBinding" }
       }
     },
     "realWorkObservation": {
@@ -423,15 +509,19 @@
       "additionalProperties": false,
       "required": [
         "repository_identity",
+        "repository_evidence",
         "task_id",
         "task",
-        "useful_outcome"
+        "useful_outcome",
+        "evidence"
       ],
       "properties": {
         "repository_identity": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "repository_evidence": { "$ref": "#/$defs/v2EvidenceBinding" },
         "task_id": { "type": "string", "minLength": 1 },
         "task": { "type": "string", "minLength": 1 },
-        "useful_outcome": { "type": "string", "minLength": 1 }
+        "useful_outcome": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/$defs/v2EvidenceBinding" }
       }
     },
     "manualJourneyRow": {
@@ -636,6 +726,37 @@
         "digest": {
           "type": "string",
           "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "v2EvidenceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest",
+        "candidate_id",
+        "same_surface",
+        "current_session"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "same_surface": {
+          "const": true
+        },
+        "current_session": {
+          "const": true
         }
       }
     }

@@ -1,6 +1,10 @@
 use serde_json::Value;
 use std::collections::BTreeSet;
 
+mod ceiling;
+#[cfg(test)]
+mod tests;
+
 pub(super) fn failures(receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
     let candidate = string(receipt, "/target_revision/value");
@@ -9,7 +13,8 @@ pub(super) fn failures(receipt: &Value) -> Vec<String> {
     public_entry(receipt, &candidate, &mut out);
     real_work(receipt, &candidate, &mut out);
     manual_journey(receipt, &mut out);
-    ceiling(receipt, &mut out);
+    ceiling::failures(receipt, &mut out);
+    legacy_dogfood_rejection(receipt, &mut out);
     out
 }
 
@@ -190,35 +195,6 @@ fn manual_journey(receipt: &Value, out: &mut Vec<String>) {
     }
 }
 
-fn ceiling(receipt: &Value, out: &mut Vec<String>) {
-    if string(receipt, "/claim_ceiling") != "live_same_surface_proven" {
-        return;
-    }
-    let class = string(receipt, "/evidence_class");
-    if class != "repeated_human_use"
-        || string(receipt, "/surface_identities/journey/status") != "observed"
-    {
-        out.push("product_fitness_unsupported_claim_ceiling".to_string());
-    }
-    for layer in [
-        "source",
-        "package",
-        "marketplace",
-        "install",
-        "cache",
-        "app_registry",
-        "discovery",
-        "runtime",
-        "journey",
-    ] {
-        if string(receipt, &format!("/surface_identities/{layer}/status")) == "observed"
-            && !supports_live_layer(layer, &class)
-        {
-            out.push("product_fitness_unsupported_claim_ceiling".to_string());
-        }
-    }
-}
-
 fn bound_evidence(evidence: &Value, candidate: &str, name: &str, out: &mut Vec<String>) {
     if string(evidence, "/path").is_empty()
         || string(evidence, "/digest").is_empty()
@@ -230,35 +206,16 @@ fn bound_evidence(evidence: &Value, candidate: &str, name: &str, out: &mut Vec<S
     }
 }
 
-fn supports_live_layer(layer: &str, class: &str) -> bool {
-    match class {
-        "source" => layer == "source",
-        "package" => matches!(layer, "source" | "package"),
-        "installed" => matches!(layer, "source" | "package" | "marketplace" | "install"),
-        "runtime" | "agent_use" => matches!(
-            layer,
-            "source"
-                | "package"
-                | "marketplace"
-                | "install"
-                | "cache"
-                | "app_registry"
-                | "discovery"
-                | "runtime"
-        ),
-        "human_use" | "repeated_human_use" => matches!(
-            layer,
-            "source"
-                | "package"
-                | "marketplace"
-                | "install"
-                | "cache"
-                | "app_registry"
-                | "discovery"
-                | "runtime"
-                | "journey"
-        ),
-        _ => false,
+fn legacy_dogfood_rejection(receipt: &Value, out: &mut Vec<String>) {
+    let count = receipt
+        .pointer("/substitution_rejections")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter(|item| string(item, "/rejected_substitute") == "legacy_dogfood_receipt")
+        .count();
+    if count != 1 {
+        out.push("product_fitness_legacy_dogfood_substitution_missing".to_string());
     }
 }
 
