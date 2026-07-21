@@ -3,7 +3,6 @@ use crate::distribution::{
     Capability, HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, ScopedTree,
 };
 use crate::inventory::AuthorityCatalog;
-use std::fs;
 use std::path::Path;
 
 use super::isolated_observation::IsolatedObservation;
@@ -36,11 +35,9 @@ fn execute_inner(
         .materialize_marketplace_source(context, catalog, &mut package_tree)
         .map_err(|_| "package materialization failed")?;
     let runtime_path = root_path.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
-    let project = root_path.join("project");
-    fs::create_dir(&project).map_err(|_| "isolated project creation failed")?;
     let host = HostCapabilityDeclaration::isolated(
         root_path,
-        &project,
+        root_path,
         "isolated-codex-install-test-v1",
         Some(&runtime_path),
     )
