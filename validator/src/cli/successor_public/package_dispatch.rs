@@ -1,8 +1,7 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    ConfinedRoot, ProductionPackageErrorId, ScopedFile, capture_product_package,
-    verify_product_package,
+    ProductionPackageErrorId, ReadOnlyWorkspace, capture_product_package, verify_product_package,
 };
 use serde::Serialize;
 
@@ -76,9 +75,8 @@ fn verify_current_package(context: &LiveContext, invocation: &ParsedInvocation) 
         Ok(catalog) => catalog,
         Err(_) => return inventory_unavailable(),
     };
-    let input = match ConfinedRoot::open_workspace(context)
-        .and_then(|root| ScopedFile::new(root, input_path))
-        .and_then(|file| file.inspect(PACKAGE_LIMIT))
+    let input = match ReadOnlyWorkspace::open(context)
+        .and_then(|workspace| workspace.inspect_file(input_path, PACKAGE_LIMIT))
     {
         Ok(Some(bytes)) => bytes,
         _ => return package_verification_failure("the bounded package input is unavailable"),
