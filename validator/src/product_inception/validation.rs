@@ -41,7 +41,10 @@ pub(crate) fn validate_v2(
         return Err("brief_candidate_binding_stale");
     }
     if matches!(
-        (brief.real_work.dirty_state_expectation, candidate.dirty),
+        (
+            brief.real_work.dirty_state_expectation,
+            candidate.subject_dirty
+        ),
         (super::model::DirtyStateExpectation::Clean, true)
             | (super::model::DirtyStateExpectation::Dirty, false)
     ) {

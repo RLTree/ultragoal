@@ -32,6 +32,7 @@ fn candidate() -> CandidateBinding {
         head_tree: Some("tree".to_owned()),
         branch: Some("branch".to_owned()),
         dirty: true,
+        subject_dirty: true,
         candidate_digest: digest('d'),
         repository_digest: digest('e'),
     }

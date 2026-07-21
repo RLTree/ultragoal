@@ -8,6 +8,7 @@ use std::collections::BTreeSet;
 
 pub(crate) enum RankingDisposition {
     Active,
+    MissingBrief,
     InceptionRequired,
 }
 
@@ -29,7 +30,7 @@ fn bind(
 ) -> Result<RankingDisposition, InceptionError> {
     let input = reader::read_with_catalog(context, catalog.clone())?;
     let Some(bytes) = input.brief else {
-        return Ok(RankingDisposition::InceptionRequired);
+        return Ok(RankingDisposition::MissingBrief);
     };
     let ParsedBrief::EvidenceLed(mut brief) = parser::parse(&bytes)? else {
         return Ok(RankingDisposition::InceptionRequired);

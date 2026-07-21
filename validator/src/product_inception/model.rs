@@ -210,6 +210,7 @@ pub(crate) struct CandidateBinding {
     pub(crate) head_tree: Option<String>,
     pub(crate) branch: Option<String>,
     pub(crate) dirty: bool,
+    pub(crate) subject_dirty: bool,
     pub(crate) candidate_digest: String,
     pub(crate) repository_digest: String,
 }

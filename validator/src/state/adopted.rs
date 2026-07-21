@@ -15,6 +15,8 @@ use crate::context::{EffectClass, LiveContext};
 use crate::inventory::AuthorityCatalog;
 use std::collections::BTreeSet;
 
+use super::adopted_journey::append_first_truth_loop_route;
+
 pub(crate) fn derive_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
@@ -99,8 +101,6 @@ fn live_spec(
             evidence_led: None,
         })
         .collect::<Vec<_>>();
-    let inception =
-        crate::product_inception::bind_actions(context, authority_catalog, &mut actions, &codes);
     let mut dependencies = vec![DependencyFact {
         dependency_id: "reconciliation-kernel".to_owned(),
         observation_id: staged_reconciliation_id.to_owned(),
@@ -119,6 +119,40 @@ fn live_spec(
         )),
         ceiling_reductions: reductions.clone(),
     }];
+    let mut commands = vec![
+        CommandBinding {
+            command_id: "inspect-inception".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "inspect".to_owned(),
+                "inception".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+        CommandBinding {
+            command_id: "inspect-json".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "inspect".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+        CommandBinding {
+            command_id: "migrate-plan".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "migrate".to_owned(),
+                "plan".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+    ];
+    append_first_truth_loop_route(&mut dependencies, &mut commands, &mut actions, &reductions);
+    let inception =
+        crate::product_inception::bind_actions(context, authority_catalog, &mut actions, &codes);
     if matches!(
         inception,
         crate::product_inception::RankingDisposition::InceptionRequired
@@ -164,37 +198,7 @@ fn live_spec(
         capability_requirements: Vec::new(),
         runtime_metadata: RuntimeMetadata::default(),
         runtime_requirements: Vec::new(),
-        commands: vec![
-            CommandBinding {
-                command_id: "inspect-inception".to_owned(),
-                argv: vec![
-                    "ultragoal".to_owned(),
-                    "--json".to_owned(),
-                    "inspect".to_owned(),
-                    "inception".to_owned(),
-                ],
-                effect: EffectClass::Read,
-            },
-            CommandBinding {
-                command_id: "inspect-json".to_owned(),
-                argv: vec![
-                    "ultragoal".to_owned(),
-                    "--json".to_owned(),
-                    "inspect".to_owned(),
-                ],
-                effect: EffectClass::Read,
-            },
-            CommandBinding {
-                command_id: "migrate-plan".to_owned(),
-                argv: vec![
-                    "ultragoal".to_owned(),
-                    "--json".to_owned(),
-                    "migrate".to_owned(),
-                    "plan".to_owned(),
-                ],
-                effect: EffectClass::Read,
-            },
-        ],
+        commands,
         actions,
         host_goal: HostGoalObservation::default(),
     }

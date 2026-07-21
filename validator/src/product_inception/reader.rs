@@ -1,6 +1,6 @@
 use super::InceptionError;
 use super::model::{CandidateBinding, ContractFacts};
-use crate::context::{LiveContext, ReadSession};
+use crate::context::{LiveContext, ReadSession, inception_subject_identity};
 use crate::digest;
 use crate::inventory::{AuthorityCatalog, InventoryBuilder};
 use serde_json::Value;
@@ -36,7 +36,6 @@ pub(crate) fn read_with_catalog(
     context: &LiveContext,
     catalog: AuthorityCatalog,
 ) -> Result<ReadResult, InceptionError> {
-    let initial_candidate = candidate(context);
     let reads = context
         .begin_read_session()
         .map_err(InceptionError::context)?;
@@ -49,27 +48,28 @@ pub(crate) fn read_with_catalog(
     let brief = read_optional(&reads, &root, BRIEF_PATH, MAX_BRIEF_BYTES)?;
     reads.revalidate().map_err(InceptionError::context)?;
     context.revalidate().map_err(InceptionError::context)?;
-    let final_candidate = candidate(context);
-    if final_candidate != initial_candidate {
-        return Err(InceptionError::Context);
-    }
+    let candidate = candidate(context, &reads)?;
     Ok(ReadResult {
         catalog,
         facts,
-        candidate: final_candidate,
+        candidate,
         brief,
     })
 }
-fn candidate(context: &LiveContext) -> CandidateBinding {
-    let encoded = serde_json::to_vec(context.candidate()).expect("candidate is serializable");
-    CandidateBinding {
+fn candidate(
+    context: &LiveContext,
+    reads: &ReadSession,
+) -> Result<CandidateBinding, InceptionError> {
+    let subject = inception_subject_identity(reads).map_err(InceptionError::context)?;
+    Ok(CandidateBinding {
         head_commit: context.candidate().head_commit.clone(),
         head_tree: context.candidate().head_tree.clone(),
         branch: context.candidate().branch.clone(),
         dirty: context.candidate().dirty,
-        candidate_digest: digest::bytes(&encoded),
+        subject_dirty: subject.dirty,
+        candidate_digest: subject.digest,
         repository_digest: digest::bytes(context.roots().repository_root.as_bytes()),
-    }
+    })
 }
 fn facts(
     catalog: &AuthorityCatalog,

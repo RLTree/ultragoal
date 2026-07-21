@@ -15,6 +15,7 @@ mod git;
 #[cfg(test)]
 #[path = "git_tests.rs"]
 mod git_tests;
+mod inception_subject;
 #[cfg(test)]
 mod path;
 mod process;
@@ -44,5 +45,6 @@ pub use bound_context::{
 };
 pub use error::ContextError;
 pub(crate) use git::query as query_git;
+pub(crate) use inception_subject::identity as inception_subject_identity;
 pub(crate) use read_session::ReadSession;
 pub use request::BuildRequest;

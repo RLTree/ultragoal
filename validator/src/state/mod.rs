@@ -5,6 +5,7 @@
 
 mod adopted;
 mod adopted_claims;
+mod adopted_journey;
 mod adopted_registry;
 mod catalog;
 mod ceiling;
@@ -39,7 +40,8 @@ pub use catalog::{
     ActionDefinition, ActionKind, ActionPriorityClass, CapabilityRequirement, ClaimSpec,
     CommandBinding, DependencyActionCatalog, DependencyActionSpec, DependencyFact,
     DependencyStatus, EvidenceLedActionBinding, FactAuthority, HostGoalObservation, HostGoalStatus,
-    InventoryPolicy, RuntimeField, RuntimeMetadata, RuntimeRequirement, RuntimeSource, RuntimeValue,
+    InventoryPolicy, RuntimeField, RuntimeMetadata, RuntimeRequirement, RuntimeSource,
+    RuntimeValue,
 };
 pub use ceiling::{CeilingRelation, ClaimCeiling};
 pub use engine::StateEngine;
