@@ -90,6 +90,16 @@ impl SelectedCodexExecutable {
         }
     }
 
+    #[cfg(target_os = "macos")]
+    pub(super) fn launch_path(&self) -> &Path {
+        self.launch.path()
+    }
+
+    #[cfg(target_os = "macos")]
+    pub(super) fn revalidate_launch(&self) -> Result<(), HostEffectLedgerError> {
+        self.launch.revalidate()
+    }
+
     pub(in crate::distribution::host_effect) fn execute(
         &self,
         capability: &super::super::lifecycle::DescriptorExecutionCapability,
@@ -100,6 +110,12 @@ impl SelectedCodexExecutable {
     ) -> Result<super::super::executor::CommandCapture, super::super::executor::BackendFailure>
     {
         self.revalidate().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
+        #[cfg(target_os = "macos")]
+        self.revalidate_launch().map_err(|_| {
             super::super::executor::BackendFailure::before_start(
                 super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
             )

@@ -8,6 +8,10 @@ use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 
+#[cfg(target_os = "macos")]
+#[path = "darwin_tests.rs"]
+mod darwin_tests;
+
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 pub(crate) struct SelectedCodexExecutableTestFixture {

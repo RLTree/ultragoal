@@ -1,17 +1,20 @@
 use super::super::HostEffectLedgerError;
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+use super::super::ledger_io;
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
-use super::super::{ledger_io, tampered};
+use super::super::tampered;
 use std::fs::File;
 
-/// The only executable object accepted by the descriptor launch backends.
-///
-/// On Linux and FreeBSD this is a sealed, private-memory copy of the bytes
-/// selected from PATH. Darwin deliberately carries an unsupported marker: the
-/// host has no equivalent byte-sealing primitive in this candidate, so its
-/// execution backend refuses before any spawn.
+#[cfg(target_os = "macos")]
+#[path = "darwin_copy.rs"]
+mod darwin_copy;
+
+/// The only executable object accepted by a descriptor launch backend.
 pub(super) struct ImmutableExecutable {
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     file: File,
+    #[cfg(target_os = "macos")]
+    darwin: std::sync::Arc<darwin_copy::DarwinPrivateExecutable>,
 }
 
 impl ImmutableExecutable {
@@ -27,11 +30,10 @@ impl ImmutableExecutable {
             use std::ffi::CString;
             use std::io::Write;
             use std::os::fd::{AsRawFd, FromRawFd};
-            use std::os::unix::fs::FileExt;
 
             let name = CString::new("harness-ultragoal-codex").map_err(|_| ledger_io())?;
-            // SAFETY: the C string is NUL-terminated and remains live for the
-            // duration of the syscall; the returned descriptor is owned below.
+            // SAFETY: the C string remains live for the syscall and the returned
+            // descriptor is owned by the File constructed below.
             let descriptor = unsafe {
                 libc::memfd_create(name.as_ptr(), libc::MFD_CLOEXEC | libc::MFD_ALLOW_SEALING)
             };
@@ -40,12 +42,11 @@ impl ImmutableExecutable {
             }
             // SAFETY: memfd_create returned a unique owned descriptor.
             let file = unsafe { File::from_raw_fd(descriptor) };
-            // SAFETY: the descriptor is owned by `file` and mode is copied
-            // from the already validated regular executable.
+            // SAFETY: the descriptor is owned by `file` and mode came from the
+            // already validated regular executable.
             if unsafe { libc::fchmod(file.as_raw_fd(), (mode & 0o7777) as libc::mode_t) } != 0 {
                 return Err(ledger_io());
             }
-
             let mut hasher = Sha256::new();
             let mut offset = 0_u64;
             let mut buffer = [0_u8; 64 * 1024];
@@ -64,16 +65,14 @@ impl ImmutableExecutable {
             {
                 return Err(tampered());
             }
-
             let required =
                 libc::F_SEAL_SEAL | libc::F_SEAL_SHRINK | libc::F_SEAL_GROW | libc::F_SEAL_WRITE;
-            // SAFETY: the descriptor is owned by `file`; the command and seal
-            // mask are the documented fcntl ABI values.
+            // SAFETY: the descriptor is owned by `file` and the command is the
+            // documented memfd seal operation.
             if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_ADD_SEALS, required) } < 0 {
                 return Err(ledger_io());
             }
-            // SAFETY: the descriptor is owned by `file` and GET_SEALS writes
-            // no memory; it returns the immutable seal mask.
+            // SAFETY: GET_SEALS writes no memory and returns the seal mask.
             let seals = unsafe { libc::fcntl(file.as_raw_fd(), libc::F_GET_SEALS) };
             if seals < 0 || seals & required != required {
                 return Err(tampered());
@@ -82,11 +81,14 @@ impl ImmutableExecutable {
         }
         #[cfg(target_os = "macos")]
         {
-            let _ = (source, mode, expected_size, expected_sha256);
-            // Darwin has no byte-sealing launch primitive here. Selection
-            // remains inspectable for identity and authorization tests, but
-            // its execution backend is explicitly unsupported.
-            Ok(Self {})
+            Ok(Self {
+                darwin: std::sync::Arc::new(darwin_copy::DarwinPrivateExecutable::stage(
+                    source,
+                    mode,
+                    expected_size,
+                    expected_sha256,
+                )?),
+            })
         }
         #[cfg(not(any(target_os = "linux", target_os = "freebsd", target_os = "macos")))]
         {
@@ -104,7 +106,9 @@ impl ImmutableExecutable {
         }
         #[cfg(target_os = "macos")]
         {
-            Ok(Self {})
+            Ok(Self {
+                darwin: std::sync::Arc::clone(&self.darwin),
+            })
         }
         #[cfg(not(any(target_os = "linux", target_os = "freebsd", target_os = "macos")))]
         {
@@ -116,9 +120,19 @@ impl ImmutableExecutable {
     pub(super) fn file(&self) -> &File {
         &self.file
     }
+
+    #[cfg(target_os = "macos")]
+    pub(super) fn path(&self) -> &std::path::Path {
+        self.darwin.path()
+    }
+
+    #[cfg(target_os = "macos")]
+    pub(super) fn revalidate(&self) -> Result<(), HostEffectLedgerError> {
+        self.darwin.revalidate()
+    }
 }
 
-#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
 fn read_at_retry(
     file: &File,
     buffer: &mut [u8],

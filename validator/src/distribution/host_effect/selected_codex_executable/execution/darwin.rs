@@ -5,6 +5,9 @@ use crate::distribution::host_effect::executor::{
     HostEffectExecutorErrorId,
 };
 
+#[path = "custody.rs"]
+mod custody;
+
 #[cfg(target_os = "macos")]
 pub(super) fn execute(
     executable: &SelectedCodexExecutable,
@@ -13,19 +16,33 @@ pub(super) fn execute(
     cancellation: &HostEffectCancellation,
     cwd: std::os::fd::RawFd,
 ) -> Result<CommandCapture, BackendFailure> {
-    let _ = (
-        executable,
-        command,
-        policy.timeout(),
-        policy.stdout_limit(),
-        policy.stderr_limit(),
-        cancellation.is_cancelled(),
-        cwd,
-    );
-    // Darwin has no byte-sealing executable handoff in this candidate. A
-    // loaded-vnode/path check is only identity evidence and cannot prevent a
-    // same-inode rewrite after final validation, so refuse before spawn.
-    Err(BackendFailure::before_start(
-        HostEffectExecutorErrorId::UnsupportedPlatform,
-    ))
+    executable
+        .revalidate_launch()
+        .map_err(|_| BackendFailure::before_start(HostEffectExecutorErrorId::ExecutableMutation))?;
+    let capture =
+        match custody::execute(executable.launch_path(), command, policy, cancellation, cwd) {
+            Ok(capture) => capture,
+            Err(failure) => {
+                if executable.revalidate_launch().is_err() {
+                    return Err(BackendFailure {
+                        id: HostEffectExecutorErrorId::ExecutableMutation,
+                        started: failure.started,
+                        capture: failure.capture,
+                    });
+                }
+                return Err(BackendFailure {
+                    id: failure.id,
+                    started: failure.started,
+                    capture: failure.capture,
+                });
+            }
+        };
+    if executable.revalidate_launch().is_err() {
+        return Err(BackendFailure {
+            id: HostEffectExecutorErrorId::ExecutableMutation,
+            started: true,
+            capture,
+        });
+    }
+    Ok(capture)
 }
