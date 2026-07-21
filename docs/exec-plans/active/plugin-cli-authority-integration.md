@@ -1367,6 +1367,24 @@ The installed-daily-driver implementation lane is active in Codex task
 isolated-install-path only. Root retains public wiring, live host installation,
 fresh-task discovery, real-repository execution, Product Fitness, and claims.
 
+### Installed executable-custody decision
+
+The first correction candidate for this lane proved that a resolver returning a
+raw `PathBuf` could be replaced before the host-effect transaction pinned it.
+The second, exact-candidate confirmation then found that widening
+`PinnedHostExecutable::pin` to crate visibility would let any validator caller
+mint the host-execution capability from an arbitrary path. Root therefore
+retains the existing `PinnedHostExecutable` design and narrows its construction
+boundary: raw-path pinning stays private to `distribution::host_effect`; the
+only cross-module route is one atomically selected Codex executable capability
+that contains the retained descriptor. Effectful and repeat-use observation
+consume that capability; neither accepts a raw executable path. This is a
+replacement decision for the shared selection authority, not another resolver
+patch or proof layer. The active lane must enumerate its selection, pin,
+pre-execution, retry/recovery, and repeat-use siblings, then return one new
+clean source freeze for bounded confirmation. Package, install, discovery,
+runtime, and product claims remain withheld.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
