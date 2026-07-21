@@ -8,7 +8,7 @@ use std::os::unix::fs::DirBuilderExt;
 static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 
 pub(super) fn create() -> Result<PathBuf, &'static str> {
-    let parent = crate::distribution::filesystem::canonical_temporary_parent()
+    let parent = crate::distribution::canonical_temporary_parent()
         .map_err(|_| "temporary parent unavailable")?;
     for _ in 0..16 {
         let path = parent.join(format!(

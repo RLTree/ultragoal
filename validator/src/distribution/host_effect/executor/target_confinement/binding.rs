@@ -12,8 +12,8 @@ impl ConfinedHostEffectTarget {
                 HostEffectExecutorErrorId::InvalidTargetRoot,
             ));
         }
-        let temporary_parent = crate::distribution::filesystem::canonical_temporary_parent()
-            .map_err(|_| io_failure())?;
+        let temporary_parent =
+            crate::distribution::canonical_temporary_parent().map_err(|_| io_failure())?;
         let canonical = fs::canonicalize(path).map_err(|_| io_failure())?;
         let name = canonical
             .file_name()
