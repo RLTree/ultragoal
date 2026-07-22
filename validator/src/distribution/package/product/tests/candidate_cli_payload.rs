@@ -118,3 +118,14 @@ fn compiled_payload_preserves_candidate_and_digest() {
     assert_eq!(payload.bytes(), b"\x7fELFcli");
     assert!(payload.sha256().starts_with("sha256:"));
 }
+
+#[test]
+fn source_owned_cli_path_is_rejected_without_a_candidate_payload() {
+    let repo = Repo::new("candidate-cli-source-fallback");
+    let source_path = repo.root.join("runtime/ultragoal");
+    fs::write(&source_path, b"#!/bin/sh\necho fallback\n").expect("source CLI fallback");
+    #[cfg(unix)]
+    fs::set_permissions(&source_path, fs::Permissions::from_mode(0o755)).expect("source CLI mode");
+    let context = repo.context();
+    assert!(capture_product_package(&context, &catalog(&context)).is_err());
+}

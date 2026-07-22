@@ -61,7 +61,7 @@ fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageE
         PackageRole::Manifest
     } else if path == MARKETPLACE_CATALOG_PATH {
         PackageRole::Data
-    } else if matches!(path, "runtime/runtime-probe-bin" | "runtime/ultragoal") {
+    } else if path == "runtime/runtime-probe-bin" {
         PackageRole::Executable
     } else if CANONICAL_SKILLS
         .iter()
