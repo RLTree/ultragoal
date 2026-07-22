@@ -4,6 +4,9 @@ fn packaged_entries(
 ) -> Result<Vec<PackageEntry>, ProductionPackageError> {
     let mut entries = Vec::with_capacity(source.packaged_paths().len());
     for path in source.packaged_paths() {
+        if cli_payload.is_some() && path == "runtime/runtime-probe-bin" {
+            continue;
+        }
         let bytes = source
             .bytes(path)
             .ok_or_else(|| failure(ProductionPackageErrorId::MembershipMismatch))?;
@@ -23,7 +26,11 @@ fn packaged_entries(
         });
     }
     entries.sort_by(|left, right| left.path.cmp(&right.path));
-    if entries.len() != source.packaged_paths().len()
+    if entries.len()
+        != source
+            .packaged_paths()
+            .len()
+            .saturating_sub(usize::from(cli_payload.is_some()))
         || entries.windows(2).any(|pair| pair[0].path == pair[1].path)
         || entries
             .iter()

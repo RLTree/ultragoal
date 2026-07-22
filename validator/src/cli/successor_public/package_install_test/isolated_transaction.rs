@@ -1,7 +1,7 @@
 use super::*;
 use crate::distribution::{
     Capability, HostCapabilityDeclaration, HostCommandPlan, ISOLATED_MARKETPLACE_NAME,
-    JourneyBinding, ScopedFile, ScopedTree,
+    JourneyBinding, RuntimeProbePlan, ScopedFile, ScopedTree,
 };
 use crate::inventory::AuthorityCatalog;
 use std::path::Path;
@@ -60,7 +60,7 @@ fn execute_inner(
     artifact
         .materialize_marketplace_catalog(context, catalog, &marketplace_catalog)
         .map_err(|_| "isolated marketplace catalog materialization failed")?;
-    let runtime_path = root_path.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
+    let runtime_path = root_path.join("plugins/harness-ultragoal/runtime/ultragoal");
     let host = HostCapabilityDeclaration::isolated(
         root_path,
         root_path,
@@ -170,8 +170,8 @@ fn execute_bound(
         plan,
         package.clone(),
         command_plan,
-        binding,
-        host,
+        binding.clone(),
+        host.clone(),
         &ledger_root,
         "isolated-codex-install-test".to_owned(),
         "harness-ultragoal-package-install-test".to_owned(),
@@ -184,6 +184,27 @@ fn execute_bound(
             plugin: "harness-ultragoal".to_owned(),
         },
     )?;
+    let runtime_plan = RuntimeProbePlan::from_verified_host_runtime(
+        binding.clone(),
+        &host,
+        artifact.snapshot(),
+        &root_path.join("plugins/harness-ultragoal/runtime/ultragoal"),
+        std::time::Duration::from_secs(10),
+    )
+    .map_err(|_| "installed candidate CLI probe is unavailable or mismatched")?;
+    let expected_runtime_sha256 = artifact
+        .snapshot()
+        .entries()
+        .iter()
+        .find(|entry| entry.role() == crate::distribution::PackageRole::Executable)
+        .map(|entry| entry.sha256())
+        .ok_or("candidate package has no runtime executable")?;
+    if result.surfaces.runtime != expected_runtime_sha256 {
+        return Err("host runtime object diverged before execution probe".into());
+    }
+    let (_, runtime_surface) = runtime_plan
+        .execute_bound()
+        .map_err(|_| "installed candidate CLI help probe failed")?;
     artifact
         .verify_marketplace_source(context, catalog, &package_tree)
         .map_err(|_| "materialized package changed during transaction")?;
@@ -193,7 +214,7 @@ fn execute_bound(
         installed_observation_sha256: surfaces.installed,
         cache_observation_sha256: surfaces.cache,
         marketplace_observation_sha256: surfaces.registry,
-        runtime_observation_sha256: surfaces.runtime,
+        runtime_observation_sha256: runtime_surface.observation_sha256().to_owned(),
         journey_binding_sha256: binding_sha256,
         retained_root: None,
     })

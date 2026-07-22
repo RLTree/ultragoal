@@ -1,10 +1,16 @@
+#[cfg(test)]
 use super::host_custody::recovery_state_after_completed_prefix;
+#[cfg(test)]
+use super::model::{ApplyDisposition, ApplyReport};
 use super::model::{
-    ApplyDisposition, ApplyReport, LifecycleEffectAdapter, LifecycleError, LifecyclePlan,
-    LifecycleState, RecoveryAuthorizationSeal, RecoveryToken, validate_digest,
+    LifecycleEffectAdapter, LifecycleError, LifecyclePlan, LifecycleState,
+    RecoveryAuthorizationSeal, RecoveryToken, validate_digest,
 };
-use super::plan::{consume_plan, validate_plan};
+#[cfg(test)]
+use super::plan::consume_plan;
+use super::plan::validate_plan;
 
+#[cfg(test)]
 pub(crate) fn apply<A: LifecycleEffectAdapter>(
     observed: &LifecycleState,
     plan: &LifecyclePlan,

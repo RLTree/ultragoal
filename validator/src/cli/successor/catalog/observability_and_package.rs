@@ -2,8 +2,8 @@ use super::super::command_contract::{
     CommandDescriptor, ObserveAction, PackageAction, SuccessorCommand,
 };
 use super::options::{
-    EXPORT_OPTIONS, FILTER_OPTION, INPUT_OPTION, INPUT_OUTPUT_RETAIN, OUTPUT_OPTION,
-    PUBLISH_OPTIONS, descriptor,
+    EXPORT_OPTIONS, FILTER_OPTION, INPUT_OUTPUT_RETAIN, OUTPUT_OPTION, PACKAGE_BUILD_OPTIONS,
+    PACKAGE_VERIFY_OPTIONS, PUBLISH_OPTIONS, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -34,14 +34,14 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         Some("build"),
         EffectClass::WorkspaceWrite,
         "Build deterministic package bytes and local provenance inputs.",
-        OUTPUT_OPTION,
+        PACKAGE_BUILD_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::Verify),
         Some("verify"),
         EffectClass::Read,
         "Verify package bytes and inventory without mutation.",
-        INPUT_OPTION,
+        PACKAGE_VERIFY_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::InstallTest),

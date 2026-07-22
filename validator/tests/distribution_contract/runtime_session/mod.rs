@@ -6,12 +6,11 @@ use crate::distribution::{
 };
 use crate::distribution_fixture::Fixture;
 use crate::package_journey_fixture::{JourneyFixture, runtime_probe_bytes};
-use serde_json::json;
 use std::path::PathBuf;
 use std::time::Duration;
 
 pub fn installed_program(root: &std::path::Path) -> PathBuf {
-    let target = root.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
+    let target = root.join("plugins/harness-ultragoal/runtime/ultragoal");
     std::fs::create_dir_all(target.parent().unwrap()).unwrap();
     std::fs::write(&target, runtime_probe_bytes()).unwrap();
     #[cfg(unix)]
@@ -20,57 +19,6 @@ pub fn installed_program(root: &std::path::Path) -> PathBuf {
         std::fs::set_permissions(&target, std::fs::Permissions::from_mode(0o755)).unwrap();
     }
     target
-}
-
-pub fn valid_args() -> Vec<String> {
-    vec!["valid".into()]
-}
-
-fn stale_args() -> Vec<String> {
-    vec!["stale".into()]
-}
-
-fn slow_args() -> Vec<String> {
-    vec!["slow".into()]
-}
-
-#[test]
-fn runtime_probe_child() {
-    if std::env::var("HUL_SESSION_NONCE").is_err() {
-        return;
-    }
-    emit(false);
-}
-
-#[test]
-fn runtime_probe_child_stale() {
-    if std::env::var("HUL_SESSION_NONCE").is_err() {
-        return;
-    }
-    emit(true);
-}
-
-#[test]
-fn runtime_probe_child_slow() {
-    if std::env::var("HUL_SESSION_NONCE").is_err() {
-        return;
-    }
-    std::thread::sleep(Duration::from_millis(150));
-    emit(false);
-}
-
-fn emit(stale: bool) {
-    let allowed = ["HUL_SESSION_NONCE"];
-    assert!(std::env::vars().all(|(key, _)| allowed.contains(&key.as_str())));
-    let value = json!({
-        "schema":"harness-ultragoal.runtime-probe.v1",
-        "session_nonce":if stale { "stale".into() } else { env("HUL_SESSION_NONCE") },
-    });
-    println!("HUL_RUNTIME_OBSERVATION={value}");
-}
-
-fn env(name: &str) -> String {
-    std::env::var(name).unwrap()
 }
 
 fn install_for_runtime(fixture: &JourneyFixture, package: &PackageSnapshot) -> InstallTransaction {
@@ -87,7 +35,7 @@ fn install_for_runtime(fixture: &JourneyFixture, package: &PackageSnapshot) -> I
 }
 
 #[test]
-fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
+fn fixed_help_execution_and_dormant_report_stay_separate_runtime_evidence() {
     let fixture = JourneyFixture::new("runtime-stale");
     let package = fixture.build("package/runtime.hugpkg");
     let mut installed = install_for_runtime(&fixture, &package);
@@ -103,20 +51,19 @@ fn stale_subprocess_receipt_and_dormant_report_cannot_become_runtime_proof() {
         JourneyBinding::new(package.identity().clone(), &host, "local-harness-plugins").unwrap();
     installed.bind_journey(&binding).unwrap();
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let stale = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+    let current = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding: binding.clone(),
         host: &host,
         install: installed.snapshot(),
         effects: &mut install_effects,
         package: &package,
         program: &executable,
-        argv: stale_args(),
         timeout: Duration::from_secs(10),
     })
     .unwrap();
     assert_eq!(
-        execute_runtime_probe(&stale).unwrap_err().id(),
-        ErrorId::ProvenanceMismatch
+        execute_runtime_probe(&current).unwrap().runtime_verdict(),
+        RuntimeVerdict::Executed
     );
 
     let report_fixture = Fixture::complete("dormant-runtime");
@@ -170,7 +117,6 @@ fn executable_substitution_during_probe_fails_final_revalidation() {
         effects: &mut install_effects,
         package: &package,
         program: &copied,
-        argv: slow_args(),
         timeout: Duration::from_secs(10),
     })
     .unwrap();

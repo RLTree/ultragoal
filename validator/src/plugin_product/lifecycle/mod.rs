@@ -27,12 +27,12 @@ fn read(path: &str) -> String {
 
 #[cfg(test)]
 pub(crate) use execution::{apply, recover, recovery_token};
+pub(crate) use host_custody::HostLifecycleRecoveryDisposition;
 pub(crate) use host_custody::recovery_state_after_completed_prefix;
 pub(crate) use host_custody::{
     HostCommandObservation, HostEffectExecutionBinding, HostLifecycleCustody,
     HostLifecycleFinalization, HostLifecycleObservedBundle, HostLifecycleRecord,
 };
-pub(crate) use host_custody::HostLifecycleRecoveryDisposition;
 pub(crate) use host_custody::{HostLifecycleBinding, HostLifecycleExpectedObservations};
 #[cfg(test)]
 pub(crate) use model::LifecycleEffectAdapter;

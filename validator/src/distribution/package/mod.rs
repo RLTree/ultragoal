@@ -28,8 +28,9 @@ include_production_package_module!();
 pub(crate) use product::ISOLATED_MARKETPLACE_NAME;
 #[cfg(test)]
 pub(crate) use product::{
-    ISOLATED_MARKETPLACE_NAME, ProductionPackageArtifact, ProductionPackageErrorId,
-    capture_product_package, verify_product_package,
+    CandidateCliPayload, ISOLATED_MARKETPLACE_NAME, ProductionPackageArtifact,
+    ProductionPackageErrorId, capture_product_package, capture_product_package_with_cli,
+    verify_product_package,
 };
 #[cfg(not(test))]
 pub use product::{

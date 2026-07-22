@@ -11,6 +11,7 @@ fn exact_install_test_paths_are_accepted() {
         arguments: vec![
             option(OptionName::Input, "target/ultragoal/package.hugpkg"),
             option(OptionName::Output, "target/ultragoal/install-test.json"),
+            option(OptionName::Cli, "target/ultragoal/release/ultragoal"),
         ],
     };
     assert_eq!(
@@ -18,13 +19,14 @@ fn exact_install_test_paths_are_accepted() {
         Some((
             "target/ultragoal/package.hugpkg",
             "target/ultragoal/install-test.json",
+            "target/ultragoal/release/ultragoal",
             false,
         ))
     );
 }
 
 #[test]
-fn explicit_retention_is_the_only_third_install_test_argument() {
+fn explicit_retention_is_the_only_optional_install_test_argument() {
     let invocation = ParsedInvocation {
         command: SuccessorCommand::Package(PackageAction::InstallTest),
         effect: EffectClass::WorkspaceWrite,
@@ -32,6 +34,7 @@ fn explicit_retention_is_the_only_third_install_test_argument() {
         arguments: vec![
             option(OptionName::Input, "target/ultragoal/package.hugpkg"),
             option(OptionName::Output, "target/ultragoal/install-test.json"),
+            option(OptionName::Cli, "target/ultragoal/release/ultragoal"),
             OptionArgument {
                 name: OptionName::RetainIsolatedRoot,
                 value: ParsedValue::Flag,
@@ -43,6 +46,7 @@ fn explicit_retention_is_the_only_third_install_test_argument() {
         Some((
             "target/ultragoal/package.hugpkg",
             "target/ultragoal/install-test.json",
+            "target/ultragoal/release/ultragoal",
             true,
         ))
     );

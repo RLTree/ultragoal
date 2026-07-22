@@ -30,6 +30,7 @@ pub use command_contract::{
 #[cfg(test)]
 pub use error::ParseErrorId;
 pub use error::ParseFailure;
+pub(crate) use help::{HELP_SCHEMA, SUCCESSOR_GRAMMAR_VERSION};
 pub use help::{render_help, version_text};
 #[cfg(test)]
 pub use parser::parse_args;

@@ -1,8 +1,8 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    capture_product_package, verify_product_package, ConfinedRoot, ProductionPackageArtifact,
-    ScopedFile,
+    ConfinedRoot, ProductionPackageArtifact, ScopedFile, capture_product_package,
+    capture_product_package_with_cli, verify_product_package,
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256};
@@ -38,14 +38,27 @@ pub(super) fn execute(
     output_context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
-    let Some((input_path, output_path, retain_root)) = invocation_paths(invocation) else {
+    let Some((input_path, output_path, cli_path, retain_root)) = invocation_paths(invocation)
+    else {
         return invalid_invocation();
     };
     let catalog = match InventoryBuilder::new(source_context).build() {
         Ok(catalog) => catalog,
-        Err(_) => return transaction_failure("authority inventory is unavailable"),
+        Err(error) => return inventory_failure(&error),
     };
-    let artifact = match capture_product_package(source_context, &catalog) {
+    let source = match capture_product_package(source_context, &catalog) {
+        Ok(artifact) => artifact,
+        Err(_) => return transaction_failure("current-source package capture failed"),
+    };
+    let payload = match super::package_cli_payload::from_workspace(
+        output_context,
+        cli_path,
+        source.candidate_id(),
+    ) {
+        Some(payload) => payload,
+        None => return transaction_failure("candidate CLI payload is unavailable or not native"),
+    };
+    let artifact = match capture_product_package_with_cli(source_context, &catalog, payload) {
         Ok(artifact) if verify_product_package(&artifact, source_context, &catalog).is_ok() => {
             artifact
         }
@@ -58,7 +71,7 @@ pub(super) fn execute(
         match isolated_transaction::execute(source_context, &catalog, &artifact, retain_root) {
             Ok(observation) => observation,
             Err(isolated_transaction::IsolatedTransactionFailure::Message(cause)) => {
-                return transaction_failure(cause)
+                return transaction_failure(cause);
             }
         };
     let record = InstallTestOutcome {
@@ -75,12 +88,12 @@ pub(super) fn execute(
         retained_isolated_root: observation.retained_root(),
         discovery_status: "pending-fresh-codex-task",
         output: output_path,
-        claim_ceiling: "isolated source/archive, public plugin-install record, marketplace, cache, and runtime object verified; app-registry, Codex discovery, and installed-product claims withheld",
+        claim_ceiling: "isolated source/archive, public plugin-install record, marketplace, cache, and sealed runtime-help execution verified; app-registry, Codex discovery, and installed-product claims withheld",
     };
     publish_outcome(output_context, output_path, &record)
 }
 
-fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str, bool)> {
+fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str, &str, bool)> {
     let ParsedInvocation {
         command: SuccessorCommand::Package(PackageAction::InstallTest),
         effect: EffectClass::WorkspaceWrite,
@@ -90,7 +103,7 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str, bool)>
     else {
         return None;
     };
-    if !(2..=3).contains(&arguments.len()) {
+    if !(3..=4).contains(&arguments.len()) {
         return None;
     }
     let input = arguments
@@ -99,22 +112,30 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str, bool)>
     let output = arguments
         .iter()
         .find(|argument| argument.name == OptionName::Output);
+    let cli = arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::Cli);
     let retain_root = arguments
         .iter()
         .find(|argument| argument.name == OptionName::RetainIsolatedRoot)
         .is_some_and(|argument| matches!(argument.value, ParsedValue::Flag));
-    if arguments.len() == 3 && !retain_root {
+    if arguments.len() == 4 && !retain_root {
         return None;
     }
     match (
         input.map(|argument| &argument.value),
         output.map(|argument| &argument.value),
+        cli.map(|argument| &argument.value),
     ) {
-        (Some(ParsedValue::RelativePath(input)), Some(ParsedValue::RelativePath(output)))
-            if super::package_dispatch::package_archive_input_allowed(input.as_str())
-                && output_allowed(output.as_str()) =>
+        (
+            Some(ParsedValue::RelativePath(input)),
+            Some(ParsedValue::RelativePath(output)),
+            Some(ParsedValue::RelativePath(cli)),
+        ) if super::package_dispatch::package_archive_input_allowed(input.as_str())
+            && output_allowed(output.as_str())
+            && super::package_cli_payload::allowed(cli.as_str()) =>
         {
-            Some((input.as_str(), output.as_str(), retain_root))
+            Some((input.as_str(), output.as_str(), cli.as_str(), retain_root))
         }
         _ => None,
     }
@@ -178,7 +199,7 @@ fn transaction_failure(cause: &'static str) -> RuntimeOutcome {
                 affected_surface: "HCT-DISTRIBUTION package install-test",
                 repair: "repair the exact package or isolated transaction failure and retry",
                 effect: "workspace_write plus disposable isolated host effects",
-                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json [--retain-isolated-root]",
+                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json --cli target/ultragoal/release/ultragoal [--retain-isolated-root]",
                 ceiling: "Codex discovery, installed product, readiness, and release claims remain withheld",
             },
         ),
@@ -206,11 +227,11 @@ fn invalid_invocation() -> RuntimeOutcome {
             DiagnosticId::UnexpectedArguments,
             ExitClass::InvalidInvocation,
             DiagnosticDetails {
-                cause: "package install-test requires bounded --input and disposable --output relative paths, with optional explicit isolated-root retention",
+                cause: "package install-test requires bounded --input, --output, and exact --cli paths, with optional isolated-root retention",
                 affected_surface: "HCT-DISTRIBUTION package install-test",
-                repair: "supply a package input and target/ultragoal/*.json output",
+                repair: "supply the exact package, candidate CLI, and target/ultragoal/*.json output",
                 effect: "none",
-                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json [--retain-isolated-root]",
+                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json --cli target/ultragoal/release/ultragoal [--retain-isolated-root]",
                 ceiling: "no package, install, cache, discovery, or runtime claim is available",
             },
         ),

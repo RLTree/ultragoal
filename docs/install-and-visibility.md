@@ -32,11 +32,17 @@ path `./plugins/harness-ultragoal`; catalog bytes are invalid evidence until
 that relative target exists and its package identity is independently
 reconciled.
 
-The packaged runtime entry remains `runtime/runtime-probe-bin`. Once the
-package is materialized at the catalog source, the supported host execution
-path is `plugins/harness-ultragoal/runtime/runtime-probe-bin`; running a
-separate copy outside that resolved source cannot support the installed
-journey.
+An installed candidate carries exactly one compiled CLI runtime entry,
+`runtime/ultragoal`. The public package commands require the confined explicit
+input `target/ultragoal/release/ultragoal`; they never run Cargo or accept a
+source-owned fallback while packaging. Once materialized at the catalog source,
+the supported host execution path is
+`plugins/harness-ultragoal/runtime/ultragoal`; running a separate copy outside
+that resolved source cannot support the installed journey. The package binds
+the explicitly selected native payload to the candidate label and archive
+identity; it does not establish source-to-binary compilation provenance.
+Compilation provenance and actual runtime behavior remain separate proof
+surfaces.
 
 A repository marketplace is non-default host configuration. After the root has
 accepted the catalog and materialized the exact package, an authorized operator

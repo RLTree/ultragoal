@@ -5,7 +5,7 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let package = verify_package(&plan, &archive).unwrap();
     let runtime_program = fixture
         .0
-        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
+        .join("plugins/harness-ultragoal/runtime/ultragoal");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.0,
         &fixture.0.join("project"),
@@ -97,7 +97,6 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
             effects: &mut ScopedInstall::new(confined.clone()),
             package: &package,
             program: &runtime_program,
-            argv: Vec::new(),
             timeout: Duration::from_secs(5),
         },
     )

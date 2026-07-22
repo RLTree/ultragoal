@@ -20,6 +20,14 @@ fn candidate_cli_is_an_exact_bound_archive_member_and_materializes() {
     assert_eq!(entry.role, PackageRole::Executable);
     assert_eq!(entry.sha256, payload.sha256());
     assert_eq!(entry.bytes, payload.bytes());
+    assert!(
+        artifact
+            .plan
+            .entries
+            .iter()
+            .all(|entry| entry.path != "runtime/runtime-probe-bin"),
+        "a candidate CLI package must contain only the dynamic runtime executable"
+    );
 
     let output = OutputRoot::new("candidate-cli-payload");
     let confined = ConfinedRoot::open(&output.root).expect("confined root");
@@ -89,9 +97,11 @@ fn candidate_cli_materialization_refuses_substituted_output_without_overwrite() 
         .root
         .join("plugins/harness-ultragoal/runtime/ultragoal");
     fs::write(&installed, b"substituted").expect("substitute installed CLI");
-    assert!(artifact
-        .materialize_marketplace_source(&context, &catalog, &mut tree)
-        .is_err());
+    assert!(
+        artifact
+            .materialize_marketplace_source(&context, &catalog, &mut tree)
+            .is_err()
+    );
     assert_eq!(
         fs::read(installed).expect("retained substituted bytes"),
         b"substituted"

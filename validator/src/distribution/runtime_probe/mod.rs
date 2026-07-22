@@ -14,13 +14,18 @@ use serde::Deserialize;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 include!("pinned_executable.rs");
 
+include!("execution_copy.rs");
+
+include!("help_envelope.rs");
+
 include!("output_limit.rs");
+
+include!("runtime_execution.rs");
 
 include!("unique_marker.rs");
 
-const PACKAGE_RUNTIME_ENTRY: &str = "runtime/runtime-probe-bin";
+const PACKAGE_RUNTIME_ENTRY: &str = "runtime/ultragoal";

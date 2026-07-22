@@ -143,11 +143,13 @@ pub enum LifecycleError {
 }
 
 pub(crate) trait LifecycleEffectAdapter {
+    #[cfg(test)]
     fn execute(
         &mut self,
         effect: LifecycleEffect,
         expected_after: &LifecycleState,
     ) -> Result<(), String>;
     fn restore(&mut self, prior: &LifecycleState) -> Result<(), String>;
+    #[cfg(test)]
     fn observe_state(&self) -> Result<LifecycleState, String>;
 }

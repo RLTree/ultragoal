@@ -10,7 +10,6 @@ use crate::distribution::{
 };
 use crate::distribution_fixture::{PLUGIN_ID, VERSION};
 use crate::package_journey_fixture::JourneyFixture;
-use crate::runtime_session::valid_args;
 use std::time::Duration;
 
 #[test]
@@ -74,13 +73,13 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
 
     let executable_file = ScopedFile::new(
         fixture.confined(),
-        "plugins/harness-ultragoal/runtime/runtime-probe-bin",
+        "plugins/harness-ultragoal/runtime/ultragoal",
     )
     .unwrap();
     publish_installed_runtime_probe(&first, &executable_file).unwrap();
     let executable = fixture
         .root
-        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
+        .join("plugins/harness-ultragoal/runtime/ultragoal");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.root,
         &fixture.project,
@@ -149,7 +148,6 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
             effects: &mut ScopedInstall::new(fixture.confined()),
             package: &first,
             program: &executable,
-            argv: valid_args(),
             timeout: Duration::from_secs(10),
         })
         .unwrap();

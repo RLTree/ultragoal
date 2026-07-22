@@ -1,18 +1,18 @@
+use super::SelectedCodexExecutable;
 use super::transaction_identity::absent_digest;
 use super::transaction_observation_command::{
     observation_command, run_json, validate_input, validate_paths,
 };
 use super::transaction_observation_identity::{
-    observe_marketplace, observe_plugin, HostSurfaceLocations,
+    HostSurfaceLocations, observe_marketplace, observe_plugin,
 };
-use super::transaction_observation_transition::{derive_effect_prefix, SurfacePresence};
+use super::transaction_observation_transition::{SurfacePresence, derive_effect_prefix};
 use super::transaction_tree::{observe_file, observe_tree};
-use super::SelectedCodexExecutable;
+use crate::distribution::PackageIdentity;
 use crate::distribution::host_effect::executor::{
     HostEffectCancellation, HostEffectExecutionPolicy, NativeRetainedDescriptorProcessBackend,
 };
 use crate::distribution::host_effect::lifecycle::DescriptorExecutionCapability;
-use crate::distribution::PackageIdentity;
 use crate::plugin_product::lifecycle::{
     HostCommandObservation, HostLifecycleExpectedObservations, HostLifecycleObservedBundle,
 };
@@ -179,9 +179,7 @@ pub(crate) fn expected_content(
     if !source.present {
         return Err("materialized marketplace source is unavailable for expected authority");
     }
-    let runtime_path = input
-        .marketplace_source_path
-        .join("runtime/runtime-probe-bin");
+    let runtime_path = input.marketplace_source_path.join("runtime/ultragoal");
     let runtime = observe_file(&runtime_path)?;
     if !runtime.present {
         return Err("materialized runtime object is unavailable for expected authority");

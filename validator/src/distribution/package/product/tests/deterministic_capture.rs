@@ -89,7 +89,7 @@ fn legacy_skill_source_is_not_active_package_membership() {
 }
 
 #[test]
-fn captured_runtime_payload_drives_the_confined_runtime_probe() {
+fn source_only_package_cannot_publish_an_installed_runtime() {
     let repo = Repo::new("supported-package-product-runtime");
     let context = repo.context();
     let artifact = capture_product_package(&context, &catalog(&context)).expect("package");
@@ -97,61 +97,13 @@ fn captured_runtime_payload_drives_the_confined_runtime_probe() {
     let confined = ConfinedRoot::open(&output.root).expect("confined root");
     let executable = ScopedFile::new(
         confined.clone(),
-        "plugins/harness-ultragoal/runtime/runtime-probe-bin",
+        "plugins/harness-ultragoal/runtime/ultragoal",
     )
     .unwrap();
-    publish_installed_runtime_probe(artifact.snapshot(), &executable).expect("runtime payload");
-    let program = output
-        .root
-        .join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
-    fs::set_permissions(&program, fs::Permissions::from_mode(0o600)).expect("remove execute mode");
-    publish_installed_runtime_probe(artifact.snapshot(), &executable)
-        .expect("same bytes with wrong mode repaired");
-    publish_installed_runtime_probe(artifact.snapshot(), &executable).expect("repeat publication");
-    assert_eq!(
-        fs::metadata(&program).unwrap().permissions().mode() & 0o777,
-        0o755,
-        "publisher accepted same bytes with nonexecutable mode",
+    assert!(
+        publish_installed_runtime_probe(artifact.snapshot(), &executable).is_err(),
+        "a source-only package must not publish the retired static runtime probe"
     );
-    let host = HostCapabilityDeclaration::isolated(
-        &output.root,
-        &output.root,
-        "isolated-runtime-v1",
-        Some(&program),
-    )
-    .expect("runtime host");
-    let binding = JourneyBinding::new(
-        artifact.snapshot().identity().clone(),
-        &host,
-        "local-harness-plugins",
-    )
-    .expect("journey binding");
-    let plan = InstallPlan::new(
-        artifact.snapshot().context_id().into(),
-        artifact.snapshot().candidate_id().into(),
-        InstallScope::PersonalFixture,
-        "plugins/harness-ultragoal.hugpkg".into(),
-        artifact.snapshot().package_sha256().into(),
-        ExpectedPrior::Absent,
-    )
-    .expect("install plan");
-    let mut install_effects = ScopedInstall::new(confined.clone());
-    let mut installed = install(&plan, artifact.snapshot(), &mut install_effects).expect("install");
-    installed.bind_journey(&binding).expect("bound install");
-    let runtime = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
-        binding,
-        host: &host,
-        install: installed.snapshot(),
-        effects: &mut ScopedInstall::new(confined),
-        package: artifact.snapshot(),
-        program: &program,
-        argv: vec!["valid".into()],
-        timeout: Duration::from_secs(10),
-    })
-    .expect("runtime plan")
-    .execute_bound()
-    .expect("runtime execution");
-    assert_eq!(runtime.0.runtime_verdict(), RuntimeVerdict::Executed);
 }
 
 #[test]
@@ -218,8 +170,4 @@ fn source_change_during_archive_publication_restores_prior_output() {
         "archive publication left transaction artifacts behind",
     );
 }
-use crate::distribution::{
-    ExpectedPrior, InstallPlan, InstallScope, InstalledPackageRuntimeProbeRequest,
-    RuntimeProbePlan, RuntimeVerdict, ScopedInstall, install, publish_installed_runtime_probe,
-};
-use std::time::Duration;
+use crate::distribution::publish_installed_runtime_probe;

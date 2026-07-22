@@ -2,7 +2,7 @@ use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
     ConfinedRoot, ProductionPackageErrorId, ScopedFile, capture_product_package,
-    verify_product_package,
+    capture_product_package_with_cli, verify_product_package,
 };
 use serde::Serialize;
 
@@ -24,14 +24,26 @@ pub(super) fn execute(
     output_context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
-    let Some(output_path) = output_path(invocation) else {
+    let Some((output_path, cli_path)) = output_paths(invocation) else {
         return invalid_invocation();
     };
     let catalog = match InventoryBuilder::new(source_context).build() {
         Ok(catalog) => catalog,
-        Err(_) => return inventory_unavailable(),
+        Err(error) => return inventory_failure(&error),
     };
-    let artifact = match capture_product_package(source_context, &catalog) {
+    let source = match capture_product_package(source_context, &catalog) {
+        Ok(artifact) => artifact,
+        Err(error) => return package_failure(error.id()),
+    };
+    let payload = match super::package_cli_payload::from_workspace(
+        output_context,
+        cli_path,
+        source.candidate_id(),
+    ) {
+        Some(payload) => payload,
+        None => return package_failure(ProductionPackageErrorId::MembershipMismatch),
+    };
+    let artifact = match capture_product_package_with_cli(source_context, &catalog, payload) {
         Ok(artifact) => artifact,
         Err(error) => return package_failure(error.id()),
     };
@@ -55,22 +67,31 @@ pub(super) fn execute(
     success(&artifact, output_path)
 }
 
-fn output_path(invocation: &ParsedInvocation) -> Option<&str> {
+fn output_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
     match invocation {
         ParsedInvocation {
             command: SuccessorCommand::Package(PackageAction::Build),
             effect: EffectClass::WorkspaceWrite,
             arguments,
             ..
-        } => match arguments.as_slice() {
-            [argument] if argument.name == OptionName::Output => match &argument.value {
-                ParsedValue::RelativePath(path) if output_allowed(path.as_str()) => {
-                    Some(path.as_str())
+        } => {
+            let output = arguments
+                .iter()
+                .find(|argument| argument.name == OptionName::Output)?;
+            let cli = arguments
+                .iter()
+                .find(|argument| argument.name == OptionName::Cli)?;
+            match (&output.value, &cli.value) {
+                (ParsedValue::RelativePath(output), ParsedValue::RelativePath(cli))
+                    if arguments.len() == 2
+                        && output_allowed(output.as_str())
+                        && super::package_cli_payload::allowed(cli.as_str()) =>
+                {
+                    Some((output.as_str(), cli.as_str()))
                 }
                 _ => None,
-            },
-            _ => None,
-        },
+            }
+        }
         _ => None,
     }
 }
@@ -123,8 +144,8 @@ fn invalid_invocation() -> RuntimeOutcome {
     diagnostic(
         DiagnosticId::UnexpectedArguments,
         ExitClass::InvalidInvocation,
-        "package build requires exactly one bounded --output relative path",
-        "write the package under target/ultragoal with a .hugpkg extension",
+        "package build requires bounded --output and exact --cli relative paths",
+        "build target/ultragoal/release/ultragoal, then write the package under target/ultragoal",
         "no package archive or dependent claim is available",
     )
 }
@@ -190,7 +211,7 @@ fn diagnostic(
                 affected_surface: "HCT-DISTRIBUTION package build",
                 repair,
                 effect: "workspace_write",
-                rerun: "ultragoal --json package build --output target/ultragoal/package.hugpkg",
+                rerun: "ultragoal --json package build --output target/ultragoal/package.hugpkg --cli target/ultragoal/release/ultragoal",
                 ceiling,
             },
         ),
@@ -214,5 +235,11 @@ mod tests {
         ] {
             assert!(!output_allowed(rejected), "{rejected}");
         }
+        assert!(super::super::package_cli_payload::allowed(
+            "target/ultragoal/release/ultragoal"
+        ));
+        assert!(!super::super::package_cli_payload::allowed(
+            "validator/target/release/ultragoal"
+        ));
     }
 }

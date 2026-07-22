@@ -71,15 +71,19 @@ fn host_surface_substitution_controls(
         DistributionErrorId::ProvenanceMismatch
     );
 
-    let substituted_runtime = RuntimeProbePlan::new(
-        binding.clone(),
-        host,
-        installed.snapshot(),
-        &fixture
-            .0
-            .join("plugins/harness-ultragoal/runtime/runtime-probe-bin"),
-        vec!["sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd".into()],
-        Duration::from_secs(5),
+    let mut effects = ScopedInstall::new(ConfinedRoot::open(&fixture.0).unwrap());
+    let substituted_runtime = RuntimeProbePlan::from_installed_package(
+        ultragoal::distribution::InstalledPackageRuntimeProbeRequest {
+            binding: binding.clone(),
+            host,
+            install: installed.snapshot(),
+            effects: &mut effects,
+            package,
+            program: &fixture
+                .0
+                .join("plugins/harness-ultragoal/runtime/ultragoal-substitute"),
+            timeout: Duration::from_secs(5),
+        },
     );
     assert_eq!(
         substituted_runtime.unwrap_err().id(),

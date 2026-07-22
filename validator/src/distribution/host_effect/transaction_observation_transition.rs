@@ -1,5 +1,5 @@
 use super::transaction_observation::HostLifecycleObservationResult;
-use crate::plugin_product::lifecycle::{LifecycleEffect, LifecyclePlan, LifecycleState};
+use crate::plugin_product::lifecycle::{LifecycleEffect, LifecyclePlan};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) enum SurfacePresence {
@@ -80,7 +80,7 @@ mod tests {
     use crate::distribution::host_effect::transaction_observation::HostLifecycleSurfaceDigests;
     use crate::plugin_product::lifecycle::{
         HostLifecycleObservedBundle, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
-        PackageAuthority, Version, plan,
+        LifecycleState, PackageAuthority, Version, plan,
     };
 
     fn digest(seed: char) -> String {

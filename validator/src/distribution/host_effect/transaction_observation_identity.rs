@@ -121,7 +121,7 @@ fn adapter_locations(
         runtime: target_root
             .join("plugins")
             .join(&input.plugin)
-            .join("runtime/runtime-probe-bin"),
+            .join("runtime/ultragoal"),
     };
     if locations.cache == input.marketplace_source_path {
         return Err("Codex adapter installed path aliases the marketplace source");
@@ -141,7 +141,7 @@ fn installed_cache_locations(
         .join(version);
     HostSurfaceLocations {
         cache: cache.clone(),
-        runtime: cache.join("runtime/runtime-probe-bin"),
+        runtime: cache.join("runtime/ultragoal"),
     }
 }
 

@@ -65,18 +65,6 @@ impl PinnedRuntimeExecutable {
         &self.sha256
     }
 
-    fn execution_path(&self) -> PathBuf {
-        #[cfg(unix)]
-        {
-            use std::os::fd::AsRawFd;
-            PathBuf::from(format!("/dev/fd/{}", self.file.as_raw_fd()))
-        }
-        #[cfg(not(unix))]
-        {
-            self.path.clone()
-        }
-    }
-
     fn shell_script(&self) -> bool {
         self.shell_script
     }

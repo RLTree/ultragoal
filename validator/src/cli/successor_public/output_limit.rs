@@ -211,6 +211,30 @@ pub(crate) fn inventory_unavailable() -> RuntimeOutcome {
     )
 }
 
+pub(crate) fn inventory_failure(error: &crate::inventory::InventoryError) -> RuntimeOutcome {
+    let (cause, repair) = match error {
+        crate::inventory::InventoryError::Activation(_) => (
+            "the adopted activation registry conflicts with the compiled command authority",
+            "reconcile the generated activation authority before retrying package work",
+        ),
+        crate::inventory::InventoryError::Context(_) => (
+            "the candidate changed while the authority inventory was being read",
+            "retry against one stable candidate",
+        ),
+        _ => (
+            "the canonical authority inventory could not be derived from the current context",
+            "repair the adopted registry or concurrent candidate mutation and rerun inspection",
+        ),
+    };
+    failure(
+        DiagnosticId::InventoryUnavailable,
+        cause,
+        "authority inventory",
+        repair,
+        "inventory and dependent claims remain unavailable",
+    )
+}
+
 pub(crate) fn state_unavailable() -> RuntimeOutcome {
     failure(
         DiagnosticId::StateUnavailable,

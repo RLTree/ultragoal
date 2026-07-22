@@ -66,7 +66,6 @@ fn same_byte_inode_swap_before_spawn_never_launches_or_accepts() {
         effects: &mut install_effects,
         package: &package,
         program: &executable,
-        argv: valid_args(),
         timeout: Duration::from_secs(10),
     })
     .unwrap();
@@ -92,7 +91,6 @@ fn same_byte_inode_swap_during_execution_is_not_accepted() {
         effects: &mut install_effects,
         package: &package,
         program: &executable,
-        argv: slow_args(),
         timeout: Duration::from_secs(10),
     })
     .unwrap();
@@ -114,7 +112,7 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
     let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("runtime-wrong-route-regressions");
     let mut install_effects = ScopedInstall::new(fixture.confined());
-    let sibling = fixture.root.join("runtime/sibling-runtime-probe-bin");
+    let sibling = fixture.root.join("runtime/sibling-ultragoal");
     std::fs::copy(&executable, &sibling).unwrap();
     assert_eq!(
         RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
@@ -124,7 +122,6 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
             effects: &mut install_effects,
             package: &package,
             program: &sibling,
-            argv: valid_args(),
             timeout: Duration::from_secs(10),
         })
         .unwrap_err()
@@ -143,7 +140,6 @@ fn sibling_wrong_route_and_replaced_object_regressions_fail_closed() {
             effects: &mut replaced_install_effects,
             package: &package,
             program: &executable,
-            argv: valid_args(),
             timeout: Duration::from_secs(10),
         })
         .unwrap_err()

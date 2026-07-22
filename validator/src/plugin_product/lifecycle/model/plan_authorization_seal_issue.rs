@@ -23,6 +23,7 @@ impl PlanAuthorizationSeal {
         Ok(data.issuance_id)
     }
 
+    #[cfg(test)]
     pub(super) fn consume(&self) -> Result<(), LifecycleError> {
         let Self::Sealed(data) = self else {
             return Err(LifecycleError::UnsealedPlan);

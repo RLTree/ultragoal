@@ -39,11 +39,11 @@ Commands:
       Export explicitly approved semantic data to an external destination.
   package inventory  [workspace-write] --output <value>
       Write a deterministic package inventory from canonical source.
-  package build  [workspace-write] --output <value>
+  package build  [workspace-write] --output <value> --cli <value>
       Build deterministic package bytes and local provenance inputs.
-  package verify  [read] --input <value>
+  package verify  [read] --input <value> --cli <value>
       Verify package bytes and inventory without mutation.
-  package install-test  [workspace-write] --input <value> --output <value>
+  package install-test  [workspace-write] --input <value> --output <value> --cli <value> [--retain-isolated-root]
       Exercise an isolated install and write a local verification artifact.
   package publish  [external-write] --input <value> --provider <value> --approve-publish
       Publish only an explicitly approved package through a named provider.

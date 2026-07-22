@@ -112,15 +112,12 @@ impl Fixture {
         )
         .unwrap();
         fs::create_dir_all(root.join("plugins/harness-ultragoal/runtime")).unwrap();
-        let runtime = root.join("plugins/harness-ultragoal/runtime/runtime-probe-bin");
+        let runtime = root.join("plugins/harness-ultragoal/runtime/ultragoal");
         fs::write(
             &runtime,
             br##"#!/bin/sh
-if [ "$#" -ne 0 ]; then
-  printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"stale\"}"
-  exit 0
-fi
-printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"$HUL_SESSION_NONCE\"}"
+test "$1" = --json && test "$2" = --help || exit 64
+printf '%s\n' '{"schema_version":"harness-ultragoal.cli-help.v1","grammar_version":"successor-v1-candidate","commands":[{"group":"inspect","subcommand":"inception","effect":"read","purpose":"fixture help","options":[]}]}'
 "##,
         )
         .unwrap();
@@ -135,7 +132,7 @@ printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-p
     fn plan(&self) -> PackagePlan {
         let entries = [
             json!({"path":".codex-plugin/plugin.json","source_path":"source/plugin.json","role":"manifest","executable":false}),
-            json!({"path":"runtime/runtime-probe-bin","source_path":"plugins/harness-ultragoal/runtime/runtime-probe-bin","role":"executable","executable":true}),
+            json!({"path":"runtime/ultragoal","source_path":"plugins/harness-ultragoal/runtime/ultragoal","role":"executable","executable":true}),
             json!({"path":"skills/harness-ultragoal/SKILL.md","source_path":"source/skill-one.md","role":"skill","executable":false}),
             json!({"path":"skills/prove/SKILL.md","source_path":"source/skill-two.md","role":"skill","executable":false}),
         ];

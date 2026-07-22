@@ -57,7 +57,6 @@ fn confined_install_authority_issues_installed_and_runtime_surfaces() {
         effects: &mut runtime_install_effects,
         package: &package,
         program: &executable,
-        argv: valid_args(),
         timeout: Duration::from_secs(10),
     })
     .unwrap();
@@ -113,7 +112,6 @@ fn memory_install_snapshot_cannot_issue_installed_or_runtime_authority() {
             effects: &mut memory,
             package: &package,
             program: &executable,
-            argv: valid_args(),
             timeout: Duration::from_secs(10),
         })
         .unwrap_err()
@@ -161,7 +159,6 @@ fn cross_root_install_snapshot_cannot_mint_other_journey_authority() {
             effects: &mut runtime_effects_b,
             package: &package_b,
             program: &executable_b,
-            argv: valid_args(),
             timeout: Duration::from_secs(10),
         })
         .unwrap_err()

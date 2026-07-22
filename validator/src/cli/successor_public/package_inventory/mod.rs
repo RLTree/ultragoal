@@ -27,7 +27,7 @@ pub(super) fn execute(
     };
     let catalog = match InventoryBuilder::new(source_context).build() {
         Ok(catalog) => catalog,
-        Err(_) => return inventory_unavailable(),
+        Err(error) => return inventory_failure(&error),
     };
     let artifact = match capture_product_package(source_context, &catalog) {
         Ok(artifact) => artifact,

@@ -60,14 +60,6 @@ pub use model::{
 };
 pub use observations::{RuntimeObservation, RuntimeVerdict};
 pub(crate) use package::ISOLATED_MARKETPLACE_NAME;
-pub use package::{
-    ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
-    PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,
-    PackageSnapshot, TreeObject, TreeObjectKind, build_package, materialize_package, plan_package,
-    plan_package_from_inventory, publish_package_artifact, reconcile_materialized_tree,
-    reconcile_package_artifact, recover_package_artifact, rollback_materialization,
-    rollback_package_artifact, tree_sha256, verify_package,
-};
 #[cfg(not(test))]
 pub use package::{
     CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,
@@ -76,8 +68,16 @@ pub use package::{
 };
 #[cfg(test)]
 pub(crate) use package::{
-    ProductionPackageArtifact, ProductionPackageErrorId, capture_product_package,
-    verify_product_package,
+    CandidateCliPayload, ProductionPackageArtifact, ProductionPackageErrorId,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
+};
+pub use package::{
+    ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
+    PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,
+    PackageSnapshot, TreeObject, TreeObjectKind, build_package, materialize_package, plan_package,
+    plan_package_from_inventory, publish_package_artifact, reconcile_materialized_tree,
+    reconcile_package_artifact, recover_package_artifact, rollback_materialization,
+    rollback_package_artifact, tree_sha256, verify_package,
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,

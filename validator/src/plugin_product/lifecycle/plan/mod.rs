@@ -136,6 +136,7 @@ pub(super) fn validate_plan(plan: &LifecyclePlan) -> Result<(), LifecycleError> 
     Ok(())
 }
 
+#[cfg(test)]
 pub(super) fn consume_plan(plan: &LifecyclePlan) -> Result<(), LifecycleError> {
     plan.authorization_seal.consume()
 }
