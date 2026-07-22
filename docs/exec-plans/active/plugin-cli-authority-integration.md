@@ -1620,6 +1620,25 @@ focused schema test passes in a clean worktree. This makes the test reproducible
 without converting a runtime/Product Fitness receipt into retained build input;
 it does not promote any Product Fitness claim.
 
+### Sealed host-handoff correction — 2026-07-21
+
+Root integrated `4e049e15e` and `4120f54ba` from the accepted host-handoff
+worktree, whose exact final source was `a0fdb5e79b185fccac349eaf95d930624d4037d1`
+at tree `34a1d0b39f9e1e75731153e1361b67c08c6096a4`. The repair leaves one sealed
+executable owner in the handoff, borrows it only through explicit revalidation
+for observation and recovery, and preserves a pre-handoff refusal even when
+best-effort staged-byte cleanup also fails. It does not add a fallback launch
+route or implicit cleanup.
+
+On the integrated code candidate, warning-denied `cargo check -p ultragoal
+--lib` passed. A freshly built HUGPKG then completed the public isolated
+`package install-test` transaction and independently returned installed,
+marketplace-source, cache, marketplace, and runtime-object observations. The
+isolated result is not fresh-Codex-task discovery, an installed-product claim,
+or a real repository journey. The next truth-loop transition remains fresh
+task discovery followed by the supported dirty-repository routine,
+interruption/recovery, preservation, and repeat-use journey.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,

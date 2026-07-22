@@ -249,6 +249,20 @@ projections. Required follow-up is recorded in
 warning-free compilation, repository package, install, discovery, runtime,
 journey, release, node closure, and completion claims remain withheld.
 
+## 2026-07-21 host-handoff integration checkpoint
+
+Root integrated `4e049e15e` and `4120f54ba`, preserving the complete
+host-lifecycle custody invariant: one sealed executable owner, explicit
+revalidation for observation and recovery, and non-masking cleanup failures.
+The worktree's Terra/medium confirmation accepted the exact correction before
+integration. Root then passed warning-denied library compilation and the
+candidate-bound isolated `package install-test` journey. That journey observes
+only its disposable host root; fresh Codex discovery, a real dirty-repository
+routine/recovery/repeat-use journey, Product Fitness, readiness, release, and
+completion stay withheld. The next dependency-legal action is fresh-task
+discovery against the exact packaged candidate, not another host-lifecycle
+source lane.
+
 Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
