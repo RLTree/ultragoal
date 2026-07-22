@@ -115,10 +115,10 @@ impl Fixture {
         let runtime = root.join("plugins/harness-ultragoal/runtime/ultragoal");
         fs::write(
             &runtime,
-            br##"#!/bin/sh
-test "$1" = --json && test "$2" = --help || exit 64
-printf '%s\n' '{"schema_version":"harness-ultragoal.cli-help.v1","grammar_version":"successor-v1-candidate","commands":[{"group":"inspect","subcommand":"inception","effect":"read","purpose":"fixture help","options":[]}]}'
-"##,
+            format!(
+                "#!/bin/sh\ntest \"$1\" = --json && test \"$2\" = --help || exit 64\n/bin/cat <<'HUL_HELP'\n{}\nHUL_HELP\n",
+                ultragoal::distribution::canonical_runtime_help_json(),
+            ),
         )
         .unwrap();
         #[cfg(unix)]

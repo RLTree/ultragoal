@@ -75,6 +75,10 @@ impl RuntimeExecutionCopy {
         &self.path
     }
 
+    fn working_directory(&self) -> &Path {
+        &self.directory
+    }
+
     fn remove(self) -> Result<(), DistributionError> {
         std::fs::remove_file(&self.path).map_err(|_| error(DistributionErrorId::EffectFailed))?;
         std::fs::remove_dir(&self.directory).map_err(|_| error(DistributionErrorId::EffectFailed))

@@ -86,8 +86,8 @@ pub use registry_observation::{
     publish_registry_file, registry_document,
 };
 pub use runtime_probe::{
-    InstalledPackageRuntimeProbeRequest, RuntimeProbePlan, execute_runtime_probe,
-    publish_installed_runtime_probe,
+    InstalledPackageRuntimeProbeRequest, RuntimeProbePlan, canonical_runtime_help_json,
+    execute_runtime_probe, publish_installed_runtime_probe,
 };
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,

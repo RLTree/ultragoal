@@ -6,7 +6,11 @@ pub fn execute_runtime_probe(
     }
     plan.executable.revalidate()?;
     let execution_copy = plan.executable.execution_copy()?;
-    let result = execute_runtime_probe_copy(plan, execution_copy.path());
+    let result = execute_runtime_probe_copy(
+        plan,
+        execution_copy.path(),
+        execution_copy.working_directory(),
+    );
     let cleanup = execution_copy.remove();
     cleanup?;
     result
@@ -15,6 +19,7 @@ pub fn execute_runtime_probe(
 fn execute_runtime_probe_copy(
     plan: &RuntimeProbePlan,
     executable_path: &Path,
+    working_directory: &Path,
 ) -> Result<RuntimeObservation, DistributionError> {
     let mut command = if plan.executable.shell_script() {
         let mut command = Command::new("/bin/sh");
@@ -26,6 +31,7 @@ fn execute_runtime_probe_copy(
     command
         .args(HELP_ARGUMENTS)
         .env_clear()
+        .current_dir(working_directory)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
@@ -42,7 +48,10 @@ fn execute_runtime_probe_copy(
                 let _ = child.wait();
                 return Err(error(DistributionErrorId::EffectFailed));
             }
-            Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
+            Err(_) => {
+                terminate_child(&mut child);
+                return Err(error(DistributionErrorId::EffectFailed));
+            }
         }
     };
     let stdout = read_output(child.stdout.take())?;
@@ -50,8 +59,7 @@ fn execute_runtime_probe_copy(
     if !status.success() {
         return Err(error(DistributionErrorId::EffectFailed));
     }
-    let envelope: ProbeEnvelope = json::parse(&stdout, 64 * 1024)?;
-    validate_envelope(&envelope)?;
+    validate_envelope(&stdout)?;
     plan.executable.revalidate()?;
     if let Some(install) = &plan.install {
         install.revalidate(&plan.binding)?;
@@ -63,4 +71,9 @@ fn execute_runtime_probe_copy(
         plan.executable_sha256.clone(),
         sha256(&output),
     ))
+}
+
+fn terminate_child(child: &mut std::process::Child) {
+    let _ = child.kill();
+    let _ = child.wait();
 }

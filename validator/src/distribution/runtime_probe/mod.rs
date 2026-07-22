@@ -10,7 +10,6 @@ use crate::distribution::model::{IdentitySurface, SurfaceIdentity};
 use crate::distribution::observations::RuntimeObservation;
 use crate::distribution::package::{PackageRole, PackageSnapshot};
 use crate::distribution::reader::sha256;
-use serde::Deserialize;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};

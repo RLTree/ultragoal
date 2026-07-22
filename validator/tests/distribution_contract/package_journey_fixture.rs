@@ -132,13 +132,10 @@ struct Entry<'a> {
 }
 
 pub fn runtime_probe_bytes() -> Vec<u8> {
-    [
-        "#!/bin/sh\n",
-        "test \"$1\" = --json && test \"$2\" = --help || exit 64\n",
-        "sleep 0.15\n",
-        "printf '%s\\n' '{\"schema_version\":\"harness-ultragoal.cli-help.v1\",\"grammar_version\":\"successor-v1-candidate\",\"commands\":[{\"group\":\"inspect\",\"subcommand\":\"inception\",\"effect\":\"read\",\"purpose\":\"fixture help\",\"options\":[]}]}'\n",
-    ]
-    .concat()
+    format!(
+        "#!/bin/sh\ntest \"$1\" = --json && test \"$2\" = --help || exit 64\nsleep 0.15\n/bin/cat <<'HUL_HELP'\n{}\nHUL_HELP\n",
+        crate::distribution::canonical_runtime_help_json(),
+    )
     .into_bytes()
 }
 

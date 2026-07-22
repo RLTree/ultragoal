@@ -109,7 +109,11 @@ fn candidate_cli_materialization_refuses_substituted_output_without_overwrite() 
 }
 
 fn test_cli_bytes() -> Vec<u8> {
-    b"\xfe\xed\xfa\xcfcandidate-cli".to_vec()
+    let mut bytes = vec![
+        0xcf, 0xfa, 0xed, 0xfe, 0x0c, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0,
+    ];
+    bytes.extend_from_slice(&[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    bytes
 }
 #[test]
 fn compiled_payload_rejects_probe_scripts_and_empty_bytes() {
@@ -120,12 +124,24 @@ fn compiled_payload_rejects_probe_scripts_and_empty_bytes() {
 }
 
 #[test]
+fn compiled_payload_rejects_truncated_or_incoherent_native_headers() {
+    let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    for bytes in [
+        b"\x7fELFcli".to_vec(),
+        b"MZnot-a-portable-executable".to_vec(),
+        b"\xcf\xfa\xed\xfecandidate-cli".to_vec(),
+    ] {
+        assert!(CandidateCliPayload::for_candidate(candidate, bytes).is_err());
+    }
+}
+
+#[test]
 fn compiled_payload_preserves_candidate_and_digest() {
     let candidate = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    let payload = CandidateCliPayload::for_candidate(candidate, b"\x7fELFcli".to_vec())
-        .expect("native payload");
+    let payload =
+        CandidateCliPayload::for_candidate(candidate, test_cli_bytes()).expect("native payload");
     assert_eq!(payload.candidate_id(), candidate);
-    assert_eq!(payload.bytes(), b"\x7fELFcli");
+    assert_eq!(payload.bytes(), test_cli_bytes());
     assert!(payload.sha256().starts_with("sha256:"));
 }
 
