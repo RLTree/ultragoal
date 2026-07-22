@@ -15,7 +15,7 @@ pub(crate) fn target_root(
             (OptionName::Plan, ParsedValue::HostPath(_))
             | (OptionName::AcceptPlan, ParsedValue::Identifier(_))
                 if invocation.command == SuccessorCommand::Fit(FitAction::Apply) => {}
-            (OptionName::RoutineConfig, ParsedValue::Flag)
+            (OptionName::RoutineConfig | OptionName::LocalState, ParsedValue::Flag)
                 if invocation.command == SuccessorCommand::Fit(FitAction::Plan) => {}
             _ => return Err(Box::new(invalid_invocation())),
         }
@@ -58,7 +58,9 @@ pub(crate) fn plan(context: &LiveContext, invocation: &ParsedInvocation) -> Runt
     };
     let result = match scope {
         FitPlanScope::CompleteRepository => plan_target(context),
-        FitPlanScope::RoutineConfiguration => plan_target_for_scope(context, scope),
+        FitPlanScope::RoutineConfiguration | FitPlanScope::LocalState => {
+            plan_target_for_scope(context, scope)
+        }
     };
     match result {
         Ok(record) => match record.to_machine_bytes() {
@@ -90,6 +92,7 @@ fn plan_scope(invocation: &ParsedInvocation) -> Result<FitPlanScope, Box<Runtime
     }
     let mut target_seen = false;
     let mut routine_configuration = false;
+    let mut local_state = false;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
             (OptionName::Target, ParsedValue::RelativePath(_)) if !target_seen => {
@@ -98,13 +101,18 @@ fn plan_scope(invocation: &ParsedInvocation) -> Result<FitPlanScope, Box<Runtime
             (OptionName::RoutineConfig, ParsedValue::Flag) if !routine_configuration => {
                 routine_configuration = true
             }
+            (OptionName::LocalState, ParsedValue::Flag) if !local_state => local_state = true,
             _ => return Err(Box::new(invalid_invocation())),
         }
     }
-    Ok(if routine_configuration {
+    Ok(if routine_configuration && !local_state {
         FitPlanScope::RoutineConfiguration
-    } else {
+    } else if local_state && !routine_configuration {
+        FitPlanScope::LocalState
+    } else if !routine_configuration && !local_state {
         FitPlanScope::CompleteRepository
+    } else {
+        return Err(Box::new(invalid_invocation()));
     })
 }
 

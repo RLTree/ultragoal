@@ -24,6 +24,7 @@ Probe the exact grammar before relying on it:
 ultragoal --json fit inspect --target <relative-path>
 ultragoal --json fit plan --target <relative-path>
 ultragoal --json fit plan --routine-config --target <relative-path>
+ultragoal --json fit plan --local-state --target <relative-path>
 ```
 
 `fit inspect` records existing components, owners, modified/staged/untracked
@@ -38,6 +39,11 @@ it never resolves unrelated ownership conflicts or adds the general local-state
 policy. The resulting plan records that scope, and `fit apply` recomputes the
 same scoped candidate-bound plan before any effect. Use it only when those two
 files are the missing transition; otherwise use the complete plan.
+
+`--local-state` is the narrow follow-on when only routine artifact retention is
+missing. It plans only the required `validation_artifacts/` `.gitignore` rule,
+preserves existing `.gitignore` bytes and mode, and cannot create or update a
+template-managed path.
 
 If the target is missing, classification is ambiguous, or ownership conflicts
 cannot be resolved safely, return a typed blocker. Do not silently choose a

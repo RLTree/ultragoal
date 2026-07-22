@@ -15,11 +15,12 @@ pub(crate) enum FitPlanScope {
     #[default]
     CompleteRepository,
     RoutineConfiguration,
+    LocalState,
 }
 
 impl FitPlanScope {
     pub(crate) const fn includes_local_state(self) -> bool {
-        matches!(self, Self::CompleteRepository)
+        matches!(self, Self::CompleteRepository | Self::LocalState)
     }
 }
 
@@ -29,6 +30,17 @@ pub(super) fn select_desired_bundle(
 ) -> Result<DesiredBundle, FitAdapterError> {
     if scope == FitPlanScope::CompleteRepository {
         return Ok(bundle);
+    }
+    if scope == FitPlanScope::LocalState {
+        return Ok(DesiredBundle {
+            desired: DesiredState::local_state_scope(
+                bundle.desired.context_id.clone(),
+                bundle.desired.candidate_id.clone(),
+            )
+            .map_err(kernel_error)?,
+            authority: bundle.authority,
+            unix_modes: Default::default(),
+        });
     }
     let paths = ROUTINE_CONFIGURATION_PATHS
         .iter()
@@ -64,4 +76,29 @@ pub(super) fn select_desired_bundle(
         authority: bundle.authority,
         unix_modes,
     })
+}
+
+/// Reconstructs the exact scoped desired-state identity during pre-effect
+/// revalidation. Local state is intentionally not a template catalog, so its
+/// empty file set has a separate, domain-bound constructor.
+pub(super) fn rebuild_desired_for_scope(
+    scope: FitPlanScope,
+    desired: &DesiredState,
+) -> Result<DesiredState, FitAdapterError> {
+    if scope == FitPlanScope::LocalState {
+        if !desired.files.is_empty() {
+            return Err(adapter_error(AdapterErrorId::InvalidTemplateCatalog));
+        }
+        return DesiredState::local_state_scope(
+            desired.context_id.clone(),
+            desired.candidate_id.clone(),
+        )
+        .map_err(kernel_error);
+    }
+    DesiredState::new(
+        desired.context_id.clone(),
+        desired.candidate_id.clone(),
+        desired.files.clone(),
+    )
+    .map_err(kernel_error)
 }

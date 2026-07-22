@@ -1553,6 +1553,20 @@ journey, Product Fitness, daily-driver, readiness, release, or completion
 claim. The next boundary is a fresh package/install candidate and the real
 dirty-repository journey.
 
+The current Obolyn route then proved a narrower missing transition: those two
+routine configuration files were present, but the required observability store
+was not ignored. `fit plan --local-state` now emits a candidate-bound plan with
+zero template mutations and exactly the existing `.gitignore` local-state
+policy. Its first live apply correctly failed before effect because the
+available repository-fit host authority was aliased, substituted, malformed,
+or unsafe. No Obolyn file changed and the disposable external plan was removed.
+The local-state route now reconstructs its scoped desired state through the
+same production permit revalidation. Its focused production-authority control
+reached the real permit path and changed only `.gitignore`; source evidence
+does not substitute for a supported host authority, package, install,
+discovery, runtime, or operator journey. No bypass around the ledger or forced
+routine execution is permitted.
+
 Two dependency-independent source lanes are active from that exact root:
 
 | Lane | Codex task / worktree | Owned result | Root-held boundary |

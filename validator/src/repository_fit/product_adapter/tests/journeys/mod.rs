@@ -11,6 +11,8 @@ use std::os::unix::fs::{MetadataExt, PermissionsExt};
 mod fresh_inspect_and_plan_are_deterministic_zero_write;
 #[path = "local_state_policy.rs"]
 mod local_state_policy;
+#[path = "local_state_scope_preserves_template_conflicts.rs"]
+mod local_state_scope_preserves_template_conflicts;
 #[path = "mode_drift_invalidates_the_mode_bound_adapter_verification_proof.rs"]
 mod mode_drift_invalidates_the_mode_bound_adapter_verification_proof;
 #[path = "routine_configuration_scope_preserves_conflicting_authority.rs"]

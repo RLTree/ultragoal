@@ -8,7 +8,7 @@ use crate::context::LiveContext;
 
 use super::FitPlanScope;
 use super::catalog::{DesiredBundle, compile};
-use super::plan_scope::select_desired_bundle;
+use super::plan_scope::{rebuild_desired_for_scope, select_desired_bundle};
 #[cfg(test)]
 use super::projection::{APPLY_PREPARATION_SCHEMA, FitApplyPreparationProjection};
 use super::projection::{

@@ -95,6 +95,10 @@ When the first blocked journey transition is only routine activation,
 `fit plan --routine-config` may plan the two owned routine configuration files.
 That explicit scope excludes every conflicting template and `.gitignore`; the
 accepted apply still revalidates the same scoped candidate and cannot widen it.
+When those files are current but the routine artifact store is not ignored,
+`fit plan --local-state` may plan only the existing `.gitignore` policy. It
+carries no template mutation and uses the same accepted apply, rollback, and
+revalidation path.
 
 ### Routine repeat use
 

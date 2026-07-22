@@ -23,6 +23,7 @@ pub enum OptionName {
     PackageRoot,
     RetainIsolatedRoot,
     RoutineConfig,
+    LocalState,
     InterruptAfter,
     Continuation,
 }
@@ -48,6 +49,7 @@ impl OptionName {
             Self::PackageRoot => "--package-root",
             Self::RetainIsolatedRoot => "--retain-isolated-root",
             Self::RoutineConfig => "--routine-config",
+            Self::LocalState => "--local-state",
             Self::InterruptAfter => "--interrupt-after",
             Self::Continuation => "--continuation",
         }

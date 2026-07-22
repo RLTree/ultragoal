@@ -14,7 +14,10 @@ use super::super::ledger::{
     canonical_recovery_intent_bytes,
 };
 use super::super::root_permit::managed_ancestor_contract_for_ledger_test;
-use super::super::{AdapterErrorId, plan_target, prepare_apply_request, verify_target};
+use super::super::{
+    AdapterErrorId, FitPlanScope, plan_target, plan_target_for_scope, prepare_apply_request,
+    verify_target,
+};
 use super::scenario::{git_status, snapshot};
 use crate::context::{BuildRequest, LiveContext};
 use crate::repository_fit::{
@@ -39,6 +42,8 @@ mod failed_terminal_validation_retains_recovery_authority_until_reconciled;
 mod inspect_plan_verify_and_verify_as_apply_are_recursively_zero_write;
 #[path = "live_effect_owner_holds_process_lock_through_mutation_and_terminal.rs"]
 mod live_effect_owner_holds_process_lock_through_mutation_and_terminal;
+#[path = "local_state_scope_revalidates_through_production_authority.rs"]
+mod local_state_scope_revalidates_through_production_authority;
 #[path = "missing_recovery_ledger_refuses_without_initializing_authority_or_writing_target.rs"]
 mod missing_recovery_ledger_refuses_without_initializing_authority_or_writing_target;
 #[path = "production_mutation_grant_has_one_private_mint_in_the_sealed_authority.rs"]

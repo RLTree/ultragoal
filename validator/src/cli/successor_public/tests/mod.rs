@@ -15,6 +15,8 @@ mod evaluation_run;
 #[path = "fit_apply_runs_the_public_production_route_and_retires_recovery_state.rs"]
 mod fit_apply_runs_the_public_production_route_and_retires_recovery_state;
 mod inspection;
+#[path = "local_state_fit_plan_is_public_and_confined.rs"]
+mod local_state_fit_plan_is_public_and_confined;
 mod migration_plan;
 #[path = "public_output_limit_is_inclusive_and_fail_closed.rs"]
 mod public_output_limit_is_inclusive_and_fail_closed;

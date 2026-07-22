@@ -125,12 +125,7 @@ pub(crate) fn revalidate_apply_request(
         return Err(adapter_error(AdapterErrorId::ApplyPermitInvalid));
     }
 
-    let rebuilt_desired = DesiredState::new(
-        request.desired.context_id.clone(),
-        request.desired.candidate_id.clone(),
-        request.desired.files.clone(),
-    )
-    .map_err(kernel_error)?;
+    let rebuilt_desired = rebuild_desired_for_scope(request.scope, &request.desired)?;
     if rebuilt_desired.state_sha256 != request.desired.state_sha256 {
         return Err(adapter_error(AdapterErrorId::InvalidTemplateCatalog));
     }

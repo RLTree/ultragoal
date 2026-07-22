@@ -23,12 +23,13 @@ const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::Host
 const RETAIN_ISOLATED_ROOT: OptionSpec =
     option(OptionName::RetainIsolatedRoot, ValueKind::Flag, false);
 const ROUTINE_CONFIG: OptionSpec = option(OptionName::RoutineConfig, ValueKind::Flag, false);
+const LOCAL_STATE: OptionSpec = option(OptionName::LocalState, ValueKind::Flag, false);
 const INTERRUPT_AFTER: OptionSpec =
     option(OptionName::InterruptAfter, ValueKind::Identifier, false);
 const CONTINUATION: OptionSpec = option(OptionName::Continuation, ValueKind::Identifier, false);
 
 pub(super) const TARGET_OPTION: &[OptionSpec] = &[TARGET];
-pub(super) const FIT_PLAN_OPTIONS: &[OptionSpec] = &[TARGET, ROUTINE_CONFIG];
+pub(super) const FIT_PLAN_OPTIONS: &[OptionSpec] = &[TARGET, ROUTINE_CONFIG, LOCAL_STATE];
 pub(super) const ROUTINE_OPTIONS: &[OptionSpec] = &[TARGET, INTERRUPT_AFTER, CONTINUATION];
 pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, FIT_PLAN, ACCEPT_PLAN];
 pub(super) const STRICT_OPTIONS: &[OptionSpec] = &[TARGET, CLAIM];
