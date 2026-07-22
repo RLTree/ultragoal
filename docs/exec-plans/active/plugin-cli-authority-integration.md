@@ -1491,6 +1491,13 @@ cancellation, parent exit, fork/setsid, retry, recovery, and repeat-use in one
 batch, and receive one bounded confirmation review. No claim advances while
 that candidate is reworked.
 
+Root also removed an artifact-only test dependency at `de6e79d18`: the Product
+Fitness v2 schema control now reads its tracked review-round fixture rather
+than embedding the ignored live `validation_artifacts/harness` receipt. The
+focused schema test passes in a clean worktree. This makes the test reproducible
+without converting a runtime/Product Fitness receipt into retained build input;
+it does not promote any Product Fitness claim.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
