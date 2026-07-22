@@ -7,6 +7,8 @@ use super::transaction_policy;
 use super::transaction_preparation::prepare_host_effect_transaction;
 use super::transaction_read_only::observe_read_only;
 use super::transaction_recovery::ObservedRecoveryAdapter;
+#[cfg(not(test))]
+use super::transaction_recovery::finalize_recorded_recovery;
 use super::{
     HostEffectCancellation, HostEffectCompletion, NativeRetainedDescriptorProcessBackend,
     SelectedCodexExecutable, SupportedHostEffectExecutor,
@@ -81,18 +83,50 @@ pub(crate) fn execute_host_lifecycle_transaction(
     let receipt = match receipt {
         Ok(receipt) => receipt,
         Err(error) => {
-            // Recovery remains unresolved: dropping this opaque owner is
-            // intentionally non-destructive, so the staged executable stays
-            // preserved for the durable recovery path rather than being
-            // cleaned up on an ambiguous execution result.
-            drop(handoff);
-            return Err(execution_failure(error));
+            #[cfg(not(test))]
+            {
+                let recovery = error
+                    .recovery()
+                    .filter(|recovery| recovery.terminal_state().is_some())
+                    .cloned();
+                if let Some(recovery) = recovery {
+                    return finalize_recorded_recovery(
+                        handoff,
+                        &mut prepared.custody,
+                        &recovery,
+                        execution_failure(error),
+                    );
+                }
+                handoff.retain_for_recovery();
+                return Err(execution_failure(error));
+            }
+            #[cfg(test)]
+            {
+                let _ = handoff;
+                return Err(execution_failure(error));
+            }
         }
     };
-    let capability = transaction_policy::current_capability()
-        .map_err(|_| "host lifecycle observation capability unavailable")?;
+    #[cfg(not(test))]
+    let receipt_recovery = receipt.recovery_handoff();
+    let capability = match transaction_policy::current_capability() {
+        Ok(capability) => capability,
+        Err(_) => {
+            #[cfg(not(test))]
+            {
+                return finalize_recorded_recovery(
+                    handoff,
+                    &mut prepared.custody,
+                    &receipt_recovery,
+                    "host lifecycle observation capability unavailable",
+                );
+            }
+            #[cfg(test)]
+            return Err("host lifecycle observation capability unavailable");
+        }
+    };
     let observation_package = prepared.custody.pre_effect_record().package().clone();
-    let result = observe(
+    let result = match observe(
         &observation_package,
         prepared.custody.plan(),
         &observation,
@@ -106,7 +140,22 @@ pub(crate) fn execute_host_lifecycle_transaction(
         target_root,
         &prepared.environment,
         receipt.command_output_sha256().to_vec(),
-    )?;
+    ) {
+        Ok(result) => result,
+        Err(error) => {
+            #[cfg(not(test))]
+            {
+                return finalize_recorded_recovery(
+                    handoff,
+                    &mut prepared.custody,
+                    &receipt_recovery,
+                    error,
+                );
+            }
+            #[cfg(test)]
+            return Err(error);
+        }
+    };
     // On Darwin the observation duplicate shares the staged private object.
     // It must be released before the settled handoff can prove sole ownership
     // and perform explicit finalization.
@@ -130,26 +179,60 @@ pub(crate) fn execute_host_lifecycle_transaction(
             result.effect_cursor,
         )
     };
-    prepared
-        .custody
-        .settle(completion)
-        .map_err(|_| "host lifecycle independent observation settlement failed")?;
+    if prepared.custody.settle(completion).is_err() {
+        #[cfg(not(test))]
+        {
+            return finalize_recorded_recovery(
+                handoff,
+                &mut prepared.custody,
+                &receipt_recovery,
+                "host lifecycle independent observation settlement failed",
+            );
+        }
+        #[cfg(test)]
+        return Err("host lifecycle independent observation settlement failed");
+    }
     if ambiguous {
         let mut observed_recovery = ObservedRecoveryAdapter {
             observed: observed.clone(),
         };
-        prepared
+        if prepared
             .custody
             .recover(&observed, &mut observed_recovery)
-            .map_err(|_| "host lifecycle recovery authorization failed")?;
+            .is_err()
+        {
+            #[cfg(not(test))]
+            {
+                return finalize_recorded_recovery(
+                    handoff,
+                    &mut prepared.custody,
+                    &receipt_recovery,
+                    "host lifecycle recovery authorization failed",
+                );
+            }
+            #[cfg(test)]
+            return Err("host lifecycle recovery authorization failed");
+        }
     }
-    let finalization = prepared
-        .custody
-        .finalization_token()
-        .map_err(|_| "host lifecycle terminal finalization unavailable")?;
-    handoff
-        .finalize(finalization)
-        .map_err(preparation_failure)?;
+    let finalization = match prepared.custody.finalization_token() {
+        Ok(finalization) => finalization,
+        Err(_) => {
+            #[cfg(not(test))]
+            {
+                return finalize_recorded_recovery(
+                    handoff,
+                    &mut prepared.custody,
+                    &receipt_recovery,
+                    "host lifecycle terminal finalization unavailable",
+                );
+            }
+            #[cfg(test)]
+            return Err("host lifecycle terminal finalization unavailable");
+        }
+    };
+    if let Err(error) = handoff.finalize(finalization) {
+        return Err(preparation_failure(error));
+    }
     Ok(HostLifecycleTransactionResult {
         surfaces: result.surfaces,
     })

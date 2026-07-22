@@ -17,6 +17,8 @@ pub(crate) use executor::{
     HostEffectCompletion, HostEffectCompletionOutcome, HostEffectExecutionPolicy,
     NativeRetainedDescriptorProcessBackend, SupportedHostEffectExecutor,
 };
+#[cfg(not(test))]
+pub(crate) use executor::HostEffectRecoveryHandoff;
 pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;

@@ -5,6 +5,8 @@ use super::plan::validate_plan;
 use crate::distribution::host_effect::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
 };
+#[cfg(not(test))]
+use crate::distribution::host_effect::HostEffectRecoveryHandoff;
 use crate::distribution::{HostCommand, HostCommandPlan, PackageIdentity};
 use serde::{Deserialize, Serialize};
 
@@ -13,6 +15,7 @@ include!("binding.rs");
 include!("record.rs");
 include!("recovery.rs");
 include!("finalization.rs");
+include!("recovery_disposition.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,

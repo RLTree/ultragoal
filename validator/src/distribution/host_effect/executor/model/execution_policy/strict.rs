@@ -127,6 +127,8 @@ impl HostEffectCancellation {
 pub(crate) struct HostEffectExecutionReceipt {
     effect_identity_sha256: String,
     _outcome: HostEffectOutcome,
+    #[cfg(not(test))]
+    terminal_record: HostEffectLedgerRecord,
     terminal_ledger_head: HostEffectLedgerHead,
     command_output_sha256: Vec<String>,
     _acknowledgement: PublicationAcknowledgementIdentity,
@@ -153,6 +155,7 @@ impl HostEffectExecutionReceipt {
     pub(super) fn new(
         effect_identity_sha256: String,
         outcome: HostEffectOutcome,
+        _terminal_record: HostEffectLedgerRecord,
         terminal_ledger_head: HostEffectLedgerHead,
         command_output_sha256: Vec<String>,
         acknowledgement: PublicationAcknowledgementIdentity,
@@ -162,6 +165,8 @@ impl HostEffectExecutionReceipt {
         Self {
             effect_identity_sha256,
             _outcome: outcome,
+            #[cfg(not(test))]
+            terminal_record: _terminal_record,
             terminal_ledger_head,
             command_output_sha256,
             _acknowledgement: acknowledgement,
@@ -187,6 +192,20 @@ impl HostEffectExecutionReceipt {
 
     pub(crate) fn command_output_sha256(&self) -> &[String] {
         &self.command_output_sha256
+    }
+
+    #[cfg(not(test))]
+    pub(crate) fn recovery_handoff(&self) -> HostEffectRecoveryHandoff {
+        HostEffectRecoveryHandoff::terminal_transition(TerminalTransitionRecoveryRequest {
+            effect_identity_sha256: self.effect_identity_sha256.clone(),
+            permit_id: self._outcome.permit_id.clone(),
+            ledger_head: self.terminal_ledger_head.clone(),
+            ledger_record: self.terminal_record.clone(),
+            exact_current_ledger_observation: true,
+            outcome: self._outcome.clone(),
+            originating_error_ids: vec![HostEffectExecutorErrorId::RecoveryRequired],
+            classification: HostEffectTerminalRecoveryClassification::TerminalCommittedAndVerified,
+        })
     }
 
     #[cfg(test)]

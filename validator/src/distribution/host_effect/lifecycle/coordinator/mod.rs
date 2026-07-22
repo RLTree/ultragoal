@@ -20,4 +20,6 @@ include!("host_target_observer.rs");
 
 include!("supported/binding.rs");
 
+include!("supported/handoff.rs");
+
 include!("supported/recovery_proposal.rs");
