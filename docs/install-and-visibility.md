@@ -53,12 +53,11 @@ to be current.
 
 The source-local `HostCommandPlan` binds those exact argv rows to the package
 identity and carries an empty scrubbed environment, a 30-second timeout, and
-one attempt. The frozen source joins that plan to sealed lifecycle admission
-and typed fail-closed outcome records in its focused authority tests, but it
-does not yet provide the root-owned production caller or Darwin process
-backend that would consume and enforce those fields. Therefore this source
-contract is not evidence of command execution, host mutation, installation,
-or fresh-task discovery; those claims remain outside this candidate's ceiling.
+one attempt. The integrated source now joins that plan to sealed lifecycle
+admission, the production host-handoff caller, and typed fail-closed outcome
+records. Source controls still do not prove command execution, host mutation,
+installation, or fresh-task discovery: those require current host observations
+against the exact package candidate and remain separate claim surfaces.
 
 ## Personal marketplace
 
