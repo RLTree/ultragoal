@@ -55,6 +55,12 @@ Its production precondition is the descriptor-bound repository root and exact
 `.gitignore` target, not unrelated repository or Git-internal contents that
 the one-file effect never reads or follows.
 
+Routine-configuration fit uses the same narrow-scope rule for its two canonical
+configuration targets. Their descriptor chains, root binding, scope, and exact
+path set form the protected boundary; unrelated repository and Git-internal
+objects remain outside that effect. Complete-repository fit retains the full
+recursive protected-tree capture.
+
 Local agent authority is one private production transaction under
 `plugin_product/agent_discovery/`. The public read route
 `inspect capabilities --package-root <host-path>` supplies one typed

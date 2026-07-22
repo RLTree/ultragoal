@@ -16,8 +16,11 @@ pub(crate) fn collect_protected(
         let _ = (root, request, boundary, run_capture_hooks);
         return Err(adapter_error(AdapterErrorId::UnsupportedHost));
     }
-    if request.scope == FitPlanScope::LocalState {
-        return collect_local_state_protected(request);
+    if matches!(
+        request.scope,
+        FitPlanScope::LocalState | FitPlanScope::RoutineConfiguration
+    ) {
+        return collect_scoped_protected(request);
     }
     #[cfg(target_vendor = "apple")]
     {
@@ -80,17 +83,24 @@ pub(crate) fn collect_protected(
     }
 }
 
-/// Local-state apply authorizes one descriptor-bound `.gitignore` mutation.
-/// The target capture already binds that leaf and its repository root, so
-/// unrelated repository contents cannot enlarge this effect's precondition.
-/// Git evidence may legitimately contain symlinks that this effect never reads.
-fn collect_local_state_protected(
+/// Narrow-scope apply authorizes only its descriptor-bound target mutations.
+/// The target capture already binds each leaf and its repository root, so
+/// unrelated repository contents cannot enlarge the effect's precondition.
+/// Git evidence may legitimately contain symlinks that these effects never read.
+fn collect_scoped_protected(
     request: &OpaqueFitApplyRequest,
 ) -> Result<ProtectedSnapshot, FitAdapterError> {
+    let target_paths = request
+        .target_paths()
+        .into_iter()
+        .map(|path| path.as_str().to_owned())
+        .collect::<Vec<_>>();
     let sha256 = digest(
         &serde_json::to_vec(&(
-            "repository-fit-local-state-protected-boundary-v1",
+            "repository-fit-scoped-protected-boundary-v1",
+            request.scope,
             request.root_binding(),
+            target_paths,
         ))
         .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
     );

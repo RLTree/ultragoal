@@ -48,6 +48,8 @@ mod local_state_scope_revalidates_through_production_authority;
 mod missing_recovery_ledger_refuses_without_initializing_authority_or_writing_target;
 #[path = "production_mutation_grant_has_one_private_mint_in_the_sealed_authority.rs"]
 mod production_mutation_grant_has_one_private_mint_in_the_sealed_authority;
+#[path = "routine_configuration_scope_revalidates_through_production_authority.rs"]
+mod routine_configuration_scope_revalidates_through_production_authority;
 #[path = "same_session_stale_head_replay_and_terminal_substitution_fail_closed.rs"]
 mod same_session_stale_head_replay_and_terminal_substitution_fail_closed;
 #[path = "scenario_fixture.rs"]
