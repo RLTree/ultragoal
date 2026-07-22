@@ -56,17 +56,7 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
                 let cleanup = selected.take().ok_or_else(|| {
                     lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution)
                 })?;
-                #[cfg(not(test))]
-                cleanup.finalize().map_err(|_| {
-                    lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed)
-                })?;
-                #[cfg(test)]
-                {
-                    // Fixture aliases deliberately retain the selected object;
-                    // preserve the exact refusal that prevented an effect.
-                    let _ = cleanup.finalize();
-                }
-                Err(error)
+                Err(preserve_preparation_refusal(error, cleanup.finalize()))
             }
         }
     }
@@ -85,6 +75,25 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             &head,
             time.unix_ms(),
         )
+    }
+}
+
+fn preserve_preparation_refusal<E>(
+    error: SupportedHostLifecycleError,
+    cleanup: Result<(), E>,
+) -> SupportedHostLifecycleError {
+    let _ = cleanup;
+    error
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn cleanup_failure_does_not_replace_preparation_refusal() {
+        let refusal = lifecycle_error(SupportedHostLifecycleErrorId::TargetRace);
+        assert_eq!(preserve_preparation_refusal(refusal, Err(())), refusal);
     }
 }
 

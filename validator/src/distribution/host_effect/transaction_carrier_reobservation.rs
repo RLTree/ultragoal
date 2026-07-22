@@ -32,6 +32,9 @@ impl HostLifecycleRecoveryCarrier {
         if current_head != *expected_head || current_record != *expected_record {
             return HostLifecycleTransactionOutcome::RecoveryRequired(self);
         }
+        if self.handoff.revalidate_observation_executable().is_err() {
+            return HostLifecycleTransactionOutcome::RecoveryRequired(self);
+        }
         match recovery.disposition_state() {
             Some(HostEffectState::Failed) => {
                 let cause = self.cause.message();

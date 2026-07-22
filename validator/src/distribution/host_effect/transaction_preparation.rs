@@ -137,11 +137,28 @@ pub(super) fn prepare_host_effect_transaction(
         Ok(prepared) => Ok(prepared),
         Err(error) => {
             if let Some(selected) = selected {
-                selected
-                    .finalize()
-                    .map_err(|_| "host executable pre-effect finalization failed")?;
+                return Err(preserve_pre_effect_refusal(error, || selected.finalize()));
             }
             Err(error)
         }
+    }
+}
+
+fn preserve_pre_effect_refusal<E>(
+    error: &'static str,
+    cleanup: impl FnOnce() -> Result<(), E>,
+) -> &'static str {
+    let _ = cleanup();
+    error
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn cleanup_failure_does_not_replace_pre_effect_refusal() {
+        assert_eq!(
+            super::preserve_pre_effect_refusal("target refusal", || Err(())),
+            "target refusal"
+        );
     }
 }
