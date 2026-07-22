@@ -22,7 +22,7 @@
   "real_work": {
     "repository_identity": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170",
     "starting_candidate": "sha256:de12a3db58972792ff812c235abdd11891b0e006d9c8d0ba654f0a791d21bdab",
-    "dirty_state_expectation": "clean",
+    "dirty_state_expectation": "either",
     "task_id": "current-source-installed-daily-driver",
     "task": "Establish the first truthful transition of the real UltraGoal installed-daily-driver journey before creating or promoting broader product evidence.",
     "expected_useful_outcome": "A zero-write fit observation with a deterministic next action; later journey stages remain separately evidenced or withheld."
