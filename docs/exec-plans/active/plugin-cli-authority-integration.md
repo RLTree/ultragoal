@@ -1491,6 +1491,20 @@ cancellation, parent exit, fork/setsid, retry, recovery, and repeat-use in one
 batch, and receive one bounded confirmation review. No claim advances while
 that candidate is reworked.
 
+The replacement freeze `0cb750c84` proved that a verified macOS seatbelt
+profile can deny `process-fork` while running a sealed Codex copy, but root
+independently returned it for one remaining custody defect. Its `ChildGuard`
+settles an OS process scope from `Drop`, and its staged-copy owners clear
+immutable flags and unlink from `Drop`. An unwind or early ownership loss can
+therefore perform terminal or destructive cleanup without a typed finalization
+transition or durable recovery evidence. The correction remains in the same
+Darwin lane: enumerate every launch, pipe-setup, resume, read, overflow,
+cancellation, timeout, exit, revalidation, panic, and recovery transition;
+make settling and staged-byte cleanup an explicit consuming finalization after
+durable resolution; and prove panic and early-return controls. RAII may close
+inert descriptors only. This is one invariant-level correction followed by one
+Terra/medium confirmation, not a new review loop or a claim advance.
+
 Root also removed an artifact-only test dependency at `de6e79d18`: the Product
 Fitness v2 schema control now reads its tracked review-round fixture rather
 than embedding the ignored live `validation_artifacts/harness` receipt. The
