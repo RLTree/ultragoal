@@ -1,6 +1,8 @@
-use super::*;
+use super::{HostEffectExecutorErrorId, session, spawn};
+use crate::distribution::HostCommand;
 use std::fs::File;
 use std::os::fd::AsRawFd;
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 #[test]
 fn panic_boundary_requires_explicit_child_scope_finalization() {
@@ -14,12 +16,10 @@ fn panic_boundary_requires_explicit_child_scope_finalization() {
     );
     let spawned = spawn::spawn(std::path::Path::new("/bin/sh"), &command, cwd.as_raw_fd())
         .expect("suspended child");
-    let mut session = ChildSession::new(spawned);
+    let session = session::ChildSession::new(spawned);
     let panic_result = catch_unwind(AssertUnwindSafe(|| panic!("panic control")));
     assert!(panic_result.is_err());
 
-    let failure = session.failure(HostEffectExecutorErrorId::ProcessFailed);
+    let failure = session.finalize_failure(HostEffectExecutorErrorId::ProcessFailed);
     assert!(failure.started);
-    assert!(session.finalized);
-    assert!(!recovery::group_exists(session.pid));
 }

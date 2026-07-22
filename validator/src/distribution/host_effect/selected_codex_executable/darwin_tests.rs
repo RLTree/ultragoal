@@ -1,7 +1,10 @@
 use super::{SelectedCodexExecutableTestFixture, selected_test_fixture};
 use std::fs;
 use std::os::darwin::fs::MetadataExt as DarwinMetadataExt;
+use std::os::fd::AsRawFd;
 use std::os::unix::fs::MetadataExt;
+use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
+use std::path::Path;
 
 #[test]
 fn launch_uses_a_fresh_immutable_owner_only_copy() {
@@ -88,4 +91,42 @@ fn executor_runs_sealed_copy_inside_contained_scope() {
     assert_eq!(capture.exit_code(), 0);
     assert_eq!(capture.stdout(), b"sealed-copy");
     selected.finalize().expect("explicit sealed cleanup");
+}
+
+#[test]
+fn finalization_rejects_substituted_private_directory() {
+    let mut fixture = selected_test_fixture("darwin-finalize-substitution", b"sealed");
+    let selected = fixture.take_selected();
+    let launch = selected.launch_path().to_owned();
+    let directory = launch.parent().expect("sealed directory").to_owned();
+    let held = directory.with_extension("held");
+    clear_flags(&launch);
+    clear_flags(&directory);
+    fs::rename(&directory, &held).expect("hold original sealed directory");
+    fs::create_dir(&directory).expect("substitute directory");
+    fs::set_permissions(&directory, fs::Permissions::from_mode(0o700)).expect("directory mode");
+    fs::write(directory.join("codex"), b"substitute").expect("substitute bytes");
+    fs::set_permissions(directory.join("codex"), fs::Permissions::from_mode(0o700))
+        .expect("substitute mode");
+
+    assert!(selected.revalidate_launch().is_err());
+    assert!(selected.finalize().is_err());
+    assert_eq!(
+        fs::read(directory.join("codex")).expect("substitute remains"),
+        b"substitute"
+    );
+
+    clear_flags(&held.join("codex"));
+    clear_flags(&held);
+    fs::remove_dir_all(held).expect("test original cleanup");
+    fs::remove_dir_all(directory).expect("test substitute cleanup");
+}
+
+fn clear_flags(path: &Path) {
+    let mut options = fs::OpenOptions::new();
+    options
+        .read(true)
+        .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW);
+    let file = options.open(path).expect("clear test flags");
+    assert_eq!(unsafe { libc::fchflags(file.as_raw_fd(), 0) }, 0);
 }

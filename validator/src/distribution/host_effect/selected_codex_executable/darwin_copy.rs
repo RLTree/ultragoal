@@ -90,7 +90,7 @@ impl DarwinPrivateExecutable {
                 },
             },
             Err(error) => match directory.take() {
-                Some(directory) => match directory.finalize(&path) {
+                Some(directory) => match directory.finalize(None, &path) {
                     Ok(()) => Err(error),
                     Err(_) => Err(ledger_io()),
                 },
@@ -107,16 +107,9 @@ impl DarwinPrivateExecutable {
         use std::os::darwin::fs::MetadataExt as DarwinMetadataExt;
         use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
-        let directory = std::fs::symlink_metadata(&self.directory.path).map_err(|_| ledger_io())?;
+        self.directory.revalidate()?;
         let canonical_directory =
             std::fs::canonicalize(&self.directory.path).map_err(|_| ledger_io())?;
-        if !directory.is_dir()
-            || directory.mode() & 0o7777 != 0o700
-            || directory.uid() != unsafe { libc::geteuid() }
-            || directory.st_flags() & libc::UF_IMMUTABLE == 0
-        {
-            return Err(tampered());
-        }
         let metadata = std::fs::symlink_metadata(&self.path).map_err(|_| ledger_io())?;
         if !metadata.is_file()
             || metadata.nlink() != 1
@@ -168,8 +161,9 @@ impl DarwinPrivateExecutable {
             file,
             ..
         } = self;
+        let result = directory.finalize(Some(&file), &path);
         drop(file);
-        directory.finalize(&path)
+        result
     }
 }
 
