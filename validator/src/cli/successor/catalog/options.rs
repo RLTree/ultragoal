@@ -20,6 +20,8 @@ const CANDIDATE: OptionSpec = option(OptionName::Candidate, ValueKind::Identifie
 const REGISTRY: OptionSpec = option(OptionName::Registry, ValueKind::RelativePath, false);
 const APPROVE_RETIREMENT: OptionSpec = option(OptionName::ApproveRetirement, ValueKind::Flag, true);
 const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::HostPath, false);
+const RETAIN_ISOLATED_ROOT: OptionSpec =
+    option(OptionName::RetainIsolatedRoot, ValueKind::Flag, false);
 const INTERRUPT_AFTER: OptionSpec =
     option(OptionName::InterruptAfter, ValueKind::Identifier, false);
 const CONTINUATION: OptionSpec = option(OptionName::Continuation, ValueKind::Identifier, false);
@@ -38,6 +40,7 @@ pub(super) const PUBLISH_OPTIONS: &[OptionSpec] = &[INPUT, PROVIDER, APPROVE_PUB
 pub(super) const SPEC_OPTION: &[OptionSpec] = &[SPEC];
 pub(super) const SPEC_OUTPUT: &[OptionSpec] = &[SPEC, OUTPUT];
 pub(super) const INPUT_OUTPUT: &[OptionSpec] = &[INPUT, OUTPUT];
+pub(super) const INPUT_OUTPUT_RETAIN: &[OptionSpec] = &[INPUT, OUTPUT, RETAIN_ISOLATED_ROOT];
 pub(super) const CANDIDATE_OUTPUT: &[OptionSpec] = &[CANDIDATE, OUTPUT];
 pub(super) const ADAPTER_OPTIONS: &[OptionSpec] = &[SPEC, PROVIDER];
 pub(super) const REGISTRY_OPTION: &[OptionSpec] = &[REGISTRY];

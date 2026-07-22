@@ -27,6 +27,7 @@ struct InstallTestOutcome<'a> {
     marketplace_observation_sha256: &'a str,
     runtime_observation_sha256: &'a str,
     journey_binding_sha256: &'a str,
+    retained_isolated_root: Option<&'a str>,
     discovery_status: &'static str,
     output: &'a str,
     claim_ceiling: &'static str,
@@ -37,7 +38,7 @@ pub(super) fn execute(
     output_context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
-    let Some((input_path, output_path)) = invocation_paths(invocation) else {
+    let Some((input_path, output_path, retain_root)) = invocation_paths(invocation) else {
         return invalid_invocation();
     };
     let catalog = match InventoryBuilder::new(source_context).build() {
@@ -53,10 +54,11 @@ pub(super) fn execute(
     if !input_matches(output_context, input_path, &artifact) {
         return transaction_failure("input package is not the exact current-source archive");
     }
-    let observation = match isolated_transaction::execute(source_context, &catalog, &artifact) {
-        Ok(observation) => observation,
-        Err(cause) => return transaction_failure(cause),
-    };
+    let observation =
+        match isolated_transaction::execute(source_context, &catalog, &artifact, retain_root) {
+            Ok(observation) => observation,
+            Err(cause) => return transaction_failure(cause),
+        };
     let record = InstallTestOutcome {
         schema_version: "HarnessPackageInstallTestOutcome-v1",
         candidate_id: artifact.candidate_id(),
@@ -68,6 +70,7 @@ pub(super) fn execute(
         marketplace_observation_sha256: observation.marketplace_observation_sha256(),
         runtime_observation_sha256: observation.runtime_observation_sha256(),
         journey_binding_sha256: observation.journey_binding_sha256(),
+        retained_isolated_root: observation.retained_root(),
         discovery_status: "pending-fresh-codex-task",
         output: output_path,
         claim_ceiling: "isolated source/archive, public plugin-install record, marketplace, cache, and runtime object verified; app-registry, Codex discovery, and installed-product claims withheld",
@@ -75,7 +78,7 @@ pub(super) fn execute(
     publish_outcome(output_context, output_path, &record)
 }
 
-fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
+fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str, bool)> {
     let ParsedInvocation {
         command: SuccessorCommand::Package(PackageAction::InstallTest),
         effect: EffectClass::WorkspaceWrite,
@@ -85,7 +88,7 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
     else {
         return None;
     };
-    if arguments.len() != 2 {
+    if !(2..=3).contains(&arguments.len()) {
         return None;
     }
     let input = arguments
@@ -94,6 +97,13 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
     let output = arguments
         .iter()
         .find(|argument| argument.name == OptionName::Output);
+    let retain_root = arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::RetainIsolatedRoot)
+        .is_some_and(|argument| matches!(argument.value, ParsedValue::Flag));
+    if arguments.len() == 3 && !retain_root {
+        return None;
+    }
     match (
         input.map(|argument| &argument.value),
         output.map(|argument| &argument.value),
@@ -102,7 +112,7 @@ fn invocation_paths(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
             if super::package_dispatch::package_archive_input_allowed(input.as_str())
                 && output_allowed(output.as_str()) =>
         {
-            Some((input.as_str(), output.as_str()))
+            Some((input.as_str(), output.as_str(), retain_root))
         }
         _ => None,
     }
@@ -166,7 +176,7 @@ fn transaction_failure(cause: &'static str) -> RuntimeOutcome {
                 affected_surface: "HCT-DISTRIBUTION package install-test",
                 repair: "repair the exact package or isolated transaction failure and retry",
                 effect: "workspace_write plus disposable isolated host effects",
-                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json",
+                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json [--retain-isolated-root]",
                 ceiling: "Codex discovery, installed product, readiness, and release claims remain withheld",
             },
         ),
@@ -194,11 +204,11 @@ fn invalid_invocation() -> RuntimeOutcome {
             DiagnosticId::UnexpectedArguments,
             ExitClass::InvalidInvocation,
             DiagnosticDetails {
-                cause: "package install-test requires bounded --input and disposable --output relative paths",
+                cause: "package install-test requires bounded --input and disposable --output relative paths, with optional explicit isolated-root retention",
                 affected_surface: "HCT-DISTRIBUTION package install-test",
                 repair: "supply a package input and target/ultragoal/*.json output",
                 effect: "none",
-                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json",
+                rerun: "ultragoal --json package install-test --input target/ultragoal/package.hugpkg --output target/ultragoal/install-test.json [--retain-isolated-root]",
                 ceiling: "no package, install, cache, discovery, or runtime claim is available",
             },
         ),

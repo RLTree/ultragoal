@@ -157,6 +157,28 @@ documented root, supported Codex installation of that exact materialized
 source, and discovery from a fresh Codex task before repository-fit and
 routine/recovery work.
 
+## Retained isolated install for fresh discovery — 2026-07-21
+
+`package install-test` now accepts the explicit
+`--retain-isolated-root` option only for the exact fresh-task discovery
+boundary. The normal path still removes its isolated host root on every
+outcome; the opt-in success path returns the canonical retained root so root
+can install that exact materialized marketplace into Codex and ask one fresh
+task to enter through `harness-ultragoal`. It adds no global installer,
+discovery writer, receipt family, or lifecycle authority.
+
+The first pre-freeze retained package was byte-identical across two builds,
+installed through Codex's supported local marketplace path, and was found by
+a fresh Codex task. That task selected `repository-fit` and its read-only
+`fit inspect` first-value action. This is discovery and route-selection
+evidence only: the task did not exercise an effect, routine work,
+interruption/recovery, repeat use, or human use. Its initial capability note
+also cannot override the direct public fit observation or host-lifecycle
+authority. The final documented candidate must repeat package, retained
+install, fresh discovery, and the full journey before any installed or
+daily-driver claim advances; the retained root is disposable immediately
+after those observations.
+
 ## Installed daily-driver root convergence — 2026-07-20
 
 The managed N08 task on branch `codex/n08-installed-daily-driver` returned a

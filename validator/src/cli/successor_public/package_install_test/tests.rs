@@ -17,7 +17,33 @@ fn exact_install_test_paths_are_accepted() {
         invocation_paths(&invocation),
         Some((
             "target/ultragoal/package.hugpkg",
-            "target/ultragoal/install-test.json"
+            "target/ultragoal/install-test.json",
+            false,
+        ))
+    );
+}
+
+#[test]
+fn explicit_retention_is_the_only_third_install_test_argument() {
+    let invocation = ParsedInvocation {
+        command: SuccessorCommand::Package(PackageAction::InstallTest),
+        effect: EffectClass::WorkspaceWrite,
+        output_mode: OutputMode::Json,
+        arguments: vec![
+            option(OptionName::Input, "target/ultragoal/package.hugpkg"),
+            option(OptionName::Output, "target/ultragoal/install-test.json"),
+            OptionArgument {
+                name: OptionName::RetainIsolatedRoot,
+                value: ParsedValue::Flag,
+            },
+        ],
+    };
+    assert_eq!(
+        invocation_paths(&invocation),
+        Some((
+            "target/ultragoal/package.hugpkg",
+            "target/ultragoal/install-test.json",
+            true,
         ))
     );
 }

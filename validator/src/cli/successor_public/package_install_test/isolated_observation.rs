@@ -5,6 +5,7 @@ pub(super) struct IsolatedObservation {
     pub(super) marketplace_observation_sha256: String,
     pub(super) runtime_observation_sha256: String,
     pub(super) journey_binding_sha256: String,
+    pub(super) retained_root: Option<String>,
 }
 
 impl IsolatedObservation {
@@ -30,5 +31,9 @@ impl IsolatedObservation {
 
     pub(super) fn journey_binding_sha256(&self) -> &str {
         &self.journey_binding_sha256
+    }
+
+    pub(super) fn retained_root(&self) -> Option<&str> {
+        self.retained_root.as_deref()
     }
 }

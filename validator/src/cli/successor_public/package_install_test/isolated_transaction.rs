@@ -13,10 +13,18 @@ pub(super) fn execute(
     context: &LiveContext,
     catalog: &AuthorityCatalog,
     artifact: &ProductionPackageArtifact,
+    retain_root: bool,
 ) -> Result<IsolatedObservation, &'static str> {
     let root_path = temporary_root::create()?;
     let confined = ConfinedRoot::open(&root_path).map_err(|_| "isolated host root unavailable")?;
-    let result = execute_inner(context, catalog, artifact, confined.clone(), &root_path);
+    let mut result = execute_inner(context, catalog, artifact, confined.clone(), &root_path);
+    if retain_root && result.is_ok() {
+        if let Ok(observation) = &mut result {
+            observation.retained_root = Some(root_path.display().to_string());
+        }
+        drop(confined);
+        return result;
+    }
     if confined.remove_owned().is_err() {
         return Err("disposable isolated host cleanup failed");
     }
@@ -169,6 +177,7 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         marketplace_observation_sha256: surfaces.registry,
         runtime_observation_sha256: surfaces.runtime,
         journey_binding_sha256: binding_sha256,
+        retained_root: None,
     })
 }
 
