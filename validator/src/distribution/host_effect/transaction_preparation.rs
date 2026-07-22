@@ -21,7 +21,6 @@ pub(super) struct PreparedHostEffectTransaction {
     pub(super) ledger: FileHostEffectLedger,
     pub(super) target: ConfinedHostEffectTarget,
     pub(super) observation_target: ConfinedHostEffectTarget,
-    pub(super) observation_executable: SelectedCodexExecutable,
     pub(super) handoff: super::lifecycle::DescriptorExecutionHandoff,
     pub(super) policy: HostEffectExecutionPolicy,
     pub(super) environment: Vec<(String, String)>,
@@ -62,11 +61,6 @@ pub(super) fn prepare_host_effect_transaction(
             .map_err(|_| "host lifecycle ledger creation failed")?;
         let coordinator = SupportedHostLifecycleCoordinator::bind(issuer_id, ledger_id, &ledger)
             .map_err(|_| "host lifecycle coordinator binding failed")?;
-        let observation_executable = selected
-            .as_ref()
-            .ok_or("host executable selection unavailable")?
-            .duplicate()
-            .map_err(|_| "host executable duplicate failed")?;
         let (target, expected_target) = ConfinedHostEffectTarget::bind(
             target_root,
             scope.clone(),
@@ -133,7 +127,6 @@ pub(super) fn prepare_host_effect_transaction(
             ledger,
             target,
             observation_target,
-            observation_executable,
             handoff,
             policy,
             environment,

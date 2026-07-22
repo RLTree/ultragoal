@@ -61,6 +61,7 @@ impl SelectedCodexExecutable {
         self.identity.binding_sha256()
     }
 
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn duplicate(
         &self,
     ) -> Result<Self, HostEffectLedgerError> {

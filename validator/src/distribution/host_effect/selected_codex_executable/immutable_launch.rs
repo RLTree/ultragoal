@@ -97,6 +97,7 @@ impl ImmutableExecutable {
         }
     }
 
+    #[cfg(test)]
     pub(super) fn duplicate(&self) -> Result<Self, HostEffectLedgerError> {
         #[cfg(any(target_os = "linux", target_os = "freebsd"))]
         {

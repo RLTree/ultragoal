@@ -17,8 +17,7 @@ impl HostLifecycleRecoveryCarrier {
             &self.attempt.command_plan_sha256,
             &self.attempt.executable_identity_sha256,
             &self.attempt.target_identity_sha256,
-        ) || !self.observation_executable.revalidate().is_ok()
-            || !self.observation_target.revalidate_for_recovery()
+        ) || !self.observation_target.revalidate_for_recovery()
         {
             return HostLifecycleTransactionOutcome::RecoveryRequired(self);
         }
@@ -66,23 +65,27 @@ impl HostLifecycleRecoveryCarrier {
         let package = self.custody.pre_effect_record().package().clone();
         let cancellation = HostEffectCancellation::default();
         let mut backend = NativeRetainedDescriptorProcessBackend;
-        let result = match observe(
-            &package,
-            self.custody.plan(),
-            &self.observation_input,
-            self.custody.pre_effect_record().expected_observations(),
-            &self.observation_executable,
-            &capability,
-            &mut backend,
-            &self.policy,
-            &cancellation,
-            self.observation_target.cwd_fd(),
-            &self.target_root,
-            &self.environment,
-            self.command_output_sha256.clone(),
-        ) {
-            Ok(result) => result,
-            Err(_) => return HostLifecycleTransactionOutcome::RecoveryRequired(self),
+        let result = match self.handoff.with_revalidated_observation(|executable| {
+            observe(
+                &package,
+                self.custody.plan(),
+                &self.observation_input,
+                self.custody.pre_effect_record().expected_observations(),
+                executable,
+                &capability,
+                &mut backend,
+                &self.policy,
+                &cancellation,
+                self.observation_target.cwd_fd(),
+                &self.target_root,
+                &self.environment,
+                self.command_output_sha256.clone(),
+            )
+        }) {
+            Ok(Ok(result)) => result,
+            Ok(Err(_)) | Err(_) => {
+                return HostLifecycleTransactionOutcome::RecoveryRequired(self);
+            }
         };
         let ambiguous = result.completed_effects.len() != self.custody.plan().effects.len();
         let observed = result.observed.clone();

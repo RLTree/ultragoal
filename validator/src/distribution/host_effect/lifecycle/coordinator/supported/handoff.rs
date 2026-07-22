@@ -57,6 +57,14 @@ impl DescriptorExecutionHandoff {
         )
     }
 
+    pub(in crate::distribution::host_effect) fn with_revalidated_observation<R>(
+        &self,
+        adapter: impl FnOnce(&crate::distribution::host_effect::SelectedCodexExecutable) -> R,
+    ) -> Result<R, crate::distribution::host_effect::HostEffectLedgerError> {
+        self.effect.executable().revalidate()?;
+        Ok(adapter(self.effect.executable()))
+    }
+
     pub(in crate::distribution::host_effect) fn recovery_bindings(
         &self,
     ) -> (String, String, String, String) {

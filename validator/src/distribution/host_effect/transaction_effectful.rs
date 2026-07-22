@@ -46,7 +46,6 @@ pub(super) fn execute_effectful_transaction(
         ledger,
         target,
         observation_target,
-        observation_executable,
         handoff: initial_handoff,
         policy,
         environment,
@@ -69,7 +68,6 @@ pub(super) fn execute_effectful_transaction(
                 handoff,
                 custody,
                 ledger,
-                observation_executable,
                 observation_target,
                 observation.clone(),
                 target_root,
@@ -89,7 +87,6 @@ pub(super) fn execute_effectful_transaction(
                 handoff,
                 custody,
                 ledger,
-                observation_executable,
                 observation_target,
                 observation.clone(),
                 target_root,
@@ -104,28 +101,29 @@ pub(super) fn execute_effectful_transaction(
         }
     };
     let observation_package = custody.pre_effect_record().package().clone();
-    let result = match observe(
-        &observation_package,
-        custody.plan(),
-        &observation,
-        custody.pre_effect_record().expected_observations(),
-        &observation_executable,
-        &capability,
-        &mut backend,
-        &policy,
-        &cancellation,
-        observation_target.cwd_fd(),
-        target_root,
-        &environment,
-        receipt.command_output_sha256().to_vec(),
-    ) {
-        Ok(result) => result,
-        Err(error) => {
+    let result = match handoff.with_revalidated_observation(|observation_executable| {
+        observe(
+            &observation_package,
+            custody.plan(),
+            &observation,
+            custody.pre_effect_record().expected_observations(),
+            observation_executable,
+            &capability,
+            &mut backend,
+            &policy,
+            &cancellation,
+            observation_target.cwd_fd(),
+            target_root,
+            &environment,
+            receipt.command_output_sha256().to_vec(),
+        )
+    }) {
+        Ok(Ok(result)) => result,
+        Ok(Err(error)) => {
             return Ok(recovery_required(
                 handoff,
                 custody,
                 ledger,
-                observation_executable,
                 observation_target,
                 observation.clone(),
                 target_root,
@@ -134,6 +132,23 @@ pub(super) fn execute_effectful_transaction(
                 receipt_recovery.clone(),
                 receipt.command_output_sha256().to_vec(),
                 HostLifecycleRecoveryCause::Observation(error),
+            ));
+        }
+        Err(_) => {
+            return Ok(recovery_required(
+                handoff,
+                custody,
+                ledger,
+                observation_target,
+                observation.clone(),
+                target_root,
+                policy,
+                environment,
+                receipt_recovery.clone(),
+                receipt.command_output_sha256().to_vec(),
+                HostLifecycleRecoveryCause::Observation(
+                    "host lifecycle observation executable revalidation failed",
+                ),
             ));
         }
     };
@@ -161,7 +176,6 @@ pub(super) fn execute_effectful_transaction(
             handoff,
             custody,
             ledger,
-            observation_executable,
             observation_target,
             observation.clone(),
             target_root,
@@ -183,7 +197,6 @@ pub(super) fn execute_effectful_transaction(
                 handoff,
                 custody,
                 ledger,
-                observation_executable,
                 observation_target,
                 observation.clone(),
                 target_root,
@@ -204,7 +217,6 @@ pub(super) fn execute_effectful_transaction(
                 handoff,
                 custody,
                 ledger,
-                observation_executable,
                 observation_target,
                 observation.clone(),
                 target_root,
@@ -223,7 +235,6 @@ pub(super) fn execute_effectful_transaction(
             super::transaction_failure::preparation_failure(error),
         ));
     }
-    drop(observation_executable);
     Ok(HostLifecycleTransactionOutcome::Completed(
         super::transaction::HostLifecycleTransactionResult {
             surfaces: result.surfaces,

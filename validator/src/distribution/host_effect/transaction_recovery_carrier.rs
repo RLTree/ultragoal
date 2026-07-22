@@ -1,15 +1,14 @@
+use super::HostEffectRecoveryHandoff;
 use super::transaction_carrier::{
     HostLifecycleRecoveryCarrier, HostLifecycleRecoveryCause, HostLifecycleTransactionOutcome,
 };
 use super::transaction_observation::HostLifecycleObservationInput;
-use super::{HostEffectRecoveryHandoff, SelectedCodexExecutable};
 use std::path::Path;
 
 pub(super) fn recovery_required(
     handoff: super::lifecycle::DescriptorExecutionHandoff,
     custody: crate::plugin_product::lifecycle::HostLifecycleCustody,
     ledger: super::FileHostEffectLedger,
-    observation_executable: SelectedCodexExecutable,
     observation_target: super::ConfinedHostEffectTarget,
     observation: HostLifecycleObservationInput,
     target_root: &Path,
@@ -23,7 +22,6 @@ pub(super) fn recovery_required(
         handoff,
         custody,
         ledger,
-        observation_executable,
         observation_target,
         observation,
         target_root.to_path_buf(),

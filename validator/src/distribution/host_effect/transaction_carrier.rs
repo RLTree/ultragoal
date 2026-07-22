@@ -1,3 +1,4 @@
+use super::HostEffectCompletion;
 use super::executor::{
     ConfinedHostEffectTarget, HostEffectCancellation, HostEffectExecutionPolicy,
     NativeRetainedDescriptorProcessBackend,
@@ -10,7 +11,6 @@ use super::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectRecoveryHandoff, HostEffectState,
     HostLifecycleObservationInput,
 };
-use super::{HostEffectCompletion, SelectedCodexExecutable};
 use crate::plugin_product::lifecycle::HostLifecycleCustody;
 use std::path::PathBuf;
 
@@ -37,7 +37,6 @@ pub(super) struct HostLifecycleRecoveryCarrier {
     handoff: DescriptorExecutionHandoff,
     custody: HostLifecycleCustody,
     ledger: FileHostEffectLedger,
-    observation_executable: super::SelectedCodexExecutable,
     observation_target: ConfinedHostEffectTarget,
     observation_input: HostLifecycleObservationInput,
     target_root: PathBuf,
@@ -54,7 +53,6 @@ impl HostLifecycleRecoveryCarrier {
         handoff: DescriptorExecutionHandoff,
         custody: HostLifecycleCustody,
         ledger: FileHostEffectLedger,
-        observation_executable: SelectedCodexExecutable,
         observation_target: ConfinedHostEffectTarget,
         observation_input: HostLifecycleObservationInput,
         target_root: PathBuf,
@@ -83,7 +81,6 @@ impl HostLifecycleRecoveryCarrier {
             handoff,
             custody,
             ledger,
-            observation_executable,
             observation_target,
             observation_input,
             target_root,
