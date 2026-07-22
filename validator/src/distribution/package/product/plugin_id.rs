@@ -1,5 +1,5 @@
 pub(super) const PLUGIN_ID: &str = "harness-ultragoal";
-pub(super) const SUPPORTED_VERSION: &str = "0.0.12";
+pub(super) const SUPPORTED_VERSION: &str = "0.0.13";
 pub(super) const SUPPORTED_MANIFEST_PATH: &str = ".codex-plugin/plugin.json";
 pub(super) const CLI_RUNTIME_ENTRY: &str = "runtime/ultragoal";
 pub(super) const CANONICAL_SKILLS: [&str; 8] = [

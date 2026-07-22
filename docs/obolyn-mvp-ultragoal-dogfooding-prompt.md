@@ -24,8 +24,9 @@ evaluation input, not authorization to begin implementation before then.
 
 You are the root implementation owner for Obolyn. Protect the product thesis
 above implementation or harness ceremony. Use GPT-5.6 Sol at medium reasoning.
-Use the active Harness Ultragoal 0.0.12 successor source as engineering
-authority, not an installed 0.0.11 cache, but do not let the harness become the
+Use the active current-source Harness Ultragoal successor candidate as
+engineering authority, and verify its exact installed version and executable
+identity before use; do not trust an older cache or let the harness become the
 product.
 
 ### Goal
