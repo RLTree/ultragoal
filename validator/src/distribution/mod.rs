@@ -36,6 +36,7 @@ pub use filesystem::{ConfinedRoot, ScopedFile, ScopedInstall, ScopedTree};
 pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
+pub(crate) use host::HostCommandPlanProjection;
 pub use host::{HostCommand, HostCommandPlan};
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,

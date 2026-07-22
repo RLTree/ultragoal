@@ -12,7 +12,6 @@ mod process;
 mod retained_execution_outcome;
 mod target;
 
-#[cfg(not(test))]
 pub(crate) use lifecycle_completion::reserve_in_flight_lifecycle;
 pub(crate) use lifecycle_completion::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
@@ -62,6 +61,8 @@ include!("publication/write.rs");
 include!("publication/acknowledgement.rs");
 
 include!("preflight.rs");
+
+include!("observation_settlement.rs");
 
 include!("recovery/backend_failure.rs");
 

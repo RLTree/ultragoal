@@ -72,10 +72,10 @@ fn accepted<'a>(
     )
     .unwrap();
     let pinned = fixture.pin();
-    let request = coordinator
-        .accept(acceptance(fixture, &pinned, head))
-        .unwrap();
     let custody = lifecycle_custody(fixture);
+    let request = coordinator
+        .accept(acceptance_with_custody(fixture, &pinned, head, &custody))
+        .unwrap();
     (coordinator, request, custody)
 }
 
@@ -143,7 +143,10 @@ fn current_platform_rejects_a_mismatched_descriptor_adapter_before_reservation()
         ))
         .unwrap_err();
 
-    assert_eq!(error.id(), SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable);
+    assert_eq!(
+        error.id(),
+        SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable
+    );
     assert!(!custody.is_released());
     assert_eq!(target.acquisitions.load(Ordering::Relaxed), 0);
     assert_eq!(target.revalidations.load(Ordering::Relaxed), 0);
@@ -175,6 +178,10 @@ fn supported_protocol_prepares_an_opaque_descriptor_handoff_without_execution() 
         )
         .unwrap();
     assert!(custody.is_released());
+    assert!(matches!(
+        custody.finalization_token(),
+        Err(crate::plugin_product::lifecycle::LifecycleError::RecoveryUnavailable)
+    ));
     assert_eq!(ledger.reserve_calls.load(Ordering::Relaxed), 1);
     assert_eq!(ledger.transition_calls.load(Ordering::Relaxed), 1);
     assert_eq!(target.acquisitions.load(Ordering::Relaxed), 1);

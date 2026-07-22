@@ -68,7 +68,6 @@ pub(crate) struct AcceptedHostEffect {
     command_plan_sha256: String,
     argv_sha256: String,
     executable_identity_sha256: String,
-    #[cfg(not(test))]
     lifecycle_record: crate::plugin_product::lifecycle::HostLifecycleRecord,
 }
 

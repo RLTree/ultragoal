@@ -10,7 +10,8 @@ use super::recovery::{
 };
 use super::*;
 use crate::distribution::{
-    HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
+    HostCapabilityDeclaration, HostCommandPlan, HostCommandPlanProjection, JourneyBinding,
+    PackageIdentity, SourceIdentity,
 };
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, VecDeque};
@@ -23,6 +24,7 @@ use std::sync::{Arc, Mutex};
 use std::os::unix::fs::MetadataExt;
 
 include!("next_fixture.rs");
+include!("recording_ledger.rs");
 
 include!("recording_ledger_head.rs");
 

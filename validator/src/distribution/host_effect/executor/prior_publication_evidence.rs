@@ -54,7 +54,6 @@ impl<'a> SupportedHostEffectExecutor<'a> {
         clock: &mut dyn RootTrustedClock,
         cancellation: &HostEffectCancellation,
     ) -> RetainedExecutionOutcome {
-        #[cfg(not(test))]
         {
             let result = handoff.with_retained_lifecycle(|capability, effect, lease, lifecycle| {
                 if lifecycle.record().validate().is_err() {
@@ -84,25 +83,6 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 self.execute_authorized(capability, effect, lease, clock, cancellation)
             });
             return RetainedExecutionOutcome::new(handoff, result);
-        }
-        #[cfg(test)]
-        {
-            let result = handoff.with_retained_authority_mut(|capability, effect, lease| {
-                if capability.platform() != DescriptorExecutionPlatform::current() {
-                    let effect_identity_sha256 = self
-                        .effect_identity(capability, effect)
-                        .unwrap_or_else(|_| fallback_effect_identity(effect));
-                    return Err(self.post_reservation_recovery_failure(
-                        effect,
-                        &effect_identity_sha256,
-                        HostEffectExecutorErrorId::UnsupportedPlatform,
-                        vec![HostEffectExecutorErrorId::UnsupportedPlatform],
-                        None,
-                    ));
-                }
-                self.execute_authorized(capability, effect, lease, clock, cancellation)
-            });
-            RetainedExecutionOutcome::new(handoff, result)
         }
     }
 

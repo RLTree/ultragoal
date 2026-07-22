@@ -14,7 +14,6 @@ use sha2::{Digest, Sha256};
 pub(crate) struct DurableHostLifecycleAdmission {
     record: HostLifecycleRecord,
     _in_flight: HostEffectLedgerRecord,
-    #[cfg(not(test))]
     permit: Option<HostEffectPermit>,
 }
 
@@ -44,12 +43,9 @@ impl DurableHostLifecycleAdmission {
                 HostEffectLedgerErrorId::InvalidRecord,
             ));
         }
-        #[cfg(test)]
-        let _ = permit;
         Ok(Self {
             record,
             _in_flight: in_flight,
-            #[cfg(not(test))]
             permit: Some(permit),
         })
     }
@@ -58,7 +54,6 @@ impl DurableHostLifecycleAdmission {
         &self.record
     }
 
-    #[cfg(not(test))]
     pub(crate) fn take_effect_parts(
         mut self,
     ) -> Result<(HostEffectPermit, HostEffectLedgerRecord), HostEffectLedgerError> {

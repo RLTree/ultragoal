@@ -13,7 +13,7 @@ use super::{
     HostEffectExecutionPolicy, SelectedCodexExecutable,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
-use crate::plugin_product::lifecycle::{HostLifecycleCustody, LifecyclePlan};
+use crate::plugin_product::lifecycle::{HostLifecycleCustody, LifecycleIntent, LifecyclePlan};
 use std::path::Path;
 
 pub(super) struct PreparedHostEffectTransaction {
@@ -43,10 +43,25 @@ pub(super) fn prepare_host_effect_transaction(
     let mut selected = Some(executable);
     let result = (|| {
         let content = expected_content(observation, target_root)?;
+        let command_count = if matches!(
+            plan.intent,
+            LifecycleIntent::RepeatUse | LifecycleIntent::IdempotentReinstall
+        ) {
+            0
+        } else {
+            command_plan.len()
+        };
         let expected =
-            expected_observations(&package, &plan, observation, &content, command_plan.len())?;
+            expected_observations(&package, &plan, observation, &content, command_count)?;
         let scope = AcceptedHostScope::repository(&journey, journey.marketplace().to_owned())
             .map_err(|_| "repository host scope unavailable")?;
+        scope
+            .validate_plan(
+                &package,
+                transaction_policy::accepted_operation(plan.intent),
+                &command_plan,
+            )
+            .map_err(|_| "host command plan admission failed")?;
         let binding = crate::plugin_product::lifecycle::HostLifecycleBinding::new(
             package.clone(),
             command_plan,
@@ -69,21 +84,8 @@ pub(super) fn prepare_host_effect_transaction(
         .map_err(|_| "host target binding failed")?;
         let observation_target = target.clone();
         let lifecycle = accepted_lifecycle(&custody, &package)?;
-        let command_plan = custody
-            .candidate_plan()
-            .map_err(|_| "host command plan unavailable")?;
-        let environment = command_plan
-            .commands()
-            .first()
-            .map(|command| command.environment().to_vec())
-            .ok_or("host lifecycle command plan empty")?;
-        if command_plan
-            .commands()
-            .iter()
-            .any(|command| command.environment() != environment.as_slice())
-        {
-            return Err("host lifecycle command environments diverged");
-        }
+        let projection = custody.command_plan_projection();
+        let environment = projection.environment().to_vec();
         let policy = transaction_policy::isolated_codex_policy(&environment)?;
         let expected_head = ledger
             .head()
@@ -95,16 +97,13 @@ pub(super) fn prepare_host_effect_transaction(
                 host,
                 lifecycle,
                 scope,
-                plan: &command_plan,
+                plan: projection,
                 executable: selected
                     .as_ref()
                     .ok_or("host executable selection unavailable")?,
                 expected_target,
                 expected_head,
-                #[cfg(not(test))]
                 lifecycle_record: custody.pre_effect_record(),
-                #[cfg(test)]
-                lifecycle_record: Some(custody.pre_effect_record()),
             })
             .map_err(|_| "host lifecycle identity admission failed")?;
         let mut target_observer = target.observer();

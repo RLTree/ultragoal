@@ -82,7 +82,7 @@ impl AcceptedHostScope {
         required
     }
 
-    fn validate_plan(
+    pub(in crate::distribution::host_effect) fn validate_plan(
         &self,
         package: &PackageIdentity,
         operation: AcceptedLifecycleOperation,

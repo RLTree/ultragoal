@@ -176,7 +176,6 @@ impl HostEffectAuthority {
         Ok(())
     }
 
-    #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn verify_at(
         &self,
         permit: HostEffectPermit,

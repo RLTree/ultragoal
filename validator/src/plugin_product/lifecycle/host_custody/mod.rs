@@ -6,21 +6,23 @@ use crate::distribution::host_effect::HostEffectRecoveryHandoff;
 use crate::distribution::host_effect::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
 };
-use crate::distribution::{HostCommand, HostCommandPlan, PackageIdentity};
+use crate::distribution::{
+    HostCommand, HostCommandPlan, HostCommandPlanProjection, PackageIdentity,
+};
 use serde::{Deserialize, Serialize};
 
 include!("observations.rs");
 include!("binding.rs");
+include!("command_plan_record.rs");
 include!("record.rs");
 include!("recovery.rs");
 include!("finalization.rs");
 include!("recovery_disposition.rs");
-#[cfg(test)]
-include!("test_release.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
     command_plan: Option<HostCommandPlan>,
+    command_plan_projection: HostCommandPlanProjection,
     pre_effect_record: HostLifecycleRecord,
     command_cursor: usize,
     effect_cursor: usize,
@@ -34,6 +36,10 @@ impl HostLifecycleCustody {
         binding: HostLifecycleBinding,
     ) -> Result<Self, LifecycleError> {
         validate_plan(&plan)?;
+        let command_plan_projection = binding
+            .command_plan
+            .projection()
+            .map_err(|_| LifecycleError::InvalidTransition)?;
         let issuance_id = plan.authorization_seal.issuance_id()?;
         plan.authorization_seal.transfer_to_host()?;
         Ok(Self {
@@ -59,6 +65,7 @@ impl HostLifecycleCustody {
             },
             plan,
             command_plan: Some(binding.command_plan),
+            command_plan_projection,
             command_cursor: 0,
             effect_cursor: 0,
             custody_phase: 0,
@@ -118,16 +125,12 @@ impl HostLifecycleCustody {
         self.pre_effect_record.command_plan_sha256()
     }
 
-    #[cfg(not(test))]
     pub(crate) fn take_command_plan(&mut self) -> Result<HostCommandPlan, LifecycleError> {
         self.command_plan.take().ok_or(LifecycleError::ReplayedPlan)
     }
 
-    pub(crate) fn candidate_plan(&self) -> Result<HostCommandPlan, LifecycleError> {
-        self.command_plan
-            .as_ref()
-            .cloned()
-            .ok_or(LifecycleError::ReplayedPlan)
+    pub(crate) fn command_plan_projection(&self) -> &HostCommandPlanProjection {
+        &self.command_plan_projection
     }
 
     #[cfg(test)]

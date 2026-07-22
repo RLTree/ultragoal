@@ -1,8 +1,6 @@
 use super::super::{
     AuthorizedHostEffect, DurableHostEffectLedger, HostEffectAuthority, SelectedCodexExecutable,
 };
-#[cfg(test)]
-use super::super::{HostEffectState, HostEffectTransition};
 use super::binding::{AcceptedHostEffect, HostEffectAcceptanceRequest, ObservedTargetIdentity};
 #[cfg(test)]
 use super::recovery::{

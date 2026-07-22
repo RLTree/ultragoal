@@ -8,4 +8,5 @@ use std::path::Path;
 include!("output_limit.rs");
 
 include!("command.rs");
+include!("command_projection.rs");
 include!("command_isolated.rs");

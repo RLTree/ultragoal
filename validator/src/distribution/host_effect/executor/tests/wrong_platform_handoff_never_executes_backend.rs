@@ -66,6 +66,9 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     )
     .unwrap();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
+    let projection = plan.projection().unwrap();
+    let mut custody = lifecycle_custody(&fixture, &plan);
+    let lifecycle_record = custody.pre_effect_record().clone();
     let pinned = fixture.executable_fixture.selected().unwrap();
     let accepted = coordinator
         .accept(HostEffectAcceptanceRequest {
@@ -74,14 +77,13 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             host,
             lifecycle: fresh_lifecycle(&package),
             scope,
-            plan: &plan,
+            plan: &projection,
             executable: &pinned,
             expected_target,
             expected_head: ledger.head().unwrap(),
-            lifecycle_record: None,
+            lifecycle_record: &lifecycle_record,
         })
         .unwrap();
-    let mut custody = lifecycle_custody(&fixture, &plan);
     let mut clock = TestClock { sequence: 0 };
     let mut adapter = LinuxDescriptorAdapter;
     let handoff = coordinator

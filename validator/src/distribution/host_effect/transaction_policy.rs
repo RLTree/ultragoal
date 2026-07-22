@@ -59,6 +59,10 @@ pub(crate) fn accepted_lifecycle(
     .map_err(|_| "accepted lifecycle plan unavailable")
 }
 
+pub(crate) fn accepted_operation(intent: LifecycleIntent) -> AcceptedLifecycleOperation {
+    policies(intent).0
+}
+
 fn policies(
     intent: LifecycleIntent,
 ) -> (

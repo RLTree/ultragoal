@@ -10,13 +10,10 @@ impl AcceptedHostEffect {
                 SupportedHostLifecycleErrorId::StaleLedgerHead,
             ));
         }
-        #[cfg(not(test))]
         let lifecycle_intent = serde_json::to_string(&self.lifecycle_record.permit_join().1)
             .map_err(|_| invalid())?
             .trim_matches('"')
             .to_owned();
-        #[cfg(test)]
-        let lifecycle_intent = self.lifecycle.operation().as_str().to_owned();
         Ok(HostEffectPermitBinding {
             context_id: self.package.source().context_id().to_owned(),
             candidate_id: self.package.source().candidate_id().to_owned(),
@@ -27,10 +24,7 @@ impl AcceptedHostEffect {
             // accepted projection remains bound through the session and
             // external-request digests below, but it cannot replace the
             // record that the ledger will persist with the permit.
-            #[cfg(not(test))]
             lifecycle_plan_sha256: self.lifecycle_record.permit_join().0.to_owned(),
-            #[cfg(test)]
-            lifecycle_plan_sha256: self.lifecycle.plan_sha256().to_owned(),
             lifecycle_intent,
             expected_pre_state_sha256: self.expected_pre_state_sha256.clone(),
             expected_post_state_sha256: self.expected_post_state_sha256.clone(),
@@ -48,18 +42,12 @@ impl AcceptedHostEffect {
             issued_at_unix_ms,
             expires_at_unix_ms,
             expected_head_sha256: current_head.head_sha256().to_owned(),
-            #[cfg(not(test))]
             lifecycle_record: Some(self.lifecycle_record.clone()),
-            #[cfg(not(test))]
             lifecycle_record_sha256: Some(
                 serde_json::to_vec(&self.lifecycle_record)
                     .map(|bytes| format!("sha256:{:x}", Sha256::digest(bytes)))
                     .map_err(|_| invalid())?,
             ),
-            #[cfg(test)]
-            lifecycle_record: None,
-            #[cfg(test)]
-            lifecycle_record_sha256: None,
             decision: HostEffectDecision::Authorize,
         })
     }
@@ -139,21 +127,4 @@ fn session_issuance(
     });
     nonce.fill(0);
     result
-}
-
-fn command_plan_sha256(
-    package: &PackageIdentity,
-    plan: &HostCommandPlan,
-) -> Result<String, SupportedHostLifecycleError> {
-    #[derive(Serialize)]
-    struct Binding<'a> {
-        schema: &'static str,
-        package: &'a PackageIdentity,
-        commands: &'a [crate::distribution::HostCommand],
-    }
-    digest_json(&Binding {
-        schema: "harness-ultragoal.host-command-plan.v1",
-        package,
-        commands: plan.commands(),
-    })
 }

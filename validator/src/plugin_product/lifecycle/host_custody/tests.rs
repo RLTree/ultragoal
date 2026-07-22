@@ -36,6 +36,32 @@ fn transfer_replays_every_plan_clone_before_effect_execution() {
     );
 }
 
+#[test]
+fn custody_has_projection_only_before_single_command_consumption() {
+    let custody = HostLifecycleCustody::take(
+        plan(
+            &LifecycleState::default(),
+            &LifecycleRequest {
+                intent: LifecycleIntent::FreshInstall,
+                target: Some(authority('b', "1.0.1")),
+                prior_authority: None,
+                authorization: LifecycleAuthorization {
+                    allow_host_write: true,
+                    allow_downgrade: false,
+                    expected_installed_sha256: None,
+                },
+            },
+        )
+        .unwrap(),
+        binding_for(),
+    )
+    .unwrap();
+    let source = include_str!("mod.rs");
+    assert!(!source.contains("candidate_plan"));
+    assert!(!source.contains("commit_release"));
+    assert_eq!(custody.command_plan_projection().command_count(), 1);
+}
+
 struct NeverExecute;
 
 impl LifecycleEffectAdapter for NeverExecute {

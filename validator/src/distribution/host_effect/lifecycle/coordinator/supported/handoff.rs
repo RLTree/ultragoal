@@ -28,18 +28,6 @@ impl DescriptorExecutionHandoff {
         adapter(&self.capability, &self.effect, self.target.as_mut())
     }
 
-    #[cfg(test)]
-    pub(in crate::distribution::host_effect) fn with_retained_authority_mut<R>(
-        &mut self,
-        adapter: impl FnOnce(
-            &DescriptorExecutionCapability,
-            &AuthorizedHostEffect,
-            &mut dyn HostTargetLease,
-        ) -> R,
-    ) -> R {
-        adapter(&self.capability, &self.effect, self.target.as_mut())
-    }
-
     pub(in crate::distribution::host_effect) fn with_retained_lifecycle<R>(
         &mut self,
         adapter: impl FnOnce(

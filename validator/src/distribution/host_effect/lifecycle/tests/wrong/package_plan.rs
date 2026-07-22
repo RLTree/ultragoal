@@ -59,10 +59,11 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
 
     let wrong_marketplace =
         HostCommandPlan::personal_install(&fixture.package, "other-marketplace").unwrap();
+    let wrong_marketplace_projection = wrong_marketplace.projection().unwrap();
     assert_eq!(
         {
             let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
-            request.plan = &wrong_marketplace;
+            request.plan = &wrong_marketplace_projection;
             coordinator.accept(request)
         }
         .unwrap_err()
@@ -86,17 +87,18 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         "local-marketplace",
     )
     .unwrap();
+    let wrong_repository_projection = wrong_repository_plan.projection().unwrap();
     assert_eq!(
         {
             let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
             request.scope = repository_scope.clone();
-            request.plan = &wrong_repository_plan;
+            request.plan = &wrong_repository_projection;
             request.expected_target = repository_target.clone();
             coordinator.accept(request)
         }
         .unwrap_err()
         .id(),
-        SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
+        SupportedHostLifecycleErrorId::PlanSubstitution
     );
     #[cfg(unix)]
     {
@@ -108,17 +110,18 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             "local-marketplace",
         )
         .unwrap();
+        let aliased_repository_projection = aliased_repository_plan.projection().unwrap();
         assert_eq!(
             {
                 let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
                 request.scope = repository_scope.clone();
-                request.plan = &aliased_repository_plan;
+                request.plan = &aliased_repository_projection;
                 request.expected_target = repository_target.clone();
                 coordinator.accept(request)
             }
             .unwrap_err()
             .id(),
-            SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
+            SupportedHostLifecycleErrorId::PlanSubstitution
         );
     }
     let repository_root = fs::canonicalize(&fixture.project).unwrap();
@@ -128,11 +131,15 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         "local-marketplace",
     )
     .unwrap();
+    let repository_projection = repository_plan.projection().unwrap();
     let mut repository_request = acceptance(&fixture, &pinned, ledger.observed_head());
     repository_request.scope = repository_scope;
-    repository_request.plan = &repository_plan;
+    repository_request.plan = &repository_projection;
     repository_request.expected_target = repository_target;
-    coordinator.accept(repository_request).unwrap();
+    assert_eq!(
+        coordinator.accept(repository_request).unwrap_err().id(),
+        SupportedHostLifecycleErrorId::PlanSubstitution
+    );
 
     for operation in [
         AcceptedLifecycleOperation::IdempotentReinstall,
@@ -159,5 +166,4 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
         );
     }
-
 }
