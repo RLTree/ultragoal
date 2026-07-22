@@ -22,6 +22,7 @@ pub enum OptionName {
     ApproveRetirement,
     PackageRoot,
     RetainIsolatedRoot,
+    RoutineConfig,
     InterruptAfter,
     Continuation,
 }
@@ -46,6 +47,7 @@ impl OptionName {
             Self::ApproveRetirement => "--approve-retirement",
             Self::PackageRoot => "--package-root",
             Self::RetainIsolatedRoot => "--retain-isolated-root",
+            Self::RoutineConfig => "--routine-config",
             Self::InterruptAfter => "--interrupt-after",
             Self::Continuation => "--continuation",
         }

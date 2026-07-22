@@ -1523,6 +1523,16 @@ provenance; repository identity and every command's current `LiveContext`
 remain enforced. No evidence, installed, runtime, or product claim advances
 from this correction.
 
+The root then added the smallest executable repair for that blocked transition:
+`fit plan --routine-config`. It derives a two-file desired state only for
+`config/routine-public.json` and `config/routines.json`, omits the otherwise
+unrelated `.gitignore` local-state policy, binds the scope in the canonical
+accepted plan, and recomputes the same scope before apply. It does not expose
+arbitrary partial retrofit, suppress conflicts, or advance an install, runtime,
+journey, Product Fitness, daily-driver, readiness, release, or completion
+claim. The next boundary is a fresh package/install candidate and the real
+dirty-repository journey.
+
 Two dependency-independent source lanes are active from that exact root:
 
 | Lane | Codex task / worktree | Owned result | Root-held boundary |

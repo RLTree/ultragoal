@@ -9,7 +9,7 @@ pub(crate) fn local_state_only_mutation_is_counted_at_each_preparation_surface()
     let context = fixture.context();
     let record = plan_target(&context).unwrap();
     assert_eq!(record.mutation_count(), 1);
-    assert!(record.plan.local_state.mutation_required);
+    assert!(record.plan.local_state.as_ref().unwrap().mutation_required);
     let prepared = fixture.plan(&context);
     assert_eq!(prepared.projection().mutation_count, 1);
     assert_eq!(prepared.request().all_mutations().len(), 1);
@@ -108,7 +108,7 @@ pub(crate) fn already_ignored_local_state_is_a_repeat_noop() {
     fixture.write(".gitignore", b"# keep\nvalidation_artifacts/\n");
     let context = fixture.context();
     let record = plan_target(&context).unwrap();
-    assert!(!record.plan.local_state.mutation_required);
+    assert!(!record.plan.local_state.as_ref().unwrap().mutation_required);
     let first = fixture.plan(&context);
     let before = snapshot(&fixture.root);
     execute(&fixture, first).unwrap();

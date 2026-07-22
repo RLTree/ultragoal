@@ -19,11 +19,7 @@ pub(crate) fn plan_projection(
     Ok(PlanProjection {
         plan_sha256: plan.plan_sha256.clone(),
         authorization_sha256,
-        local_state: plan
-            .local_state
-            .as_ref()
-            .map(local_state_projection)
-            .ok_or_else(|| adapter_error(AdapterErrorId::ProjectionFailed))?,
+        local_state: plan.local_state.as_ref().map(local_state_projection),
         checks: plan
             .checks
             .iter()

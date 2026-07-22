@@ -18,5 +18,7 @@ mod inspection;
 mod migration_plan;
 #[path = "public_output_limit_is_inclusive_and_fail_closed.rs"]
 mod public_output_limit_is_inclusive_and_fail_closed;
+#[path = "routine_configuration_fit_plan_is_public_and_confined.rs"]
+mod routine_configuration_fit_plan_is_public_and_confined;
 #[path = "unavailable_context_is_stable_and_does_not_echo_input.rs"]
 mod unavailable_context_is_stable_and_does_not_echo_input;

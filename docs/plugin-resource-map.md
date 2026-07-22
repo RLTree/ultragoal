@@ -91,6 +91,10 @@ consumes it.
 Use `repository-fit`. Classify existing owners and preserve all unrelated
 modified, staged, untracked, and worktree state. Conflicts remain findings;
 they are never resolved by preference or hidden behind generated output.
+When the first blocked journey transition is only routine activation,
+`fit plan --routine-config` may plan the two owned routine configuration files.
+That explicit scope excludes every conflicting template and `.gitignore`; the
+accepted apply still revalidates the same scoped candidate and cannot widen it.
 
 ### Routine repeat use
 

@@ -23,6 +23,7 @@ Probe the exact grammar before relying on it:
 ```text
 ultragoal --json fit inspect --target <relative-path>
 ultragoal --json fit plan --target <relative-path>
+ultragoal --json fit plan --routine-config --target <relative-path>
 ```
 
 `fit inspect` records existing components, owners, modified/staged/untracked
@@ -30,6 +31,13 @@ state, worktrees, conflicts, unsupported capabilities, and the current claim
 ceiling. `fit plan` must bind the same live candidate and name every proposed
 mutation, preservation rule, conflict, authority need, rollback action, and
 postcondition.
+
+`--routine-config` is the one bounded retrofit scope for the installed routine
+loop. It plans only `config/routine-public.json` and `config/routines.json`;
+it never resolves unrelated ownership conflicts or adds the general local-state
+policy. The resulting plan records that scope, and `fit apply` recomputes the
+same scoped candidate-bound plan before any effect. Use it only when those two
+files are the missing transition; otherwise use the complete plan.
 
 If the target is missing, classification is ambiguous, or ownership conflicts
 cannot be resolved safely, return a typed blocker. Do not silently choose a

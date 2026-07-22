@@ -3,6 +3,7 @@ use super::*;
 pub(crate) fn plan_record(current: &CurrentPlan) -> Result<FitPlanRecord, FitAdapterError> {
     Ok(FitPlanRecord {
         schema_version: PLAN_SCHEMA.to_owned(),
+        scope: current.scope,
         target: current.target.clone(),
         authority: current.bundle.authority.clone(),
         desired: desired_projection(&current.bundle.desired),
@@ -10,9 +11,9 @@ pub(crate) fn plan_record(current: &CurrentPlan) -> Result<FitPlanRecord, FitAda
             &current.inspection,
             &current.observed_modes,
             &current.bundle.unix_modes,
-            &current.local_state,
+            current.local_state.as_ref(),
         ),
-        local_state: local_state_projection(&current.local_state),
+        local_state: current.local_state.as_ref().map(local_state_projection),
         plan: plan_projection(
             &current.plan,
             &current.observed_modes,
@@ -160,7 +161,7 @@ pub(crate) fn inspection_projection(
     inspection: &FitInspection,
     observed_modes: &BTreeMap<String, Option<u32>>,
     desired_modes: &BTreeMap<String, u32>,
-    local_state: &LocalStatePlan,
+    local_state: Option<&LocalStatePlan>,
 ) -> InspectionProjection {
     InspectionProjection {
         mode: mode_name(inspection.mode).to_owned(),
@@ -178,7 +179,7 @@ pub(crate) fn inspection_projection(
             .iter()
             .map(|row| observed_projection(row, observed_modes, desired_modes))
             .collect(),
-        local_state: local_state_projection(local_state),
+        local_state: local_state.map(local_state_projection),
     }
 }
 

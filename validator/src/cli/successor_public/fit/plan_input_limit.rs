@@ -15,6 +15,8 @@ pub(crate) fn target_root(
             (OptionName::Plan, ParsedValue::HostPath(_))
             | (OptionName::AcceptPlan, ParsedValue::Identifier(_))
                 if invocation.command == SuccessorCommand::Fit(FitAction::Apply) => {}
+            (OptionName::RoutineConfig, ParsedValue::Flag)
+                if invocation.command == SuccessorCommand::Fit(FitAction::Plan) => {}
             _ => return Err(Box::new(invalid_invocation())),
         }
     }
@@ -50,10 +52,15 @@ pub(crate) fn inspect(context: &LiveContext, invocation: &ParsedInvocation) -> R
 }
 
 pub(crate) fn plan(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
-    if !valid_read_invocation(invocation, FitAction::Plan) {
-        return invalid_invocation();
-    }
-    match plan_target(context) {
+    let scope = match plan_scope(invocation) {
+        Ok(scope) => scope,
+        Err(outcome) => return *outcome,
+    };
+    let result = match scope {
+        FitPlanScope::CompleteRepository => plan_target(context),
+        FitPlanScope::RoutineConfiguration => plan_target_for_scope(context, scope),
+    };
+    match result {
         Ok(record) => match record.to_machine_bytes() {
             Ok(machine) => RuntimeOutcome::payload(
                 if record.conflict_count() == 0 {
@@ -73,6 +80,32 @@ pub(crate) fn plan(context: &LiveContext, invocation: &ParsedInvocation) -> Runt
         },
         Err(failure) => adapter_failure(failure),
     }
+}
+
+fn plan_scope(invocation: &ParsedInvocation) -> Result<FitPlanScope, Box<RuntimeOutcome>> {
+    if invocation.command != SuccessorCommand::Fit(FitAction::Plan)
+        || invocation.effect != EffectClass::Read
+    {
+        return Err(Box::new(invalid_invocation()));
+    }
+    let mut target_seen = false;
+    let mut routine_configuration = false;
+    for argument in &invocation.arguments {
+        match (&argument.name, &argument.value) {
+            (OptionName::Target, ParsedValue::RelativePath(_)) if !target_seen => {
+                target_seen = true
+            }
+            (OptionName::RoutineConfig, ParsedValue::Flag) if !routine_configuration => {
+                routine_configuration = true
+            }
+            _ => return Err(Box::new(invalid_invocation())),
+        }
+    }
+    Ok(if routine_configuration {
+        FitPlanScope::RoutineConfiguration
+    } else {
+        FitPlanScope::CompleteRepository
+    })
 }
 
 pub(crate) fn verify(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {

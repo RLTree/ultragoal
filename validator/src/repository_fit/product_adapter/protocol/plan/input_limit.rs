@@ -10,11 +10,12 @@ pub(crate) const REQUEST_STAGE_AMBIGUOUS: u8 = 4;
 pub(crate) static NEXT_APPLY_REQUEST_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
 pub(crate) struct CurrentPlan {
+    pub(crate) scope: FitPlanScope,
     pub(crate) target: TargetProjection,
     pub(crate) bundle: DesiredBundle,
     pub(crate) inspection: FitInspection,
     pub(crate) observed_modes: BTreeMap<String, Option<u32>>,
-    pub(crate) local_state: LocalStatePlan,
+    pub(crate) local_state: Option<LocalStatePlan>,
     pub(crate) plan: FitPlan,
 }
 
@@ -89,6 +90,7 @@ impl ApplyRequestSeal {
 /// A one-use, non-cloneable accepted-plan carrier. No method on this type
 /// performs an effect; a separate root-owned permit boundary must consume it.
 pub(crate) struct OpaqueFitApplyRequest {
+    pub(crate) scope: FitPlanScope,
     pub(crate) request_id: String,
     pub(crate) context_id: String,
     pub(crate) candidate_id: String,
@@ -162,6 +164,7 @@ impl OpaqueFitApplyRequest {
     #[cfg(test)]
     pub(crate) fn duplicate_for_test(&self) -> Self {
         Self {
+            scope: self.scope,
             request_id: self.request_id.clone(),
             context_id: self.context_id.clone(),
             candidate_id: self.candidate_id.clone(),

@@ -1,14 +1,17 @@
+use super::super::FitPlanScope;
 use super::*;
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct FitPlanRecord {
     pub(crate) schema_version: String,
+    #[serde(default)]
+    pub(crate) scope: FitPlanScope,
     pub(crate) target: TargetProjection,
     pub(crate) authority: TemplateAuthorityProjection,
     pub(crate) desired: DesiredProjection,
     pub(crate) inspection: InspectionProjection,
-    pub(crate) local_state: LocalStatePolicyProjection,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
     pub(crate) plan: PlanProjection,
     pub(crate) effect: String,
     pub(crate) claim_effect: String,
@@ -21,7 +24,12 @@ impl FitPlanRecord {
     }
 
     pub(crate) fn mutation_count(&self) -> usize {
-        self.plan.mutations.len() + usize::from(self.plan.local_state.mutation_required)
+        self.plan.mutations.len()
+            + self
+                .plan
+                .local_state
+                .as_ref()
+                .map_or(0, |state| usize::from(state.mutation_required))
     }
 
     pub(crate) fn conflict_count(&self) -> usize {

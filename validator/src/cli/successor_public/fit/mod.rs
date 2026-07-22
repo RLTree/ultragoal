@@ -10,8 +10,8 @@ use crate::cli::successor::{
 };
 use crate::context::LiveContext;
 use crate::repository_fit::{
-    inspect_target, plan_target, prepare_apply_request, verify_target, AdapterErrorId,
-    FitAdapterError, PreparedFitApply,
+    AdapterErrorId, FitAdapterError, FitPlanScope, PreparedFitApply, inspect_target, plan_target,
+    plan_target_for_scope, prepare_apply_request, verify_target,
 };
 use std::path::{Path, PathBuf};
 

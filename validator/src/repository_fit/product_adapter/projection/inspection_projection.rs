@@ -92,7 +92,7 @@ pub(crate) struct InspectionProjection {
     pub(crate) root_binding: String,
     pub(crate) inspection_sha256: String,
     pub(crate) files: Vec<ObservedFileProjection>,
-    pub(crate) local_state: LocalStatePolicyProjection,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -170,7 +170,7 @@ pub(crate) struct PlanProjection {
     pub(crate) checks: Vec<CheckProjection>,
     pub(crate) mutations: Vec<MutationProjection>,
     pub(crate) conflicts: Vec<ConflictProjection>,
-    pub(crate) local_state: LocalStatePolicyProjection,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
     pub(crate) rollback_mutation_count: usize,
 }
 
