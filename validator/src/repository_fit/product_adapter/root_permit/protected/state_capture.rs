@@ -1,4 +1,5 @@
 use super::*;
+use crate::repository_fit::FitPlanScope;
 
 /// A complete descriptor-relative protected-tree collect. `capture_protected`
 /// accepts one only after a second complete collect returns the identical
@@ -14,6 +15,9 @@ pub(crate) fn collect_protected(
     {
         let _ = (root, request, boundary, run_capture_hooks);
         return Err(adapter_error(AdapterErrorId::UnsupportedHost));
+    }
+    if request.scope == FitPlanScope::LocalState {
+        return collect_local_state_protected(request);
     }
     #[cfg(target_vendor = "apple")]
     {
@@ -74,6 +78,26 @@ pub(crate) fn collect_protected(
         );
         Ok(ProtectedSnapshot { sha256, rows })
     }
+}
+
+/// Local-state apply authorizes one descriptor-bound `.gitignore` mutation.
+/// The target capture already binds that leaf and its repository root, so
+/// unrelated repository contents cannot enlarge this effect's precondition.
+/// Git evidence may legitimately contain symlinks that this effect never reads.
+fn collect_local_state_protected(
+    request: &OpaqueFitApplyRequest,
+) -> Result<ProtectedSnapshot, FitAdapterError> {
+    let sha256 = digest(
+        &serde_json::to_vec(&(
+            "repository-fit-local-state-protected-boundary-v1",
+            request.root_binding(),
+        ))
+        .map_err(|_| adapter_error(AdapterErrorId::ProjectionFailed))?,
+    );
+    Ok(ProtectedSnapshot {
+        sha256,
+        rows: Vec::new(),
+    })
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

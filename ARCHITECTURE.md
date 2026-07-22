@@ -51,6 +51,9 @@ existing confined compare-exchange, rollback, recovery, and revalidation
 transaction. `.gitignore` is not a template-managed file and no whole-file
 manifest authority is introduced. The public `fit plan --local-state` route
 binds that policy alone; it cannot create or update a template-managed path.
+Its production precondition is the descriptor-bound repository root and exact
+`.gitignore` target, not unrelated repository or Git-internal contents that
+the one-file effect never reads or follows.
 
 Local agent authority is one private production transaction under
 `plugin_product/agent_discovery/`. The public read route
