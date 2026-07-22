@@ -33,9 +33,9 @@ pub(crate) use product::{
 };
 #[cfg(not(test))]
 pub use product::{
-    MarketplaceSourceObservation, ProductionPackageArtifact, ProductionPackageError,
-    ProductionPackageErrorId, ProductionPackageSession, capture_product_package,
-    verify_product_package,
+    CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,
+    ProductionPackageError, ProductionPackageErrorId, ProductionPackageSession,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
 };
 pub use spec::PackageRole;
 

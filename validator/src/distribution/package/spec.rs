@@ -9,6 +9,7 @@ use std::collections::BTreeSet;
 
 pub(crate) const SPEC_LIMIT: usize = 1024 * 1024;
 pub(crate) const ENTRY_LIMIT: usize = 4 * 1024 * 1024;
+pub(crate) const CLI_ENTRY_LIMIT: usize = 32 * 1024 * 1024;
 pub(crate) const PACKAGE_LIMIT: usize = 64 * 1024 * 1024;
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]

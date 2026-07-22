@@ -55,7 +55,9 @@ pub(super) fn bind(entries: &[PackageEntry], roots: &[Root]) -> Result<(), Distr
         if entry.path == ".agents/plugins/marketplace.json" && entry.role == PackageRole::Data {
             continue;
         }
-        if entry.path == "runtime/runtime-probe-bin" && entry.role == PackageRole::Executable {
+        if matches!(entry.path.as_str(), "runtime/runtime-probe-bin" | "runtime/ultragoal")
+            && entry.role == PackageRole::Executable
+        {
             continue;
         }
         let matches = roots

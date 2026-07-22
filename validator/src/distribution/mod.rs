@@ -69,9 +69,9 @@ pub use package::{
 };
 #[cfg(not(test))]
 pub use package::{
-    MarketplaceSourceObservation, ProductionPackageArtifact, ProductionPackageError,
-    ProductionPackageErrorId, ProductionPackageSession, capture_product_package,
-    verify_product_package,
+    CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,
+    ProductionPackageError, ProductionPackageErrorId, ProductionPackageSession,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
 };
 #[cfg(test)]
 pub(crate) use package::{

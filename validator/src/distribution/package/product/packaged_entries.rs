@@ -1,5 +1,6 @@
 fn packaged_entries(
     source: &SourcePackageSnapshot,
+    cli_payload: Option<&CandidateCliPayload>,
 ) -> Result<Vec<PackageEntry>, ProductionPackageError> {
     let mut entries = Vec::with_capacity(source.packaged_paths().len());
     for path in source.packaged_paths() {
@@ -42,6 +43,16 @@ fn packaged_entries(
             }
         }
     }
+    if let Some(payload) = cli_payload {
+        entries.push(PackageEntry {
+            path: CLI_RUNTIME_ENTRY.to_owned(),
+            mode: 0o755,
+            role: PackageRole::Executable,
+            sha256: payload.sha256().to_owned(),
+            bytes: payload.bytes().to_vec(),
+        });
+    }
+    entries.sort_by(|left, right| left.path.cmp(&right.path));
     Ok(entries)
 }
 
@@ -50,7 +61,7 @@ fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageE
         PackageRole::Manifest
     } else if path == MARKETPLACE_CATALOG_PATH {
         PackageRole::Data
-    } else if path == "runtime/runtime-probe-bin" {
+    } else if matches!(path, "runtime/runtime-probe-bin" | "runtime/ultragoal") {
         PackageRole::Executable
     } else if CANONICAL_SKILLS
         .iter()

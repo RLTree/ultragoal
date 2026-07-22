@@ -41,3 +41,5 @@ include!("package_surface_identity.rs");
 include!("artifact_identity_fields.rs");
 
 include!("marketplace_source_publication.rs");
+
+include!("candidate_cli_payload.rs");

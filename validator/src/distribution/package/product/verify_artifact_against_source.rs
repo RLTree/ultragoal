@@ -28,7 +28,12 @@ fn verify_artifact_against_source(
         return Err(failure(ProductionPackageErrorId::InventoryMismatch));
     }
 
-    let fresh = build_artifact(context, catalog.catalog_id(), source)?;
+    let fresh = build_artifact(
+        context,
+        catalog.catalog_id(),
+        source,
+        artifact.cli_payload.clone(),
+    )?;
     if !same_artifact(artifact, &fresh) {
         return Err(failure(ProductionPackageErrorId::SourceUnavailable));
     }
@@ -41,6 +46,7 @@ fn same_artifact(expected: &ProductionPackageArtifact, actual: &ProductionPackag
         && expected.catalog_id == actual.catalog_id
         && expected.source_snapshot_id == actual.source_snapshot_id
         && expected.source_inventory == actual.source_inventory
+        && expected.cli_payload == actual.cli_payload
         && expected.plan.context_id == actual.plan.context_id
         && expected.plan.candidate_id == actual.plan.candidate_id
         && expected.plan.plugin_id == actual.plan.plugin_id
@@ -71,15 +77,23 @@ fn build_artifact(
     context: &LiveContext,
     catalog_id: &str,
     source: &SourcePackageSnapshot,
+    cli_payload: Option<CandidateCliPayload>,
 ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
     if source.context_id() != context.context_id() {
         return Err(failure(ProductionPackageErrorId::ContextUnavailable));
     }
     let version = validate_manifests(source)?;
-    let entries = packaged_entries(source)?;
+    let source_entries = packaged_entries(source, None)?;
+    let entries = packaged_entries(source, cli_payload.as_ref())?;
     manifest::validate(&entries, PLUGIN_ID, &version)
         .map_err(|_| failure(ProductionPackageErrorId::ManifestMismatch))?;
     let candidate_id = candidate_id(context)?;
+    if cli_payload
+        .as_ref()
+        .is_some_and(|payload| payload.candidate_id() != candidate_id)
+    {
+        return Err(failure(ProductionPackageErrorId::CatalogMismatch));
+    }
     let source_tree_sha256 = entry_tree_sha256(&entries)
         .map_err(|_| failure(ProductionPackageErrorId::InventoryMismatch))?;
     let source_inventory = source_inventory(
@@ -87,7 +101,7 @@ fn build_artifact(
         &candidate_id,
         catalog_id,
         &version,
-        &entries,
+        &source_entries,
     )?;
     let plan = PackagePlan {
         context_id: context.context_id().to_owned(),
@@ -112,6 +126,7 @@ fn build_artifact(
         catalog_id: catalog_id.to_owned(),
         source_snapshot_id: source.snapshot_id().to_owned(),
         source_inventory,
+        cli_payload,
         plan,
         snapshot,
         binding,

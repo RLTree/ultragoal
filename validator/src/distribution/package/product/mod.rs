@@ -21,6 +21,8 @@ use serde::Serialize;
 
 include!("plugin_id.rs");
 
+include!("cli_payload.rs");
+
 include!("verify_artifact_against_source.rs");
 
 include!("packaged_entries.rs");

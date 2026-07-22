@@ -11,7 +11,7 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
     assert_eq!(first.snapshot().archive(), second.snapshot().archive());
     assert_eq!(first.snapshot().inventory(), second.snapshot().inventory());
     assert_eq!(first.source_inventory(), second.source_inventory());
-    assert_eq!(first.snapshot().entries().len(), 18);
+    assert_eq!(first.snapshot().entries().len(), 19);
     assert_eq!(
         first
             .snapshot()
@@ -21,7 +21,7 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
             .count(),
         8
     );
-    for role in [PackageRole::Documentation, PackageRole::Data] {
+    for role in [PackageRole::Documentation] {
         assert_eq!(
             first
                 .snapshot()
@@ -33,6 +33,15 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
             "noncanonical package role became active: {role:?}"
         );
     }
+    assert_eq!(
+        first
+            .snapshot()
+            .entries()
+            .iter()
+            .filter(|entry| entry.role() == PackageRole::Data)
+            .count(),
+        1
+    );
     assert_eq!(
         first
             .snapshot()
@@ -69,7 +78,7 @@ fn legacy_skill_source_is_not_active_package_membership() {
     let context = repo.context();
     let catalog = catalog(&context);
     let package = capture_product_package(&context, &catalog).expect("package");
-    assert_eq!(package.snapshot().entries().len(), 18);
+    assert_eq!(package.snapshot().entries().len(), 19);
     assert!(
         package
             .snapshot()
