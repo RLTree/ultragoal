@@ -60,7 +60,7 @@ fn missing_or_unsafe_canonical_agent_member_fails_closed() {
 #[test]
 fn manifest_absence_version_drift_and_mutate_restore_fail_closed() {
     let repo = Repo::new("supported-package-product-version-drift");
-    write_draft(&repo.root, "0.0.13");
+    write_draft(&repo.root, "0.0.14");
     let context = repo.context();
     let authority_catalog = catalog(&context);
     let error =
@@ -68,7 +68,7 @@ fn manifest_absence_version_drift_and_mutate_restore_fail_closed() {
     assert_eq!(error.id(), ProductionPackageErrorId::ManifestMismatch);
 
     write_draft(&repo.root, SUPPORTED_VERSION);
-    write_supported_manifest(&repo.root, "0.0.13");
+    write_supported_manifest(&repo.root, "0.0.14");
     let context = repo.context();
     let authority_catalog = catalog(&context);
     let error = capture_product_package(&context, &authority_catalog)
