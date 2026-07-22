@@ -1471,6 +1471,26 @@ the package advertises skill `openai.yaml` files; that is a separate
 PS-AGENTS/catalog migration and is not being papered over by copied agent
 files in this install path.
 
+The marketplace-materialization lane then proved that no new API is needed for
+the nearest journey: public `package install-test` already invokes the two
+crate-private, candidate/catalog-bound materialization operations inside one
+fresh disposable root, verifies their postimage, and removes the root on every
+exit. Its bounded Terra/medium review accepted that existing path. The lane made
+no bytes, was archived, and worktree `3c7f` was removed; reused-root retry is
+deliberately unsupported because a retry starts from a new owned root.
+
+The first Darwin execution freeze, `e7f26c8ac`, is explicitly REWORK and is
+not integrated. Its confirmation reviewer found that a `setsid` descendant can
+escape between PID observations, so descendant scanning cannot support a
+terminal-settlement or recovery claim. It also exceeded the authored-file
+limit. The only authorized follow-up is one invariant-level replacement
+decision: prove an OS-enforced execution containment boundary compatible with
+the selected Codex command, or keep Darwin host execution fail-closed. The
+correction must split semantic modules under 250 lines, cover launch, timeout,
+cancellation, parent exit, fork/setsid, retry, recovery, and repeat-use in one
+batch, and receive one bounded confirmation review. No claim advances while
+that candidate is reworked.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
