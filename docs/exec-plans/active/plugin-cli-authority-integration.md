@@ -1519,6 +1519,21 @@ resolution, then explicitly finalizes it. Until that binding exists, the
 current Darwin capability and public lifecycle route remain fail-closed; no
 installed, discovery, runtime, or Product Fitness claim advances.
 
+Root mapping confirms that this is a transaction-completion boundary, not a
+safe `finalize()` call to append at one success return. Repeat-use observation,
+preparation, handoff, executor failure, and observer-duplicate paths all
+currently drop a selected executable without an explicit terminal disposition.
+The root correction must retain an opaque deferred-finalization carrier on both
+executor result variants; validate preparation before ownership is moved or
+durable effects begin; release the Darwin observation duplicate; and require a
+private custody-settlement or verified recovery token before finalization. An
+unresolved executor failure keeps the staged bytes under fail-closed recovery
+rather than deleting them. The read-only route needs its corresponding
+no-effect/observation completion token. No local finally block, source-only
+receipt, or capability flip may substitute for that carrier. The next root
+increment owns these transaction and lifecycle boundaries; no additional
+implementation worktree is launched first.
+
 Root also removed an artifact-only test dependency at `de6e79d18`: the Product
 Fitness v2 schema control now reads its tracked review-round fixture rather
 than embedding the ignored live `validation_artifacts/harness` receipt. The
