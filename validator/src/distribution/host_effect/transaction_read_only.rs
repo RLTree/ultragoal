@@ -140,7 +140,21 @@ pub(super) fn execute_read_only_transaction(
             HostLifecycleRecoveryCause::Observation("read-only lifecycle observations incomplete"),
         ));
     }
-    validate_read_only_transition(custody.plan(), &result)?;
+    if let Err(error) = validate_read_only_transition(custody.plan(), &result) {
+        return Ok(recovery_required(
+            handoff,
+            custody,
+            ledger,
+            observation_target,
+            observation,
+            target_root,
+            policy,
+            environment,
+            None,
+            Vec::new(),
+            HostLifecycleRecoveryCause::Observation(error),
+        ));
+    }
     let executor = SupportedHostEffectExecutor::new(&ledger, target, &mut backend, policy.clone());
     if handoff
         .with_retained_lifecycle(|capability, effect, lease, _| {
