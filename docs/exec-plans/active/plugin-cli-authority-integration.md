@@ -1505,6 +1505,20 @@ durable resolution; and prove panic and early-return controls. RAII may close
 inert descriptors only. This is one invariant-level correction followed by one
 Terra/medium confirmation, not a new review loop or a claim advance.
 
+The corrected Darwin source increment is now integrated at
+`75c83a2fb45655d1258007713962c72222a2ea3a` after its final Terra/medium
+confirmation. It provides seatbelt fork containment, sealed-copy staging,
+explicit consuming OS/session cleanup, and retained-descriptor cleanup that
+rejects pathname substitution; the completed worktree was archived and removed.
+Its ceiling is deliberately still source-local. `AuthorizedHostEffect` is held
+inside the root transaction only by borrow today, so the integrated caller
+cannot consume `SelectedCodexExecutable::finalize` after durable observation
+and custody settlement. Root must add one opaque completion carrier that retains
+the executable through command execution, observation, and terminal custody
+resolution, then explicitly finalizes it. Until that binding exists, the
+current Darwin capability and public lifecycle route remain fail-closed; no
+installed, discovery, runtime, or Product Fitness claim advances.
+
 Root also removed an artifact-only test dependency at `de6e79d18`: the Product
 Fitness v2 schema control now reads its tracked review-round fixture rather
 than embedding the ignored live `validation_artifacts/harness` receipt. The
