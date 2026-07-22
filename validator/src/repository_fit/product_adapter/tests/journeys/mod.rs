@@ -15,3 +15,5 @@ mod local_state_policy;
 mod mode_drift_invalidates_the_mode_bound_adapter_verification_proof;
 #[path = "routine_configuration_scope_preserves_conflicting_authority.rs"]
 mod routine_configuration_scope_preserves_conflicting_authority;
+#[path = "tracked_deletion_preservation.rs"]
+mod tracked_deletion_preservation;

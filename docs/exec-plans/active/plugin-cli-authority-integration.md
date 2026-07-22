@@ -1515,6 +1515,26 @@ the current whole-repository fit plan has conflicts, so it must not silently
 copy those templates or partially apply the plan. This is the current first
 broken journey transition.
 
+### Tracked-deletion fit guard — 2026-07-22
+
+The Obolyn E2E made the conflict concrete: its whole-repository plan proposed
+recreating intentionally deleted tracked paths, including `AGENTS.md` and
+`README.md`, while reporting no conflict. Root added a candidate-bound,
+zero-write Git observation at the repository-fit adapter boundary. A plan or
+apply preparation now fails closed when one of its exact mutation targets is a
+staged or unstaged tracked deletion, rename source, or unmerged path; unrelated
+dirty deletions remain legal. The guard is re-run before plan issuance and
+before each apply-authority revalidation, rather than trusting the absent-path
+inspection result.
+
+Focused source evidence covers unstaged deletion, staged deletion, rename
+source, routine-scope deletion, unrelated deletion, and zero-write
+preservation. It does not establish package, installed-plugin, runtime, or
+operator-journey behavior. The E2E remains blocked until the current package
+can bind the actual CLI and the repaired candidate reaches the supported
+install/discovery route; no deleted Obolyn product material will be recreated
+to force the journey through.
+
 The same pass showed that a v2 Product Success Brief incorrectly compared its
 historical `real_work.starting_candidate` to every current dirty candidate.
 That would deactivate a truth loop as soon as its expected dirty routine or

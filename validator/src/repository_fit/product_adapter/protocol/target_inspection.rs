@@ -38,6 +38,7 @@ pub(crate) fn plan_target_for_scope(
     scope: FitPlanScope,
 ) -> Result<FitPlanRecord, FitAdapterError> {
     let current = current_plan(context, scope)?;
+    reject_dirty_write_overlap(context, &current.plan)?;
     plan_record(&current)
 }
 

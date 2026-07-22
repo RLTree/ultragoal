@@ -23,6 +23,7 @@ pub(crate) fn prepare_apply_request(
     }
 
     let current = current_plan(context, supplied.scope)?;
+    reject_dirty_write_overlap(context, &current.plan)?;
     let recomputed = plan_record(&current)?;
     if recomputed.to_machine_bytes()? != supplied_canonical {
         return Err(adapter_error(AdapterErrorId::StalePlan));
@@ -135,6 +136,7 @@ pub(crate) fn revalidate_apply_request(
     }
 
     let current = current_plan(context, request.scope)?;
+    reject_dirty_write_overlap(context, &current.plan)?;
     let current_record = plan_record(&current)?;
     let current_bytes = current_record.to_machine_bytes()?;
     let request_plan =

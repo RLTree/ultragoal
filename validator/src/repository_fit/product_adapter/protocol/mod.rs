@@ -40,6 +40,8 @@ mod plan_record;
 mod root_identity;
 #[path = "target_inspection.rs"]
 mod target_inspection;
+#[path = "tracked_deletions.rs"]
+mod tracked_deletions;
 
 pub(crate) use apply_preparation::*;
 pub(crate) use plan_input_limit::*;
@@ -47,3 +49,4 @@ pub(crate) use plan_projection::*;
 pub(crate) use plan_record::*;
 pub(crate) use root_identity::*;
 pub(crate) use target_inspection::*;
+pub(crate) use tracked_deletions::*;
