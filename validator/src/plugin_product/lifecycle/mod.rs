@@ -32,7 +32,6 @@ pub(crate) use host_custody::{
     HostCommandObservation, HostEffectExecutionBinding, HostLifecycleCustody,
     HostLifecycleFinalization, HostLifecycleObservedBundle, HostLifecycleRecord,
 };
-#[cfg(not(test))]
 pub(crate) use host_custody::HostLifecycleRecoveryDisposition;
 pub(crate) use host_custody::{HostLifecycleBinding, HostLifecycleExpectedObservations};
 #[cfg(test)]

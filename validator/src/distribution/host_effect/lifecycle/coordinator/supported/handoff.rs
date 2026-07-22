@@ -2,7 +2,6 @@ pub(crate) struct DescriptorExecutionHandoff {
     capability: DescriptorExecutionCapability,
     effect: AuthorizedHostEffect,
     target: Box<dyn HostTargetLease>,
-    #[cfg(not(test))]
     lifecycle_binding: crate::plugin_product::lifecycle::HostEffectExecutionBinding,
 }
 
@@ -41,7 +40,6 @@ impl DescriptorExecutionHandoff {
         adapter(&self.capability, &self.effect, self.target.as_mut())
     }
 
-    #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn with_retained_lifecycle<R>(
         &mut self,
         adapter: impl FnOnce(
@@ -95,34 +93,18 @@ impl DescriptorExecutionHandoff {
         {
             return false;
         }
-        #[cfg(not(test))]
-        {
-            self.with_retained_lifecycle(|_, effect, lease, lifecycle| {
-                lifecycle.record() == custody.pre_effect_record()
-                    && effect.plan().plan_sha256() == custody.plan_sha256()
-                    && effect
-                        .executable()
-                        .binding_sha256()
-                        .is_ok_and(|identity| identity == executable_identity_sha256)
-                    && lease.identity().target_sha256() == target_identity_sha256
-                    && lease.revalidate().is_ok()
-            })
-        }
-        #[cfg(test)]
-        {
-            self.with_retained_authority_mut(|_, effect, lease| {
-                effect.plan().plan_sha256() == custody.plan_sha256()
-                    && effect
-                        .executable()
-                        .binding_sha256()
-                        .is_ok_and(|identity| identity == executable_identity_sha256)
-                    && lease.identity().target_sha256() == target_identity_sha256
-                    && lease.revalidate().is_ok()
-            })
-        }
+        self.with_retained_lifecycle(|_, effect, lease, lifecycle| {
+            lifecycle.record() == custody.pre_effect_record()
+                && effect.plan().plan_sha256() == custody.plan_sha256()
+                && effect
+                    .executable()
+                    .binding_sha256()
+                    .is_ok_and(|identity| identity == executable_identity_sha256)
+                && lease.identity().target_sha256() == target_identity_sha256
+                && lease.revalidate().is_ok()
+        })
     }
 
-    #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn finalize(
         self,
         finalization: crate::plugin_product::lifecycle::HostLifecycleFinalization,
@@ -137,7 +119,6 @@ impl DescriptorExecutionHandoff {
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))
     }
 
-    #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn issue_recovery_disposition(
         &self,
         custody: &mut crate::plugin_product::lifecycle::HostLifecycleCustody,
@@ -162,7 +143,6 @@ impl DescriptorExecutionHandoff {
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::RecoveryUnsafe))
     }
 
-    #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn finalize_recovery(
         self,
         disposition: crate::plugin_product::lifecycle::HostLifecycleRecoveryDisposition,
@@ -185,16 +165,6 @@ impl DescriptorExecutionHandoff {
                 SupportedHostLifecycleErrorId::PlanSubstitution,
             ));
         }
-        self.effect
-            .finalize()
-            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))
-    }
-
-    #[cfg(test)]
-    pub(in crate::distribution::host_effect) fn finalize(
-        self,
-        _finalization: crate::plugin_product::lifecycle::HostLifecycleFinalization,
-    ) -> Result<(), SupportedHostLifecycleError> {
         self.effect
             .finalize()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))

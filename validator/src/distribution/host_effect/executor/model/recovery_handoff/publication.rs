@@ -188,7 +188,6 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
-    #[cfg(not(test))]
     pub(crate) fn disposition_binding_sha256(&self) -> &str {
         match self {
             Self::Publication { binding_sha256, .. }

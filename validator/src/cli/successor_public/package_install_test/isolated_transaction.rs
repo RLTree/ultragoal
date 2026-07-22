@@ -1,7 +1,7 @@
 use super::*;
 use crate::distribution::{
-    Capability, HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, ScopedFile, ScopedTree,
-    ISOLATED_MARKETPLACE_NAME,
+    Capability, HostCapabilityDeclaration, HostCommandPlan, ISOLATED_MARKETPLACE_NAME,
+    JourneyBinding, ScopedFile, ScopedTree,
 };
 use crate::inventory::AuthorityCatalog;
 use std::path::Path;
@@ -11,7 +11,6 @@ use super::temporary_root;
 
 pub(super) enum IsolatedTransactionFailure {
     Message(&'static str),
-    RecoveryRequired(crate::distribution::host_effect::HostLifecycleRecoveryCarrier),
 }
 
 impl From<&'static str> for IsolatedTransactionFailure {
@@ -80,7 +79,9 @@ fn execute_inner(
         Capability::Runtime,
     ] {
         if host.state(capability) != crate::distribution::HostCapabilityState::Supported {
-            return Err("isolated host capability is unavailable");
+            return Err(IsolatedTransactionFailure::Message(
+                "isolated host capability is unavailable",
+            ));
         }
     }
     let binding = JourneyBinding::new(
@@ -92,7 +93,9 @@ fn execute_inner(
     if package_publication.root_id() != binding.home_id()
         || package_publication.tree_sha256() != artifact.snapshot().identity().tree_sha256()
     {
-        return Err("materialized package identity diverged");
+        return Err(IsolatedTransactionFailure::Message(
+            "materialized package identity diverged",
+        ));
     }
     execute_bound(InstallTransaction {
         context,
@@ -181,7 +184,6 @@ fn execute_bound(
             plugin: "harness-ultragoal".to_owned(),
         },
     )?;
-    let result = resolve_transaction_outcome(result)?;
     artifact
         .verify_marketplace_source(context, catalog, &package_tree)
         .map_err(|_| "materialized package changed during transaction")?;
@@ -195,38 +197,6 @@ fn execute_bound(
         journey_binding_sha256: binding_sha256,
         retained_root: None,
     })
-}
-
-fn resolve_transaction_outcome(
-    mut outcome: crate::distribution::host_effect::HostLifecycleTransactionOutcome,
-) -> Result<
-    crate::distribution::host_effect::HostLifecycleTransactionResult,
-    IsolatedTransactionFailure,
-> {
-    for _ in 0..3 {
-        outcome = match outcome {
-            crate::distribution::host_effect::HostLifecycleTransactionOutcome::Completed(
-                result,
-            ) => return Ok(result),
-            crate::distribution::host_effect::HostLifecycleTransactionOutcome::FinalizedFailure(
-                cause,
-            ) => return Err(IsolatedTransactionFailure::Message(cause)),
-            crate::distribution::host_effect::HostLifecycleTransactionOutcome::RecoveryRequired(
-                carrier,
-            ) => carrier.reobserve_and_resolve(),
-        };
-    }
-    match outcome {
-        crate::distribution::host_effect::HostLifecycleTransactionOutcome::RecoveryRequired(
-            carrier,
-        ) => Err(IsolatedTransactionFailure::RecoveryRequired(carrier)),
-        crate::distribution::host_effect::HostLifecycleTransactionOutcome::FinalizedFailure(
-            cause,
-        ) => Err(IsolatedTransactionFailure::Message(cause)),
-        crate::distribution::host_effect::HostLifecycleTransactionOutcome::Completed(result) => {
-            Ok(result)
-        }
-    }
 }
 
 fn isolated_ledger_root(root: &Path) -> Result<std::path::PathBuf, &'static str> {

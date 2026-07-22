@@ -1,4 +1,5 @@
 impl HostEffectRecoveryHandoff {
+    #[cfg(test)]
     pub(crate) fn prior_publication_observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
             Self::PostPublicationTerminalTransition {
@@ -13,6 +14,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn publication_identity_sha256(&self) -> Option<&str> {
         match self {
             Self::PostPublicationTerminalTransition {
@@ -27,6 +29,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn classification(&self) -> Option<&PublicationClassification> {
         match self {
             Self::Publication { classification, .. } => Some(classification),
@@ -36,6 +39,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn post_publication_classification(
         &self,
     ) -> Option<HostEffectPostPublicationRecoveryClassification> {
@@ -47,6 +51,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn terminal_classification(
         &self,
     ) -> Option<HostEffectTerminalRecoveryClassification> {
@@ -58,6 +63,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn ledger_record(&self) -> Option<&HostEffectLedgerRecord> {
         match self {
             Self::Publication { .. } | Self::PostPublicationTerminalTransition { .. } => None,
@@ -75,6 +81,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn originating_error_id(&self) -> Option<HostEffectExecutorErrorId> {
         match self {
             Self::Publication {
@@ -96,6 +103,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn originating_error_ids(&self) -> &[HostEffectExecutorErrorId] {
         match self {
             Self::Publication {
@@ -117,6 +125,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn post_reservation_ledger_classification(
         &self,
     ) -> Option<HostEffectPostReservationLedgerClassification> {
@@ -129,6 +138,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn post_reservation_publication_classification(
         &self,
     ) -> Option<HostEffectPostReservationPublicationClassification> {
@@ -141,6 +151,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn has_exact_current_ledger_observation(&self) -> bool {
         matches!(
             self,
@@ -174,6 +185,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn has_exact_current_publication_observation(&self) -> bool {
         match self {
             Self::Publication { .. } => true,
@@ -189,6 +201,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn binding_sha256(&self) -> Option<&str> {
         match self {
             Self::Publication { binding_sha256, .. }

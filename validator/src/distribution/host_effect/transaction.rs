@@ -1,11 +1,11 @@
-use super::transaction_carrier::HostLifecycleTransactionOutcome;
+use super::SelectedCodexExecutable;
+use super::transaction_carrier::{HostLifecycleTransactionOutcome, resolve_host_lifecycle_outcome};
 use super::transaction_effectful::execute_effectful_transaction;
 use super::transaction_identity::expected_observations;
 use super::transaction_observation::{
-    expected_content, observe, HostLifecycleObservationInput, HostLifecycleSurfaceDigests,
+    HostLifecycleObservationInput, HostLifecycleSurfaceDigests, expected_content,
 };
 use super::transaction_read_only::observe_read_only;
-use super::SelectedCodexExecutable;
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
 use crate::plugin_product::lifecycle::{LifecycleIntent, LifecyclePlan};
 use std::path::Path;
@@ -26,8 +26,8 @@ pub(crate) fn execute_host_lifecycle_transaction(
     executable: SelectedCodexExecutable,
     target_root: &Path,
     observation: HostLifecycleObservationInput,
-) -> Result<HostLifecycleTransactionOutcome, &'static str> {
-    if matches!(
+) -> Result<HostLifecycleTransactionResult, &'static str> {
+    let outcome = if matches!(
         plan.intent,
         LifecycleIntent::RepeatUse | LifecycleIntent::IdempotentReinstall
     ) {
@@ -47,23 +47,23 @@ pub(crate) fn execute_host_lifecycle_transaction(
             observation,
             expected,
         )?;
-        return Ok(HostLifecycleTransactionOutcome::Completed(
-            HostLifecycleTransactionResult { surfaces },
-        ));
-    }
-    execute_effectful_transaction(
-        plan,
-        package,
-        command_plan,
-        journey,
-        host,
-        ledger_root,
-        ledger_id,
-        issuer_id,
-        executable,
-        target_root,
-        &observation,
-    )
+        HostLifecycleTransactionOutcome::Completed(HostLifecycleTransactionResult { surfaces })
+    } else {
+        execute_effectful_transaction(
+            plan,
+            package,
+            command_plan,
+            journey,
+            host,
+            ledger_root,
+            ledger_id,
+            issuer_id,
+            executable,
+            target_root,
+            observation,
+        )?
+    };
+    resolve_host_lifecycle_outcome(outcome)
 }
 
 fn abort_without_effect<T>(

@@ -1,9 +1,9 @@
 use super::transaction_carrier::{HostLifecycleRecoveryCause, HostLifecycleTransactionOutcome};
 use super::transaction_failure::execution_failure;
-use super::transaction_observation::{observe, HostLifecycleObservationInput};
+use super::transaction_observation::{HostLifecycleObservationInput, observe};
 use super::transaction_policy;
 use super::transaction_preparation::{
-    prepare_host_effect_transaction, PreparedHostEffectTransaction,
+    PreparedHostEffectTransaction, prepare_host_effect_transaction,
 };
 use super::transaction_recovery::ObservedRecoveryAdapter;
 use super::transaction_recovery_carrier::recovery_required;
@@ -81,10 +81,7 @@ pub(super) fn execute_effectful_transaction(
             ));
         }
     };
-    #[cfg(not(test))]
     let receipt_recovery = Some(receipt.recovery_handoff());
-    #[cfg(test)]
-    let receipt_recovery = None;
     let capability = match transaction_policy::current_capability() {
         Ok(capability) => capability,
         Err(_) => {

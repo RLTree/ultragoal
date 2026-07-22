@@ -52,12 +52,7 @@ mod transaction_preparation;
 mod transaction_read_only;
 mod transaction_recovery;
 mod transaction_tree;
-pub(crate) use transaction::{
-    HostLifecycleTransactionResult, execute_host_lifecycle_transaction,
-};
-pub(crate) use transaction_carrier::{
-    HostLifecycleRecoveryCarrier, HostLifecycleTransactionOutcome,
-};
+pub(crate) use transaction::execute_host_lifecycle_transaction;
 pub(crate) use transaction_observation::HostLifecycleObservationInput;
 
 #[cfg(test)]

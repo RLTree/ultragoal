@@ -2,7 +2,6 @@ use super::model::{
     LifecycleEffect, LifecycleError, LifecycleIntent, LifecyclePlan, LifecycleState,
 };
 use super::plan::validate_plan;
-#[cfg(not(test))]
 use crate::distribution::host_effect::HostEffectRecoveryHandoff;
 use crate::distribution::host_effect::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
@@ -16,6 +15,8 @@ include!("record.rs");
 include!("recovery.rs");
 include!("finalization.rs");
 include!("recovery_disposition.rs");
+#[cfg(test)]
+include!("test_release.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
@@ -134,14 +135,6 @@ impl HostLifecycleCustody {
         self.command_plan.is_none()
     }
 
-    #[cfg(test)]
-    pub(crate) fn commit_release(&mut self) -> Result<(), LifecycleError> {
-        self.command_plan
-            .take()
-            .map(|_| ())
-            .ok_or(LifecycleError::ReplayedPlan)
-    }
-
     pub(crate) fn settle(
         &mut self,
         completion: HostEffectCompletion,
@@ -227,7 +220,6 @@ impl HostLifecycleCustody {
             return Err(LifecycleError::RecoveryUnavailable);
         }
         Ok(HostLifecycleFinalization {
-            #[cfg(not(test))]
             record: self.pre_effect_record.clone(),
         })
     }

@@ -1,6 +1,5 @@
 impl HostLifecycleRecoveryCarrier {
-    #[cfg(not(test))]
-    pub(crate) fn reobserve_and_resolve(mut self) -> HostLifecycleTransactionOutcome {
+    pub(super) fn reobserve_and_resolve(mut self) -> HostLifecycleTransactionOutcome {
         if self.attempt.observation_attempt >= MAX_REOBSERVATION_ATTEMPTS {
             return HostLifecycleTransactionOutcome::RecoveryRequired(self);
         }
@@ -59,11 +58,6 @@ impl HostLifecycleRecoveryCarrier {
         }
     }
 
-    #[cfg(test)]
-    pub(crate) fn reobserve_and_resolve(self) -> HostLifecycleTransactionOutcome {
-        HostLifecycleTransactionOutcome::RecoveryRequired(self)
-    }
-
     fn reobserve_settled(mut self) -> HostLifecycleTransactionOutcome {
         let capability = match transaction_policy::current_capability() {
             Ok(capability) => capability,
@@ -119,9 +113,10 @@ impl HostLifecycleRecoveryCarrier {
         }
         if ambiguous {
             let mut adapter = ObservedRecoveryAdapter { observed };
+            let observed_for_recovery = adapter.observed.clone();
             if self
                 .custody
-                .recover(&adapter.observed, &mut adapter)
+                .recover(&observed_for_recovery, &mut adapter)
                 .is_err()
             {
                 return HostLifecycleTransactionOutcome::RecoveryRequired(self);

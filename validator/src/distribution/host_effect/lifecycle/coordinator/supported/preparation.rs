@@ -115,6 +115,8 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
         let lifecycle_binding = custody
             .begin_effects(&admission)
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))?;
+        #[cfg(test)]
+        let lifecycle_binding = custody.completion_binding();
         #[cfg(not(test))]
         let (permit, in_flight) = admission
             .take_effect_parts()
@@ -145,7 +147,6 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             capability,
             effect,
             target: target_lease,
-            #[cfg(not(test))]
             lifecycle_binding,
         })
     }

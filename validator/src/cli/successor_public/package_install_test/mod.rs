@@ -60,9 +60,6 @@ pub(super) fn execute(
             Err(isolated_transaction::IsolatedTransactionFailure::Message(cause)) => {
                 return transaction_failure(cause)
             }
-            Err(isolated_transaction::IsolatedTransactionFailure::RecoveryRequired(_carrier)) => {
-                return transaction_failure("host lifecycle recovery remained unresolved")
-            }
         };
     let record = InstallTestOutcome {
         schema_version: "HarnessPackageInstallTestOutcome-v1",

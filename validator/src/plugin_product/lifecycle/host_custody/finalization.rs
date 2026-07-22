@@ -1,4 +1,3 @@
-#[cfg(not(test))]
 use crate::distribution::host_effect::HostEffectState;
 
 /// A one-use proof that the transferred lifecycle reached a durable terminal
@@ -6,12 +5,10 @@ use crate::distribution::host_effect::HostEffectState;
 /// cannot release a staged executable before settlement, nor before an
 /// ambiguous result has completed its authorized recovery.
 pub(crate) struct HostLifecycleFinalization {
-    #[cfg(not(test))]
     record: HostLifecycleRecord,
 }
 
 impl HostLifecycleFinalization {
-    #[cfg(not(test))]
     pub(crate) fn matches(&self, binding: &HostEffectExecutionBinding) -> bool {
         &self.record == binding.record()
     }
@@ -20,7 +17,6 @@ impl HostLifecycleFinalization {
 /// A one-use proof that a failed or ambiguous host-effect transition was
 /// durably recorded for this exact lifecycle transfer. It is issued only by
 /// `HostLifecycleCustody`; callers cannot construct a release decision.
-#[cfg(not(test))]
 pub(crate) struct HostLifecycleRecoveryDisposition {
     record: HostLifecycleRecord,
     permit_id: String,
@@ -32,7 +28,6 @@ pub(crate) struct HostLifecycleRecoveryDisposition {
     terminal_state: HostEffectState,
 }
 
-#[cfg(not(test))]
 impl HostLifecycleRecoveryDisposition {
     pub(crate) fn matches(
         &self,
@@ -51,7 +46,10 @@ impl HostLifecycleRecoveryDisposition {
             && self.executable_identity_sha256 == executable_identity_sha256
             && self.command_plan_sha256 == command_plan_sha256
             && self.recovery_binding_sha256 == recovery.disposition_binding_sha256()
-            && matches!(self.terminal_state, HostEffectState::Settled | HostEffectState::Failed)
+            && matches!(
+                self.terminal_state,
+                HostEffectState::Settled | HostEffectState::Failed
+            )
             && Some(self.terminal_state) == recovery.terminal_state()
             && recovery.verify_binding()
     }

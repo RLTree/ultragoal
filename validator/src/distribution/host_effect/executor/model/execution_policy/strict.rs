@@ -127,7 +127,6 @@ impl HostEffectCancellation {
 pub(crate) struct HostEffectExecutionReceipt {
     effect_identity_sha256: String,
     _outcome: HostEffectOutcome,
-    #[cfg(not(test))]
     terminal_record: HostEffectLedgerRecord,
     terminal_ledger_head: HostEffectLedgerHead,
     command_output_sha256: Vec<String>,
@@ -165,7 +164,6 @@ impl HostEffectExecutionReceipt {
         Self {
             effect_identity_sha256,
             _outcome: outcome,
-            #[cfg(not(test))]
             terminal_record: _terminal_record,
             terminal_ledger_head,
             command_output_sha256,
@@ -194,7 +192,6 @@ impl HostEffectExecutionReceipt {
         &self.command_output_sha256
     }
 
-    #[cfg(not(test))]
     pub(crate) fn recovery_handoff(&self) -> HostEffectRecoveryHandoff {
         HostEffectRecoveryHandoff::terminal_transition(TerminalTransitionRecoveryRequest {
             effect_identity_sha256: self.effect_identity_sha256.clone(),

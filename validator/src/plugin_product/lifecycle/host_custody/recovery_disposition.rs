@@ -1,4 +1,3 @@
-#[cfg(not(test))]
 impl HostLifecycleCustody {
     pub(crate) fn issue_recovery_disposition(
         &mut self,

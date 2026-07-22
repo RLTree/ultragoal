@@ -14,7 +14,7 @@ use super::{HostEffectCompletion, SelectedCodexExecutable};
 use crate::plugin_product::lifecycle::HostLifecycleCustody;
 use std::path::PathBuf;
 
-const MAX_REOBSERVATION_ATTEMPTS: u8 = 3;
+pub(super) const MAX_REOBSERVATION_ATTEMPTS: u8 = 3;
 
 pub(super) struct HostLifecycleAttemptIdentity {
     permit_id: String,
@@ -33,7 +33,7 @@ pub(super) enum HostLifecycleRecoveryCause {
     Finalization(&'static str),
 }
 
-pub(crate) struct HostLifecycleRecoveryCarrier {
+pub(super) struct HostLifecycleRecoveryCarrier {
     handoff: DescriptorExecutionHandoff,
     custody: HostLifecycleCustody,
     ledger: FileHostEffectLedger,
@@ -104,10 +104,25 @@ impl HostLifecycleRecoveryCarrier {
     }
 }
 
-pub(crate) enum HostLifecycleTransactionOutcome {
+pub(super) enum HostLifecycleTransactionOutcome {
     Completed(super::transaction::HostLifecycleTransactionResult),
     FinalizedFailure(&'static str),
     RecoveryRequired(HostLifecycleRecoveryCarrier),
 }
 
 include!("transaction_carrier_reobservation.rs");
+
+pub(super) fn resolve_host_lifecycle_outcome(
+    mut outcome: HostLifecycleTransactionOutcome,
+) -> Result<super::transaction::HostLifecycleTransactionResult, &'static str> {
+    for _ in 0..MAX_REOBSERVATION_ATTEMPTS {
+        outcome = match outcome {
+            HostLifecycleTransactionOutcome::Completed(result) => return Ok(result),
+            HostLifecycleTransactionOutcome::FinalizedFailure(cause) => return Err(cause),
+            HostLifecycleTransactionOutcome::RecoveryRequired(carrier) => {
+                carrier.reobserve_and_resolve()
+            }
+        };
+    }
+    Err("host lifecycle recovery remained unresolved")
+}
