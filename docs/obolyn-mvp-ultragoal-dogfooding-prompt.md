@@ -13,10 +13,10 @@ Before use, the Ultragoal root integrator must refresh:
 - the authorized Obolyn implementation repository and its nearest `AGENTS.md`.
 
 The deleted Obolyn implementation has zero authority. The
-`done-definition-workspace` remains read-only product authority. This source
-copy is mirrored in the Obolyn repository; the real dogfooding task must run
-there. It is a future real-use evaluation input, not authorization to begin
-implementation before the Ultragoal E2E gate passes.
+`done-definition-workspace` remains read-only product authority. This is the
+retained source copy; the real dogfooding task must start in the Obolyn
+repository after the UltraGoal E2E gate passes. It is a future real-use
+evaluation input, not authorization to begin implementation before then.
 
 ## Prompt
 
