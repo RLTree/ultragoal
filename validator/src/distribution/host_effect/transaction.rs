@@ -1,25 +1,18 @@
-use super::lifecycle::{
-    AcceptedHostScope, HostEffectAcceptanceRequest, HostEffectPreparationRequest,
-    SupportedHostLifecycleCoordinator,
-};
 use super::transaction_failure::{execution_failure, preparation_failure};
 use super::transaction_identity::expected_observations;
 use super::transaction_observation::{
     HostLifecycleObservationInput, HostLifecycleSurfaceDigests, expected_content, observe,
 };
 use super::transaction_policy;
-use super::transaction_policy::{CurrentDescriptorAdapter, SystemTrustedClock, accepted_lifecycle};
+use super::transaction_preparation::prepare_host_effect_transaction;
 use super::transaction_read_only::observe_read_only;
 use super::transaction_recovery::ObservedRecoveryAdapter;
 use super::{
-    ConfinedHostEffectTarget, DurableHostEffectLedger, FileHostEffectLedger,
     HostEffectCancellation, HostEffectCompletion, NativeRetainedDescriptorProcessBackend,
     SelectedCodexExecutable, SupportedHostEffectExecutor,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
-use crate::plugin_product::lifecycle::{
-    HostLifecycleBinding, HostLifecycleCustody, LifecycleIntent, LifecyclePlan,
-};
+use crate::plugin_product::lifecycle::{LifecycleIntent, LifecyclePlan};
 use std::path::Path;
 
 pub(crate) struct HostLifecycleTransactionResult {
@@ -43,8 +36,13 @@ pub(crate) fn execute_host_lifecycle_transaction(
         plan.intent,
         LifecycleIntent::RepeatUse | LifecycleIntent::IdempotentReinstall
     ) {
-        let content = expected_content(&observation, target_root)?;
-        let expected = expected_observations(&package, &plan, &observation, &content, 0)?;
+        let expected = match (|| {
+            let content = expected_content(&observation, target_root)?;
+            expected_observations(&package, &plan, &observation, &content, 0)
+        })() {
+            Ok(expected) => expected,
+            Err(error) => return abort_without_effect(executable, error),
+        };
         let surfaces = observe_read_only(
             &package,
             &plan,
@@ -56,115 +54,68 @@ pub(crate) fn execute_host_lifecycle_transaction(
         )?;
         return Ok(HostLifecycleTransactionResult { surfaces });
     }
-    let content = expected_content(&observation, target_root)?;
-    let expected =
-        expected_observations(&package, &plan, &observation, &content, command_plan.len())?;
-    let scope = AcceptedHostScope::repository(&journey, journey.marketplace().to_owned())
-        .map_err(|_| "repository host scope unavailable")?;
-    let binding = HostLifecycleBinding::new(
-        package.clone(),
+    let mut prepared = prepare_host_effect_transaction(
+        plan,
+        package,
         command_plan,
-        scope.binding_sha256().map_err(|_| "scope binding failed")?,
-        host.capability_sha256().to_owned(),
-        expected,
-    )
-    .map_err(|_| "host lifecycle binding failed")?;
-    let mut custody = HostLifecycleCustody::take(plan, binding)
-        .map_err(|_| "host lifecycle custody admission failed")?;
-    let ledger = FileHostEffectLedger::create(ledger_root, ledger_id.clone())
-        .map_err(|_| "host lifecycle ledger creation failed")?;
-    let coordinator = SupportedHostLifecycleCoordinator::bind(issuer_id, ledger_id, &ledger)
-        .map_err(|_| "host lifecycle coordinator binding failed")?;
-    let observation_executable = executable
-        .duplicate()
-        .map_err(|_| "host executable duplicate failed")?;
-    let (target, expected_target) = ConfinedHostEffectTarget::bind(
+        journey,
+        host,
+        ledger_root,
+        ledger_id,
+        issuer_id,
+        executable,
         target_root,
-        scope.clone(),
-        custody.expected_after().generation,
-    )
-    .map_err(|_| "host target binding failed")?;
-    let observation_target = target.clone();
-    let lifecycle = accepted_lifecycle(&custody, &package)?;
-    let command_plan = custody
-        .candidate_plan()
-        .map_err(|_| "host command plan unavailable")?;
-    let expected_head = ledger
-        .head()
-        .map_err(|_| "host lifecycle ledger head unavailable")?;
-    let accepted = coordinator
-        .accept(HostEffectAcceptanceRequest {
-            package,
-            journey,
-            host,
-            lifecycle,
-            scope,
-            plan: &command_plan,
-            executable: &executable,
-            expected_target,
-            expected_head,
-            #[cfg(not(test))]
-            lifecycle_record: custody.pre_effect_record(),
-            #[cfg(test)]
-            lifecycle_record: Some(custody.pre_effect_record()),
-        })
-        .map_err(|_| "host lifecycle identity admission failed")?;
-    let mut target_observer = target.observer();
-    let mut adapter = CurrentDescriptorAdapter;
-    let mut clock = SystemTrustedClock::default();
-    let handoff = coordinator
-        .prepare_current(HostEffectPreparationRequest {
-            accepted: &accepted,
-            custody: &mut custody,
-            executable,
-            target: &mut target_observer,
-            clock: &mut clock,
-            adapter: &mut adapter,
-        })
-        .map_err(preparation_failure)?;
+        &observation,
+    )?;
     let mut backend = NativeRetainedDescriptorProcessBackend;
-    let environment = command_plan
-        .commands()
-        .first()
-        .map(|command| command.environment())
-        .ok_or("host lifecycle command plan empty")?;
-    if command_plan
-        .commands()
-        .iter()
-        .any(|command| command.environment() != environment)
-    {
-        return Err("host lifecycle command environments diverged");
-    }
-    let policy = transaction_policy::isolated_codex_policy(environment)?;
     let cancellation = HostEffectCancellation::default();
-    let mut executor =
-        SupportedHostEffectExecutor::new(&ledger, target, &mut backend, policy.clone());
-    let receipt = executor
-        .execute_handoff(handoff, &mut clock, &cancellation)
-        .map_err(execution_failure)?;
+    let mut executor = SupportedHostEffectExecutor::new(
+        &prepared.ledger,
+        prepared.target,
+        &mut backend,
+        prepared.policy.clone(),
+    );
+    let (handoff, receipt) = executor
+        .execute_handoff(prepared.handoff, &mut prepared.clock, &cancellation)
+        .into_parts();
+    let receipt = match receipt {
+        Ok(receipt) => receipt,
+        Err(error) => {
+            // Recovery remains unresolved: dropping this opaque owner is
+            // intentionally non-destructive, so the staged executable stays
+            // preserved for the durable recovery path rather than being
+            // cleaned up on an ambiguous execution result.
+            drop(handoff);
+            return Err(execution_failure(error));
+        }
+    };
     let capability = transaction_policy::current_capability()
         .map_err(|_| "host lifecycle observation capability unavailable")?;
-    let observation_package = custody.pre_effect_record().package().clone();
+    let observation_package = prepared.custody.pre_effect_record().package().clone();
     let result = observe(
         &observation_package,
-        custody.plan(),
+        prepared.custody.plan(),
         &observation,
-        custody.pre_effect_record().expected_observations(),
-        &observation_executable,
+        prepared.custody.pre_effect_record().expected_observations(),
+        &prepared.observation_executable,
         &capability,
         &mut backend,
-        &policy,
+        &prepared.policy,
         &cancellation,
-        observation_target.cwd_fd(),
+        prepared.observation_target.cwd_fd(),
         target_root,
-        environment,
+        &prepared.environment,
         receipt.command_output_sha256().to_vec(),
     )?;
-    let ambiguous = result.completed_effects.len() != custody.plan().effects.len();
+    // On Darwin the observation duplicate shares the staged private object.
+    // It must be released before the settled handoff can prove sole ownership
+    // and perform explicit finalization.
+    drop(prepared.observation_executable);
+    let ambiguous = result.completed_effects.len() != prepared.custody.plan().effects.len();
     let observed = result.observed.clone();
     let completion = if ambiguous {
         HostEffectCompletion::ambiguous(
-            custody.completion_binding(),
+            prepared.custody.completion_binding(),
             observed.clone(),
             result.completed_effects,
             result.observations,
@@ -172,35 +123,44 @@ pub(crate) fn execute_host_lifecycle_transaction(
         )
     } else {
         HostEffectCompletion::settled(
-            custody.completion_binding(),
+            prepared.custody.completion_binding(),
             observed.clone(),
             result.completed_effects,
             result.observations,
             result.effect_cursor,
         )
     };
-    custody
+    prepared
+        .custody
         .settle(completion)
         .map_err(|_| "host lifecycle independent observation settlement failed")?;
     if ambiguous {
-        let recovery_authority = custody
-            .recovery_token()
-            .map_err(|_| "host lifecycle recovery authority unavailable")?;
-        if recovery_authority.prior.installed == observed.installed
-            && recovery_authority.prior.cache == observed.cache
-        {
-            let mut observed_recovery = ObservedRecoveryAdapter {
-                observed: observed.clone(),
-            };
-            crate::plugin_product::lifecycle::execution::recover(
-                &observed,
-                &recovery_authority,
-                &mut observed_recovery,
-            )
+        let mut observed_recovery = ObservedRecoveryAdapter {
+            observed: observed.clone(),
+        };
+        prepared
+            .custody
+            .recover(&observed, &mut observed_recovery)
             .map_err(|_| "host lifecycle recovery authorization failed")?;
-        }
     }
+    let finalization = prepared
+        .custody
+        .finalization_token()
+        .map_err(|_| "host lifecycle terminal finalization unavailable")?;
+    handoff
+        .finalize(finalization)
+        .map_err(preparation_failure)?;
     Ok(HostLifecycleTransactionResult {
         surfaces: result.surfaces,
     })
+}
+
+fn abort_without_effect<T>(
+    executable: SelectedCodexExecutable,
+    error: &'static str,
+) -> Result<T, &'static str> {
+    executable
+        .finalize()
+        .map_err(|_| "host executable pre-effect finalization failed")?;
+    Err(error)
 }

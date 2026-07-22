@@ -144,20 +144,6 @@ pub(crate) fn current_capability()
             ));
         }
     };
-    if platform == DescriptorExecutionPlatform::Darwin {
-        // Keep the platform probe typed, but do not issue a usable capability:
-        // the Darwin launch primitive is intentionally unsupported until a
-        // byte-sealing handoff exists.
-        let _candidate = DescriptorExecutionCapability::new(
-            platform,
-            primitive,
-            "harness-host-effect".into(),
-            "v1".into(),
-        )?;
-        return Err(lifecycle_error(
-            SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
-        ));
-    }
     DescriptorExecutionCapability::new(
         platform,
         primitive,

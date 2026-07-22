@@ -44,6 +44,7 @@ mod transaction_observation_identity;
 mod transaction_observation_rows;
 mod transaction_observation_transition;
 mod transaction_policy;
+mod transaction_preparation;
 mod transaction_read_only;
 mod transaction_recovery;
 mod transaction_tree;

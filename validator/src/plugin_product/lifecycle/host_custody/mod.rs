@@ -12,6 +12,7 @@ include!("observations.rs");
 include!("binding.rs");
 include!("record.rs");
 include!("recovery.rs");
+include!("finalization.rs");
 
 pub(crate) struct HostLifecycleCustody {
     plan: LifecyclePlan,
@@ -20,6 +21,7 @@ pub(crate) struct HostLifecycleCustody {
     command_cursor: usize,
     effect_cursor: usize,
     custody_phase: u8,
+    recovery_required: bool,
 }
 
 impl HostLifecycleCustody {
@@ -56,6 +58,7 @@ impl HostLifecycleCustody {
             command_cursor: 0,
             effect_cursor: 0,
             custody_phase: 0,
+            recovery_required: false,
         })
     }
 
@@ -152,6 +155,10 @@ impl HostLifecycleCustody {
             )?),
             HostEffectCompletionOutcome::Settled { .. } => None,
         };
+        self.recovery_required = matches!(
+            completion.outcome(),
+            HostEffectCompletionOutcome::Ambiguous { .. }
+        );
         match completion.outcome() {
             HostEffectCompletionOutcome::Settled {
                 observed,
@@ -197,8 +204,34 @@ impl HostLifecycleCustody {
         Ok(())
     }
 
+    pub(crate) fn recover<A: super::model::LifecycleEffectAdapter>(
+        &mut self,
+        observed: &LifecycleState,
+        adapter: &mut A,
+    ) -> Result<LifecycleState, LifecycleError> {
+        if self.custody_phase != 2 || !self.recovery_required {
+            return Err(LifecycleError::RecoveryUnavailable);
+        }
+        let token = super::execution::recovery_token(&self.plan)?;
+        let recovered = super::execution::recover(observed, &token, adapter)?;
+        self.custody_phase = 3;
+        self.recovery_required = false;
+        Ok(recovered)
+    }
+
+    pub(crate) fn finalization_token(&self) -> Result<HostLifecycleFinalization, LifecycleError> {
+        if !matches!(self.custody_phase, 2 | 3) || self.recovery_required {
+            return Err(LifecycleError::RecoveryUnavailable);
+        }
+        Ok(HostLifecycleFinalization {
+            #[cfg(not(test))]
+            record: self.pre_effect_record.clone(),
+        })
+    }
+
+    #[cfg(test)]
     pub(crate) fn recovery_token(&self) -> Result<super::model::RecoveryToken, LifecycleError> {
-        if self.custody_phase != 2 {
+        if self.custody_phase != 2 || !self.recovery_required {
             return Err(LifecycleError::RecoveryUnavailable);
         }
         super::execution::recovery_token(&self.plan)

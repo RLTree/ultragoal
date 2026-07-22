@@ -30,7 +30,7 @@ pub(crate) use execution::{apply, recover, recovery_token};
 pub(crate) use host_custody::recovery_state_after_completed_prefix;
 pub(crate) use host_custody::{
     HostCommandObservation, HostEffectExecutionBinding, HostLifecycleCustody,
-    HostLifecycleObservedBundle, HostLifecycleRecord,
+    HostLifecycleFinalization, HostLifecycleObservedBundle, HostLifecycleRecord,
 };
 pub(crate) use host_custody::{HostLifecycleBinding, HostLifecycleExpectedObservations};
 #[cfg(test)]

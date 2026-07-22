@@ -51,12 +51,23 @@ pub(crate) struct AuthorizedHostEffect {
 }
 
 impl AuthorizedHostEffect {
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn new(
         permit: HostEffectPermit,
         record: HostEffectLedgerRecord,
         executable: SelectedCodexExecutable,
         plan: HostCommandPlan,
     ) -> Result<Self, HostEffectLedgerError> {
+        Self::validate(&permit, &record, &executable, &plan)?;
+        Ok(Self::from_validated(permit, record, executable, plan))
+    }
+
+    pub(in crate::distribution::host_effect) fn validate(
+        permit: &HostEffectPermit,
+        record: &HostEffectLedgerRecord,
+        executable: &SelectedCodexExecutable,
+        plan: &HostCommandPlan,
+    ) -> Result<(), HostEffectLedgerError> {
         executable.revalidate()?;
         let executable_identity_sha256 = executable.binding_sha256()?;
         let expected_reservation = HostEffectReservation::from_permit(&permit);
@@ -69,12 +80,21 @@ impl AuthorizedHostEffect {
                 HostEffectLedgerErrorId::InvalidRecord,
             ));
         }
-        Ok(Self {
+        Ok(())
+    }
+
+    pub(in crate::distribution::host_effect) fn from_validated(
+        permit: HostEffectPermit,
+        record: HostEffectLedgerRecord,
+        executable: SelectedCodexExecutable,
+        plan: HostCommandPlan,
+    ) -> Self {
+        Self {
             permit,
             record,
             executable,
             plan,
-        })
+        }
     }
 
     pub(in crate::distribution::host_effect) fn permit(&self) -> &HostEffectPermit {
@@ -91,6 +111,12 @@ impl AuthorizedHostEffect {
 
     pub(in crate::distribution::host_effect) fn plan(&self) -> &HostCommandPlan {
         &self.plan
+    }
+
+    pub(in crate::distribution::host_effect) fn finalize(
+        self,
+    ) -> Result<(), HostEffectLedgerError> {
+        self.executable.finalize()
     }
 }
 

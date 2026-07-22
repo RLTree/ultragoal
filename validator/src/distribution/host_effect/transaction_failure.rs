@@ -17,8 +17,6 @@ pub(super) fn preparation_failure(error: SupportedHostLifecycleError) -> &'stati
         Id::LedgerRejected => "host lifecycle durable reservation rejected",
         Id::HandoffConstructionFailed => "host lifecycle execution handoff rejected",
         #[cfg(test)]
-        Id::UnsupportedPlatform => "host lifecycle platform unsupported",
-        #[cfg(test)]
         Id::RecoveryAuthorizationRequired => "host lifecycle recovery authorization required",
         Id::RecoveryUnsafe => "host lifecycle recovery rejected",
     }

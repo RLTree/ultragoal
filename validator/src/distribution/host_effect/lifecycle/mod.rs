@@ -41,8 +41,6 @@ pub(crate) use recovery::{
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum SupportedHostLifecycleErrorId {
-    #[cfg(test)]
-    UnsupportedPlatform,
     DescriptorExecutionUnavailable,
     InvalidAcceptedIdentity,
     CoordinatorSubstitution,

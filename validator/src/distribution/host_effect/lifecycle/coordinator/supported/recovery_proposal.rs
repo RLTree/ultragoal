@@ -84,9 +84,21 @@ impl DescriptorExecutionHandoff {
         adapter(&self.capability, &self.effect, self.target.as_mut())
     }
 
+    #[cfg(test)]
+    pub(in crate::distribution::host_effect) fn with_retained_authority_mut<R>(
+        &mut self,
+        adapter: impl FnOnce(
+            &DescriptorExecutionCapability,
+            &AuthorizedHostEffect,
+            &mut dyn HostTargetLease,
+        ) -> R,
+    ) -> R {
+        adapter(&self.capability, &self.effect, self.target.as_mut())
+    }
+
     #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn with_retained_lifecycle<R>(
-        mut self,
+        &mut self,
         adapter: impl FnOnce(
             &DescriptorExecutionCapability,
             &AuthorizedHostEffect,
@@ -100,6 +112,35 @@ impl DescriptorExecutionHandoff {
             self.target.as_mut(),
             &self.lifecycle_binding,
         )
+    }
+
+    /// Releases the selected private executable only after lifecycle custody
+    /// supplies the opaque terminal-disposition token. The token binds this
+    /// handoff's exact pre-effect record, so a sibling transaction cannot use
+    /// its settlement to clean up another transaction's staged executable.
+    #[cfg(not(test))]
+    pub(in crate::distribution::host_effect) fn finalize(
+        self,
+        finalization: crate::plugin_product::lifecycle::HostLifecycleFinalization,
+    ) -> Result<(), SupportedHostLifecycleError> {
+        if !finalization.matches(&self.lifecycle_binding) {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::PlanSubstitution,
+            ));
+        }
+        self.effect
+            .finalize()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))
+    }
+
+    #[cfg(test)]
+    pub(in crate::distribution::host_effect) fn finalize(
+        self,
+        _finalization: crate::plugin_product::lifecycle::HostLifecycleFinalization,
+    ) -> Result<(), SupportedHostLifecycleError> {
+        self.effect
+            .finalize()
+            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))
     }
 }
 

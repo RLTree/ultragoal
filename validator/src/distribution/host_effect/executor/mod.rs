@@ -1,17 +1,15 @@
 //! Internal supported-host transaction executor candidate.
 //!
 //! The accepted lifecycle coordinator remains the only source of an
-//! `AuthorizedHostEffect`. Darwin remains unsupported at that coordinator
-//! boundary because the host has no retained-descriptor execution primitive.
-//! This module does not add a public route or weaken that decision. It supplies
-//! the dependency-closed transaction consumer, a descriptor-capable process
-//! backend for Linux/FreeBSD, and descriptor-relative durable publication used
-//! by the executor after a retained-authority handoff.
+//! `AuthorizedHostEffect`. It supplies the dependency-closed transaction
+//! consumer, a platform-specific sealed-executable process backend, and
+//! descriptor-relative durable publication after a retained-authority handoff.
 
 #[path = "reservation/lifecycle_completion/mod.rs"]
 mod lifecycle_completion;
 mod model;
 mod process;
+mod retained_execution_outcome;
 mod target;
 
 #[cfg(not(test))]
@@ -29,9 +27,10 @@ pub(crate) use model::{
     HostEffectPostReservationPublicationClassification, HostEffectRecoveryHandoff,
     HostEffectTerminalRecoveryClassification,
 };
-pub(crate) use process::{BackendFailure, NativeRetainedDescriptorProcessBackend};
 use process::RetainedDescriptorProcessBackend;
 pub(crate) use process::execute_bounded_observation;
+pub(crate) use process::{BackendFailure, NativeRetainedDescriptorProcessBackend};
+pub(crate) use retained_execution_outcome::RetainedExecutionOutcome;
 pub(crate) use target::ConfinedHostEffectTarget;
 
 use self::model::{

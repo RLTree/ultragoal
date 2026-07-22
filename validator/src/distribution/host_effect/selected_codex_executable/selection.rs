@@ -88,7 +88,8 @@ impl SelectedCodexExecutable {
     ) -> Result<(), HostEffectLedgerError> {
         #[cfg(unix)]
         {
-            let current = capture_identity(&self.file, Path::new(&self.identity.canonical_path))?;
+            let current = capture_identity(&self.file, Path::new(&self.identity.canonical_path))
+                .map_err(|_| HostEffectLedgerError::new(HostEffectLedgerErrorId::Tampered))?;
             if current != self.identity {
                 return Err(HostEffectLedgerError::new(
                     HostEffectLedgerErrorId::Tampered,

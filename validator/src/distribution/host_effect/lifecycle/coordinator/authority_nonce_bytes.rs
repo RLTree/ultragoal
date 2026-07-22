@@ -26,7 +26,7 @@ impl DescriptorExecutionPlatform {
     }
 
     const fn supports_descriptor_execution(self) -> bool {
-        matches!(self, Self::Linux | Self::FreeBsd)
+        matches!(self, Self::Darwin | Self::Linux | Self::FreeBsd)
     }
 }
 

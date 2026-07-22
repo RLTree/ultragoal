@@ -45,7 +45,13 @@ pub(super) fn observe_read_only(
         target_root,
         environment,
         Vec::new(),
-    )?;
+    );
+    let finalization = executable.finalize();
+    let result = match (result, finalization) {
+        (Ok(result), Ok(())) => result,
+        (_, Err(_)) => return Err("read-only executable finalization failed"),
+        (Err(error), Ok(())) => return Err(error),
+    };
     if result.completed_effects.len() != plan.effects.len() {
         return Err("read-only lifecycle observations incomplete");
     }
