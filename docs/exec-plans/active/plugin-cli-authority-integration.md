@@ -1,5 +1,35 @@
 # Plugin and CLI Authority Integration
 
+## Terminal-disposition Darwin execution integration — 2026-07-21
+
+Root integrated `7eefca283f826d036315eaf91814785c1756b07b` / tree
+`9f9e8898ee07605bacd3b2801a4c5d8fe4ad4e36`. The transaction now retains the
+opaque execution handoff across executor output, observation, durable custody
+settlement, and any authorized ambiguous-state recovery. Only the custody owner
+can mint the terminal finalization token; it binds the exact pre-effect record
+before the handoff can delete the staged sealed executable. Read-only and
+pre-effect refusals explicitly finalize their selected executable, while an
+unresolved post-reservation failure remains fail-closed and retains staged bytes
+for recovery rather than destructively cleaning them up.
+
+Darwin now participates in the same sealed host lifecycle as Linux and FreeBSD:
+the private byte-sealed executable is contained with the macOS seatbelt launch
+path, and a matching opaque Darwin capability is admitted only through the
+existing coordinator. The root host-effect matrix passed 90/90 with one
+intentionally ignored subprocess entrypoint, and warning-denied production
+compilation passed. A local package was built reproducibly twice and its
+isolated package/install transaction produced separate installed, cache,
+marketplace, and runtime object observations. That run occurred before this
+documentation update, so current-candidate package and runtime proof must be
+repeated after the containing documentation checkpoint.
+
+This advances integrated source and isolated host-transaction behavior only.
+Fresh Codex discovery, current installed-plugin identity, repository fit,
+routine work, interruption/recovery, repeat use, Product Fitness, daily-driver,
+readiness, release, and completion remain withheld. The next dependency-legal
+boundary is a clean candidate rebuild followed by supported fresh-task discovery
+and the real dirty-repository journey.
+
 ## Sealed host-lifecycle root integration — 2026-07-21
 
 Root integrated the accepted immutable-launch correction through
