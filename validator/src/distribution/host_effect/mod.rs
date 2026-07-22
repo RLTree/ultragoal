@@ -17,7 +17,6 @@ pub(crate) use executor::{
     HostEffectCompletion, HostEffectCompletionOutcome, HostEffectExecutionPolicy,
     NativeRetainedDescriptorProcessBackend, SupportedHostEffectExecutor,
 };
-#[cfg(not(test))]
 pub(crate) use executor::HostEffectRecoveryHandoff;
 pub(crate) use ledger::FileHostEffectLedger;
 
@@ -38,6 +37,9 @@ pub(crate) use selected_codex_executable::{
     selected_test_fixture, SelectedCodexExecutableTestFixture,
 };
 mod transaction;
+mod transaction_effectful;
+mod transaction_recovery_carrier;
+mod transaction_carrier;
 mod transaction_failure;
 mod transaction_identity;
 mod transaction_observation;
@@ -50,7 +52,12 @@ mod transaction_preparation;
 mod transaction_read_only;
 mod transaction_recovery;
 mod transaction_tree;
-pub(crate) use transaction::execute_host_lifecycle_transaction;
+pub(crate) use transaction::{
+    HostLifecycleTransactionResult, execute_host_lifecycle_transaction,
+};
+pub(crate) use transaction_carrier::{
+    HostLifecycleRecoveryCarrier, HostLifecycleTransactionOutcome,
+};
 pub(crate) use transaction_observation::HostLifecycleObservationInput;
 
 #[cfg(test)]

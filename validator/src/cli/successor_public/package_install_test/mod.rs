@@ -1,8 +1,8 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    ConfinedRoot, ProductionPackageArtifact, ScopedFile, capture_product_package,
-    verify_product_package,
+    capture_product_package, verify_product_package, ConfinedRoot, ProductionPackageArtifact,
+    ScopedFile,
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256};
@@ -57,7 +57,12 @@ pub(super) fn execute(
     let observation =
         match isolated_transaction::execute(source_context, &catalog, &artifact, retain_root) {
             Ok(observation) => observation,
-            Err(cause) => return transaction_failure(cause),
+            Err(isolated_transaction::IsolatedTransactionFailure::Message(cause)) => {
+                return transaction_failure(cause)
+            }
+            Err(isolated_transaction::IsolatedTransactionFailure::RecoveryRequired(_carrier)) => {
+                return transaction_failure("host lifecycle recovery remained unresolved")
+            }
         };
     let record = InstallTestOutcome {
         schema_version: "HarnessPackageInstallTestOutcome-v1",

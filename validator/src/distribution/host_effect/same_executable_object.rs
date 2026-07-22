@@ -163,6 +163,10 @@ impl HostEffectOutcome {
             completed_at_unix_ms,
         })
     }
+
+    pub(crate) fn command_output_sha256(&self) -> &[String] {
+        &self.command_output_sha256
+    }
 }
 
 fn allowed_transition(expected: HostEffectState, next: HostEffectState) -> bool {

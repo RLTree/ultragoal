@@ -59,6 +59,69 @@ impl DescriptorExecutionHandoff {
         )
     }
 
+    pub(in crate::distribution::host_effect) fn recovery_bindings(
+        &self,
+    ) -> (String, String, String, String) {
+        (
+            self.effect.permit().permit_id().to_owned(),
+            self.effect.plan().plan_sha256().to_owned(),
+            self.effect
+                .executable()
+                .binding_sha256()
+                .unwrap_or_default(),
+            self.target.identity().target_sha256().to_owned(),
+        )
+    }
+
+    pub(in crate::distribution::host_effect) fn revalidate_recovery(
+        &mut self,
+        custody: &crate::plugin_product::lifecycle::HostLifecycleCustody,
+        recovery: &crate::distribution::host_effect::HostEffectRecoveryHandoff,
+        expected_effect_identity_sha256: &str,
+        expected_command_plan_sha256: &str,
+        expected_executable_identity_sha256: &str,
+        expected_target_identity_sha256: &str,
+    ) -> bool {
+        let (permit_id, command_plan_sha256, executable_identity_sha256, target_identity_sha256) =
+            self.recovery_bindings();
+        if permit_id != recovery.permit_id()
+            || command_plan_sha256 != expected_command_plan_sha256
+            || command_plan_sha256 != custody.plan_sha256()
+            || executable_identity_sha256.is_empty()
+            || executable_identity_sha256 != expected_executable_identity_sha256
+            || target_identity_sha256 != expected_target_identity_sha256
+            || recovery.effect_identity_sha256() != expected_effect_identity_sha256
+            || !recovery.verify_binding()
+        {
+            return false;
+        }
+        #[cfg(not(test))]
+        {
+            self.with_retained_lifecycle(|_, effect, lease, lifecycle| {
+                lifecycle.record() == custody.pre_effect_record()
+                    && effect.plan().plan_sha256() == custody.plan_sha256()
+                    && effect
+                        .executable()
+                        .binding_sha256()
+                        .is_ok_and(|identity| identity == executable_identity_sha256)
+                    && lease.identity().target_sha256() == target_identity_sha256
+                    && lease.revalidate().is_ok()
+            })
+        }
+        #[cfg(test)]
+        {
+            self.with_retained_authority_mut(|_, effect, lease| {
+                effect.plan().plan_sha256() == custody.plan_sha256()
+                    && effect
+                        .executable()
+                        .binding_sha256()
+                        .is_ok_and(|identity| identity == executable_identity_sha256)
+                    && lease.identity().target_sha256() == target_identity_sha256
+                    && lease.revalidate().is_ok()
+            })
+        }
+    }
+
     #[cfg(not(test))]
     pub(in crate::distribution::host_effect) fn finalize(
         self,
@@ -83,11 +146,10 @@ impl DescriptorExecutionHandoff {
         crate::plugin_product::lifecycle::HostLifecycleRecoveryDisposition,
         SupportedHostLifecycleError,
     > {
-        let executable_identity_sha256 = self
-            .effect
-            .executable()
-            .binding_sha256()
-            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
+        let executable_identity_sha256 =
+            self.effect.executable().binding_sha256().map_err(|_| {
+                lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution)
+            })?;
         custody
             .issue_recovery_disposition(
                 &self.lifecycle_binding,
@@ -106,11 +168,10 @@ impl DescriptorExecutionHandoff {
         disposition: crate::plugin_product::lifecycle::HostLifecycleRecoveryDisposition,
         recovery: &crate::distribution::host_effect::HostEffectRecoveryHandoff,
     ) -> Result<(), SupportedHostLifecycleError> {
-        let executable_identity_sha256 = self
-            .effect
-            .executable()
-            .binding_sha256()
-            .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
+        let executable_identity_sha256 =
+            self.effect.executable().binding_sha256().map_err(|_| {
+                lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution)
+            })?;
         if !disposition.matches(
             &self.lifecycle_binding,
             self.effect.permit().permit_id(),
@@ -120,16 +181,13 @@ impl DescriptorExecutionHandoff {
             self.effect.plan().plan_sha256(),
             recovery,
         ) {
-            return Err(lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution));
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::PlanSubstitution,
+            ));
         }
         self.effect
             .finalize()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed))
-    }
-
-    #[cfg(not(test))]
-    pub(in crate::distribution::host_effect) fn retain_for_recovery(self) {
-        std::mem::forget(self);
     }
 
     #[cfg(test)]

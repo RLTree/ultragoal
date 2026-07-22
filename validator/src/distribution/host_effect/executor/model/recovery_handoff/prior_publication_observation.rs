@@ -1,4 +1,3 @@
-#[cfg(test)]
 impl HostEffectRecoveryHandoff {
     pub(crate) fn prior_publication_observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
@@ -153,6 +152,26 @@ impl HostEffectRecoveryHandoff {
                 ..
             }
         )
+    }
+
+    pub(crate) fn exact_ledger_observation(
+        &self,
+    ) -> Option<(&HostEffectLedgerHead, &HostEffectLedgerRecord)> {
+        match self {
+            Self::TerminalTransition {
+                ledger_head,
+                ledger_record,
+                exact_current_ledger_observation: true,
+                ..
+            }
+            | Self::PostReservation {
+                ledger_head,
+                ledger_record,
+                exact_current_ledger_observation: true,
+                ..
+            } => Some((ledger_head, ledger_record)),
+            _ => None,
+        }
     }
 
     pub(crate) fn has_exact_current_publication_observation(&self) -> bool {

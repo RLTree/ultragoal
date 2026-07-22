@@ -102,6 +102,10 @@ impl ConfinedHostEffectTarget {
         Ok(())
     }
 
+    pub(in crate::distribution::host_effect) fn revalidate_for_recovery(&self) -> bool {
+        self.revalidate_anchor().is_ok()
+    }
+
     fn current_target_identity(&self) -> Result<ObservedTargetIdentity, HostEffectExecutorFailure> {
         self.revalidate_anchor()?;
         let metadata = self.anchor.directory.metadata().map_err(|_| path_swap())?;

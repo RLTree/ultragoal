@@ -1,18 +1,18 @@
-use super::SelectedCodexExecutable;
 use super::transaction_identity::absent_digest;
 use super::transaction_observation_command::{
     observation_command, run_json, validate_input, validate_paths,
 };
 use super::transaction_observation_identity::{
-    HostSurfaceLocations, observe_marketplace, observe_plugin,
+    observe_marketplace, observe_plugin, HostSurfaceLocations,
 };
-use super::transaction_observation_transition::{SurfacePresence, derive_effect_prefix};
+use super::transaction_observation_transition::{derive_effect_prefix, SurfacePresence};
 use super::transaction_tree::{observe_file, observe_tree};
-use crate::distribution::PackageIdentity;
+use super::SelectedCodexExecutable;
 use crate::distribution::host_effect::executor::{
     HostEffectCancellation, HostEffectExecutionPolicy, NativeRetainedDescriptorProcessBackend,
 };
 use crate::distribution::host_effect::lifecycle::DescriptorExecutionCapability;
+use crate::distribution::PackageIdentity;
 use crate::plugin_product::lifecycle::{
     HostCommandObservation, HostLifecycleExpectedObservations, HostLifecycleObservedBundle,
 };
@@ -20,6 +20,7 @@ use crate::plugin_product::lifecycle::{LifecycleEffect, LifecyclePlan, Lifecycle
 use std::os::fd::RawFd;
 use std::path::{Path, PathBuf};
 
+#[derive(Clone)]
 pub(crate) struct HostLifecycleObservationInput {
     pub(crate) marketplace_source_path: PathBuf,
     pub(crate) marketplace_source_root: PathBuf,

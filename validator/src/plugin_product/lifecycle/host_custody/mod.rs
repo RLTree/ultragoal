@@ -2,11 +2,11 @@ use super::model::{
     LifecycleEffect, LifecycleError, LifecycleIntent, LifecyclePlan, LifecycleState,
 };
 use super::plan::validate_plan;
+#[cfg(not(test))]
+use crate::distribution::host_effect::HostEffectRecoveryHandoff;
 use crate::distribution::host_effect::{
     DurableHostLifecycleAdmission, HostEffectCompletion, HostEffectCompletionOutcome,
 };
-#[cfg(not(test))]
-use crate::distribution::host_effect::HostEffectRecoveryHandoff;
 use crate::distribution::{HostCommand, HostCommandPlan, PackageIdentity};
 use serde::{Deserialize, Serialize};
 
@@ -230,6 +230,10 @@ impl HostLifecycleCustody {
             #[cfg(not(test))]
             record: self.pre_effect_record.clone(),
         })
+    }
+
+    pub(crate) fn recovery_pending(&self) -> bool {
+        self.custody_phase == 2 && self.recovery_required
     }
 
     #[cfg(test)]

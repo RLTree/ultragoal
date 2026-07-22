@@ -1,7 +1,7 @@
 use super::*;
 use crate::distribution::{
-    Capability, HostCapabilityDeclaration, HostCommandPlan, ISOLATED_MARKETPLACE_NAME,
-    JourneyBinding, ScopedFile, ScopedTree,
+    Capability, HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, ScopedFile, ScopedTree,
+    ISOLATED_MARKETPLACE_NAME,
 };
 use crate::inventory::AuthorityCatalog;
 use std::path::Path;
@@ -9,13 +9,24 @@ use std::path::Path;
 use super::isolated_observation::IsolatedObservation;
 use super::temporary_root;
 
+pub(super) enum IsolatedTransactionFailure {
+    Message(&'static str),
+    RecoveryRequired(crate::distribution::host_effect::HostLifecycleRecoveryCarrier),
+}
+
+impl From<&'static str> for IsolatedTransactionFailure {
+    fn from(message: &'static str) -> Self {
+        Self::Message(message)
+    }
+}
+
 pub(super) fn execute(
     context: &LiveContext,
     catalog: &AuthorityCatalog,
     artifact: &ProductionPackageArtifact,
     retain_root: bool,
-) -> Result<IsolatedObservation, &'static str> {
-    let root_path = temporary_root::create()?;
+) -> Result<IsolatedObservation, IsolatedTransactionFailure> {
+    let root_path = temporary_root::create().map_err(|_| "isolated host root unavailable")?;
     let confined = ConfinedRoot::open(&root_path).map_err(|_| "isolated host root unavailable")?;
     let mut result = execute_inner(context, catalog, artifact, confined.clone(), &root_path);
     if retain_root && result.is_ok() {
@@ -26,7 +37,9 @@ pub(super) fn execute(
         return result;
     }
     if confined.remove_owned().is_err() {
-        return Err("disposable isolated host cleanup failed");
+        return Err(IsolatedTransactionFailure::Message(
+            "disposable isolated host cleanup failed",
+        ));
     }
     result
 }
@@ -37,7 +50,7 @@ fn execute_inner(
     artifact: &ProductionPackageArtifact,
     confined: ConfinedRoot,
     root_path: &Path,
-) -> Result<IsolatedObservation, &'static str> {
+) -> Result<IsolatedObservation, IsolatedTransactionFailure> {
     let mut package_tree = ScopedTree::new(confined.clone(), "plugins/harness-ultragoal")
         .map_err(|_| "package materialization target failed")?;
     let package_publication = artifact
@@ -104,7 +117,9 @@ struct InstallTransaction<'a> {
     root_path: std::path::PathBuf,
 }
 
-fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservation, &'static str> {
+fn execute_bound(
+    transaction: InstallTransaction<'_>,
+) -> Result<IsolatedObservation, IsolatedTransactionFailure> {
     let InstallTransaction {
         context,
         catalog,
@@ -166,6 +181,7 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
             plugin: "harness-ultragoal".to_owned(),
         },
     )?;
+    let result = resolve_transaction_outcome(result)?;
     artifact
         .verify_marketplace_source(context, catalog, &package_tree)
         .map_err(|_| "materialized package changed during transaction")?;
@@ -179,6 +195,38 @@ fn execute_bound(transaction: InstallTransaction<'_>) -> Result<IsolatedObservat
         journey_binding_sha256: binding_sha256,
         retained_root: None,
     })
+}
+
+fn resolve_transaction_outcome(
+    mut outcome: crate::distribution::host_effect::HostLifecycleTransactionOutcome,
+) -> Result<
+    crate::distribution::host_effect::HostLifecycleTransactionResult,
+    IsolatedTransactionFailure,
+> {
+    for _ in 0..3 {
+        outcome = match outcome {
+            crate::distribution::host_effect::HostLifecycleTransactionOutcome::Completed(
+                result,
+            ) => return Ok(result),
+            crate::distribution::host_effect::HostLifecycleTransactionOutcome::FinalizedFailure(
+                cause,
+            ) => return Err(IsolatedTransactionFailure::Message(cause)),
+            crate::distribution::host_effect::HostLifecycleTransactionOutcome::RecoveryRequired(
+                carrier,
+            ) => carrier.reobserve_and_resolve(),
+        };
+    }
+    match outcome {
+        crate::distribution::host_effect::HostLifecycleTransactionOutcome::RecoveryRequired(
+            carrier,
+        ) => Err(IsolatedTransactionFailure::RecoveryRequired(carrier)),
+        crate::distribution::host_effect::HostLifecycleTransactionOutcome::FinalizedFailure(
+            cause,
+        ) => Err(IsolatedTransactionFailure::Message(cause)),
+        crate::distribution::host_effect::HostLifecycleTransactionOutcome::Completed(result) => {
+            Ok(result)
+        }
+    }
 }
 
 fn isolated_ledger_root(root: &Path) -> Result<std::path::PathBuf, &'static str> {
