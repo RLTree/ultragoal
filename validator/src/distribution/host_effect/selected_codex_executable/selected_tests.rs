@@ -1,4 +1,4 @@
-use super::super::HostEffectLedgerError;
+use super::super::{HostEffectLedgerError, HostEffectLedgerErrorId};
 use super::{path_byte_length, resolve_from_path};
 use crate::distribution::error::DistributionError;
 use std::ffi::OsString;
@@ -17,12 +17,19 @@ static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
 pub(crate) struct SelectedCodexExecutableTestFixture {
     root: PathBuf,
     path: PathBuf,
-    selected: super::SelectedCodexExecutable,
+    selected: Option<super::SelectedCodexExecutable>,
 }
 
 impl SelectedCodexExecutableTestFixture {
     pub(crate) fn selected(&self) -> Result<super::SelectedCodexExecutable, HostEffectLedgerError> {
-        self.selected.duplicate()
+        self.selected
+            .as_ref()
+            .ok_or_else(|| HostEffectLedgerError::new(HostEffectLedgerErrorId::Io))?
+            .duplicate()
+    }
+
+    pub(crate) fn take_selected(&mut self) -> super::SelectedCodexExecutable {
+        self.selected.take().expect("fixture selected executable")
     }
 
     pub(crate) fn host_capability(
@@ -60,6 +67,7 @@ impl SelectedCodexExecutableTestFixture {
         fs::remove_file(&self.path).expect("fixture executable removal");
         fs::hard_link(&source.path, &self.path).expect("fixture executable hard link");
     }
+
 }
 
 impl Drop for SelectedCodexExecutableTestFixture {
@@ -85,7 +93,7 @@ pub(crate) fn selected_test_fixture(
     SelectedCodexExecutableTestFixture {
         root,
         path,
-        selected,
+        selected: Some(selected),
     }
 }
 

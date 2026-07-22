@@ -66,35 +66,35 @@ impl DarwinPrivateDirectory {
         Ok(())
     }
 
-    pub(super) fn clear_immutable_for_drop(&self) {
+    fn clear_immutable(&self) -> Result<(), HostEffectLedgerError> {
         use std::os::fd::AsRawFd;
 
-        // SAFETY: `file` owns the descriptor; cleanup is best effort.
-        unsafe {
-            libc::fchflags(self.file.as_raw_fd(), 0);
+        // SAFETY: `file` owns the descriptor and this is an explicit finalization.
+        if unsafe { libc::fchflags(self.file.as_raw_fd(), 0) } != 0 {
+            return Err(ledger_io());
+        }
+        Ok(())
+    }
+
+    pub(super) fn finalize(self, file_path: &Path) -> Result<(), HostEffectLedgerError> {
+        self.clear_immutable()?;
+        clear_immutable_and_remove(file_path)?;
+        match std::fs::remove_dir(&self.path) {
+            Ok(()) => Ok(()),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+            Err(_) => Err(ledger_io()),
         }
     }
-
-    pub(super) fn remove_file_for_drop(&self, path: &Path) {
-        clear_immutable_and_remove(path);
-    }
 }
 
-impl Drop for DarwinPrivateDirectory {
-    fn drop(&mut self) {
-        self.clear_immutable_for_drop();
-        let path = self.path.join("codex");
-        self.remove_file_for_drop(&path);
-        let _ = std::fs::remove_dir(&self.path);
-    }
-}
-
-fn clear_immutable_and_remove(path: &Path) {
+fn clear_immutable_and_remove(path: &Path) -> Result<(), HostEffectLedgerError> {
     use std::os::fd::AsRawFd;
     use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
-    let Ok(metadata) = std::fs::symlink_metadata(path) else {
-        return;
+    let metadata = match std::fs::symlink_metadata(path) {
+        Ok(metadata) => metadata,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(_) => return Err(ledger_io()),
     };
     let canonical_parent = path
         .parent()
@@ -109,23 +109,24 @@ fn clear_immutable_and_remove(path: &Path) {
             .as_deref()
             != canonical_parent.as_deref()
     {
-        return;
+        return Err(tampered());
     }
     let mut options = std::fs::OpenOptions::new();
     options
         .read(true)
         .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW);
-    let Ok(file) = options.open(path) else {
-        return;
-    };
-    let Ok(open_metadata) = file.metadata() else {
-        return;
-    };
+    let file = options.open(path).map_err(|_| ledger_io())?;
+    let open_metadata = file.metadata().map_err(|_| ledger_io())?;
     if open_metadata.dev() != metadata.dev() || open_metadata.ino() != metadata.ino() {
-        return;
+        return Err(tampered());
     }
     // SAFETY: `file` owns the descriptor and clearing flags enables removal.
-    if unsafe { libc::fchflags(file.as_raw_fd(), 0) } == 0 {
-        let _ = std::fs::remove_file(path);
+    if unsafe { libc::fchflags(file.as_raw_fd(), 0) } != 0 {
+        return Err(ledger_io());
+    }
+    match std::fs::remove_file(path) {
+        Ok(()) => Ok(()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(_) => Err(ledger_io()),
     }
 }

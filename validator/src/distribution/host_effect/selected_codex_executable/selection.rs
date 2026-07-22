@@ -71,6 +71,18 @@ impl SelectedCodexExecutable {
         })
     }
 
+    pub(in crate::distribution::host_effect) fn finalize(
+        self,
+    ) -> Result<(), HostEffectLedgerError> {
+        let Self {
+            file,
+            launch,
+            identity: _,
+        } = self;
+        drop(file);
+        launch.finalize()
+    }
+
     pub(in crate::distribution::host_effect) fn revalidate(
         &self,
     ) -> Result<(), HostEffectLedgerError> {

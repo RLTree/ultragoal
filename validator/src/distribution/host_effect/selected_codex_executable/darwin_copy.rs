@@ -28,57 +28,75 @@ impl DarwinPrivateExecutable {
         use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
 
         let _ = mode;
-        let directory = DarwinPrivateDirectory::create()?;
-        let path = directory.path.join("codex");
-        let mut writer = std::fs::OpenOptions::new();
-        writer
-            .write(true)
-            .create_new(true)
-            .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW)
-            .mode(0o700);
-        let mut writer = writer.open(&path).map_err(|_| ledger_io())?;
-        let mut hasher = Sha256::new();
-        let mut offset = 0_u64;
-        let mut buffer = [0_u8; 64 * 1024];
-        while offset < expected_size {
-            let remaining = (expected_size - offset).min(buffer.len() as u64) as usize;
-            let count = read_at_retry(source, &mut buffer[..remaining], offset)?;
-            if count == 0 {
+        let mut directory = Some(DarwinPrivateDirectory::create()?);
+        let path = directory.as_ref().ok_or_else(ledger_io)?.path.join("codex");
+        let result = (|| {
+            let mut writer = std::fs::OpenOptions::new();
+            writer
+                .write(true)
+                .create_new(true)
+                .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW)
+                .mode(0o700);
+            let mut writer = writer.open(&path).map_err(|_| ledger_io())?;
+            let mut hasher = Sha256::new();
+            let mut offset = 0_u64;
+            let mut buffer = [0_u8; 64 * 1024];
+            while offset < expected_size {
+                let remaining = (expected_size - offset).min(buffer.len() as u64) as usize;
+                let count = read_at_retry(source, &mut buffer[..remaining], offset)?;
+                if count == 0 {
+                    return Err(tampered());
+                }
+                hasher.update(&buffer[..count]);
+                writer
+                    .write_all(&buffer[..count])
+                    .map_err(|_| ledger_io())?;
+                offset = offset.checked_add(count as u64).ok_or_else(ledger_io)?;
+            }
+            if offset != expected_size
+                || format!("sha256:{:x}", hasher.finalize()) != expected_sha256
+            {
                 return Err(tampered());
             }
-            hasher.update(&buffer[..count]);
-            writer
-                .write_all(&buffer[..count])
+            std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700))
                 .map_err(|_| ledger_io())?;
-            offset = offset.checked_add(count as u64).ok_or_else(ledger_io)?;
+            writer.sync_all().map_err(|_| ledger_io())?;
+            // SAFETY: `writer` owns a regular file descriptor and this sets the
+            // documented Darwin user immutable bit.
+            if unsafe { libc::fchflags(writer.as_raw_fd(), libc::UF_IMMUTABLE) } != 0 {
+                return Err(ledger_io());
+            }
+            drop(writer);
+            directory.as_ref().ok_or_else(ledger_io)?.make_immutable()?;
+            let mut options = std::fs::OpenOptions::new();
+            options
+                .read(true)
+                .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_NONBLOCK);
+            let file = options.open(&path).map_err(|_| ledger_io())?;
+            Ok(Self {
+                directory: directory.take().ok_or_else(ledger_io)?,
+                path: path.clone(),
+                file,
+                size: expected_size,
+                sha256: expected_sha256.to_owned(),
+            })
+        })();
+        match result {
+            Ok(executable) => match executable.revalidate() {
+                Ok(()) => Ok(executable),
+                Err(error) => match executable.finalize() {
+                    Ok(()) => Err(error),
+                    Err(_) => Err(ledger_io()),
+                },
+            },
+            Err(error) => match directory.take() {
+                Some(directory) => match directory.finalize(&path) {
+                    Ok(()) => Err(error),
+                    Err(_) => Err(ledger_io()),
+                },
+                None => Err(ledger_io()),
+            },
         }
-        if offset != expected_size || format!("sha256:{:x}", hasher.finalize()) != expected_sha256 {
-            return Err(tampered());
-        }
-        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o700))
-            .map_err(|_| ledger_io())?;
-        writer.sync_all().map_err(|_| ledger_io())?;
-        // SAFETY: `writer` owns a regular file descriptor and this sets the
-        // documented Darwin user immutable bit.
-        if unsafe { libc::fchflags(writer.as_raw_fd(), libc::UF_IMMUTABLE) } != 0 {
-            return Err(ledger_io());
-        }
-        drop(writer);
-        directory.make_immutable()?;
-        let mut options = std::fs::OpenOptions::new();
-        options
-            .read(true)
-            .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_NONBLOCK);
-        let file = options.open(&path).map_err(|_| ledger_io())?;
-        let executable = Self {
-            directory,
-            path,
-            file,
-            size: expected_size,
-            sha256: expected_sha256.to_owned(),
-        };
-        executable.revalidate()?;
-        Ok(executable)
     }
 
     pub(super) fn path(&self) -> &Path {
@@ -142,12 +160,16 @@ impl DarwinPrivateExecutable {
         verify_digest(&self.file, self.size, &self.sha256)?;
         verify_digest(&path_file, self.size, &self.sha256)
     }
-}
 
-impl Drop for DarwinPrivateExecutable {
-    fn drop(&mut self) {
-        self.directory.clear_immutable_for_drop();
-        self.directory.remove_file_for_drop(&self.path);
+    pub(super) fn finalize(self) -> Result<(), HostEffectLedgerError> {
+        let Self {
+            directory,
+            path,
+            file,
+            ..
+        } = self;
+        drop(file);
+        directory.finalize(&path)
     }
 }
 

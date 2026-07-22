@@ -116,6 +116,25 @@ impl ImmutableExecutable {
         }
     }
 
+    pub(super) fn finalize(self) -> Result<(), HostEffectLedgerError> {
+        #[cfg(any(target_os = "linux", target_os = "freebsd"))]
+        {
+            drop(self);
+            return Ok(());
+        }
+        #[cfg(target_os = "macos")]
+        {
+            return std::sync::Arc::try_unwrap(self.darwin)
+                .map_err(|_| ledger_io())?
+                .finalize();
+        }
+        #[cfg(not(any(target_os = "linux", target_os = "freebsd", target_os = "macos")))]
+        {
+            let _ = self;
+            Err(ledger_io())
+        }
+    }
+
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) fn file(&self) -> &File {
         &self.file
