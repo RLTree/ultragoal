@@ -97,7 +97,7 @@ fn historical_and_evidence_led_product_briefs_have_distinct_valid_shapes() {
 fn product_fitness_v2_requires_separate_truth_surfaces_and_real_use_fields() {
     let store = store();
     let mut receipt: Value = serde_json::from_slice(include_bytes!(
-        "../../../../../validation_artifacts/harness/product-fitness-receipt.json"
+        "../../../../../fixtures/review-round/anchors/product-fitness-receipt.json"
     ))
     .expect("fitness receipt");
     receipt["schema"] = json!("harness-ultragoal.product-fitness-receipt.v2");
