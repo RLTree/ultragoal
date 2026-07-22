@@ -35,9 +35,10 @@ pub(crate) fn validate_v2(
     {
         return Err("brief_contract_binding_stale");
     }
-    if brief.real_work.repository_identity != candidate.repository_digest
-        || brief.real_work.starting_candidate != candidate.candidate_digest
-    {
+    // `starting_candidate` records the immutable beginning of the journey.
+    // The active loop must survive its expected dirty routine-work and recovery
+    // transitions; current commands bind their own LiveContext at execution.
+    if brief.real_work.repository_identity != candidate.repository_digest {
         return Err("brief_candidate_binding_stale");
     }
     if matches!(

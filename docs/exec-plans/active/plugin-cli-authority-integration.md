@@ -1506,6 +1506,23 @@ unmaterialized. Root will not copy package bytes into the source tree, repoint
 the catalog to arbitrary source, or treat an old target receipt as current
 install evidence.
 
+### E2E truth-loop correction — 2026-07-21
+
+The first installed agent-use pass discovered two product-boundary facts on the
+current dirty source repository. Routine work correctly requires the
+repository-owned `config/routine-public.json` and `config/routines.json`, but
+the current whole-repository fit plan has conflicts, so it must not silently
+copy those templates or partially apply the plan. This is the current first
+broken journey transition.
+
+The same pass showed that a v2 Product Success Brief incorrectly compared its
+historical `real_work.starting_candidate` to every current dirty candidate.
+That would deactivate a truth loop as soon as its expected dirty routine or
+recovery state began. The brief now keeps that value as immutable journey
+provenance; repository identity and every command's current `LiveContext`
+remain enforced. No evidence, installed, runtime, or product claim advances
+from this correction.
+
 Two dependency-independent source lanes are active from that exact root:
 
 | Lane | Codex task / worktree | Owned result | Root-held boundary |

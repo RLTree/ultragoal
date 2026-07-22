@@ -119,11 +119,12 @@ fn parser_accepts_v2_and_rejects_unknown_fields() {
 }
 
 #[test]
-fn semantic_validation_rejects_candidate_and_claim_substitution() {
-    let mut value = brief();
-    value.real_work.starting_candidate = digest('f');
+fn semantic_validation_rejects_repository_and_claim_substitution() {
+    let value = brief();
+    let mut wrong_repository = candidate();
+    wrong_repository.repository_digest = digest('f');
     assert_eq!(
-        validate_v2(&value, &facts(), &candidate()),
+        validate_v2(&value, &facts(), &wrong_repository),
         Err("brief_candidate_binding_stale")
     );
 
@@ -133,6 +134,15 @@ fn semantic_validation_rejects_candidate_and_claim_substitution() {
         validate_v2(&value, &facts(), &candidate()),
         Err("brief_claim_unknown")
     );
+}
+
+#[test]
+fn historical_starting_candidate_does_not_stale_an_expected_dirty_journey() {
+    let mut value = brief();
+    value.real_work.dirty_state_expectation = super::model::DirtyStateExpectation::Either;
+    let mut current = candidate();
+    current.candidate_digest = digest('f');
+    assert!(validate_v2(&value, &facts(), &current).is_ok());
 }
 
 #[test]
