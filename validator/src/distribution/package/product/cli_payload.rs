@@ -45,35 +45,7 @@ impl CandidateCliPayload {
 }
 
 fn is_native_executable(bytes: &[u8]) -> bool {
-    elf_executable(bytes) || macho_executable(bytes) || pe_executable(bytes)
-}
-
-fn elf_executable(bytes: &[u8]) -> bool {
-    matches!(
-        bytes.get(..20),
-        Some([
-            0x7f,
-            b'E',
-            b'L',
-            b'F',
-            2,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            2 | 3,
-            0,
-            0xb7 | 0x3e,
-            0
-        ])
-    )
+    macho_executable(bytes)
 }
 
 fn macho_executable(bytes: &[u8]) -> bool {
@@ -99,21 +71,46 @@ fn macho_executable(bytes: &[u8]) -> bool {
     let commands = read_u32(16) as usize;
     let command_bytes = read_u32(20) as usize;
     (cpu == 0x0100_0007 || cpu == 0x0100_000c)
-        && (file_type == 2 || file_type == 6)
+        && file_type == 2
         && commands > 0
+        && command_bytes >= commands.saturating_mul(8)
         && command_bytes <= bytes.len().saturating_sub(32)
+        && valid_load_commands(bytes, 32, commands, command_bytes, little_endian)
 }
 
-fn pe_executable(bytes: &[u8]) -> bool {
-    let Some(dos) = bytes.get(..64) else {
+fn valid_load_commands(
+    bytes: &[u8],
+    offset: usize,
+    commands: usize,
+    command_bytes: usize,
+    little_endian: bool,
+) -> bool {
+    let Some(table) = bytes.get(offset..offset.saturating_add(command_bytes)) else {
         return false;
     };
-    if dos[..2] != *b"MZ" {
-        return false;
+    let mut cursor = 0_usize;
+    let mut has_segment = false;
+    let mut has_entry = false;
+    for _ in 0..commands {
+        let Some(header) = table.get(cursor..cursor.saturating_add(8)) else {
+            return false;
+        };
+        let read_u32 = |start| {
+            let value: [u8; 4] = header[start..start + 4].try_into().expect("load command");
+            if little_endian {
+                u32::from_le_bytes(value)
+            } else {
+                u32::from_be_bytes(value)
+            }
+        };
+        let command = read_u32(0);
+        let size = read_u32(4) as usize;
+        if size < 8 || size % 8 != 0 || table.get(cursor..cursor.saturating_add(size)).is_none() {
+            return false;
+        }
+        has_segment |= command == 0x19 && size >= 72;
+        has_entry |= command == 0x8000_0028 && size == 24;
+        cursor += size;
     }
-    let offset = u32::from_le_bytes(dos[60..64].try_into().expect("DOS offset")) as usize;
-    matches!(
-        bytes.get(offset..offset + 6),
-        Some([b'P', b'E', 0, 0, 0x64 | 0xaa, 0x86 | 0x64])
-    )
+    cursor == table.len() && has_segment && has_entry
 }

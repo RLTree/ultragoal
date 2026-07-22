@@ -80,11 +80,32 @@ impl RuntimeExecutionCopy {
     }
 
     fn remove(self) -> Result<(), DistributionError> {
-        std::fs::remove_file(&self.path).map_err(|_| error(DistributionErrorId::EffectFailed))?;
-        std::fs::remove_dir(&self.directory).map_err(|_| error(DistributionErrorId::EffectFailed))
+        std::fs::remove_dir_all(&self.directory)
+            .map_err(|_| error(DistributionErrorId::EffectFailed))
     }
 }
 
 fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|byte| format!("{byte:02x}")).collect()
+}
+
+#[cfg(test)]
+mod execution_copy_tests {
+    use super::*;
+
+    #[test]
+    fn owned_execution_directory_removes_child_created_files() {
+        let directory = std::env::temp_dir().join(format!("hul-cleanup-{}", std::process::id()));
+        let path = directory.join("ultragoal");
+        std::fs::create_dir(&directory).unwrap();
+        std::fs::write(&path, b"payload").unwrap();
+        std::fs::write(directory.join("workspace-canary"), b"child output").unwrap();
+        RuntimeExecutionCopy {
+            directory: directory.clone(),
+            path,
+        }
+        .remove()
+        .unwrap();
+        assert!(!directory.exists());
+    }
 }

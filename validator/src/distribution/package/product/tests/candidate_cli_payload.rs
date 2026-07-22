@@ -110,9 +110,13 @@ fn candidate_cli_materialization_refuses_substituted_output_without_overwrite() 
 
 fn test_cli_bytes() -> Vec<u8> {
     let mut bytes = vec![
-        0xcf, 0xfa, 0xed, 0xfe, 0x0c, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0,
+        0xcf, 0xfa, 0xed, 0xfe, 0x0c, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 96, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0,
     ];
-    bytes.extend_from_slice(&[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    bytes.extend_from_slice(&[0x19, 0, 0, 0, 72, 0, 0, 0]);
+    bytes.extend_from_slice(&[0; 64]);
+    bytes.extend_from_slice(&[0x28, 0, 0, 0x80, 24, 0, 0, 0]);
+    bytes.extend_from_slice(&[0; 16]);
     bytes
 }
 #[test]
@@ -130,6 +134,10 @@ fn compiled_payload_rejects_truncated_or_incoherent_native_headers() {
         b"\x7fELFcli".to_vec(),
         b"MZnot-a-portable-executable".to_vec(),
         b"\xcf\xfa\xed\xfecandidate-cli".to_vec(),
+        vec![
+            0xcf, 0xfa, 0xed, 0xfe, 0x0c, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0,
+        ],
     ] {
         assert!(CandidateCliPayload::for_candidate(candidate, bytes).is_err());
     }
