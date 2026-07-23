@@ -17,7 +17,7 @@ use std::path::Path;
 const SOURCE_ID: &str = "successor-runtime";
 pub(super) fn query_local(
     root: &Path,
-    context: &LiveContext,
+    read_context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Observe(ObserveAction::Query)
@@ -38,9 +38,14 @@ pub(super) fn query_local(
         }
         _ => return invalid_invocation(),
     };
-    if context.revalidate().is_err() {
+    if read_context.revalidate().is_err() {
         return stale_context();
     }
+    let routine_context = match super::routine::current_observability_context(root, read_context) {
+        Ok(context) => context,
+        Err(()) => return observability_unavailable(LocalStoreFailure::binding()),
+    };
+    let context = routine_context.as_ref().unwrap_or(read_context);
     let binding = match SemanticEvent::for_context(
         context,
         SOURCE_ID,

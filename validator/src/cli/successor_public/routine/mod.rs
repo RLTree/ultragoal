@@ -34,6 +34,8 @@ use std::path::{Path, PathBuf};
 
 #[path = "invocation_binding.rs"]
 mod invocation_binding;
+#[path = "source/observability_context.rs"]
+mod observability_context;
 #[path = "source/configuration.rs"]
 mod source_configuration;
 #[path = "source/context.rs"]
@@ -43,5 +45,6 @@ mod source_selection;
 
 pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;
+pub(crate) use observability_context::*;
 pub(crate) use source_configuration::*;
 pub(crate) use source_selection::*;
