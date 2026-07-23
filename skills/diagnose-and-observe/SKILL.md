@@ -27,6 +27,7 @@ ultragoal --json inspect findings
 ultragoal --json observe query
 ultragoal --json observe query --filter <identifier>
 ultragoal --json diagnose --finding <finding-id>
+ultragoal --json diagnose --target <repository-path>
 ultragoal --json next
 ```
 
@@ -35,7 +36,10 @@ ultragoal --json next
 2. `observe query` reads bounded local semantic events, applies redaction and
    cardinality limits, and reports corruption or truncation explicitly.
 3. `diagnose` links observed facts to cause, smallest safe repair, exact rerun,
-   effect, authority, and resulting ceiling. Label inference as inference.
+   effect, authority, and resulting ceiling. When full product-state inventory
+   is unavailable, `--target` reconstructs only the existing routine checkpoint
+   and ledger authority for that repository; it does not manufacture
+   ProductState or promote a claim. Label inference as inference.
 4. `next` returns one deterministic legal action or authority request.
 
 An ambiguous cause, stale finding, conflicting stores, unavailable command, or

@@ -1,5 +1,47 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering P0 current-candidate closure — 2026-07-23
+
+The bounded reuse/extend/map/reject decision is current at
+`docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-P0-CURRENT-CANDIDATE-003.json`.
+UltraGoal remains the sole implicit front door and the sole executable, effect,
+state, acceptance, and claim authority. Agentic Engineering remains an
+explicit advisory source whose candidate artifacts cannot promote claims.
+
+The accepted source increment is
+`5106c94b507dcd36f3abad4b82b4b2f040ed49dd` / tree
+`1a9b0225fce8622d37747240dce8672aea3ff282`. `TaskEvidencePacket-v1`
+now projects only an exact active `LeaseRegistry` entry under the current
+`ScopePolicy` and `Binding`; `ReviewVerdict-v1` revalidates the exact
+`ReviewRecord`; and the semantic repair circuit looks up the named repair from
+the current candidate-bound `ProductState`. The existing `WorkerResult-v1`,
+review acceptance, improvement registry, effects, migrations, Product Fitness,
+and claims remain unchanged.
+
+One bounded Terra/medium review returned the complete material batch: an
+unissued lease could project task evidence, a deserialized verdict was not
+joined to its root review, and a caller could supply a forged repair. One
+coherent authority-binding correction closed those paths. Its confirmation
+review returned ACCEPT. Focused engineering-advisory controls pass 7/7 and the
+affected production library compiles warning-free.
+
+The independently accepted public diagnosis increment at
+`4f9de727ffbaab456159e1b489061cc9abdb0fad` extends the existing read-only
+`diagnose` route. When full inventory/ProductState derivation fails, it can
+reconstruct only the exact routine checkpoint and ledger authority for an
+explicit repository target; absence of routine state preserves the original
+typed inventory failure. This does not manufacture ProductState or settle a
+claim.
+
+The next plugin candidate is `0.0.20`. Source, package, isolated install,
+marketplace registration, installed cache, public executable, app discovery,
+runtime, and journey evidence must be re-observed separately. The documented
+Codex marketplace surface loads a local installed copy from the plugin cache
+and requires a marketplace refresh, plugin reinstall, and app restart/new task
+after source changes. Until those exact surfaces pass, package, installed,
+fresh-app discovery, runtime, empirical Product Fitness, human-use,
+daily-driver, readiness, release, and completion claims remain withheld.
+
 ## Agentic Engineering 3.0 bounded integration and installed journey — 2026-07-23
 
 The current exact source is `de5d395bcefef087e974ab20b21c585a965e47ad`

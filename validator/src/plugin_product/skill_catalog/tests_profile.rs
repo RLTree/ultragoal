@@ -21,7 +21,7 @@ fn profile_errors_cover_missing_extra_duplicate_and_unknown_skills() {
     );
     let harness = package(
         HARNESS_PLUGIN,
-        "0.0.19",
+        "0.0.20",
         HARNESS_PLUGIN_DIGEST,
         HARNESS_PACKAGE_DIGEST,
         vec![skill(HARNESS_FRONT_DOOR, true)],
@@ -113,7 +113,7 @@ fn non_harness_implicit_gateway_is_rejected() {
 fn legacy_aliases_are_excluded_and_warned() {
     let packages = vec![package(
         HARNESS_PLUGIN,
-        "0.0.19",
+        "0.0.20",
         HARNESS_PLUGIN_DIGEST,
         HARNESS_PACKAGE_DIGEST,
         vec![skill(HARNESS_FRONT_DOOR, true), skill("ultragoal", false)],
@@ -134,7 +134,7 @@ fn omitted_and_truncated_metadata_are_visible_as_warnings() {
     omitted.enabled = false;
     let packages = vec![package(
         HARNESS_PLUGIN,
-        "0.0.19",
+        "0.0.20",
         HARNESS_PLUGIN_DIGEST,
         HARNESS_PACKAGE_DIGEST,
         vec![skill(HARNESS_FRONT_DOOR, true), omitted, truncated],
@@ -180,7 +180,7 @@ fn folded_blocks_with_more_indented_content_are_rejected() {
 fn noncanonical_skill_path_is_rejected() {
     let mut harness = package(
         HARNESS_PLUGIN,
-        "0.0.19",
+        "0.0.20",
         HARNESS_PLUGIN_DIGEST,
         HARNESS_PACKAGE_DIGEST,
         vec![skill(HARNESS_FRONT_DOOR, true)],
