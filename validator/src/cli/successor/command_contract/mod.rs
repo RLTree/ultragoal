@@ -7,7 +7,8 @@ mod exit;
 mod invocation;
 
 pub use arguments::{
-    HostPath, OptionArgument, OptionName, OptionSpec, ParsedValue, RelativePath, ValueKind,
+    HostPath, OptionArgument, OptionName, OptionSpec, ParsedValue, RelativePath, RepositoryTarget,
+    ValueKind,
 };
 pub use command_line::{ParsedCommandLine, WorkspaceRoot};
 pub use commands::{

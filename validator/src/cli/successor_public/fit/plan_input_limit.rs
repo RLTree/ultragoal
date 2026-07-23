@@ -9,7 +9,7 @@ pub(crate) fn target_root(
     let mut target = None;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
+            (OptionName::Target, ParsedValue::RepositoryTarget(path)) if target.is_none() => {
                 target = Some(path.as_str())
             }
             (OptionName::Plan, ParsedValue::HostPath(_))
@@ -95,7 +95,7 @@ fn plan_scope(invocation: &ParsedInvocation) -> Result<FitPlanScope, Box<Runtime
     let mut local_state = false;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(_)) if !target_seen => {
+            (OptionName::Target, ParsedValue::RepositoryTarget(_)) if !target_seen => {
                 target_seen = true
             }
             (OptionName::RoutineConfig, ParsedValue::Flag) if !routine_configuration => {
@@ -185,7 +185,7 @@ pub(crate) fn apply_arguments(
     let mut accepted_plan = None;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(_)) => {}
+            (OptionName::Target, ParsedValue::RepositoryTarget(_)) => {}
             (OptionName::Plan, ParsedValue::HostPath(path)) if plan_path.is_none() => {
                 plan_path = Some(path.as_path())
             }
@@ -236,7 +236,7 @@ pub(crate) fn valid_read_invocation(invocation: &ParsedInvocation, action: FitAc
         && invocation.arguments.iter().all(|argument| {
             matches!(
                 (&argument.name, &argument.value),
-                (OptionName::Target, ParsedValue::RelativePath(_))
+                (OptionName::Target, ParsedValue::RepositoryTarget(_))
             )
         })
         && invocation

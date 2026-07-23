@@ -6,6 +6,9 @@ use super::successor::{
 };
 use clap::{ArgAction, builder::ValueRange};
 use std::collections::BTreeSet;
+
+mod arguments;
+use arguments::{push_option, required_args};
 #[test]
 fn catalog_exposes_exactly_the_ten_contract_groups() {
     let groups: BTreeSet<_> = catalog()
@@ -30,6 +33,7 @@ fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
             match option.kind {
                 ValueKind::Flag => {}
                 ValueKind::Identifier => args.push("candidate-1".to_owned()),
+                ValueKind::RepositoryTarget => args.push(".".to_owned()),
                 ValueKind::RelativePath => args.push("artifacts/result.json".to_owned()),
                 ValueKind::HostPath => args.push("/package".to_owned()),
             }
@@ -55,6 +59,7 @@ fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
                 .all(|argument| match &argument.value {
                     ParsedValue::Flag => true,
                     ParsedValue::Identifier(value) => !value.is_empty(),
+                    ParsedValue::RepositoryTarget(path) => !path.as_str().is_empty(),
                     ParsedValue::RelativePath(path) => !path.as_str().is_empty(),
                     ParsedValue::HostPath(path) => {
                         path.is_valid() && path.as_path().is_absolute()
@@ -103,9 +108,10 @@ fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
             assert!(matches!(argument.get_action(), &ArgAction::Set));
             let expected_arity = match option.kind {
                 ValueKind::Flag => ValueRange::EMPTY,
-                ValueKind::Identifier | ValueKind::RelativePath | ValueKind::HostPath => {
-                    ValueRange::SINGLE
-                }
+                ValueKind::Identifier
+                | ValueKind::RepositoryTarget
+                | ValueKind::RelativePath
+                | ValueKind::HostPath => ValueRange::SINGLE,
             };
             assert_eq!(argument.get_num_args(), Some(expected_arity));
             let value_name = argument
@@ -117,6 +123,7 @@ fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
                 match option.kind {
                     ValueKind::Flag => None,
                     ValueKind::Identifier => Some("ID"),
+                    ValueKind::RepositoryTarget => Some("REPOSITORY"),
                     ValueKind::RelativePath => Some("RELATIVE_PATH"),
                     ValueKind::HostPath => Some("HOST_PATH"),
                 }
@@ -221,30 +228,5 @@ fn sensitive_effects_are_never_attached_to_read_routes() {
             }
             _ => assert_eq!(descriptor.effect, EffectClass::Read),
         }
-    }
-}
-
-fn required_args(descriptor: &CommandDescriptor, omit: Option<OptionName>) -> Vec<String> {
-    let mut args = vec![descriptor.command.group().as_str().to_owned()];
-    if let Some(subcommand) = descriptor.subcommand {
-        args.push(subcommand.to_owned());
-    }
-    for option in descriptor
-        .options
-        .iter()
-        .filter(|option| option.required && Some(option.name) != omit)
-    {
-        push_option(&mut args, option.name, option.kind);
-    }
-    args
-}
-
-fn push_option(args: &mut Vec<String>, name: OptionName, kind: ValueKind) {
-    args.push(name.as_str().to_owned());
-    match kind {
-        ValueKind::Flag => {}
-        ValueKind::Identifier => args.push("candidate-1".to_owned()),
-        ValueKind::RelativePath => args.push("artifacts/result.json".to_owned()),
-        ValueKind::HostPath => args.push("/package".to_owned()),
     }
 }

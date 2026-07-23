@@ -62,6 +62,7 @@ impl OptionName {
 pub enum ValueKind {
     Flag,
     Identifier,
+    RepositoryTarget,
     RelativePath,
     HostPath,
 }
@@ -77,6 +78,15 @@ pub struct OptionSpec {
 pub struct RelativePath(pub(crate) String);
 
 impl RelativePath {
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepositoryTarget(pub(crate) String);
+
+impl RepositoryTarget {
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -119,6 +129,7 @@ impl HostPath {
 pub enum ParsedValue {
     Flag,
     Identifier(String),
+    RepositoryTarget(RepositoryTarget),
     RelativePath(RelativePath),
     HostPath(HostPath),
 }

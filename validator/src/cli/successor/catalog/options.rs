@@ -3,7 +3,7 @@ use super::super::command_contract::{
 };
 use crate::context::EffectClass;
 
-const TARGET: OptionSpec = option(OptionName::Target, ValueKind::RelativePath, false);
+const TARGET: OptionSpec = option(OptionName::Target, ValueKind::RepositoryTarget, false);
 const FIT_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::HostPath, true);
 const MIGRATION_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::RelativePath, true);
 const ACCEPT_PLAN: OptionSpec = option(OptionName::AcceptPlan, ValueKind::Identifier, true);

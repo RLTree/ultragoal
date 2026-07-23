@@ -31,6 +31,7 @@ fn option_identity(option: OptionSpec) -> OptionIdentity {
         kind: match option.kind {
             ValueKind::Flag => "flag",
             ValueKind::Identifier => "identifier",
+            ValueKind::RepositoryTarget => "repository-target",
             ValueKind::RelativePath => "relative-path",
             ValueKind::HostPath => "host-path",
         },

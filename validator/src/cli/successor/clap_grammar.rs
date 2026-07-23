@@ -100,6 +100,10 @@ fn option_arg(option: OptionSpec) -> Arg {
             .default_missing_value("true")
             .value_parser(value_parser!(bool)),
         ValueKind::Identifier => argument.action(ArgAction::Set).num_args(1).value_name("ID"),
+        ValueKind::RepositoryTarget => argument
+            .action(ArgAction::Set)
+            .num_args(1)
+            .value_name("REPOSITORY"),
         ValueKind::RelativePath => argument
             .action(ArgAction::Set)
             .num_args(1)

@@ -35,7 +35,7 @@ pub(crate) fn options(
     let mut continuation = None;
     for argument in &invocation.arguments {
         match (&argument.name, &argument.value) {
-            (OptionName::Target, ParsedValue::RelativePath(path)) if target.is_none() => {
+            (OptionName::Target, ParsedValue::RepositoryTarget(path)) if target.is_none() => {
                 target = Some(path.as_str().to_owned());
             }
             (OptionName::InterruptAfter, ParsedValue::Identifier(value))
