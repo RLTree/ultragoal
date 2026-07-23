@@ -13,9 +13,6 @@ impl FileLedger {
             return Err(error("routine-production-continuation-checkpoint-invalid"));
         }
         self.transition_payload(local, PublicationContext::read(), |payload, _tick, head| {
-            if head != expected_head {
-                return Err(error("routine-production-continuation-ledger-stale"));
-            }
             let record = payload
                 .attempts
                 .get_mut(attempt_grant)
@@ -35,6 +32,14 @@ impl FileLedger {
                     ContinuationDisposition::Complete(reuse_result(record, head)?),
                     false,
                 ));
+            }
+            // The ledger head advances for other independently bound attempts.
+            // A complete record is authenticated by its exact binding and
+            // terminal mediation, so its replay is read-only and can return the
+            // current head. A nonterminal record still needs its checkpoint's
+            // exact head before it can be changed.
+            if head != expected_head {
+                return Err(error("routine-production-continuation-ledger-stale"));
             }
             if record.state != AttemptState::Reserved
                 || record.child.is_some()

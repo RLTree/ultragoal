@@ -517,6 +517,93 @@ fn one_repository_can_reopen_a_distinct_binding_without_replacing_the_prior_reco
 }
 
 #[test]
+fn completed_binding_reuses_after_a_distinct_binding_recovers_without_relaxing_stale_reservations()
+{
+    let mut fixture = Fixture::new(
+        "completed-binding-reuses-after-distinct-recovery",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let original = fixture.run();
+    assert_eq!(original.status.code(), Some(0), "{original:?}");
+    assert_eq!(Fixture::value(&original)["status"], "executed");
+
+    let control = fixture.root.join("src/recovery-control.rs");
+    fs::write(&control, b"pub const RECOVERY_CONTROL: u8 = 1;\n").unwrap();
+    let interrupted = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let continuation = Fixture::value(&interrupted)["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let recovered = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert_eq!(Fixture::value(&recovered)["status"], "executed");
+
+    fs::remove_file(&control).unwrap();
+    let before_reuse = tree(&fixture.root);
+    assert_reused_without_effect(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_reuse);
+
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn stale_reserved_binding_refuses_after_a_distinct_binding_advances_the_ledger() {
+    let mut fixture = Fixture::new(
+        "stale-reserved-binding-refusal",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let interrupted = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let continuation = Fixture::value(&interrupted)["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+
+    let control = fixture.root.join("src/ledger-advance.rs");
+    fs::write(&control, b"pub const LEDGER_ADVANCE: u8 = 1;\n").unwrap();
+    let advanced = fixture.run();
+    assert_eq!(advanced.status.code(), Some(0), "{advanced:?}");
+    assert_eq!(Fixture::value(&advanced)["status"], "executed");
+
+    fs::remove_file(&control).unwrap();
+    let stale = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    assert_eq!(stale.status.code(), Some(3), "{stale:?}");
+    assert!(stale.stdout.is_empty(), "{stale:?}");
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn exact_legacy_checkpoint_remains_recoverable_at_the_compatibility_boundary() {
     let mut fixture = Fixture::new(
         "legacy-continuation-compatibility",
