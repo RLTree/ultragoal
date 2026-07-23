@@ -1,7 +1,6 @@
 use crate::inventory::compatibility::{
     CompiledAgentRoute, CompiledSkillRoute, agent_routes, skill_routes,
 };
-use crate::inventory::compatibility::{CompiledAgentTargetState, READER_PROOF_SHA256};
 
 const FAMILY_SCHEMA: &str = "MigrationAdoptionFamily-v1";
 const FAMILY_ID: &str = "n14-agent-skill-adoption";
@@ -19,20 +18,32 @@ fn validate_adoption_family(
     family: &MigrationAdoptionFamily,
     registry: &AuthorityRoutingRegistry,
     surfaces: &BTreeMap<&str, &InventorySurface>,
+    input: &ProductInputSnapshot,
 ) -> Result<(), ProductMigrationError> {
-    if family.schema_version != FAMILY_SCHEMA
-        || family.family_id != FAMILY_ID
-        || !family.preserve_physical_bytes
-        || !valid_route_set(
+    let checks = (
+        family.schema_version == FAMILY_SCHEMA,
+        family.family_id == FAMILY_ID,
+        family.preserve_physical_bytes,
+        valid_route_set(
             &family.agent_route_ids,
             agent_routes().map(|route| route.route_id),
-        )
-        || !valid_route_set(
+        ),
+        valid_route_set(
             &family.skill_route_ids,
             skill_routes().map(|route| route.route_id),
-        )
-        || !valid_family_hashes(family)
-        || !validate_compatibility(&family.compatibility)
+        ),
+        valid_family_hashes(family),
+        validate_skill_authority_inputs(family, surfaces, input),
+        validate_compatibility(&family.compatibility),
+    );
+    if !checks.0
+        || !checks.1
+        || !checks.2
+        || !checks.3
+        || !checks.4
+        || !checks.5
+        || !checks.6
+        || !checks.7
     {
         return Err(ProductMigrationError::new(
             "migration-product-adoption-family-invalid",
@@ -83,64 +94,6 @@ fn valid_route_set<'a>(actual: &[String], expected: impl Iterator<Item = &'a str
         && actual.iter().map(String::as_str).collect::<BTreeSet<_>>() == expected
 }
 
-fn valid_family_hashes(family: &MigrationAdoptionFamily) -> bool {
-    let agent_routes = agent_routes()
-        .map(route_fragment)
-        .collect::<Vec<_>>()
-        .join("|");
-    let skill_route_fragments = skill_routes()
-        .map(skill_route_fragment)
-        .collect::<Vec<_>>()
-        .join("|");
-    let agent_routes_sha = digest(agent_routes.as_bytes());
-    let skill_routes_sha = digest(skill_route_fragments.as_bytes());
-    let expected_agent_evidence = digest(
-        format!(
-            "n14-agent-context-evidence-v1|{}|{}|{}|{}|{}",
-            prefixed(READER_PROOF_SHA256),
-            digest(b"n14-agent-no-discovery-v1"),
-            digest(b"n14-agent-no-package-v1"),
-            digest(b"n14-agent-no-public-route-v1"),
-            agent_routes_sha,
-        )
-        .as_bytes(),
-    );
-    let expected_skill_wrapper =
-        digest(format!("n14-skill-wrapper-family-v1|{skill_routes_sha}").as_bytes());
-    let expected_family_rollback = digest(
-        format!(
-            "n14-family-rollback-v1|{}|{}",
-            family.agent_rollback_execution_sha256, family.skill_rollback_execution_sha256
-        )
-        .as_bytes(),
-    );
-    family.agent_behavior_execution_kind == AGENT_BEHAVIOR_KIND
-        && family.skill_behavior_execution_kind == SKILL_BEHAVIOR_KIND
-        && family.agent_behavior_execution_sha256 == digest(b"n14-agent-context-behavior-v1")
-        && family.skill_behavior_execution_sha256 == digest(b"n14-skill-wrapper-forward-v1")
-        && family.agent_rollback_execution_sha256 == digest(b"n14-agent-context-rollback-v1")
-        && family.skill_rollback_execution_sha256 == digest(b"n14-skill-wrapper-rollback-v1")
-        && family.agent_reader_evidence_sha256 == prefixed(READER_PROOF_SHA256)
-        && family.agent_no_discovery_evidence_sha256 == digest(b"n14-agent-no-discovery-v1")
-        && family.agent_no_package_evidence_sha256 == digest(b"n14-agent-no-package-v1")
-        && family.agent_no_public_route_evidence_sha256 == digest(b"n14-agent-no-public-route-v1")
-        && family.agent_evidence_sha256 == expected_agent_evidence
-        && family.skill_wrapper_family_sha256 == expected_skill_wrapper
-        && family.skill_no_package_evidence_sha256 == digest(b"n14-skill-no-package-v1")
-        && family.skill_no_catalog_evidence_sha256 == digest(b"n14-skill-no-catalog-v1")
-        && family.skill_no_profile_evidence_sha256 == digest(b"n14-skill-no-profile-v1")
-        && family.skill_implicit_gateway_target == "SKILL:harness-ultragoal"
-        && skill_routes().all(|route| route.canonical_name != "agentic-engineering")
-        && family.family_rollback_execution_sha256 == expected_family_rollback
-        && family.false_pass_control_sha256.len() == REQUIRED_CONTROLS.len()
-        && REQUIRED_CONTROLS.iter().all(|control| {
-            family.false_pass_control_sha256.get(*control)
-                == Some(&digest(
-                    format!("n14-family-false-pass-v1|{control}").as_bytes(),
-                ))
-        })
-}
-
 fn validate_compatibility(value: &FamilyCompatibilityPrerequisites) -> bool {
     value.owner_id == "OWN-MAINTENANCE"
         && value.user_facing_warning
@@ -151,132 +104,6 @@ fn validate_compatibility(value: &FamilyCompatibilityPrerequisites) -> bool {
         && value.observed_invocations == 0
         && value.boundary_product_version == "0.0.21"
         && value.required_consecutive_windows == 1
-}
-
-fn validate_agent_route(
-    route: &RegistryRoute,
-    surfaces: &BTreeMap<&str, &InventorySurface>,
-    family: &MigrationAdoptionFamily,
-) -> Result<(), ProductMigrationError> {
-    let Some(spec) = agent_routes().find(|spec| spec.route_id == route.route_id) else {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-agent-route-unknown",
-        ));
-    };
-    if route.match_spec.stable_id.as_deref() != Some(spec.stable_id().as_str())
-        || route.match_spec.kind.is_some()
-        || route.match_spec.relative_path.is_some()
-        || route.canonical_target != spec.canonical_target
-        || route.transition.proof_refs
-            != [
-                spec.legacy_path.to_owned(),
-                spec.target_path.to_owned(),
-                "docs/ultragoal-successor-live/worker-results/LEASE-N02-AGENT-READERS-002.json"
-                    .to_owned(),
-            ]
-        || !agent_transition_is_exact(&route.transition)
-    {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-agent-route-invalid",
-        ));
-    }
-    let source = surfaces.get(spec.stable_id().as_str()).copied();
-    let target = surfaces.get(spec.canonical_target).copied();
-    if source.is_none_or(|surface| {
-        surface.kind != "legacy-agent-authority"
-            || surface.relative_path != spec.legacy_path
-            || surface.digest_sha256 != prefixed(spec.legacy_sha256)
-            || surface.status != SurfaceStatus::ContextOnly
-            || surface.file_kind != crate::migration::SurfaceFileKind::Regular
-            || surface.link_count != 1
-            || !surface.active_readers.is_empty()
-            || !surface.active_writers.is_empty()
-            || !surface.public_routes.is_empty()
-            || !surface.generated_outputs.is_empty()
-    }) || target.is_none_or(|surface| {
-        surface.stable_id != spec.canonical_target
-            || surface.relative_path != spec.target_path
-            || surface.digest_sha256 != prefixed(spec.target_sha256)
-            || surface.status
-                != if matches!(spec.target_state, CompiledAgentTargetState::ActiveAgent) {
-                    SurfaceStatus::Active
-                } else {
-                    SurfaceStatus::Definition
-                }
-    }) || family.agent_rollback_execution_sha256.is_empty()
-    {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-agent-observation-invalid",
-        ));
-    }
-    Ok(())
-}
-
-fn validate_skill_route(
-    route: &RegistryRoute,
-    surfaces: &BTreeMap<&str, &InventorySurface>,
-    family: &MigrationAdoptionFamily,
-) -> Result<(), ProductMigrationError> {
-    let Some(spec) = skill_routes().find(|spec| spec.route_id == route.route_id) else {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-skill-route-unknown",
-        ));
-    };
-    if route.match_spec.stable_id.as_deref() != Some(spec.stable_id().as_str())
-        || route.match_spec.kind.is_some()
-        || route.match_spec.relative_path.is_some()
-        || route.canonical_target != spec.canonical_id()
-        || route.transition.proof_refs != [spec.skill_path(), spec.metadata_path()]
-        || !skill_transition_is_exact(&route.transition)
-    {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-skill-route-invalid",
-        ));
-    }
-    let source = surfaces.get(spec.stable_id().as_str()).copied();
-    let target = surfaces.get(spec.canonical_id().as_str()).copied();
-    if source.is_none_or(|surface| {
-        surface.kind != "compatibility-route-retained"
-            || surface.relative_path != spec.skill_path()
-            || surface.digest_sha256 != prefixed(spec.legacy_sha256)
-            || surface.status != SurfaceStatus::Active
-            || surface.file_kind != crate::migration::SurfaceFileKind::Regular
-            || surface.link_count != 1
-            || !surface.active_readers.is_empty()
-            || !surface.active_writers.is_empty()
-            || !surface.generated_outputs.is_empty()
-    }) || target.is_none_or(|surface| {
-        surface.stable_id != spec.canonical_id()
-            || surface.relative_path != format!("skills/{}/SKILL.md", spec.canonical_name)
-            || surface.digest_sha256 != prefixed(spec.canonical_target_sha256)
-            || surface.status != SurfaceStatus::Active
-    }) || family.skill_rollback_execution_sha256.is_empty()
-    {
-        return Err(ProductMigrationError::new(
-            "migration-product-adoption-family-skill-observation-invalid",
-        ));
-    }
-    Ok(())
-}
-
-fn agent_transition_is_exact(transition: &RegistryTransition) -> bool {
-    transition.compatibility_behavior == "not-applicable"
-        && transition.compatibility_boundary == "adopted"
-        && transition.replacement_state == "candidate-required"
-        && transition.active_reader_writer_state == "none-verified"
-        && transition.observed_authority_state == "context-only"
-        && transition.equivalence_proof == "not-applicable"
-        && transition.physical_cleanup_state == "preserve"
-}
-
-fn skill_transition_is_exact(transition: &RegistryTransition) -> bool {
-    transition.compatibility_behavior == "exact-route-only"
-        && transition.compatibility_boundary == "explicit-only"
-        && transition.replacement_state == "candidate-required"
-        && transition.active_reader_writer_state == "active"
-        && transition.observed_authority_state == "compatibility-route-retained"
-        && transition.equivalence_proof == "missing"
-        && transition.physical_cleanup_state == "preserve"
 }
 
 fn family_adoption(

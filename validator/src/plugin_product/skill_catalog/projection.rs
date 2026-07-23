@@ -1,3 +1,4 @@
+use super::authority_evidence::legacy_aliases;
 use super::model::*;
 use super::parser::{ParsedSkillMetadata, parse_skill_metadata};
 use super::validation::{
@@ -5,23 +6,6 @@ use super::validation::{
 };
 use crate::digest;
 use std::collections::{BTreeMap, BTreeSet};
-
-const LEGACY_ALIASES: &[&str] = &[
-    "agent-first-repo-init",
-    "agent-first-repo-retrofit",
-    "agent-improvement-loop",
-    "agent-observability-stack",
-    "agent-runtime-legibility",
-    "execplan-lane",
-    "fit-repo",
-    "harness-engineering",
-    "orchestrator-reconciler",
-    "product-cohesion-gate",
-    "product-fitness-gate",
-    "proof-gate",
-    "standards-gardener",
-    "ultragoal",
-];
 
 pub fn project(request: &SkillCatalogRequest) -> Result<SkillCatalogProjection, SkillCatalogError> {
     validate_digest(&request.candidate_id, "candidate_id")?;
@@ -226,5 +210,5 @@ fn profile_identity(profile: SkillProfile) -> ProfileIdentity {
 }
 
 pub(crate) fn is_legacy_alias_for_plugin(plugin: &str, name: &str) -> bool {
-    plugin == HARNESS_PLUGIN && LEGACY_ALIASES.contains(&name)
+    plugin == HARNESS_PLUGIN && legacy_aliases().contains(&name)
 }

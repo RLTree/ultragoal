@@ -1,8 +1,14 @@
 impl MigrationInputBinding {
     pub(super) fn issue(input: &ProductInputSnapshot) -> Self {
+        let activation = input.skill_activation.as_ref();
+        let activation_source_snapshot_id =
+            activation.map(|value| value.source_snapshot_id().to_owned());
+        let activation_package_sha256 = activation.map(|value| value.package_sha256().to_owned());
+        let activation_projection_sha256 =
+            activation.map(|value| value.projection_sha256().to_owned());
         let binding_sha256 = digest(
             format!(
-                "migration-product-input-v1|{}|{}|{}|{}|{}|{}|{}",
+                "migration-product-input-v1|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
                 input.inventory.live_context_id,
                 input.inventory.candidate_id,
                 input.inventory.catalog_id,
@@ -10,6 +16,9 @@ impl MigrationInputBinding {
                 input.inventory.inventory_sha256,
                 input.registry.bytes_sha256,
                 input.registry.source_identity_sha256,
+                activation_source_snapshot_id.as_deref().unwrap_or("none"),
+                activation_package_sha256.as_deref().unwrap_or("none"),
+                activation_projection_sha256.as_deref().unwrap_or("none"),
             )
             .as_bytes(),
         );
@@ -22,6 +31,9 @@ impl MigrationInputBinding {
             inventory_sha256: input.inventory.inventory_sha256.clone(),
             registry_sha256: input.registry.bytes_sha256.clone(),
             registry_source_identity_sha256: input.registry.source_identity_sha256.clone(),
+            skill_activation_source_snapshot_id: activation_source_snapshot_id,
+            skill_activation_package_sha256: activation_package_sha256,
+            skill_activation_projection_sha256: activation_projection_sha256,
             binding_sha256,
         }
     }
@@ -51,10 +63,26 @@ impl MigrationInputBinding {
             && valid_sha256(&self.inventory_sha256)
             && valid_sha256(&self.registry_sha256)
             && valid_sha256(&self.registry_source_identity_sha256)
+            && self
+                .skill_activation_source_snapshot_id
+                .as_deref()
+                .is_none_or(valid_sha256)
+            && self
+                .skill_activation_package_sha256
+                .as_deref()
+                .is_none_or(valid_sha256)
+            && self
+                .skill_activation_projection_sha256
+                .as_deref()
+                .is_none_or(valid_sha256)
+            && (self.skill_activation_source_snapshot_id.is_some()
+                == self.skill_activation_package_sha256.is_some()
+                && self.skill_activation_package_sha256.is_some()
+                    == self.skill_activation_projection_sha256.is_some())
             && self.binding_sha256
                 == digest(
                     format!(
-                        "migration-product-input-v1|{}|{}|{}|{}|{}|{}|{}",
+                        "migration-product-input-v1|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
                         self.live_context_id,
                         self.candidate_id,
                         self.catalog_id,
@@ -62,6 +90,15 @@ impl MigrationInputBinding {
                         self.inventory_sha256,
                         self.registry_sha256,
                         self.registry_source_identity_sha256,
+                        self.skill_activation_source_snapshot_id
+                            .as_deref()
+                            .unwrap_or("none"),
+                        self.skill_activation_package_sha256
+                            .as_deref()
+                            .unwrap_or("none"),
+                        self.skill_activation_projection_sha256
+                            .as_deref()
+                            .unwrap_or("none"),
                     )
                     .as_bytes(),
                 )
@@ -72,6 +109,7 @@ impl MigrationInputBinding {
 pub(crate) struct ProductInputSnapshot {
     inventory: MigrationInventory,
     registry: AdoptedRegistrySnapshot,
+    skill_activation: Option<super::SkillFamilyActivationProjection>,
 }
 
 impl ProductInputSnapshot {
@@ -82,7 +120,19 @@ impl ProductInputSnapshot {
         let value = Self {
             inventory,
             registry,
+            skill_activation: None,
         };
+        value.validate()?;
+        Ok(value)
+    }
+
+    pub(crate) fn observed_with_skill_activation(
+        inventory: MigrationInventory,
+        registry: AdoptedRegistrySnapshot,
+        skill_activation: super::SkillFamilyActivationProjection,
+    ) -> Result<Self, ProductMigrationError> {
+        let mut value = Self::observed(inventory, registry)?;
+        value.skill_activation = Some(skill_activation);
         value.validate()?;
         Ok(value)
     }
@@ -93,6 +143,10 @@ impl ProductInputSnapshot {
 
     pub(crate) fn registry(&self) -> &AdoptedRegistrySnapshot {
         &self.registry
+    }
+
+    pub(crate) fn skill_activation(&self) -> Option<&super::SkillFamilyActivationProjection> {
+        self.skill_activation.as_ref()
     }
 
     pub(crate) fn binding(&self) -> MigrationInputBinding {

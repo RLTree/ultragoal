@@ -144,5 +144,11 @@ pub(crate) struct MigrationInputBinding {
     inventory_sha256: String,
     registry_sha256: String,
     registry_source_identity_sha256: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    skill_activation_source_snapshot_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    skill_activation_package_sha256: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    skill_activation_projection_sha256: Option<String>,
     binding_sha256: String,
 }

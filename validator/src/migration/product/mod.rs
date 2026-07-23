@@ -3,6 +3,8 @@
 //! This module is crate-private until root wires the sole public migration
 //! route. All product effects remain injected and semantically confined.
 
+mod activation;
+mod activation_inputs;
 #[cfg(test)]
 mod host;
 mod model;
@@ -10,6 +12,7 @@ mod registry;
 #[cfg(test)]
 mod runtime;
 
+pub(crate) use activation::{SkillFamilyActivationProjection, observe_skill_family_activation};
 #[cfg(test)]
 pub(crate) use host::provision_darwin_migration_host_for_test;
 #[cfg(test)]

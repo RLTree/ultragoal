@@ -2,7 +2,7 @@ use super::{ActiveStatus, AuthorityCatalog, InventoryEntry, InventoryError};
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::{
     AdoptedRegistrySnapshot, ProductInputSnapshot, ProductMigrationError,
-    ProductMigrationPlanProjection, derive_read_only_product_plan,
+    ProductMigrationPlanProjection, derive_read_only_product_plan, observe_skill_family_activation,
 };
 use crate::migration::{
     InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,
@@ -71,7 +71,12 @@ pub(super) fn derive(
         surfaces,
     )
     .map_err(|error| MigrationPlanAdapterError(error.code().to_owned()))?;
-    let input = ProductInputSnapshot::observed(inventory, registry)?;
+    let skill_activation = observe_skill_family_activation(context, catalog)?;
+    let input = ProductInputSnapshot::observed_with_skill_activation(
+        inventory,
+        registry,
+        skill_activation,
+    )?;
     let plan = derive_read_only_product_plan(&input)?;
     reads
         .revalidate()

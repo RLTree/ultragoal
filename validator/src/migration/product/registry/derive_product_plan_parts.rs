@@ -11,7 +11,7 @@ fn derive_product_plan_parts(
         .map(|surface| (surface.stable_id.as_str(), surface))
         .collect::<BTreeMap<_, _>>();
     if let Some(family) = registry.adoption_family.as_ref() {
-        validate_adoption_family(family, &registry, &surfaces)?;
+        validate_adoption_family(family, &registry, &surfaces, input)?;
     }
     reject_active_duplicate_authority(input.inventory().surfaces())?;
 

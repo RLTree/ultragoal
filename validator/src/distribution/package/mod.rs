@@ -26,6 +26,7 @@ pub use plan::{
 include_production_package_module!();
 #[cfg(not(test))]
 pub(crate) use product::ISOLATED_MARKETPLACE_NAME;
+pub(crate) use product::canonical_skill_names;
 #[cfg(test)]
 pub(crate) use product::{
     CandidateCliPayload, ISOLATED_MARKETPLACE_NAME, ProductionPackageArtifact,

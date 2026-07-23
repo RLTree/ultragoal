@@ -51,9 +51,9 @@ struct RouteRegistry {
     destructive_cleanup_authorized: bool,
     authority_rule: String,
     routes: Vec<RouteRule>,
-    #[allow(dead_code)]
     #[serde(default)]
-    adoption_family: Option<serde_json::Value>,
+    #[serde(rename = "adoption_family")]
+    _adoption_family: Option<serde_json::Value>,
 }
 
 pub(crate) struct RoutingData {
