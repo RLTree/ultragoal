@@ -138,13 +138,31 @@ pub(crate) fn execute_invocation_with_home(
         },
         SuccessorCommand::Inspect(
             InspectTarget::Summary | InspectTarget::Findings | InspectTarget::Claims,
-        )
-        | SuccessorCommand::Next => match InventoryBuilder::new(&context).build() {
+        ) => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
                 Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
                 Err(_) => state_unavailable(),
             },
             Err(_) => inventory_unavailable(),
+        },
+        SuccessorCommand::Next => match InventoryBuilder::new(&context).build() {
+            Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
+                Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
+                Err(_) => diagnose::next_routine_or(
+                    root,
+                    &context,
+                    &invocation,
+                    home,
+                    state_unavailable(),
+                ),
+            },
+            Err(_) => diagnose::next_routine_or(
+                root,
+                &context,
+                &invocation,
+                home,
+                inventory_unavailable(),
+            ),
         },
         _ => crate::cli::successor::runtime::unavailable(&invocation),
     }

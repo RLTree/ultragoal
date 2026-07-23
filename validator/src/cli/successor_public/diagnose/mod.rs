@@ -15,6 +15,8 @@ use std::path::Path;
 
 mod causal;
 mod request;
+#[path = "routine_next.rs"]
+mod routine_next_projection;
 #[path = "routine.rs"]
 mod routine_projection;
 
@@ -37,6 +39,16 @@ pub(super) fn diagnose_routine_or(
     fallback: RuntimeOutcome,
 ) -> RuntimeOutcome {
     routine_projection::diagnose(root, context, invocation, home, Some(fallback))
+}
+
+pub(super) fn next_routine_or(
+    root: &Path,
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+    fallback: RuntimeOutcome,
+) -> RuntimeOutcome {
+    routine_next_projection::project(root, context, invocation, home, fallback)
 }
 
 pub(super) fn diagnose_local(

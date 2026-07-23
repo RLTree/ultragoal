@@ -78,15 +78,15 @@ pub(super) fn diagnose(
     }
 }
 
-struct Disposition {
-    status: &'static str,
-    effect_state: &'static str,
-    recovery: &'static str,
-    repeat_use: &'static str,
-    exit: ExitClass,
+pub(super) struct Disposition {
+    pub(super) status: &'static str,
+    pub(super) effect_state: &'static str,
+    pub(super) recovery: &'static str,
+    pub(super) repeat_use: &'static str,
+    pub(super) exit: ExitClass,
 }
 
-fn disposition(
+pub(super) fn disposition(
     checkpoint: Option<&super::super::routine::RoutineCheckpointProjection>,
 ) -> Disposition {
     let Some(checkpoint) = checkpoint else {
@@ -120,13 +120,15 @@ fn disposition(
             repeat_use: "withheld",
             exit: ExitClass::ActionableFinding,
         },
-        "terminal-event-pending" => Disposition {
-            status: "settlement_pending",
-            effect_state: "committed",
-            recovery: "rerun routine to join the terminal event without repeating the effect",
-            repeat_use: "withheld_until_settlement",
-            exit: ExitClass::ActionableFinding,
-        },
+        "terminal-event-pending" if checkpoint.terminal_outcome.as_deref() == Some("complete") => {
+            Disposition {
+                status: "settlement_pending",
+                effect_state: "committed",
+                recovery: "rerun routine to join the terminal event without repeating the effect",
+                repeat_use: "withheld_until_settlement",
+                exit: ExitClass::ActionableFinding,
+            }
+        }
         "terminal-event-joined" if checkpoint.terminal_outcome.as_deref() == Some("complete") => {
             Disposition {
                 status: "complete",
@@ -136,7 +138,7 @@ fn disposition(
                 exit: ExitClass::Success,
             }
         }
-        "terminal-event-joined" => Disposition {
+        "terminal-event-pending" | "terminal-event-joined" => Disposition {
             status: "terminal_failure",
             effect_state: "committed",
             recovery: "inspect the terminal outcome before one candidate-bound rerun",

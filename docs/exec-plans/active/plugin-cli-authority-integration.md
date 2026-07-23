@@ -2596,6 +2596,39 @@ formatting, manifest JSON parsing, and diff checks passed. This is source-only:
 the rebuilt package, cache, desktop discovery, automatic activation, runtime,
 and journey surfaces remain unobserved for `0.0.25`.
 
+### Installed routine navigation fallback — Terra implementation — 2026-07-23
+
+The active installed daily-driver journey established a valid candidate-bound
+routine context on an intentionally dirty Research Run repository, but public
+`ultragoal --json next` returned `successor_runtime_inventory_unavailable`
+because it required the target to host UltraGoal's own ProductState inventory.
+The same installed candidate could already run, interrupt, diagnose, recover,
+and reuse its routine through the target-bound routine authority. That made
+navigation the first broken transition rather than an authority or dirty-tree
+refusal.
+
+The `Next` public dispatch now reuses the existing routine diagnosis binding
+only when inventory construction *or adopted ProductState derivation* is
+unavailable. It emits an ephemeral, candidate-bound `RoutineNext-v1` projection
+only for argument-free read-only `next`: no record, continuation, effect,
+claim, scheduler, or alternate state authority is created. It validates the
+current binding and checkpoint before output. A missing record may propose the
+existing routine command; a reserved, ambiguous, failed, cancelled, incomplete,
+or non-complete joined terminal state requires read-only diagnosis; only a
+pending `complete` event may propose its existing settlement route; a joined
+complete event may propose safe reuse.
+
+The source is advanced to `0.0.26`. One Terra/medium review found the complete
+terminal-outcome sibling defect (non-complete pending states were offered an
+impossible settlement), and one coherent correction also closed the
+adopted-state-unavailable sibling fallback. The exact confirmation accepted the
+complete invariant. Focused source controls passed: routine diagnosis without
+inventory/state `6/6`, routine-next projection `3/3`, owned-file formatting,
+and diff checks. This is source-only until the exact `0.0.26` package, install,
+cache, discovery, and installed public `next` observation are refreshed. It
+does not advance runtime, agent-use, human-use, Product Fitness, daily-driver,
+readiness, release, or completion ceilings.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required

@@ -38,6 +38,27 @@ fn checkpoint_states_have_distinct_effect_and_recovery_dispositions() {
             "withheld_until_settlement",
         ),
         (
+            "terminal-event-pending",
+            Some("failed"),
+            "terminal_failure",
+            "committed",
+            "honest_rerun",
+        ),
+        (
+            "terminal-event-pending",
+            Some("cancelled"),
+            "terminal_failure",
+            "committed",
+            "honest_rerun",
+        ),
+        (
+            "terminal-event-pending",
+            Some("incomplete"),
+            "terminal_failure",
+            "committed",
+            "honest_rerun",
+        ),
+        (
             "terminal-event-joined",
             Some("failed"),
             "terminal_failure",

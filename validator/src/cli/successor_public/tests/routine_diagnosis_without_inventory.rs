@@ -33,6 +33,65 @@ fn public_diagnose_projects_routine_state_when_inventory_is_incomplete() {
 }
 
 #[test]
+fn public_next_projects_routine_work_when_inventory_is_incomplete() {
+    let repo = Repository::new("routine-next-partial-fit");
+    install_routine(&repo.root, 1);
+    fs::remove_file(repo.root.join("migration/authority-routes.json")).unwrap();
+    let home = empty_home("routine-next-partial-fit");
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let ParseOutcome::Invocation(invocation) = parse_args(["--json", "next"]).unwrap() else {
+        panic!("expected invocation")
+    };
+    let streams =
+        execute_invocation_with_home(&repo.root, invocation, Some(&home)).render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 1);
+    let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+    assert_eq!(value["schema_version"], "RoutineNext-v1");
+    assert_eq!(value["status"], "no_record");
+    assert_eq!(value["next_action"]["action"], "run_current_routine");
+    assert_eq!(
+        value["next_action"]["command"],
+        "ultragoal --json check routine"
+    );
+    assert_eq!(value["next_action"]["effect"], "workspace_write");
+    assert_eq!(value["claim_effect"], "none");
+    assert!(!String::from_utf8_lossy(&streams.stdout).contains(repo.root.to_str().unwrap()));
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[test]
+fn routine_next_projects_when_adopted_state_is_unavailable() {
+    let repo = Repository::new("routine-next-state-unavailable");
+    install_routine(&repo.root, 1);
+    let home = empty_home("routine-next-state-unavailable");
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let ParseOutcome::Invocation(invocation) = parse_args(["--json", "next"]).unwrap() else {
+        panic!("expected invocation")
+    };
+    let context = read_context(&repo.root).unwrap();
+    let streams = super::super::diagnose::next_routine_or(
+        &repo.root,
+        &context,
+        &invocation,
+        Some(&home),
+        super::super::state_unavailable(),
+    )
+    .render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 1);
+    let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+    assert_eq!(value["schema_version"], "RoutineNext-v1");
+    assert_eq!(value["status"], "no_record");
+    assert_eq!(value["next_action"]["action"], "run_current_routine");
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[test]
 fn public_diagnose_retains_inventory_failure_when_no_routine_surface_exists() {
     let repo = Repository::new("routine-diagnosis-no-surface");
     fs::remove_file(repo.root.join("migration/authority-routes.json")).unwrap();
