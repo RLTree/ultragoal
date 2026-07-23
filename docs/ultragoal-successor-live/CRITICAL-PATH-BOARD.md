@@ -1,5 +1,30 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 N14 current-candidate migration adoption
+
+Exact root source `913bc193057b9852080d28f083dd5debccd6bc2a` / tree
+`fa0813c4b677966a7eafa074a62af0c5268a6804` now projects all 28 retained
+legacy routes through one typed family: 14 agent routes are context-only and
+14 skill wrappers are explicit compatibility routes for the 0.0.20 window.
+The public read-only plan contains 28 non-destructive effects and zero pending
+items while preserving every physical byte. Package membership, current
+catalog exclusion, profile rejection, and the sole implicit
+`harness-ultragoal` gateway are derived from current inputs and bound into the
+product input and plan identity.
+
+The correction review rejected static evidence labels. Its exact confirmation
+then revealed a registry self-reference: a registry cannot store
+candidate-derived hashes when those registry bytes contribute to the candidate.
+The integrated repair keeps stable requirements in the registry and current
+activation evidence in a non-persistent candidate-bound projection. Parent
+checks pass warning-denied library compilation, the exact migration-plan
+control, and the public 28-effect/zero-pending projection.
+
+This is integrated source-local migration planning, not installed execution,
+retirement, cleanup, route equivalence, Product Fitness, readiness, release, or
+completion. N15/OD-009 is now the sole dependency-legal boundary for the
+coordinated 0.0.21 retirement; all stronger claims remain withheld.
+
 ## 2026-07-23 N14 behavioral-role correction
 
 Exact root source `2d9e7b75ff48bdc9d79eec9b7dd7904fc7509879` / tree

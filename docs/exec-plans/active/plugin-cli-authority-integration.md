@@ -2,19 +2,35 @@
 
 ## N14 migration-family adoption projection — 2026-07-23
 
-The current exact-base candidate now binds one typed `MigrationAdoptionFamily-v1`
-projection to the compiled 14 legacy agent routes and 14 legacy skill-wrapper
-routes. The public read-only `migrate plan` derives 28 non-destructive effects
-with zero pending items: 14 context-only agent adoptions and 14 explicit-only
-compatibility-wrapper adoptions. The family binds current source and target
-digests, wrapper/reader and exclusion evidence, rollback, false-pass controls,
-candidate identity, and the retained 0.0.20 compatibility prerequisites.
+Root integrated exact source `913bc193057b9852080d28f083dd5debccd6bc2a` /
+tree `fa0813c4b677966a7eafa074a62af0c5268a6804`. It binds one typed
+`MigrationAdoptionFamily-v1` projection to the compiled 14 legacy agent routes
+and 14 legacy skill-wrapper routes. The public read-only `migrate plan` derives
+28 non-destructive effects with zero pending items: 14 context-only agent
+adoptions and 14 explicit-only compatibility-wrapper adoptions. The family
+binds current source and target digests, wrapper/reader and exclusion evidence,
+rollback, false-pass controls, candidate identity, and the retained 0.0.20
+compatibility prerequisites.
+
+The first correction review found that package, catalog, profile, and gateway
+claims were static labels rather than current-input evidence. The committed
+correction then exposed a second concrete invariant at confirmation: storing
+candidate-derived activation hashes inside the registry that contributes to
+that candidate makes the registry self-invalidating. The integrated design
+keeps only stable requirements and independently observed manifest/schema
+identities in the registry; the non-persistent activation projection binds the
+exact current package, catalog, profile, gateway, source snapshot, and package
+identity into the product input and plan identity.
+
+Parent checks on the integrated candidate pass warning-denied library
+compilation, the exact public migration-plan test, and the public JSON plan
+with 28 items, 28 effects, and zero pending.
 
 This is a candidate-bound projection only. It preserves all physical bytes,
 does not add runtime effects, does not establish route equivalence or installed
 runtime execution, and does not authorize apply, retirement, cleanup, N15, or
 any package, readiness, release, or completion claim. The 0.0.21 retirement
-boundary remains N15/OD-009 work.
+boundary remains N15/OD-009 work and is now the next dependency-legal boundary.
 
 ## N14 behavioral-role correction — 2026-07-23
 
