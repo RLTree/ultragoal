@@ -7,6 +7,7 @@
 pub mod journey_matrix;
 pub mod lifecycle;
 pub mod product_fitness;
+pub mod skill_catalog;
 pub mod source_closure;
 
 // The product contract imports this compiled library surface; it does not
