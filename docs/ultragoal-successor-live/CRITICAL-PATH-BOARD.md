@@ -312,6 +312,17 @@ tree `03075d90e7903c20498a01059efd5fd5fcf1d603`. N12-A is followed serially by
 N14 and N15, then the final identity freeze, N02/N12 reproof, N13, N16, the
 post-product milestone review, and non-mutating N17 reconciliation.
 
+The installed daily-driver frontier is now the exact integrated source
+`a4ff1fccf7c9c04f6f1ab3ad7a10c9fb2a6e6bc0` / tree
+`e87d9178bbe0f2bf2989f7297b8e698c24785058`. It repairs the public routine
+current-directory root and Git-visible dirty-state invariant and is accepted at
+source scope after one bounded Terra/medium review. The next transition is a
+fresh `0.0.14` package, retained isolated install, marketplace and plugin
+refresh, fresh discovery, and the installed dirty-repository interruption,
+recovery, reopen, and repeat-use journey. All installed, runtime, Product
+Fitness, daily-driver, readiness, release, and completion claims remain
+withheld until those exact surfaces pass.
+
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
 Rule: every digest-changing authority edit immediately reopens dependent evidence. Percentages are non-authoritative.

@@ -1673,6 +1673,31 @@ or a real repository journey. The next truth-loop transition remains fresh
 task discovery followed by the supported dirty-repository routine,
 interruption/recovery, preservation, and repeat-use journey.
 
+### Installed routine-adoption checkpoint — 2026-07-22
+
+Root integrated the accepted routine-adoption repair at
+`a4ff1fccf7c9c04f6f1ab3ad7a10c9fb2a6e6bc0` / tree
+`e87d9178bbe0f2bf2989f7297b8e698c24785058`. The prior installed `0.0.13`
+candidate proved package, isolated install, discovery, fit inspection, and
+routine configuration apply, then exposed two public product defects: the
+documented current-directory root `.` rejected its own canonical path, and
+dirty-state capture treated Git-ignored Cargo build hard-links as repository
+authority. The correction canonicalizes the default root and derives routine
+dirty-state stability from Git-visible tracked and untracked paths while
+retaining separate exact revalidation of selected inputs and declared outputs.
+
+Focused source evidence passes the full public routine contract 54/54, local
+dirty capture 11/11, product package contract 30/30, warning-denied production
+compilation, generated authority, Python source law, semantic namespace, and
+121 standards rows. One bounded Terra/medium review accepted the complete
+current-root, dirty-state, recovery, reuse, and package-version invariant on
+the exact source freeze. This promotes no installed or journey claim. The next
+candidate is `0.0.14`; the package, retained isolated marketplace, configured
+marketplace, installed plugin, executable, fresh discovery, routine,
+interruption, recovery, and repeat-use identities must all be re-observed.
+Codex host discovery requires both a higher plugin version and an explicit
+marketplace/plugin refresh; stale `0.0.13` cache state is invalid evidence.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
