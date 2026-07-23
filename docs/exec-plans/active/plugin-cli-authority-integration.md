@@ -1,5 +1,33 @@
 # Plugin and CLI Authority Integration
 
+## Routine multi-binding repeat-use repair — 2026-07-23
+
+Exact source `b6e8811bf4a07400d4fe2d8ad2719f3e6f546bdf` / tree
+`a2d13cad508249a2a9073e077d683479e3b1699a` repaired the next installed
+Research Run defect. An original completed dirty-tree routine binding became
+unreusable after a distinct binding was interrupted and recovered: the durable
+authority ledger has one global authenticated head, and continuation
+reconciliation rejected the original checkpoint head before authenticating the
+original complete record. The rejection preserved repository state but made
+safe repeat use unavailable.
+
+Reconciliation now authenticates the exact attempt binding and terminal
+mediation first. A terminal-complete record is read-only, so it may reuse its
+authenticated result and return the current global ledger head after an
+independent binding advances it. Reserved, staged, started, ambiguous, forged,
+or otherwise incomplete records still require their checkpoint's exact head
+and fail closed on staleness. This changes no issuer, caller authority, host
+checkpoint namespace, or cleanup rule.
+
+The focused public production contract passes the complete binding set: an
+original completed binding reuses after a distinct interruption/recovery, and
+a stale reserved binding remains refused after a distinct ledger advance
+(`4/4`, 73.46s). This is source and focused public-behavior evidence only.
+The package, isolated install, marketplace/cache/app registration, fresh
+discovery, installed runtime, repository journey, Product Fitness, daily-driver,
+readiness, release, and completion surfaces must be reobserved on a new
+`0.0.23` candidate.
+
 ## Installed routine self-runner repair — 2026-07-23
 
 On exact source `ff904accc972a4198e4b317447af3a4bca484dc7` / tree

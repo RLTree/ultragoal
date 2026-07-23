@@ -1,5 +1,30 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 routine multi-binding repeat-use repair
+
+The installed Research Run journey exposed the next shared routine-custody
+defect after the self-runner repair. An exact completed binding could not
+repeat once a different binding had interrupted and recovered, because
+continuation reconciliation treated the original checkpoint's global ledger
+head as stale before it authenticated the terminal-complete attempt. The
+repository's unrelated dirty state remained preserved, but safe reuse was
+unavailable.
+
+Root integrated source `b6e8811bf4a07400d4fe2d8ad2719f3e6f546bdf` / tree
+`a2d13cad508249a2a9073e077d683479e3b1699a`. The durable ledger now permits a
+read-only reuse only after exact binding and complete terminal mediation match;
+it returns the current ledger head. Every nonterminal record still requires its
+checkpoint's exact head, so stale reservation recovery remains fail-closed.
+The focused public contract passes both positive cross-binding reuse and the
+stale-reserved negative (`4/4`, 73.46s).
+
+This is a source-level repair only. The candidate now advances to `0.0.23`;
+all `0.0.22` package, install, cache, marketplace, app-registry, discovery,
+runtime, and journey evidence is stale. The serial frontier is package and
+install the exact current candidate, refresh the local marketplace/plugin, and
+restart the Research Run journey at the installed public CLI. No Product
+Fitness, daily-driver, readiness, release, or completion claim advances.
+
 ## 2026-07-23 installed routine self-runner repair
 
 The first broken installed-daily-driver transition is now source-repaired at
