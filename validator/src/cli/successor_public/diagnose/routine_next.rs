@@ -1,7 +1,9 @@
-use super::super::routine::RoutineCheckpointProjection;
 use super::routine_projection::disposition;
 use super::*;
 use serde_json::json;
+
+#[cfg(test)]
+use super::super::routine::RoutineCheckpointProjection;
 
 pub(super) fn project(
     root: &Path,

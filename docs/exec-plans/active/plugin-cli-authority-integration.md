@@ -2629,6 +2629,13 @@ cache, discovery, and installed public `next` observation are refreshed. It
 does not advance runtime, agent-use, human-use, Product Fitness, daily-driver,
 readiness, release, or completion ceilings.
 
+The first clean release build stopped before packaging because the new
+projection's test fixture import was compiled in a warning-denied production
+build. The import is now `cfg(test)`-scoped; this mechanical packaging repair
+does not change the reviewed navigation behavior. The release build and every
+dependent package/install observation are being refreshed from the amended
+exact candidate.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required
