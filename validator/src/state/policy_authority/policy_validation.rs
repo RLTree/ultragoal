@@ -103,6 +103,9 @@ impl PolicyAuthority {
             crate::engineering_advisory::VerificationModeProposal,
         )>,
     ) -> Result<DependencyActionCatalog, StateError> {
+        if let Some((_, proposal)) = proposed_mode.as_ref() {
+            validate_verification_candidate(proposal, candidate_id)?;
+        }
         let accepted_catalog = if let Some((action_id, proposal)) = proposed_mode {
             let contract = self.seal_verification_mode(proposal)?;
             self.accepted_catalog
@@ -145,6 +148,57 @@ impl PolicyAuthority {
             observed_codes,
             None,
         )
+    }
+}
+
+fn validate_verification_candidate(
+    proposal: &crate::engineering_advisory::VerificationModeProposal,
+    candidate_id: &str,
+) -> Result<(), StateError> {
+    if proposal.candidate_id != candidate_id {
+        return Err(StateError::InvalidCatalog(
+            "verification-mode-candidate-mismatch".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::validate_verification_candidate;
+    use crate::engineering_advisory::{VerificationModeProposal, VerificationModeProposalInput};
+    use crate::state::product_state::StateError;
+    use std::collections::{BTreeMap, BTreeSet};
+
+    #[test]
+    fn cross_candidate_verification_is_rejected_before_root_sealing() {
+        let proposal = VerificationModeProposal::new(VerificationModeProposalInput {
+            candidate_id: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                .to_owned(),
+            risk: "high".to_owned(),
+            failure_model: "semantic mutation".to_owned(),
+            oracle: "targeted oracle".to_owned(),
+            truth_surface: "source".to_owned(),
+            selected_modes: BTreeSet::from(["targeted".to_owned()]),
+            rejected_modes: BTreeSet::new(),
+            required_evidence: BTreeSet::from(["semantic-check".to_owned()]),
+            claim_ceiling: BTreeMap::from([(
+                "CL-SOURCE".to_owned(),
+                BTreeSet::from(["source".to_owned()]),
+            )]),
+            invalidation_trigger: "candidate changed".to_owned(),
+        })
+        .unwrap();
+        assert_eq!(
+            validate_verification_candidate(
+                &proposal,
+                "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            ),
+            Err(StateError::InvalidCatalog(
+                "verification-mode-candidate-mismatch".to_owned()
+            ))
+        );
+        assert!(validate_verification_candidate(&proposal, &proposal.candidate_id).is_ok());
     }
 }
 

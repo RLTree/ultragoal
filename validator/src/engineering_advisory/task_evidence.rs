@@ -82,14 +82,12 @@ impl TaskEvidencePacket {
         }
         if self.read_paths != lease.read_paths
             || self.read_paths != package.read_paths
-            || !self.owned_scope.is_subset_of(&package.owned_scope)
-            || !self.owned_scope.is_subset_of(&lease.owned_scope)
+            || self.owned_scope != lease.owned_scope
+            || !lease.owned_scope.is_subset_of(&package.owned_scope)
         {
             return Err(AdvisoryError::PermissionWidening);
         }
-        if !package.acceptance.is_subset(&self.required_verification)
-            || self.required_verification.is_empty()
-        {
+        if self.required_verification != package.acceptance {
             return Err(AdvisoryError::MissingVerification);
         }
         Ok(())

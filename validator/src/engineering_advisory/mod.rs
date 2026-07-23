@@ -12,6 +12,8 @@ mod verification;
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod confirmation_tests;
 
 pub use error::AdvisoryError;
 pub use repair::{

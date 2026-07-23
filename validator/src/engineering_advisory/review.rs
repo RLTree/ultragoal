@@ -59,24 +59,7 @@ impl ReviewVerdict {
                 "review rerun is not reproduced",
             ));
         }
-        if materiality.claim_ceiling.iter().any(|(claim, dimensions)| {
-            claim.is_empty()
-                || dimensions.is_empty()
-                || claim.contains("complete")
-                || dimensions.iter().any(|dimension| {
-                    matches!(
-                        dimension.as_str(),
-                        "material_signoff"
-                            | "major_root_integration"
-                            | "product"
-                            | "readiness"
-                            | "release"
-                            | "completion"
-                    )
-                })
-        }) {
-            return Err(AdvisoryError::ClaimPromotion);
-        }
+        validate_claim_ceiling(&materiality.claim_ceiling)?;
         let decision = if !materiality.unverifiable_claims.is_empty() {
             ReviewDecision::Rework
         } else if !materiality.material {
@@ -113,6 +96,7 @@ impl ReviewVerdict {
                 "review verdict authority boundary violated",
             ));
         }
+        validate_claim_ceiling(&self.claim_ceiling)?;
         if !self.unverifiable_claims.is_empty() && self.decision == ReviewDecision::Pass {
             return Err(AdvisoryError::InvalidReview(
                 "unverifiable review cannot pass",
@@ -120,4 +104,28 @@ impl ReviewVerdict {
         }
         Ok(())
     }
+}
+
+fn validate_claim_ceiling(
+    claim_ceiling: &BTreeMap<String, BTreeSet<String>>,
+) -> Result<(), AdvisoryError> {
+    if claim_ceiling.iter().any(|(claim, dimensions)| {
+        claim.is_empty()
+            || dimensions.is_empty()
+            || claim.contains("complete")
+            || dimensions.iter().any(|dimension| {
+                matches!(
+                    dimension.as_str(),
+                    "material_signoff"
+                        | "major_root_integration"
+                        | "product"
+                        | "readiness"
+                        | "release"
+                        | "completion"
+                )
+            })
+    }) {
+        return Err(AdvisoryError::ClaimPromotion);
+    }
+    Ok(())
 }
