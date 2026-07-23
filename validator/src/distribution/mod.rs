@@ -60,7 +60,6 @@ pub use model::{
 };
 pub use observations::{RuntimeObservation, RuntimeVerdict};
 pub(crate) use package::ISOLATED_MARKETPLACE_NAME;
-pub(crate) use package::canonical_skill_names;
 #[cfg(not(test))]
 pub use package::{
     CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,

@@ -13,10 +13,6 @@ pub(super) const CANONICAL_SKILLS: [&str; 8] = [
     "improve-and-maintain",
 ];
 
-pub(crate) fn canonical_skill_names() -> &'static [&'static str] {
-    &CANONICAL_SKILLS
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ProductionPackageErrorId {
     ContextUnavailable,

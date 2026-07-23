@@ -68,7 +68,6 @@ impl PlannedMigrationEffect {
         &self.route_id
     }
 
-    #[cfg(test)]
     pub(crate) fn disposition(&self) -> PlanDisposition {
         self.disposition
     }
@@ -131,19 +130,6 @@ impl PlannedMigrationEffect {
         {
             return Err(ProductMigrationError::new(
                 "migration-product-retirement-postcondition-invalid",
-            ));
-        }
-        if self.disposition == PlanDisposition::AdoptContext
-            && (self.after.status != SurfaceStatus::ContextOnly
-                || !self.after.active_readers.is_empty()
-                || !self.after.active_writers.is_empty()
-                || !self.after.public_routes.is_empty()
-                || !self.after.generated_outputs.is_empty()
-                || self.compatibility_prerequisites.is_some()
-                || self.compatibility_prerequisites_sha256.is_some())
-        {
-            return Err(ProductMigrationError::new(
-                "migration-product-context-postcondition-invalid",
             ));
         }
         if self.disposition == PlanDisposition::AdoptCompatibility

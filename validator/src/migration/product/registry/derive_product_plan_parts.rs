@@ -10,9 +10,6 @@ fn derive_product_plan_parts(
         .iter()
         .map(|surface| (surface.stable_id.as_str(), surface))
         .collect::<BTreeMap<_, _>>();
-    if let Some(family) = registry.adoption_family.as_ref() {
-        validate_adoption_family(family, &registry, &surfaces, input)?;
-    }
     reject_active_duplicate_authority(input.inventory().surfaces())?;
 
     let mut seen_route_ids = BTreeSet::new();
@@ -65,27 +62,7 @@ fn derive_product_plan_parts(
                 "migration-route/{}/source/{}",
                 route.route_id, source.stable_id
             );
-            let family_adoption = registry
-                .adoption_family
-                .as_ref()
-                .map(|family| family_adoption(family, route))
-                .transpose()?
-                .flatten();
-            let adoption = match (&route.transition.adopted_effect, family_adoption) {
-                (Some(_), Some(_)) => {
-                    return Err(ProductMigrationError::new(
-                        "migration-product-duplicate-adoption-authority",
-                    ));
-                }
-                (Some(adoption), None) => Some(adoption.clone()),
-                (None, Some(mut adoption)) => {
-                    adoption.source_digest_sha256 = source.digest_sha256.clone();
-                    adoption.canonical_target_digest_sha256 = canonical.digest_sha256.clone();
-                    Some(adoption)
-                }
-                (None, None) => None,
-            };
-            match adoption.as_ref() {
+            match &route.transition.adopted_effect {
                 None => {
                     if source.status == SurfaceStatus::Active
                         && canonical.status == SurfaceStatus::Active

@@ -10,8 +10,6 @@ struct AuthorityRoutingRegistry {
     destructive_cleanup_authorized: bool,
     authority_rule: String,
     routes: Vec<RegistryRoute>,
-    #[serde(default)]
-    adoption_family: Option<MigrationAdoptionFamily>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -69,53 +67,6 @@ struct TransitionAdoption {
     preserve_physical_bytes: bool,
 }
 
-#[derive(Clone, Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct MigrationAdoptionFamily {
-    schema_version: String,
-    family_id: String,
-    agent_route_ids: Vec<String>,
-    skill_route_ids: Vec<String>,
-    agent_behavior_execution_kind: String,
-    agent_behavior_execution_sha256: String,
-    agent_rollback_execution_sha256: String,
-    agent_evidence_sha256: String,
-    agent_reader_evidence_sha256: String,
-    agent_no_discovery_evidence_sha256: String,
-    agent_no_package_evidence_sha256: String,
-    agent_no_public_route_evidence_sha256: String,
-    skill_behavior_execution_kind: String,
-    skill_behavior_execution_sha256: String,
-    skill_rollback_execution_sha256: String,
-    skill_wrapper_family_sha256: String,
-    skill_package_manifest_surface_id: String,
-    skill_package_manifest_sha256: String,
-    skill_package_schema_surface_id: String,
-    skill_package_schema_sha256: String,
-    skill_no_package_evidence_sha256: String,
-    skill_no_catalog_evidence_id: String,
-    skill_no_profile_evidence_id: String,
-    skill_implicit_gateway_target: String,
-    skill_implicit_gateway_evidence_id: String,
-    family_rollback_execution_sha256: String,
-    false_pass_control_sha256: BTreeMap<String, String>,
-    compatibility: FamilyCompatibilityPrerequisites,
-    preserve_physical_bytes: bool,
-}
-
-#[derive(Clone, Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct FamilyCompatibilityPrerequisites {
-    owner_id: String,
-    user_facing_warning: String,
-    usage_measurement_sha256: String,
-    window_start_unix_ms: u64,
-    window_end_unix_ms: u64,
-    observed_invocations: u64,
-    boundary_product_version: String,
-    required_consecutive_windows: u16,
-}
-
 struct ProductPlanParts {
     input_binding: MigrationInputBinding,
     contract_id: String,
@@ -127,13 +78,21 @@ pub(crate) fn derive_read_only_product_plan(
     input: &ProductInputSnapshot,
 ) -> Result<ProductMigrationPlan, ProductMigrationError> {
     let parts = derive_product_plan_parts(input)?;
+    if parts
+        .effects
+        .iter()
+        .any(|effect| effect.disposition() == PlanDisposition::AdoptCompatibility)
+    {
+        return Err(ProductMigrationError::new(
+            "migration-product-compatibility-boundary-authority-required",
+        ));
+    }
     ProductMigrationPlan::issue(
         parts.input_binding,
         parts.contract_id,
         parts.items,
         parts.effects,
         None,
-        true,
     )
 }
 
@@ -162,7 +121,6 @@ pub(crate) fn derive_product_plan(
         parts.items,
         parts.effects,
         observation,
-        false,
     )
 }
 
@@ -178,6 +136,5 @@ pub(super) fn derive_product_plan_from_bound_observation(
         parts.items,
         parts.effects,
         observation.cloned(),
-        false,
     )
 }

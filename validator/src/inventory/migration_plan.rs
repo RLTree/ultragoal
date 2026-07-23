@@ -2,7 +2,7 @@ use super::{ActiveStatus, AuthorityCatalog, InventoryEntry, InventoryError};
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::{
     AdoptedRegistrySnapshot, ProductInputSnapshot, ProductMigrationError,
-    ProductMigrationPlanProjection, derive_read_only_product_plan, observe_skill_family_activation,
+    ProductMigrationPlanProjection, derive_read_only_product_plan,
 };
 use crate::migration::{
     InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,
@@ -71,12 +71,7 @@ pub(super) fn derive(
         surfaces,
     )
     .map_err(|error| MigrationPlanAdapterError(error.code().to_owned()))?;
-    let skill_activation = observe_skill_family_activation(context, catalog)?;
-    let input = ProductInputSnapshot::observed_with_skill_activation(
-        inventory,
-        registry,
-        skill_activation,
-    )?;
+    let input = ProductInputSnapshot::observed(inventory, registry)?;
     let plan = derive_read_only_product_plan(&input)?;
     reads
         .revalidate()
@@ -85,21 +80,13 @@ pub(super) fn derive(
 }
 
 fn surface(entry: &InventoryEntry) -> Result<InventorySurface, MigrationPlanAdapterError> {
-    let physical_route_surface = entry.stable_id.starts_with("LEGACY-AGENT:")
-        || entry.stable_id.starts_with("LEGACY-SKILL:")
-        || entry.stable_id.starts_with("AGENT:")
-        || entry.stable_id.starts_with("SKILL:");
     Ok(InventorySurface::observed(InventorySurfaceObservation {
         stable_id: entry.stable_id.clone(),
         kind: entry.kind.clone(),
         relative_path: entry.relative_path.clone(),
         digest_sha256: observed_digest(entry)?,
-        file_kind: if physical_route_surface {
-            SurfaceFileKind::Regular
-        } else {
-            SurfaceFileKind::Semantic
-        },
-        link_count: if physical_route_surface { 1 } else { 0 },
+        file_kind: SurfaceFileKind::Semantic,
+        link_count: 0,
         status: match entry.active_status {
             ActiveStatus::Active => SurfaceStatus::Active,
             ActiveStatus::Definition => SurfaceStatus::Definition,

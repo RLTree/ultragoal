@@ -109,12 +109,11 @@ pub(crate) fn load(
         counts: &mut counts,
         findings: &mut findings,
     })?;
-    let legacy_skills = topology::load(&product, &mut entries, &mut counts)?;
+    topology::load(&product, &mut entries, &mut counts)?;
     Ok(RegistryData {
         contract_id: contract_id.unwrap_or_default(),
         counts,
         entries,
         findings,
-        legacy_skills,
     })
 }

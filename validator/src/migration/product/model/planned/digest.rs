@@ -121,7 +121,6 @@ impl ProductMigrationPlanProjection {
 #[derive(Clone, Eq, PartialEq)]
 pub(crate) struct ProductMigrationPlan {
     projection: ProductMigrationPlanProjection,
-    allow_unobserved_compatibility: bool,
 }
 
 impl fmt::Debug for ProductMigrationPlan {

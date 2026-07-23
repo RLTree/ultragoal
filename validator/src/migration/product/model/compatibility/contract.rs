@@ -87,54 +87,6 @@ pub(super) struct CompatibilityPrerequisites {
 }
 
 impl CompatibilityPrerequisites {
-    pub(super) fn from_family(
-        route_id: &str,
-        canonical_target_id: &str,
-        owner_id: &str,
-        user_facing_warning: &str,
-        usage_measurement_sha256: &str,
-        window_start_unix_ms: u64,
-        window_end_unix_ms: u64,
-        observed_invocations: u64,
-        boundary_product_version: &str,
-        required_consecutive_windows: u16,
-    ) -> Result<Self, ProductMigrationError> {
-        let value = Self {
-            schema_version: "CompatibilityPrerequisites-v1".to_owned(),
-            owner_id: owner_id.to_owned(),
-            semantic_target_id: canonical_target_id.to_owned(),
-            user_facing_warning: user_facing_warning.to_owned(),
-            usage_measurement: CompatibilityUsageMeasurement {
-                schema_version: "CompatibilityUsageMeasurement-v1".to_owned(),
-                route_id: route_id.to_owned(),
-                metric: "legacy-route-invocations".to_owned(),
-                evidence_sha256: usage_measurement_sha256.to_owned(),
-                window_start_unix_ms,
-                window_end_unix_ms,
-                observed_invocations,
-            },
-            boundary: CompatibilityBoundary {
-                schema_version: "CompatibilityBoundary-v1".to_owned(),
-                deadline_unix_ms: None,
-                product_version: Some(boundary_product_version.to_owned()),
-            },
-            removal_condition: CompatibilityRemovalCondition {
-                schema_version: "CompatibilityRemovalCondition-v1".to_owned(),
-                metric: "legacy-route-invocations".to_owned(),
-                operator: "less-than-or-equal".to_owned(),
-                threshold: 0,
-                required_consecutive_windows,
-            },
-        };
-        if value.validate(route_id, canonical_target_id) {
-            Ok(value)
-        } else {
-            Err(ProductMigrationError::new(
-                "migration-product-compatibility-prerequisites-invalid",
-            ))
-        }
-    }
-
     pub(super) fn validate(&self, route_id: &str, canonical_target_id: &str) -> bool {
         self.schema_version == "CompatibilityPrerequisites-v1"
             && valid_identifier(&self.owner_id)

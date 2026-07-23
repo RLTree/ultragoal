@@ -1,4 +1,3 @@
-use super::compatibility::RETAINED_KIND;
 use super::routing::RoutingData;
 use super::types::{
     ActiveStatus, AuthorityCatalog, AuthorityState, InventoryClosureStatus, InventoryEntry,

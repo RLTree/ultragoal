@@ -158,16 +158,6 @@ impl InventoryFinding {
             message,
         }
     }
-
-    pub(crate) fn info(code: &str, id: Option<&str>, path: Option<&str>, message: String) -> Self {
-        Self {
-            code: code.to_owned(),
-            severity: FindingSeverity::Info,
-            entry_id: id.map(ToOwned::to_owned),
-            relative_path: path.map(ToOwned::to_owned),
-            message,
-        }
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

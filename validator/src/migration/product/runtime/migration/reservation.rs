@@ -95,7 +95,6 @@ impl MigrationOperation {
                         return true;
                     };
                     match effect.disposition() {
-                        PlanDisposition::AdoptContext => permit.is_some(),
                         PlanDisposition::AdoptCompatibility => {
                             permit.as_deref().is_none_or(|value| !valid_sha256(value))
                         }

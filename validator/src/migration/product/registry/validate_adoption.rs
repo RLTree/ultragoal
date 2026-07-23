@@ -4,24 +4,15 @@ fn validate_adoption(
     canonical: &InventorySurface,
     adoption: &TransitionAdoption,
 ) -> Result<PlanDisposition, ProductMigrationError> {
-    let context_adoption = adoption.disposition == "context";
     if adoption.schema_version != ADOPTION_SCHEMA
         || source.file_kind != SurfaceFileKind::Regular
         || source.link_count != 1
-        || !matches!(
-            (canonical.file_kind, canonical.link_count),
-            (SurfaceFileKind::Regular, 1) | (SurfaceFileKind::Semantic, 0)
-        )
-        || !(canonical.status == SurfaceStatus::Active
-            || (context_adoption && canonical.status == SurfaceStatus::Definition))
+        || canonical.file_kind != SurfaceFileKind::Regular
+        || canonical.link_count != 1
+        || canonical.status != SurfaceStatus::Active
         || adoption.source_digest_sha256 != source.digest_sha256
         || adoption.canonical_target_digest_sha256 != canonical.digest_sha256
-        || !matches!(
-            adoption.behavior_execution_kind.as_str(),
-            BEHAVIOR_EXECUTION_KIND
-                | "migration-family-agent-context-v1"
-                | "migration-family-skill-wrapper-v1"
-        )
+        || adoption.behavior_execution_kind != BEHAVIOR_EXECUTION_KIND
         || !valid_sha256(&adoption.behavior_execution_sha256)
         || !valid_sha256(&adoption.rollback_execution_sha256)
         || !adoption.preserve_physical_bytes
@@ -43,45 +34,14 @@ fn validate_adoption(
     validate_exact_set(&adoption.exact_generated_outputs)?;
 
     match adoption.disposition.as_str() {
-        "context" => {
-            if source.status != SurfaceStatus::ContextOnly
-                || adoption.behavior_execution_kind != "migration-family-agent-context-v1"
-                || route.transition.compatibility_behavior != "not-applicable"
-                || route.transition.compatibility_boundary != "adopted"
-                || route.transition.replacement_state != "candidate-required"
-                || route.transition.active_reader_writer_state != "none-verified"
-                || route.transition.observed_authority_state != "context-only"
-                || route.transition.equivalence_proof != "not-applicable"
-                || route.transition.physical_cleanup_state != "preserve"
-                || adoption.post_status != "context_only"
-                || !adoption.exact_active_readers.is_empty()
-                || !adoption.exact_active_writers.is_empty()
-                || !adoption.exact_public_routes.is_empty()
-                || !adoption.exact_generated_outputs.is_empty()
-                || adoption.compatibility_prerequisites.is_some()
-            {
-                return Err(ProductMigrationError::new(
-                    "migration-product-context-adoption-refused",
-                ));
-            }
-            Ok(PlanDisposition::AdoptContext)
-        }
         "compatibility" => {
-            let family_wrapper =
-                adoption.behavior_execution_kind == "migration-family-skill-wrapper-v1";
             if source.status != SurfaceStatus::Active
                 || route.transition.compatibility_behavior != "exact-route-only"
                 || route.transition.compatibility_boundary != "explicit-only"
-                || if family_wrapper {
-                    route.transition.replacement_state != "candidate-required"
-                        || route.transition.active_reader_writer_state != "active"
-                        || route.transition.equivalence_proof != "missing"
-                } else {
-                    route.transition.replacement_state != "verified"
-                        || route.transition.active_reader_writer_state != "none"
-                        || route.transition.equivalence_proof != "executed-behavior-v1"
-                }
+                || route.transition.replacement_state != "verified"
+                || route.transition.active_reader_writer_state != "none"
                 || route.transition.observed_authority_state != "compatibility-route-retained"
+                || route.transition.equivalence_proof != "executed-behavior-v1"
                 || route.transition.physical_cleanup_state != "preserve"
                 || adoption.post_status != "context_only"
                 || !adoption.exact_active_readers.is_empty()

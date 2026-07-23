@@ -154,7 +154,6 @@ fn parallel_authority(
     for legacy in entries.values().filter(|entry| {
         entry.authority_state == AuthorityState::Legacy
             && entry.active_status == ActiveStatus::Active
-            && entry.kind != RETAINED_KIND
     }) {
         if verified_pending_authority.contains(&legacy.stable_id) {
             findings.push(InventoryFinding::warning(

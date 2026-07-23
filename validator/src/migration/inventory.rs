@@ -38,6 +38,7 @@ impl MigrationInventory {
         &self.inventory_sha256
     }
 
+    #[cfg(test)]
     pub fn candidate_id(&self) -> &str {
         &self.candidate_id
     }
@@ -47,6 +48,7 @@ impl MigrationInventory {
         &self.live_context_id
     }
 
+    #[cfg(test)]
     pub(crate) fn catalog_id(&self) -> &str {
         &self.catalog_id
     }

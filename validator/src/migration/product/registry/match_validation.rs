@@ -51,7 +51,6 @@ fn validate_registry(registry: &AuthorityRoutingRegistry) -> Result<(), ProductM
         || registry.authority_rule.is_empty()
         || registry.authority_rule.len() > 4_096
         || registry.authority_rule.chars().any(char::is_control)
-        || registry.routes.is_empty()
         || registry.routes.len() > super::model::MAX_PRODUCT_ITEMS
     {
         return Err(ProductMigrationError::new(
