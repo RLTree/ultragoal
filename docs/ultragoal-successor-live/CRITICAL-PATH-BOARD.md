@@ -313,15 +313,18 @@ N14 and N15, then the final identity freeze, N02/N12 reproof, N13, N16, the
 post-product milestone review, and non-mutating N17 reconciliation.
 
 The installed daily-driver frontier is now the exact integrated source
-`a4ff1fccf7c9c04f6f1ab3ad7a10c9fb2a6e6bc0` / tree
-`e87d9178bbe0f2bf2989f7297b8e698c24785058`. It repairs the public routine
-current-directory root and Git-visible dirty-state invariant and is accepted at
-source scope after one bounded Terra/medium review. The next transition is a
-fresh `0.0.14` package, retained isolated install, marketplace and plugin
-refresh, fresh discovery, and the installed dirty-repository interruption,
-recovery, reopen, and repeat-use journey. All installed, runtime, Product
+`a5b7447c0` / tree `ca7dcbf40a024e2e05c4b97326bcf61c47df2658`.
+Installed `0.0.14` passed fresh discovery and zero-write fit inspection, then
+exposed a public routine defect: normal owner-controlled macOS home ancestry
+was rejected before private state creation. The accepted repair admits
+non-group/world-writable host ancestry while keeping the private authority
+chain exact `0700`. The next transition is a fresh `0.0.15` package, retained
+isolated install, marketplace and plugin refresh, fresh discovery, and the
+installed dirty-repository interruption, recovery, reopen, and repeat-use
+journey. The repository-wide namespace claim remains withheld on four named
+pre-existing debts outside this increment. All installed, runtime, Product
 Fitness, daily-driver, readiness, release, and completion claims remain
-withheld until those exact surfaces pass.
+withheld until their exact surfaces pass.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.

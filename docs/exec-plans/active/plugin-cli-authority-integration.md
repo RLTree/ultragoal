@@ -1698,6 +1698,34 @@ interruption, recovery, and repeat-use identities must all be re-observed.
 Codex host discovery requires both a higher plugin version and an explicit
 marketplace/plugin refresh; stale `0.0.13` cache state is invalid evidence.
 
+### Routine host-ancestry integration — 2026-07-22
+
+Installed `0.0.14` discovery and zero-write repository inspection passed, then
+the public routine route failed before state creation because its host adapter
+required the normal macOS home and `.codex` ancestry to be exactly `0700`.
+Root integrated `a5b7447c0` / tree
+`ca7dcbf40a024e2e05c4b97326bcf61c47df2658`. The repair admits only
+owner-controlled host ancestry with no group/world write permission, while the
+`harness-ultragoal`, `routine-public`, authority, and adapter custody chain
+remains exact `0700` and is revalidated before effects. Writable shared
+ancestry and relaxed private authority modes fail without repository effects.
+
+Focused evidence on the exact source passes the complete routine production
+contract 55/55, its seven host-admission controls, warning-denied production
+compilation, package product controls 30/30, version wiring 1/1, Python source
+laws, 121 standards rows, generated authority, line caps, and diff checks. One
+bounded Terra/medium material review accepted the exact source with no finding.
+The repository-wide namespace adapter still reports four pre-existing debts
+outside this increment, so namespace-dependent package/readiness/release claims
+remain withheld rather than blocking the installed truth-loop observation.
+
+The next immutable candidate is `0.0.15`. Package, isolated install, configured
+marketplace, installed plugin, executable, fresh discovery, routine execution,
+interruption, recovery, reopen, and repeat-use identities must be observed
+again. A source/package change is not visible to Codex App until the plugin
+version increments and both marketplace registration and plugin installation
+are explicitly refreshed.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
