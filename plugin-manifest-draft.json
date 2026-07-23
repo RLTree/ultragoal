@@ -1931,13 +1931,6 @@
     "validator/src/distribution/package/product/inventory_publication.rs",
     "validator/src/distribution/package/product/mod.rs",
     "validator/src/inventory/builder.rs",
-    "validator/src/inventory/compatibility/mod.rs",
-    "validator/src/inventory/compatibility/reader_witness/scan/literals.rs",
-    "validator/src/inventory/compatibility/reader_witness/scan/unicode.rs",
-    "validator/src/inventory/compatibility/reader_witness/tests.rs",
-    "validator/src/inventory/compatibility/reader_witness_specs.rs",
-    "validator/src/inventory/compatibility/specs.rs",
-    "validator/src/inventory/compatibility/witness.rs",
     "validator/src/inventory/component_expectations.rs",
     "validator/src/inventory/components.rs",
     "validator/src/inventory/context_scopes/exact_set.rs",
@@ -2234,5 +2227,5 @@
     }
   ],
   "status": "implementation",
-  "version": "0.0.20"
+  "version": "0.0.21"
 }
