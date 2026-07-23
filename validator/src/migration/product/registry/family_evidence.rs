@@ -20,13 +20,9 @@ fn validate_skill_authority_inputs(
     };
     let expected_package_exclusion = digest(
         format!(
-            "n14-skill-package-manifest-exclusion-v4|{}|{}|{}|{}|{}|{}|{}|{}",
+            "n14-skill-package-manifest-exclusion-v3|{}|{}|{}|{}",
             manifest.digest_sha256,
             schema.digest_sha256,
-            activation.source_snapshot_id(),
-            activation.package_sha256(),
-            activation.projection_sha256(),
-            activation.plugin_version(),
             canonical_skill_names().join(","),
             legacy_aliases().join(","),
         )
@@ -61,11 +57,9 @@ fn validate_skill_authority_inputs(
                 .collect::<Vec<_>>()
         && activation.profile_rejected_legacy()
         && activation.implicit_gateways() == ["harness-ultragoal".to_owned()]
-        && family.skill_no_catalog_evidence_sha256
-            == prefixed(activation.catalog_exclusion_sha256())
-        && family.skill_no_profile_evidence_sha256
-            == prefixed(activation.profile_rejection_sha256())
-        && family.skill_implicit_gateway_sha256 == prefixed(activation.implicit_gateway_sha256())
+        && family.skill_no_catalog_evidence_id == "N14-CURRENT-CATALOG-EXCLUSION-PROJECTION"
+        && family.skill_no_profile_evidence_id == "N14-CURRENT-PROFILE-REJECTION-PROJECTION"
+        && family.skill_implicit_gateway_evidence_id == "N14-SOLE-IMPLICIT-GATEWAY-PROJECTION"
         && family.skill_no_package_evidence_sha256 == expected_package_exclusion;
     result
 }

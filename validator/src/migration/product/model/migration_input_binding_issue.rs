@@ -158,6 +158,15 @@ impl ProductInputSnapshot {
             .validate()
             .map_err(|_| ProductMigrationError::new("migration-product-inventory-refused"))?;
         self.registry.validate()?;
+        if self
+            .skill_activation
+            .as_ref()
+            .is_some_and(|activation| !activation.validate())
+        {
+            return Err(ProductMigrationError::new(
+                "migration-product-skill-family-activation-refused",
+            ));
+        }
         validate_inventory_paths(&self.inventory)
     }
 }
