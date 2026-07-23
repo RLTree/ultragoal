@@ -25,27 +25,34 @@ pub(super) fn query_local(
     {
         return invalid_invocation();
     }
-    let filter = match invocation.arguments.as_slice() {
-        [] => None,
-        [argument]
-            if argument.name == OptionName::Filter
-                && matches!(argument.value, ParsedValue::Identifier(_)) =>
-        {
-            let ParsedValue::Identifier(value) = &argument.value else {
-                unreachable!()
-            };
-            Some(value.as_str())
+    let mut requested_target = None;
+    let mut filter = None;
+    for argument in &invocation.arguments {
+        match (&argument.name, &argument.value) {
+            (OptionName::Target, ParsedValue::RepositoryTarget(value))
+                if requested_target.is_none() =>
+            {
+                requested_target = Some(value.as_str());
+            }
+            (OptionName::Filter, ParsedValue::Identifier(value)) if filter.is_none() => {
+                filter = Some(value.as_str());
+            }
+            _ => return invalid_invocation(),
         }
-        _ => return invalid_invocation(),
-    };
+    }
     if read_context.revalidate().is_err() {
         return stale_context();
     }
-    let routine_context = match super::routine::current_observability_context(root, read_context) {
-        Ok(context) => context,
-        Err(()) => return observability_unavailable(LocalStoreFailure::binding()),
-    };
-    let context = routine_context.as_ref().unwrap_or(read_context);
+    let routine_binding =
+        match super::routine::current_observability_context(root, requested_target, read_context) {
+            Ok(context) => context,
+            Err(()) => return observability_unavailable(LocalStoreFailure::binding()),
+        };
+    let (store_root, context) = routine_binding
+        .as_ref()
+        .map_or((root, read_context), |binding| {
+            (binding.target.as_path(), &binding.context)
+        });
     let binding = match SemanticEvent::for_context(
         context,
         SOURCE_ID,
@@ -70,7 +77,7 @@ pub(super) fn query_local(
             Err(_) => return invalid_invocation(),
         };
     }
-    let store = match LocalStore::open(root, context, SOURCE_ID) {
+    let store = match LocalStore::open(store_root, context, SOURCE_ID) {
         Ok(store) => store,
         Err(failure) => return observability_unavailable(failure),
     };
@@ -132,7 +139,7 @@ fn invalid_invocation() -> RuntimeOutcome {
             DiagnosticDetails {
                 cause: "observe query received arguments outside the typed route contract",
                 affected_surface: "HCT-OBSERVE query adapter",
-                repair: "invoke observe query with at most one typed --filter identifier",
+                repair: "invoke observe query with at most one confined --target and one typed --filter identifier",
                 effect: "read",
                 rerun: "ultragoal --json observe query",
                 ceiling: "observability and dependent claims remain unchanged",

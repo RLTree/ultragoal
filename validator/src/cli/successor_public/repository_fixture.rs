@@ -42,6 +42,23 @@ impl Repository {
         output.stdout
     }
 
+    pub(super) fn add_nested_repository(&self, name: &str) -> PathBuf {
+        let live = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .to_path_buf();
+        let root = self.root.join(name);
+        fs::create_dir_all(&root).unwrap();
+        let root = fs::canonicalize(root).unwrap();
+        git(&root, &["init", "-q"]);
+        git(&root, &["config", "user.email", "public@example.invalid"]);
+        git(&root, &["config", "user.name", "Successor Public"]);
+        copy_authority_inputs(&live, &root);
+        git(&root, &["add", "-A"]);
+        git(&root, &["commit", "-qm", "fixture"]);
+        root
+    }
+
     pub(super) fn install_agent_authority(&self, home: &Path) {
         let version = serde_json::from_slice::<serde_json::Value>(
             &fs::read(self.root.join(".codex-plugin/plugin.json")).unwrap(),

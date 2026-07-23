@@ -22,6 +22,14 @@ impl RoutineInvocationOptions {
     }
 }
 
+pub(super) fn observability_options(target: Option<&str>) -> RoutineInvocationOptions {
+    RoutineInvocationOptions {
+        target: target.map(str::to_owned),
+        interruption: None,
+        continuation: None,
+    }
+}
+
 pub(crate) fn options(
     invocation: &ParsedInvocation,
 ) -> Result<RoutineInvocationOptions, PublicFailure> {

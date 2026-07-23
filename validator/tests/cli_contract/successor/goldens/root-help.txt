@@ -33,7 +33,7 @@ Commands:
       Explain cause, smallest repair, exact rerun, effect, and ceiling.
   prove  [workspace-write] --claim <value> --output <value>
       Execute one claim-specific proof and independent reconciliation packet.
-  observe query  [read] [--filter <value>]
+  observe query  [read] [--target <value>] [--filter <value>]
       Query local semantic events without access-metadata writes.
   observe export  [external-write] --output <value> --approve-export
       Export explicitly approved semantic data to an external destination.
