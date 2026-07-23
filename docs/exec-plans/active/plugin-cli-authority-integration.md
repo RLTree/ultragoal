@@ -126,6 +126,24 @@ completion. The next dependency-legal product boundary is root-owned version,
 package, install, discovery, and installed-journey reconciliation on a new
 exact candidate.
 
+## 0.0.21 source version boundary — 2026-07-23
+
+Root committed `26c1d3e0a4eaa09389d3414e5407d569120e7327` / tree
+`634ad103cfc1d827cbd1073046f9011c75a6a74d`. It advances the canonical
+plugin manifest and the package verifier together from `0.0.20` to `0.0.21`,
+the post-retirement version already required by the N15 compatibility decision.
+The package verifier's absent-manifest, version-drift, mutation/restore, and
+independent capture controls remain focused-green. The repository marketplace
+catalog is an unversioned source descriptor; it continues to point to the
+canonical local plugin rather than duplicating the plugin semantic version.
+
+This is source identity only. Package bytes, isolated installation, cache,
+marketplace, app registry, discovery, runtime, repository adoption, routine
+work, recovery, repeat use, Product Fitness, readiness, release, and completion
+remain unobserved. The next product action is to package this exact source from
+a clean root-owned worktree, then use the installed public CLI against the
+candidate-bound Research Run routine-configuration route.
+
 ## N14 migration-family adoption projection — 2026-07-23
 
 Root integrated exact source `913bc193057b9852080d28f083dd5debccd6bc2a` /

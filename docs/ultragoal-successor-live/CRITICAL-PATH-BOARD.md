@@ -49,6 +49,18 @@ The first broken product transition is now the public `fit inspect` route on
 the current candidate; root must observe it before launching selector work or
 an installed journey increment.
 
+## 2026-07-23 0.0.21 source version boundary
+
+Root committed `26c1d3e0a4eaa09389d3414e5407d569120e7327` / tree
+`634ad103cfc1d827cbd1073046f9011c75a6a74d`, advancing the canonical plugin
+manifest and package verifier together to the post-retirement `0.0.21` version.
+Focused package-contract controls are green. The local marketplace catalog is
+an unversioned source descriptor, so it correctly carries no duplicate semantic
+version. This does not establish package, install, cache, marketplace,
+app-registry, discovery, runtime, or journey evidence. The active frontier is
+the exact clean-candidate package/install identity ladder followed by the
+installed public routine-configuration journey on Research Run.
+
 ## 2026-07-23 N15 exact retirement integration
 
 Exact root source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` / tree
