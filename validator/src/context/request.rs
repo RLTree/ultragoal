@@ -2,6 +2,22 @@ use super::bound_context::EffectClass;
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
+/// The source of one capability observation. Exact-self probes are reserved for
+/// the currently executing public program; they never accept a caller path.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(super) enum ToolProbe {
+    Path(String),
+    CurrentExecutable(String),
+}
+
+impl ToolProbe {
+    pub(super) fn name(&self) -> &str {
+        match self {
+            Self::Path(name) | Self::CurrentExecutable(name) => name,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct BuildRequest {
     pub(super) start: PathBuf,
@@ -12,7 +28,7 @@ pub struct BuildRequest {
     pub(super) configuration: BTreeMap<String, String>,
     pub(super) secret_sources: BTreeMap<String, String>,
     pub(super) selected_inputs: Vec<PathBuf>,
-    pub(super) tool_probes: Vec<String>,
+    pub(super) tool_probes: Vec<ToolProbe>,
 }
 
 impl BuildRequest {
@@ -26,7 +42,7 @@ impl BuildRequest {
             configuration: BTreeMap::new(),
             secret_sources: BTreeMap::new(),
             selected_inputs: Vec::new(),
-            tool_probes: vec!["git".to_owned()],
+            tool_probes: vec![ToolProbe::Path("git".to_owned())],
         }
     }
 
@@ -83,9 +99,19 @@ impl BuildRequest {
 
     pub fn probe_tool(mut self, name: impl Into<String>) -> Self {
         let name = name.into();
-        if !self.tool_probes.contains(&name) {
-            self.tool_probes.push(name);
+        if !self.tool_probes.iter().any(|probe| probe.name() == name) {
+            self.tool_probes.push(ToolProbe::Path(name));
         }
+        self
+    }
+
+    /// Pins an allowlisted internal capability to this process's executable.
+    /// This is intentionally not a path-taking API: repository or caller input
+    /// cannot substitute an executable into a candidate-bound `LiveContext`.
+    pub(crate) fn probe_current_executable(mut self, name: &'static str) -> Self {
+        self.tool_probes.retain(|probe| probe.name() != name);
+        self.tool_probes
+            .push(ToolProbe::CurrentExecutable(name.to_owned()));
         self
     }
 

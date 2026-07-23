@@ -1,4 +1,5 @@
 use super::error::ContextError;
+use super::request::ToolProbe;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -191,6 +192,8 @@ pub struct LiveContext {
     context_id: String,
     #[serde(flatten)]
     payload: ContextPayload,
+    #[serde(skip)]
+    capability_probes: Vec<ToolProbe>,
     #[cfg(unix)]
     #[serde(skip)]
     worktree_directory_identity: WorktreeDirectoryIdentity,
@@ -233,13 +236,19 @@ impl LiveContext {
     pub(super) fn from_payload(
         payload: ContextPayload,
         context_id: String,
+        capability_probes: Vec<ToolProbe>,
         #[cfg(unix)] worktree_directory_identity: WorktreeDirectoryIdentity,
     ) -> Self {
         Self {
             context_id,
             payload,
+            capability_probes,
             #[cfg(unix)]
             worktree_directory_identity,
         }
+    }
+
+    pub(super) fn capability_probes(&self) -> &[ToolProbe] {
+        &self.capability_probes
     }
 }

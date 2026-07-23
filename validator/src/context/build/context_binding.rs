@@ -116,6 +116,7 @@ impl LiveContext {
         let context = Self::from_payload(
             payload,
             format!("sha256:{}", sha256_hex(&serialized)),
+            request.tool_probes,
             #[cfg(unix)]
             captured_worktree_directory,
         );

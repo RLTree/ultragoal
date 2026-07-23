@@ -124,7 +124,11 @@ pub(crate) fn execution_context(
         request = request.select_input(target.join(path));
     }
     for tool in manifest.tool_names() {
-        request = request.probe_tool(tool);
+        request = if tool == manifest::ROUTINE_RUNNER {
+            request.probe_current_executable(manifest::ROUTINE_RUNNER)
+        } else {
+            request.probe_tool(tool)
+        };
     }
     LiveContext::build(request).map_err(|_| PublicFailure::Context)
 }

@@ -60,13 +60,7 @@ impl LiveContext {
         if selected_inputs(&input_paths, &worktree)? != self.selected_inputs() {
             return Err(changed("selected inputs"));
         }
-        let tool_names = self
-            .capabilities()
-            .tools
-            .iter()
-            .map(|tool| tool.name.clone())
-            .collect::<Vec<_>>();
-        if capability::capture(&tool_names, &git_path)? != *self.capabilities() {
+        if capability::capture(self.capability_probes(), &git_path)? != *self.capabilities() {
             return Err(changed("capabilities or PATH"));
         }
         if permissions(&repository, &worktree) != *self.permissions() {
