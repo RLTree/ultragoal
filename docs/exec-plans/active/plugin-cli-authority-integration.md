@@ -1,5 +1,76 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering 3.0 bounded integration and installed journey — 2026-07-23
+
+The current exact source is `de5d395bcefef087e974ab20b21c585a965e47ad`
+/ tree `0f72ea778587017b2e7ee33af887b48cae5af7f3`. It contains the
+candidate-bound observability reconstruction at `469691de6`, the shared
+root/child target-binding correction at `d193ab4e4`, and the coordinated
+plugin/package advance to `0.0.19`. One bounded Terra/medium review rejected
+the first observation topology because child-target routine executions were
+invisible from the repository root. The coherent correction reuses the private
+routine target resolver for execution and observation; the exact confirmation
+review returned ACCEPT.
+
+Two clean-room `0.0.19` packages were byte-identical at
+`sha256:a999567d0a650a0fcc4d24cb96414ff21b47b3c1f26e76972ac3388d346547d0`.
+The package candidate is
+`sha256:bcba6cbd1856c65913537f6a4e7a94cbaba9e1621a4cf62d2c01241e099fcc98`;
+the embedded, marketplace, installed-cache, and public-CLI executable digest is
+`sha256:0c285562ea7af9f042462109ecc5eb0add66ccc3d6ed8f2d19087aaf1f63d472`.
+Package verification and the isolated install transaction passed. The
+isolated installed, marketplace-source, cache, runtime, and second-journey
+observations remain distinct at
+`sha256:82e9fafbf82d670e177b20d3e291d1cdf9e755029b7a074b0626c99f244daab7`,
+`sha256:f8ac71a4b20d5405abfa7d46885313177f24085c6c458e52c9d913cf192e0cd5`,
+`sha256:66312bb74d686770c20fa493ed5dd912a0dde269cb01bc36e792d14809b6f6ea`,
+`sha256:c55cff9e1906db57f6d53af59ab8e2bd5b842ebb88549396577a2c0d95beaaad`,
+and
+`sha256:6b02731e427fde4335a072b036e5cb90535120191f83a2148da1d6fc57bf3b4e`.
+
+The durable marketplace, installed Codex cache, and public
+`~/.local/bin/ultragoal` were explicitly refreshed. Supported Codex listing
+reports `harness-ultragoal@harness-ultragoal-local` installed and enabled at
+`0.0.19`. A fresh Codex process explicitly invoked the sole front door
+`harness-ultragoal:harness-ultragoal`, selected the installed
+`harness-ultragoal:repository-fit` route, and returned `effect: read`. The
+Agentic gateway remains disabled and all Agentic artifacts remain
+proposal-only/no-claim. The packaged Harness-plus-Agentic profile remains
+within its product budget; the complete host catalog still exceeds Codex's
+global display budget and omitted 122 unrelated skills, so host-wide discovery
+margin remains withheld.
+
+On Research Run source `acee890a4dcc9c1377a954961e782b8f685a5b58`,
+installed `0.0.19` preserved the exact dirty Git status and every named
+unrelated byte. It recorded a no-effect interruption after routine reservation,
+continued the exact opaque token in a fresh CLI process, executed the `syntax`
+validation, published terminal event
+`routine-terminal-ec07421e6e1cee7e078977e256520a31fada0adc7e82f9b398a54cd36d1f18fe`
+with outcome `pass`, safely reused the same
+artifact with `effect: none`, and rejected replay of the consumed continuation.
+The corrected public `observe query --filter check.routine.terminal` joined the
+exact target-bound journal and returned the terminal event.
+
+The P0/P1 Agentic integration remains bounded to existing owners:
+NoChangeDecision maps to current behavior disposition; verification is
+root-sealed; task evidence projects WorkPackage and Lease; review verdicts
+cannot promote claims; the semantic repair circuit is stateless; learning
+adoption extends the existing improvement registry; and knowledge is a
+digest-linked generated projection. Focused current-candidate checks pass:
+engineering advisory `6/6`, improvement-loop `5/5`, skill catalog `13/13`,
+root/child observation `2/2`, and affected production compilation.
+
+This is exact package, isolated-install, refreshed-cache/marketplace,
+fresh-process installed-front-door, installed runtime, and agent-use
+interruption/recovery/reuse evidence. It is not human-use, empirical Product
+Fitness improvement, daily-driver, readiness, release, or completion evidence.
+The next high-information product boundary is the existing public `diagnose`
+owner: on this deliberately partial-fit repository it still fails closed with
+`successor_runtime_inventory_unavailable`, while routine terminal observation
+is available through the canonical target-bound journal. Any repair must extend
+that existing diagnosis authority coherently; it must not add a second state
+reader or infer full ProductState from routine evidence.
+
 ## Agentic Engineering P0 installed boundary — 2026-07-23
 
 Exact source `01384a996a46fc3492a757ace3489030b23f4bab` / tree

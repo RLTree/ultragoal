@@ -1,5 +1,37 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Agentic Engineering bounded product boundary at 0.0.19
+
+Exact source `de5d395bcefef087e974ab20b21c585a965e47ad` / tree
+`0f72ea778587017b2e7ee33af887b48cae5af7f3` is installed as `0.0.19`.
+Its two clean-room packages are byte-identical at
+`sha256:a999567d0a650a0fcc4d24cb96414ff21b47b3c1f26e76972ac3388d346547d0`;
+marketplace, installed cache, and public CLI execute the same binary
+`sha256:0c285562ea7af9f042462109ecc5eb0add66ccc3d6ed8f2d19087aaf1f63d472`.
+A fresh Codex process invoked the exact Harness front door and selected the
+installed repository-fit route. Agentic remains explicit-only,
+proposal-only/no-claim; UltraGoal remains the sole executable and claim
+authority. The host-wide discovery-margin claim stays withheld because the
+unrelated full plugin catalog still exceeds Codex's global skill budget.
+
+On the exact Research Run candidate, the installed public CLI preserved the
+dirty baseline, recorded a no-effect reservation interruption, completed the
+opaque continuation in a fresh process, published and queried the exact
+target-bound terminal event, safely reused the result with no second effect,
+and rejected consumed-token replay. One bounded review rejected root-only
+observation of child-target execution; the shared routine target-binding
+correction passed root and child controls and exact confirmation review.
+
+The Agentic P0/P1 slice is closed at source, package, isolated install,
+installed discovery, runtime, and agent-use evidence. No empirical Product
+Fitness improvement, human-use, daily-driver, readiness, release, or completion
+claim advances. The first broken transition is now the existing public
+`diagnose` join on a partial-fit repository: it fails closed with
+`successor_runtime_inventory_unavailable` even though the canonical routine
+terminal journal is current. Root must decide whether the existing diagnosis
+authority can admit a routine-scoped projection without manufacturing full
+ProductState; no duplicate reader or diagnosis lifecycle is authorized.
+
 ## 2026-07-23 Installed routine terminal reconciliation
 
 The exact installed `0.0.17` Research Run journey passed package, isolated
