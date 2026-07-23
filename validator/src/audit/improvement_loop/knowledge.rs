@@ -1,4 +1,5 @@
 use serde_json::Value;
+use std::collections::HashSet;
 use std::path::Path;
 
 use super::{
@@ -50,6 +51,17 @@ pub(super) fn failures(root: &Path) -> Vec<String> {
     };
     if records.len() < 2 {
         out.push("improvement_loop_learning_records_too_few".to_string());
+    }
+    let mut record_ids = HashSet::new();
+    for row in records {
+        let id = text(row, "record_id");
+        if id.is_empty() {
+            out.push("improvement_loop_learning_record_id_missing".to_string());
+        } else if !record_ids.insert(id.clone()) {
+            out.push(format!(
+                "improvement_loop_learning_record_id_duplicate:{id}"
+            ));
+        }
     }
     let adopted = records
         .iter()

@@ -108,3 +108,24 @@ fn learning_adoption_rejects_universal_repair_budget_and_missing_eval_family() {
     );
     std::fs::remove_dir_all(root).expect("cleanup");
 }
+
+#[test]
+fn learning_adoption_rejects_duplicate_record_ids() {
+    let root = root("learning-adoption-duplicate-id");
+    copy_learning_surfaces(&root);
+    let registry_path = root.join(super::REGISTRY);
+    let mut registry = crate::json_boundary::read_json(&registry_path).expect("registry JSON");
+    registry["learning_adoption"]["records"][1]["record_id"] =
+        json!("knowledge-projection-stale-mismatch");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(&registry_path, &registry)
+        .expect("mutated registry");
+    let failures = super::knowledge::failures(&root);
+    assert!(
+        failures.iter().any(|failure| {
+            failure
+                == "improvement_loop_learning_record_id_duplicate:knowledge-projection-stale-mismatch"
+        }),
+        "{failures:#?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup");
+}

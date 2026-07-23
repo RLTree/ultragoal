@@ -134,11 +134,12 @@
         "repair_budget": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["task_family", "operating_envelope", "max_repair_attempts", "universal_count"],
+          "required": ["task_family", "operating_envelope", "max_repair_attempts", "calibration_basis", "universal_count"],
           "properties": {
             "task_family": { "type": "string", "minLength": 1 },
             "operating_envelope": { "type": "string", "minLength": 1 },
             "max_repair_attempts": { "type": "integer", "minimum": 1 },
+            "calibration_basis": { "type": "string", "minLength": 1 },
             "universal_count": { "const": false }
           }
         },
