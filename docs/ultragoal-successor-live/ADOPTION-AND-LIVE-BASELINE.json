@@ -226,7 +226,7 @@
     {"id": "OD-005", "state": "unresolved", "safe_default": "digest and provenance without signature claim"},
     {"id": "OD-006", "state": "unresolved", "safe_default": "no optional executable extension"},
     {"id": "OD-007", "state": "unresolved", "safe_default": "local bounded events with no export"},
-    {"id": "OD-008", "state": "unresolved", "safe_default": "route non-destructively with warnings and do not claim retirement complete"},
+    {"id": "OD-008", "state": "resolved", "safe_default": "0.0.20 is the warning-bearing compatibility window; 0.0.21 is the earliest removal version after exact N14 proof", "decision_path": "docs/ultragoal-successor-live/root-decisions/OD-008-GLOBAL-COMPATIBILITY-WINDOW.json"},
     {"id": "OD-009", "state": "resolved_scoped", "safe_default": "outside the exact consumed cleanup cohorts, archive or leave historical files in place as non-authoritative", "decision_path": "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json"},
     {"id": "OD-010", "state": "unresolved", "safe_default": "preserve harness-ultragoal identity and avoid public rename"}
   ],
@@ -273,9 +273,11 @@
       "open_decisions_sha256": "ac806088630d09b9ce15b6ca31c6e3022bdca996f87202213ccfd5c80be0d46f",
       "scoped_od008_path": "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json",
       "scoped_od008_sha256": "41a727aa9ffcd3c6140a1bde3d88682dc72c5d35223b447ff5e4349766256639",
+      "global_od008_path": "docs/ultragoal-successor-live/root-decisions/OD-008-GLOBAL-COMPATIBILITY-WINDOW.json",
+      "global_od008_sha256": "55f3a8f4f54dc964e24187b00d492e2325b27a194b9a69a855d7f51c5026abf4",
       "scoped_od009_path": "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json",
       "scoped_od009_sha256": "4bf699e71285efe178112ddd0c2163fce8eaef99cefffd2043f52eb325766c57",
-      "rule": "Apply every unresolved decision's safe default. Scoped OD-008 does not resolve global OD-008; scoped OD-009 is consumed only for its exact path/content-digested cohorts and does not enable generic destructive cleanup."
+      "rule": "Apply every unresolved decision's safe default. Global OD-008 resolves compatibility timing but does not implement migration or authorize physical deletion; scoped OD-009 is consumed only for its exact path/content-digested cohorts and does not enable generic destructive cleanup."
     },
     "root_authority": {
       "canonical_state": "LANE_REGISTRY.json",

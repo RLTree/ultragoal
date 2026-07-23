@@ -1,5 +1,25 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 global OD-008 adoption
+
+Root adopted Tree's explicit OD-008 approval at
+`OD-008-GLOBAL-COMPATIBILITY-WINDOW.json`. The exercised `0.0.20` product is
+the compatibility window and `0.0.21` is the earliest removal version.
+Compatibility routes remain explicit-only, warning-bearing,
+non-authoritative, and unable to promote claims. Historical durable formats
+may retain a read-only migration reader where evidence requires one. OD-008
+does not authorize physical deletion; OD-009 remains the independent cleanup
+authority.
+
+N14 is now the sole ready lane at
+`N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER`. Its previous
+source identity is invalidated because the newly adopted decision changes the
+migration authority it consumes. N14 must reobserve the exact current
+inventory and prove replacement behavior, compatibility disposition, duplicate
+authority absence, rollback or historical-reader behavior, stale/wrong
+candidate refusal, and zero-write reads before N15 can become eligible. Every
+claim remains withheld.
+
 ## 2026-07-23 N08 installed milestone and canonical-frontier reconciliation
 
 N08 is no longer scheduler-ready. Exact product source

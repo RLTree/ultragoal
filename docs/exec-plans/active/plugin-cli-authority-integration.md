@@ -1,5 +1,21 @@
 # Plugin and CLI Authority Integration
 
+## Global OD-008 adoption and N14 release — 2026-07-23
+
+Tree's explicit `OD-008 is approved` instruction is now adopted through
+`OD-008-GLOBAL-COMPATIBILITY-WINDOW.json`. Version `0.0.20` is the single
+warning-bearing compatibility window already exercised; `0.0.21` is the
+earliest removal version. Retained compatibility routes remain explicit-only,
+non-authoritative, and incapable of claim promotion. Durable historical bytes
+may retain a read-only migration reader only when evidence requires it.
+Physical deletion remains independently governed by OD-009.
+
+This decision releases N14 for exact current-inventory reobservation. It does
+not restore the stale N14 source identity or prove route equivalence,
+retirement, package, runtime, or release behavior. The canonical frontier is
+`N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER`; N14 is the sole
+eligible scheduler node, with every claim still withheld.
+
 ## N08 canonical-frontier reconciliation — 2026-07-23
 
 The installed `0.0.20` milestone invalidates the stale operational projection

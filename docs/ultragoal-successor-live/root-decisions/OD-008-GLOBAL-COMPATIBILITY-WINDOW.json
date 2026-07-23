@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootAuthorityDecision-v1",
+  "decision_id": "OD-008-GLOBAL-COMPATIBILITY-WINDOW",
+  "node_id": "N14-MIGRATION",
+  "root_decision": "adopt_one_released_version_compatibility_window",
+  "review_mode": "root_owned_external_authority_adoption",
+  "approval_source": "explicit_user_approval",
+  "approval_statement": "OD-008 is approved",
+  "approval_candidate": {
+    "head": "82424e5b1087820997a179e7267a7d6efe52282c",
+    "tree": "0156c391229586ba631eeb48f600dd8a1a412b64"
+  },
+  "policy": {
+    "compatibility_version": "0.0.20",
+    "removal_version": "0.0.21",
+    "window_rule": "The already exercised 0.0.20 product is the sole compatibility window. A retained public compatibility route is explicit-only, non-authoritative, warning-bearing, and incapable of claim promotion.",
+    "removal_rule": "Version 0.0.21 may retire the legacy authority and compatibility route only after N14 proves canonical replacement behavior, route equivalence where promised, zero duplicate authority, rollback, and current inventory binding.",
+    "durable_state_rule": "Historical serialized bytes may retain a read-only migration reader when current evidence proves a durable-state obligation; the reader cannot write, select, or promote authority.",
+    "physical_cleanup_rule": "OD-008 authorizes compatibility timing only. Physical deletion remains governed by OD-009 and exact path/content authority."
+  },
+  "applies_to": [
+    "lane and gate commands",
+    "legacy skills and aliases",
+    "legacy agent routes",
+    "legacy schemas and receipts",
+    "legacy finalizers",
+    "legacy manifest projections"
+  ],
+  "required_n14_evidence": [
+    "exact current authority inventory",
+    "canonical replacement availability",
+    "promised compatibility equivalence or an explicit unsupported disposition",
+    "zero active duplicate authority",
+    "wrong-candidate and stale-inventory refusal",
+    "rollback or preserved historical-reader behavior where required",
+    "zero-write read-path verification",
+    "current 0.0.21 package version binding before release"
+  ],
+  "prohibited_inferences": [
+    "No route is retired merely because this decision exists.",
+    "No physical deletion is authorized by this decision.",
+    "No historical reader may regain write or selection authority.",
+    "No package, install, discovery, runtime, journey, readiness, release, or completion claim is promoted."
+  ],
+  "claim_ceiling": "OD-008 decided; N14 reobservation and implementation are eligible. All product and release claims remain withheld.",
+  "no_claim_statement": "This record resolves compatibility timing. It is not migration implementation, route-equivalence, retirement, package, runtime, or release proof."
+}
