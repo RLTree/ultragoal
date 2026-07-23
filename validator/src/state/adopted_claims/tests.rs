@@ -67,7 +67,7 @@ fn declared_staged_state_is_accepted_without_promoting_n11() {
 }
 
 #[test]
-fn invalidated_staging_identity_remains_declared_without_restoring_its_ceiling() {
+fn integrated_staging_identity_remains_root_accepted_and_exact() {
     let original: serde_json::Value = serde_json::from_slice(LANES).unwrap();
     let n12 = original["lanes"]
         .as_array()
@@ -75,8 +75,8 @@ fn invalidated_staging_identity_remains_declared_without_restoring_its_ceiling()
         .iter()
         .find(|lane| lane["id"] == "N12")
         .unwrap();
-    assert_eq!(n12["state"], "blocked");
-    assert_eq!(n12["ceiling"], "adopted_reobservation_required");
+    assert_eq!(n12["state"], "integrated");
+    assert_eq!(n12["ceiling"], "source_accepted");
     assert!(n12["current_identity"].is_object());
     assert!(load_declared_dependency_identities(LANES).is_ok());
 
@@ -92,8 +92,8 @@ fn invalidated_staging_identity_remains_declared_without_restoring_its_ceiling()
             0 => n12["current_identity"] = serde_json::Value::Null,
             1 => n12["current_identity"]["lane_id"] = serde_json::json!("N11"),
             2 => n12["authority"] = serde_json::json!("lane_write"),
-            3 => n12["ceiling"] = serde_json::json!("source_accepted"),
-            _ => n12["state"] = serde_json::json!("integrating"),
+            3 => n12["ceiling"] = serde_json::json!("adopted_reobservation_required"),
+            _ => n12["state"] = serde_json::json!("blocked"),
         }
         assert!(load_declared_dependency_identities(&serde_json::to_vec(&value).unwrap()).is_err());
     }

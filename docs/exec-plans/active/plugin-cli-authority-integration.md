@@ -1,5 +1,26 @@
 # Plugin and CLI Authority Integration
 
+## N08 canonical-frontier reconciliation — 2026-07-23
+
+The installed `0.0.20` milestone invalidates the stale operational projection
+that still selected N08 as ready. Root now records N08 as integrated at exact
+product source `34ecc872e730df0b3d87e724e881e86b98bf0c06` / tree
+`9768ade2bf03aa20e17443eac0f52b81c167387c`. N11 remains blocked with accepted
+source and an external execution outcome; N12 is source-integrated with every
+claim withheld; N14 remains source-accepted and externally blocked on global
+OD-008. The selected canonical frontier is
+`N14_EXTERNAL_BLOCKED_N12_INTEGRATED_SOURCE_ACCEPTED`, with no scheduler-ready
+or active worktree lane.
+
+This state reconciliation consumes the package/install/discovery/runtime
+observations only as the prior N08 milestone. Because the registry and its
+bound projections are authority-bearing source, their update creates a new
+source candidate and invalidates those same-surface package and installed
+identities for any later release claim. The next dependency-legal action is the
+already-authorized global OD-008 decision and exact N14 migration refresh;
+N11 positive evaluation remains independently blocked by its named host
+capability rather than being relabeled as complete.
+
 ## Installed `0.0.20` advisory and diagnosis journey — 2026-07-23
 
 The immutable product source is

@@ -1,5 +1,29 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 N08 installed milestone and canonical-frontier reconciliation
+
+N08 is no longer scheduler-ready. Exact product source
+`34ecc872e730df0b3d87e724e881e86b98bf0c06` / tree
+`9768ade2bf03aa20e17443eac0f52b81c167387c` produced two byte-identical
+`0.0.20` packages, passed isolated install, refreshed the supported local
+marketplace and installed cache, and exposed one matching public runtime at
+`sha256:464235d4d486c9779b90342af2ceb8aa9436b49261aa40711f3f1bdad635ccc5`.
+A fresh Codex process invoked the installed Harness front door. On the exact
+dirty Research Run candidate, public repository-fit inspection was recursively
+zero-write, routine execution was interrupted after reservation with no effect,
+fresh-process recovery committed once, repeat use reused the same artifact
+without another effect, and consumed-continuation replay failed authority
+closed. Unrelated Git-visible and filesystem state remained byte-identical.
+
+This closes N08 at the integrated source and installed-agent-use milestone
+ceiling. It does not promote Product Fitness, human-use, daily-driver,
+readiness, release, or completion claims. N11 remains source-accepted and
+externally blocked on joint confinement plus identity-conditioned cleanup.
+N12 remains source-integrated with every claim withheld. N14 remains
+source-accepted and externally blocked pending the global OD-008 compatibility
+window/removal-version decision. The canonical scheduler frontier has no ready
+or active lane at this checkpoint.
+
 ## 2026-07-23 Agentic Engineering bounded product boundary at 0.0.19
 
 Exact source `de5d395bcefef087e974ab20b21c585a965e47ad` / tree
