@@ -57,8 +57,21 @@ Diagnosis then reported `complete`, `committed`, and `safe_reuse`; repeat use
 returned the same artifact with `effect: none`; replay of the consumed
 continuation failed authority closed with exit 3.
 
+The installed public `fit inspect --target .` route returned
+`RepositoryFitInspect-v1` with `effect: read`, `claim_effect: none`, and the
+honest `conflicting` retrofit classification for the same dirty candidate.
+Its candidate identity was
+`sha256:f837cffbb23f1861f21fc2a3fb3e0f8a435cd85da74e33b79971b4e56a111543`.
+The command exited 1 as a typed conflicting result in one second. Recursive
+non-Git file bytes and the complete Git status/staged/working-diff snapshot
+were byte-identical before and after
+(`sha256:89b7f24a...c43667` and `sha256:b5f702ba...c5ccb`,
+respectively), so this is zero-write inspection evidence rather than adoption
+or apply evidence.
+
 Research Run's pre-existing dirty status, staged and working diffs, and all
-Git-visible tracked/untracked bytes were identical before and after. The
+Git-visible tracked/untracked bytes were also identical across the routine
+interruption, recovery, repeat, and replay sequence. The
 minimal agent-use Product Fitness observation is: approximately 21 seconds
 across interruption, two diagnoses, recovery, repeat, and replay; no manual
 intervention after authorization; two review rounds for the P0 authority
