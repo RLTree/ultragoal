@@ -1,7 +1,7 @@
 use super::super::super::{CheckpointBinding, HostFailure};
 use super::super::{
-    AnchoredDirectory, CONTINUITY_CHECKPOINT_NAME, CONTINUITY_CHECKPOINT_STAGE_NAME,
-    CONTINUITY_DIRECTORY_NAME, HostState,
+    AnchoredDirectory, HostState, CONTINUITY_CHECKPOINT_NAME, CONTINUITY_CHECKPOINT_STAGE_NAME,
+    CONTINUITY_DIRECTORY_NAME,
 };
 use super::checkpoint::ContinuationCheckpoint;
 use super::continuity_validation::{
@@ -94,6 +94,7 @@ fn read_canonical(
             }
         }
     }
+    directory.verify()?;
     Ok(matching)
 }
 
@@ -140,7 +141,9 @@ fn read_checkpoint_file(
     if bytes.len() as u64 > MAX_CHECKPOINT_BYTES || directory.stat(name)? != Some(expected) {
         return Err(HostFailure::Invalid);
     }
-    serde_json::from_slice(&bytes).map_err(|_| HostFailure::Invalid)
+    let checkpoint = serde_json::from_slice(&bytes).map_err(|_| HostFailure::Invalid)?;
+    directory.verify()?;
+    Ok(checkpoint)
 }
 
 fn open_continuations(
