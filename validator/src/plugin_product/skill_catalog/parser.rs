@@ -81,18 +81,34 @@ fn parse_mapping(source: &str) -> Result<BTreeMap<String, String>, YamlError> {
     let mut parents: Vec<(usize, String)> = Vec::new();
     let mut index = 0;
     let mut saw_mapping = false;
+    let mut saw_document_start = false;
+    let mut saw_document_end = false;
     while index < lines.len() {
         let raw = lines[index];
         index += 1;
         if raw.trim().is_empty() || raw.trim_start().starts_with('#') {
             continue;
         }
+        if saw_document_end {
+            return Err(YamlError::InvalidLine(index));
+        }
         if raw.contains('\t') {
             return Err(YamlError::InvalidLine(index));
         }
         let indent = raw.len() - raw.trim_start().len();
         let content = strip_comment(raw[indent..].trim_end());
-        if content == "---" || content == "..." {
+        if content == "---" {
+            if saw_document_start || saw_mapping {
+                return Err(YamlError::InvalidLine(index));
+            }
+            saw_document_start = true;
+            continue;
+        }
+        if content == "..." {
+            if !saw_mapping || saw_document_end {
+                return Err(YamlError::InvalidLine(index));
+            }
+            saw_document_end = true;
             continue;
         }
         if content.starts_with('-') {
@@ -160,9 +176,12 @@ fn parse_block(
             break;
         }
         if !line.trim().is_empty() {
-            let current = content_indent.get_or_insert(indent);
-            if indent < *current {
-                return Err(YamlError::InvalidLine(cursor + 1));
+            if let Some(current) = content_indent {
+                if indent != current {
+                    return Err(YamlError::InvalidLine(cursor + 1));
+                }
+            } else {
+                content_indent = Some(indent);
             }
         }
         block_lines.push(line);

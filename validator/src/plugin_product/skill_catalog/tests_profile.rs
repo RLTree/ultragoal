@@ -157,3 +157,37 @@ fn unsupported_yaml_is_rejected_instead_of_approximated() {
         Err(super::parser::YamlError::UnsupportedField(_))
     ));
 }
+
+#[test]
+fn yaml_document_streams_are_rejected() {
+    let source = "---\ninterface:\n  display_name: Front door\n  short_description: bounded\n  default_prompt: Use it.\npolicy:\n  allow_implicit_invocation: true\n...\ninterface:\n  display_name: Second\n";
+    assert!(matches!(
+        super::parser::parse_skill_metadata(source),
+        Err(super::parser::YamlError::InvalidLine(_))
+    ));
+}
+
+#[test]
+fn folded_blocks_with_more_indented_content_are_rejected() {
+    let source = "interface:\n  display_name: Front door\n  short_description: >-\n    First line\n      More-indented line\n  default_prompt: Use it.\npolicy:\n  allow_implicit_invocation: true\n";
+    assert!(matches!(
+        super::parser::parse_skill_metadata(source),
+        Err(super::parser::YamlError::InvalidLine(_))
+    ));
+}
+
+#[test]
+fn noncanonical_skill_path_is_rejected() {
+    let mut harness = package(
+        HARNESS_PLUGIN,
+        "0.0.16",
+        HARNESS_PLUGIN_DIGEST,
+        HARNESS_PACKAGE_DIGEST,
+        vec![skill(HARNESS_FRONT_DOOR, true)],
+    );
+    harness.skills[0].path = "README.md".to_owned();
+    assert!(matches!(
+        project(&request(vec![harness], None)),
+        Err(SkillCatalogError::InvalidPath(path)) if path == "README.md"
+    ));
+}

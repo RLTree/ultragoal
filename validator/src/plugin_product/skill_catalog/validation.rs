@@ -25,8 +25,11 @@ pub(super) fn validate_package(
         ));
     }
     for skill in &package.skills {
-        if skill.path.trim().is_empty() || skill.path.starts_with('/') || skill.path.contains("..")
-        {
+        if skill.name.trim().is_empty() {
+            return Err(SkillCatalogError::InvalidPath(skill.path.clone()));
+        }
+        let expected_path = format!("skills/{}/agents/openai.yaml", skill.name);
+        if skill.path != expected_path || skill.path.starts_with('/') || skill.path.contains("..") {
             return Err(SkillCatalogError::InvalidPath(skill.path.clone()));
         }
     }
