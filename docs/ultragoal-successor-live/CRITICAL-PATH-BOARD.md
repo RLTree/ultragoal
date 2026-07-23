@@ -1,5 +1,30 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Installed routine terminal reconciliation
+
+The exact installed `0.0.17` Research Run journey passed package, isolated
+install, discovery, public entry, recursive zero-write fit inspection, typed
+routine admission, and reservation interruption. Recovery and a fresh repeat
+completed their durable routine effects, but public settlement remained
+`terminal-event-pending`: the single append-only observability journal rejected
+its valid historical `0.0.15` row because that row carried an earlier
+`LiveContext`.
+
+The `0.0.18` candidate repairs the shared journal invariant. Every row remains
+strictly decoded, checksummed, size-bounded, and schema-validated. A bound
+writer may still append only its exact current context, candidate, and source.
+Valid historical bindings may coexist in the journal, while query and causal
+interpretation select only the exact current binding. Cross-binding causal
+parents remain missing evidence, not inferred authority. Malformed rows,
+wrong-bound direct appends, conflicting event identities, path substitution,
+and claim promotion remain fail-closed.
+
+Source checks are green at the pre-freeze boundary: observability `35/35` and
+routine public production `60/60`. Package, refreshed marketplace/cache,
+installed discovery, pending-terminal recovery, repeat use, Product Fitness,
+readiness, release, and completion remain withheld until the exact `0.0.18`
+candidate passes those same-surface observations.
+
 ## 2026-07-23 Agentic Engineering P1 source integration
 
 Root integrated the bounded learning-adoption increment through

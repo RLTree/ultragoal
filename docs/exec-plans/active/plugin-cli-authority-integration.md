@@ -1949,6 +1949,31 @@ the unchanged claim ceiling. The next product candidate is `0.0.17`. The
 `0.0.16` package and installed observations remain valid only for P0; they
 cannot support P1 installed or runtime claims.
 
+### Installed routine terminal reconciliation — 2026-07-23
+
+Installed `0.0.17` reached the active Research Run routine effect through the
+public CLI. Reservation interruption produced a typed continuation with no
+repository write. Recovery and a fresh repeat each completed their durable
+routine effect, but public settlement could not join the terminal observation:
+the fixed append-only observability journal contained one valid historical row
+bound to an earlier `LiveContext`, and `EventStore` classified that different
+binding as corruption. Diagnosis and observation therefore became unavailable
+and exact terminal custody remained pending.
+
+The `0.0.18` repair keeps one journal and one observability authority. Stored
+rows remain strictly decoded, checksummed, bounded, and schema-validated.
+Current writers remain bound to their exact context, candidate, and source.
+Queries and causal explanation now filter valid journal history to that exact
+binding, and a causal parent from another binding is withheld as missing
+evidence. There is no migration that deletes or rewrites historical rows and no
+new store, receipt, or claim authority.
+
+Pre-freeze focused evidence is observability `35/35` and routine public
+production `60/60`. One exact material review, package rebuild, marketplace
+refresh, isolated install, installed recovery, diagnosis, fresh-process reopen,
+and repeat-use observation remain required. All stronger Product Fitness,
+human-use, readiness, release, completion, and mastery claims remain withheld.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required

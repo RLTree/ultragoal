@@ -1,7 +1,7 @@
 use super::scenario::{TestDir, event, query, store};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
-use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
+use ultragoal::observability::{EventQuery, SemanticEvent, SemanticEventInput};
 
 #[test]
 fn malformed_unknown_version_checksum_and_truncation_fail_closed() {
@@ -89,7 +89,7 @@ fn unknown_event_fields_are_rejected_even_with_valid_row_shape() {
 }
 
 #[test]
-fn wrong_context_candidate_and_source_are_rejected_on_append_query_and_row_read() {
+fn wrong_context_candidate_and_source_are_rejected_on_append_and_query() {
     let dir = TestDir::new("bindings");
     let bound_store = store(&dir);
     let wrong = SemanticEvent::new(SemanticEventInput {
@@ -133,18 +133,6 @@ fn wrong_context_candidate_and_source_are_rejected_on_append_query_and_row_read(
             classification
         );
     }
-
-    let other_dir = TestDir::new("bindings-other");
-    let other =
-        EventStore::open_bound(other_dir.store_path(), "ctx-1", "cand-1", "source-2").unwrap();
-    other.append(&wrong).unwrap();
-    fs::write(dir.store_path(), fs::read(other_dir.store_path()).unwrap()).unwrap();
-    assert!(
-        store(&dir)
-            .query(&query())
-            .unwrap_err()
-            .contains("row-binding-conflict")
-    );
 }
 
 #[test]

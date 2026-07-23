@@ -22,7 +22,7 @@ fn every_artifact_binding_dimension_is_checked_before_output_effects() {
     plan_context.plan.context_id = format!("sha256:{}", "4".repeat(64));
     substitutions.push(plan_context);
     let mut plan_version = artifact.clone();
-    plan_version.plan.version = "0.0.17".to_string();
+    plan_version.plan.version = "0.0.18".to_string();
     substitutions.push(plan_version);
     let mut plan_catalog = artifact.clone();
     plan_catalog.plan.catalog_id = format!("sha256:{}", "5".repeat(64));

@@ -47,13 +47,14 @@ pub(super) fn explain(
         }
         return Err(error);
     }
-    let events = match store.read_events() {
+    let mut events = match store.read_events() {
         Ok(events) => events,
         Err(error) if error.starts_with("observe-store-corrupt:") => {
             return Ok(corruption(&error));
         }
         Err(error) => return Err(error),
     };
+    events.retain(|event| query.matches(event));
     if events.is_empty() {
         return Ok(missing("observe-evidence-missing:store-empty", Vec::new()));
     }

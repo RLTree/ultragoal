@@ -103,9 +103,13 @@ impl EventQuery {
     }
 
     pub(super) fn matches(&self, event: &SemanticEvent) -> bool {
-        self.operation
-            .as_deref()
-            .is_none_or(|value| value == event.operation())
+        self.context_id == event.context_id()
+            && self.candidate_id == event.candidate_id()
+            && self.source_id == event.source_id()
+            && self
+                .operation
+                .as_deref()
+                .is_none_or(|value| value == event.operation())
             && self
                 .outcome
                 .as_deref()
