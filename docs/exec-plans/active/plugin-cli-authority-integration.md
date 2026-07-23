@@ -144,6 +144,30 @@ remain unobserved. The next product action is to package this exact source from
 a clean root-owned worktree, then use the installed public CLI against the
 candidate-bound Research Run routine-configuration route.
 
+### Package-manifest reconciliation and isolated installation — 2026-07-23
+
+The first clean `0.0.21` package attempt failed closed before output because
+`plugin-manifest-draft.json` still named seven N15-retired compatibility source
+members. Root removed only those absent paths, advanced the draft manifest to
+the same `0.0.21` version, and added a current-source materializability control.
+Exact source `457420ee2d8f89624fbc2051b4cf2dd1446bedf4` / tree
+`37419d489a865c2af81882c89ac7b3359a414442` passes that control, the package
+manifest mutation guard, and warning-denied library compilation. A clean
+worktree then built and verified HUGPKG
+`sha256:3df8f102b261a9c9bc5fb2422f6dc6083aa20bed24bd0f9e277876f908d4b5d0`
+(15,171,004 bytes), candidate
+`sha256:c0e657e1c586f5621efecb1960562eb46d660de3f9f214d1a61725a3d2efba03`.
+
+The existing isolated install transaction then observed separate package,
+marketplace-source, cache, app-registry, and sealed runtime-help identities;
+its disposable host root was removed. This is isolated-install evidence only.
+The real Codex marketplace remains on `0.0.20`, while the current N08
+host-lifecycle authority is active unintegrated work. Root must not manually
+copy archive contents into the real marketplace or report fresh discovery. The
+next dependency-legal action is to finish and integrate the single durable
+current-host lifecycle boundary, then rebuild the exact final candidate and
+perform the real marketplace refresh, installation, and fresh-task discovery.
+
 ## N14 migration-family adoption projection — 2026-07-23
 
 Root integrated exact source `913bc193057b9852080d28f083dd5debccd6bc2a` /

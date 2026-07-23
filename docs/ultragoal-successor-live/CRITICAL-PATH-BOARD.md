@@ -61,6 +61,24 @@ app-registry, discovery, runtime, or journey evidence. The active frontier is
 the exact clean-candidate package/install identity ladder followed by the
 installed public routine-configuration journey on Research Run.
 
+### 2026-07-23 package-manifest repair and isolated install
+
+The clean `0.0.21` package attempt found a single shared package invariant:
+the draft package manifest retained seven N15-retired compatibility paths. Root
+removed those absent members, aligned the draft manifest version, and added a
+current-source materializability control in
+`457420ee2d8f89624fbc2051b4cf2dd1446bedf4` / tree
+`37419d489a865c2af81882c89ac7b3359a414442`. The clean candidate built and
+verified HUGPKG `sha256:3df8f102b261a9c9bc5fb2422f6dc6083aa20bed24bd0f9e277876f908d4b5d0`
+and exercised the existing disposable isolated marketplace/cache/app-registry/
+runtime-help transaction. Its temporary host root was removed.
+
+The real marketplace remains on version `0.0.20`; this is not fresh app
+discovery or installed-product proof. The first blocked transition is now the
+unintegrated N08 durable current-host lifecycle authority, which must replace
+the real marketplace through its sealed route before the installed daily-driver
+journey can resume.
+
 ## 2026-07-23 N15 exact retirement integration
 
 Exact root source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` / tree
