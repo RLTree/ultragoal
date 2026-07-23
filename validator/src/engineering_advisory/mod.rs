@@ -11,9 +11,13 @@ mod task_evidence;
 mod verification;
 
 #[cfg(test)]
-mod tests;
-#[cfg(test)]
 mod confirmation_tests;
+#[cfg(test)]
+mod repair_tests;
+#[cfg(test)]
+mod review_authority_tests;
+#[cfg(test)]
+mod tests;
 
 pub use error::AdvisoryError;
 pub use repair::{
@@ -21,7 +25,8 @@ pub use repair::{
     SemanticRepairObservation, decide_semantic_repair,
 };
 pub use review::{
-    MaterialityOutput, REVIEW_VERDICT_NO_CLAIM, ReviewMaterialityOutput, ReviewVerdict,
+    MaterialityOutput, REVIEW_VERDICT_NO_CLAIM, ReviewFinding, ReviewFindingSeverity,
+    ReviewMaterialityOutput, ReviewVerdict,
 };
 pub use task_evidence::{TASK_EVIDENCE_NO_CLAIM, TaskEvidencePacket};
 pub use verification::{

@@ -1,7 +1,7 @@
 use super::*;
 use crate::orchestration::{
-    Actor, Binding, CanonicalPath, LeaseSpec, OwnedScope, Principal, ReviewDecision, ReviewRecord,
-    SafetyClass, WorkPackage,
+    Actor, Binding, CanonicalPath, LeaseRegistry, LeaseSpec, OwnedScope, PrerequisiteEvidence,
+    Principal, ReviewDecision, ReviewRecord, SafetyClass, ScopePolicy, WorkPackage,
 };
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -11,19 +11,23 @@ const CONTEXT: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 #[test]
 fn task_packet_rejects_narrowed_or_mutated_scope_and_added_verification() {
     let (package, lease) = task_fixture();
-    let packet = TaskEvidencePacket::from_work_package(&package, &lease).unwrap();
+    let policy = task_policy(&package);
+    let registry = active_registry(&lease, &policy);
+    let packet =
+        TaskEvidencePacket::from_work_package(&package, &lease, &registry, &policy, &lease.binding)
+            .unwrap();
 
     let mut narrowed = packet.clone();
     narrowed.owned_scope.paths.clear();
     assert_eq!(
-        narrowed.validate_against(&package, &lease),
+        narrowed.validate_against(&package, &lease, &registry, &policy, &lease.binding),
         Err(AdvisoryError::PermissionWidening)
     );
 
     let mut mutated = packet.clone();
     mutated.owned_scope.paths = BTreeSet::from([CanonicalPath::parse("src/other.rs").unwrap()]);
     assert_eq!(
-        mutated.validate_against(&package, &lease),
+        mutated.validate_against(&package, &lease, &registry, &policy, &lease.binding),
         Err(AdvisoryError::PermissionWidening)
     );
 
@@ -32,9 +36,25 @@ fn task_packet_rejects_narrowed_or_mutated_scope_and_added_verification() {
         .required_verification
         .insert("extra-check".to_owned());
     assert_eq!(
-        added_verification.validate_against(&package, &lease),
+        added_verification.validate_against(&package, &lease, &registry, &policy, &lease.binding),
         Err(AdvisoryError::MissingVerification)
     );
+}
+
+fn task_policy(package: &WorkPackage) -> ScopePolicy {
+    ScopePolicy {
+        allowed_read_paths: package.read_paths.clone(),
+        allowed_paths: package.owned_scope.paths.clone(),
+        ..ScopePolicy::default()
+    }
+}
+
+fn active_registry(lease: &LeaseSpec, policy: &ScopePolicy) -> LeaseRegistry {
+    let mut registry = LeaseRegistry::default();
+    registry
+        .grant(lease.clone(), policy, &lease.binding)
+        .unwrap();
+    registry
 }
 
 #[test]
@@ -55,6 +75,7 @@ fn deserialized_review_verdict_rejects_release_and_completion_ceiling() {
         &ReviewMaterialityOutput {
             binding,
             review_id: review.review_id().unwrap(),
+            findings: BTreeMap::new(),
             claim_ceiling: BTreeMap::from([(
                 "CL-SOURCE".to_owned(),
                 BTreeSet::from(["source".to_owned()]),
@@ -82,12 +103,12 @@ fn task_fixture() -> (WorkPackage, LeaseSpec) {
     };
     let package = WorkPackage {
         node_id: "node-source".to_owned(),
-        dependencies: BTreeSet::new(),
-        required_tools: BTreeSet::new(),
+        dependencies: BTreeSet::from(["node-context".to_owned()]),
+        required_tools: BTreeSet::from(["rustfmt".to_owned()]),
         safety_class: SafetyClass::IsolatedWorkspaceWrite,
         read_paths: BTreeSet::from([CanonicalPath::parse("tests").unwrap()]),
         owned_scope: scope.clone(),
-        prerequisites: BTreeSet::new(),
+        prerequisites: BTreeSet::from(["current-candidate".to_owned()]),
         outputs: BTreeSet::from(["source".to_owned()]),
         acceptance: BTreeSet::from(["semantic-check".to_owned()]),
         claim_effect: "source".to_owned(),
@@ -102,7 +123,11 @@ fn task_fixture() -> (WorkPackage, LeaseSpec) {
         safety_class: package.safety_class,
         read_paths: package.read_paths.clone(),
         owned_scope: scope,
-        prerequisite_evidence: Default::default(),
+        prerequisite_evidence: PrerequisiteEvidence {
+            dependency_nodes: BTreeMap::from([("node-context".to_owned(), digest('d'))]),
+            required_tools: BTreeMap::from([("rustfmt".to_owned(), digest('e'))]),
+            prerequisites: BTreeMap::from([("current-candidate".to_owned(), digest('f'))]),
+        },
         issued_tick: 1,
         heartbeat_deadline_tick: 2,
         max_retries: 1,

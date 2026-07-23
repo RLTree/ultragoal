@@ -1,15 +1,12 @@
 use super::*;
-use crate::context::EffectClass;
 use crate::orchestration::{
-    Actor, Binding, CanonicalPath, LeaseSpec, OwnedScope, Principal, ReviewDecision, ReviewRecord,
-    SafetyClass, WorkPackage,
+    Actor, Binding, CanonicalPath, LeaseRegistry, LeaseSpec, OwnedScope, PrerequisiteEvidence,
+    Principal, ReviewDecision, ReviewRecord, SafetyClass, ScopePolicy, WorkPackage,
 };
-use crate::state::{Repair, RepairTarget, RepairTargetKind};
 use std::collections::{BTreeMap, BTreeSet};
 
 const CANDIDATE: &str = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
 const CONTEXT: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
 #[test]
 fn verification_contract_requires_root_fields_and_rejects_universal_tdd() {
     let empty = VerificationModeProposal::new(VerificationModeProposalInput {
@@ -86,9 +83,20 @@ fn verification_contract_requires_root_fields_and_rejects_universal_tdd() {
 #[test]
 fn task_packet_is_proposal_only_and_rejects_widening_or_missing_verification() {
     let (package, lease) = task_fixture();
-    let packet = TaskEvidencePacket::from_work_package(&package, &lease).unwrap();
+    let policy = task_policy(&package);
+    let registry = active_registry(&lease, &policy);
+    let packet =
+        TaskEvidencePacket::from_work_package(&package, &lease, &registry, &policy, &lease.binding)
+            .unwrap();
     assert_eq!(packet.schema_version, "TaskEvidencePacket-v1");
-    assert!(packet.validate_against(&package, &lease).is_ok());
+    assert!(
+        packet
+            .validate_against(&package, &lease, &registry, &policy, &lease.binding)
+            .is_ok()
+    );
+    assert_eq!(packet.required_tools, package.required_tools);
+    assert_eq!(packet.prerequisite_evidence, lease.prerequisite_evidence);
+    assert_eq!(packet.cancellation_authority, "root_lease_revocation");
 
     let mut widened = packet.clone();
     widened
@@ -96,20 +104,52 @@ fn task_packet_is_proposal_only_and_rejects_widening_or_missing_verification() {
         .paths
         .insert(CanonicalPath::parse("src/other.rs").unwrap());
     assert_eq!(
-        widened.validate_against(&package, &lease),
+        widened.validate_against(&package, &lease, &registry, &policy, &lease.binding),
         Err(AdvisoryError::PermissionWidening)
     );
 
     let mut missing = packet;
     missing.required_verification.clear();
     assert_eq!(
-        missing.validate_against(&package, &lease),
+        missing.validate_against(&package, &lease, &registry, &policy, &lease.binding),
         Err(AdvisoryError::MissingVerification)
+    );
+
+    let mut stale_budget =
+        TaskEvidencePacket::from_work_package(&package, &lease, &registry, &policy, &lease.binding)
+            .unwrap();
+    stale_budget.max_retries += 1;
+    assert_eq!(
+        stale_budget.validate_against(&package, &lease, &registry, &policy, &lease.binding),
+        Err(AdvisoryError::StaleBinding)
+    );
+
+    let mut invalid_lease = lease.clone();
+    invalid_lease.heartbeat_deadline_tick = invalid_lease.issued_tick;
+    assert_eq!(
+        TaskEvidencePacket::from_work_package(
+            &package,
+            &invalid_lease,
+            &registry,
+            &policy,
+            &lease.binding
+        ),
+        Err(AdvisoryError::PermissionWidening)
+    );
+    assert_eq!(
+        TaskEvidencePacket::from_work_package(
+            &package,
+            &lease,
+            &LeaseRegistry::default(),
+            &policy,
+            &lease.binding
+        ),
+        Err(AdvisoryError::StaleBinding)
     );
 }
 
 #[test]
-fn review_verdict_preserves_independence_and_cannot_promote() {
+fn structured_review_findings_bind_every_root_finding_code() {
     let binding = Binding::new(CONTEXT, CANDIDATE).unwrap();
     let review = ReviewRecord {
         reviewer: "/reviewer".to_owned(),
@@ -117,73 +157,57 @@ fn review_verdict_preserves_independence_and_cannot_promote() {
         binding: binding.clone(),
         result_id: digest('b'),
         result_commitment_id: digest('c'),
-        decision: ReviewDecision::Pass,
+        decision: ReviewDecision::Rework,
         reproduced_commands: BTreeSet::from(["check-source".to_owned()]),
-        finding_codes: BTreeSet::new(),
+        finding_codes: BTreeSet::from(["authority-gap".to_owned()]),
     };
-    let materiality = ReviewMaterialityOutput {
-        binding,
-        review_id: review.review_id().unwrap(),
-        claim_ceiling: BTreeMap::from([(
-            String::from("CL-SOURCE"),
-            BTreeSet::from([String::from("source")]),
-        )]),
-        unverifiable_claims: BTreeSet::new(),
-        rerun_command_id: "check-source".to_owned(),
-        material: true,
+    let finding = ReviewFinding {
+        code: "authority-gap".to_owned(),
+        severity: ReviewFindingSeverity::P0,
+        evidence: BTreeSet::from(["source:authority-gap".to_owned()]),
+        suggested_action: Some("repair the existing authority boundary".to_owned()),
     };
-    let verdict = ReviewVerdict::from_review(&review, &materiality).unwrap();
-    assert!(!verdict.reviewer_can_promote);
-    assert!(verdict.validate().is_ok());
-    let mut forged = verdict;
-    forged.reviewer_can_promote = true;
+    let verdict = ReviewVerdict::from_review(
+        &review,
+        &ReviewMaterialityOutput {
+            binding,
+            review_id: review.review_id().unwrap(),
+            findings: BTreeMap::from([("authority-gap".to_owned(), finding)]),
+            claim_ceiling: BTreeMap::from([(
+                String::from("CL-SOURCE"),
+                BTreeSet::from([String::from("source")]),
+            )]),
+            unverifiable_claims: BTreeSet::new(),
+            rerun_command_id: "check-source".to_owned(),
+            material: true,
+        },
+    )
+    .unwrap();
+    assert!(verdict.validate_against(&review).is_ok());
+    let mut omitted = verdict;
+    omitted.findings.clear();
     assert_eq!(
-        forged.validate(),
+        omitted.validate(),
         Err(AdvisoryError::InvalidReview(
-            "review verdict authority boundary violated"
+            "structured review findings do not match the root review record"
         ))
     );
 }
 
-#[test]
-fn semantic_repair_requires_new_semantic_signal_and_rejects_proxies() {
-    let repair = Repair {
-        repair_id: "repair-source".to_owned(),
-        target: RepairTarget {
-            kind: RepairTargetKind::Source,
-            id: "source".to_owned(),
-        },
-        summary: "repair source".to_owned(),
-        effect: EffectClass::Read,
-        authority: crate::state::AuthorityRequirement::Root,
-        rerun_command_id: "inspect-json".to_owned(),
-        authority_decision: None,
-        invalidates_evidence: BTreeSet::new(),
-        projected_ceiling_after_reverification: Vec::new(),
-    };
-    let previous = SemanticRepairObservation {
-        candidate_id: CANDIDATE.to_owned(),
-        hypothesis: "wrong parser".to_owned(),
-        mechanism: "branch".to_owned(),
-        evidence: BTreeSet::from(["e1".to_owned()]),
-        ambiguous: false,
-        proxy_signal: false,
-    };
-    let mut new_evidence = previous.clone();
-    new_evidence.evidence.insert("e2".to_owned());
-    let continued =
-        decide_semantic_repair(&previous, &new_evidence, &repair, RepairCircuitRoute::Retry)
-            .unwrap();
-    assert_eq!(continued.decision, SemanticRepairDecision::Continue);
-    let stopped =
-        decide_semantic_repair(&previous, &previous, &repair, RepairCircuitRoute::Retry).unwrap();
-    assert_eq!(stopped.decision, SemanticRepairDecision::Stop);
-    let mut proxy = new_evidence;
-    proxy.proxy_signal = true;
-    assert_eq!(
-        decide_semantic_repair(&previous, &proxy, &repair, RepairCircuitRoute::Improvement),
-        Err(AdvisoryError::ProxyGaming)
-    );
+fn task_policy(package: &WorkPackage) -> ScopePolicy {
+    ScopePolicy {
+        allowed_read_paths: package.read_paths.clone(),
+        allowed_paths: package.owned_scope.paths.clone(),
+        ..ScopePolicy::default()
+    }
+}
+
+fn active_registry(lease: &LeaseSpec, policy: &ScopePolicy) -> LeaseRegistry {
+    let mut registry = LeaseRegistry::default();
+    registry
+        .grant(lease.clone(), policy, &lease.binding)
+        .unwrap();
+    registry
 }
 
 fn task_fixture() -> (WorkPackage, LeaseSpec) {
@@ -195,12 +219,12 @@ fn task_fixture() -> (WorkPackage, LeaseSpec) {
     let binding = Binding::new(CONTEXT, CANDIDATE).unwrap();
     let package = WorkPackage {
         node_id: "node-source".to_owned(),
-        dependencies: BTreeSet::new(),
-        required_tools: BTreeSet::new(),
+        dependencies: BTreeSet::from(["node-context".to_owned()]),
+        required_tools: BTreeSet::from(["rustfmt".to_owned()]),
         safety_class: SafetyClass::IsolatedWorkspaceWrite,
         read_paths: BTreeSet::from([CanonicalPath::parse("tests").unwrap()]),
         owned_scope: scope.clone(),
-        prerequisites: BTreeSet::new(),
+        prerequisites: BTreeSet::from(["current-candidate".to_owned()]),
         outputs: BTreeSet::from(["source".to_owned()]),
         acceptance: BTreeSet::from(["semantic-check".to_owned()]),
         claim_effect: "source".to_owned(),
@@ -215,7 +239,11 @@ fn task_fixture() -> (WorkPackage, LeaseSpec) {
         safety_class: package.safety_class,
         read_paths: package.read_paths.clone(),
         owned_scope: scope,
-        prerequisite_evidence: Default::default(),
+        prerequisite_evidence: PrerequisiteEvidence {
+            dependency_nodes: BTreeMap::from([("node-context".to_owned(), digest('d'))]),
+            required_tools: BTreeMap::from([("rustfmt".to_owned(), digest('e'))]),
+            prerequisites: BTreeMap::from([("current-candidate".to_owned(), digest('f'))]),
+        },
         issued_tick: 1,
         heartbeat_deadline_tick: 2,
         max_retries: 1,

@@ -1,5 +1,6 @@
 use super::AdvisoryError;
-use crate::state::Repair;
+use crate::orchestration::Binding;
+use crate::state::{ProductState, Repair};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
@@ -47,15 +48,57 @@ pub struct SemanticRepairCircuit {
 pub const REPAIR_CIRCUIT_NO_CLAIM: &str =
     "Semantic repair advice does not own retries, improvement records, or claims.";
 
+impl SemanticRepairCircuit {
+    pub fn validate_against(
+        &self,
+        state: &ProductState,
+        binding: &Binding,
+        previous: &SemanticRepairObservation,
+        current: &SemanticRepairObservation,
+        repair_id: &str,
+        route: RepairCircuitRoute,
+    ) -> Result<(), AdvisoryError> {
+        if self == &decide_semantic_repair(state, binding, previous, current, repair_id, route)? {
+            Ok(())
+        } else {
+            Err(AdvisoryError::InvalidContract(
+                "repair circuit does not match the current evidence",
+            ))
+        }
+    }
+}
+
 pub fn decide_semantic_repair(
+    state: &ProductState,
+    binding: &Binding,
+    previous: &SemanticRepairObservation,
+    current: &SemanticRepairObservation,
+    repair_id: &str,
+    route: RepairCircuitRoute,
+) -> Result<SemanticRepairCircuit, AdvisoryError> {
+    if state.context_id() != binding.context_id
+        || state.candidate_id() != binding.candidate_id
+        || previous.candidate_id != binding.candidate_id
+        || current.candidate_id != binding.candidate_id
+    {
+        return Err(AdvisoryError::CandidateMismatch);
+    }
+    let repair = state
+        .repairs()
+        .iter()
+        .find(|repair| repair.repair_id == repair_id)
+        .ok_or(AdvisoryError::InvalidContract(
+            "repair is not present in the current product state",
+        ))?;
+    decide_bound_repair(previous, current, repair, route)
+}
+
+fn decide_bound_repair(
     previous: &SemanticRepairObservation,
     current: &SemanticRepairObservation,
     repair: &Repair,
     route: RepairCircuitRoute,
 ) -> Result<SemanticRepairCircuit, AdvisoryError> {
-    if previous.candidate_id != current.candidate_id {
-        return Err(AdvisoryError::CandidateMismatch);
-    }
     if current.ambiguous {
         return Err(AdvisoryError::AmbiguousRepair);
     }
