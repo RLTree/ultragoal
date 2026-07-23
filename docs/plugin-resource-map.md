@@ -112,14 +112,14 @@ The source selector consumes one exact candidate-bound profile and catalog
 projection, verifies their complete rendered skill set, and produces either a
 plain-language, proposal-only selection or a visible no-selection/fail-closed
 result. It does not persist an activation tracker: unchanged input suppresses
-reactivation, while changed candidate, context, configuration, lifecycle, or
-evidence invalidates prior advice. Public CLI routing, package, installation,
-discovery, runtime, and journey proof remain separate pending surfaces.
-Root must explicitly reuse, extend, map, or reject its proposal through the
-existing Harness owner. Candidate, lifecycle, evidence, assumption, risk,
-failure-mechanism, profile, or active-transition changes invalidate the advice
-and permit reactivation. Unchanged bindings return the current disposition and
-cannot form a loop.
+reactivation, while changed candidate, context, configuration, lifecycle,
+evidence, assumption, risk, failure mechanism, profile, or active transition
+invalidates prior advice. A root-issued `EngineeringAdvisoryAdoption-v1` can
+then record reuse, extension, mapping as a projection, or rejection through an
+existing UltraGoal owner. It is candidate/context/proposal-digest bound and
+cannot create advisory effect, evidence, or claim authority. Public CLI
+routing, package, installation, discovery, runtime, and journey proof remain
+separate pending surfaces.
 
 The ordinary response remains plain language. `inspect` may expose the
 activated disciplines and rationale, while advanced inspection may expose

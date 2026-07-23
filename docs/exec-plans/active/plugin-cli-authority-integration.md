@@ -2509,6 +2509,21 @@ front-door routing, package/install/cache/registry/discovery/runtime/journey,
 human-use, Product Fitness, readiness, release, and completion claims remain
 withheld until separately observed on a rebuilt current candidate.
 
+### Root-issued advisory adoption — Terra implementation — 2026-07-23
+
+`EngineeringAdvisoryAdoption-v1` binds an already-selected advisory proposal to
+the same selection, candidate, context, and proposal digest before the root can
+reuse, extend, map it as a projection, or reject it. Only `OWN-ULTRA-ROOT` can
+issue the record. It requires an appropriate scope, verification, inherited
+invalidation conditions, and the inherited proposal-only/no-claim ceiling;
+forged scope, claim promotion, or stale selection bindings fail closed. It is
+not an activation tracker, effect authority, review verdict, receipt, or claim
+promotion path.
+
+Focused source verification is the `engineering_advisory` unit filter (14
+passed). This has no package, install, discovery, runtime, journey, human-use,
+Product Fitness, readiness, release, or completion evidence.
+
 ### Installed routine terminal reconciliation — 2026-07-23
 
 Installed `0.0.17` reached the active Research Run routine effect through the

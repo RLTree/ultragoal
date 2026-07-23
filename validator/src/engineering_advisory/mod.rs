@@ -4,6 +4,7 @@
 //! contracts. They are proposal-only: none can accept work, issue a lease,
 //! schedule a retry, promote a claim, or create a second state store.
 
+mod adoption;
 mod error;
 mod repair;
 mod review;
@@ -16,6 +17,8 @@ mod task_evidence;
 mod verification;
 
 #[cfg(test)]
+mod adoption_tests;
+#[cfg(test)]
 mod confirmation_tests;
 #[cfg(test)]
 mod repair_tests;
@@ -26,6 +29,9 @@ mod selection_tests;
 #[cfg(test)]
 mod tests;
 
+pub use adoption::{
+    ADVISORY_ADOPTION_NO_CLAIM, AdvisoryAdoptionDisposition, EngineeringAdvisoryAdoption,
+};
 pub use error::AdvisoryError;
 pub use repair::{
     REPAIR_CIRCUIT_NO_CLAIM, RepairCircuitRoute, SemanticRepairCircuit, SemanticRepairDecision,

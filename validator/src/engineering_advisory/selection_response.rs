@@ -48,7 +48,7 @@ pub(super) fn selection(
             "release".to_owned(),
             "completion".to_owned(),
         ]),
-        adopting_owner: "harness-ultragoal front door through existing UltraGoal owner".to_owned(),
+        adopting_owner: "OWN-ULTRA-ROOT".to_owned(),
         invalidation_conditions: BTreeSet::from([
             "candidate".to_owned(),
             "context".to_owned(),
