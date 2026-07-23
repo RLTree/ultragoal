@@ -1,5 +1,5 @@
 use super::scenario::{
-    ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route,
+    ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route, routine_command,
     run_bounded_contender, tree,
 };
 use serde_json::Value;
@@ -415,6 +415,138 @@ fn independent_fresh_authority_roots_execute_once_and_reuse_their_own_bindings()
     assert_reused_without_effect(&second.run());
     second.teardown_after_assertions();
     first.teardown_after_assertions();
+}
+
+#[test]
+fn shared_host_continuations_keep_foreign_legacy_and_repository_records_independent() {
+    let mut first = Fixture::new(
+        "shared-home-first",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut second = Fixture::new(
+        "shared-home-second",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut interrupted = first.base_command();
+    interrupted.args([
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    let interrupted = interrupted.output().unwrap();
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let first_record = first.checkpoint_path();
+    let legacy = first.state_root().join("adapter/routine-continuation.json");
+    fs::copy(&first_record, &legacy).unwrap();
+
+    let mut second_run = routine_command(&second.root, &first.home, second.binary_path());
+    second_run.args(["--json", "check", "routine"]);
+    let output = second_run.output().unwrap();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "executed");
+    assert_eq!(fs::read_dir(first.continuations_root()).unwrap().count(), 2);
+    assert_eq!(fs::read(&legacy).unwrap(), fs::read(&first_record).unwrap());
+
+    second.teardown_after_assertions();
+    first.teardown_after_assertions();
+}
+
+#[test]
+fn one_repository_can_reopen_a_distinct_binding_without_replacing_the_prior_record() {
+    let mut fixture = Fixture::new(
+        "same-repository-distinct-binding",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(first.status.code(), Some(1), "{first:?}");
+    let first_record = fixture.checkpoint_path();
+    fs::write(
+        fixture.root.join("src/lib.rs"),
+        b"pub fn value() -> u8 { 3 }\n",
+    )
+    .unwrap();
+    let second = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(second.status.code(), Some(1), "{second:?}");
+    let records = fs::read_dir(fixture.continuations_root())
+        .unwrap()
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().and_then(|value| value.to_str()) == Some("json"))
+        .collect::<Vec<_>>();
+    assert_eq!(records.len(), 2);
+    assert!(records.iter().any(|path| path == &first_record));
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn exact_legacy_checkpoint_remains_recoverable_at_the_compatibility_boundary() {
+    let mut fixture = Fixture::new(
+        "legacy-continuation-compatibility",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut interrupted = fixture.base_command();
+    interrupted.args([
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    let interrupted = interrupted.output().unwrap();
+    let continuation = Fixture::value(&interrupted)["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let canonical = fixture.checkpoint_path();
+    let legacy = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&canonical, &legacy).unwrap();
+    fs::remove_file(canonical).unwrap();
+
+    let mut recovered = fixture.base_command();
+    recovered.args([
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    let recovered = recovered.output().unwrap();
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert_eq!(Fixture::value(&recovered)["status"], "executed");
+    assert!(legacy.is_file());
+    assert_eq!(
+        fs::read_dir(fixture.continuations_root()).unwrap().count(),
+        0
+    );
+    fixture.teardown_after_assertions();
 }
 
 fn assert_terminal_refusal(output: &std::process::Output) {

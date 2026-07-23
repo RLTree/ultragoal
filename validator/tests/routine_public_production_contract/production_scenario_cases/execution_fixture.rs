@@ -157,11 +157,15 @@ impl Fixture {
     }
 
     pub fn checkpoint_path(&self) -> PathBuf {
-        self.state_root().join("adapter/routine-continuation.json")
+        super::continuation_paths::checkpoint_path(&self.state_root())
+    }
+
+    pub fn continuations_root(&self) -> PathBuf {
+        super::continuation_paths::continuations_root(&self.state_root())
     }
 
     pub fn checkpoint_stage_path(&self) -> PathBuf {
-        self.state_root().join("adapter/.routine-continuation.next")
+        super::continuation_paths::checkpoint_stage_path(&self.state_root())
     }
 
     pub(crate) fn binary_path(&self) -> &Path {

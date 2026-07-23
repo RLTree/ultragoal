@@ -1785,6 +1785,27 @@ remains source-local even when installed execution succeeds. These debts
 withhold broader product and daily-driver claims but do not invalidate the
 exact installed agent-use journey above.
 
+### Public routine continuation multi-record repair — 2026-07-22
+
+The next source-local repair moves new public routine continuation checkpoints
+under the owner-only `adapter/continuations/` directory. Each record name is a
+deterministic digest of the exact target, context, candidate, plan, and
+snapshot binding, so distinct repositories and distinct bindings in one
+repository select independent custody. The existing
+`adapter/routine-continuation.json` remains a bounded compatibility reader and
+writer only when its validated binding exactly matches the request; a valid
+foreign legacy record is ignored for selection and cannot block a new
+canonical record.
+
+The canonical directory rejects unknown and staged entries and revalidates
+record names, JSON shape, binding-derived names, owner-only regular-file
+identity, hard-link count, symlink refusal, and replacement identity around
+atomic publication. No migration cleanup, new authority store, public command,
+or read-only route write is introduced. Focused routine-contract and source
+checks remain the acceptance surface for this lane; package, install,
+discovery, runtime, Product Fitness, readiness, release, and completion claims
+remain outside its ceiling.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,

@@ -7,6 +7,7 @@ pub(crate) const ADAPTER_DIRECTORY: &str = "adapter";
 pub(crate) const LOCK_NAME: &str = "adapter.lock";
 pub(crate) const CONTINUITY_CHECKPOINT_NAME: &str = "routine-continuation.json";
 pub(crate) const CONTINUITY_CHECKPOINT_STAGE_NAME: &str = ".routine-continuation.next";
+pub(crate) const CONTINUITY_DIRECTORY_NAME: &str = "continuations";
 pub(crate) const LOCK_MARKER: &[u8] = b"routine-public-lock-v1\n";
 pub(crate) const BOOTSTRAP_STAGE: &str = ".routine-public-bootstrap";
 pub(crate) const LAUNCH_DIRECTORY: &str = ".routine-authority-launch";

@@ -61,6 +61,18 @@ pub(super) fn validate_checkpoint(
     binding: CheckpointBinding<'_>,
     continuation: Option<&str>,
 ) -> Result<(), HostFailure> {
+    validate_checkpoint_shape(checkpoint)?;
+    if !checkpoint_matches_binding(checkpoint, binding)
+        || continuation.is_some_and(|value| checkpoint.continuation != value)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
+}
+
+pub(super) fn validate_checkpoint_shape(
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<(), HostFailure> {
     if checkpoint.schema_version != "RoutineContinuationCheckpoint-v4"
         || checkpoint.generation == 0
         || !matches!(
@@ -71,11 +83,8 @@ pub(super) fn validate_checkpoint(
                 | "terminal-event-pending"
                 | "terminal-event-joined"
         )
-        || checkpoint.target != binding.target().to_str().ok_or(HostFailure::Invalid)?
-        || checkpoint.context_id != binding.context_id()
-        || checkpoint.candidate_id != binding.candidate_id()
-        || checkpoint.plan_id != binding.plan_id()
-        || checkpoint.snapshot_id != binding.snapshot_id()
+        || !std::path::Path::new(&checkpoint.target).is_absolute()
+        || std::path::Path::new(&checkpoint.target).to_str().is_none()
         || !checkpoint.continuation.starts_with("routine-cont-")
         || checkpoint.attempt_grant.is_empty()
         || checkpoint.authenticated_ledger_head.is_empty()
@@ -106,11 +115,59 @@ pub(super) fn validate_checkpoint(
         || (checkpoint.state == "ambiguous"
             && checkpoint.terminal_outcome
                 != Some(crate::routine_work::RoutineTerminalOutcome::Ambiguous))
-        || continuation.is_some_and(|value| checkpoint.continuation != value)
     {
         return Err(HostFailure::Invalid);
     }
     Ok(())
+}
+
+pub(super) fn checkpoint_matches_binding(
+    checkpoint: &ContinuationCheckpoint,
+    binding: CheckpointBinding<'_>,
+) -> bool {
+    checkpoint.target == binding.target().to_str().unwrap_or_default()
+        && checkpoint.context_id == binding.context_id()
+        && checkpoint.candidate_id == binding.candidate_id()
+        && checkpoint.plan_id == binding.plan_id()
+        && checkpoint.snapshot_id == binding.snapshot_id()
+}
+
+pub(super) fn canonical_record_name(binding: CheckpointBinding<'_>) -> String {
+    let mut digest = Sha256::new();
+    digest.update(b"routine-continuation-record-v1\0");
+    digest.update(binding.target().to_string_lossy().as_bytes());
+    digest.update([0]);
+    digest.update(binding.context_id().as_bytes());
+    digest.update([0]);
+    digest.update(binding.candidate_id().as_bytes());
+    digest.update([0]);
+    digest.update(binding.plan_id().as_bytes());
+    digest.update([0]);
+    digest.update(binding.snapshot_id().as_bytes());
+    format!("routine-continuation-{:x}.json", digest.finalize())
+}
+
+pub(super) fn canonical_stage_name(binding: CheckpointBinding<'_>) -> String {
+    format!(
+        ".{}.next",
+        canonical_record_name(binding).trim_end_matches(".json")
+    )
+}
+
+pub(super) fn canonical_record_name_for_checkpoint(
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<String, HostFailure> {
+    let target = std::path::Path::new(&checkpoint.target);
+    if !target.is_absolute() || target.to_str().is_none() {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(canonical_record_name(CheckpointBinding::new(
+        target,
+        &checkpoint.context_id,
+        &checkpoint.candidate_id,
+        &checkpoint.plan_id,
+        &checkpoint.snapshot_id,
+    )))
 }
 
 pub(super) fn event_projection(

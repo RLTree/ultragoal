@@ -44,6 +44,23 @@ impl HostState {
         self.state.verify()?;
         self.authority.verify()?;
         self.adapter.verify()?;
+        require_entries(
+            &self.state,
+            &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+        )?;
+        require_entries(
+            &self.adapter,
+            &[
+                LOCK_NAME,
+                CONTINUITY_CHECKPOINT_NAME,
+                CONTINUITY_DIRECTORY_NAME,
+            ],
+        )?;
+        match self.adapter.open_child(CONTINUITY_DIRECTORY_NAME) {
+            Ok(continuations) => continuity::validate_continuation_directory(&continuations)?,
+            Err(HostFailure::Unavailable) => {}
+            Err(error) => return Err(error),
+        }
         let metadata = self.lock.metadata().map_err(|_| HostFailure::Invalid)?;
         if identity(&metadata) != self.lock_identity
             || self.adapter.stat(LOCK_NAME)? != Some(self.lock_identity)
@@ -84,7 +101,14 @@ fn open_existing_state(
     )?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
-    require_entries(&adapter, &[LOCK_NAME, CONTINUITY_CHECKPOINT_NAME])?;
+    require_entries(
+        &adapter,
+        &[
+            LOCK_NAME,
+            CONTINUITY_CHECKPOINT_NAME,
+            CONTINUITY_DIRECTORY_NAME,
+        ],
+    )?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
     HostState::from_locked(home, state, authority, adapter, lock, false)
 }

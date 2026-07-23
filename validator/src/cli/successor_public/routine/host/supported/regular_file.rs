@@ -71,7 +71,15 @@ impl AnchoredDirectory {
     ) -> Result<(), HostFailure> {
         validate_name(name)?;
         validate_name(stage_name)?;
-        if self.stat(name)?.is_some() != expected_existing || self.stat(stage_name)?.is_some() {
+        let expected_identity = if expected_existing {
+            let current = self.open_regular(name, libc::O_RDONLY, mode)?;
+            Some(identity(
+                &current.metadata().map_err(|_| HostFailure::Invalid)?,
+            ))
+        } else {
+            self.stat(name)?
+        };
+        if expected_identity.is_some() != expected_existing || self.stat(stage_name)?.is_some() {
             return Err(HostFailure::Busy);
         }
         let (mut stage, created) = self.open_or_create_regular(stage_name, mode)?;
@@ -80,6 +88,10 @@ impl AnchoredDirectory {
         }
         stage.write_all(bytes).map_err(|_| HostFailure::Invalid)?;
         stage.sync_all().map_err(|_| HostFailure::Invalid)?;
+        let stage_identity = identity(&stage.metadata().map_err(|_| HostFailure::Invalid)?);
+        if self.stat(name)? != expected_identity || self.stat(stage_name)? != Some(stage_identity) {
+            return Err(HostFailure::Busy);
+        }
         let source = CString::new(stage_name).map_err(|_| HostFailure::Invalid)?;
         let destination = CString::new(name).map_err(|_| HostFailure::Invalid)?;
         let flags = if expected_existing {
@@ -101,6 +113,10 @@ impl AnchoredDirectory {
         if result != 0 {
             return Err(HostFailure::Busy);
         }
-        self.file.sync_all().map_err(|_| HostFailure::Invalid)
+        self.file.sync_all().map_err(|_| HostFailure::Invalid)?;
+        if self.stat(name)? != Some(stage_identity) {
+            return Err(HostFailure::Invalid);
+        }
+        Ok(())
     }
 }

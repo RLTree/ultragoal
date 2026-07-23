@@ -1,6 +1,6 @@
 use super::super::super::{HostFailure, ReservedCheckpoint, TerminalCheckpoint};
 use super::super::HostState;
-use super::checkpoint_storage::write_checkpoint;
+use super::checkpoint_storage::{CheckpointLocation, stored_checkpoint, write_checkpoint};
 use super::continuity_validation::{CheckpointDraft, checkpoint, validate_checkpoint};
 
 impl HostState {
@@ -17,19 +17,21 @@ impl HostState {
         {
             return Err(HostFailure::Invalid);
         }
-        let previous = self.read_optional_checkpoint()?;
-        let (generation, expected_existing) = match previous {
-            None => (1, false),
+        let previous = stored_checkpoint(&self.adapter, request.binding, None)?;
+        let (generation, location, expected_existing) = match previous {
+            None => (1, CheckpointLocation::Canonical, false),
             Some(previous) => {
-                validate_checkpoint(&previous, request.binding, None)?;
-                if previous.state != "reconciled" {
+                validate_checkpoint(&previous.checkpoint, request.binding, None)?;
+                if previous.checkpoint.state != "reconciled" {
                     return Err(HostFailure::Busy);
                 }
                 (
                     previous
+                        .checkpoint
                         .generation
                         .checked_add(1)
                         .ok_or(HostFailure::Invalid)?,
+                    previous.location,
                     true,
                 )
             }
@@ -45,7 +47,13 @@ impl HostState {
             state: "reserved",
             generation,
         })?;
-        write_checkpoint(&self.adapter, &checkpoint, expected_existing)?;
+        write_checkpoint(
+            &self.adapter,
+            request.binding,
+            location,
+            &checkpoint,
+            expected_existing,
+        )?;
         self.verify()
     }
 
@@ -53,23 +61,25 @@ impl HostState {
         &self,
         request: TerminalCheckpoint<'_>,
     ) -> Result<(), HostFailure> {
-        let previous = self.read_optional_checkpoint()?.ok_or(HostFailure::Busy)?;
-        validate_checkpoint(&previous, request.binding, None)?;
-        if (!previous.is_reserved() && previous.state != "reconciled")
-            || previous.finding_binding.as_ref() != request.finding_binding
-            || previous.continuation != request.continuation
-            || previous.attempt_grant != request.attempt_grant
+        let previous =
+            stored_checkpoint(&self.adapter, request.binding, None)?.ok_or(HostFailure::Busy)?;
+        validate_checkpoint(&previous.checkpoint, request.binding, None)?;
+        if (!previous.checkpoint.is_reserved() && previous.checkpoint.state != "reconciled")
+            || previous.checkpoint.finding_binding.as_ref() != request.finding_binding
+            || previous.checkpoint.continuation != request.continuation
+            || previous.checkpoint.attempt_grant != request.attempt_grant
         {
             return Err(HostFailure::Busy);
         }
         let generation = previous
+            .checkpoint
             .generation
             .checked_add(1)
             .ok_or(HostFailure::Invalid)?;
         let next = checkpoint(CheckpointDraft {
             binding: request.binding,
             continuation: request.continuation,
-            recovery_marker: &previous.recovery_marker,
+            recovery_marker: &previous.checkpoint.recovery_marker,
             attempt_grant: request.attempt_grant,
             authenticated_ledger_head: request.authenticated_ledger_head,
             finding_binding: request.finding_binding,
@@ -77,7 +87,13 @@ impl HostState {
             state: "terminal-event-pending",
             generation,
         })?;
-        write_checkpoint(&self.adapter, &next, true)?;
+        write_checkpoint(
+            &self.adapter,
+            request.binding,
+            previous.location,
+            &next,
+            true,
+        )?;
         self.verify()
     }
 }
