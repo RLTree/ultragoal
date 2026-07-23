@@ -78,12 +78,16 @@ consumes it.
 
 ## Automatic Agentic advisory selection
 
-The Harness front door may automatically select Agentic Engineering as a
-proposal-only advisory lens. This is a second calibration inside the existing
-route, not a second route or lifecycle. It reads current candidate, lifecycle,
-risk, authority, evidence, active truth-loop, and failure context and chooses
-the smallest sufficient primary lens. Supporting lenses appear only when one
-material decision crosses layers.
+The Harness front door automatically makes the advisory calibration after it
+has selected one operational route. It selects no lens for an already-specified
+or no-change task; otherwise it selects one available explicit Agentic skill
+only when current evidence identifies a material ambiguity. This is a second
+calibration inside the existing route, not a second route or lifecycle. It
+reads current candidate, lifecycle, risk, authority, evidence, active
+truth-loop, and failure context and chooses the smallest sufficient primary
+lens. Supporting lenses appear only when one material decision crosses layers.
+Missing or stale co-install exposure is an explicit unavailable-advice result,
+not permission to infer a lens from source or cache bytes.
 
 The existing eight-skill `ultragoal` co-install view is retained for its
 bounded current scope. The complete Agentic Engineering 3.0 skill set is

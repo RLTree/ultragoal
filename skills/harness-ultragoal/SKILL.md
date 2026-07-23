@@ -57,6 +57,65 @@ For a multi-outcome prompt, choose the earliest outcome the operator must
 complete and report the others as follow-ons. Select `goal-run` only when the
 immediate outcome is coordination itself. Never combine skill authorities.
 
+## Calibrate advisory depth
+
+After choosing the one operational route, decide whether the route needs a
+proposal-only Agentic Engineering lens. This is internal calibration of the
+same Harness route, never a second entry point, lifecycle, planner, or effect
+authority.
+
+Use an Agentic lens only when the current task catalog exposes the exact
+explicit `$agentic-engineering:<skill>` named below and the task has a material
+decision that the ordinary route cannot safely resolve from current evidence.
+Do not infer availability from source files, an installed cache, a prompt, or a
+previous task. If the explicit skill is unavailable, state that advisory input
+is unavailable and continue through the independent legal Harness route; do
+not substitute a guessed analysis.
+
+Select **no advisory** for an already-specified task, a task whose current
+evidence supports `no_change`, or a small reversible task with a clear oracle.
+Select `partial_change` when only part of the requested outcome is supported;
+do not edit merely to avoid abstaining.
+
+For a material decision, select one primary lens from the current evidence:
+
+- ambiguous outcome, missing material input, or authority boundary ->
+  `$agentic-engineering:codex-task-contract`;
+- stale, incomplete, or repository-shaping context ->
+  `$agentic-engineering:context-repository-engineering`;
+- protected authority, privacy, destructive effect, or unsafe-tool risk ->
+  `$agentic-engineering:agent-security-governance`;
+- recovery, replay, fencing, terminal-state, or duplicate-effect ambiguity ->
+  `$agentic-engineering:rust-agent-durability`;
+- false-pass risk, weak oracle, or proportional verification choice ->
+  `$agentic-engineering:verification-strategy-engineering`;
+- repeated repair or non-converging control loop ->
+  `$agentic-engineering:loop-engineering`;
+- real-use, intervention, recovery, or continuance evidence gap ->
+  `$agentic-engineering:product-fitness-engineering`.
+
+Use a supporting lens only when a distinct cross-layer decision remains after
+the primary lens, and name its exact catalog-exposed
+`$agentic-engineering:<skill>` before invoking it. Use the stage-scoped profile
+documented in `docs/plugin-resource-map.md` only to find that exact skill: core
+for task/context, harness, orchestration, assurance, construction, and
+learning; lifecycle for discovery through retirement; Rust for architecture,
+runtime, protocol, durability, verification, and observability. Those three
+profiles collectively cover the complete explicit Agentic skill set without
+loading it by default.
+
+An explicit expert request can choose an available Agentic lens, but cannot
+disable this selection's protected boundaries or authorize a write. State the
+selection in plain language first: the current result, important tradeoff, and
+next UltraGoal action. Expose lens names, alternatives, assumptions,
+invalidation, and the `proposal_only_no_claim` ceiling only when requested.
+
+Re-select only when the candidate, context, lifecycle, active truth-loop,
+authority, risk, oracle, failure/recovery mechanism, profile, or available
+evidence changes. Do not reactivate on unchanged evidence, and never let
+advice issue a lease, permission, effect, retry, acceptance, or claim
+promotion.
+
 ## Calibrate the selected route
 
 After selecting the primary workflow, choose the smallest current action that

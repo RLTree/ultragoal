@@ -70,7 +70,7 @@ fn core_profile_projects_under_the_harness_gateway_with_budget_margin() {
         vec![
             package(
                 HARNESS_PLUGIN,
-                "0.0.24",
+                "0.0.25",
                 HARNESS_PLUGIN_DIGEST,
                 HARNESS_PACKAGE_DIGEST,
                 vec![skill(HARNESS_FRONT_DOOR, true)],
@@ -98,7 +98,7 @@ fn coinstall_rejects_substituted_profile_and_second_implicit_gateway() {
     let packages = vec![
         package(
             HARNESS_PLUGIN,
-            "0.0.24",
+            "0.0.25",
             HARNESS_PLUGIN_DIGEST,
             HARNESS_PACKAGE_DIGEST,
             vec![skill(HARNESS_FRONT_DOOR, true)],

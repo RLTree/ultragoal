@@ -2575,6 +2575,27 @@ refresh, isolated install, installed recovery, diagnosis, fresh-process reopen,
 and repeat-use observation remain required. All stronger Product Fitness,
 human-use, readiness, release, completion, and mastery claims remain withheld.
 
+### Sole-front-door automatic advisory calibration — Terra implementation — 2026-07-23
+
+The Harness front-door skill now makes one advisory-depth decision only after
+it has selected its single operational route. Already-specified, no-change,
+and small reversible work stays unadvised. A material ambiguity can select one
+current-task-exposed explicit Agentic skill, and only a named available
+supporting skill when a distinct cross-layer decision remains. Missing or stale
+co-install exposure remains a visible unavailable-advice result; it never
+permits cache/source inference or an alternate gateway.
+
+The increment does not add a router, lifecycle, state, effect, receipt, or
+claim authority. Advice remains proposal-only/no-claim and cannot issue a
+lease, permission, effect, retry, acceptance, or promotion. The package source
+is advanced to `0.0.25`. One bounded Terra/medium review found and the single
+correction removed an already-specified-task activation ambiguity; the exact
+confirmation review accepted the resulting invariant. Focused
+`plugin_product::skill_catalog` and `engineering_advisory` library filters,
+formatting, manifest JSON parsing, and diff checks passed. This is source-only:
+the rebuilt package, cache, desktop discovery, automatic activation, runtime,
+and journey surfaces remain unobserved for `0.0.25`.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required
