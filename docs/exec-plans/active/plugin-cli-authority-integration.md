@@ -1,5 +1,51 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering P0 installed boundary — 2026-07-23
+
+Exact source `01384a996a46fc3492a757ace3489030b23f4bab` / tree
+`f9938ea52851435434c5c831fd193d2126710345` produced two byte-identical
+`0.0.16` packages. The package digest is
+`sha256:512b6db94feb850e20b08f5cd7b75b3ef8e864d7849195d6bd6293e3e54f2d5d`;
+the embedded runtime digest is
+`sha256:74a625f35ff6473adeaf849f6ca2a9f484c8c145d690606150086a381e5f778d`.
+Package verification and the isolated install transaction passed. The isolated
+observations remain separate: installed
+`sha256:f41adf9d211db67ce3e178cfd09cecb3a34917765d5ad9a397600817f4e0889d`,
+marketplace source tree
+`sha256:f40c87b9424bc827d047b960aaee891d98aa38e2bb9afc39c4049c68da352c70`,
+cache
+`sha256:1bb516325184deb388b3592b4d11e637f44e2be177a5a4d5b3903a00d6c64e41`,
+marketplace
+`sha256:828b0be7789c37ddeeaa1bf06facff4a5a1cdc54bcfcf7e65733eee14ea65015`,
+runtime
+`sha256:7b865ff5a476cd0b3cf9e0e06673a6b1237c0e6d905cc389774007541bb649e1`,
+and journey binding
+`sha256:405e00655a3494acdbadd098953ac8a75b4e7bd47b2e4c69ac06733fe4d13165`.
+
+The durable local marketplace, Codex installed cache, and public
+`~/.local/bin/ultragoal` now expose `0.0.16` and the same embedded-runtime
+digest. A fresh ephemeral Codex process selected
+`harness-ultragoal:harness-ultragoal` by exact name; the disabled Agentic
+gateway did not route, while explicit
+`agentic-engineering:codex-task-contract` invocation returned a proposal-only
+`no_change` decision without effects or claims. The combined packaged
+UltraGoal-plus-Agentic profile remains below its 8,000-character product
+budget at 3,956 characters. The host's complete unrelated plugin catalog
+nevertheless exceeds Codex's global two-percent display budget and omitted 122
+other skills; that host-wide condition is not reclassified as product margin.
+Exact explicit skill names remain callable.
+
+Installed `inspect capabilities`, `inspect context`, `inspect inception`, and
+`fit inspect --target .` ran on the clean candidate. Recursive non-target
+source bytes and Git status were identical before and after. Fit returned a
+typed conflict and `claim_effect: none`; it did not mutate the candidate.
+This advances P0 package, isolated install, installed CLI, fresh-process
+front-door routing, explicit-adviser routing, and zero-write runtime inspection
+only. It does not prove a Product Fitness improvement, human use, repeated use,
+readiness, release, or completion. The next dependency-legal increment is the
+small P1 extension of the existing improvement-loop registry and behavior-eval
+authority.
+
 ## Agentic Engineering P0 source integration — 2026-07-23
 
 Root integrated the two bounded P0 units through

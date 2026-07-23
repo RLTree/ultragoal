@@ -1,5 +1,27 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Agentic Engineering P0 installed boundary
+
+Exact source `01384a996` / tree `f9938ea5` is packaged and installed as
+`0.0.16`. Two package builds are byte-identical at
+`sha256:512b6db94feb850e20b08f5cd7b75b3ef8e864d7849195d6bd6293e3e54f2d5d`;
+the durable marketplace, installed cache, and public CLI carry runtime
+`sha256:74a625f35ff6473adeaf849f6ca2a9f484c8c145d690606150086a381e5f778d`.
+The isolated install transaction passed with distinct installed, marketplace,
+cache, runtime, and journey observations.
+
+A fresh Codex process routed through the exact Harness UltraGoal front door.
+The Agentic gateway remains disabled; an exact explicit Agentic specialist
+invocation remains callable and returned `no_change`/`no_claim`. The packaged
+combined profile has 4,044 characters of measured headroom. The full host
+catalog still exceeds Codex's global display budget because of unrelated
+installed plugins, so no host-wide discovery-margin claim is made. Installed
+context, inception, capabilities, and repository-fit inspection were
+recursively zero-write on the exact clean candidate. P0 is therefore closed at
+the package/install/installed-read/agent-use boundary. Product improvement,
+human use, repeat use, Product Fitness, readiness, release, and completion
+remain withheld. P1 governed learning and behavior evaluation is now eligible.
+
 ## 2026-07-23 Agentic Engineering P0 integration
 
 Root integrated the bounded skill-catalog and evidence-control increments
