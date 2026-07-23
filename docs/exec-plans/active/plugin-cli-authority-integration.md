@@ -1,5 +1,72 @@
 # Plugin and CLI Authority Integration
 
+## Installed `0.0.20` advisory and diagnosis journey — 2026-07-23
+
+The immutable product source is
+`34ecc872e730df0b3d87e724e881e86b98bf0c06` / tree
+`9768ade2bf03aa20e17443eac0f52b81c167387c`. Two clean package
+captures produced identical HUGPKG bytes at
+`sha256:f138f7aaed8f0040cd47022c73c721f3e1a90bee15e7cd2e0ddfb120cb8fc00f`
+for package candidate
+`sha256:7b3d58b70701e684b867fd95745708a225ba44c10c510c317f07b868cce3214e`.
+The package inventory is
+`sha256:d5a4fd60a9565e676329cbb1d550c310dafe10d958f6c067e7cee7d254ffb3fe`,
+and the embedded runtime digest is
+`sha256:464235d4d486c9779b90342af2ceb8aa9436b49261aa40711f3f1bdad635ccc5`.
+Package verification passed.
+
+The isolated install transaction kept its observations separate:
+installed `sha256:31f316042fe6552d416fbf0b61241f2b4d7a78ae6ddda854c652b25f970b61b5`,
+marketplace source
+`sha256:7c1eace2f6a285c43de77b06205b1ab037f0a6fde530e388b559687bf3762900`,
+cache `sha256:61a1dcf0674f14825eedb1392cb7007e864ce451e5cedef4b0363da959d80dc9`,
+marketplace
+`sha256:775930411460513ee58e5b279cc3aaa3c04e9e4494270c453cf83dd1454672fa`,
+runtime `sha256:919b0334479d43c3668cda74f773035e5c1ae4533693e5f0cc75b52976b8e522`,
+and journey binding
+`sha256:876917305f15f29debde17def8ab20615967aece758f8709c078670751d235bc`.
+
+Following the documented Codex marketplace flow, root replaced only the
+durable `harness-ultragoal-local` source, ran supported `codex plugin add`, and
+atomically refreshed the public CLI. `codex plugin list` reports
+`harness-ultragoal@harness-ultragoal-local` installed and enabled at `0.0.20`;
+the durable marketplace, installed cache, and public CLI runtime digests all
+equal `sha256:464235d4...ccc5`. A fresh Codex process invoked the exact installed
+`$harness-ultragoal:harness-ultragoal` skill and selected
+`$harness-ultragoal:repository-fit` with a read-only ceiling. The current
+Agentic profile keeps its gateway disabled and names Harness as the external
+implicit front door.
+
+The configured Harness-plus-Agentic product profile remains below the adopted
+8,000-character source projection budget and its 13 focused routing/budget
+controls pass. The complete host catalog still exceeds Codex's global
+two-percent skills-context budget and omitted 122 unrelated skills in the
+fresh task. Explicit Harness invocation works; host-wide implicit-discovery
+margin is therefore withheld rather than misreported as passing. Restart the
+desktop app or start a new task to load the newly installed local version.
+
+On Research Run at
+`acee890a4dcc9c1377a954961e782b8f685a5b58`, the installed public diagnosis
+route first returned typed `no_record` / `no_effect` instead of the prior full
+inventory failure. A public routine reservation then interrupted with no
+effect, diagnosis reported the exact reserved checkpoint as
+`outcome_unknown`, and a fresh CLI process consumed only its opaque
+continuation. The `syntax` node executed and produced artifact
+`sha256:e95d439fd40f7c96bc7afdbe62124248cf646610513749d8e7d3ea1a9f5cb6e3`.
+Diagnosis then reported `complete`, `committed`, and `safe_reuse`; repeat use
+returned the same artifact with `effect: none`; replay of the consumed
+continuation failed authority closed with exit 3.
+
+Research Run's pre-existing dirty status, staged and working diffs, and all
+Git-visible tracked/untracked bytes were identical before and after. The
+minimal agent-use Product Fitness observation is: approximately 21 seconds
+across interruption, two diagnoses, recovery, repeat, and replay; no manual
+intervention after authorization; two review rounds for the P0 authority
+correction; recovery succeeded; repeat use was effect-free; no observed false
+pass; and retained marketplace plus cache cost is about 30 MiB. This is not a
+canonical Product Fitness receipt and cannot support human-use, continuance,
+daily-driver, readiness, release, or completion.
+
 ## Agentic Engineering P0 current-candidate closure — 2026-07-23
 
 The bounded reuse/extend/map/reject decision is current at
