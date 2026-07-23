@@ -169,3 +169,7 @@ const ROUTES: [AgentRouteSpec; 14] = [
 pub(crate) fn by_agent_route_id(route_id: &str) -> Option<&'static AgentRouteSpec> {
     ROUTES.iter().find(|route| route.route_id == route_id)
 }
+
+pub(crate) fn agent_routes() -> impl Iterator<Item = &'static AgentRouteSpec> {
+    ROUTES.iter()
+}

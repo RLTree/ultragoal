@@ -5,6 +5,7 @@ impl ProductMigrationPlan {
         mut items: Vec<ProductPlanItem>,
         mut effects: Vec<PlannedMigrationEffect>,
         compatibility_boundary_observation: Option<CompatibilityBoundaryObservation>,
+        allow_unobserved_compatibility: bool,
     ) -> Result<Self, ProductMigrationError> {
         if items.is_empty() || items.len() > MAX_PRODUCT_ITEMS || effects.len() > items.len() {
             return Err(ProductMigrationError::new(
@@ -33,6 +34,7 @@ impl ProductMigrationPlan {
                 (true, Some(observation)) => {
                     Some(CompatibilityBoundaryBinding::issue(observation, &effects)?)
                 }
+                (true, None) if allow_unobserved_compatibility => None,
                 (true, None) => {
                     return Err(ProductMigrationError::new(
                         "migration-product-compatibility-boundary-authority-required",
@@ -89,7 +91,10 @@ impl ProductMigrationPlan {
                 "migration-product-plan-output-too-large",
             ));
         }
-        Ok(Self { projection })
+        Ok(Self {
+            projection,
+            allow_unobserved_compatibility,
+        })
     }
 
     #[cfg(test)]
@@ -145,6 +150,7 @@ impl ProductMigrationPlan {
                         .effects
                         .iter()
                         .any(|effect| effect.disposition == PlanDisposition::AdoptCompatibility)
+                        && !self.allow_unobserved_compatibility
                     {
                         return Err(ProductMigrationError::new("migration-product-plan-mutated"));
                     }

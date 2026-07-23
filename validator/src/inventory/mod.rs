@@ -6,7 +6,7 @@
 mod agent_reader_guard_digests;
 pub(crate) mod behavioral_role;
 mod builder;
-mod compatibility;
+pub(crate) mod compatibility;
 mod component_expectations;
 mod components;
 mod context_scopes;

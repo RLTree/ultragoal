@@ -1,5 +1,21 @@
 # Plugin and CLI Authority Integration
 
+## N14 migration-family adoption projection — 2026-07-23
+
+The current exact-base candidate now binds one typed `MigrationAdoptionFamily-v1`
+projection to the compiled 14 legacy agent routes and 14 legacy skill-wrapper
+routes. The public read-only `migrate plan` derives 28 non-destructive effects
+with zero pending items: 14 context-only agent adoptions and 14 explicit-only
+compatibility-wrapper adoptions. The family binds current source and target
+digests, wrapper/reader and exclusion evidence, rollback, false-pass controls,
+candidate identity, and the retained 0.0.20 compatibility prerequisites.
+
+This is a candidate-bound projection only. It preserves all physical bytes,
+does not add runtime effects, does not establish route equivalence or installed
+runtime execution, and does not authorize apply, retirement, cleanup, N15, or
+any package, readiness, release, or completion claim. The 0.0.21 retirement
+boundary remains N15/OD-009 work.
+
 ## N14 behavioral-role correction — 2026-07-23
 
 Root integrated the accepted N14 correction at

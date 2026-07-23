@@ -58,6 +58,13 @@ impl DarwinMigrationEffects {
             ));
         }
         match effect.disposition() {
+            PlanDisposition::AdoptContext => {
+                if permit.is_some() {
+                    return Err(EffectFault::rejected(
+                        "migration-host-context-permit-refused",
+                    ));
+                }
+            }
             PlanDisposition::AdoptCompatibility => {
                 if permit.is_none_or(|value| !super::super::super::valid_sha256(value)) {
                     return Err(EffectFault::rejected(

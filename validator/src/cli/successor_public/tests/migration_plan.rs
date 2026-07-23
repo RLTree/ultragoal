@@ -4,7 +4,7 @@ use crate::cli::successor_public::strict;
 use std::process::Command;
 
 #[test]
-fn current_source_migration_plan_is_read_only_and_has_no_unadopted_effects() {
+fn current_source_migration_plan_adopts_the_exact_family_without_writes() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
     let before_tree = strict::zero_write_guard::capture(root).unwrap();
     let before = git_status(root);
@@ -16,24 +16,48 @@ fn current_source_migration_plan_is_read_only_and_has_no_unadopted_effects() {
         "migration/authority-routes.json",
     ]);
     let outcome = execute_invocation(root, request);
-    assert_eq!(outcome.exit_class, ExitClass::ActionableFinding);
+    assert_eq!(outcome.exit_class, ExitClass::Success);
     let projection: serde_json::Value =
         serde_json::from_slice(outcome.machine_payload.as_ref().unwrap()).unwrap();
     assert_eq!(
         projection["schema_version"],
         "ProductMigrationPlanProjection-v2"
     );
-    assert!(projection["item_count"].as_u64().unwrap() > 0);
+    assert_eq!(projection["item_count"], 28);
     assert!(projection["items"].as_array().unwrap().iter().all(|item| {
-        item["exact_active_readers"].is_null()
-            && item["exact_active_writers"].is_null()
-            && item["exact_public_routes"].is_null()
-            && item["exact_generated_outputs"].is_null()
+        item["exact_active_readers"] == serde_json::json!([])
+            && item["exact_active_writers"] == serde_json::json!([])
+            && item["exact_generated_outputs"] == serde_json::json!([])
     }));
-    assert!(projection["items"].as_array().unwrap().iter().any(|item| {
-        item["reason"] == "semantic_parallel_authority_requires_exact_adoption_observation"
-    }));
-    assert_eq!(projection["effect_count"], 0);
+    let dispositions = projection["items"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter_map(|item| item["disposition"].as_str())
+        .fold(
+            std::collections::BTreeMap::<&str, usize>::new(),
+            |mut counts, disposition| {
+                *counts.entry(disposition).or_default() += 1;
+                counts
+            },
+        );
+    assert_eq!(dispositions.get("adopt_context"), Some(&14));
+    assert_eq!(dispositions.get("adopt_compatibility"), Some(&14));
+    assert_eq!(projection["effect_count"], 28);
+    assert!(
+        projection["effects"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|effect| {
+                effect["physical_bytes_policy"] == "preserve"
+                    && (effect["disposition"] == "adopt_context"
+                        || (effect["compatibility_prerequisites"].is_object()
+                            && effect["after"]["public_routes"]
+                                .as_array()
+                                .is_some_and(|routes| routes.len() == 1)))
+            })
+    );
     assert!(
         !String::from_utf8_lossy(outcome.machine_payload.as_ref().unwrap())
             .contains(&root.to_string_lossy().to_string())

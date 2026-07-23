@@ -80,13 +80,21 @@ pub(super) fn derive(
 }
 
 fn surface(entry: &InventoryEntry) -> Result<InventorySurface, MigrationPlanAdapterError> {
+    let physical_route_surface = entry.stable_id.starts_with("LEGACY-AGENT:")
+        || entry.stable_id.starts_with("LEGACY-SKILL:")
+        || entry.stable_id.starts_with("AGENT:")
+        || entry.stable_id.starts_with("SKILL:");
     Ok(InventorySurface::observed(InventorySurfaceObservation {
         stable_id: entry.stable_id.clone(),
         kind: entry.kind.clone(),
         relative_path: entry.relative_path.clone(),
         digest_sha256: observed_digest(entry)?,
-        file_kind: SurfaceFileKind::Semantic,
-        link_count: 0,
+        file_kind: if physical_route_surface {
+            SurfaceFileKind::Regular
+        } else {
+            SurfaceFileKind::Semantic
+        },
+        link_count: if physical_route_surface { 1 } else { 0 },
         status: match entry.active_status {
             ActiveStatus::Active => SurfaceStatus::Active,
             ActiveStatus::Definition => SurfaceStatus::Definition,

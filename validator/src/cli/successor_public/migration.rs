@@ -16,11 +16,10 @@ pub(super) fn plan(context: &LiveContext, invocation: &ParsedInvocation) -> Runt
                 },
                 machine,
                 format!(
-                    "migration plan available items={} pending={} effects={} effects_authorized={}",
+                    "migration plan available items={} pending={} effects={} effects_authorized=false",
                     projection.item_count(),
                     projection.pending_count(),
                     projection.effect_count(),
-                    projection.effect_count() > 0,
                 ),
             ),
             _ => projection_unavailable(),
