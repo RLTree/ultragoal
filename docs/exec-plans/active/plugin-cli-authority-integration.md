@@ -1726,6 +1726,44 @@ again. A source/package change is not visible to Codex App until the plugin
 version increments and both marketplace registration and plugin installation
 are explicitly refreshed.
 
+### Installed agent-use journey — 2026-07-22
+
+Exact source `038afc598a59ab2a1e7b7b950d5e9bbcbe4b1bdf` / tree
+`b89b96472e09e789f24952acbcd0547f1327783b` produced the byte-repeatable
+`0.0.15` HUGPKG at
+`sha256:a0810d7dc36881ed817b4874e80516157840cd017b72671d0e13a0656380f43d`.
+The isolated install, marketplace source, cache, marketplace, and runtime
+objects were observed separately. The installed executable is
+`sha256:e9e207de5d7946654379fe536d4f62c566589fbddfc2ad8971cf342643d6c76d`.
+Marketplace registration and plugin installation were explicitly refreshed,
+and a fresh Codex task discovered the installed `0.0.15` front door and selected
+the installed repository-fit route.
+
+On Research Run at `acee890a4dcc9c1377a954961e782b8f685a5b58`, the installed
+CLI proved recursively zero-write fit inspection, preserved the exact dirty
+baseline, recorded a no-effect interruption after routine reservation,
+continued it in a fresh CLI process, produced the `syntax` validation result,
+reused the same result with no second effect, and rejected stale continuation
+replay without repository or private-state mutation. This is installed
+agent-use journey evidence, not human use, Product Fitness, daily-driver,
+readiness, release, or completion evidence. Started-or-unknown ambiguity was
+not exercised.
+
+The first Obolyn dogfood probe exposed a host-selection defect outside the
+package cache: the ordinary `~/.local/bin/ultragoal` still named an older
+executable after marketplace and plugin refresh. Root atomically refreshed that
+public PATH executable to the exact installed digest above before permitting
+Obolyn implementation to continue. The mismatch is retained as product
+evidence: package/plugin refresh and ordinary CLI activation are separate
+surfaces and require explicit reconciliation.
+
+The journey also exposed three nonblocking product debts. `fit inspect` rejects
+`--target .` while its help does not explain the parent-relative target model;
+`diagnose` does not join to routine interruption/continuation state; and the
+routine output's support-limit wording remains source-local even when installed
+execution succeeds. These debts withhold broader product and daily-driver
+claims but do not invalidate the exact installed agent-use journey above.
+
 ## Stop and escalation rules
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,

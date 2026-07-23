@@ -312,19 +312,21 @@ tree `03075d90e7903c20498a01059efd5fd5fcf1d603`. N12-A is followed serially by
 N14 and N15, then the final identity freeze, N02/N12 reproof, N13, N16, the
 post-product milestone review, and non-mutating N17 reconciliation.
 
-The installed daily-driver frontier is now the exact integrated source
-`a5b7447c0` / tree `ca7dcbf40a024e2e05c4b97326bcf61c47df2658`.
-Installed `0.0.14` passed fresh discovery and zero-write fit inspection, then
-exposed a public routine defect: normal owner-controlled macOS home ancestry
-was rejected before private state creation. The accepted repair admits
-non-group/world-writable host ancestry while keeping the private authority
-chain exact `0700`. The next transition is a fresh `0.0.15` package, retained
-isolated install, marketplace and plugin refresh, fresh discovery, and the
-installed dirty-repository interruption, recovery, reopen, and repeat-use
-journey. The repository-wide namespace claim remains withheld on four named
-pre-existing debts outside this increment. All installed, runtime, Product
-Fitness, daily-driver, readiness, release, and completion claims remain
-withheld until their exact surfaces pass.
+The installed agent-use frontier is exact source `038afc598a59ab2a1e7b7b950d5e9bbcbe4b1bdf`
+/ tree `b89b96472e09e789f24952acbcd0547f1327783b`, package
+`sha256:a0810d7dc36881ed817b4874e80516157840cd017b72671d0e13a0656380f43d`,
+and installed executable
+`sha256:e9e207de5d7946654379fe536d4f62c566589fbddfc2ad8971cf342643d6c76d`.
+Marketplace and plugin refresh, fresh discovery, recursive zero-write Research
+Run fit inspection, dirty routine execution, no-effect interruption,
+fresh-process continuation, stale-replay refusal, preserved unrelated state,
+and byte-identical repeat reuse passed. The ordinary PATH executable was stale
+after plugin refresh and was separately reconciled to the installed digest
+before Obolyn dogfooding continued. This is installed agent-use evidence only.
+Human use, Product Fitness, daily-driver, readiness, release, completion,
+started-or-unknown recovery, and the repository-wide namespace claim remain
+withheld. Current product debts are routine-aware diagnosis, clearer fit target
+semantics, and runtime-accurate support-limit wording.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
