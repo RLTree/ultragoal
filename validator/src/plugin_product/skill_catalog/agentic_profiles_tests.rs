@@ -22,14 +22,10 @@ fn stage_profiles_cover_every_agentic_skill_without_a_second_gateway() {
     assert!(covered.contains("agentic-engineering"));
     assert!(covered.contains("product-fitness-engineering"));
     assert!(covered.contains("rust-agent-durability"));
-    assert_eq!(
-        profiles[0].source_implicit_front_door,
-        EXTERNAL_HARNESS_GATEWAY
-    );
     assert!(
-        profiles[1..]
+        profiles
             .iter()
-            .all(|profile| profile.source_implicit_front_door == AGENTIC_PLUGIN)
+            .all(|profile| profile.source_implicit_front_door == EXTERNAL_HARNESS_GATEWAY)
     );
     assert!(profiles.iter().all(|profile| {
         profile.external_front_door == EXTERNAL_HARNESS_GATEWAY

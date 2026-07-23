@@ -2524,6 +2524,24 @@ Focused source verification is the `engineering_advisory` unit filter (14
 passed). This has no package, install, discovery, runtime, journey, human-use,
 Product Fitness, readiness, release, or completion evidence.
 
+### Agentic co-install gateway correction — Terra implementation — 2026-07-23
+
+The supplied Agentic Engineering source package was internally inconsistent:
+its `ultragoal` profile named the external Harness gateway, while its top-level
+skill still permitted implicit invocation. The bounded `3.0.1` local package
+release makes every Agentic skill explicit, declares the external Harness
+gateway in every stage profile, and updates the package validators to reject
+an internal implicit gateway. The source package release gate passed all 14
+required checks; its `FILE-MANIFEST.sha256` is
+`sha256:b0cf70a7db8fe86964acac725ac1a97502edf9369a8b3e8ce23b676ac78260fe`.
+
+`plugin_product::skill_catalog` now pins that version, manifest digest, and
+the corrected core, lifecycle, and Rust profile digests. Focused source
+verification passed the skill-catalog filter (16 passed) and the advisory
+filter (14 passed). This is source/package-authority evidence only. Marketplace
+registration, install/cache replacement, fresh-session discovery, public
+routing, runtime selection, and journey claims remain unobserved.
+
 ### Installed routine terminal reconciliation — 2026-07-23
 
 Installed `0.0.17` reached the active Research Run routine effect through the

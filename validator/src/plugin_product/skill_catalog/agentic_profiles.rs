@@ -4,9 +4,9 @@ use super::{
 use serde::{Deserialize, Serialize};
 
 pub const AGENTIC_PLUGIN: &str = "agentic-engineering";
-pub const AGENTIC_PLUGIN_VERSION: &str = "3.0.0";
+pub const AGENTIC_PLUGIN_VERSION: &str = "3.0.1";
 pub const AGENTIC_FILE_MANIFEST_DIGEST: &str =
-    "sha256:6ec22b411d1fd9723857a3e68a5a48efc03ac00a9893990e4634151bb03893a6";
+    "sha256:b0cf70a7db8fe86964acac725ac1a97502edf9369a8b3e8ce23b676ac78260fe";
 pub const EXTERNAL_HARNESS_GATEWAY: &str = "external:harness-ultragoal";
 
 const CORE: &[&str] = &[
@@ -129,11 +129,11 @@ impl AgenticAdvisoryStage {
             Self::UltraGoal => {
                 "sha256:a2d2a098a035654f7c40837b3fd58032c4e7d250cba302c23055adb446d13ea3"
             }
-            Self::Core => "sha256:2428ab26fdfc1029937b43216dc7dbc957e76184262d124c4374a46a5ce2ddf5",
+            Self::Core => "sha256:a9494b6dc0cdee51790d63a1273cfef138c71e67b2815e113b9dfea19df00940",
             Self::Lifecycle => {
-                "sha256:c0a2e2db4615c5f5778d0de5ea8c0afd3ba833553c2a12f19a0f86a5a2c9f849"
+                "sha256:6cf61fd7606da97ef185260cc3f7fb4cd17ec9fd5650a46b431b6fb4c7611e41"
             }
-            Self::Rust => "sha256:d39955d9ca01a7391a7fc312663de9b3dd289e41a9699a472aa511c9efbec58c",
+            Self::Rust => "sha256:84121f8c9b2a52d62746bf2c18b290ec9aa0437109e46c6a0b9b3685d366ac85",
         }
     }
 
@@ -149,9 +149,8 @@ impl AgenticAdvisoryStage {
 
 /// Builds the co-install projection, not a Codex configuration mutation.
 ///
-/// The upstream stage profiles make Agentic Engineering their implicit entry.
-/// UltraGoal keeps the exact selected skills but moves that entry behind the
-/// existing Harness gateway. The returned record is candidate-bound only when
+/// The upstream stage profiles declare the external Harness entry and keep
+/// Agentic skills explicit. The returned record is candidate-bound only when
 /// the existing catalog validates it with the current package observation.
 pub fn coinstall_profile(
     stage: AgenticAdvisoryStage,
@@ -162,11 +161,7 @@ pub fn coinstall_profile(
     let source_profile_digest = stage.source_digest();
     AgenticCoInstallProfile {
         stage,
-        source_implicit_front_door: if stage == AgenticAdvisoryStage::UltraGoal {
-            EXTERNAL_HARNESS_GATEWAY.to_owned()
-        } else {
-            AGENTIC_PLUGIN.to_owned()
-        },
+        source_implicit_front_door: EXTERNAL_HARNESS_GATEWAY.to_owned(),
         external_front_door: EXTERNAL_HARNESS_GATEWAY.to_owned(),
         source_profile_path: format!("profiles/{name}.json"),
         source_profile_digest: source_profile_digest.to_owned(),

@@ -103,7 +103,10 @@ candidate binding, closed skill set, and measured discovery budget. The source
 projection rejects a substituted profile, candidate, configuration, source
 digest, skill set, or second implicit gateway; actual host configuration and
 fresh-session discovery remain separate proof surfaces. Agentic's gateway is
-explicit-only when co-installed. A full thirty-skill view is not loaded by
+explicit-only when co-installed. The current mapped source is Agentic
+Engineering `3.0.1`, whose `FILE-MANIFEST.sha256` is
+`sha256:b0cf70a7db8fe86964acac725ac1a97502edf9369a8b3e8ce23b676ac78260fe`.
+A full thirty-skill view is not loaded by
 default and must first demonstrate a safe combined context margin and no
 routing degradation.
 
