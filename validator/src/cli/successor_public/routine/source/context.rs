@@ -68,19 +68,19 @@ pub(crate) fn target_root(
     options: &RoutineInvocationOptions,
 ) -> Result<PathBuf, PublicFailure> {
     let canonical_root = fs::canonicalize(root).map_err(|_| PublicFailure::Context)?;
-    if canonical_root != root {
+    if root != Path::new(".") && canonical_root != root {
         return Err(PublicFailure::Context);
     }
     let requested = options
         .target
         .as_deref()
-        .map_or_else(|| root.to_path_buf(), |path| root.join(path));
+        .map_or_else(|| canonical_root.clone(), |path| canonical_root.join(path));
     let metadata = fs::symlink_metadata(&requested).map_err(|_| PublicFailure::Context)?;
     if !metadata.is_dir() || metadata.file_type().is_symlink() {
         return Err(PublicFailure::Context);
     }
     let target = fs::canonicalize(&requested).map_err(|_| PublicFailure::Context)?;
-    if !target.starts_with(root) || target.to_str().is_none() {
+    if !target.starts_with(&canonical_root) || target.to_str().is_none() {
         return Err(PublicFailure::Context);
     }
     Ok(target)

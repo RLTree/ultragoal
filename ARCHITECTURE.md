@@ -61,6 +61,13 @@ path set form the protected boundary; unrelated repository and Git-internal
 objects remain outside that effect. Complete-repository fit retains the full
 recursive protected-tree capture.
 
+Routine dirty-state capture treats Git-visible tracked and untracked paths as
+repository authority and excludes paths that the same bound Git observation
+classifies as ignored. This permits ordinary build caches such as `target/`
+without weakening visible symlink, hard-link, special-file, substitution, or
+concurrent-mutation refusal. Selected routine inputs and declared output scopes
+retain their separate exact filesystem revalidation.
+
 Local agent authority is one private production transaction under
 `plugin_product/agent_discovery/`. The public read route
 `inspect capabilities --package-root <host-path>` supplies one typed

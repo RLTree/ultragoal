@@ -27,7 +27,7 @@ adopts a bounded compatibility route.
 
 The supported repository catalog path is `.agents/plugins/marketplace.json`.
 Its local plugin source is relative to the marketplace root and begins with
-`./`. The current 0.0.13 root integration uses the package materialization
+`./`. The current 0.0.14 root integration uses the package materialization
 path `./plugins/harness-ultragoal`; catalog bytes are invalid evidence until
 that relative target exists and its package identity is independently
 reconciled.

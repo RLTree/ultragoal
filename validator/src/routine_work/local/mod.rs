@@ -1,6 +1,6 @@
 mod file;
 mod git;
-mod tree;
+mod git_visible_tree;
 
 #[cfg(test)]
 use super::authority::test_authority_checkpoint;
@@ -9,8 +9,10 @@ use super::digest::sha256;
 use super::{DirtyChange, DirtySnapshot, RoutineBinding, RoutineError, RoutineErrorId};
 use crate::context::LiveContext;
 use file::{RootAnchor, content_identity};
-use git::{parse_status, runtime_store_ignored, status_bytes};
-use tree::WorktreeShape;
+use git::{
+    ignored_status_bytes, parse_ignored_paths, parse_status, runtime_store_ignored, status_bytes,
+};
+use git_visible_tree::GitVisibleWorktreeShape;
 
 pub struct LocalDirtyTree;
 
@@ -53,8 +55,9 @@ impl LocalDirtyTree {
         test_authority_checkpoint();
         let root = binding.worktree_root();
         let anchor = RootAnchor::capture(root)?;
-        let first_shape = WorktreeShape::capture(root)?;
         let first = status_bytes(&binding)?;
+        let first_ignored = parse_ignored_paths(&ignored_status_bytes(&binding)?)?;
+        let first_shape = GitVisibleWorktreeShape::capture(root, &first_ignored)?;
         let rows = parse_status(&first)?;
         let mut changes = Vec::with_capacity(rows.len());
         for row in rows {
@@ -72,7 +75,8 @@ impl LocalDirtyTree {
         }
         anchor.revalidate(root)?;
         let second = status_bytes(&binding)?;
-        let second_shape = WorktreeShape::capture(root)?;
+        let second_ignored = parse_ignored_paths(&ignored_status_bytes(&binding)?)?;
+        let second_shape = GitVisibleWorktreeShape::capture(root, &second_ignored)?;
         if first != second || first_shape != second_shape {
             return Err(RoutineError::new(
                 RoutineErrorId::ConcurrentMutation,

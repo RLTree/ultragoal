@@ -48,6 +48,26 @@ fn symlink_and_hardlink_entries_fail_closed() {
     hardlink_repo.teardown_after_assertions();
 }
 
+#[test]
+fn ignored_build_hardlinks_do_not_replace_git_visible_dirty_authority() {
+    let mut repo = TempRepo::new("ignored-build-hardlink");
+    repo.write(".gitignore", b"target/\n");
+    repo.git(&["add", ".gitignore"]);
+    repo.git(&["commit", "-q", "-m", "ignore build output"]);
+    repo.write("target/debug/object", b"reproducible build output\n");
+    fs::hard_link(
+        repo.root().join("target/debug/object"),
+        repo.root().join("target/debug/object-copy"),
+    )
+    .unwrap();
+    repo.write("src/lib.rs", b"pub fn value() -> u8 { 9 }\n");
+
+    let snapshot = LocalDirtyTree::capture(&repo.context("routine")).unwrap();
+    assert_eq!(snapshot.changes().len(), 1);
+    assert_eq!(snapshot.changes()[0].path().as_str(), "src/lib.rs");
+    repo.teardown_after_assertions();
+}
+
 #[cfg(unix)]
 #[test]
 fn fifo_entry_fails_without_blocking_or_reading_it() {

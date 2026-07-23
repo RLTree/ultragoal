@@ -1,4 +1,5 @@
 use sha2::{Digest, Sha256};
+use std::collections::BTreeSet;
 use std::fs::{self, DirEntry};
 use std::path::Path;
 
@@ -11,10 +12,10 @@ const ENTRY_LIMIT: usize = 100_000;
 const DEPTH_LIMIT: usize = 64;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(super) struct WorktreeShape(String);
+pub(super) struct GitVisibleWorktreeShape(String);
 
-impl WorktreeShape {
-    pub(super) fn capture(root: &Path) -> Result<Self, RoutineError> {
+impl GitVisibleWorktreeShape {
+    pub(super) fn capture(root: &Path, ignored: &BTreeSet<RepoPath>) -> Result<Self, RoutineError> {
         let mut hasher = Sha256::new();
         let mut stack = vec![(root.to_path_buf(), 0_usize)];
         let mut count = 0_usize;
@@ -32,14 +33,17 @@ impl WorktreeShape {
                 if depth == 0 && relative == Path::new(".git") {
                     continue;
                 }
+                let text = relative
+                    .to_str()
+                    .ok_or_else(|| unsupported("worktree-path-not-utf8"))?;
+                let parsed = RepoPath::parse(text.to_owned())?;
+                if ignored.iter().any(|prefix| ignored_path(prefix, &parsed)) {
+                    continue;
+                }
                 count = count.saturating_add(1);
                 if count > ENTRY_LIMIT {
                     return Err(limit("worktree-entry-limit-exceeded"));
                 }
-                let text = relative
-                    .to_str()
-                    .ok_or_else(|| unsupported("worktree-path-not-utf8"))?;
-                RepoPath::parse(text.to_owned())?;
                 let metadata = fs::symlink_metadata(&path)
                     .map_err(|_| capture("worktree-entry-metadata-failed"))?;
                 let kind = classify(&metadata)?;
@@ -51,6 +55,14 @@ impl WorktreeShape {
         }
         Ok(Self(format!("sha256:{:x}", hasher.finalize())))
     }
+}
+
+fn ignored_path(prefix: &RepoPath, path: &RepoPath) -> bool {
+    path == prefix
+        || path
+            .as_str()
+            .strip_prefix(prefix.as_str())
+            .is_some_and(|suffix| suffix.starts_with('/'))
 }
 
 fn read_entries(directory: &Path) -> Result<Vec<DirEntry>, RoutineError> {
@@ -94,10 +106,10 @@ fn update_identity(hasher: &mut Sha256, path: &str, kind: u8, metadata: &fs::Met
     #[cfg(not(unix))]
     {
         hasher.update([u8::from(metadata.permissions().readonly())]);
-        if let Ok(modified) = metadata.modified() {
-            if let Ok(duration) = modified.duration_since(std::time::UNIX_EPOCH) {
-                hasher.update(duration.as_nanos().to_be_bytes());
-            }
+        if let Ok(modified) = metadata.modified()
+            && let Ok(duration) = modified.duration_since(std::time::UNIX_EPOCH)
+        {
+            hasher.update(duration.as_nanos().to_be_bytes());
         }
     }
 }

@@ -53,6 +53,16 @@ pub(crate) fn git_output(root: &Path, args: &[&str]) -> Vec<u8> {
 }
 
 pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Command {
+    let mut command = routine_command_from_current_directory(root, home, binary);
+    command.arg("--root").arg(root);
+    command
+}
+
+pub(crate) fn routine_command_from_current_directory(
+    root: &Path,
+    home: &Path,
+    binary: &Path,
+) -> Command {
     let mut command = Command::new(binary);
     command
         .env_clear()
@@ -64,9 +74,7 @@ pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Comman
         .env("GIT_CONFIG_NOSYSTEM", "1")
         .env("GIT_OPTIONAL_LOCKS", "0")
         .env("GIT_TERMINAL_PROMPT", "0")
-        .current_dir(root)
-        .arg("--root")
-        .arg(root);
+        .current_dir(root);
     command
 }
 

@@ -38,7 +38,7 @@ fn root_wiring_request_is_exact_but_non_authoritative() {
         assert!(request_json.contains(&agent.path()));
     }
     assert_eq!(
-        read(".codex-plugin/plugin.json").matches("0.0.13").count(),
+        read(".codex-plugin/plugin.json").matches("0.0.14").count(),
         1
     );
     let marketplace: serde_json::Value =

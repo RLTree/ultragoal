@@ -1,6 +1,54 @@
-use super::scenario::{Fixture, pass_node, prefix_route};
+use super::scenario::{Fixture, pass_node, prefix_route, routine_command_from_current_directory};
 use serde_json::Value;
 use std::fs;
+
+#[test]
+fn current_directory_is_the_supported_default_routine_root() {
+    let mut fixture = Fixture::new(
+        "current-directory-root",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        false,
+        false,
+    );
+    let output =
+        routine_command_from_current_directory(&fixture.root, &fixture.home, fixture.binary_path())
+            .args(["--json", "check", "routine"])
+            .output()
+            .unwrap();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "clean-no-op");
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn dirty_routine_preserves_ignored_build_hardlinks() {
+    let mut fixture = Fixture::new(
+        "ignored-build-hardlink",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let ignored = fixture.root.join("target/prior-build/object");
+    fs::create_dir_all(ignored.parent().unwrap()).unwrap();
+    fs::write(&ignored, b"reproducible build output\n").unwrap();
+    fs::hard_link(
+        &ignored,
+        fixture.root.join("target/prior-build/object-copy"),
+    )
+    .unwrap();
+
+    let output =
+        routine_command_from_current_directory(&fixture.root, &fixture.home, fixture.binary_path())
+            .args(["--json", "check", "routine"])
+            .output()
+            .unwrap();
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "executed");
+    assert_eq!(fs::read(&ignored).unwrap(), b"reproducible build output\n");
+    fixture.teardown_after_assertions();
+}
 
 #[test]
 fn dependency_closed_outputs_are_journaled_before_real_children_then_repeat_reuses() {

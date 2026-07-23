@@ -11,6 +11,17 @@ const STATUS_LIMIT: usize = 16 * 1024 * 1024;
 const STATUS_TIMEOUT: Duration = Duration::from_secs(5);
 
 pub(crate) fn status_bytes(binding: &RoutineBinding) -> Result<Vec<u8>, RoutineError> {
+    status_bytes_with_ignored(binding, false)
+}
+
+pub(crate) fn ignored_status_bytes(binding: &RoutineBinding) -> Result<Vec<u8>, RoutineError> {
+    status_bytes_with_ignored(binding, true)
+}
+
+fn status_bytes_with_ignored(
+    binding: &RoutineBinding,
+    include_ignored: bool,
+) -> Result<Vec<u8>, RoutineError> {
     let git = binding
         .tool("git")
         .filter(|tool| tool.available())
@@ -19,15 +30,19 @@ pub(crate) fn status_bytes(binding: &RoutineBinding) -> Result<Vec<u8>, RoutineE
     if !git.is_absolute() {
         return Err(capability_error("bound-git-path-not-absolute"));
     }
-    let mut child = Command::new(git)
-        .args([
-            "--no-optional-locks",
-            "status",
-            "--porcelain=v2",
-            "-z",
-            "--untracked-files=all",
-            "--ignore-submodules=none",
-        ])
+    let mut command = Command::new(git);
+    command.args([
+        "--no-optional-locks",
+        "status",
+        "--porcelain=v2",
+        "-z",
+        "--untracked-files=all",
+        "--ignore-submodules=none",
+    ]);
+    if include_ignored {
+        command.arg("--ignored=matching");
+    }
+    let mut child = command
         .current_dir(binding.worktree_root())
         .env_clear()
         .env("GIT_CONFIG_NOSYSTEM", "1")
