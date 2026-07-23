@@ -7,6 +7,11 @@
 mod error;
 mod repair;
 mod review;
+mod selection;
+mod selection_lens;
+mod selection_model;
+mod selection_response;
+mod selection_validation;
 mod task_evidence;
 mod verification;
 
@@ -16,6 +21,8 @@ mod confirmation_tests;
 mod repair_tests;
 #[cfg(test)]
 mod review_authority_tests;
+#[cfg(test)]
+mod selection_tests;
 #[cfg(test)]
 mod tests;
 
@@ -27,6 +34,11 @@ pub use repair::{
 pub use review::{
     MaterialityOutput, REVIEW_VERDICT_NO_CLAIM, ReviewFinding, ReviewFindingSeverity,
     ReviewMaterialityOutput, ReviewVerdict,
+};
+pub use selection::{ADVISORY_SELECTION_NO_CLAIM, select_advisory};
+pub use selection_model::{
+    AdvisoryLens, AdvisoryOutcomeClass, AdvisorySelectionDisposition, AdvisorySelectionRequest,
+    EngineeringAdvisorySelection,
 };
 pub use task_evidence::{TASK_EVIDENCE_NO_CLAIM, TaskEvidencePacket};
 pub use verification::{

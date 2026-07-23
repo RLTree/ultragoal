@@ -108,6 +108,13 @@ default and must first demonstrate a safe combined context margin and no
 routing degradation.
 
 Advice has no lease, permission, effect, evidence, review, or claim authority.
+The source selector consumes one exact candidate-bound profile and catalog
+projection, verifies their complete rendered skill set, and produces either a
+plain-language, proposal-only selection or a visible no-selection/fail-closed
+result. It does not persist an activation tracker: unchanged input suppresses
+reactivation, while changed candidate, context, configuration, lifecycle, or
+evidence invalidates prior advice. Public CLI routing, package, installation,
+discovery, runtime, and journey proof remain separate pending surfaces.
 Root must explicitly reuse, extend, map, or reject its proposal through the
 existing Harness owner. Candidate, lifecycle, evidence, assumption, risk,
 failure-mechanism, profile, or active-transition changes invalidate the advice

@@ -2487,6 +2487,28 @@ automatic selection, runtime, journey, human use, Product Fitness, readiness,
 release, or completion. Those surfaces remain queued behind the public
 integration and the current installed journey identity refresh.
 
+### Candidate-bound advisory selection — Terra implementation — 2026-07-23
+
+`engineering_advisory` now derives an ephemeral `EngineeringAdvisorySelection`
+from the exact candidate, context, product state, configuration, lifecycle,
+truth-loop, risk, authority, verification, failure, recovery, and Product
+Fitness inputs. The selection has one primary lens and, only for a genuine
+cross-layer decision, one supporting lens. It returns plain-language
+proposal-only/no-claim output, a material missing-input result, or a visible
+fail-closed disposition for an unavailable, stale, cross-candidate,
+substituted, duplicate-gateway, or incomplete profile/catalog.
+
+The selector does not create an activation state store. It suppresses a prior
+selection only when its input fingerprint is unchanged; a changed binding or
+evidence condition reactivates selection. No-change and routine work remain
+unselected. The complete expected rendered stage profile is verified rather
+than accepting only the requested lens, so a partial profile cannot silently
+drop an advisory boundary. Focused source verification is the
+`engineering_advisory` unit filter (12 passed). This is source-only: public
+front-door routing, package/install/cache/registry/discovery/runtime/journey,
+human-use, Product Fitness, readiness, release, and completion claims remain
+withheld until separately observed on a rebuilt current candidate.
+
 ### Installed routine terminal reconciliation — 2026-07-23
 
 Installed `0.0.17` reached the active Research Run routine effect through the
