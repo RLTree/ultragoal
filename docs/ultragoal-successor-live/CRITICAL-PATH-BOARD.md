@@ -30,6 +30,25 @@ diff before and after. Canonical inventory reconciliation is therefore the
 first broken Terra transition; selector execution remains ineligible until it
 closes.
 
+## 2026-07-23 Terra canonical-inventory reconciliation
+
+Root integrated `2cae694d5d5f0b6575c419c3be6f5bb425e20af7` / tree
+`008c1f50baf68c7e24c8ed650cf2598518b1ea80`. It repairs the two stale current
+authority identities that blocked the first Terra transition: the generated
+inventory verifier now binds the full AMEND-005 artifact set, and adopted state
+binds the current final-handoff manifest. Current-root catalog and Product
+State derivation, the package contract binding, and the active v2 truth-loop
+fixture are focused-green. The public source route now selects `fit inspect`
+instead of failing before selection.
+
+This closes only the canonical source read-path blocker. Exact package,
+installation, cache, marketplace, app registry, discovery, runtime,
+repository-adoption, dirty-tree routine, interruption/recovery, repeat-use,
+Product Fitness, readiness, release, and completion evidence remain withheld.
+The first broken product transition is now the public `fit inspect` route on
+the current candidate; root must observe it before launching selector work or
+an installed journey increment.
+
 ## 2026-07-23 N15 exact retirement integration
 
 Exact root source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` / tree

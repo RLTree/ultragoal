@@ -57,6 +57,27 @@ one-front-door binding, then implement selection. It is not an authority fork,
 an authorization bypass, or evidence that the automatic selector already
 works.
 
+## Terra inventory reconciliation — 2026-07-23
+
+Root integrated source `2cae694d5d5f0b6575c419c3be6f5bb425e20af7` / tree
+`008c1f50baf68c7e24c8ed650cf2598518b1ea80`. The generated inventory verifier
+now binds AMEND-005's complete three-artifact current amendment shape: Product
+Success Contract, Product Success Brief, and the candidate-bound Agentic
+advisory decision. The adopted state registry now binds the current immutable
+final-handoff digest. The shared inception fixture creates a complete local
+authority snapshot, including the amended binding and generated projection,
+instead of weakening either current-contract or candidate checks.
+
+Focused current-root catalog/state, adopted-registry, package-schema, and
+active-first-truth-loop controls pass. The public source CLI can now derive the
+catalog and Product State needed to select `fit inspect` as the active
+truth-loop transition. This is a source-only repair: no package, installation,
+discovery, runtime, repository adoption, routine work, recovery, Product
+Fitness, human-use, readiness, release, or completion claim advances. The next
+dependency-legal product action is the exact public `fit inspect` observation
+on the current candidate, followed by packaging only if that source route
+remains current.
+
 The repository-wide `scripts/check .` entrypoint passed its standards,
 generated-authority, and Python-source stages, then stopped before coverage
 because `scripts/check-coverage-full` still invokes the retired
