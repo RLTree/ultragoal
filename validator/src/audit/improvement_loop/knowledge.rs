@@ -3,8 +3,8 @@ use std::collections::HashSet;
 use std::path::Path;
 
 use super::{
-    knowledge_projection, LEARNING_SCHEMA, PROJECTION_REL, PROJECTION_SCHEMA, REGISTRY,
-    REGISTRY_SCHEMA,
+    LEARNING_SCHEMA, PROJECTION_REL, PROJECTION_SCHEMA, REGISTRY, REGISTRY_SCHEMA,
+    knowledge_projection,
 };
 
 pub(super) fn failures(root: &Path) -> Vec<String> {
@@ -14,7 +14,7 @@ pub(super) fn failures(root: &Path) -> Vec<String> {
         Err(err) => {
             return vec![format!(
                 "improvement_loop_registry_missing_or_malformed:{err}"
-            )]
+            )];
         }
     };
     let registry = match serde_json::from_slice::<Value>(&bytes) {
@@ -22,7 +22,7 @@ pub(super) fn failures(root: &Path) -> Vec<String> {
         Err(err) => {
             return vec![format!(
                 "improvement_loop_registry_missing_or_malformed:{err}"
-            )]
+            )];
         }
     };
     let mut out = Vec::new();

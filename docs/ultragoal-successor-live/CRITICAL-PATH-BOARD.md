@@ -1,5 +1,27 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Agentic Engineering P1 source integration
+
+Root integrated the bounded learning-adoption increment through
+`4e41e94a98089bc662c8c702e96d8b677d028db7` / tree
+`e26541e953d4d81c4cb0cae19e2115e171e95d0d`. The existing improvement-loop
+registry now owns one adopted learning and one held learning; its Markdown
+knowledge view is a deterministic byte-derived projection, not a peer store.
+The existing product-eval protocol now requires the named behavior families and
+a task-family/operating-envelope repair budget with an explicit calibration
+basis. `WorkerResult-v1`, the semantic repair circuit breaker, and root claim
+authority are unchanged.
+
+The bounded Terra/medium review returned two material false-pass findings in one
+pass. Correction `25eeec3ec` rejects duplicate learning identities and bare,
+uncalibrated repair counts. The confirmation review found no executable bypass;
+its request for an additional test of the already schema-and-validator-enforced
+missing-ID path is nonmaterial backlog hardening. The schema evolution and
+refresh decision is
+`AGENTIC-ENGINEERING-V3-P1-INTEGRATION-002`. P1 is accepted at the source-local
+ceiling. Version `0.0.17` package, install, cache, marketplace, app-registry,
+discovery, and installed behavior remain the next invalidated surfaces.
+
 ## 2026-07-23 Agentic Engineering P0 installed boundary
 
 Exact source `01384a996` / tree `f9938ea5` is packaged and installed as

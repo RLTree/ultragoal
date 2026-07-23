@@ -1924,6 +1924,31 @@ remain outside its ceiling.
 
 ## Stop and escalation rules
 
+### Agentic Engineering P1 bounded integration — 2026-07-23
+
+The exact accepted lane increment is `25eeec3ec`, integrated through root
+`4e41e94a98089bc662c8c702e96d8b677d028db7` / tree
+`e26541e953d4d81c4cb0cae19e2115e171e95d0d`. It extends the existing
+improvement-loop registry rather than creating a learning authority: one
+learning is adopted, one universal repair-budget proposal is held, and the
+human-readable knowledge document is regenerated and byte-checked from the
+canonical registry. The existing product-eval protocol now names the required
+behavior families and requires a non-universal, task-family-specific repair
+budget with an explicit calibration basis.
+
+One Terra/medium review returned the complete material batch: duplicate learning
+identities and calibration-free repair counts. One correction closed both.
+Confirmation found the missing-ID path already fails closed through schema and
+the executable validator; its request for another unit test is recorded as
+nonmaterial hardening rather than reopening the bounded repair loop.
+
+Root decision
+`docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-P1-INTEGRATION-002.json`
+records schema digests, compatibility, invalidation, refresh obligations, and
+the unchanged claim ceiling. The next product candidate is `0.0.17`. The
+`0.0.16` package and installed observations remain valid only for P0; they
+cannot support P1 installed or runtime claims.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required

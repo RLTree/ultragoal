@@ -68,7 +68,7 @@ fn parses_multiline_yaml_without_truncating_description() {
 fn harness_only_topology_has_one_gateway_and_read_claim_ceiling() {
     let packages = vec![package(
         HARNESS_PLUGIN,
-        "0.0.16",
+        "0.0.17",
         HARNESS_PLUGIN_DIGEST,
         HARNESS_PACKAGE_DIGEST,
         vec![skill(HARNESS_FRONT_DOOR, true), skill("prove", false)],
@@ -86,7 +86,7 @@ fn two_implicit_gateways_fail_closed() {
     let packages = vec![
         package(
             HARNESS_PLUGIN,
-            "0.0.16",
+            "0.0.17",
             HARNESS_PLUGIN_DIGEST,
             HARNESS_PACKAGE_DIGEST,
             vec![skill(HARNESS_FRONT_DOOR, true)],
@@ -122,7 +122,7 @@ fn agentic_profile_plus_harness_has_one_gateway_and_margin() {
     let packages = vec![
         package(
             HARNESS_PLUGIN,
-            "0.0.16",
+            "0.0.17",
             HARNESS_PLUGIN_DIGEST,
             HARNESS_PACKAGE_DIGEST,
             vec![skill(HARNESS_FRONT_DOOR, true)],
