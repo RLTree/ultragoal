@@ -1,5 +1,22 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Agentic Engineering P0 integration
+
+Root integrated the bounded skill-catalog and evidence-control increments
+through `55687eed1ff2d10b3d8b514e1a9ae22c82fa849d`. UltraGoal remains the sole
+implicit front door and the only goal, effect, evidence, integration, and claim
+authority. Agentic Engineering contributes explicit-only advisory candidates.
+Focused root evidence is green: catalog 13/13, advisory 6/6, state 47/47, and
+warning-free affected production compilation. One bounded correction review
+closed candidate, scope, verification, and claim-promotion binding gaps.
+
+The host now carries the Agentic `ultragoal` skill profile, but installed
+discovery is not yet re-observed. The next dependency-legal boundary is exact
+`0.0.16` package construction, durable local-marketplace materialization,
+marketplace and plugin refresh, and fresh-task single-front-door discovery.
+P1 learning adoption, skill evaluation, Field Pulse, Product Fitness,
+readiness, release, and completion remain withheld.
+
 ## 2026-07-21 sealed host-lifecycle integration
 
 Root integrated `57345b8daddf3cc140d5805f85982eacf11b79f0` /

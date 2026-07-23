@@ -1,5 +1,41 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering P0 source integration — 2026-07-23
+
+Root integrated the two bounded P0 units through
+`55687eed1ff2d10b3d8b514e1a9ae22c82fa849d`. The plugin-product projection
+parses complete skill descriptors, binds exact plugin/profile/config/candidate
+identities, rejects a second implicit gateway, and reports the enabled catalog
+budget without effects or claim authority. The state increment adds
+candidate-bound current-behavior disposition, root-sealed verification
+selection, pure WorkPackage/Lease task evidence, proposal-only review verdicts,
+and a stateless semantic repair circuit. `WorkerResult-v1`, root acceptance,
+claims, effects, migrations, and Product Fitness authority remain unchanged.
+
+The first bounded Terra/medium evidence-control review returned four material
+binding gaps. One coherent correction now rejects cross-candidate verification
+before root sealing, requires exact lease scope and package acceptance in task
+evidence, and reapplies anti-promotion rules to serialized review verdicts. The
+same reviewer confirmed the corrected regression cases and returned ACCEPT.
+On the integrated root, plugin skill-catalog tests pass 13/13, advisory tests
+pass 6/6, state tests pass 47/47, and affected production compilation is
+warning-free.
+
+The Agentic `ultragoal` profile is now configured at the host surface: eight
+specialists remain explicitly available, the Agentic gateway is disabled, and
+Harness UltraGoal remains the sole implicit front door. Host configuration
+parses and the Agentic profile validator passes. Fresh-task discovery remains
+withheld until the new plugin candidate is installed and observed.
+
+The next immutable plugin candidate is `0.0.16`; both the plugin manifest and
+package authority advance together. Root must now build the exact package,
+materialize the durable local marketplace source, explicitly refresh the
+marketplace and installed plugin, and prove discovery in a fresh task. P1
+learning/evaluation and P2 Product Fitness/lifecycle projections remain parked
+until that P0 product surface passes. Source checks and reviewer agreement do
+not establish installed discovery, runtime routing, empirical improvement,
+human use, readiness, release, or completion.
+
 ## Agentic Engineering 3.0 bounded P0 integration — 2026-07-23
 
 Root integrated the accepted multi-record routine-continuation repair through
