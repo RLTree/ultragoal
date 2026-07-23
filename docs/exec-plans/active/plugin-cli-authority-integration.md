@@ -1,5 +1,39 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering 3.0 bounded P0 integration — 2026-07-23
+
+Root integrated the accepted multi-record routine-continuation repair through
+`92d34cbf45e6e063ac935635a35170ba5dd4afbe` / tree
+`2d0b5fc59bc16f4b62e36566e6487b56d9ef56fe`. Five focused root controls prove
+binding-scoped coexistence, legacy compatibility, and symlink, hard-link,
+unknown-entry, and staged-entry refusal. The completed worktree was clean and
+removed after the containing commits became reachable from root.
+
+The current Agentic Engineering 3.0 overlap decision is
+`docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-BOUNDED-INTEGRATION-001.json`.
+UltraGoal remains the only executable, effect, evidence, integration, and claim
+authority. Agentic Engineering is explicit advisory input only. Each candidate
+artifact is classified as reuse, extend, projection, or reject; no peer goal,
+plan, lifecycle, task result, review, retry tracker, knowledge store, Product
+Fitness owner, or claim graph is authorized.
+
+The first P0 product defect is current co-install routing. The enabled host
+catalog contains 38 skills, an estimated 7,670 of 8,000 discovery characters,
+only 330 characters of headroom, and two implicit gateways. The intended
+Agentic `ultragoal` profile plus the packaged Harness surface contains 16
+skills, estimates 3,956 characters, and leaves Harness as the single implicit
+front door. Source implementation must replace the current boolean-only budget
+fixture with a full-YAML, combined-catalog projection before installed profile
+or routing claims can advance.
+
+P0 has two disjoint implementation units: combined skill discovery/front-door
+measurement, and evidence decision controls. Root retains shared schemas,
+public CLI wiring, package/profile lifecycle, migrations, candidate identity,
+and claim ceilings. P1 learning/evaluation and P2 Product Fitness/lifecycle
+projections remain withheld until P0 behavior passes. AMEND-004 already owns
+this evidence-led sequencing and `CL-EVAL-IMPROVEMENT`; no required claim or
+ceiling changes, so a new contract amendment is not required.
+
 ## Terminal-disposition Darwin execution integration — 2026-07-21
 
 Root integrated `7eefca283f826d036315eaf91814785c1756b07b` / tree
