@@ -1,6 +1,21 @@
 use super::*;
 
 impl EventStore {
+    pub fn binding_leaf_name(
+        context_id: &str,
+        candidate_id: &str,
+        source_id: &str,
+    ) -> Result<String, String> {
+        privacy::validate_identifier("context-id", context_id)?;
+        privacy::validate_identifier("candidate-id", candidate_id)?;
+        privacy::validate_identifier("source-id", source_id)?;
+        let mut digest = Sha256::new();
+        for value in [context_id, candidate_id, source_id] {
+            digest.update((value.len() as u64).to_be_bytes());
+            digest.update(value.as_bytes());
+        }
+        Ok(format!("successor-events-{:x}.jsonl", digest.finalize()))
+    }
     pub const fn supported_store_limit_bytes() -> u64 {
         HARD_MAX_STORE_BYTES
     }

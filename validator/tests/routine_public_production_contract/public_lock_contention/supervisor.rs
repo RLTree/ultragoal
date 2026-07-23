@@ -164,7 +164,7 @@ fn real_public_lock_sequence(invocation: &Invocation) {
     assert!(
         !invocation
             .root
-            .join("validation_artifacts/observability/spool/successor-events.jsonl")
+            .join("validation_artifacts/observability/spool")
             .exists()
     );
     assert_eq!(

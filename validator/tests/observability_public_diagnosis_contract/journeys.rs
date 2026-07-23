@@ -32,7 +32,12 @@ fn fresh_reads_and_configured_export_refusal_are_repeatable_zero_write() {
     );
     assert_eq!(diagnosis["observability"]["store_status"], "not_opened");
     assert_eq!(diagnosis["observability"]["claim_effect"], "none");
-    assert!(!fresh.store_path().exists());
+    assert!(
+        !fresh
+            .root()
+            .join("validation_artifacts/observability/spool")
+            .exists()
+    );
 
     let configured = Repository::new("configured-export", true, true);
     let finding = selected_finding(&configured);
@@ -130,7 +135,7 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
     for item in [&root, &target, &success, &receipt] {
         assert!(store.append(item).unwrap());
     }
-    let persisted = fs::read_to_string(repository.store_path()).unwrap();
+    let persisted = fs::read_to_string(repository.store_path(&binding)).unwrap();
     for private in [
         PRIVATE_TOKEN,
         PRIVATE_PATH,

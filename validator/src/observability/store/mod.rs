@@ -8,6 +8,7 @@ use super::locking::{
 use super::privacy;
 use super::{CausalExplanation, EventQuery, SemanticEvent};
 use crate::context::LiveContext;
+use sha2::{Digest, Sha256};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 

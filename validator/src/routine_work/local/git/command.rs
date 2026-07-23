@@ -72,7 +72,7 @@ pub(crate) fn runtime_store_ignored(binding: &RoutineBinding) -> Result<bool, Ro
             "--no-optional-locks",
             "check-ignore",
             "--quiet",
-            "validation_artifacts/observability/spool/successor-events.jsonl",
+            "validation_artifacts/observability/spool/successor-events-probe.jsonl",
         ])
         .current_dir(binding.worktree_root())
         .env_clear()
@@ -113,7 +113,7 @@ fn runtime_store_untracked(git: &Path, binding: &RoutineBinding) -> Result<bool,
             "ls-files",
             "--error-unmatch",
             "--",
-            "validation_artifacts/observability/spool/successor-events.jsonl",
+            "validation_artifacts/observability/spool",
         ])
         .current_dir(binding.worktree_root())
         .env_clear()

@@ -30,7 +30,7 @@ pub(super) fn append_routine_terminal_with_hook(
     require_runtime_store_ignored(binding)
         .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     ensure_store_parent(root)?;
-    let path = store_path(root);
+    let path = store_path(root, context, RUNTIME_SOURCE_ID)?;
     let store_absent_before = store_absent(&path)?;
     if terminal.event_id
         != terminal_event_id(terminal.continuation_id, terminal.terminal_ledger_head)

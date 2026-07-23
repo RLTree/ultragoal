@@ -1960,19 +1960,21 @@ bound to an earlier `LiveContext`, and `EventStore` classified that different
 binding as corruption. Diagnosis and observation therefore became unavailable
 and exact terminal custody remained pending.
 
-The `0.0.18` repair keeps one journal and one observability authority. Stored
-rows remain strictly decoded, checksummed, bounded, and schema-validated.
-Current writers remain bound to their exact context, candidate, and source.
-Queries and causal explanation now filter valid journal history to that exact
-binding, and a causal parent from another binding is withheld as missing
-evidence. There is no migration that deletes or rewrites historical rows and no
-new store, receipt, or claim authority.
+The first `0.0.18` freeze allowed multiple valid bindings in one journal file.
+Its bounded review found that a complete foreign journal copied into place
+could then masquerade as history. The coherent correction retains the existing
+observability authority and canonical spool namespace while deriving each
+journal leaf from the exact context, candidate, and source. Each leaf is
+strictly single-bound; historical leaves remain preserved but cannot enter a
+current query or causal chain. There is no migration that deletes or rewrites
+historical rows and no new receipt or claim authority.
 
-Pre-freeze focused evidence is observability `35/35` and routine public
-production `60/60`. One exact material review, package rebuild, marketplace
-refresh, isolated install, installed recovery, diagnosis, fresh-process reopen,
-and repeat-use observation remain required. All stronger Product Fitness,
-human-use, readiness, release, completion, and mastery claims remain withheld.
+The pre-review baseline is observability `35/35` and routine public production
+`60/60`; the corrected namespace must rerun its affected focused checks and one
+exact confirmation review. Package rebuild, marketplace refresh, isolated
+install, installed recovery, diagnosis, fresh-process reopen, and repeat-use
+observation remain required. All stronger Product Fitness, human-use,
+readiness, release, completion, and mastery claims remain withheld.
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without

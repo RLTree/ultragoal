@@ -80,7 +80,7 @@ pub(crate) fn local_state_policy_preserves_user_bytes_newline_shape_and_mode() {
 
     let child = fixture
         .root
-        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+        .join("validation_artifacts/observability/spool/successor-events-probe.jsonl");
     fixture.write("validation_artifacts/observability/spool/child.txt", b"x");
     git(
         &fixture.root,

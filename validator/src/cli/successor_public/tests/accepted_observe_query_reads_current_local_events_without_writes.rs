@@ -7,7 +7,7 @@ pub(crate) fn accepted_observe_query_reads_current_local_events_without_writes()
     fs::create_dir_all(&spool).unwrap();
     let context = read_context(&repo.root).unwrap();
     let store = EventStore::for_context(
-        super::super::observe::store_path(&repo.root),
+        super::super::observe::store_path(&repo.root, &context, "successor-runtime").unwrap(),
         &context,
         "successor-runtime",
     )

@@ -5,7 +5,7 @@ pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-public-diagnosis-private-107";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/public-diagnosis-107";
 pub(crate) const PRIVATE_EMAIL: &str = "public-diagnosis-107@example.invalid";
-pub(crate) const STORE: &str = "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(crate) const STORE_PARENT: &str = "validation_artifacts/observability/spool";
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Debug)]
@@ -80,8 +80,15 @@ impl Repository {
         &self.root
     }
 
-    pub(crate) fn store_path(&self) -> PathBuf {
-        self.root.join(STORE)
+    pub(crate) fn store_path(&self, binding: &Binding) -> PathBuf {
+        self.root.join(STORE_PARENT).join(
+            EventStore::binding_leaf_name(
+                &binding.context_id,
+                &binding.candidate_id,
+                &binding.source_id,
+            )
+            .unwrap(),
+        )
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {
@@ -148,9 +155,9 @@ pub(crate) fn live_root() -> PathBuf {
 }
 
 pub(crate) fn open_store(repository: &Repository, binding: &Binding) -> EventStore {
-    fs::create_dir_all(repository.store_path().parent().unwrap()).unwrap();
+    fs::create_dir_all(repository.store_path(binding).parent().unwrap()).unwrap();
     EventStore::open_bound(
-        repository.store_path(),
+        repository.store_path(binding),
         &binding.context_id,
         &binding.candidate_id,
         &binding.source_id,

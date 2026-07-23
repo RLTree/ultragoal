@@ -64,7 +64,7 @@ fn substituted_store_is_unavailable_without_path_echo_or_hidden_writes() {
 fn bound_local_store_detects_in_place_mutation_and_leaf_replacement() {
     let repository = Repository::new("diagnose-store-revalidation");
     let context = read_context(&repository.root).unwrap();
-    let path = super::observe::store_path(&repository.root);
+    let path = super::observe::store_path(&repository.root, &context, "successor-runtime").unwrap();
     fs::create_dir_all(path.parent().unwrap()).unwrap();
     let event_store = EventStore::for_context(&path, &context, "successor-runtime").unwrap();
     let event = SemanticEvent::for_context(

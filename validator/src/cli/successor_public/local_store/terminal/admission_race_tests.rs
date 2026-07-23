@@ -52,11 +52,6 @@ fn append_revalidates_after_admission_before_store_creation() {
 
     assert!(result.is_err());
     assert!(!root.join("validation_artifacts").exists());
-    assert!(
-        !root
-            .join("validation_artifacts/observability/spool/successor-events.jsonl")
-            .exists()
-    );
     fs::remove_dir_all(root).unwrap();
 }
 

@@ -23,13 +23,13 @@ pub(crate) fn selected_finding(repository: &JourneyRepository) -> SelectedFindin
 pub(crate) fn open_store(repository: &JourneyRepository, binding: &Binding) -> EventStore {
     fs::create_dir_all(
         repository
-            .store_path()
+            .store_path(binding)
             .parent()
             .expect("observability spool parent"),
     )
     .expect("create observability spool");
     EventStore::open_bound(
-        repository.store_path(),
+        repository.store_path(binding),
         &binding.context_id,
         &binding.candidate_id,
         &binding.source_id,

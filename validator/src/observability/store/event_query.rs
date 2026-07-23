@@ -45,7 +45,8 @@ impl EventStore {
     }
     pub(crate) fn validate_rows(&self, events: &[SemanticEvent]) -> Result<(), String> {
         for event in events {
-            event.validate()?;
+            self.validate_event_binding(event)
+                .map_err(|_| "observe-store-corrupt:row-binding-conflict".to_owned())?;
         }
         Ok(())
     }

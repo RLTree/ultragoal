@@ -6,8 +6,6 @@ mod limits_false_pass;
 mod local_store;
 #[path = "observability_contract/lock_deadline.rs"]
 mod lock_deadline;
-#[path = "observability_contract/multi_binding.rs"]
-mod multi_binding;
 #[path = "observability_contract/privacy_export.rs"]
 mod privacy_export;
 #[path = "observability_contract/races_paths.rs"]

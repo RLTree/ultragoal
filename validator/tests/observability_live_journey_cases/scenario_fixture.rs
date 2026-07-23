@@ -5,8 +5,7 @@ pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-observability-private-canary-069";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/observability-canary-069";
 pub(crate) const PRIVATE_EMAIL: &str = "private-observability-069@example.invalid";
-pub(crate) const STORE_RELATIVE: &str =
-    "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(crate) const STORE_PARENT: &str = "validation_artifacts/observability/spool";
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Debug, Deserialize)]
@@ -127,8 +126,15 @@ impl JourneyRepository {
         &self.root
     }
 
-    pub(crate) fn store_path(&self) -> PathBuf {
-        self.root.join(STORE_RELATIVE)
+    pub(crate) fn store_path(&self, binding: &Binding) -> PathBuf {
+        self.root.join(STORE_PARENT).join(
+            EventStore::binding_leaf_name(
+                &binding.context_id,
+                &binding.candidate_id,
+                &binding.source_id,
+            )
+            .unwrap(),
+        )
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {

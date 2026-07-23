@@ -10,20 +10,23 @@ completed their durable routine effects, but public settlement remained
 its valid historical `0.0.15` row because that row carried an earlier
 `LiveContext`.
 
-The `0.0.18` candidate repairs the shared journal invariant. Every row remains
-strictly decoded, checksummed, size-bounded, and schema-validated. A bound
-writer may still append only its exact current context, candidate, and source.
-Valid historical bindings may coexist in the journal, while query and causal
-interpretation select only the exact current binding. Cross-binding causal
-parents remain missing evidence, not inferred authority. Malformed rows,
-wrong-bound direct appends, conflicting event identities, path substitution,
-and claim promotion remain fail-closed.
+The first `0.0.18` freeze attempted to retain different bindings in one file.
+Its bounded review rejected that topology because a complete foreign journal
+copied into place was indistinguishable from valid history. The correction
+keeps one canonical observability namespace but derives one journal leaf from
+the exact context, candidate, and source. Every leaf remains strictly
+single-bound, decoded, checksummed, size-bounded, and schema-validated.
+Historical leaves remain preserved without becoming admissible to current
+queries or causal interpretation. Malformed rows, wrong-bound direct appends,
+conflicting event identities, copied journals, path substitution, and claim
+promotion remain fail-closed.
 
-Source checks are green at the pre-freeze boundary: observability `35/35` and
-routine public production `60/60`. Package, refreshed marketplace/cache,
-installed discovery, pending-terminal recovery, repeat use, Product Fitness,
-readiness, release, and completion remain withheld until the exact `0.0.18`
-candidate passes those same-surface observations.
+The pre-review source baseline was observability `35/35` and routine public
+production `60/60`; the corrected exact-binding namespace must rerun its
+affected source checks before acceptance. Package, refreshed marketplace/cache,
+installed discovery, terminal recovery, repeat use, Product Fitness, readiness,
+release, and completion remain withheld until the exact `0.0.18` candidate
+passes those same-surface observations.
 
 ## 2026-07-23 Agentic Engineering P1 source integration
 

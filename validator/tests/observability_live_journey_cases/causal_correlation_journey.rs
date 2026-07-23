@@ -29,7 +29,7 @@ pub(crate) fn public_query_and_diagnosis_preserve_redacted_stable_causal_correla
         "exact append must be idempotent"
     );
 
-    let persisted = fs::read_to_string(repository.store_path()).unwrap();
+    let persisted = fs::read_to_string(repository.store_path(&binding)).unwrap();
     for private in [PRIVATE_TOKEN, PRIVATE_PATH, PRIVATE_EMAIL] {
         assert!(!persisted.contains(private), "persisted {private}");
     }
@@ -140,7 +140,8 @@ pub(crate) fn receipt_only_event_cannot_false_pass_as_a_public_cause() {
 }
 
 #[test]
-pub(crate) fn stale_unknown_and_truncated_stores_fail_closed_and_only_explicit_recovery_writes() {
+pub(crate) fn stale_bound_store_is_ignored_while_current_corruption_fails_closed_and_recovery_is_explicit()
+ {
     let stale = JourneyRepository::new("stale-candidate", false, false);
     let stale_binding = public_binding(&stale);
     let stale_store = open_store(&stale, &stale_binding);
@@ -150,11 +151,18 @@ pub(crate) fn stale_unknown_and_truncated_stores_fail_closed_and_only_explicit_r
             .unwrap()
     );
     fs::write(stale.root().join("tracked.txt"), b"new candidate bytes\n").unwrap();
-    assert_diagnostic_zero_write(
+    let stale_bytes = fs::read(stale.store_path(&stale_binding)).unwrap();
+    let current = assert_payload_repeat_zero_write(
         &stale,
         &["--json", "observe", "query"],
-        4,
-        "successor_runtime_observability_unavailable",
+        &[0],
+        "ObservabilityQuery-v1",
+    );
+    assert_eq!(current["store_status"], "absent");
+    assert_eq!(current["event_count"], 0);
+    assert_eq!(
+        fs::read(stale.store_path(&stale_binding)).unwrap(),
+        stale_bytes
     );
 
     let unknown = JourneyRepository::new("unknown-row", true, false);
@@ -171,9 +179,9 @@ pub(crate) fn stale_unknown_and_truncated_stores_fail_closed_and_only_explicit_r
             ))
             .unwrap()
     );
-    let row = fs::read_to_string(unknown.store_path()).unwrap();
+    let row = fs::read_to_string(unknown.store_path(&unknown_binding)).unwrap();
     fs::write(
-        unknown.store_path(),
+        unknown.store_path(&unknown_binding),
         row.replacen("}\n", ",\"unknown_row\":true}\n", 1),
     )
     .unwrap();
@@ -209,7 +217,7 @@ pub(crate) fn stale_unknown_and_truncated_stores_fail_closed_and_only_explicit_r
     );
     OpenOptions::new()
         .append(true)
-        .open(recovery.store_path())
+        .open(recovery.store_path(&recovery_binding))
         .unwrap()
         .write_all(b"{\"row_version\":\"SemanticEventRow-v1\"")
         .unwrap();

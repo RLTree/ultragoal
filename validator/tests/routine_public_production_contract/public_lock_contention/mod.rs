@@ -68,7 +68,7 @@ fn held_public_lock_refuses_a_real_contender_without_effect_then_allows_retry() 
         assert_terminal_event_after_retry(fixture);
         assert_eq!(
             new_root_paths(fixture, &before_root),
-            expected_output_paths()
+            expected_output_paths(fixture)
         );
         assert!(
             tree(&fixture.home)
@@ -89,25 +89,30 @@ fn new_root_paths(
         .collect()
 }
 
-fn expected_output_paths() -> BTreeSet<String> {
-    [
+fn expected_output_paths(fixture: &super::scenario::Fixture) -> BTreeSet<String> {
+    let mut paths = [
         "target",
         "target/routine",
         "target/routine/compile",
         "validation_artifacts",
         "validation_artifacts/observability",
         "validation_artifacts/observability/spool",
-        "validation_artifacts/observability/spool/successor-events.jsonl",
     ]
     .into_iter()
     .map(str::to_owned)
-    .collect()
+    .collect::<BTreeSet<_>>();
+    paths.insert(
+        event_path(fixture)
+            .strip_prefix(&fixture.root)
+            .unwrap()
+            .to_string_lossy()
+            .into_owned(),
+    );
+    paths
 }
 
 fn assert_terminal_event_after_retry(fixture: &super::scenario::Fixture) {
-    let event_path = fixture
-        .root
-        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+    let event_path = event_path(fixture);
     let rows = fs::read_to_string(&event_path)
         .unwrap()
         .lines()
@@ -144,4 +149,23 @@ fn assert_terminal_event_after_retry(fixture: &super::scenario::Fixture) {
         checkpoint["event_transition"]
     );
     assert_eq!(checkpoint["state"], "terminal-event-joined");
+}
+
+fn event_path(fixture: &super::scenario::Fixture) -> std::path::PathBuf {
+    let spool = fixture
+        .root
+        .join("validation_artifacts/observability/spool");
+    let paths = fs::read_dir(spool)
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| {
+            path.file_name()
+                .and_then(|name| name.to_str())
+                .is_some_and(|name| {
+                    name.starts_with("successor-events-") && name.ends_with(".jsonl")
+                })
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(paths.len(), 1);
+    paths.into_iter().next().unwrap()
 }

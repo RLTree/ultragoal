@@ -336,7 +336,7 @@ fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
     assert!(
         !fixture
             .root
-            .join("validation_artifacts/observability/spool/successor-events.jsonl")
+            .join("validation_artifacts/observability/spool")
             .exists()
     );
     fixture.teardown_after_assertions();
@@ -353,7 +353,7 @@ fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
     );
     let store = fixture
         .root
-        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+        .join("validation_artifacts/observability/spool/successor-events-forged.jsonl");
     fs::create_dir_all(store.parent().unwrap()).unwrap();
     fs::write(&store, b"tracked-runtime-store\n").unwrap();
     git(
@@ -361,7 +361,7 @@ fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
         &[
             "add",
             "-f",
-            "validation_artifacts/observability/spool/successor-events.jsonl",
+            "validation_artifacts/observability/spool/successor-events-forged.jsonl",
         ],
     );
     git(
@@ -386,11 +386,26 @@ fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
 }
 
 fn read_terminal_event(fixture: &Fixture) -> Value {
-    let path = fixture
-        .root
-        .join("validation_artifacts/observability/spool/successor-events.jsonl");
+    let path = terminal_event_path(&fixture.root);
     let text = fs::read_to_string(path).expect("terminal event was not appended");
     serde_json::from_str(text.trim()).expect("terminal event is not JSON")
+}
+
+fn terminal_event_path(root: &std::path::Path) -> std::path::PathBuf {
+    let spool = root.join("validation_artifacts/observability/spool");
+    let paths = fs::read_dir(spool)
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| {
+            path.file_name()
+                .and_then(|name| name.to_str())
+                .is_some_and(|name| {
+                    name.starts_with("successor-events-") && name.ends_with(".jsonl")
+                })
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(paths.len(), 1, "fixture has one bound event journal");
+    paths.into_iter().next().unwrap()
 }
 
 #[test]
