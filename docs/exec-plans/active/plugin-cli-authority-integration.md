@@ -1,5 +1,78 @@
 # Plugin and CLI Authority Integration
 
+## Agentic Engineering lifecycle-advisory contract checkpoint — 2026-07-23
+
+Root reconciled current repository authority at source
+`3fd07a976bfc8b5d5d8a1d28f7a84d514fd49456` / tree
+`ab238b3f8ed92e57bc75f7af9516993b52287b94` before this contract-only
+checkpoint. The five pre-existing host-lifecycle and E2E paths remain
+operator-owned and excluded from this increment.
+
+The complete Agentic Engineering 3.0 source and installed payloads are
+byte-identical against manifest
+`sha256:6ec22b411d1fd9723857a3e68a5a48efc03ac00a9893990e4634151bb03893a6`.
+Root inspected all thirty skills and every referenced resource, shared
+reference, script, schema, profile, template, Rust fragment, evaluation asset,
+manifest, license, provenance, and generated result. The authoritative
+reuse/extend/map/reject/defer ledger is
+`docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json`.
+
+AMEND-005 strengthens the product boundary: Agentic Engineering becomes the
+automatically selected or explicitly requested design, decision,
+verification-design, engineering-learning, and lifecycle-advisory layer.
+Harness Ultragoal remains the sole implicit gateway and sole operational,
+effect, evidence, integration, and claim authority. Every Agentic result is
+candidate-bound, `proposal_only`, and `no_claim` until root reuses, extends,
+maps, or rejects it through an existing owner.
+
+The frozen implementation architecture extends `engineering_advisory`,
+`plugin_product::skill_catalog`, the existing front door and read-only
+inspection, behavior evaluation, Product Fitness, and improvement-loop owners.
+It adds no lifecycle, selector state store, scheduler, router, receipt family,
+knowledge store, effect journal, or claim graph. Core, product/lifecycle, and
+Rust stage profiles retain the external Harness gateway and together cover all
+thirty skills. Automatic selection chooses one smallest sufficient lens,
+reactivates only after a material binding change, and returns the current
+disposition for unchanged evidence. Default output is plain language; exact
+lenses and adoption evidence remain inspectable.
+
+Implementation proceeds in dependency order after this checkpoint: inventory
+and one-gateway enforcement; typed selection, non-selection, invalidation, and
+reactivation; progressive disclosure and explicit controls; bounded asset
+mapping; advisory/verification/review/repair/learning joins; Product Fitness
+and lifecycle observation; then package, install, discovery, runtime, and
+journey verification. Shared schemas, APIs, dependencies, migrations,
+candidate identity, effects, integration, and claims remain root-owned. The
+already-stale lane-registry payload bindings cannot issue implementation work
+until root rebinds them to the checkpoint candidate, so the first Terra
+increment remains root-only.
+
+The exact source CLI then exercised
+`ultragoal --root . --json inspect inception`. It returned the typed
+`successor_runtime_inventory_unavailable` actionable finding before advisory
+selection because the canonical authority catalog is unavailable. Git status
+and diff bytes were identical before and after the command. This is the first
+Terra implementation transition: reconcile the current inventory and
+one-front-door binding, then implement selection. It is not an authority fork,
+an authorization bypass, or evidence that the automatic selector already
+works.
+
+The repository-wide `scripts/check .` entrypoint passed its standards,
+generated-authority, and Python-source stages, then stopped before coverage
+because `scripts/check-coverage-full` still invokes the retired
+`coverage prove` compatibility route. Root owns that verification-tool repair;
+its trigger is the first Terra inventory/gateway increment, and its claim impact
+is explicit: no coverage, strict, readiness, release, or completion claim may
+consume this run. The exact AMEND-005 lineage, product schemas, generated
+authority, live-root documents, tamper controls, and warning-denied production
+compile pass independently.
+
+This checkpoint promotes no claim. Existing P0/P1 evidence remains historical
+on its exact candidates. Automatic selection, all-thirty reachability,
+reactivation, package, install, discovery, runtime, journey, human use, Product
+Fitness, readiness, release, and completion remain withheld pending their own
+same-surface evidence.
+
 ## N15 exact retirement integration — 2026-07-23
 
 Root integrated exact source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` /

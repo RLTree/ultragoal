@@ -1,5 +1,35 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 Agentic Engineering lifecycle-advisory contract checkpoint
+
+The next frontier is the candidate-bound automatic Agentic advisory selector,
+not another installed claim or a peer workflow. AMEND-005 makes the complete
+Agentic Engineering 3.0 skill set reachable through the single Harness front
+door while preserving Harness Ultragoal as the only routing, state, effect,
+evidence, integration, and claim authority.
+
+Root's complete skill and asset disposition is recorded in
+`AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json`. Core,
+product/lifecycle, and Rust stage profiles cover all thirty skills beneath the
+external Harness gateway. Selection is ephemeral and no-effect; advice is
+candidate-bound, `proposal_only`, and `no_claim`; root must reuse, extend, map,
+or reject it through an existing owner. Material context changes permit
+reactivation, while unchanged evidence cannot create another advisory loop.
+
+This is a contract and architecture checkpoint only. The first Terra
+implementation transition is inventory and one-front-door enforcement,
+followed by typed selection/non-selection/reactivation. The existing
+lane-registry projection is deliberately stale and cannot issue a worktree
+until root rebinds it to this checkpoint, so initial implementation stays
+root-only. Automatic selection, package, install, discovery, runtime, journey,
+Product Fitness, readiness, release, and completion remain withheld.
+
+The exact source `inspect inception` read returned
+`successor_runtime_inventory_unavailable` with byte-identical Git status and
+diff before and after. Canonical inventory reconciliation is therefore the
+first broken Terra transition; selector execution remains ineligible until it
+closes.
+
 ## 2026-07-23 N15 exact retirement integration
 
 Exact root source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` / tree

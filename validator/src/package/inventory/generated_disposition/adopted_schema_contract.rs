@@ -6,7 +6,9 @@ use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use serde_json::Value;
 
 const PREVIOUS_CONTRACT_HASH: &str =
-    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
+    "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b";
+const PRODUCT_BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
+const ADVISORY_DECISION_PATH: &str = "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
 
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
@@ -62,9 +64,13 @@ fn verify_amendment(
     source_digest: &str,
 ) -> Result<(), String> {
     let bytes = source.read(binding.amendment_log.as_str(), MAX_OUTPUT_BYTES)?;
+    let brief = source.read(PRODUCT_BRIEF_PATH, MAX_OUTPUT_BYTES)?;
+    let advisory_decision = source.read(ADVISORY_DECISION_PATH, MAX_OUTPUT_BYTES)?;
     let expected_hash = format!("sha256:{}", binding.amendment_hash.lowercase_hex());
     let output_digest = format!("sha256:{output_digest}");
     let source_digest = format!("sha256:{source_digest}");
+    let brief_digest = format!("sha256:{}", digest_hex(brief.as_ref()));
+    let advisory_decision_digest = format!("sha256:{}", digest_hex(advisory_decision.as_ref()));
     validate_current(
         bytes.as_ref(),
         CurrentAmendmentBinding {
@@ -73,10 +79,20 @@ fn verify_amendment(
             previous_contract_hash: PREVIOUS_CONTRACT_HASH,
             new_contract_hash: &source_digest,
             change_class: "strengthens",
-            backlog_updates: &[ExpectedArtifactBinding {
-                path: binding.output.as_str(),
-                digest: &output_digest,
-            }],
+            backlog_updates: &[
+                ExpectedArtifactBinding {
+                    path: binding.output.as_str(),
+                    digest: &output_digest,
+                },
+                ExpectedArtifactBinding {
+                    path: PRODUCT_BRIEF_PATH,
+                    digest: &brief_digest,
+                },
+                ExpectedArtifactBinding {
+                    path: ADVISORY_DECISION_PATH,
+                    digest: &advisory_decision_digest,
+                },
+            ],
         },
     )
     .map(|_| ())

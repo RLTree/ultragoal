@@ -15,10 +15,10 @@ fn required_claim_removal_and_ceiling_reduction_fail_closed() {
     for mutation in 0..2 {
         let mut rows = fixture::rows();
         if mutation == 0 {
-            rows[3]["removed_or_weakened_claim_ids"] = json!(["CL-SOURCE"]);
-            rows[3]["derived_removed_or_weakened_claim_ids"] = json!(["CL-SOURCE"]);
+            rows[4]["removed_or_weakened_claim_ids"] = json!(["CL-SOURCE"]);
+            rows[4]["derived_removed_or_weakened_claim_ids"] = json!(["CL-SOURCE"]);
         } else {
-            rows[3]["after_claim_ceiling"]
+            rows[4]["after_claim_ceiling"]
                 .as_array_mut()
                 .expect("claim ceiling")
                 .remove(0);
@@ -36,12 +36,12 @@ fn semantic_policy_tampering_fails_closed() {
     ];
     for (field, value) in mutations {
         let mut rows = fixture::rows();
-        rows[3][field] = value;
+        rows[4][field] = value;
         let bytes = fixture::reseal(&mut rows);
         assert!(validate_current(&bytes, fixture::binding()).is_err());
     }
     let mut rows = fixture::rows();
-    rows[3]["approval"] = json!({"required": true, "status": "missing"});
+    rows[4]["approval"] = json!({"required": true, "status": "missing"});
     let bytes = fixture::reseal(&mut rows);
     assert!(validate_current(&bytes, fixture::binding()).is_err());
 }
@@ -49,12 +49,12 @@ fn semantic_policy_tampering_fails_closed() {
 #[test]
 fn duplicate_current_row_and_backlog_substitution_fail_closed() {
     let mut duplicate = fixture::rows();
-    duplicate.push(duplicate[3].clone());
+    duplicate.push(duplicate[4].clone());
     let bytes = fixture::reseal(&mut duplicate);
     assert!(validate_current(&bytes, fixture::binding()).is_err());
 
     let mut mismatch = fixture::rows();
-    mismatch[3]["backlog_updates"][0]["path"] = json!("examples/generated/other.json");
+    mismatch[4]["backlog_updates"][0]["path"] = json!("examples/generated/other.json");
     let bytes = fixture::reseal(&mut mismatch);
     assert!(validate_current(&bytes, fixture::binding()).is_err());
 }
@@ -63,17 +63,17 @@ fn duplicate_current_row_and_backlog_substitution_fail_closed() {
 fn omitted_reordered_and_extra_backlog_bindings_fail_closed() {
     for mutation in 0..3 {
         let mut rows = fixture::rows();
-        let original = rows[3]["backlog_updates"][0].clone();
+        let original = rows[4]["backlog_updates"][0].clone();
         match mutation {
-            0 => rows[3]["backlog_updates"] = json!([]),
+            0 => rows[4]["backlog_updates"] = json!([]),
             1 => {
-                rows[3]["backlog_updates"] = json!([
+                rows[4]["backlog_updates"] = json!([
                     {"path": "schemas/other.json", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
                     original
                 ])
             }
             _ => {
-                rows[3]["backlog_updates"] = json!([
+                rows[4]["backlog_updates"] = json!([
                     original,
                     {"path": "schemas/other.json", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}
                 ])

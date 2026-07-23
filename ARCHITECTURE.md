@@ -78,6 +78,48 @@ four-role projection of the canonical six-role observation. This local
 observation never proves host discovery, new-session comprehension, runtime
 activation, route eligibility, exposure, or a claim effect.
 
+## Agentic Engineering Advisory Layer
+
+Harness Ultragoal has one implicit front door and one operational authority
+chain:
+
+```text
+user intent
+  -> Harness Ultragoal front door
+  -> current candidate, state, lifecycle, risk, evidence, and truth loop
+  -> smallest sufficient Agentic Engineering advisory selection
+  -> proposal-only, no-claim advice
+  -> root reuse / extend / map / reject decision
+  -> existing plan, lease, effect, recovery, evidence, and claim owners
+  -> operator-facing result
+```
+
+`engineering_advisory` owns the typed, read-only selection and adoption
+projections. `plugin_product::skill_catalog` owns exact plugin, profile,
+gateway, skill-set, candidate, and discovery-budget validation. Neither owns a
+lifecycle, scheduler, activation store, effect, receipt, or claim. The
+selection projection has no durable status: it is recomputed from current
+authority and binds one primary lens plus only the supporting lenses required
+by a genuine cross-layer decision.
+
+All thirty Agentic Engineering skills are mapped to existing Harness lifecycle
+owners. Core, product/lifecycle, and Rust-system profiles are stage-scoped
+views under the external Harness gateway; their union covers the full skill
+set. A full profile is optional and must earn a safe combined discovery and
+context margin. Agentic's own gateway is explicit-only when co-installed.
+
+Advice becomes stale when its candidate, context, lifecycle, evidence,
+assumption, risk, failure mechanism, profile, or active truth-loop binding
+changes. That change causes a new selection. An unchanged fingerprint returns
+the current disposition and cannot recursively reactivate. Explicit expert
+requests use the same selector and adoption boundary; they never bypass
+authorization, effects, recovery, migration, or claim controls.
+
+The default product response describes the result, important tradeoff, and next
+action without requiring Agentic terminology. Intermediate and advanced
+read-only inspection expose the selected lenses, rationale, exact inputs,
+alternatives, adoption decision, unsupported surfaces, and claim ceiling.
+
 ## Public Surfaces
 
 The only successor command groups are `inspect`, `next`, `fit`, `check`,

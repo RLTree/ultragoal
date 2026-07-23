@@ -3,19 +3,27 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 
 pub(super) const CURRENT_LOG: &[u8] = include_bytes!("../../../../AMENDMENTS.jsonl");
-pub(super) const CURRENT_ID: &str = "AMEND-004";
+pub(super) const CURRENT_ID: &str = "AMEND-005";
 pub(super) const CURRENT_HASH: &str =
-    "sha256:a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26";
+    "sha256:39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d";
 const PREVIOUS_CONTRACT_HASH: &str =
-    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
-const CONTRACT_HASH: &str =
     "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b";
-const OUTPUT: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
-const OUTPUT_HASH: &str = "sha256:f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0";
-const BACKLOG: [ExpectedArtifactBinding<'static>; 1] = [ExpectedArtifactBinding {
-    path: OUTPUT,
-    digest: OUTPUT_HASH,
-}];
+const CONTRACT_HASH: &str =
+    "sha256:6488e75196f28582adac4ea6079ce0878a6ad7059b720eaea68b08b780874b7a";
+const BACKLOG: [ExpectedArtifactBinding<'static>; 3] = [
+    ExpectedArtifactBinding {
+        path: "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
+        digest: "sha256:0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
+    },
+    ExpectedArtifactBinding {
+        path: "PRODUCT_SUCCESS_BRIEF.json",
+        digest: "sha256:064037bbd4f2a2234982a458ec5afb3ef35d8383b2f52680c1fbed1dc4adcd78",
+    },
+    ExpectedArtifactBinding {
+        path: "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json",
+        digest: "sha256:70b9ecaee5b4a5e38f12442826ebf08fbf607a6ebd6bdbac5c5d602cd18b73b1",
+    },
+];
 
 pub(super) fn binding() -> CurrentAmendmentBinding<'static> {
     CurrentAmendmentBinding {

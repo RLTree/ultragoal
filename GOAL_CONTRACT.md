@@ -140,6 +140,58 @@ ceiling.
   orchestration receipts cannot substitute for Product Fitness, real use,
   human use, daily-driver status, readiness, release, or completion.
 
+### Agentic Engineering advisory layer
+
+- `$harness-ultragoal:harness-ultragoal` remains the only implicit first-entry
+  gateway. Harness Ultragoal alone owns routing, goals, amendments, plans,
+  state, leases, worker custody, permissions, effects, recovery, evidence,
+  migrations, integration, claims, readiness, release, and completion.
+- Agentic Engineering 3.0 is the design, decision, verification-design,
+  engineering-learning, and lifecycle-advisory layer above those operational
+  owners. Its complete thirty-skill surface is reachable automatically at the
+  lifecycle boundary where each lens adds value, without requiring an operator
+  to know a skill name, profile, discipline, or internal pathway.
+- Advisory selection is an ephemeral, read-only projection bound to the exact
+  candidate, current context, lifecycle stage, active truth-loop transition,
+  protected invariants, contemplated effects, evidence, risk, authority,
+  uncertainty, and observed failure class. It chooses one smallest sufficient
+  primary lens and adds supporting lenses only for a genuine cross-layer
+  decision.
+- Routine, already-specified, and no-change work does not activate unnecessary
+  advisory machinery. Missing or substituted skills, profiles, inputs,
+  candidates, or gateway bindings fail visibly and closed. Selection cannot
+  authorize an effect, issue custody, mutate state, or raise a claim.
+- Advice reactivates only when candidate identity, lifecycle stage, evidence,
+  assumptions, risk, failure mechanism, or active truth-loop state changes.
+  Byte-identical context and unchanged evidence return the current disposition
+  and cannot create an advisory loop.
+- Agentic output is always `proposal_only` and `no_claim`. Root must explicitly
+  `reuse`, `extend`, `map`, or `reject` it through an existing Harness owner
+  before it can affect a plan, implementation, verification, learning,
+  migration, Product Fitness observation, or claim.
+- Default output remains plain language: the goal, result, important tradeoff,
+  and next action. Intermediate inspection exposes activated disciplines and a
+  short rationale. Advanced inspection exposes exact skill paths, inputs,
+  evidence, alternatives, adoption decision, invalidation trigger, and claim
+  ceiling. Explicit expert requests are supported but cannot disable mandatory
+  security, privacy, authority, destructive-effect, recovery, or claim guards.
+- Stage-scoped core, product/lifecycle, and Rust advisory profiles retain the
+  external Harness gateway, bind exact plugin version, source digest,
+  candidate, and configuration, and must preserve a measured discovery and
+  context-budget margin. A full profile is retained only when representative
+  measurement shows no routing degradation.
+- Agentic scripts, schemas, templates, references, research, profiles,
+  generated knowledge, and evaluation assets are adopted only through an
+  existing Harness authority. Opaque or unbounded scripts do not execute;
+  generated prose cannot become authority; and no peer lifecycle, router,
+  graph, state store, receipt family, knowledge store, or claim registry is
+  introduced.
+- Missing live model comparisons, Rust compilation, or field use in the
+  upstream Agentic package do not block this normative integration. They
+  constrain only the same-surface product claims that later Harness
+  implementation, installation, runtime, journey, and Product Fitness evidence
+  may support.
+
 ### Calibrated enforcement
 
 - Security, privacy, destructive-effect, and authority boundaries remain
@@ -157,12 +209,15 @@ ceiling.
 
 ## Current Claim Ceiling
 
-This amendment promotes no claim. The adopted contract and accepted bounded
-source increments remain preserved. The sealed host-lifecycle source increment
-is integrated, but current-source package/install/discovery/runtime behavior,
-Product Fitness, real-repository journeys, readiness, release, completion, and
-mastery remain withheld until their exact dependency-closed, same-surface
-evidence passes.
+This amendment promotes no claim. The adopted contract, accepted P0/P1 Agentic
+increments, and all accepted bounded source increments remain preserved. The
+full Agentic advisory architecture is contract authority only until its exact
+implementation, package, install, discovery, runtime, routing, reactivation,
+journey, and Product Fitness surfaces pass independently. The sealed
+host-lifecycle source increment is integrated, but current-source
+package/install/discovery/runtime behavior, Product Fitness, real-repository
+journeys, readiness, release, completion, and mastery remain withheld until
+their exact dependency-closed, same-surface evidence passes.
 
 ## Dependency and evidence semantics
 

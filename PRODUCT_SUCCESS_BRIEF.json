@@ -1,19 +1,24 @@
 {
   "schema": "harness-ultragoal.product-success-brief.v2",
   "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
-  "product_success_contract_digest": "sha256:f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0",
+  "product_success_contract_digest": "sha256:0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
   "claim_ids": [
+    "CL-DISCOVERY",
+    "CL-EVAL-IMPROVEMENT",
     "CL-FIT",
     "CL-INSTALL",
+    "CL-ORCHESTRATION",
     "CL-PACKAGE",
+    "CL-REAL-JOURNEY",
     "CL-ROUTINE",
-    "CL-RUNTIME"
+    "CL-RUNTIME",
+    "CL-SOURCE"
   ],
-  "target_problem": "Prove the nearest useful installed-daily-driver transition before expanding Ultragoal product scope.",
+  "target_problem": "Prove the nearest useful installed-daily-driver transition while making the complete Agentic Engineering advisory layer automatically useful through the single Harness front door.",
   "audience": "Repository operator supervising current-source Harness Ultragoal work.",
-  "job_to_be_done": "Safely inspect the real current repository through the public front door, then use its observed result to drive the shortest honest package, install, discovery, routine-work, recovery, and repeat-use journey.",
+  "job_to_be_done": "Safely inspect the real current repository through the public front door, receive the smallest useful design or decision lens without naming a skill, then use that observed result to drive the shortest honest package, install, discovery, routine-work, recovery, and repeat-use journey.",
   "context_of_use": "The exact current Harness Ultragoal source repository on a clean subject candidate; later routine work must preserve an operator-owned dirty change.",
-  "desired_outcome": "A useful, inspectable repository-fit observation that identifies the next dependency-legal transition without claiming any unobserved product surface.",
+  "desired_outcome": "A useful, inspectable repository-fit observation with candidate-bound automatic advisory selection or an honest no-change disposition that identifies the next dependency-legal transition without claiming any unobserved product surface.",
   "first_value_event": "The public read-only fit route produces an exact repository observation and an honest next action.",
   "operator": {
     "kind": "agent_with_human_supervision",
@@ -50,6 +55,22 @@
       ],
       "required_condition": "Read-only fit performs no repository or Git mutation, and later routine work preserves unrelated operator-owned state.",
       "disposition": "fail_closed"
+    },
+    {
+      "id": "agentic-advice-remains-subordinate",
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-ORCHESTRATION",
+        "CL-REAL-JOURNEY",
+        "CL-SOURCE"
+      ],
+      "surfaces": [
+        "PS-ENTRY",
+        "PS-CLI",
+        "PS-OBSERVE-LOCAL"
+      ],
+      "required_condition": "Automatic or explicit Agentic advice is candidate-bound, proposal-only, no-effect, and no-claim until Harness root adopts it through an existing owner.",
+      "disposition": "fail_closed"
     }
   ],
   "first_truth_loop": {
@@ -70,7 +91,7 @@
           "PS-ENTRY",
           "PS-FIT-RETROFIT"
         ],
-        "expected_observation": "A current, read-only repository-fit observation identifies the first dependency-legal journey action.",
+        "expected_observation": "A current, read-only repository-fit observation identifies the first dependency-legal journey action while the Harness front door selects one smallest sufficient advisory lens or an honest no-change disposition.",
         "evidence_class": "source"
       }
     ],
@@ -83,10 +104,10 @@
       "preservation": "Unrelated repository state remains unchanged throughout inspection and failed inspection."
     },
     "preservation_expectation": "The fit transition is recursively zero-write and does not alter repository, Git, or operator-owned state.",
-    "repeat_use_expectation": "The same public fit route can be repeated after a controlled routine-work interruption without turning prior observations into runtime or human-use claims."
+    "repeat_use_expectation": "The same public fit route can be repeated after a controlled routine-work interruption; advisory reasoning reactivates only for changed candidate, lifecycle, evidence, assumption, risk, or failure context, and prior observations never become runtime or human-use claims."
   },
   "depth_triggers": [],
   "evidence_class": "source",
-  "evidence_ladder": "Current source evidence is limited to the exact read-only inception and fit transition; package, install, discovery, runtime, agent-use, human-use, and repeat-use evidence require separate observations.",
+  "evidence_ladder": "Current evidence is contract and source authority only. Automatic Agentic selection and reactivation, package, install, discovery, runtime, agent-use, human-use, and repeat-use require separate exact observations.",
   "claim_ceiling": "source_only"
 }

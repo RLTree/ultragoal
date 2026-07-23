@@ -11,17 +11,23 @@ use crate::state::StateError;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
-const AMENDMENT_ID: &str = "AMEND-004";
+const AMENDMENT_ID: &str = "AMEND-005";
 const AMENDMENT_HASH: &str =
-    "sha256:a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26";
+    "sha256:39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d";
 const PREVIOUS_CONTRACT_HASH: &str =
-    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
+    "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b";
 const GOAL_BYTES: &[u8] = include_bytes!("../../../../GOAL_CONTRACT.md");
 const AMENDMENT_BYTES: &[u8] = include_bytes!("../../../../AMENDMENTS.jsonl");
 const PRODUCT_CONTRACT_BYTES: &[u8] =
     include_bytes!("../../../../examples/generated/PRODUCT_SUCCESS_CONTRACT.json");
+const PRODUCT_BRIEF_BYTES: &[u8] = include_bytes!("../../../../PRODUCT_SUCCESS_BRIEF.json");
+const ADVISORY_DECISION_BYTES: &[u8] = include_bytes!(
+    "../../../../docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json"
+);
 const LANE_BYTES: &[u8] = include_bytes!("../../../../LANE_REGISTRY.json");
 const PRODUCT_CONTRACT_PATH: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
+const PRODUCT_BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
+const ADVISORY_DECISION_PATH: &str = "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
 
 #[derive(Serialize)]
 pub(in crate::state) struct StagedClaimReconciliation {
@@ -190,6 +196,8 @@ impl StagedClaimReconciliation {
 
 fn verify_amendment(goal_contract_sha256: &str) -> Result<ValidatedCurrentAmendment, StateError> {
     let output_hash = sha256(PRODUCT_CONTRACT_BYTES);
+    let brief_hash = sha256(PRODUCT_BRIEF_BYTES);
+    let advisory_decision_hash = sha256(ADVISORY_DECISION_BYTES);
     validate_current(
         AMENDMENT_BYTES,
         CurrentAmendmentBinding {
@@ -198,10 +206,20 @@ fn verify_amendment(goal_contract_sha256: &str) -> Result<ValidatedCurrentAmendm
             previous_contract_hash: PREVIOUS_CONTRACT_HASH,
             new_contract_hash: goal_contract_sha256,
             change_class: "strengthens",
-            backlog_updates: &[ExpectedArtifactBinding {
-                path: PRODUCT_CONTRACT_PATH,
-                digest: &output_hash,
-            }],
+            backlog_updates: &[
+                ExpectedArtifactBinding {
+                    path: PRODUCT_CONTRACT_PATH,
+                    digest: &output_hash,
+                },
+                ExpectedArtifactBinding {
+                    path: PRODUCT_BRIEF_PATH,
+                    digest: &brief_hash,
+                },
+                ExpectedArtifactBinding {
+                    path: ADVISORY_DECISION_PATH,
+                    digest: &advisory_decision_hash,
+                },
+            ],
         },
     )
     .map_err(|code| invalid(&format!("adopted-amendment-invalid:{code}")))

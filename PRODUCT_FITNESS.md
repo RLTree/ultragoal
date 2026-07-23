@@ -65,3 +65,24 @@ explicitly and requires v2 receipts to name it as a rejected substitution.
 Reviewer agreement, install success, smoke tests, test pass counts, fixture pass
 counts, package publication, first use, feature delivery, and Product Cohesion
 receipts alone MUST NOT prove product success.
+
+Agentic Engineering adoption is evaluated only through the existing Product
+Fitness authority after a reproducible installed journey exists. Compare the
+same Harness route without the relevant advisory lens and with automatic
+selection while holding repository state, candidate, model and reasoning
+configuration, tools, permissions, acceptance criteria, reviewer, and claim
+ceiling constant.
+
+Record routing and authority correctness, accepted outcome, material defects,
+false completion, missed and unnecessary activation, unsafe-effect attempts,
+correction and review rounds, human interventions, context and token use,
+elapsed time and cost, time to verified value, recovery, repeat use, and
+unsupported claims. Repeat only when the arms disagree, nondeterminism blocks a
+decision, or a protected failure needs confirmation. Adopt a mechanism only
+when it preserves every protected boundary and improves a meaningful product
+measure without materially worsening the others.
+
+Structural skill coverage, generated reports, upstream confidence, agent use,
+and one successful journey do not prove human usefulness or Product Fitness.
+Routine advisory observations remain ephemeral until the single current
+Product Fitness receipt consumes them at a claim boundary.

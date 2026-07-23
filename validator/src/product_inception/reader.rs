@@ -16,7 +16,7 @@ const CLAIM_REGISTRY_PATH: &str =
 const SURFACE_CATALOG_PATH: &str =
     "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json";
 const GENERATED_AUTHORITY_PATH: &str = "migration/generated-surface-authority.json";
-const PRODUCT_SUCCESS_CONTRACT_VERSION: &str = "2.2.0";
+const PRODUCT_SUCCESS_CONTRACT_VERSION: &str = "2.3.0";
 const MAX_BRIEF_BYTES: u64 = 1024 * 1024;
 const MAX_CONTRACT_BYTES: u64 = 16 * 1024 * 1024;
 pub(crate) struct ReadResult {

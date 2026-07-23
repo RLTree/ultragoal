@@ -76,6 +76,46 @@ exists only while a current claim,
 cross-process handoff, irreproducible observation, audit, or recovery path
 consumes it.
 
+## Automatic Agentic advisory selection
+
+The Harness front door may automatically select Agentic Engineering as a
+proposal-only advisory lens. This is a second calibration inside the existing
+route, not a second route or lifecycle. It reads current candidate, lifecycle,
+risk, authority, evidence, active truth-loop, and failure context and chooses
+the smallest sufficient primary lens. Supporting lenses appear only when one
+material decision crosses layers.
+
+The complete Agentic Engineering 3.0 skill set is reachable through three
+stage-scoped views:
+
+- core advisory for task framing, context, architecture, construction,
+  orchestration, verification, security, and learning;
+- product/lifecycle advisory for discovery, feasibility, authentic use,
+  requirements, Product Fitness, experimentation, release, readiness,
+  maintenance, and retirement; and
+- Rust systems advisory for architecture, runtime, durability, protocols,
+  verification, and observability.
+
+Their union covers all thirty Agentic skills. Each view retains the external
+`harness-ultragoal` gateway, exact plugin and source identity, candidate
+binding, closed skill set, and measured discovery budget. Agentic's gateway is
+explicit-only when co-installed. A full thirty-skill view is not loaded by
+default and must first demonstrate a safe combined context margin and no
+routing degradation.
+
+Advice has no lease, permission, effect, evidence, review, or claim authority.
+Root must explicitly reuse, extend, map, or reject its proposal through the
+existing Harness owner. Candidate, lifecycle, evidence, assumption, risk,
+failure-mechanism, profile, or active-transition changes invalidate the advice
+and permit reactivation. Unchanged bindings return the current disposition and
+cannot form a loop.
+
+The ordinary response remains plain language. `inspect` may expose the
+activated disciplines and rationale, while advanced inspection may expose
+exact skill paths, evidence, alternatives, adoption decisions, invalidation
+conditions, and claim ceiling. An explicit expert request uses the same
+authority boundary and cannot disable mandatory guards.
+
 ## Representative journeys
 
 ### Fresh repository

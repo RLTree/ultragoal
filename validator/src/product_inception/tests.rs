@@ -16,7 +16,7 @@ fn digest(ch: char) -> String {
 fn facts() -> ContractFacts {
     ContractFacts {
         product_contract_id: "PSC-1".to_owned(),
-        contract_version: "2.2.0".to_owned(),
+        contract_version: "2.3.0".to_owned(),
         contract_digest: digest('a'),
         authority_contract_id: "harness-ultragoal-successor-contract-v2".to_owned(),
         claim_registry_digest: digest('b'),
@@ -146,9 +146,9 @@ fn historical_starting_candidate_does_not_stale_an_expected_dirty_journey() {
 }
 
 #[test]
-fn product_success_contract_facts_require_version_2_2_0() {
-    assert!(super::reader::product_contract_version_supported("2.2.0"));
-    assert!(!super::reader::product_contract_version_supported("2.1.0"));
+fn product_success_contract_facts_require_version_2_3_0() {
+    assert!(super::reader::product_contract_version_supported("2.3.0"));
+    assert!(!super::reader::product_contract_version_supported("2.2.0"));
 }
 
 #[test]

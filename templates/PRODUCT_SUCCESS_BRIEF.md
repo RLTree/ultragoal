@@ -13,4 +13,4 @@ failure/recovery control, preservation and repeat-use expectations, parked depth
 triggers, evidence class, evidence ladder, and claim ceiling.
 
 Historical v1 briefs remain readable but cannot activate evidence-led ranking
-or satisfy Product Fitness after AMEND-004.
+or satisfy Product Fitness after AMEND-005.

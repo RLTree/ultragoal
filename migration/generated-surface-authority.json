@@ -111,14 +111,14 @@
     {
       "disposition": "adopted_schema_contract",
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-      "sha256": "f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0",
+      "sha256": "0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
       "schema": "schemas/product-success-contract.schema.json",
       "schema_sha256": "6027f3385d5ecaace7fa0e45237bc7433bf560aa3c81a43b48c0b700df10f4f5",
       "source_contract": "GOAL_CONTRACT.md",
-      "source_contract_sha256": "20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b",
+      "source_contract_sha256": "6488e75196f28582adac4ea6079ce0878a6ad7059b720eaea68b08b780874b7a",
       "amendment_log": "AMENDMENTS.jsonl",
-      "amendment_id": "AMEND-004",
-      "amendment_hash": "a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26",
+      "amendment_id": "AMEND-005",
+      "amendment_hash": "39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d",
       "claim_ceiling": "contract_authority_only"
     },
     {

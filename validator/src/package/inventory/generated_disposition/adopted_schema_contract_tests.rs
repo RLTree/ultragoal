@@ -7,14 +7,20 @@ const OUTPUT: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
 const SOURCE: &str = "GOAL_CONTRACT.md";
 const SCHEMA: &str = "schemas/product-success-contract.schema.json";
 const AMENDMENTS: &str = "AMENDMENTS.jsonl";
+const PRODUCT_BRIEF: &str = "PRODUCT_SUCCESS_BRIEF.json";
+const ADVISORY_DECISION: &str = "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
 const ZERO: &str = "0000000000000000000000000000000000000000000000000000000000000000";
-const AMENDMENT_HASH: &str = "a0d25d9efed380abfa0c2a542e3af96ba431c6c9cd00ede318449746f418aa26";
+const AMENDMENT_HASH: &str = "39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d";
 const OUTPUT_BYTES: &[u8] =
     include_bytes!("../../../../../examples/generated/PRODUCT_SUCCESS_CONTRACT.json");
 const SOURCE_BYTES: &[u8] = include_bytes!("../../../../../GOAL_CONTRACT.md");
 const SCHEMA_BYTES: &[u8] =
     include_bytes!("../../../../../schemas/product-success-contract.schema.json");
 const AMENDMENT_BYTES: &[u8] = include_bytes!("../../../../../AMENDMENTS.jsonl");
+const PRODUCT_BRIEF_BYTES: &[u8] = include_bytes!("../../../../../PRODUCT_SUCCESS_BRIEF.json");
+const ADVISORY_DECISION_BYTES: &[u8] = include_bytes!(
+    "../../../../../docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json"
+);
 
 fn root(label: &str) -> PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
@@ -23,6 +29,7 @@ fn root(label: &str) -> PathBuf {
         "migration/generated-surface-authority",
         "schemas",
         "scripts",
+        "docs/ultragoal-successor-live/root-decisions",
     ] {
         fs::create_dir_all(root.join(directory)).expect("fixture directory");
     }
@@ -39,6 +46,8 @@ fn root(label: &str) -> PathBuf {
     fs::write(root.join(SOURCE), SOURCE_BYTES).expect("goal");
     fs::write(root.join(SCHEMA), SCHEMA_BYTES).expect("schema");
     fs::write(root.join(AMENDMENTS), AMENDMENT_BYTES).expect("amendments");
+    fs::write(root.join(PRODUCT_BRIEF), PRODUCT_BRIEF_BYTES).expect("product brief");
+    fs::write(root.join(ADVISORY_DECISION), ADVISORY_DECISION_BYTES).expect("advisory decision");
     fs::write(
         root.join("plugin-manifest-draft.json"),
         serde_json::to_vec(&json!({"resources": [AMENDMENTS, SOURCE, OUTPUT, SCHEMA]}))
@@ -87,7 +96,7 @@ fn write_contract(root: &Path, receipt: &str) {
             "source_contract": SOURCE,
             "source_contract_sha256": source_digest,
             "amendment_log": AMENDMENTS,
-            "amendment_id": "AMEND-004",
+            "amendment_id": "AMEND-005",
             "amendment_hash": AMENDMENT_HASH,
             "claim_ceiling": "contract_authority_only"
         }]

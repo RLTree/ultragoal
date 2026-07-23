@@ -17,21 +17,21 @@ fn current_strengthening_binds_old_and_new_contracts_and_every_output() {
     let mut rows = fixture::rows();
     let new_contract = format!("sha256:{}", "1".repeat(64));
     let second_digest = format!("sha256:{}", "2".repeat(64));
-    rows[3]["change_class"] = json!("strengthens");
-    rows[3]["new_contract_hash"] = json!(new_contract);
-    rows[3]["backlog_updates"] = json!([
+    rows[4]["change_class"] = json!("strengthens");
+    rows[4]["new_contract_hash"] = json!(new_contract);
+    rows[4]["backlog_updates"] = json!([
         {
             "path": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-            "digest": "sha256:f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0"
+            "digest": "sha256:0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3"
         },
         {"path": "schemas/product-success-brief.schema.json", "digest": second_digest}
     ]);
     let bytes = fixture::reseal(&mut rows);
-    let amendment_hash = rows[3]["amendment_hash"].as_str().expect("amendment hash");
+    let amendment_hash = rows[4]["amendment_hash"].as_str().expect("amendment hash");
     let backlog = [
         ExpectedArtifactBinding {
             path: "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-            digest: "sha256:f6209e5f8c167ac17b77be451f4425b30cc0a48aa615eca74e1d0b98df6412b0",
+            digest: "sha256:0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
         },
         ExpectedArtifactBinding {
             path: "schemas/product-success-brief.schema.json",
@@ -41,10 +41,10 @@ fn current_strengthening_binds_old_and_new_contracts_and_every_output() {
     let validated = validate_current(
         &bytes,
         CurrentAmendmentBinding {
-            amendment_id: "AMEND-004",
+            amendment_id: "AMEND-005",
             amendment_hash,
             previous_contract_hash:
-                "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9",
+                "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b",
             new_contract_hash: &format!("sha256:{}", "1".repeat(64)),
             change_class: "strengthens",
             backlog_updates: &backlog,
