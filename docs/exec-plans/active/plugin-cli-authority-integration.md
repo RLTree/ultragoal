@@ -1969,12 +1969,18 @@ strictly single-bound; historical leaves remain preserved but cannot enter a
 current query or causal chain. There is no migration that deletes or rewrites
 historical rows and no new receipt or claim authority.
 
-The pre-review baseline is observability `35/35` and routine public production
-`60/60`; the corrected namespace must rerun its affected focused checks and one
-exact confirmation review. Package rebuild, marketplace refresh, isolated
-install, installed recovery, diagnosis, fresh-process reopen, and repeat-use
-observation remain required. All stronger Product Fitness, human-use,
-readiness, release, completion, and mastery claims remain withheld.
+The exact-binding correction at `7f532915c` passed observability `33/33`,
+public diagnosis `14/14`, the affected live corruption/recovery case, and
+routine public production `60/60`. Confirmation then found that routine
+admission still checked whether a retired fixed probe name was ignored instead
+of checking the exact hash-named journal leaf. The shared admission boundary
+now derives that same leaf before effects, checks it with `git check-ignore`,
+and separately refuses any tracked journal under the canonical spool. The
+probe-only-ignore red case and tracked-spool and ordinary dirty-run controls
+pass. This is the one confirmation correction; package rebuild, marketplace
+refresh, isolated install, installed recovery, diagnosis, fresh-process reopen,
+and repeat-use observation remain required. All stronger Product Fitness,
+human-use, readiness, release, completion, and mastery claims remain withheld.
 
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without

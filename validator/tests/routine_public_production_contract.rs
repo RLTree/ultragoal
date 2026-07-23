@@ -11,4 +11,5 @@ mod routine_public_production_contract {
     mod public_lock_contention;
     mod scenario;
     mod security;
+    mod store_admission;
 }

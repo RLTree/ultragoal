@@ -16,8 +16,11 @@ use git_visible_tree::GitVisibleWorktreeShape;
 
 pub struct LocalDirtyTree;
 
-pub(crate) fn require_runtime_store_ignored(binding: &RoutineBinding) -> Result<(), RoutineError> {
-    if runtime_store_ignored(binding)? {
+pub(crate) fn require_runtime_store_ignored(
+    binding: &RoutineBinding,
+    source_id: &str,
+) -> Result<(), RoutineError> {
+    if runtime_store_ignored(binding, source_id)? {
         Ok(())
     } else {
         Err(RoutineError::new(

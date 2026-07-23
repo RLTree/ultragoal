@@ -21,12 +21,17 @@ queries or causal interpretation. Malformed rows, wrong-bound direct appends,
 conflicting event identities, copied journals, path substitution, and claim
 promotion remain fail-closed.
 
-The pre-review source baseline was observability `35/35` and routine public
-production `60/60`; the corrected exact-binding namespace must rerun its
-affected source checks before acceptance. Package, refreshed marketplace/cache,
-installed discovery, terminal recovery, repeat use, Product Fitness, readiness,
-release, and completion remain withheld until the exact `0.0.18` candidate
-passes those same-surface observations.
+The exact-binding correction at `7f532915c` passed observability `33/33`,
+public diagnosis `14/14`, the affected live corruption/recovery case, and
+routine public production `60/60`. Confirmation found one material admission
+gap: the pre-effect ignore check still named a retired probe rather than the
+exact hash-named leaf. The shared admission boundary now derives the publication
+leaf before effects, checks that exact relative path with `git check-ignore`,
+and separately refuses tracked spool content. Its probe-only-ignore,
+tracked-spool, and normal dirty-run controls pass. Package, refreshed
+marketplace/cache, installed discovery, terminal recovery, repeat use, Product
+Fitness, readiness, release, and completion remain withheld until the final
+`0.0.18` candidate passes those same-surface observations.
 
 ## 2026-07-23 Agentic Engineering P1 source integration
 

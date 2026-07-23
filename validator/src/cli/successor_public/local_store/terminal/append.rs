@@ -22,12 +22,12 @@ pub(super) fn append_routine_terminal_with_hook(
     terminal: RoutineTerminalEvent<'_>,
     mut before_append_admission: Option<&mut dyn FnMut()>,
 ) -> Result<bool, LocalStoreFailure> {
-    require_runtime_store_ignored(binding)
+    require_runtime_store_ignored(binding, RUNTIME_SOURCE_ID)
         .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     if let Some(hook) = before_append_admission.as_mut() {
         hook();
     }
-    require_runtime_store_ignored(binding)
+    require_runtime_store_ignored(binding, RUNTIME_SOURCE_ID)
         .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     ensure_store_parent(root)?;
     let path = store_path(root, context, RUNTIME_SOURCE_ID)?;
@@ -75,7 +75,7 @@ pub(super) fn append_routine_terminal_with_hook(
     }
     let store = EventStore::for_context(&path, context, RUNTIME_SOURCE_ID)
         .map_err(|error| LocalStoreFailure::append(&error))?;
-    require_runtime_store_ignored(binding)
+    require_runtime_store_ignored(binding, RUNTIME_SOURCE_ID)
         .map_err(|error| LocalStoreFailure::append(error.cause()))?;
     let appended = store
         .append(&event)

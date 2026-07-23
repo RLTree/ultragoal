@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor_public::local_store::RUNTIME_SOURCE_ID;
 use crate::routine_work::{
     DirtySnapshot, RoutineContinuationOutcome, require_runtime_store_ignored,
 };
@@ -29,7 +30,8 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         control,
         home,
     } = request;
-    require_runtime_store_ignored(plan.binding()).map_err(PublicFailure::Routine)?;
+    require_runtime_store_ignored(plan.binding(), RUNTIME_SOURCE_ID)
+        .map_err(PublicFailure::Routine)?;
 
     let prepared = prepare(context, manifest, graph, snapshot, plan)?;
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
