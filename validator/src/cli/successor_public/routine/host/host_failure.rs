@@ -18,6 +18,18 @@ pub(crate) struct HostState {
 }
 
 impl HostState {
+    pub(crate) fn open_existing(home: &Path) -> Result<Self, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::HostState::open_existing(home).map(|inner| Self { inner })
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = home;
+            Err(HostFailure::Unsupported)
+        }
+    }
+
     pub(crate) fn open_or_bootstrap(home: &Path, target: &Path) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {

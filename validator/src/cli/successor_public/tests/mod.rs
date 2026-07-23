@@ -24,5 +24,7 @@ mod observe_query_reconstructs_routine_binding;
 mod public_output_limit_is_inclusive_and_fail_closed;
 #[path = "routine_configuration_fit_plan_is_public_and_confined.rs"]
 mod routine_configuration_fit_plan_is_public_and_confined;
+#[path = "routine_diagnosis_without_inventory.rs"]
+mod routine_diagnosis_without_inventory;
 #[path = "unavailable_context_is_stable_and_does_not_echo_input.rs"]
 mod unavailable_context_is_stable_and_does_not_echo_input;

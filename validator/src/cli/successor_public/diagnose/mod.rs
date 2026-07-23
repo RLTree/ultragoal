@@ -14,6 +14,30 @@ use serde_json::Value;
 use std::path::Path;
 
 mod causal;
+mod request;
+#[path = "routine.rs"]
+mod routine_projection;
+
+pub(super) use request::{request, requests_target};
+
+pub(super) fn diagnose_routine(
+    root: &Path,
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+) -> RuntimeOutcome {
+    routine_projection::diagnose(root, context, invocation, home, None)
+}
+
+pub(super) fn diagnose_routine_or(
+    root: &Path,
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+    fallback: RuntimeOutcome,
+) -> RuntimeOutcome {
+    routine_projection::diagnose(root, context, invocation, home, Some(fallback))
+}
 
 pub(super) fn diagnose_local(
     root: &Path,
@@ -24,22 +48,13 @@ pub(super) fn diagnose_local(
     if invocation.command != SuccessorCommand::Diagnose || invocation.effect != EffectClass::Read {
         return invalid_invocation();
     }
-    let (routine_observations, routine_window) = read_routine_observations(root, context, &state);
-    state.attach_routine_observations(routine_observations, routine_window);
-    let requested = match invocation.arguments.as_slice() {
-        [] => None,
-        [argument]
-            if argument.name == OptionName::Finding
-                && matches!(argument.value, ParsedValue::Identifier(_)) =>
-        {
-            let ParsedValue::Identifier(value) = &argument.value else {
-                unreachable!()
-            };
-            Some(value.as_str())
-        }
+    let request = match request(invocation) {
+        Ok(request) if request.target.is_none() => request,
         _ => return invalid_invocation(),
     };
-    let selected = match requested {
+    let (routine_observations, routine_window) = read_routine_observations(root, context, &state);
+    state.attach_routine_observations(routine_observations, routine_window);
+    let selected = match request.finding {
         Some(identifier) => match select_finding(&state, identifier) {
             Some(finding) => Some(finding),
             None => return finding_not_present(),

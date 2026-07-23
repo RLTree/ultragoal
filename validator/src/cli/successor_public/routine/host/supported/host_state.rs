@@ -1,6 +1,15 @@
 use super::*;
 
 impl HostState {
+    pub(crate) fn open_existing(home: &Path) -> Result<Self, HostFailure> {
+        let home_directory = open_home(home)?;
+        let codex = home_directory.open_child(STATE_COMPONENTS[0])?;
+        let state_root = codex.open_child(STATE_COMPONENTS[1])?;
+        let harness = state_root.open_child(STATE_COMPONENTS[2])?;
+        let state = harness.open_child(STATE_COMPONENTS[3])?;
+        open_existing_state(home_directory, state)
+    }
+
     pub(crate) fn open_or_bootstrap(home: &Path, target: &Path) -> Result<Self, HostFailure> {
         let home_directory = open_home(home)?;
         if !target.is_absolute()

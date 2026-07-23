@@ -2,7 +2,7 @@ use super::super::command_contract::{
     CheckProfile, CommandDescriptor, FitAction, SuccessorCommand,
 };
 use super::options::{
-    CLAIM_OUTPUT, FINDING_OPTION, FIT_APPLY, FIT_PLAN_OPTIONS, ROUTINE_OPTIONS, STRICT_OPTIONS,
+    CLAIM_OUTPUT, DIAGNOSE_OPTIONS, FIT_APPLY, FIT_PLAN_OPTIONS, ROUTINE_OPTIONS, STRICT_OPTIONS,
     TARGET_OPTION, descriptor,
 };
 use crate::context::EffectClass;
@@ -55,7 +55,7 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         None,
         EffectClass::Read,
         "Explain cause, smallest repair, exact rerun, effect, and ceiling.",
-        FINDING_OPTION,
+        DIAGNOSE_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Prove,

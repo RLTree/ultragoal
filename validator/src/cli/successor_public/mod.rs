@@ -21,6 +21,7 @@ mod output_emission;
 mod output_limit;
 
 mod capabilities;
+mod context_and_failures;
 mod diagnose;
 mod evaluation;
 mod fit;
@@ -55,6 +56,7 @@ mod diagnose_boundary_tests;
 #[cfg(test)]
 mod repository_fixture;
 
+pub(crate) use context_and_failures::*;
 pub(crate) use operation_binding::{active_api_identifiers, active_command_groups};
 pub(crate) use output_emission::*;
 pub(crate) use output_limit::*;

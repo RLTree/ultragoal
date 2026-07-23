@@ -29,7 +29,7 @@ Commands:
       Run conservative affected validation with declared local build artifacts.
   check strict  [read] [--target <value>] --claim <value>
       Run dependency-closed validation for one named claim.
-  diagnose  [read] [--finding <value>]
+  diagnose  [read] [--target <value>] [--finding <value>]
       Explain cause, smallest repair, exact rerun, effect, and ceiling.
   prove  [workspace-write] --claim <value> --output <value>
       Execute one claim-specific proof and independent reconciliation packet.

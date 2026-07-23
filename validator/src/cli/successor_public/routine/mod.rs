@@ -32,6 +32,8 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+#[path = "source/diagnosis.rs"]
+mod diagnosis;
 #[path = "invocation_binding.rs"]
 mod invocation_binding;
 #[path = "source/observability_context.rs"]
@@ -43,6 +45,7 @@ mod source_context;
 #[path = "source/selection.rs"]
 mod source_selection;
 
+pub(crate) use diagnosis::*;
 pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;
 pub(crate) use observability_context::*;
