@@ -59,16 +59,19 @@ fn open_home(home: &Path) -> Result<AnchoredDirectory, HostFailure> {
     {
         return Err(HostFailure::Invalid);
     }
-    AnchoredDirectory::open_absolute(home)
+    AnchoredDirectory::open_absolute(home, DirectorySecurity::HostAncestry)
 }
 
 fn open_base(home: &AnchoredDirectory) -> Result<AnchoredDirectory, HostFailure> {
-    let (mut current, _) = home.open_or_create_owned_child(STATE_COMPONENTS[0])?;
-    for component in &STATE_COMPONENTS[1..3] {
-        let (next, _) = current.open_or_create_owned_child(component)?;
-        current = next;
-    }
-    Ok(current)
+    let (codex, _) = home
+        .open_or_create_child_with_security(STATE_COMPONENTS[0], DirectorySecurity::HostAncestry)?;
+    let (state, _) = codex
+        .open_or_create_child_with_security(STATE_COMPONENTS[1], DirectorySecurity::HostAncestry)?;
+    let (authority, _) = state.open_or_create_child_with_security(
+        STATE_COMPONENTS[2],
+        DirectorySecurity::PrivateAuthority,
+    )?;
+    Ok(authority)
 }
 
 fn open_existing_state(

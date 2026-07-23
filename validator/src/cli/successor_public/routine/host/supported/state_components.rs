@@ -12,6 +12,18 @@ pub(crate) const BOOTSTRAP_STAGE: &str = ".routine-public-bootstrap";
 pub(crate) const LAUNCH_DIRECTORY: &str = ".routine-authority-launch";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum DirectorySecurity {
+    HostAncestry,
+    PrivateAuthority,
+}
+
+impl DirectorySecurity {
+    pub(crate) fn accepts(self, mode: u32) -> bool {
+        mode & 0o022 == 0 && (self == Self::HostAncestry || mode & 0o7777 == 0o700)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct Identity {
     pub(crate) device: u64,
     pub(crate) inode: u64,
@@ -24,6 +36,7 @@ pub(crate) struct AnchoredDirectory {
     pub(crate) path: PathBuf,
     pub(crate) file: File,
     pub(crate) identity: Identity,
+    pub(crate) security: DirectorySecurity,
 }
 
 pub(crate) struct HostState {

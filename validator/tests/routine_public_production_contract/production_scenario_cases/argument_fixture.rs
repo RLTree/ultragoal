@@ -2,13 +2,16 @@ use super::*;
 
 pub(crate) fn provision_host_state(home: &Path) {
     let components = [
-        ".codex",
-        ".codex/state",
         ".codex/state/harness-ultragoal",
         ".codex/state/harness-ultragoal/routine-public",
         ".codex/state/harness-ultragoal/routine-public/authority",
         ".codex/state/harness-ultragoal/routine-public/adapter",
     ];
+    for (component, mode) in [(".codex", 0o755), (".codex/state", 0o700)] {
+        let path = home.join(component);
+        fs::create_dir_all(&path).unwrap();
+        set_mode(&path, mode);
+    }
     for component in components {
         let path = home.join(component);
         fs::create_dir_all(&path).unwrap();

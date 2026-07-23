@@ -38,6 +38,7 @@ impl AnchoredDirectory {
         let path = fs::symlink_metadata(&self.path).map_err(|_| HostFailure::Invalid)?;
         if !same_anchored_directory(opened, self.identity)
             || !same_anchored_directory(identity(&path), self.identity)
+            || !self.security.accepts(opened.mode)
         {
             return Err(HostFailure::Invalid);
         }
