@@ -157,7 +157,7 @@ plan, apply, verify, and recovery semantics:
 | Operation | Required invariant |
 | --- | --- |
 | Fresh install | The observed state is absent and a host write is explicitly authorized. |
-| Monotonic update | The target version is strictly newer and the expected installed digest still matches. |
+| Monotonic update | The plugin manifest version and marketplace-observed plugin version both advance to the same strictly newer version, the expected installed digest still matches, and marketplace registration plus plugin installation are explicitly refreshed. |
 | Failed-update recovery | The exact captured prior installed and cache authority is restored before reuse. |
 | Authorized rollback | The target is older and a separate downgrade authorization is present. |
 | Idempotent reinstall | Matching installed and cache bytes are verified without replacement. |
@@ -169,6 +169,13 @@ Planning and verification are read-only. Applying a host mutation remains
 behind an explicit adapter and authorization; source tests do not authorize or
 perform installation. Every effect rechecks the observed prior state. A failed
 effect restores that prior authority or returns a recovery-required result.
+
+Never retain a configured local marketplace whose root is a disposable build
+or `/private/tmp` path. Materialize the exact accepted package at a durable
+local marketplace root, increment the version on every changed installable
+candidate, refresh marketplace registration and plugin installation, then use a
+fresh Codex task for discovery. A cache entry or an enabled row does not by
+itself prove fresh app recognition.
 
 Product Fitness is independently withheld until accessibility, cognitive
 load, recovery burden, continuance, and real-use evidence are all bound to the

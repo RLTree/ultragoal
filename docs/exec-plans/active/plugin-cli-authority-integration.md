@@ -1757,12 +1757,33 @@ Obolyn implementation to continue. The mismatch is retained as product
 evidence: package/plugin refresh and ordinary CLI activation are separate
 surfaces and require explicit reconciliation.
 
-The journey also exposed three nonblocking product debts. `fit inspect` rejects
-`--target .` while its help does not explain the parent-relative target model;
-`diagnose` does not join to routine interruption/continuation state; and the
-routine output's support-limit wording remains source-local even when installed
-execution succeeds. These debts withhold broader product and daily-driver
-claims but do not invalidate the exact installed agent-use journey above.
+The journey also exposed three nonblocking product debts. The first is now
+source-repaired at `34fb6f176f45ad6b56792fd56cbacdfb8451761c` / tree
+`e3196b0911415af66c11473cfee4c32f1b1cfa6f`: `.` is a distinct typed
+repository target for fit and check commands, while generic output and plan
+paths still reject it. A source-built public `fit inspect --target .` reached
+repository classification and preserved recursive filesystem, Git status, and
+Git diff equality. One Terra/medium material review accepted the complete
+parser-and-consumer invariant. Package, install, discovery, and Obolyn evidence
+remain bound to `0.0.15`; this source repair will not be packaged or installed
+until the active `0.0.15` Obolyn observation closes, after which both the plugin
+version and the marketplace-observed version must advance to at least `0.0.16`
+before both surfaces are refreshed.
+
+The configured `harness-ultragoal-local` marketplace was also found pointing at
+the deleted disposable path `/private/tmp/hul-distribution-host-effect-13252-0`.
+Root replaced only that host registration with the durable exact `0.0.15`
+snapshot at `~/.codex/local-marketplaces/harness-ultragoal-local`. Supported
+Codex listing now reports the plugin installed and enabled at `0.0.15`, and the
+marketplace/runtime bytes equal the installed cache executable at
+`sha256:e9e207de5d7946654379fe536d4f62c566589fbddfc2ad8971cf342643d6c76d`.
+This is registry repair, not fresh-task discovery or new runtime proof.
+
+The remaining debts are that `diagnose` does not join to routine
+interruption/continuation state and the routine output's support-limit wording
+remains source-local even when installed execution succeeds. These debts
+withhold broader product and daily-driver claims but do not invalidate the
+exact installed agent-use journey above.
 
 ## Stop and escalation rules
 

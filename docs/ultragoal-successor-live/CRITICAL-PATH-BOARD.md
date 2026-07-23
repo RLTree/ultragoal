@@ -325,8 +325,16 @@ after plugin refresh and was separately reconciled to the installed digest
 before Obolyn dogfooding continued. This is installed agent-use evidence only.
 Human use, Product Fitness, daily-driver, readiness, release, completion,
 started-or-unknown recovery, and the repository-wide namespace claim remain
-withheld. Current product debts are routine-aware diagnosis, clearer fit target
-semantics, and runtime-accurate support-limit wording.
+withheld. The fit-target debt is source-repaired at `34fb6f176` / tree
+`e3196b091`: the typed repository target accepts only literal `.` in addition
+to already-confined descendants, and source-built zero-write fit inspection
+passed. Package/install/discovery claims remain on `0.0.15` until the active
+Obolyn observation ends and a monotonic `0.0.16`-or-newer marketplace and plugin
+refresh is performed. The local marketplace registration no longer points into
+`/private/tmp`; it resolves to the durable exact `0.0.15` snapshot and lists the
+plugin installed/enabled, but fresh app discovery has not been re-observed from
+that repaired registration. Current product debts are routine-aware diagnosis
+and runtime-accurate support-limit wording.
 
 The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
