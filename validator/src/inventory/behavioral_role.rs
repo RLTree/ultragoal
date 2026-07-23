@@ -1,5 +1,8 @@
 use std::path::Path;
 
+mod discovery;
+pub(crate) use discovery::discover;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum BehavioralRole {
     CliIngressAdapter,
@@ -93,6 +96,10 @@ pub(crate) fn for_path(path: &Path) -> Option<&'static BehavioralRoleBinding> {
         .find(|binding| path == Path::new(binding.relative_path))
 }
 
+pub(crate) fn bindings() -> impl Iterator<Item = &'static BehavioralRoleBinding> {
+    BINDINGS.iter()
+}
+
 pub(crate) fn legacy_route_targets_active_role(
     stable_id: Option<&str>,
     relative_path: Option<&str>,
@@ -101,9 +108,9 @@ pub(crate) fn legacy_route_targets_active_role(
         relative_path == Some(binding.relative_path)
             || stable_id.is_some_and(|stable_id| {
                 stable_id
-                    .strip_prefix("LEGACY-COMMAND:")
-                    .or_else(|| stable_id.strip_prefix("LEGACY-FINALIZER:"))
-                    .or_else(|| stable_id.strip_prefix("LEGACY-MANIFEST-PROJECTION:"))
+                    .strip_prefix("LEGACY-")
+                    .and_then(|suffix| suffix.split_once(':'))
+                    .map(|(_, path)| path)
                     == Some(binding.relative_path)
             })
     })
@@ -149,6 +156,10 @@ mod tests {
         }
         assert!(legacy_route_targets_active_role(
             Some("LEGACY-COMMAND:validator/src/argument_parser/mod.rs"),
+            None
+        ));
+        assert!(legacy_route_targets_active_role(
+            Some("LEGACY-CLAIM-GUARD:validator/src/audit/final_packet/mod.rs"),
             None
         ));
         assert!(!legacy_route_targets_active_role(

@@ -3,8 +3,8 @@ use super::types::{
     GeneratedSurfaceIndex, InventoryEntry, InventoryError, catalog_identity_id,
 };
 use super::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, context_scopes, discovery, legacy, registry, routing,
-    validate,
+    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, behavioral_role, context_scopes, discovery, legacy,
+    registry, routing, validate,
 };
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::ProductMigrationPlanProjection;
@@ -69,6 +69,7 @@ impl<'context> InventoryBuilder<'context> {
         let routing = routing::load(&reads, root, &registry.contract_id)?;
         let context_scopes = context_scopes::load(&reads, root, &registry.contract_id)?;
         let discovered = discovery::discover(&reads, root, &registry)?;
+        let (behavioral_entries, behavioral_findings) = behavioral_role::discover(&reads, root)?;
         let (mut legacy_entries, legacy_findings) = legacy::discover(&reads, root)?;
         context_scopes.remove_verified_legacy(&mut legacy_entries);
         let context_entry = InventoryEntry {
@@ -91,11 +92,13 @@ impl<'context> InventoryBuilder<'context> {
         let mut findings = registry.findings;
         findings.extend(context_scopes.findings);
         findings.extend(discovered.findings);
+        findings.extend(behavioral_findings);
         findings.extend(legacy_findings);
         let routing_entry = routing.registry_entry.clone();
         let groups = vec![
             registry.entries,
             discovered.entries,
+            behavioral_entries,
             legacy_entries,
             context_scopes.entries,
             vec![routing_entry],

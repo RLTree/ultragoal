@@ -1,6 +1,7 @@
 use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::inventory::{
     ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
+    behavioral_role,
 };
 use crate::state::adopted::{derive_adopted, issue_adopted};
 use crate::state::adopted_registry::{load_claims_for_test, validate_registry_for_test};
@@ -113,6 +114,29 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
     )
     .unwrap();
     let inventory = InventoryBuilder::new(&context).build().unwrap();
+    let behavioral_entries = inventory
+        .entries()
+        .iter()
+        .filter(|entry| entry.stable_id.starts_with("BEHAVIORAL-ROLE:"))
+        .collect::<Vec<_>>();
+    assert_eq!(behavioral_entries.len(), 10);
+    let package_input = behavioral_entries
+        .iter()
+        .find(|entry| entry.kind == "package-input-descriptor")
+        .unwrap();
+    let installed_manifest = inventory
+        .entries()
+        .iter()
+        .find(|entry| entry.stable_id == "PLUGIN-MANIFEST")
+        .unwrap();
+    assert_eq!(package_input.references, [".codex-plugin/plugin.json"]);
+    assert_eq!(
+        package_input.input_provenance,
+        [format!(
+            "canonical-target:.codex-plugin/plugin.json#sha256:{}",
+            installed_manifest.digest_sha256
+        )]
+    );
 
     let policy = issue_adopted(&context, &inventory).unwrap();
     assert_ne!(policy.catalog_id(), inventory.catalog_id());
@@ -142,6 +166,21 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
             .count(),
         0
     );
+    fs::remove_file(root.join("plugin-manifest-draft.json")).unwrap();
+    let missing_context = LiveContext::build(
+        BuildRequest::new(&root)
+            .with_effect(EffectClass::Read)
+            .bind_non_secret_configuration(
+                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                ADOPTED_HANDOFF_MANIFEST_SHA256,
+            ),
+    )
+    .unwrap();
+    let missing = InventoryBuilder::new(&missing_context).build().unwrap();
+    assert!(missing.findings().iter().any(|finding| {
+        finding.code == "missing_behavioral_role_surface"
+            && finding.relative_path.as_deref() == Some("plugin-manifest-draft.json")
+    }));
     fs::remove_dir_all(root).unwrap();
 }
 
@@ -196,6 +235,12 @@ pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
         br#"{"name":"harness-ultragoal","version":"0.0.0-test"}"#,
     )
     .unwrap();
+    for binding in behavioral_role::bindings() {
+        let source = live.join(binding.relative_path);
+        let target = root.join(binding.relative_path);
+        fs::create_dir_all(target.parent().unwrap_or(root)).unwrap();
+        fs::copy(source, target).unwrap();
+    }
 }
 
 fn git(root: &Path, args: &[&str]) {
