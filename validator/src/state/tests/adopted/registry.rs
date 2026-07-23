@@ -1,7 +1,7 @@
 use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::inventory::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
-    behavioral_role,
+    behavioral_role, InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+    ADOPTED_HANDOFF_MANIFEST_SHA256,
 };
 use crate::state::adopted::{derive_adopted, issue_adopted};
 use crate::state::adopted_registry::{load_claims_for_test, validate_registry_for_test};
@@ -19,7 +19,7 @@ const MANIFEST: &[u8] = include_bytes!(
 const CLAIMS: &[u8] = include_bytes!(
     "../../../../../docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json"
 );
-const HANDOFF_SHA256: &str = "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51";
+const HANDOFF_SHA256: &str = "89b0d7f17aca16c262500533677e54803643939a19c71ec2fe71fb395aeb97ea";
 
 #[test]
 fn adopted_registry_chain_loads_exact_fourteen_claims() {
@@ -185,6 +185,9 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
 }
 
 pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
+    let advisory_decision = Path::new(
+        "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json",
+    );
     let lane_bytes = fs::read(live.join("LANE_REGISTRY.json")).unwrap();
     fs::copy(
         live.join("LANE_REGISTRY.json"),
@@ -201,6 +204,9 @@ pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
         fs::create_dir_all(destination.parent().unwrap()).unwrap();
         fs::copy(live.join(relative), destination).unwrap();
     }
+    let advisory_destination = root.join(advisory_decision);
+    fs::create_dir_all(advisory_destination.parent().unwrap()).unwrap();
+    fs::copy(live.join(advisory_decision), advisory_destination).unwrap();
     let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     fs::create_dir_all(&target).unwrap();

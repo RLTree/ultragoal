@@ -1,8 +1,36 @@
 use super::fixture::*;
-use crate::context::EffectClass;
+use crate::context::{BuildRequest, EffectClass, LiveContext};
+use crate::inventory::{
+    InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256,
+};
 use crate::state::catalog::{DependencyFact, DependencyStatus, FactAuthority};
+use crate::state::derive_adopted;
 use crate::state::engine::derive_bound;
 use crate::state::product_state::{AuthorityRequirement, CurrentBehaviorDisposition};
+use std::path::PathBuf;
+
+#[test]
+fn current_root_derives_one_candidate_bound_product_state() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .expect("validator crate has repository root")
+        .to_path_buf();
+    let context = LiveContext::build(
+        BuildRequest::new(&root)
+            .with_effect(EffectClass::Read)
+            .bind_non_secret_configuration(
+                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                ADOPTED_HANDOFF_MANIFEST_SHA256,
+            ),
+    )
+    .expect("current repository context");
+    let inventory = InventoryBuilder::new(&context)
+        .build()
+        .expect("current root authority catalog");
+
+    derive_adopted(&context, &inventory)
+        .expect("current root derives one candidate-bound product state");
+}
 
 #[test]
 fn findings_never_collapse_to_no_change() {

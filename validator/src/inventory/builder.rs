@@ -1,10 +1,10 @@
 use super::types::{
-    ActiveStatus, AuthorityCatalog, AuthorityCatalogDefinition, AuthorityState,
-    GeneratedSurfaceIndex, InventoryEntry, InventoryError, catalog_identity_id,
+    catalog_identity_id, ActiveStatus, AuthorityCatalog, AuthorityCatalogDefinition,
+    AuthorityState, GeneratedSurfaceIndex, InventoryEntry, InventoryError,
 };
 use super::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, behavioral_role, context_scopes, discovery, legacy,
-    registry, routing, validate,
+    behavioral_role, context_scopes, discovery, legacy, registry, routing, validate,
+    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
 };
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::ProductMigrationPlanProjection;
@@ -140,5 +140,34 @@ impl<'context> InventoryBuilder<'context> {
             .map_err(|error| InventoryError::Context(error.to_string()))?;
         let migration_registry = routing.into_registry_observation();
         Ok((catalog, reads, migration_registry))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::context::{BuildRequest, EffectClass};
+    use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
+    use std::path::PathBuf;
+
+    #[test]
+    fn current_root_builds_one_canonical_authority_catalog() {
+        let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .expect("validator crate has repository root")
+            .to_path_buf();
+        let context = LiveContext::build(
+            BuildRequest::new(&root)
+                .with_effect(EffectClass::Read)
+                .bind_non_secret_configuration(
+                    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                    ADOPTED_HANDOFF_MANIFEST_SHA256,
+                ),
+        )
+        .expect("current repository context");
+
+        InventoryBuilder::new(&context)
+            .build()
+            .expect("current root has one canonical authority catalog");
     }
 }

@@ -1,8 +1,8 @@
 use super::registry::copy_authority_inputs;
-use crate::context::{BuildRequest, EffectClass, LiveContext, inception_subject_identity};
+use crate::context::{inception_subject_identity, BuildRequest, EffectClass, LiveContext};
 use crate::digest;
 use crate::inventory::{
-    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
+    InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256,
 };
 use crate::state::adopted::derive_adopted;
 use std::fs;
@@ -41,13 +41,14 @@ fn active_brief_selects_the_current_first_truth_loop_route() {
         ),
     )
     .unwrap();
+    rebind_current_amendment_to_fixture_brief(&root);
 
     let context = context(&root);
-    assert_eq!(
+    assert!(
         inception_subject_identity(&context.begin_read_session().unwrap())
             .unwrap()
-            .digest,
-        subject.digest
+            .dirty,
+        "the fixture amendment rebind is identity-bearing while the brief keeps its historical start"
     );
     let inventory = InventoryBuilder::new(&context).build().unwrap();
     let inception = crate::product_inception::inspect(&context)
@@ -85,6 +86,74 @@ fn active_brief_selects_the_current_first_truth_loop_route() {
     fs::remove_dir_all(root).unwrap();
 }
 
+fn rebind_current_amendment_to_fixture_brief(root: &Path) {
+    let amendment_path = root.join("AMENDMENTS.jsonl");
+    let mut rows = fs::read_to_string(&amendment_path)
+        .unwrap()
+        .lines()
+        .map(|line| serde_json::from_str::<serde_json::Value>(line).unwrap())
+        .collect::<Vec<_>>();
+    let amendment_hash = {
+        let current = rows.last_mut().expect("fixture has current amendment");
+        for binding in current["backlog_updates"].as_array_mut().unwrap() {
+            if binding["path"] == "PRODUCT_SUCCESS_BRIEF.json" {
+                binding["digest"] = serde_json::json!(digest::file(
+                    &root.join("PRODUCT_SUCCESS_BRIEF.json")
+                )
+                .unwrap());
+            }
+        }
+        current.as_object_mut().unwrap().remove("amendment_hash");
+        let amendment_hash = digest::bytes(&serde_json::to_vec(current).unwrap());
+        current.as_object_mut().unwrap().insert(
+            "amendment_hash".to_owned(),
+            serde_json::json!(amendment_hash),
+        );
+        amendment_hash
+    };
+    fs::write(
+        amendment_path,
+        format!(
+            "{}\n",
+            rows.iter()
+                .map(serde_json::to_string)
+                .collect::<Result<Vec<_>, _>>()
+                .unwrap()
+                .join("\n")
+        ),
+    )
+    .unwrap();
+    rebind_generated_authority(root, &amendment_hash);
+}
+
+fn rebind_generated_authority(root: &Path, amendment_hash: &str) {
+    for relative in [
+        "migration/generated-surface-authority.json",
+        "migration/generated-surface-authority/product-success-contract.json",
+    ] {
+        let path = root.join(relative);
+        let mut value =
+            serde_json::from_slice::<serde_json::Value>(&fs::read(&path).unwrap()).unwrap();
+        rebind_adopted_surface(&mut value, amendment_hash);
+        fs::write(path, serde_json::to_vec(&value).unwrap()).unwrap();
+    }
+}
+
+fn rebind_adopted_surface(value: &mut serde_json::Value, amendment_hash: &str) {
+    if value["disposition"] == "adopted_schema_contract" {
+        value["amendment_hash"] = serde_json::json!(amendment_hash.trim_start_matches("sha256:"));
+    }
+    if let Some(values) = value.as_object_mut() {
+        for child in values.values_mut() {
+            rebind_adopted_surface(child, amendment_hash);
+        }
+    } else if let Some(values) = value.as_array_mut() {
+        for child in values {
+            rebind_adopted_surface(child, amendment_hash);
+        }
+    }
+}
+
 fn context(root: &Path) -> LiveContext {
     LiveContext::build(
         BuildRequest::new(root)
@@ -113,7 +182,7 @@ fn brief(repository_identity: &str, candidate: &str, contract_digest: &str) -> S
         "real_work": {
             "repository_identity": repository_identity,
             "starting_candidate": candidate,
-            "dirty_state_expectation": "clean",
+            "dirty_state_expectation": "either",
             "task_id": "installed-daily-driver",
             "task": "inspect the active repository through the public route",
             "expected_useful_outcome": "a bounded fit observation"

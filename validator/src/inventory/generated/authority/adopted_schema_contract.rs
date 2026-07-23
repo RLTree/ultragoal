@@ -1,6 +1,6 @@
 use crate::context::ReadSession;
 use crate::contract_amendment::{
-    CurrentAmendmentBinding, ExpectedArtifactBinding, validate_current,
+    validate_current, CurrentAmendmentBinding, ExpectedArtifactBinding,
 };
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use crate::inventory::digest::file_identity_regular;
@@ -13,7 +13,10 @@ const MAX_BYTES: u64 = 1024 * 1024;
 const ZERO_RECEIPT: &str =
     "sha256:0000000000000000000000000000000000000000000000000000000000000000";
 const PREVIOUS_CONTRACT_HASH: &str =
-    "sha256:6bd05cd382a2e8d1af10f6942ee64016f484983f5a98f118c4a3954ae8df6fa9";
+    "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b";
+const PRODUCT_BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
+const ADVISORY_DECISION_PATH: &str =
+    "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
 
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,
@@ -84,6 +87,8 @@ fn verify_amendment(
     source_digest: &str,
 ) -> Result<(), InventoryError> {
     let bytes = read_bounded(reads, &root.join(binding.amendment_log.as_str()), MAX_BYTES)?;
+    let brief_digest = regular_relative_digest(reads, root, PRODUCT_BRIEF_PATH)?;
+    let advisory_decision_digest = regular_relative_digest(reads, root, ADVISORY_DECISION_PATH)?;
     let expected_hash = format!("sha256:{}", binding.amendment_hash.lowercase_hex());
     validate_current(
         &bytes,
@@ -93,10 +98,20 @@ fn verify_amendment(
             previous_contract_hash: PREVIOUS_CONTRACT_HASH,
             new_contract_hash: &format!("sha256:{source_digest}"),
             change_class: "strengthens",
-            backlog_updates: &[ExpectedArtifactBinding {
-                path: binding.output.as_str(),
-                digest: &format!("sha256:{output_digest}"),
-            }],
+            backlog_updates: &[
+                ExpectedArtifactBinding {
+                    path: binding.output.as_str(),
+                    digest: &format!("sha256:{output_digest}"),
+                },
+                ExpectedArtifactBinding {
+                    path: PRODUCT_BRIEF_PATH,
+                    digest: &format!("sha256:{brief_digest}"),
+                },
+                ExpectedArtifactBinding {
+                    path: ADVISORY_DECISION_PATH,
+                    digest: &format!("sha256:{advisory_decision_digest}"),
+                },
+            ],
         },
     )
     .map(|_| ())
@@ -108,7 +123,15 @@ fn regular_digest(
     root: &Path,
     path: &RepositoryPath,
 ) -> Result<String, InventoryError> {
-    file_identity_regular(reads, &root.join(path.as_str())).map(|(digest, _)| digest)
+    regular_relative_digest(reads, root, path.as_str())
+}
+
+fn regular_relative_digest(
+    reads: &ReadSession,
+    root: &Path,
+    relative: &str,
+) -> Result<String, InventoryError> {
+    file_identity_regular(reads, &root.join(relative)).map(|(digest, _)| digest)
 }
 
 fn invalid(message: &str) -> Result<(), InventoryError> {

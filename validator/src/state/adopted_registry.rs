@@ -5,7 +5,7 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
 const CONTRACT_ID: &str = "harness-ultragoal-successor-contract-v2";
-const HANDOFF_SHA256: &str = "d61c897a68d3aa985996f595a17c80f49e0730d07434b6b81de36878ef28dc51";
+const HANDOFF_SHA256: &str = "89b0d7f17aca16c262500533677e54803643939a19c71ec2fe71fb395aeb97ea";
 const CLAIM_PATH: &str = "FINAL-CONTRACT/CLAIM_REGISTRY.json";
 const MANIFEST_PATH: &str = "FINAL-CONTRACT/CONTRACT_MANIFEST.json";
 const HANDOFF_BYTES: &[u8] = include_bytes!(
