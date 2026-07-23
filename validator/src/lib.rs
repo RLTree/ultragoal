@@ -18,6 +18,7 @@ mod contract_amendment;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;
+pub mod engineering_advisory;
 pub mod evaluation;
 pub mod fixture_scheduler;
 #[cfg(test)]

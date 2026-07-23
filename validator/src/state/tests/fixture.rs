@@ -23,6 +23,7 @@ pub(super) fn inputs() -> BoundInputs {
         context_id: CONTEXT_ID.to_owned(),
         authority_catalog_id: AUTHORITY_CATALOG_ID.to_owned(),
         authority_catalog_context_id: CONTEXT_ID.to_owned(),
+        candidate_id: CANDIDATE_ID.to_owned(),
         inventory_findings: Vec::new(),
         capabilities: BTreeMap::from([("git".to_owned(), true)]),
     }

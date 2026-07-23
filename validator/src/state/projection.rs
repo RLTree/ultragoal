@@ -1,8 +1,8 @@
 use super::catalog::{HostGoalObservation, RuntimeMetadata};
 use super::ceiling::ClaimCeiling;
 use super::product_state::{
-    Finding, NextAction, ProductGoalState, ProductState, Repair, RoutineFindingObservation,
-    RoutineObservationWindow, StateError,
+    CurrentBehaviorDisposition, Finding, NextAction, ProductGoalState, ProductState, Repair,
+    RoutineFindingObservation, RoutineObservationWindow, StateError,
 };
 use serde::Serialize;
 
@@ -12,8 +12,10 @@ struct InspectProjection<'a> {
     state_id: &'a str,
     context_id: &'a str,
     authority_catalog_id: &'a str,
+    candidate_id: &'a str,
     dependency_action_catalog_id: &'a str,
     product_goal: ProductGoalState,
+    current_behavior: CurrentBehaviorDisposition,
     host_goal_non_authoritative: &'a HostGoalObservation,
     runtime_metadata: &'a RuntimeMetadata,
     findings: &'a [Finding],
@@ -28,6 +30,8 @@ struct DiagnoseProjection<'a> {
     schema_version: &'static str,
     state_id: &'a str,
     context_id: &'a str,
+    candidate_id: &'a str,
+    current_behavior: CurrentBehaviorDisposition,
     findings: &'a [Finding],
     repairs: &'a [Repair],
     claim_ceilings: &'a [ClaimCeiling],
@@ -41,6 +45,7 @@ struct NextProjection<'a> {
     schema_version: &'static str,
     state_id: &'a str,
     context_id: &'a str,
+    candidate_id: &'a str,
     next_action: &'a NextAction,
     claim_ceilings: &'a [ClaimCeiling],
 }
@@ -50,6 +55,8 @@ struct SummaryProjection<'a> {
     schema_version: &'static str,
     state_id: &'a str,
     context_id: &'a str,
+    candidate_id: &'a str,
+    current_behavior: CurrentBehaviorDisposition,
     product_goal: ProductGoalState,
     finding_count: usize,
     claim_ceilings: &'a [ClaimCeiling],
@@ -61,6 +68,7 @@ struct FindingsProjection<'a> {
     schema_version: &'static str,
     state_id: &'a str,
     context_id: &'a str,
+    candidate_id: &'a str,
     findings: &'a [Finding],
 }
 
@@ -69,6 +77,7 @@ struct ClaimsProjection<'a> {
     schema_version: &'static str,
     state_id: &'a str,
     context_id: &'a str,
+    candidate_id: &'a str,
     claim_ceilings: &'a [ClaimCeiling],
 }
 
@@ -79,8 +88,10 @@ impl ProductState {
             state_id: &self.state_id,
             context_id: &self.context_id,
             authority_catalog_id: &self.authority_catalog_id,
+            candidate_id: &self.candidate_id,
             dependency_action_catalog_id: &self.dependency_action_catalog_id,
             product_goal: self.product_goal,
+            current_behavior: self.current_behavior,
             host_goal_non_authoritative: &self.host_goal,
             runtime_metadata: &self.runtime_metadata,
             findings: &self.findings,
@@ -96,6 +107,8 @@ impl ProductState {
             schema_version: "ProductStateDiagnose-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
+            current_behavior: self.current_behavior,
             findings: &self.findings,
             repairs: &self.repairs,
             claim_ceilings: &self.claim_ceilings,
@@ -110,6 +123,7 @@ impl ProductState {
             schema_version: "ProductStateNext-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
             next_action: &self.next_action,
             claim_ceilings: &self.claim_ceilings,
         })
@@ -120,7 +134,9 @@ impl ProductState {
             schema_version: "ProductStateSummary-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
             product_goal: self.product_goal,
+            current_behavior: self.current_behavior,
             finding_count: self.findings.len(),
             claim_ceilings: &self.claim_ceilings,
             next_action: &self.next_action,
@@ -132,6 +148,7 @@ impl ProductState {
             schema_version: "ProductStateFindings-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
             findings: &self.findings,
         })
     }
@@ -141,6 +158,7 @@ impl ProductState {
             schema_version: "ProductStateClaims-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
             claim_ceilings: &self.claim_ceilings,
         })
     }
@@ -170,6 +188,8 @@ impl ProductState {
             schema_version: "ProductStateDiagnose-v1",
             state_id: &self.state_id,
             context_id: &self.context_id,
+            candidate_id: &self.candidate_id,
+            current_behavior: self.current_behavior,
             findings: std::slice::from_ref(finding),
             repairs: std::slice::from_ref(&finding.repair),
             claim_ceilings: &self.claim_ceilings,

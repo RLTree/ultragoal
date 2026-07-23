@@ -17,14 +17,27 @@ pub enum ProductGoalState {
     NoAction,
 }
 
+/// Candidate-bound disposition of the observed current behavior. A non-empty
+/// finding set is never treated as `no_change`, even when no legal edit exists.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CurrentBehaviorDisposition {
+    NoChange,
+    PartialChange,
+    ChangeRequired,
+    Blocked,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, serde::Serialize)]
 pub struct ProductState {
     pub(crate) schema_version: &'static str,
     pub(crate) state_id: String,
     pub(crate) context_id: String,
     pub(crate) authority_catalog_id: String,
+    pub(crate) candidate_id: String,
     pub(crate) dependency_action_catalog_id: String,
     pub(crate) product_goal: ProductGoalState,
+    pub(crate) current_behavior: CurrentBehaviorDisposition,
     pub(crate) host_goal: HostGoalObservation,
     pub(crate) runtime_metadata: RuntimeMetadata,
     pub(crate) findings: Vec<Finding>,
@@ -46,6 +59,14 @@ impl ProductState {
 
     pub fn authority_catalog_id(&self) -> &str {
         &self.authority_catalog_id
+    }
+
+    pub fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+
+    pub fn current_behavior(&self) -> CurrentBehaviorDisposition {
+        self.current_behavior
     }
 
     pub fn product_goal(&self) -> ProductGoalState {

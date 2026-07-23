@@ -13,7 +13,7 @@ impl StateEngine {
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
         policy_authority::verify_live(dependency_actions, context, authority_catalog)?;
         let state = derive_bound(
-            BoundInputs::from_live(context, authority_catalog),
+            BoundInputs::from_live(context, authority_catalog)?,
             dependency_actions,
         )?;
         context
@@ -39,7 +39,7 @@ pub(crate) fn derive_bound(
         &inputs.context_id,
         &inputs.authority_catalog_id,
         &inputs.authority_catalog_context_id,
-        None,
+        Some(&inputs.candidate_id),
         &inventory_codes,
     )?;
     let spec = catalog.spec();
@@ -72,6 +72,8 @@ pub(crate) fn derive_bound(
         &findings,
         &dependency_states,
         &inputs.capabilities,
+        &inputs.candidate_id,
+        catalog.verification_modes(),
         !fatal.is_empty(),
     );
     let product_goal = match next_action.kind {
@@ -87,13 +89,16 @@ pub(crate) fn derive_bound(
         }
         NextActionKind::Command => ProductGoalState::Operating,
     };
+    let current_behavior = current_behavior_disposition(&findings, &next_action);
     let host_goal = spec.host_goal.clone();
     let state_id = identity::state_id(identity::StateIdentity {
         schema_version: "ProductState-v1",
         context_id: &inputs.context_id,
         authority_catalog_id: &inputs.authority_catalog_id,
+        candidate_id: &inputs.candidate_id,
         dependency_action_catalog_id: catalog.catalog_id(),
         product_goal,
+        current_behavior,
         runtime_metadata: &spec.runtime_metadata,
         findings: &findings,
         repairs: &repairs,
@@ -105,8 +110,10 @@ pub(crate) fn derive_bound(
         state_id,
         context_id: inputs.context_id,
         authority_catalog_id: inputs.authority_catalog_id,
+        candidate_id: inputs.candidate_id,
         dependency_action_catalog_id: catalog.catalog_id().to_owned(),
         product_goal,
+        current_behavior,
         host_goal,
         runtime_metadata: spec.runtime_metadata.clone(),
         findings,
@@ -117,6 +124,35 @@ pub(crate) fn derive_bound(
         routine_observation_window:
             super::super::product_state::RoutineObservationWindow::NotQueried,
     })
+}
+
+fn current_behavior_disposition(
+    findings: &[Finding],
+    next_action: &super::super::product_state::NextAction,
+) -> super::super::product_state::CurrentBehaviorDisposition {
+    use super::super::product_state::{CurrentBehaviorDisposition, NextActionKind};
+    if findings.is_empty() {
+        return CurrentBehaviorDisposition::NoChange;
+    }
+    if matches!(
+        next_action.kind,
+        NextActionKind::AuthorityRequest | NextActionKind::NoLegalRoute
+    ) || findings
+        .iter()
+        .any(|finding| finding.severity == FindingSeverity::Blocked)
+    {
+        return CurrentBehaviorDisposition::Blocked;
+    }
+    let selected = next_action.repair_id.as_deref();
+    if selected.is_some_and(|repair| {
+        findings
+            .iter()
+            .any(|finding| finding.repair.repair_id != repair)
+    }) {
+        CurrentBehaviorDisposition::PartialChange
+    } else {
+        CurrentBehaviorDisposition::ChangeRequired
+    }
 }
 
 pub(crate) fn initial_ceilings(

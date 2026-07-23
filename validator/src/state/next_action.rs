@@ -1,7 +1,9 @@
+use super::catalog::ActionDefinition;
 use super::repair::RepairTarget;
 use super::state_authority::{AuthorityRequest, AuthorityRequirement};
 use crate::context::EffectClass;
 use serde::Serialize;
+use std::collections::BTreeMap;
 
 use super::catalog::ActionPriorityClass;
 
@@ -44,5 +46,16 @@ pub struct NextAction {
     pub active_trigger_ids: Vec<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub parked_trigger_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub verification_mode: Option<crate::engineering_advisory::VerificationModeContract>,
     pub selection_rule: &'static str,
+}
+
+pub(crate) fn attach_verification(
+    mut next: NextAction,
+    action: &ActionDefinition,
+    verification_modes: &BTreeMap<String, crate::engineering_advisory::VerificationModeContract>,
+) -> NextAction {
+    next.verification_mode = verification_modes.get(&action.action_id).cloned();
+    next
 }

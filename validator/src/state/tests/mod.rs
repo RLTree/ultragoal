@@ -1,5 +1,6 @@
 mod adopted;
 mod authority_cases;
+mod current_behavior;
 mod engine_cases;
 mod fixture;
 mod ordering_cases;

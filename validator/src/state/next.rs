@@ -12,6 +12,8 @@ pub(crate) fn select(
     findings: &[Finding],
     dependencies: &BTreeMap<String, Option<DependencyStatus>>,
     capabilities: &BTreeMap<String, bool>,
+    candidate_id: &str,
+    verification_modes: &BTreeMap<String, crate::engineering_advisory::VerificationModeContract>,
     fail_closed: bool,
 ) -> NextAction {
     if findings.is_empty() {
@@ -49,6 +51,11 @@ pub(crate) fn select(
                 .all(|name| capabilities.get(name).copied().unwrap_or(false))
         })
         .filter(|action| shape_is_valid(action))
+        .filter(|action| {
+            verification_modes
+                .get(&action.action_id)
+                .is_none_or(|contract| contract.validate_for_candidate(candidate_id).is_ok())
+        })
         .collect::<Vec<_>>();
     let evidence_led = legal.iter().any(|action| action.evidence_led.is_some());
     legal.sort_by(|a, b| {
@@ -61,7 +68,7 @@ pub(crate) fn select(
     if let Some(action) = legal.first()
         && let Some(next) = from_definition(action, commands)
     {
-        return next;
+        return super::next_action::attach_verification(next, action, verification_modes);
     }
     no_route(
         preferred_finding(findings),
@@ -147,6 +154,7 @@ fn from_definition(action: &ActionDefinition, commands: &[CommandBinding]) -> Op
             .as_ref()
             .map(|binding| binding.parked_trigger_ids.clone())
             .unwrap_or_default(),
+        verification_mode: None,
         selection_rule: if action.evidence_led.is_some() {
             "evidence-class-then-transition-order-then-priority-then-action-id"
         } else {
@@ -172,6 +180,7 @@ fn no_op() -> NextAction {
         brief_digest: None,
         active_trigger_ids: Vec::new(),
         parked_trigger_ids: Vec::new(),
+        verification_mode: None,
         selection_rule: "no-actionable-findings",
     }
 }
@@ -199,6 +208,7 @@ fn no_route(finding: &Finding, rule: &'static str) -> NextAction {
         brief_digest: None,
         active_trigger_ids: Vec::new(),
         parked_trigger_ids: Vec::new(),
+        verification_mode: None,
         selection_rule: rule,
     }
 }

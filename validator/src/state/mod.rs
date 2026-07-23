@@ -47,7 +47,7 @@ pub use ceiling::{CeilingRelation, ClaimCeiling};
 pub use engine::StateEngine;
 pub use finding::{CeilingReduction, Finding, FindingSeverity, FindingSource, Scope};
 pub use next_action::{NextAction, NextActionKind, NoLegalRoute};
-pub use product_state::{ProductGoalState, ProductState};
+pub use product_state::{CurrentBehaviorDisposition, ProductGoalState, ProductState};
 pub use repair::{Repair, RepairTarget, RepairTargetKind};
 pub use routine_observation::{
     RoutineFindingBinding, RoutineFindingObservation, RoutineObservationTransition,
