@@ -1,5 +1,21 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 N14 behavioral-role correction
+
+Exact root source `2d9e7b75ff48bdc9d79eec9b7dd7904fc7509879` / tree
+`177e787e4456db0b3a67877638652db28d719cd6` replaces filename-derived
+migration classification for ten live paths with a closed behavioral-role and
+target binding. Two CLI ingress adapters, six fail-closed claim guards, one
+test-only context file, and `plugin-manifest-draft.json` are no longer
+misrepresented as legacy migration authority. Missing role surfaces, missing
+package target, stale route spelling, and target substitution fail closed.
+
+Focused source controls and warning-free compilation pass; the correction is
+accepted after one bounded material review and one exact confirmation review.
+The current read-only migration projection has 28 pending agent/skill routes
+and zero effects. N14 therefore remains ready and is not complete; N15 and all
+package/install/runtime/product/release claims remain withheld.
+
 ## 2026-07-23 global OD-008 adoption
 
 Root adopted Tree's explicit OD-008 approval at

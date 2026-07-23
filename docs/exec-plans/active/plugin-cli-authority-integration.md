@@ -1,5 +1,29 @@
 # Plugin and CLI Authority Integration
 
+## N14 behavioral-role correction — 2026-07-23
+
+Root integrated the accepted N14 correction at
+`2d9e7b75ff48bdc9d79eec9b7dd7904fc7509879` / tree
+`177e787e4456db0b3a67877638652db28d719cd6`. The migration inventory now
+classifies two active CLI ingress adapters, six fail-closed claim guards, one
+test-only context file, and the package-input descriptor by a closed behavioral
+role and exact target. These ten paths are no longer migration routes.
+Missing role surfaces fail closed; the package input binds the same-session
+digest of `.codex-plugin/plugin.json`; arbitrary
+`LEGACY-<kind>:<bound-path>` spellings cannot reintroduce demotion.
+
+Focused role, retained-route, adopted-inventory, read-only migration-plan, and
+warning-free library checks passed. One bounded Terra/medium review returned
+two material false-pass findings; the single coherent correction closed both,
+and the exact confirmation review accepted the candidate.
+
+This is an integrated source correction, not N14 completion. The exact
+read-only product plan now contains 28 pending agent/skill routes and zero
+effects. N14 remains the sole dependency-legal migration lane. It must settle
+those routes through the adopted OD-008 window with executable compatibility,
+rollback/reader, duplicate-authority, stale-candidate, and zero-write evidence
+before N15 becomes eligible. Every claim remains withheld.
+
 ## Global OD-008 adoption and N14 release — 2026-07-23
 
 Tree's explicit `OD-008 is approved` instruction is now adopted through
