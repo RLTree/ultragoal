@@ -143,3 +143,6 @@ fn agentic_profile_plus_harness_has_one_gateway_and_margin() {
 
 #[path = "tests_profile.rs"]
 mod profile_tests;
+
+#[path = "agentic_profiles_tests.rs"]
+mod agentic_profiles_tests;

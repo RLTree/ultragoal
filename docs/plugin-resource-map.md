@@ -85,8 +85,9 @@ risk, authority, evidence, active truth-loop, and failure context and chooses
 the smallest sufficient primary lens. Supporting lenses appear only when one
 material decision crosses layers.
 
-The complete Agentic Engineering 3.0 skill set is reachable through three
-stage-scoped views:
+The existing eight-skill `ultragoal` co-install view is retained for its
+bounded current scope. The complete Agentic Engineering 3.0 skill set is
+reachable through three additional stage-scoped views:
 
 - core advisory for task framing, context, architecture, construction,
   orchestration, verification, security, and learning;
@@ -96,9 +97,12 @@ stage-scoped views:
 - Rust systems advisory for architecture, runtime, durability, protocols,
   verification, and observability.
 
-Their union covers all thirty Agentic skills. Each view retains the external
-`harness-ultragoal` gateway, exact plugin and source identity, candidate
-binding, closed skill set, and measured discovery budget. Agentic's gateway is
+The three stage views cover all thirty Agentic skills. Each view retains the
+external `harness-ultragoal` gateway, exact plugin and source identity,
+candidate binding, closed skill set, and measured discovery budget. The source
+projection rejects a substituted profile, candidate, configuration, source
+digest, skill set, or second implicit gateway; actual host configuration and
+fresh-session discovery remain separate proof surfaces. Agentic's gateway is
 explicit-only when co-installed. A full thirty-skill view is not loaded by
 default and must first demonstrate a safe combined context margin and no
 routing degradation.

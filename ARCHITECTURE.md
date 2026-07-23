@@ -103,10 +103,11 @@ authority and binds one primary lens plus only the supporting lenses required
 by a genuine cross-layer decision.
 
 All thirty Agentic Engineering skills are mapped to existing Harness lifecycle
-owners. Core, product/lifecycle, and Rust-system profiles are stage-scoped
-views under the external Harness gateway; their union covers the full skill
-set. A full profile is optional and must earn a safe combined discovery and
-context margin. Agentic's own gateway is explicit-only when co-installed.
+owners. The existing eight-skill `ultragoal` co-install view and the core,
+product/lifecycle, and Rust-system stage views are candidate-bound projections
+under the external Harness gateway; the latter three cover the full skill set.
+A full profile is optional and must earn a safe combined discovery and context
+margin. Agentic's own gateway is explicit-only when co-installed.
 
 Advice becomes stale when its candidate, context, lifecycle, evidence,
 assumption, risk, failure mechanism, profile, or active truth-loop binding

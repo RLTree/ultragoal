@@ -2468,6 +2468,25 @@ the unchanged claim ceiling. The next product candidate is `0.0.17`. The
 `0.0.16` package and installed observations remain valid only for P0; they
 cannot support P1 installed or runtime claims.
 
+### Agentic Engineering co-install profile projection — Terra implementation — 2026-07-23
+
+`plugin_product::skill_catalog::agentic_profiles` now derives the exact
+candidate-bound Agentic 3.0 `ultragoal`, core, lifecycle, and Rust views from
+the AMEND-005 source-profile and file-manifest digests. The generic catalog
+remains reusable, but Agentic composition uses its dedicated projection entry
+point: it rejects substituted source-profile fields, candidate/config drift,
+missing or extra enabled skills, and any second implicit gateway. The core,
+lifecycle, and Rust views are asserted against the complete 30-skill set; the
+legacy eight-skill co-install view stays available as the smallest current
+profile.
+
+Focused source verification is the `plugin_product::skill_catalog` unit filter
+(16 passed). This source increment neither mutates Codex configuration nor
+proves package, installation, cache, registry, fresh-session discovery,
+automatic selection, runtime, journey, human use, Product Fitness, readiness,
+release, or completion. Those surfaces remain queued behind the public
+integration and the current installed journey identity refresh.
+
 ### Installed routine terminal reconciliation — 2026-07-23
 
 Installed `0.0.17` reached the active Research Run routine effect through the
