@@ -1,5 +1,29 @@
 # Harness Ultragoal Successor Critical-Path Board
 
+## 2026-07-23 installed routine self-runner repair
+
+The first broken installed-daily-driver transition is now source-repaired at
+`ff904accc972a4198e4b317447af3a4bca484dc7` / tree
+`0db3364b073522f56231c56e4a36ae4cb9ae5bbe`: public fit adoption on the dirty
+Research Run target succeeded, but the cache-installed runtime then rejected
+routine work because its fixed `ultragoal` runner had been captured through a
+stale ambient PATH alias. The strict mismatch guard was correct; context
+construction was not.
+
+Routine context now pins its sole fixed runner to the current executable and
+revalidates that exact self identity across admission, execution, recovery, and
+reuse. Generic capability probes remain PATH-bound, Git remains fixed, no
+caller-supplied executable path is admitted, and a stale or substituted current
+executable still fails closed. Focused stale-PATH, zero-write, package,
+materialization, compile, format, and diff controls pass.
+
+The candidate is versioned `0.0.22`; every 0.0.21 package/install/cache/
+marketplace/app-registry/discovery/runtime/journey observation is stale for this
+repair. The immediate frontier is serialized: package and install this exact
+candidate, refresh the supported local marketplace and plugin, then rerun the
+installed Research Run routine transition. No Product Fitness, daily-driver,
+readiness, release, or completion claim advances.
+
 ## 2026-07-23 Agentic Engineering lifecycle-advisory contract checkpoint
 
 The next frontier is the candidate-bound automatic Agentic advisory selector,

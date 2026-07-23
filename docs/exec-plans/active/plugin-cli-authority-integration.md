@@ -1,5 +1,42 @@
 # Plugin and CLI Authority Integration
 
+## Installed routine self-runner repair — 2026-07-23
+
+On exact source `ff904accc972a4198e4b317447af3a4bca484dc7` / tree
+`0db3364b073522f56231c56e4a36ae4cb9ae5bbe`, the active installed
+Research Run journey reached public repository-fit adoption successfully but
+`check routine` stopped before an effect with
+`routine-public-runner-path-substituted`. The cache-resident `0.0.21` runtime
+was the actual invoking executable, while the host `PATH` still resolved an
+older local `ultragoal` binary. The existing strict runner guard correctly
+refused that mismatch; the product defect was that routine context capture had
+treated the fixed, self-executed runner as an ambient PATH capability.
+
+The source repair introduces an internal exact-current-executable capability
+probe. Public routine context now binds only its fixed `ultragoal` runner to
+the current executable; ordinary named tools still use the existing PATH probe.
+The probe descriptor remains private, is carried through `LiveContext`
+revalidation, rejects duplicate capability names and a self-bound Git
+substrate, and continues to bind the captured executable digest, length, mode,
+candidate, and read context. No caller or repository path can select an
+executable. The existing runner and recovery/reuse checks remain strict, so a
+changed or substituted current executable fails closed rather than falling back
+to PATH.
+
+Focused source controls pass: stale-PATH exact-self capture/revalidation,
+zero-write context preservation, package version/mutation rejection, package
+materializability, warning-free library compilation, formatting, and diff
+validation. The package manifest and verifier are advanced together to
+`0.0.22`, which invalidates every prior `0.0.21` package, cache, marketplace,
+app-registry, discovery, runtime, and journey observation. This is source-only
+evidence; package, isolated install, Codex registry refresh, fresh discovery,
+routine behavior, interruption/recovery, repeat use, Product Fitness,
+daily-driver, readiness, release, and completion remain withheld.
+
+The next dependency-legal action is one deterministic `0.0.22` package and
+isolated install, followed by marketplace/plugin refresh and a restart from the
+installed public CLI at Research Run's dirty routine transition.
+
 ## Agentic Engineering lifecycle-advisory contract checkpoint — 2026-07-23
 
 Root reconciled current repository authority at source
