@@ -62,6 +62,10 @@ fn validate_registry(registry: &AuthorityRoutingRegistry) -> Result<(), ProductM
         if !valid_identifier(&route.route_id)
             || !valid_stable_identifier(&route.canonical_target)
             || route.intended_disposition != "non-authoritative"
+            || crate::inventory::behavioral_role::legacy_route_targets_active_role(
+                route.match_spec.stable_id.as_deref(),
+                route.match_spec.relative_path.as_deref(),
+            )
         {
             return Err(ProductMigrationError::new(
                 "migration-product-route-invalid",

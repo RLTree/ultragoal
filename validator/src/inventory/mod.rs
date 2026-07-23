@@ -4,6 +4,7 @@
 //! projections are observations only and cannot author the returned catalog.
 
 mod agent_reader_guard_digests;
+pub(crate) mod behavioral_role;
 mod builder;
 mod compatibility;
 mod component_expectations;

@@ -24,6 +24,9 @@ impl RoutingData {
             .iter()
             .filter(|route| pending_route_candidate(route))
             .collect::<Vec<_>>();
+        if source_rows.is_empty() && route_rows.is_empty() {
+            return Ok(BTreeSet::new());
+        }
 
         let sources = source_rows
             .iter()

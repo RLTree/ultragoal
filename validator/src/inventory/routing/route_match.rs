@@ -152,6 +152,14 @@ fn validate(registry: &RouteRegistry, contract_id: &str) -> Result<(), Inventory
         if route.matcher.is_empty() || !safe_matcher(&route.matcher) {
             return Err(invalid("route has an empty or noncanonical matcher"));
         }
+        if crate::inventory::behavioral_role::legacy_route_targets_active_role(
+            route.matcher.stable_id.as_deref(),
+            route.matcher.relative_path.as_deref(),
+        ) {
+            return Err(invalid(
+                "route attempts to demote a canonical behavioral role",
+            ));
+        }
         if !safe_canonical_target(&route.canonical_target)
             || route.intended_disposition != "non-authoritative"
         {
