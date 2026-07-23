@@ -227,7 +227,7 @@
     {"id": "OD-006", "state": "unresolved", "safe_default": "no optional executable extension"},
     {"id": "OD-007", "state": "unresolved", "safe_default": "local bounded events with no export"},
     {"id": "OD-008", "state": "resolved", "safe_default": "0.0.20 is the warning-bearing compatibility window; 0.0.21 is the earliest removal version after exact N14 proof", "decision_path": "docs/ultragoal-successor-live/root-decisions/OD-008-GLOBAL-COMPATIBILITY-WINDOW.json"},
-    {"id": "OD-009", "state": "resolved_scoped", "safe_default": "outside the exact consumed cleanup cohorts, archive or leave historical files in place as non-authoritative", "decision_path": "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json"},
+    {"id": "OD-009", "state": "resolved_exact_n15_consumed", "safe_default": "outside the exact consumed cleanup cohorts, archive or leave historical files in place as non-authoritative", "decision_path": "docs/ultragoal-successor-live/root-decisions/OD-009-N15-LEGACY-ROUTE-RETIREMENT-003.json"},
     {"id": "OD-010", "state": "unresolved", "safe_default": "preserve harness-ultragoal identity and avoid public rename"}
   ],
   "initial_claim_decisions": [

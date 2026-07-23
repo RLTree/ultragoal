@@ -1,5 +1,37 @@
 # Plugin and CLI Authority Integration
 
+## N15 exact retirement integration — 2026-07-23
+
+Root integrated exact source `4577b0b2b53f95d6fcc769d4db2c3846708db3db` /
+tree `c22f17ffeec15c466b5d7357d677390f4f4ac8fe`. It consumes the
+one-shot OD-009 N15 decision by removing the exact 42-path cohort: 14 legacy
+agent paths and 28 legacy skill-wrapper/metadata paths. The current migration
+registry has zero routes, no adoption family, and keeps
+`destructive_cleanup_authorized` false. The current package surface is eight
+canonical skills and six canonical agents.
+
+The bounded Terra/medium review found one material public-route contradiction:
+`fit-repo prove` and `standards-gardener rebind` still selected active
+compatibility guidance after their skill authorities were retired. One
+coherent correction removed those routes and the now-dead command variant and
+added direct fail-closed parsing controls for all 14 retired aliases. The exact
+confirmation review accepted the corrected freeze.
+
+On the integrated root, warning-denied library compilation passes in 9.55
+seconds and the exact recursively zero-write empty migration-plan control
+passes 1/1. The broad historical `cli_contract` target remains unable to
+compile because of pre-existing missing fixture-scheduler/evaluation module
+joins and stale test re-exports; it therefore provides no integrated parser
+claim. The exact worktree source control and confirmation review support only
+the retired-route source ceiling.
+
+This closes N15 at the integrated source-retirement ceiling. It does not prove
+the new 0.0.21 package, installed marketplace/cache/app-registry identity,
+fresh discovery, runtime behavior, Product Fitness, readiness, release, or
+completion. The next dependency-legal product boundary is root-owned version,
+package, install, discovery, and installed-journey reconciliation on a new
+exact candidate.
+
 ## N14 migration-family adoption projection — 2026-07-23
 
 Root integrated exact source `913bc193057b9852080d28f083dd5debccd6bc2a` /
