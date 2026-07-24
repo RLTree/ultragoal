@@ -733,6 +733,25 @@ isolated install, marketplace/cache/app registration, fresh discovery, Research
 Run interruption/recovery, and repeat-use observation. Claim ceiling is still
 source-local; all installed and higher claims are withheld.
 
+## 2026-07-23 installed `0.0.30` Research Run journey
+
+Exact root `5c14bf07ff7f3bb3e67ffa7b27391fe64514fabe` / tree
+`a03cfda3678e4c1f285107775d932cc80217b9b6` is now packaged as
+`sha256:c9db895bc69b7508e180ad7c2f1fe979832f4546175516d3d3332fb0c438aed7`.
+The installed cache and ordinary public executable share SHA-256
+`5939803857fc5b8d0904c8e8a68b239ce77bb92aa2c5edf1627df3d436e8a52f`, and a
+fresh Codex task discovered `harness-ultragoal` version `0.0.30`.
+
+The dirty Research Run target's public routine plan is `already_fitted` with
+zero mutations and no routine-config conflict; its generic template drift is
+preserved as an expected broad fit-verification conflict. The installed public
+route interrupted before an effect, recovered in a fresh process to execute one
+syntax validation, diagnosed a committed terminal outcome, and then reused that
+same result without effect. Git-visible target state and `src/lib.rs` stayed
+unchanged across read-only fit verification. This closes the nearest installed
+agent-use recovery/repeat transition. Product Fitness, human-use, daily-driver,
+readiness, release, and completion remain withheld.
+
 ## Stage B routing snapshot (projection, not authority)
 
 Literal checkpoint identity is `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` /

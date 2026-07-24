@@ -2716,6 +2716,34 @@ repeat-use observation is invalid until rebuilt from this source. No Product
 Fitness, human-use, daily-driver, readiness, release, or completion claim
 advances.
 
+### Installed Research Run recovery and reuse — 2026-07-23
+
+Exact root `5c14bf07ff7f3bb3e67ffa7b27391fe64514fabe` / tree
+`a03cfda3678e4c1f285107775d932cc80217b9b6` packaged `0.0.30` as
+`sha256:c9db895bc69b7508e180ad7c2f1fe979832f4546175516d3d3332fb0c438aed7`.
+The isolated install then supplied the cache and ordinary installed executable
+whose identical SHA-256 is
+`5939803857fc5b8d0904c8e8a68b239ce77bb92aa2c5edf1627df3d436e8a52f`;
+a fresh Codex task discovered `harness-ultragoal` version `0.0.30`.
+
+On the dirty Research Run target, public `fit plan --routine-config` classified
+the existing admitted routine configuration as `already_fitted`, with zero
+mutations and zero relevant conflicts. This is a supported no-change reopening,
+not a requirement to overwrite the target's unrelated template drift. The
+read-only fit verification preserved the target's Git-status hash and
+`src/lib.rs` hash exactly; its broader template result remains an honest
+conflicting/unsupported observation, not a product failure or claim promotion.
+
+The installed public routine was deliberately interrupted at reservation with
+effect `none` and a recovery requirement. A fresh installed process reconciled
+the exact continuation and executed the `syntax` validation once
+(`sha256:f5c79e25b245b3e2e5a61350e3087b7a78bca8aca78646f0e348f0c7ca56d3bc`).
+Installed `diagnose` then reported a committed terminal outcome and safe reuse;
+the next public invocation reused the same result with effect `none`. This is
+installed agent-use, interruption/recovery, and repeat-use evidence on the
+exact candidate. It is not human-use, Product Fitness, a daily-driver claim,
+readiness, release, or completion evidence.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required
