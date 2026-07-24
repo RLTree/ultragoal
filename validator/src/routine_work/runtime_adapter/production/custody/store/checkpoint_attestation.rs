@@ -12,7 +12,7 @@ impl FileLedger {
         snapshot_id: &str,
         continuation: &str,
         recovery_marker: &str,
-        predecessor_continuation: Option<&str>,
+        predecessor_continuations: &[String],
         attempt_grant: &str,
         authenticated_ledger_head: &str,
         state: &str,
@@ -47,7 +47,7 @@ impl FileLedger {
                 || record.binding.plan_id != plan_id
                 || record.binding.snapshot_id != snapshot_id
                 || record.recovery_marker != recovery_marker
-                || record.predecessor_continuation.as_deref() != predecessor_continuation
+                || record.predecessor_continuations != predecessor_continuations
                 || continuation_for(record) != continuation
             {
                 return Err(error("routine-production-checkpoint-binding-invalid"));

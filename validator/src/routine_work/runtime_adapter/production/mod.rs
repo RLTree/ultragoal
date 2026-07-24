@@ -60,7 +60,7 @@ pub(crate) struct ProductionExecutionControl<'a> {
     cancellation: RoutineCancellation,
     reuse: RoutineReuseInput,
     control: PublicRoutineControl,
-    predecessor_continuation: Option<&'a str>,
+    predecessor_continuations: &'a [String],
     on_reserved: Option<&'a mut ReservationPublicationCallback<'a>>,
 }
 
@@ -68,7 +68,7 @@ pub(in crate::routine_work::runtime_adapter::production) struct ReservedEffectCo
     cancellation: RoutineCancellation,
     reuse: PreflightedProductionReuse,
     control: PublicRoutineControl,
-    predecessor_continuation: Option<&'a str>,
+    predecessor_continuations: &'a [String],
     on_reserved: Option<&'a mut ReservationPublicationCallback<'a>>,
 }
 
@@ -82,7 +82,7 @@ impl<'a> ProductionExecutionControl<'a> {
             cancellation: RoutineCancellation::new(),
             reuse: RoutineReuseInput::default(),
             control,
-            predecessor_continuation: None,
+            predecessor_continuations: &[],
             on_reserved: None,
         }
     }
@@ -90,7 +90,7 @@ impl<'a> ProductionExecutionControl<'a> {
     pub(crate) fn with_reservation_publication(
         custody: RoutineCustodyCapability,
         control: PublicRoutineControl,
-        predecessor_continuation: Option<&'a str>,
+        predecessor_continuations: &'a [String],
         on_reserved: &'a mut ReservationPublicationCallback<'a>,
     ) -> Self {
         Self {
@@ -98,7 +98,7 @@ impl<'a> ProductionExecutionControl<'a> {
             cancellation: RoutineCancellation::new(),
             reuse: RoutineReuseInput::default(),
             control,
-            predecessor_continuation,
+            predecessor_continuations,
             on_reserved: Some(on_reserved),
         }
     }
@@ -166,7 +166,7 @@ pub(crate) fn mediate_public_routine_execution(
             cancellation,
             reuse,
             control: PublicRoutineControl::Run,
-            predecessor_continuation: None,
+            predecessor_continuations: &[],
             on_reserved: None,
         },
     )
@@ -187,7 +187,7 @@ pub(crate) fn mediate_public_routine_execution_with_reservation_publication<'a>(
         ProductionExecutionControl::with_reservation_publication(
             custody::issue_test_custody(authority_root),
             PublicRoutineControl::Run,
-            None,
+            &[],
             on_reserved,
         ),
     )
@@ -204,7 +204,7 @@ pub(crate) fn mediate_public_routine_execution_with_control(
         cancellation,
         reuse,
         control,
-        predecessor_continuation,
+        predecessor_continuations,
         on_reserved,
     } = control;
     if matches!(prepared, PreparedRoutineExecution::NoOp(_)) {
@@ -227,7 +227,7 @@ pub(crate) fn mediate_public_routine_execution_with_control(
         cancellation,
         reuse,
         control,
-        predecessor_continuation,
+        predecessor_continuations,
         on_reserved,
     };
     custody::mediate_reserved_effect(custody, context, plan, request, control)
@@ -267,7 +267,7 @@ pub(crate) fn authenticate_public_routine_checkpoint(
     snapshot_id: &str,
     continuation: &str,
     recovery_marker: &str,
-    predecessor_continuation: Option<&str>,
+    predecessor_continuations: &[String],
     attempt_grant: &str,
     authenticated_ledger_head: &str,
     state: &str,
@@ -283,7 +283,7 @@ pub(crate) fn authenticate_public_routine_checkpoint(
         snapshot_id,
         continuation,
         recovery_marker,
-        predecessor_continuation,
+        predecessor_continuations,
         attempt_grant,
         authenticated_ledger_head,
         state,

@@ -17,8 +17,8 @@ pub(crate) struct ContinuationCheckpoint {
     pub(super) plan_id: String,
     pub(super) snapshot_id: String,
     pub(super) continuation: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub(super) predecessor_continuation: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub(super) predecessor_continuations: Vec<String>,
     pub(super) recovery_marker: String,
     pub(super) attempt_grant: String,
     pub(super) authenticated_ledger_head: String,
@@ -95,8 +95,8 @@ impl ContinuationCheckpoint {
         &self.continuation
     }
 
-    pub(crate) fn predecessor_continuation(&self) -> Option<&str> {
-        self.predecessor_continuation.as_deref()
+    pub(crate) fn predecessor_continuations(&self) -> &[String] {
+        &self.predecessor_continuations
     }
 
     pub(crate) fn event_id(&self) -> &str {

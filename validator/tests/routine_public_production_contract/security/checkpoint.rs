@@ -6,8 +6,8 @@ fn malformed_stale_or_partially_published_checkpoint_fails_closed() {
         ("stale-checkpoint-head", "authenticated_ledger_head"),
         ("foreign-checkpoint-binding", "context_id"),
         (
-            "forged-predecessor-continuation",
-            "predecessor_continuation",
+            "forged-predecessor-continuations",
+            "predecessor_continuations",
         ),
     ] {
         let mut fixture = Fixture::new(
@@ -31,7 +31,11 @@ fn malformed_stale_or_partially_published_checkpoint_fails_closed() {
             .to_owned();
         let checkpoint = fixture.checkpoint_path();
         let mut value: Value = serde_json::from_slice(&fs::read(&checkpoint).unwrap()).unwrap();
-        value[field] = Value::String(format!("sha256:{field}"));
+        value[field] = if field == "predecessor_continuations" {
+            serde_json::json!([continuation])
+        } else {
+            Value::String(format!("sha256:{field}"))
+        };
         fs::write(&checkpoint, serde_json::to_vec(&value).unwrap()).unwrap();
         let before = tree(&fixture.root);
         let output = fixture.run_args(&[

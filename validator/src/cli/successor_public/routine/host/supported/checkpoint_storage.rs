@@ -52,13 +52,21 @@ impl HostState {
         let active = read_canonical(&self.adapter, binding, None)?;
         match (legacy, canonical, active) {
             (_, Some(canonical), Some(active))
-                if canonical.checkpoint.predecessor_continuation() == Some(continuation)
+                if canonical
+                    .checkpoint
+                    .predecessor_continuations()
+                    .iter()
+                    .any(|value| value == continuation)
                     && active.checkpoint.state == "terminal-event-joined" =>
             {
                 Err(HostFailure::Invalid)
             }
             (_, Some(canonical), Some(active))
-                if canonical.checkpoint.predecessor_continuation() == Some(continuation)
+                if canonical
+                    .checkpoint
+                    .predecessor_continuations()
+                    .iter()
+                    .any(|value| value == continuation)
                     && active.checkpoint.state != "terminal-event-joined" =>
             {
                 Ok(Some(ContinuationResolution {

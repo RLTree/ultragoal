@@ -18,8 +18,8 @@ impl HostState {
             return Err(HostFailure::Invalid);
         }
         let previous = stored_checkpoint(&self.adapter, request.binding, None)?;
-        let (generation, location, expected_existing, predecessor_continuation) = match previous {
-            None => (1, CheckpointLocation::Canonical, false, None::<String>),
+        let (generation, location, expected_existing, predecessor_continuations) = match previous {
+            None => (1, CheckpointLocation::Canonical, false, Vec::new()),
             Some(previous) => {
                 validate_checkpoint(&previous.checkpoint, request.binding, None)?;
                 if previous.checkpoint.state != "reconciled" {
@@ -36,14 +36,14 @@ impl HostState {
                         .ok_or(HostFailure::Invalid)?,
                     previous.location,
                     true,
-                    Some(previous.checkpoint.continuation.clone()),
+                    predecessor_continuations(&previous.checkpoint),
                 )
             }
         };
         let checkpoint = checkpoint(CheckpointDraft {
             binding: request.binding,
             continuation: request.continuation,
-            predecessor_continuation: predecessor_continuation.as_deref(),
+            predecessor_continuations: &predecessor_continuations,
             recovery_marker: request.recovery_marker,
             attempt_grant: request.attempt_grant,
             authenticated_ledger_head: request.authenticated_ledger_head,
@@ -84,7 +84,7 @@ impl HostState {
         let next = checkpoint(CheckpointDraft {
             binding: request.binding,
             continuation: request.continuation,
-            predecessor_continuation: previous.checkpoint.predecessor_continuation(),
+            predecessor_continuations: previous.checkpoint.predecessor_continuations(),
             recovery_marker: &previous.checkpoint.recovery_marker,
             attempt_grant: request.attempt_grant,
             authenticated_ledger_head: request.authenticated_ledger_head,
@@ -102,4 +102,18 @@ impl HostState {
         )?;
         self.verify()
     }
+}
+
+fn predecessor_continuations(
+    checkpoint: &super::checkpoint::ContinuationCheckpoint,
+) -> Vec<String> {
+    let mut continuations = checkpoint.predecessor_continuations().to_vec();
+    if !continuations
+        .iter()
+        .any(|value| value == checkpoint.continuation())
+    {
+        continuations.push(checkpoint.continuation().to_owned());
+        continuations.sort();
+    }
+    continuations
 }

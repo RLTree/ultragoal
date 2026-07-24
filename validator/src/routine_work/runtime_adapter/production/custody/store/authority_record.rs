@@ -178,7 +178,7 @@ pub(super) struct ReservationToken {
     pub(super) request_id: String,
     pub(super) grant_id: String,
     pub(super) recovery_marker: String,
-    pub(super) predecessor_continuation: Option<String>,
+    pub(super) predecessor_continuations: Vec<String>,
     pub(super) expires_tick: Cell<u64>,
     pub(super) output_journal: OutputProvisionJournal,
     pub(super) intents: Vec<IntentBinding>,

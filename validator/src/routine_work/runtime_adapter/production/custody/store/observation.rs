@@ -13,7 +13,7 @@ pub(super) fn token(spec: &ReservationSpec) -> ReservationToken {
         request_id: spec.request_id().to_owned(),
         grant_id: spec.grant_id().to_owned(),
         recovery_marker: spec.recovery_marker().to_owned(),
-        predecessor_continuation: spec.predecessor_continuation().map(str::to_owned),
+        predecessor_continuations: spec.predecessor_continuations().to_vec(),
         expires_tick: Cell::new(0),
         output_journal: spec.output_journal().clone(),
         intents: spec.intents().iter().map(intent).collect(),

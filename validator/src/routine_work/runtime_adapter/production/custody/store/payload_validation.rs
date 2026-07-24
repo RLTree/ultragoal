@@ -14,10 +14,7 @@ pub(in super::super) fn validate_payload(payload: &Payload) -> Result<(), Routin
                 || !valid(&record.request_id)
                 || !valid(&record.grant_id)
                 || !valid(&record.recovery_marker)
-                || record
-                    .predecessor_continuation
-                    .as_ref()
-                    .is_some_and(|value| !valid_continuation(value))
+                || !valid_predecessor_continuations(&record.predecessor_continuations)
                 || record.issued_tick > record.expires_tick
                 || record.expires_tick > record.recovery_deadline_tick
                 || !valid_owner(&record.owner)
@@ -178,10 +175,7 @@ pub(in super::super) fn validate_token(token: &ReservationToken) -> Result<(), R
     if !valid(&token.request_id)
         || !valid(&token.grant_id)
         || !valid(&token.recovery_marker)
-        || token
-            .predecessor_continuation
-            .as_ref()
-            .is_some_and(|value| !valid_continuation(value))
+        || !valid_predecessor_continuations(&token.predecessor_continuations)
         || !valid_owner(&token.owner)
         || token.intents.is_empty()
         || token.intents.iter().any(|intent| !valid_intent(intent))
@@ -194,6 +188,11 @@ pub(in super::super) fn validate_token(token: &ReservationToken) -> Result<(), R
 
 fn valid_continuation(value: &str) -> bool {
     value.strip_prefix("routine-cont-").is_some_and(valid)
+}
+
+fn valid_predecessor_continuations(values: &[String]) -> bool {
+    values.iter().all(|value| valid_continuation(value))
+        && values.windows(2).all(|pair| pair[0] < pair[1])
 }
 
 pub(in super::super) fn validate_binding(binding: &AuthorityBinding) -> Result<(), RoutineError> {

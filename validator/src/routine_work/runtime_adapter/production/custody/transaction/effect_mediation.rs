@@ -28,7 +28,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
         cancellation,
         reuse,
         control,
-        predecessor_continuation,
+        predecessor_continuations,
         mut on_reserved,
         ..
     } = control;
@@ -45,7 +45,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
         &request,
         binding,
         journal,
-        predecessor_continuation,
+        predecessor_continuations,
     )?;
     if let Some(publish) = on_reserved.as_mut() {
         let publication = RoutineReservationPublication::new(

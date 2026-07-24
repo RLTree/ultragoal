@@ -5,7 +5,7 @@ use sha2::{Digest, Sha256};
 pub(super) struct CheckpointDraft<'a> {
     pub(super) binding: CheckpointBinding<'a>,
     pub(super) continuation: &'a str,
-    pub(super) predecessor_continuation: Option<&'a str>,
+    pub(super) predecessor_continuations: &'a [String],
     pub(super) recovery_marker: &'a str,
     pub(super) attempt_grant: &'a str,
     pub(super) authenticated_ledger_head: &'a str,
@@ -28,7 +28,7 @@ pub(super) fn checkpoint(
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
-        schema_version: "RoutineContinuationCheckpoint-v5".to_owned(),
+        schema_version: "RoutineContinuationCheckpoint-v6".to_owned(),
         generation: draft.generation,
         target: draft
             .binding
@@ -41,7 +41,7 @@ pub(super) fn checkpoint(
         plan_id: draft.binding.plan_id().to_owned(),
         snapshot_id: draft.binding.snapshot_id().to_owned(),
         continuation: draft.continuation.to_owned(),
-        predecessor_continuation: draft.predecessor_continuation.map(str::to_owned),
+        predecessor_continuations: draft.predecessor_continuations.to_vec(),
         recovery_marker: draft.recovery_marker.to_owned(),
         attempt_grant: draft.attempt_grant.to_owned(),
         authenticated_ledger_head: draft.authenticated_ledger_head.to_owned(),
@@ -77,7 +77,7 @@ pub(super) fn validate_checkpoint_shape(
 ) -> Result<(), HostFailure> {
     if !matches!(
         checkpoint.schema_version.as_str(),
-        "RoutineContinuationCheckpoint-v4" | "RoutineContinuationCheckpoint-v5"
+        "RoutineContinuationCheckpoint-v4" | "RoutineContinuationCheckpoint-v6"
     ) || checkpoint.generation == 0
         || !matches!(
             checkpoint.state.as_str(),
@@ -91,11 +91,13 @@ pub(super) fn validate_checkpoint_shape(
         || std::path::Path::new(&checkpoint.target).to_str().is_none()
         || !checkpoint.continuation.starts_with("routine-cont-")
         || checkpoint
-            .predecessor_continuation
-            .as_ref()
-            .is_some_and(|value| {
-                !value.starts_with("routine-cont-") || value == &checkpoint.continuation
-            })
+            .predecessor_continuations
+            .iter()
+            .any(|value| !value.starts_with("routine-cont-") || value == &checkpoint.continuation)
+        || checkpoint
+            .predecessor_continuations
+            .windows(2)
+            .any(|values| values[0] >= values[1])
         || checkpoint.attempt_grant.is_empty()
         || checkpoint.authenticated_ledger_head.is_empty()
         || checkpoint.operation != RoutineCheckpointOperation::Terminal

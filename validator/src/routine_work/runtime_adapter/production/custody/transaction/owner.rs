@@ -18,7 +18,7 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Reserva
     request_id: String,
     grant_id: String,
     recovery_marker: String,
-    predecessor_continuation: Option<String>,
+    predecessor_continuations: Vec<String>,
     owner: OwnerObservation,
     output_journal: OutputProvisionJournal,
     intents: Vec<IntentObservation>,
@@ -41,10 +41,10 @@ impl ReservationSpec {
     ) -> &str {
         &self.recovery_marker
     }
-    pub(in crate::routine_work::runtime_adapter::production::custody) fn predecessor_continuation(
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn predecessor_continuations(
         &self,
-    ) -> Option<&str> {
-        self.predecessor_continuation.as_deref()
+    ) -> &[String] {
+        &self.predecessor_continuations
     }
     pub(in crate::routine_work::runtime_adapter::production::custody) fn owner(
         &self,
@@ -69,7 +69,7 @@ impl ReservationOwner {
         request: &RoutineEffectRequest,
         binding: AuthorityBinding,
         output_journal: OutputProvisionJournal,
-        predecessor_continuation: Option<&str>,
+        predecessor_continuations: &[String],
     ) -> Result<Self, RoutineError> {
         let scopes = allowed_output_scopes(request);
         let session_id = random_session_id(&binding)?;
@@ -90,7 +90,7 @@ impl ReservationOwner {
             request_id: request.request_id().to_owned(),
             grant_id,
             recovery_marker,
-            predecessor_continuation: predecessor_continuation.map(str::to_owned),
+            predecessor_continuations: predecessor_continuations.to_vec(),
             owner,
             output_journal,
             intents,
