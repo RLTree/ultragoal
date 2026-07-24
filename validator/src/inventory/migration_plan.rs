@@ -1,8 +1,8 @@
 use super::{ActiveStatus, AuthorityCatalog, InventoryEntry, InventoryError};
 use crate::context::{LiveContext, ReadSession};
 use crate::migration::product::{
-    AdoptedRegistrySnapshot, ProductInputSnapshot, ProductMigrationError,
-    ProductMigrationPlanProjection, derive_read_only_product_plan,
+    derive_read_only_product_plan, AdoptedRegistrySnapshot, ProductInputSnapshot,
+    ProductMigrationError, ProductMigrationPlanProjection,
 };
 use crate::migration::{
     InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,
@@ -12,6 +12,37 @@ use sha2::{Digest, Sha256};
 
 #[derive(Debug)]
 pub(crate) struct MigrationPlanAdapterError(String);
+
+/// One read-session-bound observation used by the public migration verifier.
+///
+/// This is intentionally an in-memory adapter, not a durable migration state or
+/// second authority inventory. It binds the read-only product plan to the same
+/// catalog that established whether any active authority error remains.
+pub(crate) struct MigrationVerification {
+    catalog_id: String,
+    authority_error_codes: Vec<String>,
+    plan: ProductMigrationPlanProjection,
+}
+
+impl MigrationVerification {
+    pub(crate) fn catalog_id(&self) -> &str {
+        &self.catalog_id
+    }
+
+    pub(crate) fn authority_error_codes(&self) -> &[String] {
+        &self.authority_error_codes
+    }
+
+    pub(crate) fn plan(&self) -> &ProductMigrationPlanProjection {
+        &self.plan
+    }
+
+    pub(crate) fn verified(&self) -> bool {
+        self.authority_error_codes.is_empty()
+            && self.plan.pending_count() == 0
+            && self.plan.effect_count() == 0
+    }
+}
 
 impl From<InventoryError> for MigrationPlanAdapterError {
     fn from(error: InventoryError) -> Self {
@@ -77,6 +108,35 @@ pub(super) fn derive(
         .revalidate()
         .map_err(|error| MigrationPlanAdapterError(error.to_string()))?;
     Ok(plan.projection())
+}
+
+pub(super) fn verify(
+    context: &LiveContext,
+    catalog: AuthorityCatalog,
+    reads: &ReadSession,
+    registry_observation: &super::ObservedMigrationRegistry,
+) -> Result<MigrationVerification, MigrationPlanAdapterError> {
+    catalog
+        .revalidate_identity()
+        .map_err(MigrationPlanAdapterError::from)?;
+    let authority_error_codes = catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.severity == crate::inventory::FindingSeverity::Error)
+        .map(|finding| finding.code.clone())
+        .collect::<std::collections::BTreeSet<_>>()
+        .into_iter()
+        .collect();
+    let catalog_id = catalog.catalog_id().to_owned();
+    let plan = derive(context, &catalog, reads, registry_observation)?;
+    reads
+        .revalidate()
+        .map_err(|error| MigrationPlanAdapterError(error.to_string()))?;
+    Ok(MigrationVerification {
+        catalog_id,
+        authority_error_codes,
+        plan,
+    })
 }
 
 fn surface(entry: &InventoryEntry) -> Result<InventorySurface, MigrationPlanAdapterError> {

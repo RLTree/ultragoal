@@ -4,4 +4,5 @@ pub(super) const APIS: &[&str] = &[
     "InventoryBuilder",
     "MigrationInventory",
     "ProductMigrationPlanProjection",
+    "ProductMigrationVerification",
 ];

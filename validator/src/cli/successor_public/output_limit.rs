@@ -114,6 +114,9 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Migrate(crate::cli::successor::command_contract::MigrateAction::Plan) => {
             migration::plan(&context, &invocation)
         }
+        SuccessorCommand::Migrate(
+            crate::cli::successor::command_contract::MigrateAction::Verify,
+        ) => migration::verify(&context, &invocation),
         SuccessorCommand::Diagnose if diagnose::requests_target(&invocation) => {
             diagnose::diagnose_routine(root, &context, &invocation, home)
         }

@@ -29,6 +29,14 @@ impl<'context> InventoryBuilder<'context> {
         super::migration_plan::derive(self.context, &catalog, &reads, &registry)
     }
 
+    pub(crate) fn build_migration_verification(
+        &self,
+    ) -> Result<super::migration_plan::MigrationVerification, super::MigrationPlanAdapterError>
+    {
+        let (catalog, reads, registry) = self.build_observed()?;
+        super::migration_plan::verify(self.context, catalog, &reads, &registry)
+    }
+
     fn build_observed(
         &self,
     ) -> Result<

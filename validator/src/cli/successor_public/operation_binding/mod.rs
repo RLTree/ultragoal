@@ -2,8 +2,8 @@
 
 use crate::cli::successor::command_contract::{EvalAction, MigrateAction};
 use crate::cli::successor::{
-    CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
-    SuccessorCommand, catalog,
+    catalog, CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction,
+    ParsedInvocation, SuccessorCommand,
 };
 use std::collections::BTreeSet;
 
@@ -199,6 +199,12 @@ const BINDINGS: &[Binding] = &[
     binding(
         PublicOperation::MigrationPlan,
         SuccessorCommand::Migrate(MigrateAction::Plan),
+        EffectClass::Read,
+        migration_plan::APIS,
+    ),
+    binding(
+        PublicOperation::MigrationVerification,
+        SuccessorCommand::Migrate(MigrateAction::Verify),
         EffectClass::Read,
         migration_plan::APIS,
     ),

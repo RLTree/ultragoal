@@ -1,8 +1,8 @@
 //! Public operation bindings admit only exact supported command and effect pairs.
 
 use super::*;
-use crate::cli::successor::OutputMode;
 use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
+use crate::cli::successor::OutputMode;
 
 fn invocation(command: SuccessorCommand, effect: EffectClass) -> ParsedInvocation {
     ParsedInvocation {
@@ -52,6 +52,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Migrate(MigrateAction::Verify),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::MigrationVerification),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Package(PackageAction::Inventory),
             EffectClass::WorkspaceWrite,
         )),
@@ -95,10 +102,6 @@ fn only_exact_supported_command_effect_pairs_bind() {
         invocation(
             SuccessorCommand::Migrate(MigrateAction::Apply),
             EffectClass::WorkspaceWrite,
-        ),
-        invocation(
-            SuccessorCommand::Migrate(MigrateAction::Verify),
-            EffectClass::Read,
         ),
         invocation(
             SuccessorCommand::Migrate(MigrateAction::Retire),

@@ -18,6 +18,7 @@ pub(crate) enum PublicOperation {
     EvaluationAudit,
     EvaluationRun,
     MigrationPlan,
+    MigrationVerification,
     PackageBuild,
     PackageVerify,
     PackageInstallTest,
