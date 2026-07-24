@@ -34,6 +34,7 @@ pub(super) fn project(
     }
     let disposition = disposition(checkpoint.as_ref());
     let (action, command, effect) = action_for(checkpoint.as_ref());
+    let reinvoke = root_bound_reinvoke(binding.plan().binding().root_id(), action);
     let machine = serde_json::to_vec(&json!({
         "schema_version": "RoutineNext-v1",
         "context_id": binding.context().context_id(),
@@ -49,6 +50,7 @@ pub(super) fn project(
             "command": command,
             "effect": effect,
             "recovery_note": disposition.recovery,
+            "reinvoke": reinvoke,
         },
         "claim_effect": "none",
         "support_limit": "routine-bound navigation only; no ProductState, Product Fitness, readiness, or release claim"
@@ -66,6 +68,29 @@ pub(super) fn project(
         }
         _ => fallback,
     }
+}
+
+/// A public next action is descriptive until the caller supplies the root that
+/// was bound by the original invocation.  It intentionally carries no path or
+/// cwd fallback, so copying it into another shell cannot retarget a write.
+fn root_bound_reinvoke(root_id: &str, action: &str) -> serde_json::Value {
+    let arguments = match action {
+        "run_current_routine" | "settle_current_routine" | "reuse_current_routine" => {
+            vec!["--json", "check", "routine"]
+        }
+        "diagnose_before_effect" => vec!["--json", "diagnose"],
+        _ => Vec::new(),
+    };
+    json!({
+        "kind": "root-bound",
+        "root_binding": {
+            "id": root_id,
+            "source": "original-invocation",
+            "required": true,
+            "cwd_fallback": "refuse"
+        },
+        "arguments": arguments,
+    })
 }
 
 fn action_for(
@@ -167,5 +192,19 @@ mod tests {
             assert_eq!(command, "ultragoal --json diagnose", "{outcome}");
             assert_eq!(effect, "read", "{outcome}");
         }
+    }
+
+    #[test]
+    fn copied_next_action_cannot_silently_retarget_cwd() {
+        let root_id = "root-id-for-test";
+        let reinvoke = root_bound_reinvoke(root_id, "run_current_routine");
+        assert_eq!(reinvoke["kind"], "root-bound");
+        assert_eq!(reinvoke["root_binding"]["id"], root_id);
+        assert_eq!(reinvoke["root_binding"]["source"], "original-invocation");
+        assert_eq!(reinvoke["root_binding"]["required"], true);
+        assert_eq!(reinvoke["root_binding"]["cwd_fallback"], "refuse");
+        assert_eq!(reinvoke["arguments"], json!(["--json", "check", "routine"]));
+        let encoded = serde_json::to_string(&reinvoke).expect("reinvoke JSON");
+        assert!(!encoded.contains("/"));
     }
 }

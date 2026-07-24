@@ -1,6 +1,25 @@
 use super::*;
 
 impl FileLedger {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn open_existing(
+        root: &Path,
+    ) -> Result<(Self, LocalHead), RoutineError> {
+        let store = Store::open(root)?;
+        let names = store.names()?;
+        if names
+            != BTreeSet::from([
+                KEY_NAME.to_owned(),
+                LOCK_NAME.to_owned(),
+                STATE_NAME.to_owned(),
+            ])
+        {
+            return Err(error("routine-production-authority-store-incomplete"));
+        }
+        let lock = store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+        let lock_identity = store.exact_identity(LOCK_NAME, &lock, 0o600)?;
+        Self::load_complete(store, ProcessLock::acquire(lock)?, lock_identity)
+    }
+
     pub(in crate::routine_work::runtime_adapter::production::custody::store) fn open_or_initialize(
         root: &Path,
     ) -> Result<(Self, LocalHead), RoutineError> {

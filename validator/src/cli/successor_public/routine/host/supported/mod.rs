@@ -17,6 +17,6 @@ mod state_components;
 mod validate_name;
 
 pub(crate) use anchored_directory::write_lock_marker;
-pub(crate) use continuity::ContinuationCheckpoint;
+pub(crate) use continuity::{ContinuationCheckpoint, ContinuationResolution};
 pub(crate) use state_components::*;
 pub(crate) use validate_name::*;

@@ -19,7 +19,23 @@ pub(super) fn mark_post_effect_ambiguity(
         snapshot.snapshot_id(),
     );
     if let Ok(Some(checkpoint)) = state.exact_checkpoint(binding, None) {
-        let _ = state.mark_checkpoint_ambiguous(&checkpoint);
+        let authenticated = state.authenticate_public_state(
+            target,
+            checkpoint.context_id(),
+            checkpoint.candidate_id(),
+            checkpoint.plan_id(),
+            checkpoint.snapshot_id(),
+            checkpoint.continuation(),
+            checkpoint.recovery_marker(),
+            checkpoint.attempt_grant(),
+            checkpoint.ledger_head(),
+            "ambiguous",
+            Some("ambiguous"),
+            false,
+        );
+        if authenticated.is_ok() {
+            let _ = state.mark_checkpoint_ambiguous(&checkpoint);
+        }
     }
 }
 
@@ -33,6 +49,9 @@ pub(super) fn join(
     if !checkpoint.is_terminal() || checkpoint.state() == "terminal-event-joined" {
         return Ok(());
     };
+    state
+        .authenticate_checkpoint(target, checkpoint, false)
+        .map_err(PublicFailure::Host)?;
     let event = RoutineTerminalEvent {
         event_id: checkpoint.event_id(),
         continuation_id: checkpoint.continuation(),

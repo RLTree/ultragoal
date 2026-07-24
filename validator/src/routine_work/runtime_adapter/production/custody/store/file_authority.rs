@@ -6,6 +6,7 @@ use crate::routine_work::runtime_adapter::production::custody::observations::{
     ChildObservation, LaunchObservation, TerminalObservation,
 };
 use crate::routine_work::runtime_adapter::production::custody::transaction::ReservationSpec;
+use std::path::Path;
 pub(in crate::routine_work::runtime_adapter::production::custody) struct DurableCustody {
     #[cfg(target_vendor = "apple")]
     inner: supported::authentication::FileLedger,
@@ -16,6 +17,62 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Durable
     child: RefCell<Option<ChildLease>>,
 }
 impl DurableCustody {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn authenticate_public_checkpoint(
+        custody: &RoutineCustodyCapability,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        plan_id: &str,
+        snapshot_id: &str,
+        continuation: &str,
+        recovery_marker: &str,
+        attempt_grant: &str,
+        authenticated_ledger_head: &str,
+        state: &str,
+        terminal_outcome: Option<&str>,
+        allow_stale_head: bool,
+    ) -> Result<(), RoutineError> {
+        let root = custody.authority_root();
+        #[cfg(target_vendor = "apple")]
+        {
+            let (inner, mut head) = supported::authentication::FileLedger::open_existing(root)?;
+            inner.authenticate_public_checkpoint(
+                &mut head,
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                attempt_grant,
+                authenticated_ledger_head,
+                state,
+                terminal_outcome,
+                allow_stale_head,
+            )
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (
+                custody,
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                attempt_grant,
+                authenticated_ledger_head,
+                state,
+                terminal_outcome,
+                allow_stale_head,
+            );
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(in crate::routine_work::runtime_adapter::production::custody) fn reconcile_reserved(
         custody: &RoutineCustodyCapability,
         binding: &AuthorityBinding,

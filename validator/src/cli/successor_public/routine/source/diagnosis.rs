@@ -93,6 +93,11 @@ pub(crate) fn current_checkpoint(
             None,
         )
         .map_err(|_| ())?;
+    if let Some(checkpoint) = checkpoint.as_ref() {
+        state
+            .authenticate_checkpoint(binding.target(), checkpoint, false)
+            .map_err(|_| ())?;
+    }
     if state.verify().is_err() || binding.context().revalidate().is_err() {
         return Err(());
     }

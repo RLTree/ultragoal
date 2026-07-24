@@ -66,8 +66,9 @@ pub(crate) use runtime_adapter::{
     PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, ProductionExecutionControl,
     PublicRoutineControl, RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReservationPublication, RoutineTerminalOutcome, bind_rust_source_syntax_invocation,
-    fixed_environment, mediate_public_routine_execution_with_control, prepare_routine_execution,
+    RoutineReservationPublication, RoutineTerminalOutcome, authenticate_public_routine_checkpoint,
+    bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution_with_control, prepare_routine_execution,
     reconcile_public_routine_reservation, validate_immutable_routine_program,
 };
 

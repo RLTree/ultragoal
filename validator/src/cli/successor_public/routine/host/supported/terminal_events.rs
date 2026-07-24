@@ -1,7 +1,7 @@
 use super::super::super::{CheckpointBinding, HostFailure};
 use super::super::HostState;
 use super::checkpoint::ContinuationCheckpoint;
-use super::checkpoint_storage::{stored_checkpoint, write_checkpoint};
+use super::checkpoint_storage::{remove_reconciled_alias, stored_checkpoint, write_checkpoint};
 use super::continuity_validation::{event_projection, terminal_event_id};
 
 impl HostState {
@@ -35,6 +35,7 @@ impl HostState {
                 .ok_or(HostFailure::Invalid)?
                 .location;
         write_checkpoint(&self.adapter, binding_from(&next), location, &next, true)?;
+        remove_reconciled_alias(&self.adapter, binding_from(&next), &next)?;
         self.verify()
     }
 

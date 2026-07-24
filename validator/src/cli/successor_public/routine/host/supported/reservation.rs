@@ -25,6 +25,17 @@ impl HostState {
                 if previous.checkpoint.state != "reconciled" {
                     return Err(HostFailure::Busy);
                 }
+                let alias_location = match previous.location {
+                    CheckpointLocation::Legacy => CheckpointLocation::Canonical,
+                    CheckpointLocation::Canonical => CheckpointLocation::Legacy,
+                };
+                super::checkpoint_storage::write_checkpoint(
+                    &self.adapter,
+                    request.binding,
+                    alias_location,
+                    &previous.checkpoint,
+                    false,
+                )?;
                 (
                     previous
                         .checkpoint

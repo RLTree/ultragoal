@@ -6,6 +6,21 @@ use std::io::Write;
 use std::os::fd::AsRawFd;
 
 impl AnchoredDirectory {
+    pub(crate) fn remove_regular(&self, name: &str) -> Result<(), HostFailure> {
+        validate_name(name)?;
+        let file = self.open_regular(name, libc::O_RDONLY, 0o600)?;
+        let expected = identity(&file.metadata().map_err(|_| HostFailure::Invalid)?);
+        if self.stat(name)? != Some(expected) {
+            return Err(HostFailure::Busy);
+        }
+        let name = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+        // SAFETY: `name` is validated and the descriptor anchors the parent.
+        if unsafe { libc::unlinkat(self.file.as_raw_fd(), name.as_ptr(), 0) } != 0 {
+            return Err(HostFailure::Busy);
+        }
+        self.file.sync_all().map_err(|_| HostFailure::Invalid)
+    }
+
     pub(crate) fn open_regular(
         &self,
         name: &str,

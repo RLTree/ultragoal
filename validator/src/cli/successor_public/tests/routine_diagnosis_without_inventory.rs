@@ -55,6 +55,19 @@ fn public_next_projects_routine_work_when_inventory_is_incomplete() {
         "ultragoal --json check routine"
     );
     assert_eq!(value["next_action"]["effect"], "workspace_write");
+    assert_eq!(value["next_action"]["reinvoke"]["kind"], "root-bound");
+    assert_eq!(
+        value["next_action"]["reinvoke"]["root_binding"]["id"],
+        value["repository_root_id"]
+    );
+    assert_eq!(
+        value["next_action"]["reinvoke"]["root_binding"]["required"],
+        true
+    );
+    assert_eq!(
+        value["next_action"]["reinvoke"]["root_binding"]["cwd_fallback"],
+        "refuse"
+    );
     assert_eq!(value["claim_effect"], "none");
     assert!(!String::from_utf8_lossy(&streams.stdout).contains(repo.root.to_str().unwrap()));
     assert_eq!(tree(&repo.root), before_tree);

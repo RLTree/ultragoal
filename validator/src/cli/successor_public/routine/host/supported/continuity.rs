@@ -10,4 +10,4 @@ mod reservation;
 mod terminal_events;
 
 pub(crate) use checkpoint::ContinuationCheckpoint;
-pub(crate) use checkpoint_storage::validate_continuation_directory;
+pub(crate) use checkpoint_storage::{ContinuationResolution, validate_continuation_directory};

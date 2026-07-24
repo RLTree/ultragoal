@@ -33,12 +33,36 @@ pub(crate) struct ContinuationCheckpoint {
 }
 
 impl ContinuationCheckpoint {
+    pub(crate) fn target(&self) -> &str {
+        &self.target
+    }
+
+    pub(crate) fn context_id(&self) -> &str {
+        &self.context_id
+    }
+
+    pub(crate) fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+
+    pub(crate) fn plan_id(&self) -> &str {
+        &self.plan_id
+    }
+
+    pub(crate) fn snapshot_id(&self) -> &str {
+        &self.snapshot_id
+    }
+
     pub(crate) fn ledger_head(&self) -> &str {
         &self.authenticated_ledger_head
     }
 
     pub(crate) fn attempt_grant(&self) -> &str {
         &self.attempt_grant
+    }
+
+    pub(crate) fn recovery_marker(&self) -> &str {
+        &self.recovery_marker
     }
 
     pub(crate) fn finding_binding(&self) -> Option<&crate::state::RoutineFindingBinding> {

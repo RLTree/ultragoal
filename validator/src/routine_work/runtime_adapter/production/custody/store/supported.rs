@@ -10,6 +10,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 #[path = "authentication.rs"]
 pub(super) mod authentication;
+#[path = "checkpoint_attestation.rs"]
+mod checkpoint_attestation;
 #[path = "failure.rs"]
 mod failure;
 #[path = "identity.rs"]

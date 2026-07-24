@@ -66,6 +66,87 @@ impl HostState {
         }
     }
 
+    pub(crate) fn authenticate_checkpoint(
+        &self,
+        target: &Path,
+        checkpoint: &supported::ContinuationCheckpoint,
+        allow_stale_head: bool,
+    ) -> Result<(), HostFailure> {
+        if checkpoint.target() != target.to_str().ok_or(HostFailure::Invalid)? {
+            return Err(HostFailure::Invalid);
+        }
+        self.authenticate_public_state(
+            target,
+            checkpoint.context_id(),
+            checkpoint.candidate_id(),
+            checkpoint.plan_id(),
+            checkpoint.snapshot_id(),
+            checkpoint.continuation(),
+            checkpoint.recovery_marker(),
+            checkpoint.attempt_grant(),
+            checkpoint.ledger_head(),
+            checkpoint.state(),
+            checkpoint
+                .terminal_outcome()
+                .map(|outcome| outcome.as_str()),
+            allow_stale_head,
+        )
+    }
+
+    pub(crate) fn authenticate_public_state(
+        &self,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        plan_id: &str,
+        snapshot_id: &str,
+        continuation: &str,
+        recovery_marker: &str,
+        attempt_grant: &str,
+        authenticated_ledger_head: &str,
+        state: &str,
+        terminal_outcome: Option<&str>,
+        allow_stale_head: bool,
+    ) -> Result<(), HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            crate::routine_work::authenticate_public_routine_checkpoint(
+                self.issue_custody_capability(),
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                attempt_grant,
+                authenticated_ledger_head,
+                state,
+                terminal_outcome,
+                allow_stale_head,
+            )
+            .map_err(|_| HostFailure::Invalid)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                attempt_grant,
+                authenticated_ledger_head,
+                state,
+                terminal_outcome,
+                allow_stale_head,
+            );
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
     pub(crate) fn record_reserved_checkpoint(
         &self,
         request: ReservedCheckpoint<'_>,
@@ -95,6 +176,49 @@ impl HostState {
             let _ = (binding, continuation);
             unreachable!("unsupported host state cannot be constructed")
         }
+    }
+
+    pub(crate) fn resolve_checkpoint(
+        &self,
+        binding: CheckpointBinding<'_>,
+        continuation: &str,
+    ) -> Result<Option<supported::ContinuationResolution>, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.resolve_checkpoint(binding, continuation)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (binding, continuation);
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
+    pub(crate) fn remove_alias(
+        &self,
+        binding: CheckpointBinding<'_>,
+        alias: &supported::ContinuationCheckpoint,
+    ) -> Result<(), HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.remove_alias(binding, alias)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (binding, alias);
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
+    pub(crate) fn remove_alias_if_present(
+        &self,
+        binding: CheckpointBinding<'_>,
+        alias: Option<&supported::ContinuationCheckpoint>,
+    ) -> Result<(), HostFailure> {
+        if let Some(alias) = alias {
+            self.remove_alias(binding, alias)?;
+        }
+        Ok(())
     }
 
     pub(crate) fn record_terminal_checkpoint(

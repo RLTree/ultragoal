@@ -218,3 +218,43 @@ pub(crate) fn reconcile_public_routine_reservation(
     preflight_production_request(context, plan, &request)?;
     custody::reconcile_reserved_effect(custody, &request, attempt_grant, expected_head)
 }
+
+/// Authenticates a public host checkpoint against the private HMAC ledger.
+///
+/// The host checkpoint is intentionally only a projection.  This read-only
+/// path opens an already-created custody store and verifies the exact attempt
+/// binding before a caller may project, append a terminal event, or advance
+/// the host projection.  `allow_stale_head` is reserved for a one-shot
+/// continuation alias: the private attempt and binding still must match, but
+/// its old projection head may have been superseded by the handoff attempt.
+pub(crate) fn authenticate_public_routine_checkpoint(
+    custody: RoutineCustodyCapability,
+    target: &Path,
+    context_id: &str,
+    candidate_id: &str,
+    plan_id: &str,
+    snapshot_id: &str,
+    continuation: &str,
+    recovery_marker: &str,
+    attempt_grant: &str,
+    authenticated_ledger_head: &str,
+    state: &str,
+    terminal_outcome: Option<&str>,
+    allow_stale_head: bool,
+) -> Result<(), RoutineError> {
+    custody::authenticate_public_checkpoint(
+        custody,
+        target,
+        context_id,
+        candidate_id,
+        plan_id,
+        snapshot_id,
+        continuation,
+        recovery_marker,
+        attempt_grant,
+        authenticated_ledger_head,
+        state,
+        terminal_outcome,
+        allow_stale_head,
+    )
+}
