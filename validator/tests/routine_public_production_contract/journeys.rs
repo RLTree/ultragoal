@@ -220,6 +220,62 @@ fn reservation_interruption_reconciles_once_through_the_public_continuation_rout
 }
 
 #[test]
+fn reconciled_reservation_republishes_when_legacy_filename_belongs_to_another_binding() {
+    let mut interrupted = Fixture::new(
+        "reconciled-republish-with-foreign-legacy",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut foreign = Fixture::new(
+        "foreign-legacy-for-reconciled-republish",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut foreign_run = routine_command(&foreign.root, &interrupted.home, foreign.binary_path());
+    foreign_run.args(["--json", "check", "routine"]);
+    let foreign_run = foreign_run.output().unwrap();
+    assert_eq!(foreign_run.status.code(), Some(0), "{foreign_run:?}");
+    assert_eq!(Fixture::value(&foreign_run)["status"], "executed");
+    let foreign_record = interrupted.checkpoint_path();
+    let legacy = interrupted
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&foreign_record, &legacy).unwrap();
+    let foreign_legacy = fs::read(&legacy).unwrap();
+
+    let first = interrupted.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(first.status.code(), Some(1), "{first:?}");
+    let continuation = Fixture::value(&first)["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+
+    let recovered = interrupted.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert_eq!(Fixture::value(&recovered)["status"], "executed");
+    assert_eq!(fs::read(&legacy).unwrap(), foreign_legacy);
+
+    foreign.teardown_after_assertions();
+    interrupted.teardown_after_assertions();
+}
+
+#[test]
 fn public_output_creation_is_observed_only_after_the_durable_journal() {
     let mut fixture = Fixture::new(
         "durable-output-order",

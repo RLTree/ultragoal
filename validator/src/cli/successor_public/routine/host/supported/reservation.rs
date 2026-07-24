@@ -1,7 +1,7 @@
 use super::super::super::{HostFailure, ReservedCheckpoint, TerminalCheckpoint};
 use super::super::HostState;
-use super::checkpoint_storage::{CheckpointLocation, stored_checkpoint, write_checkpoint};
-use super::continuity_validation::{CheckpointDraft, checkpoint, validate_checkpoint};
+use super::checkpoint_storage::{stored_checkpoint, write_checkpoint, CheckpointLocation};
+use super::continuity_validation::{checkpoint, validate_checkpoint, CheckpointDraft};
 
 impl HostState {
     pub(crate) fn record_reserved_checkpoint(
@@ -25,17 +25,11 @@ impl HostState {
                 if previous.checkpoint.state != "reconciled" {
                     return Err(HostFailure::Busy);
                 }
-                let alias_location = match previous.location {
-                    CheckpointLocation::Legacy => CheckpointLocation::Canonical,
-                    CheckpointLocation::Canonical => CheckpointLocation::Legacy,
-                };
-                super::checkpoint_storage::write_checkpoint(
-                    &self.adapter,
-                    request.binding,
-                    alias_location,
-                    &previous.checkpoint,
-                    false,
-                )?;
+                // Reconciliation is terminal for the prior reservation: the private
+                // custody ledger retains its no-effect outcome and the host record
+                // only gates the next publication. Do not require the single legacy
+                // compatibility filename to be free before replacing this canonical
+                // record; it can legitimately hold another binding's history.
                 (
                     previous
                         .checkpoint
