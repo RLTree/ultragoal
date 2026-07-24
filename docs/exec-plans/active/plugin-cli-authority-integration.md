@@ -2690,6 +2690,32 @@ isolated-install, cache, app-registry, discovery, installed runtime, and the
 Research Run interruption/recovery/repeat-use observations. Product Fitness,
 human-use, daily-driver, readiness, release, and completion remain withheld.
 
+### Cross-binding routine checkpoint publication — Terra implementation — 2026-07-23
+
+The retained installed Research Run failure was classified as a host projection
+topology defect, not a stale reservation or missing durable head. After a
+reservation was reconciled no-effect, replacing its canonical checkpoint tried
+to copy the consumed reconciled record into the single legacy compatibility
+filename. That filename may validly retain a terminal checkpoint for another
+target binding, so the copy refused and prevented the authenticated fresh
+reservation from publishing.
+
+Root integrated `f7306891f03d82b7ad59e75921a445ae53a7bfbe` / tree
+`cecc02652180fb3528ea13b4c3150caaa4794bdc`. The existing canonical record
+now replaces a reconciled checkpoint directly; the private ledger retains the
+prior no-effect outcome, and a foreign legacy compatibility record remains
+unchanged. The focused source controls passed the new cross-binding recovery
+journey (`1/1`, 23.31s), the ordinary interruption/reconciliation journey
+(`1/1`, 19.21s), and stale-reservation refusal (`1/1`, 15.95s). One bounded
+Terra/medium review accepted the complete cross-binding publication, recovery,
+and stale-head invariant.
+
+The next plugin candidate is `0.0.30`. Every package, isolated-install, cache,
+marketplace, app-registry, discovery, runtime, Research Run recovery, and
+repeat-use observation is invalid until rebuilt from this source. No Product
+Fitness, human-use, daily-driver, readiness, release, or completion claim
+advances.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required

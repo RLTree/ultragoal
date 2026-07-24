@@ -717,6 +717,22 @@ install, discovery, runtime, and agent-use evidence is invalidated until the
 upcoming versioned rebuild. Daily-driver, Product Fitness, human-use, readiness,
 release, and completion claims remain withheld.
 
+## 2026-07-23 cross-binding routine checkpoint publication
+
+Root integrated `f7306891f03d82b7ad59e75921a445ae53a7bfbe` / tree
+`cecc02652180fb3528ea13b4c3150caaa4794bdc`. The first broken installed
+transition was a single legacy compatibility filename blocking an otherwise
+authenticated fresh reservation after no-effect reconciliation: it already held
+an unrelated binding's valid terminal record. The canonical record now replaces
+the consumed reconciled checkpoint directly; private custody retains the old
+rollback and the unrelated legacy bytes remain untouched. The exact focused
+source matrix passed cross-binding recovery 1/1 (23.31s), ordinary public
+interruption/recovery 1/1 (19.21s), and stale-reserved refusal 1/1 (15.95s).
+Terra/medium review accepted. Candidate `0.0.30` now requires a new package,
+isolated install, marketplace/cache/app registration, fresh discovery, Research
+Run interruption/recovery, and repeat-use observation. Claim ceiling is still
+source-local; all installed and higher claims are withheld.
+
 ## Stage B routing snapshot (projection, not authority)
 
 Literal checkpoint identity is `97e24c9706e7b489bdbdc6184ff9520a7116c6fd` /
