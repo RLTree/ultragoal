@@ -2665,6 +2665,31 @@ and the dirty Research Run journey are invalidated by this source identity and
 remain required. No Product Fitness, daily-driver, human-use, readiness,
 release, or completion claim advances.
 
+### Installed routine terminal-replay reconciliation — Terra implementation — 2026-07-23
+
+Root integration `b79002a4403ef3cca664a11ffb63b2d0acfa137c` / tree
+`b8c109adf93fbaa195309b5cb3727e8d4cb4ec6c` closes the next shared source
+invariant exposed by the retained installed interruption: the public checkpoint
+may replay an already-complete, exactly bound terminal attempt after a separate
+attempt advances the shared ledger, but it may not use that relaxation to
+recover a stale reservation.
+
+The host still authenticates the private durable reservation before it writes a
+public `reserved` checkpoint. Only `Complete` and the pre-existing
+`RolledBack` one-shot alias path can accept an old ledger head; a reservation
+remains exact-head fenced. The change adds no checkpoint store, recovery route,
+caller authority, or cleanup behavior. On the exact source tree, completed
+replay after an independent recovery passed `1/1`; stale-reserved takeover
+refusal passed `1/1`; and the public interruption/reconciliation control passed
+`1/1`. One bounded Terra/medium confirmation review accepted the complete
+attestation, interruption, reconciliation, stale-reservation, and repeat-use
+invariant.
+
+This is source-local integration evidence only. It invalidates package,
+isolated-install, cache, app-registry, discovery, installed runtime, and the
+Research Run interruption/recovery/repeat-use observations. Product Fitness,
+human-use, daily-driver, readiness, release, and completion remain withheld.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required

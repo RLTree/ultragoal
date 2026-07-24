@@ -700,20 +700,22 @@ The last broad diagnostic baseline and the table below are historical context,
 not current candidate proof or a readiness surface.
 Rule: every digest-changing authority edit immediately reopens dependent evidence. Percentages are non-authoritative.
 
-## 2026-07-23 installed routine checkpoint publication repair
+## 2026-07-23 installed routine checkpoint publication and terminal replay repair
 
-Current root source is `cbe4c61fee148a1d6659f16d74879d18f2e2e786` / tree
-`a4dcbf76f3f6493c1d265e61785d9d0091897953`. The first broken installed
-transition was the host reservation checkpoint: public continuations have the
-canonical `routine-cont-` prefix, while the ledger checkpoint validator only
-accepted a bare digest. The integrated repair validates the canonical shape;
-settles a definite pre-effect projection failure through the existing durable
-failure owner; and preserves a confirmed post-write uncertainty for the
-existing public recovery path. The focused red controls and the exact public
-interruption/reconciliation journey pass at source. All package, install,
-discovery, runtime, and agent-use evidence is invalidated until the upcoming
-versioned rebuild. Daily-driver, Product Fitness, human-use, readiness, release,
-and completion claims remain withheld.
+Current root source is `b79002a4403ef3cca664a11ffb63b2d0acfa137c` / tree
+`b8c109adf93fbaa195309b5cb3727e8d4cb4ec6c`. The first broken installed
+transition remains the host reservation checkpoint. The prior repair accepts
+the canonical `routine-cont-` shape and routes definite pre-effect projection
+failure through the durable failure owner. The current repair restores durable
+private-reservation attestation before public `reserved` publication and allows
+an old ledger head only when replaying an exactly matched complete terminal
+attempt (or the existing rolled-back alias); stale reservation recovery stays
+fail-closed. Focused source controls cover public interruption/reconciliation,
+completed replay after an independent recovery, and stale-reservation refusal;
+the bounded Terra/medium confirmation accepted the full invariant. All package,
+install, discovery, runtime, and agent-use evidence is invalidated until the
+upcoming versioned rebuild. Daily-driver, Product Fitness, human-use, readiness,
+release, and completion claims remain withheld.
 
 ## Stage B routing snapshot (projection, not authority)
 
