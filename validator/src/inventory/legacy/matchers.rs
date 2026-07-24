@@ -75,7 +75,10 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
         || lower.starts_with("validator/src/command/")
     {
         found("command", "path:legacy-command-authority")
-    } else if component(rel, "final_packet") || component(rel, "finalizer") || stem == "finalizer" {
+    } else if component(rel, "final_packet")
+        || component(rel, "finalizer")
+        || (component(rel, "legacy") && matches!(stem, "finalizer" | "finalization"))
+    {
         found("finalizer", "path:legacy-finalization-authority")
     } else {
         None
@@ -121,6 +124,7 @@ mod tests {
             "validator/src/audit/final_packet/mod.rs",
             "validator/src/cli/final_packet/mod.rs",
             "legacy/finalizer.md",
+            "legacy/finalization.rs",
         ] {
             assert_eq!(
                 path_match(Path::new(path)).map(|found| found.kind),

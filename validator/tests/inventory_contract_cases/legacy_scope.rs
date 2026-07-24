@@ -6,7 +6,6 @@ fn catalog(repo: &TestRepo) -> AuthorityCatalog {
     let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
     InventoryBuilder::new(&context).build().unwrap()
 }
-
 fn legacy_entry<'a>(
     catalog: &'a AuthorityCatalog,
     path: &str,
@@ -16,7 +15,6 @@ fn legacy_entry<'a>(
         .iter()
         .find(|entry| entry.relative_path == path && entry.stable_id.starts_with("LEGACY-"))
 }
-
 fn assert_absent(catalog: &AuthorityCatalog, path: &str) {
     assert!(
         legacy_entry(catalog, path).is_none(),
@@ -139,6 +137,7 @@ fn active_authority_negative_controls_remain_flagged() {
             "validator/src/plugin_product/lifecycle/host_custody/finalization.rs",
             "pub fn terminal_custody() {}\n",
         ),
+        ("legacy/finalization.rs", "pub fn obsolete() {}\n"),
         ("plugin-manifest-draft.json", "{}\n"),
         ("agents/current.md", "active agent prompt\n"),
         ("docs/public-model.md", "required model gpt-5.5\n"),
@@ -156,6 +155,7 @@ fn active_authority_negative_controls_remain_flagged() {
         ("validator/src/claim_semantics/lane/policy.rs", "lane"),
         ("validator/src/audit/final_packet/mod.rs", "finalizer"),
         ("validator/src/cli/final_packet/mod.rs", "finalizer"),
+        ("legacy/finalization.rs", "finalizer"),
         ("plugin-manifest-draft.json", "manifest-projection"),
         ("agents/current.md", "agent"),
         ("docs/public-model.md", "model"),
