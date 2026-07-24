@@ -186,6 +186,19 @@ impl HostState {
         }
     }
 
+    pub(crate) fn exact_checkpoint_or_legacy(
+        &self,
+        binding: CheckpointBinding<'_>,
+    ) -> Result<Option<supported::ContinuationCheckpoint>, HostFailure> {
+        match self.exact_checkpoint(binding, None)? {
+            Some(checkpoint) => Ok(Some(checkpoint)),
+            None if !binding.execution_id().is_empty() => {
+                self.exact_checkpoint(binding.without_execution_id(), None)
+            }
+            None => Ok(None),
+        }
+    }
+
     pub(crate) fn resolve_checkpoint(
         &self,
         binding: CheckpointBinding<'_>,
@@ -193,7 +206,13 @@ impl HostState {
     ) -> Result<Option<supported::ContinuationResolution>, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            self.inner.resolve_checkpoint(binding, continuation)
+            match self.inner.resolve_checkpoint(binding, continuation)? {
+                Some(resolution) => Ok(Some(resolution)),
+                None if !binding.execution_id().is_empty() => self
+                    .inner
+                    .resolve_checkpoint(binding.without_execution_id(), continuation),
+                None => Ok(None),
+            }
         }
         #[cfg(not(target_vendor = "apple"))]
         {

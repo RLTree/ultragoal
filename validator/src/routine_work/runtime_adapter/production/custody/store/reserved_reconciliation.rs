@@ -18,7 +18,7 @@ impl FileLedger {
                 .get_mut(attempt_grant)
                 .ok_or_else(|| error("routine-production-continuation-record-invalid"))?;
             if record.binding != *binding {
-                return Err(error("routine-production-continuation-binding-invalid"));
+                return Ok((ContinuationDisposition::BindingMismatch, false));
             }
             if record.state == AttemptState::Complete
                 && record.terminal.as_ref().is_some_and(|terminal| {
@@ -64,6 +64,7 @@ impl FileLedger {
 #[derive(Debug)]
 pub(in crate::routine_work::runtime_adapter::production::custody) enum ContinuationDisposition {
     Complete(crate::routine_work::runtime_adapter::mediator::RoutineMediationResult),
+    BindingMismatch,
     Reserved,
 }
 

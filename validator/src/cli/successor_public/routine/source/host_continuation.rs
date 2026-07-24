@@ -34,6 +34,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         .map_err(PublicFailure::Routine)?;
 
     let prepared = prepare(context, manifest, graph, snapshot, plan)?;
+    let checkpoint_execution_id = prepared.checkpoint_execution_id().to_owned();
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
     let state = HostState::open_or_bootstrap(home, target).map_err(PublicFailure::Host)?;
     let checkpoint_binding = host::CheckpointBinding::new(
@@ -42,8 +43,9 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         plan.binding().candidate_id(),
         plan.plan_id(),
         snapshot.snapshot_id(),
+        &checkpoint_execution_id,
     );
-    let (checkpoint, handoff_alias) = match continuation {
+    let (mut checkpoint, mut handoff_alias) = match continuation {
         Some(continuation) => match state
             .resolve_checkpoint(checkpoint_binding, continuation)
             .map_err(PublicFailure::Host)?
@@ -53,7 +55,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         },
         None => (
             state
-                .exact_checkpoint(checkpoint_binding, None)
+                .exact_checkpoint_or_legacy(checkpoint_binding)
                 .map_err(PublicFailure::Host)?,
             None,
         ),
@@ -68,15 +70,10 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
             .authenticate_checkpoint(target, checkpoint, false)
             .map_err(PublicFailure::Host)?;
     }
-    let finding_binding = checkpoint
+    let mut finding_binding = checkpoint
         .as_ref()
-        .and_then(|checkpoint| checkpoint.finding_binding().cloned())
-        .or_else(|| {
-            checkpoint
-                .is_none()
-                .then(|| terminal_event::capture_finding_binding(context))
-                .flatten()
-        });
+        .and_then(|checkpoint| checkpoint.finding_binding().cloned());
+    let mut legacy_complete_mismatch = false;
     if let Some(checkpoint) = checkpoint.as_ref() {
         if checkpoint.is_terminal() && !checkpoint.is_complete() {
             terminal_event::join(target, context, &state, plan.binding(), checkpoint)?;
@@ -84,7 +81,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         }
         if checkpoint.is_complete() {
             let recovery_prepared = prepare(context, manifest, graph, snapshot, plan)?;
-            let result = match reconcile_public_routine_reservation(
+            match reconcile_public_routine_reservation(
                 state.issue_custody_capability(),
                 context,
                 plan,
@@ -94,24 +91,30 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
             )
             .map_err(PublicFailure::Routine)?
             {
-                RoutineContinuationOutcome::Complete(result) => result,
-                RoutineContinuationOutcome::Reserved { .. } => {
+                RoutineContinuationOutcome::Complete(result) => {
+                    terminal_event::join(target, context, &state, plan.binding(), checkpoint)?;
+                    return Ok(outcome::mediation(
+                        &result,
+                        terminal_event::mediation_context(
+                            context, plan, graph, snapshot, source_id,
+                        ),
+                    ));
+                }
+                RoutineContinuationOutcome::BindingMismatch
+                    if !checkpoint.has_execution_id() && continuation.is_none() =>
+                {
+                    legacy_complete_mismatch = true;
+                }
+                RoutineContinuationOutcome::BindingMismatch
+                | RoutineContinuationOutcome::Reserved { .. } => {
                     return Err(PublicFailure::PersistenceAfterEffect);
                 }
             };
-            terminal_event::join(target, context, &state, plan.binding(), checkpoint)?;
-            return Ok(outcome::mediation(
-                &result,
-                terminal_event::mediation_context(context, plan, graph, snapshot, source_id),
-            ));
-        }
-        if continuation.is_none() {
+        } else if continuation.is_none() {
             return Err(PublicFailure::ContinuationUnavailable);
-        }
-        if !checkpoint.is_reserved() && checkpoint.state() != "reconciled" {
+        } else if !checkpoint.is_reserved() && checkpoint.state() != "reconciled" {
             return Err(PublicFailure::Host(host::HostFailure::Invalid));
-        }
-        if checkpoint.is_reserved() {
+        } else if checkpoint.is_reserved() {
             let recovery_prepared = prepare(context, manifest, graph, snapshot, plan)?;
             match reconcile_public_routine_reservation(
                 state.issue_custody_capability(),
@@ -196,10 +199,21 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                         state.remove_alias_if_present(checkpoint_binding, handoff_alias.as_ref())
                     })
                     .map_err(PublicFailure::Host)?,
+                RoutineContinuationOutcome::BindingMismatch => {
+                    return Err(PublicFailure::PersistenceAfterEffect);
+                }
             }
         }
     } else if continuation.is_some() {
         return Err(PublicFailure::Host(host::HostFailure::Invalid));
+    }
+    if legacy_complete_mismatch {
+        checkpoint = None;
+        handoff_alias = None;
+        finding_binding = terminal_event::capture_finding_binding(context);
+    }
+    if checkpoint.is_none() && finding_binding.is_none() {
+        finding_binding = terminal_event::capture_finding_binding(context);
     }
     if checkpoint
         .as_ref()
@@ -293,7 +307,14 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         Ok(result) => result,
         Err(error) => {
             if !reservation_publication_failed {
-                terminal_event::mark_post_effect_ambiguity(&state, target, context, plan, snapshot);
+                terminal_event::mark_post_effect_ambiguity(
+                    &state,
+                    target,
+                    context,
+                    plan,
+                    snapshot,
+                    &checkpoint_execution_id,
+                );
             }
             return Err(PublicFailure::Routine(error));
         }
@@ -350,7 +371,14 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                 terminal_outcome,
             })
             .map_err(|_| {
-                terminal_event::mark_post_effect_ambiguity(&state, target, context, plan, snapshot);
+                terminal_event::mark_post_effect_ambiguity(
+                    &state,
+                    target,
+                    context,
+                    plan,
+                    snapshot,
+                    &checkpoint_execution_id,
+                );
                 PublicFailure::PersistenceAfterEffect
             })?;
     }

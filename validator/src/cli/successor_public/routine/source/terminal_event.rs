@@ -10,6 +10,7 @@ pub(super) fn mark_post_effect_ambiguity(
     context: &LiveContext,
     plan: &RoutinePlan,
     snapshot: &DirtySnapshot,
+    execution_id: &str,
 ) {
     let binding = host::CheckpointBinding::new(
         target,
@@ -17,6 +18,7 @@ pub(super) fn mark_post_effect_ambiguity(
         plan.binding().candidate_id(),
         plan.plan_id(),
         snapshot.snapshot_id(),
+        execution_id,
     );
     if let Ok(Some(checkpoint)) = state.exact_checkpoint(binding, None) {
         let authenticated = state.authenticate_public_state(

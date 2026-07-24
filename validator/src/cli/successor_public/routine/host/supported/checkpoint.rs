@@ -16,6 +16,8 @@ pub(crate) struct ContinuationCheckpoint {
     pub(super) candidate_id: String,
     pub(super) plan_id: String,
     pub(super) snapshot_id: String,
+    #[serde(default)]
+    pub(super) execution_id: String,
     pub(super) continuation: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub(super) predecessor_continuations: Vec<String>,
@@ -53,6 +55,14 @@ impl ContinuationCheckpoint {
 
     pub(crate) fn snapshot_id(&self) -> &str {
         &self.snapshot_id
+    }
+
+    pub(crate) fn execution_id(&self) -> &str {
+        &self.execution_id
+    }
+
+    pub(crate) fn has_execution_id(&self) -> bool {
+        !self.execution_id.is_empty()
     }
 
     pub(crate) fn ledger_head(&self) -> &str {

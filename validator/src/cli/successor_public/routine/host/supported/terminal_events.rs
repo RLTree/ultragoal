@@ -17,6 +17,7 @@ impl HostState {
                     &checkpoint.candidate_id,
                     &checkpoint.plan_id,
                     &checkpoint.snapshot_id,
+                    checkpoint.execution_id(),
                 ),
                 Some(&checkpoint.continuation),
             )?
@@ -52,6 +53,7 @@ impl HostState {
                     &checkpoint.candidate_id,
                     &checkpoint.plan_id,
                     &checkpoint.snapshot_id,
+                    checkpoint.execution_id(),
                 ),
                 Some(&checkpoint.continuation),
             )?
@@ -88,6 +90,7 @@ impl HostState {
                     &checkpoint.candidate_id,
                     &checkpoint.plan_id,
                     &checkpoint.snapshot_id,
+                    checkpoint.execution_id(),
                 ),
                 Some(&checkpoint.continuation),
             )?
@@ -120,5 +123,6 @@ fn binding_from(checkpoint: &ContinuationCheckpoint) -> CheckpointBinding<'_> {
         &checkpoint.candidate_id,
         &checkpoint.plan_id,
         &checkpoint.snapshot_id,
+        checkpoint.execution_id(),
     )
 }

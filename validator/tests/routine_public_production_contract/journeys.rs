@@ -1,11 +1,12 @@
 use super::scenario::{
-    ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route, routine_command,
-    run_bounded_contender, tree,
+    contain_contender, git, pass_node, prefix_route, routine_command, run_bounded_contender, tree,
+    ContainedContender, Fixture,
 };
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use std::fs;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::Duration;
 
 #[test]
@@ -37,12 +38,10 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
             .len(),
         8
     );
-    assert!(
-        value["installed_runtime_ceiling"]
-            .as_str()
-            .unwrap()
-            .contains("immutable installed ultragoal runtime")
-    );
+    assert!(value["installed_runtime_ceiling"]
+        .as_str()
+        .unwrap()
+        .contains("immutable installed ultragoal runtime"));
 }
 #[test]
 fn clean_public_routine_is_a_zero_effect_noop() {
@@ -103,6 +102,116 @@ fn dirty_public_effect_executes_once_then_exact_repeat_reuses_without_mutation()
     assert_reused_without_effect(&fixture.run());
     assert_eq!(tree(&fixture.root), before_repeat);
     fixture.teardown_after_assertions();
+}
+
+#[test]
+fn restored_source_bytes_with_a_replaced_read_identity_rerun_then_reuse() {
+    let mut fixture = Fixture::new(
+        "restored-source-identity-rerun",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    assert_eq!(Fixture::value(&first)["status"], "executed");
+
+    let source = fixture.root.join("src/lib.rs");
+    let replacement = fixture.container.join("restored-lib.rs");
+    let original = fs::read(&source).unwrap();
+    fs::write(&replacement, &original).unwrap();
+    fs::rename(&replacement, &source).unwrap();
+    assert_eq!(fs::read(&source).unwrap(), original);
+
+    let diagnosis = fixture.run_args(&["--json", "diagnose"]);
+    assert_eq!(diagnosis.status.code(), Some(1), "{diagnosis:?}");
+    let diagnosis = Fixture::value(&diagnosis);
+    assert_eq!(diagnosis["schema_version"], "RoutineDiagnosis-v1");
+    assert_eq!(diagnosis["status"], "no_record");
+    assert_ne!(diagnosis["repeat_use"], "safe_reuse");
+
+    let rerun = fixture.run();
+    assert_eq!(rerun.status.code(), Some(0), "{rerun:?}");
+    let rerun = Fixture::value(&rerun);
+    assert_eq!(rerun["status"], "executed");
+    assert_eq!(rerun["nodes"][0]["disposition"], "executed");
+
+    assert_reused_without_effect(&fixture.run());
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn legacy_complete_checkpoint_with_changed_execution_identity_reruns_then_reuses() {
+    let mut fixture = Fixture::new(
+        "legacy-complete-identity-rerun",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+
+    migrate_complete_checkpoint_to_v6(&fixture);
+
+    let source = fixture.root.join("src/lib.rs");
+    let replacement = fixture.container.join("legacy-restored-lib.rs");
+    let original = fs::read(&source).unwrap();
+    fs::write(&replacement, &original).unwrap();
+    fs::rename(&replacement, &source).unwrap();
+    assert_eq!(fs::read(&source).unwrap(), original);
+
+    let rerun = fixture.run();
+    assert_eq!(rerun.status.code(), Some(0), "{rerun:?}");
+    assert_eq!(Fixture::value(&rerun)["status"], "executed");
+    assert_reused_without_effect(&fixture.run());
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn legacy_complete_checkpoint_with_the_same_execution_identity_reuses() {
+    let mut fixture = Fixture::new(
+        "legacy-complete-exact-reuse",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    migrate_complete_checkpoint_to_v6(&fixture);
+
+    assert_reused_without_effect(&fixture.run());
+    fixture.teardown_after_assertions();
+}
+
+fn migrate_complete_checkpoint_to_v6(fixture: &Fixture) {
+    let checkpoint = fixture.checkpoint_path();
+    let mut legacy: Value = serde_json::from_slice(&fs::read(&checkpoint).unwrap()).unwrap();
+    legacy["schema_version"] = Value::String("RoutineContinuationCheckpoint-v6".to_owned());
+    let object = legacy.as_object_mut().unwrap();
+    object.remove("execution_id");
+    let legacy_name = legacy_checkpoint_name(&legacy);
+    let legacy_path = fixture.continuations_root().join(legacy_name);
+    fs::remove_file(&checkpoint).unwrap();
+    fs::write(&legacy_path, serde_json::to_vec(&legacy).unwrap()).unwrap();
+    fs::set_permissions(
+        &legacy_path,
+        std::os::unix::fs::PermissionsExt::from_mode(0o600),
+    )
+    .unwrap();
+}
+
+fn legacy_checkpoint_name(checkpoint: &Value) -> String {
+    let mut digest = Sha256::new();
+    digest.update(b"routine-continuation-record-v1\0");
+    for field in ["target", "context_id", "candidate_id", "plan_id"] {
+        digest.update(checkpoint[field].as_str().unwrap().as_bytes());
+        digest.update([0]);
+    }
+    digest.update(checkpoint["snapshot_id"].as_str().unwrap().as_bytes());
+    format!("routine-continuation-{:x}.json", digest.finalize())
 }
 #[test]
 fn authorized_fresh_execution_then_exact_repeat_reuses_without_a_second_effect() {
@@ -385,23 +494,19 @@ fn public_output_creation_is_observed_only_after_the_durable_journal() {
     let state = fixture.authority_root().join("routine-authority.state");
     let stopped = Arc::new(AtomicBool::new(false));
     let watcher_stopped = Arc::clone(&stopped);
-    let watcher = std::thread::spawn(move || {
-        loop {
-            if scope.is_dir() {
-                let durable =
-                    fs::read(&state).map_err(|_| "output appeared before durable state")?;
-                let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
-                if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile")
-                {
-                    return Err("output appeared before its durable journal binding");
-                }
-                return Ok(());
+    let watcher = std::thread::spawn(move || loop {
+        if scope.is_dir() {
+            let durable = fs::read(&state).map_err(|_| "output appeared before durable state")?;
+            let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
+            if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile") {
+                return Err("output appeared before its durable journal binding");
             }
-            if watcher_stopped.load(Ordering::Acquire) {
-                return Err("child exited without provisioning output");
-            }
-            std::thread::sleep(Duration::from_millis(2));
+            return Ok(());
         }
+        if watcher_stopped.load(Ordering::Acquire) {
+            return Err("child exited without provisioning output");
+        }
+        std::thread::sleep(Duration::from_millis(2));
     });
     let mut command = fixture.base_command();
     command.args(["--json", "check", "routine"]);
@@ -486,12 +591,10 @@ fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
     assert_eq!(fixture.status(), before_status);
     assert!(!fixture.root.join("target/routine").exists());
     assert!(!fixture.checkpoint_path().exists());
-    assert!(
-        !fixture
-            .root
-            .join("validation_artifacts/observability/spool")
-            .exists()
-    );
+    assert!(!fixture
+        .root
+        .join("validation_artifacts/observability/spool")
+        .exists());
     fixture.teardown_after_assertions();
 }
 

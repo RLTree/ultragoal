@@ -7,6 +7,11 @@ pub(crate) enum RoutineContinuationOutcome {
     /// The exact authenticated attempt already completed. This classification
     /// is read-only and safe to reuse without another effect.
     Complete(RoutineMediationResult),
+    /// A legacy host checkpoint selected a prior attempt, but the current
+    /// fully bound execution is not that attempt.  It is read-only evidence;
+    /// only the root host adapter may decide whether a fresh, separately keyed
+    /// execution can proceed.
+    BindingMismatch,
     /// The exact authenticated attempt was reserved without a child, staged
     /// launch, or provisioned output and was durably rolled back.
     Reserved { authenticated_head: String },

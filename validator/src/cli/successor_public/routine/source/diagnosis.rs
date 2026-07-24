@@ -3,6 +3,8 @@ use super::*;
 pub(crate) struct RoutineDiagnosisBinding {
     target: PathBuf,
     context: LiveContext,
+    manifest: LoadedManifest,
+    graph: ImpactGraph,
     plan: RoutinePlan,
     snapshot: crate::routine_work::DirtySnapshot,
 }
@@ -28,6 +30,14 @@ impl RoutineDiagnosisBinding {
 
     pub(crate) fn plan(&self) -> &RoutinePlan {
         &self.plan
+    }
+
+    pub(crate) fn manifest(&self) -> &LoadedManifest {
+        &self.manifest
+    }
+
+    pub(crate) fn graph(&self) -> &ImpactGraph {
+        &self.graph
     }
 
     pub(crate) fn snapshot(&self) -> &crate::routine_work::DirtySnapshot {
@@ -67,6 +77,8 @@ pub(crate) fn current_diagnosis_binding(
     Ok(Some(RoutineDiagnosisBinding {
         target,
         context,
+        manifest,
+        graph,
         plan,
         snapshot,
     }))
@@ -81,6 +93,16 @@ pub(crate) fn current_checkpoint(
         Err(host::HostFailure::Unavailable) => return Ok(None),
         Err(_) => return Err(()),
     };
+    let execution_id = prepare(
+        binding.context(),
+        binding.manifest(),
+        binding.graph(),
+        binding.snapshot(),
+        binding.plan(),
+    )
+    .map_err(|_| ())?
+    .checkpoint_execution_id()
+    .to_owned();
     let checkpoint = state
         .exact_checkpoint(
             host::CheckpointBinding::new(
@@ -89,6 +111,7 @@ pub(crate) fn current_checkpoint(
                 binding.plan().binding().candidate_id(),
                 binding.plan().plan_id(),
                 binding.snapshot().snapshot_id(),
+                &execution_id,
             ),
             None,
         )

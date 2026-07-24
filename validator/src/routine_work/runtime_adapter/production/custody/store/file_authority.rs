@@ -91,6 +91,9 @@ impl DurableCustody {
                 DurableWrite::Committed(ContinuationDisposition::Complete(result)) => {
                     Ok(RoutineContinuationOutcome::Complete(result))
                 }
+                DurableWrite::Committed(ContinuationDisposition::BindingMismatch) => {
+                    Ok(RoutineContinuationOutcome::BindingMismatch)
+                }
                 DurableWrite::Committed(ContinuationDisposition::Reserved) => {
                     Ok(RoutineContinuationOutcome::Reserved {
                         authenticated_head: head.head_sha256().to_owned(),

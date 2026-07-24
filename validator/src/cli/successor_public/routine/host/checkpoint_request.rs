@@ -8,6 +8,7 @@ pub(crate) struct CheckpointBinding<'a> {
     candidate_id: &'a str,
     plan_id: &'a str,
     snapshot_id: &'a str,
+    execution_id: &'a str,
 }
 
 impl<'a> CheckpointBinding<'a> {
@@ -17,6 +18,7 @@ impl<'a> CheckpointBinding<'a> {
         candidate_id: &'a str,
         plan_id: &'a str,
         snapshot_id: &'a str,
+        execution_id: &'a str,
     ) -> Self {
         Self {
             target,
@@ -24,6 +26,7 @@ impl<'a> CheckpointBinding<'a> {
             candidate_id,
             plan_id,
             snapshot_id,
+            execution_id,
         }
     }
 
@@ -45,6 +48,21 @@ impl<'a> CheckpointBinding<'a> {
 
     pub(crate) fn snapshot_id(self) -> &'a str {
         self.snapshot_id
+    }
+
+    pub(crate) fn execution_id(self) -> &'a str {
+        self.execution_id
+    }
+
+    pub(crate) fn without_execution_id(self) -> Self {
+        Self::new(
+            self.target,
+            self.context_id,
+            self.candidate_id,
+            self.plan_id,
+            self.snapshot_id,
+            "",
+        )
     }
 }
 

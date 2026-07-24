@@ -28,7 +28,7 @@ pub(super) fn checkpoint(
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
-        schema_version: "RoutineContinuationCheckpoint-v6".to_owned(),
+        schema_version: "RoutineContinuationCheckpoint-v7".to_owned(),
         generation: draft.generation,
         target: draft
             .binding
@@ -40,6 +40,7 @@ pub(super) fn checkpoint(
         candidate_id: draft.binding.candidate_id().to_owned(),
         plan_id: draft.binding.plan_id().to_owned(),
         snapshot_id: draft.binding.snapshot_id().to_owned(),
+        execution_id: draft.binding.execution_id().to_owned(),
         continuation: draft.continuation.to_owned(),
         predecessor_continuations: draft.predecessor_continuations.to_vec(),
         recovery_marker: draft.recovery_marker.to_owned(),
@@ -77,7 +78,9 @@ pub(super) fn validate_checkpoint_shape(
 ) -> Result<(), HostFailure> {
     if !matches!(
         checkpoint.schema_version.as_str(),
-        "RoutineContinuationCheckpoint-v4" | "RoutineContinuationCheckpoint-v6"
+        "RoutineContinuationCheckpoint-v4"
+            | "RoutineContinuationCheckpoint-v6"
+            | "RoutineContinuationCheckpoint-v7"
     ) || checkpoint.generation == 0
         || !matches!(
             checkpoint.state.as_str(),
@@ -89,6 +92,10 @@ pub(super) fn validate_checkpoint_shape(
         )
         || !std::path::Path::new(&checkpoint.target).is_absolute()
         || std::path::Path::new(&checkpoint.target).to_str().is_none()
+        || (checkpoint.schema_version == "RoutineContinuationCheckpoint-v7"
+            && checkpoint.execution_id.is_empty())
+        || (checkpoint.schema_version != "RoutineContinuationCheckpoint-v7"
+            && !checkpoint.execution_id.is_empty())
         || !checkpoint.continuation.starts_with("routine-cont-")
         || checkpoint
             .predecessor_continuations
@@ -142,6 +149,7 @@ pub(super) fn checkpoint_matches_binding(
         && checkpoint.candidate_id == binding.candidate_id()
         && checkpoint.plan_id == binding.plan_id()
         && checkpoint.snapshot_id == binding.snapshot_id()
+        && checkpoint.execution_id == binding.execution_id()
 }
 
 pub(super) fn canonical_record_name(binding: CheckpointBinding<'_>) -> String {
@@ -156,6 +164,10 @@ pub(super) fn canonical_record_name(binding: CheckpointBinding<'_>) -> String {
     digest.update(binding.plan_id().as_bytes());
     digest.update([0]);
     digest.update(binding.snapshot_id().as_bytes());
+    if !binding.execution_id().is_empty() {
+        digest.update([0]);
+        digest.update(binding.execution_id().as_bytes());
+    }
     format!("routine-continuation-{:x}.json", digest.finalize())
 }
 
@@ -179,6 +191,7 @@ pub(super) fn canonical_record_name_for_checkpoint(
         &checkpoint.candidate_id,
         &checkpoint.plan_id,
         &checkpoint.snapshot_id,
+        &checkpoint.execution_id,
     )))
 }
 
