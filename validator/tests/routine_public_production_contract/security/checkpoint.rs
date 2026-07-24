@@ -5,6 +5,10 @@ fn malformed_stale_or_partially_published_checkpoint_fails_closed() {
     for (label, field) in [
         ("stale-checkpoint-head", "authenticated_ledger_head"),
         ("foreign-checkpoint-binding", "context_id"),
+        (
+            "forged-predecessor-continuation",
+            "predecessor_continuation",
+        ),
     ] {
         let mut fixture = Fixture::new(
             label,

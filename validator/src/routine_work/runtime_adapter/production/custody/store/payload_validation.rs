@@ -14,6 +14,10 @@ pub(in super::super) fn validate_payload(payload: &Payload) -> Result<(), Routin
                 || !valid(&record.request_id)
                 || !valid(&record.grant_id)
                 || !valid(&record.recovery_marker)
+                || record
+                    .predecessor_continuation
+                    .as_ref()
+                    .is_some_and(|value| !valid_continuation(value))
                 || record.issued_tick > record.expires_tick
                 || record.expires_tick > record.recovery_deadline_tick
                 || !valid_owner(&record.owner)
@@ -174,6 +178,10 @@ pub(in super::super) fn validate_token(token: &ReservationToken) -> Result<(), R
     if !valid(&token.request_id)
         || !valid(&token.grant_id)
         || !valid(&token.recovery_marker)
+        || token
+            .predecessor_continuation
+            .as_ref()
+            .is_some_and(|value| !valid_continuation(value))
         || !valid_owner(&token.owner)
         || token.intents.is_empty()
         || token.intents.iter().any(|intent| !valid_intent(intent))
@@ -182,6 +190,10 @@ pub(in super::super) fn validate_token(token: &ReservationToken) -> Result<(), R
         return Err(error("routine-production-reservation-spec-invalid"));
     }
     Ok(())
+}
+
+fn valid_continuation(value: &str) -> bool {
+    value.strip_prefix("routine-cont-").is_some_and(valid)
 }
 
 pub(in super::super) fn validate_binding(binding: &AuthorityBinding) -> Result<(), RoutineError> {

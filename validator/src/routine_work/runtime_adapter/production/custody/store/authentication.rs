@@ -38,6 +38,9 @@ pub(in crate::routine_work::runtime_adapter::production::custody::store::support
         String,
     pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) recovery_marker:
         String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) predecessor_continuation:
+        Option<String>,
     pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) state:
         AttemptState,
     pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) owner:

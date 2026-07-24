@@ -145,6 +145,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                             snapshot.snapshot_id(),
                             continuation,
                             checkpoint.recovery_marker(),
+                            checkpoint.predecessor_continuation(),
                             attempt_grant,
                             head,
                             "terminal-event-pending",
@@ -183,6 +184,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                         snapshot.snapshot_id(),
                         checkpoint.continuation(),
                         checkpoint.recovery_marker(),
+                        checkpoint.predecessor_continuation(),
                         checkpoint.attempt_grant(),
                         &authenticated_head,
                         "reconciled",
@@ -207,6 +209,10 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
             .remove_alias_if_present(checkpoint_binding, handoff_alias.as_ref())
             .map_err(PublicFailure::Host)?;
     }
+    let predecessor_continuation = checkpoint
+        .as_ref()
+        .filter(|_| continuation.is_some())
+        .map(|checkpoint| checkpoint.continuation().to_owned());
     let mut reservation_publication_failed = false;
     let mut publish_reserved =
         |reservation: &crate::routine_work::RoutineReservationPublication| {
@@ -219,6 +225,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                     snapshot.snapshot_id(),
                     reservation.continuation(),
                     reservation.recovery_marker(),
+                    predecessor_continuation.as_deref(),
                     reservation.attempt_grant(),
                     reservation.authenticated_ledger_head(),
                     "reserved",
@@ -277,6 +284,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         ProductionExecutionControl::with_reservation_publication(
             state.issue_custody_capability(),
             control,
+            predecessor_continuation.as_deref(),
             &mut publish_reserved,
         ),
     );
@@ -323,6 +331,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
                 snapshot.snapshot_id(),
                 continuation,
                 reserved.recovery_marker(),
+                reserved.predecessor_continuation(),
                 attempt_grant,
                 head,
                 "terminal-event-pending",

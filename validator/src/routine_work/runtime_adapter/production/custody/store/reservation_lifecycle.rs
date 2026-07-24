@@ -36,6 +36,7 @@ impl FileLedger {
                     request_id: token.request_id.clone(),
                     grant_id: token.grant_id.clone(),
                     recovery_marker: token.recovery_marker.clone(),
+                    predecessor_continuation: token.predecessor_continuation.clone(),
                     state: AttemptState::Reserved,
                     owner: token.owner.clone(),
                     child: None,

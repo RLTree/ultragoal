@@ -29,6 +29,7 @@ fn exact_binding(record: &ProtocolRecord, token: &ReservationToken) -> Result<()
         || record.request_id != token.request_id
         || record.grant_id != token.grant_id
         || record.recovery_marker != token.recovery_marker
+        || record.predecessor_continuation != token.predecessor_continuation
         || record.owner != token.owner
         || record.expires_tick != token.expires_tick.get()
         || record.intents != token.intents

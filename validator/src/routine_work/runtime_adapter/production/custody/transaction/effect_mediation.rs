@@ -28,6 +28,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
         cancellation,
         reuse,
         control,
+        predecessor_continuation,
         mut on_reserved,
         ..
     } = control;
@@ -39,7 +40,13 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
     let binding = authority_binding(&request)?;
     let scopes = allowed_output_scopes(&request);
     let journal = output_journal::observe(context.worktree_root(), &scopes)?;
-    let owner = ReservationOwner::reserve(&custody, &request, binding, journal)?;
+    let owner = ReservationOwner::reserve(
+        &custody,
+        &request,
+        binding,
+        journal,
+        predecessor_continuation,
+    )?;
     if let Some(publish) = on_reserved.as_mut() {
         let publication = RoutineReservationPublication::new(
             owner.continuation_id()?,

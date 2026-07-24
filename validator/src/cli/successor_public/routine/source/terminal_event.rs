@@ -27,6 +27,7 @@ pub(super) fn mark_post_effect_ambiguity(
             checkpoint.snapshot_id(),
             checkpoint.continuation(),
             checkpoint.recovery_marker(),
+            checkpoint.predecessor_continuation(),
             checkpoint.attempt_grant(),
             checkpoint.ledger_head(),
             "ambiguous",

@@ -254,6 +254,22 @@ fn caller_known_continuation_survives_a_replacement_reservation_before_result_de
     let replacement_value = Fixture::value(&replacement);
     assert_eq!(replacement_value["status"], "interrupted-reservation");
     assert_ne!(replacement_value["continuation"], continuation);
+    let replacement_checkpoint: Value =
+        serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap()).unwrap();
+    assert_eq!(
+        replacement_checkpoint["predecessor_continuation"],
+        continuation
+    );
+    assert_eq!(
+        fs::read_dir(fixture.continuations_root())
+            .unwrap()
+            .filter_map(Result::ok)
+            .filter(
+                |entry| entry.path().extension().and_then(|value| value.to_str()) == Some("json")
+            )
+            .count(),
+        1,
+    );
 
     let recovered = fixture.run_args(&[
         "--json",

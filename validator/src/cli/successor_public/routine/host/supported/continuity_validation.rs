@@ -5,6 +5,7 @@ use sha2::{Digest, Sha256};
 pub(super) struct CheckpointDraft<'a> {
     pub(super) binding: CheckpointBinding<'a>,
     pub(super) continuation: &'a str,
+    pub(super) predecessor_continuation: Option<&'a str>,
     pub(super) recovery_marker: &'a str,
     pub(super) attempt_grant: &'a str,
     pub(super) authenticated_ledger_head: &'a str,
@@ -27,7 +28,7 @@ pub(super) fn checkpoint(
         return Err(HostFailure::Invalid);
     }
     Ok(ContinuationCheckpoint {
-        schema_version: "RoutineContinuationCheckpoint-v4".to_owned(),
+        schema_version: "RoutineContinuationCheckpoint-v5".to_owned(),
         generation: draft.generation,
         target: draft
             .binding
@@ -40,6 +41,7 @@ pub(super) fn checkpoint(
         plan_id: draft.binding.plan_id().to_owned(),
         snapshot_id: draft.binding.snapshot_id().to_owned(),
         continuation: draft.continuation.to_owned(),
+        predecessor_continuation: draft.predecessor_continuation.map(str::to_owned),
         recovery_marker: draft.recovery_marker.to_owned(),
         attempt_grant: draft.attempt_grant.to_owned(),
         authenticated_ledger_head: draft.authenticated_ledger_head.to_owned(),
@@ -73,8 +75,10 @@ pub(super) fn validate_checkpoint(
 pub(super) fn validate_checkpoint_shape(
     checkpoint: &ContinuationCheckpoint,
 ) -> Result<(), HostFailure> {
-    if checkpoint.schema_version != "RoutineContinuationCheckpoint-v4"
-        || checkpoint.generation == 0
+    if !matches!(
+        checkpoint.schema_version.as_str(),
+        "RoutineContinuationCheckpoint-v4" | "RoutineContinuationCheckpoint-v5"
+    ) || checkpoint.generation == 0
         || !matches!(
             checkpoint.state.as_str(),
             "reserved"
@@ -86,6 +90,12 @@ pub(super) fn validate_checkpoint_shape(
         || !std::path::Path::new(&checkpoint.target).is_absolute()
         || std::path::Path::new(&checkpoint.target).to_str().is_none()
         || !checkpoint.continuation.starts_with("routine-cont-")
+        || checkpoint
+            .predecessor_continuation
+            .as_ref()
+            .is_some_and(|value| {
+                !value.starts_with("routine-cont-") || value == &checkpoint.continuation
+            })
         || checkpoint.attempt_grant.is_empty()
         || checkpoint.authenticated_ledger_head.is_empty()
         || checkpoint.operation != RoutineCheckpointOperation::Terminal
@@ -152,41 +162,6 @@ pub(super) fn canonical_stage_name(binding: CheckpointBinding<'_>) -> String {
         ".{}.next",
         canonical_record_name(binding).trim_end_matches(".json")
     )
-}
-
-pub(super) fn handoff_record_name(
-    checkpoint: &ContinuationCheckpoint,
-) -> Result<String, HostFailure> {
-    let target = std::path::Path::new(&checkpoint.target);
-    if !target.is_absolute() || target.to_str().is_none() || checkpoint.continuation.is_empty() {
-        return Err(HostFailure::Invalid);
-    }
-    let mut digest = Sha256::new();
-    digest.update(b"routine-continuation-handoff-v1\0");
-    digest.update(target.to_string_lossy().as_bytes());
-    digest.update([0]);
-    digest.update(checkpoint.context_id.as_bytes());
-    digest.update([0]);
-    digest.update(checkpoint.candidate_id.as_bytes());
-    digest.update([0]);
-    digest.update(checkpoint.plan_id.as_bytes());
-    digest.update([0]);
-    digest.update(checkpoint.snapshot_id.as_bytes());
-    digest.update([0]);
-    digest.update(checkpoint.continuation.as_bytes());
-    Ok(format!(
-        "routine-continuation-handoff-{:x}.json",
-        digest.finalize()
-    ))
-}
-
-pub(super) fn handoff_stage_name(
-    checkpoint: &ContinuationCheckpoint,
-) -> Result<String, HostFailure> {
-    Ok(format!(
-        ".{}.next",
-        handoff_record_name(checkpoint)?.trim_end_matches(".json")
-    ))
 }
 
 pub(super) fn canonical_record_name_for_checkpoint(
