@@ -1,5 +1,38 @@
 # Plugin and CLI Authority Integration
 
+## Installed Research Run routine recovery and reuse — 0.0.31 — 2026-07-23
+
+Exact root `0bde53ebaf1f4f316cde9a9f70c0c265d52c12cb` / tree
+`01ff4ce1c4edac03a5905c685bdcb68d94ef4252` was packaged as candidate
+`sha256:69be0042f850ae22556dbda241bba4fe845161ce27fade17973fa5247e71397d`
+and archive `sha256:5bd6d32c77be85b909c12e898a825caaef7e34f9cb754f6f78cc74dedc8f36de`.
+The source, retained local marketplace, and enabled Codex cache manifest bytes
+all equal `sha256:2ff5c62e58764dee7a83f12fb45f162d61c38740de8056ba16aeff87ee51cc99`;
+the public cache runtime equals the source-built executable at
+`sha256:f5382d4c2f975e8f5d770df41f43ba9da2e2d8d239155f7d94b3b3d673dba12b`.
+Codex registry lists only `harness-ultragoal@harness-ultragoal-local` as the
+enabled Harness instance, at `0.0.31`.
+
+On Research Run commit `acee890a4dcc9c1377a954961e782b8f685a5b58`, the
+installed public `fit inspect` was zero-write and `fit plan --routine-config`
+returned a compatible `already_fitted` plan with no mutations. The pre-existing
+dirty Git-status hash and `src/lib.rs` hash were unchanged before and after
+inspection, interruption, recovery, diagnosis, and reuse. The installed public
+routine was interrupted at reservation with effect `none`; its exact
+continuation recovered to one executed `syntax` terminal event. Installed
+`diagnose` then reported `committed`, `complete`, and `safe_reuse`; the next
+public routine invocation returned `reused` with effect `none` and the same
+candidate, context, snapshot, and plan bindings. This is bounded installed
+CLI/runtime and agent-use recovery/repeat-use evidence. Agentic Engineering's
+durability guidance was advisory only; it introduced no authority or claim.
+
+Fresh-Codex-task skill discovery and human use have not been observed on this
+candidate. Product Fitness, daily-driver, readiness, release, and completion
+therefore remain withheld. The next missing product surface is a fresh task
+discovering the enabled `harness-ultragoal` front door; no reinstall or source
+repair is warranted while these package, registry, and runtime identities stay
+unchanged.
+
 ## Routine multi-binding repeat-use repair — 2026-07-23
 
 Exact source `b6e8811bf4a07400d4fe2d8ad2719f3e6f546bdf` / tree
