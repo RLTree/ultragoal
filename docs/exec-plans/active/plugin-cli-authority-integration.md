@@ -2636,6 +2636,35 @@ does not change the reviewed navigation behavior. The release build and every
 dependent package/install observation are being refreshed from the amended
 exact candidate.
 
+### Installed routine reservation-publication repair — Terra implementation — 2026-07-23
+
+The next exact source candidate is root integration
+`cbe4c61fee148a1d6659f16d74879d18f2e2e786` / tree
+`a4dcbf76f3f6493c1d265e61785d9d0091897953`. It repairs the actual
+installed-journey blocker: the public host checkpoint is authenticated against
+the durable reservation, but its continuation value includes the required
+`routine-cont-` prefix. The checkpoint validator had accepted only a bare
+digest, so every otherwise valid host reservation projection failed before a
+workspace effect.
+
+The repair validates the canonical continuation shape and routes a failed host
+reservation publication through the existing reservation failure owner. A
+definite pre-effect failure settles as a durable no-effect failure; a confirmed
+checkpoint that may have persisted after its host write returned an error stays
+reserved with failure evidence for the existing public recovery route. This
+does not add a lifecycle, authority, checkpoint store, or cleanup mechanism.
+
+Focused controls passed on this exact source: the new definite-failure and
+ambiguous-publication red cases, plus the public reservation interruption and
+fresh-process reconciliation journey. One bounded material review found the
+post-rename host-write ambiguity and the coherent correction above; the
+confirmation found no remaining concrete material defect in the complete
+publication, dirty-state, interruption, recovery, and reuse invariant.
+Package, isolated installation, cache, desktop discovery, installed runtime,
+and the dirty Research Run journey are invalidated by this source identity and
+remain required. No Product Fitness, daily-driver, human-use, readiness,
+release, or completion claim advances.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required
