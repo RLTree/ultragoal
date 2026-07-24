@@ -1,6 +1,6 @@
 use crate::context::LiveContext;
 use crate::inventory::{AuthorityCatalog, InventoryBuilder};
-use crate::repository_fixture::{TestRepo, inventory_request};
+use crate::repository_fixture::{inventory_request, TestRepo};
 
 fn catalog(repo: &TestRepo) -> AuthorityCatalog {
     let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
@@ -135,6 +135,10 @@ fn active_authority_negative_controls_remain_flagged() {
             "validator/src/cli/final_packet/mod.rs",
             "pub fn print() {}\n",
         ),
+        (
+            "validator/src/plugin_product/lifecycle/host_custody/finalization.rs",
+            "pub fn terminal_custody() {}\n",
+        ),
         ("plugin-manifest-draft.json", "{}\n"),
         ("agents/current.md", "active agent prompt\n"),
         ("docs/public-model.md", "required model gpt-5.5\n"),
@@ -144,7 +148,6 @@ fn active_authority_negative_controls_remain_flagged() {
     }
     repo.commit();
     let catalog = catalog(&repo);
-
     for (path, kind) in [
         ("docs/ultragoal-contract-2026-07/active.md", "contract"),
         ("validator/src/argument_parser/mod.rs", "command"),
@@ -160,6 +163,10 @@ fn active_authority_negative_controls_remain_flagged() {
     ] {
         assert_kind(&catalog, path, kind);
     }
+    assert_absent(
+        &catalog,
+        "validator/src/plugin_product/lifecycle/host_custody/finalization.rs",
+    );
     assert_absent(&catalog, "LANE_REGISTRY.json");
     assert_absent(&catalog, "templates/LANE_REGISTRY.json");
 }
