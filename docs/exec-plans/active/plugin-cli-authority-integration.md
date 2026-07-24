@@ -2744,6 +2744,27 @@ installed agent-use, interruption/recovery, and repeat-use evidence on the
 exact candidate. It is not human-use, Product Fitness, a daily-driver claim,
 readiness, release, or completion evidence.
 
+### Routine continuation-chain repair accepted — 2026-07-23
+
+Root accepted source `e42b7ab32c14df04bd4170af84d2763f2a1ac283` / tree
+`1890b4d554c7bb81b462fcd6bcafffc758817a65`. The single canonical public
+checkpoint and its authenticated private reservation record now carry the full,
+sorted set of caller-known predecessor continuations. An A → B → C replacement
+therefore preserves A and B until the active successor joins terminally; after
+terminal join every predecessor alias refuses rather than falling through to a
+stale record. No sibling handoff record or caller-authored recovery authority
+was retained.
+
+Focused checks passed: production library check (4.49s); A → B → C recovery
+control (1/1, 27.14s); malformed/forged checkpoint control (1/1, 28.61s);
+ordinary interruption reconciliation (1/1, 17.73s); and v4 compatibility
+(1/1, 12.75s). The bounded Terra review accepted the complete invariant. Its
+v5 observation was non-promotable because that predecessor was a rejected,
+unpackaged local freeze with no persistent target state. The 0.0.30 package,
+install, discovery, and Research Run observations are now invalidated by this
+source identity and must be refreshed once from the next versioned package;
+they have not been rerun during source repair. No claim ceiling advances.
+
 Continue through ordinary defects, stale candidates, missing narrow evidence,
 and environmental retryable failures. Stop only for destructive action without
 authority, external writes or publication, secrets, unavailable required
