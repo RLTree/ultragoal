@@ -220,6 +220,63 @@ fn reservation_interruption_reconciles_once_through_the_public_continuation_rout
 }
 
 #[test]
+fn caller_known_continuation_survives_a_replacement_reservation_before_result_delivery() {
+    let mut fixture = Fixture::new(
+        "replacement-reservation-caller-handoff",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(first.status.code(), Some(1), "{first:?}");
+    let continuation = Fixture::value(&first)["continuation"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+
+    let replacement = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(replacement.status.code(), Some(1), "{replacement:?}");
+    let replacement_value = Fixture::value(&replacement);
+    assert_eq!(replacement_value["status"], "interrupted-reservation");
+    assert_ne!(replacement_value["continuation"], continuation);
+
+    let recovered = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    assert_eq!(recovered.status.code(), Some(0), "{recovered:?}");
+    assert_eq!(Fixture::value(&recovered)["status"], "executed");
+
+    let stale = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--continuation",
+        &continuation,
+    ]);
+    assert_eq!(stale.status.code(), Some(3), "{stale:?}");
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn reconciled_reservation_republishes_when_legacy_filename_belongs_to_another_binding() {
     let mut interrupted = Fixture::new(
         "reconciled-republish-with-foreign-legacy",

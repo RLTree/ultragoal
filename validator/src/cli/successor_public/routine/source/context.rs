@@ -61,9 +61,6 @@ pub(crate) fn options(
             _ => return Err(PublicFailure::InvalidInvocation),
         }
     }
-    if interruption.is_some() && continuation.is_some() {
-        return Err(PublicFailure::InvalidInvocation);
-    }
     Ok(RoutineInvocationOptions {
         target,
         interruption,

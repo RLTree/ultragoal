@@ -6,18 +6,21 @@ use super::super::{
 use super::checkpoint::ContinuationCheckpoint;
 use super::continuity_validation::{
     canonical_record_name, canonical_record_name_for_checkpoint, canonical_stage_name,
-    checkpoint_matches_binding, validate_checkpoint, validate_checkpoint_shape,
+    checkpoint_matches_binding, handoff_record_name, handoff_stage_name, validate_checkpoint,
+    validate_checkpoint_shape,
 };
 use std::io::Read;
 
 const MAX_CHECKPOINT_BYTES: u64 = 16 * 1024;
 const RECORD_PREFIX: &str = "routine-continuation-";
+const HANDOFF_RECORD_PREFIX: &str = "routine-continuation-handoff-";
 const RECORD_SUFFIX: &str = ".json";
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub(super) enum CheckpointLocation {
     Legacy,
     Canonical,
+    Handoff,
 }
 
 pub(super) struct StoredCheckpoint {
@@ -47,44 +50,45 @@ impl HostState {
         binding: CheckpointBinding<'_>,
         continuation: &str,
     ) -> Result<Option<ContinuationResolution>, HostFailure> {
-        let legacy = read_legacy(&self.adapter, binding, None)?;
-        let canonical = read_canonical(&self.adapter, binding, None)?;
-        match (legacy, canonical) {
-            (Some(legacy), Some(canonical))
+        let legacy = read_legacy(&self.adapter, binding, Some(continuation))?;
+        let canonical = read_canonical(&self.adapter, binding, Some(continuation))?;
+        let active = read_canonical(&self.adapter, binding, None)?;
+        match (legacy, canonical, active) {
+            (Some(legacy), _, Some(active))
                 if legacy.continuation == continuation
-                    && canonical.continuation != continuation
+                    && active.checkpoint.continuation != continuation
                     && legacy.state == "reconciled"
-                    && canonical.state != "terminal-event-joined" =>
+                    && active.checkpoint.state != "terminal-event-joined" =>
             {
                 Ok(Some(ContinuationResolution {
-                    checkpoint: canonical,
+                    checkpoint: active.checkpoint,
                     handoff_alias: Some(legacy),
                 }))
             }
-            (Some(legacy), Some(canonical))
-                if canonical.continuation == continuation
-                    && legacy.continuation != continuation
-                    && canonical.state == "reconciled"
-                    && legacy.state != "terminal-event-joined" =>
+            (_, Some(canonical), Some(active))
+                if canonical.checkpoint.continuation == continuation
+                    && active.checkpoint.continuation != continuation
+                    && canonical.checkpoint.state == "reconciled"
+                    && active.checkpoint.state != "terminal-event-joined" =>
             {
                 Ok(Some(ContinuationResolution {
-                    checkpoint: legacy,
-                    handoff_alias: Some(canonical),
+                    checkpoint: active.checkpoint,
+                    handoff_alias: Some(canonical.checkpoint),
                 }))
             }
-            (Some(legacy), None) if legacy.continuation == continuation => {
+            (Some(legacy), _, _) if legacy.continuation == continuation => {
                 Ok(Some(ContinuationResolution {
                     checkpoint: legacy,
                     handoff_alias: None,
                 }))
             }
-            (None, Some(canonical)) if canonical.continuation == continuation => {
+            (_, Some(canonical), _) if canonical.checkpoint.continuation == continuation => {
                 Ok(Some(ContinuationResolution {
-                    checkpoint: canonical,
+                    checkpoint: canonical.checkpoint,
                     handoff_alias: None,
                 }))
             }
-            (None, None) => Ok(None),
+            (None, None, _) => Ok(None),
             _ => Err(HostFailure::Invalid),
         }
     }
@@ -108,18 +112,15 @@ pub(super) fn stored_checkpoint(
     match (legacy, canonical) {
         (Some(legacy), Some(canonical))
             if legacy.state == "reconciled"
-                && canonical.state != "reconciled"
-                && legacy.continuation != canonical.continuation =>
+                && canonical.checkpoint.state != "reconciled"
+                && legacy.continuation != canonical.checkpoint.continuation =>
         {
-            Ok(Some(StoredCheckpoint {
-                checkpoint: canonical,
-                location: CheckpointLocation::Canonical,
-            }))
+            Ok(Some(canonical))
         }
         (Some(legacy), Some(canonical))
-            if canonical.state == "reconciled"
+            if canonical.checkpoint.state == "reconciled"
                 && legacy.state != "reconciled"
-                && legacy.continuation != canonical.continuation =>
+                && legacy.continuation != canonical.checkpoint.continuation =>
         {
             Ok(Some(StoredCheckpoint {
                 checkpoint: legacy,
@@ -131,12 +132,31 @@ pub(super) fn stored_checkpoint(
             checkpoint,
             location: CheckpointLocation::Legacy,
         })),
-        (None, Some(checkpoint)) => Ok(Some(StoredCheckpoint {
-            checkpoint,
-            location: CheckpointLocation::Canonical,
-        })),
+        (None, Some(checkpoint)) => Ok(Some(checkpoint)),
         (None, None) => Ok(None),
     }
+}
+
+pub(super) fn preserve_reconciled_handoff(
+    adapter: &AnchoredDirectory,
+    binding: CheckpointBinding<'_>,
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<(), HostFailure> {
+    if checkpoint.state != "reconciled" {
+        return Err(HostFailure::Invalid);
+    }
+    let directory = open_continuations(adapter, true)?.ok_or(HostFailure::Invalid)?;
+    validate_continuation_directory(&directory)?;
+    if directory.stat(&handoff_record_name(checkpoint)?)?.is_some() {
+        return Err(HostFailure::Busy);
+    }
+    write_checkpoint(
+        adapter,
+        binding,
+        CheckpointLocation::Handoff,
+        checkpoint,
+        false,
+    )
 }
 
 pub(super) fn remove_reconciled_alias(
@@ -151,13 +171,18 @@ pub(super) fn remove_reconciled_alias(
     {
         adapter.remove_regular(CONTINUITY_CHECKPOINT_NAME)?;
     }
-    let canonical = read_canonical(adapter, binding, None)?;
-    if let Some(canonical) = canonical
-        && canonical.continuation != active.continuation
-        && canonical.state == "reconciled"
-    {
-        let directory = open_continuations(adapter, false)?.ok_or(HostFailure::Invalid)?;
-        directory.remove_regular(&canonical_record_name(binding))?;
+    let Some(directory) = open_continuations(adapter, false)? else {
+        return Ok(());
+    };
+    for name in directory.entry_names()? {
+        let checkpoint = read_checkpoint_file(&directory, &name)?;
+        if checkpoint_matches_binding(&checkpoint, binding)
+            && checkpoint.continuation != active.continuation
+            && checkpoint.state == "reconciled"
+            && checkpoint_location(&name, &checkpoint)? == CheckpointLocation::Handoff
+        {
+            directory.remove_regular(&name)?;
+        }
     }
     Ok(())
 }
@@ -173,10 +198,10 @@ pub(super) fn remove_alias(
         adapter.remove_regular(CONTINUITY_CHECKPOINT_NAME)?;
     }
     if let Some(current) = read_canonical(adapter, binding, Some(&alias.continuation))?
-        && current.generation == alias.generation
+        && current.checkpoint.generation == alias.generation
     {
         let directory = open_continuations(adapter, false)?.ok_or(HostFailure::Invalid)?;
-        directory.remove_regular(&canonical_record_name(binding))?;
+        directory.remove_regular(&record_name(binding, &current)?)?;
     }
     Ok(())
 }
@@ -204,26 +229,47 @@ fn read_canonical(
     adapter: &AnchoredDirectory,
     binding: CheckpointBinding<'_>,
     continuation: Option<&str>,
-) -> Result<Option<ContinuationCheckpoint>, HostFailure> {
+) -> Result<Option<StoredCheckpoint>, HostFailure> {
     let Some(directory) = open_continuations(adapter, false)? else {
         return Ok(None);
     };
     validate_continuation_directory(&directory)?;
+    let mut primary = None;
     let mut matching = None;
     for name in directory.entry_names()? {
         let checkpoint = read_checkpoint_file(&directory, &name)?;
         if checkpoint_matches_binding(&checkpoint, binding) {
             validate_checkpoint(&checkpoint, binding, None)?;
-            if continuation.is_some_and(|value| checkpoint.continuation != value) {
-                continue;
-            }
-            if matching.replace(checkpoint).is_some() {
+            let location = checkpoint_location(&name, &checkpoint)?;
+            if location == CheckpointLocation::Canonical
+                && primary
+                    .replace(StoredCheckpoint {
+                        checkpoint: checkpoint.clone(),
+                        location,
+                    })
+                    .is_some()
+            {
                 return Err(HostFailure::Invalid);
+            }
+            if continuation.is_some_and(|value| checkpoint.continuation == value) {
+                if matching
+                    .replace(StoredCheckpoint {
+                        checkpoint,
+                        location,
+                    })
+                    .is_some()
+                {
+                    return Err(HostFailure::Invalid);
+                }
             }
         }
     }
     directory.verify()?;
-    Ok(matching)
+    Ok(if continuation.is_some() {
+        matching
+    } else {
+        primary
+    })
 }
 
 pub(crate) fn validate_continuation_directory(
@@ -233,7 +279,9 @@ pub(crate) fn validate_continuation_directory(
         validate_record_name(&name)?;
         let checkpoint = read_checkpoint_file(directory, &name)?;
         validate_checkpoint_shape(&checkpoint)?;
-        if canonical_record_name_for_checkpoint(&checkpoint)? != name {
+        if checkpoint_location(&name, &checkpoint)? == CheckpointLocation::Handoff
+            && checkpoint.state != "reconciled"
+        {
             return Err(HostFailure::Invalid);
         }
     }
@@ -242,7 +290,8 @@ pub(crate) fn validate_continuation_directory(
 
 fn validate_record_name(name: &str) -> Result<(), HostFailure> {
     let Some(digest) = name
-        .strip_prefix(RECORD_PREFIX)
+        .strip_prefix(HANDOFF_RECORD_PREFIX)
+        .or_else(|| name.strip_prefix(RECORD_PREFIX))
         .and_then(|value| value.strip_suffix(RECORD_SUFFIX))
     else {
         return Err(HostFailure::Invalid);
@@ -251,6 +300,30 @@ fn validate_record_name(name: &str) -> Result<(), HostFailure> {
         return Err(HostFailure::Invalid);
     }
     Ok(())
+}
+
+fn checkpoint_location(
+    name: &str,
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<CheckpointLocation, HostFailure> {
+    if canonical_record_name_for_checkpoint(checkpoint)? == name {
+        Ok(CheckpointLocation::Canonical)
+    } else if handoff_record_name(checkpoint)? == name {
+        Ok(CheckpointLocation::Handoff)
+    } else {
+        Err(HostFailure::Invalid)
+    }
+}
+
+fn record_name(
+    binding: CheckpointBinding<'_>,
+    stored: &StoredCheckpoint,
+) -> Result<String, HostFailure> {
+    match stored.location {
+        CheckpointLocation::Legacy => Err(HostFailure::Invalid),
+        CheckpointLocation::Canonical => Ok(canonical_record_name(binding)),
+        CheckpointLocation::Handoff => handoff_record_name(&stored.checkpoint),
+    }
 }
 
 fn read_checkpoint_file(
@@ -313,6 +386,17 @@ pub(super) fn write_checkpoint(
             directory.replace_regular_atomically(
                 &canonical_record_name(binding),
                 &canonical_stage_name(binding),
+                0o600,
+                &bytes,
+                expected_existing,
+            )
+        }
+        CheckpointLocation::Handoff => {
+            let directory = open_continuations(adapter, true)?.ok_or(HostFailure::Invalid)?;
+            validate_continuation_directory(&directory)?;
+            directory.replace_regular_atomically(
+                &handoff_record_name(checkpoint)?,
+                &handoff_stage_name(checkpoint)?,
                 0o600,
                 &bytes,
                 expected_existing,

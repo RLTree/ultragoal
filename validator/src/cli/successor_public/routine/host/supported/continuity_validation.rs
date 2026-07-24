@@ -154,6 +154,41 @@ pub(super) fn canonical_stage_name(binding: CheckpointBinding<'_>) -> String {
     )
 }
 
+pub(super) fn handoff_record_name(
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<String, HostFailure> {
+    let target = std::path::Path::new(&checkpoint.target);
+    if !target.is_absolute() || target.to_str().is_none() || checkpoint.continuation.is_empty() {
+        return Err(HostFailure::Invalid);
+    }
+    let mut digest = Sha256::new();
+    digest.update(b"routine-continuation-handoff-v1\0");
+    digest.update(target.to_string_lossy().as_bytes());
+    digest.update([0]);
+    digest.update(checkpoint.context_id.as_bytes());
+    digest.update([0]);
+    digest.update(checkpoint.candidate_id.as_bytes());
+    digest.update([0]);
+    digest.update(checkpoint.plan_id.as_bytes());
+    digest.update([0]);
+    digest.update(checkpoint.snapshot_id.as_bytes());
+    digest.update([0]);
+    digest.update(checkpoint.continuation.as_bytes());
+    Ok(format!(
+        "routine-continuation-handoff-{:x}.json",
+        digest.finalize()
+    ))
+}
+
+pub(super) fn handoff_stage_name(
+    checkpoint: &ContinuationCheckpoint,
+) -> Result<String, HostFailure> {
+    Ok(format!(
+        ".{}.next",
+        handoff_record_name(checkpoint)?.trim_end_matches(".json")
+    ))
+}
+
 pub(super) fn canonical_record_name_for_checkpoint(
     checkpoint: &ContinuationCheckpoint,
 ) -> Result<String, HostFailure> {
