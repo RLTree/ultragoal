@@ -33,6 +33,13 @@ discovering the enabled `harness-ultragoal` front door; no reinstall or source
 repair is warranted while these package, registry, and runtime identities stay
 unchanged.
 
+A clean Codex task created after the 0.0.31 registration did discover
+`$harness-ultragoal:harness-ultragoal` from `harness-ultragoal-local` at
+0.0.31, with no competing implicit UltraGoal gateway in its exposed catalog.
+That is fresh-task discovery evidence only. It closes this bounded installed
+agent-use journey but does not establish human use, Product Fitness,
+daily-driver, readiness, release, or completion.
+
 ## Routine multi-binding repeat-use repair — 2026-07-23
 
 Exact source `b6e8811bf4a07400d4fe2d8ad2719f3e6f546bdf` / tree
