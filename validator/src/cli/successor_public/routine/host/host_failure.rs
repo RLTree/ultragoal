@@ -89,7 +89,11 @@ impl HostState {
             checkpoint
                 .terminal_outcome()
                 .map(|outcome| outcome.as_str()),
-            allow_stale_head,
+            // A completed attempt is a read-only replay: its exact terminal
+            // binding remains valid when another, independently bound attempt
+            // advances the shared ledger. Reserved recovery stays exact-head
+            // fenced unless this is the one-shot reconciled alias path.
+            allow_stale_head || checkpoint.is_complete(),
         )
     }
 

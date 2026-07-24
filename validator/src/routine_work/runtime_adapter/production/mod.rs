@@ -247,6 +247,8 @@ pub(crate) fn reconcile_public_routine_reservation(
 /// the host projection.  `allow_stale_head` is reserved for a one-shot
 /// continuation alias: the private attempt and binding still must match, but
 /// its old projection head may have been superseded by the handoff attempt.
+/// A completed terminal checkpoint may also replay after an independently
+/// bound attempt advances the shared ledger; it cannot advance custody.
 pub(crate) fn authenticate_public_routine_checkpoint(
     custody: RoutineCustodyCapability,
     target: &Path,

@@ -54,7 +54,12 @@ impl FileLedger {
             if record.state != expected {
                 return Err(error("routine-production-checkpoint-state-invalid"));
             }
-            if allow_stale_head && record.state != AttemptState::RolledBack {
+            if allow_stale_head
+                && !matches!(
+                    record.state,
+                    AttemptState::RolledBack | AttemptState::Complete
+                )
+            {
                 return Err(error("routine-production-checkpoint-alias-invalid"));
             }
             Ok(((), false))
