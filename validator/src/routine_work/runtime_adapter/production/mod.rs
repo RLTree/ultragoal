@@ -50,8 +50,8 @@ pub(crate) enum PublicRoutineControl {
     InterruptAfterReservation,
 }
 
-type ReservationPublicationCallback<'a> =
-    dyn FnMut(&RoutineReservationPublication) -> Result<(), RoutineError> + 'a;
+type ReservationPublicationCallback<'a> = dyn for<'publication> FnMut(&'publication RoutineReservationPublication) -> Result<(), RoutineError>
+    + 'a;
 
 /// Private controls carried together from production admission to the one
 /// reservation-and-effect transition.
@@ -163,6 +163,26 @@ pub(crate) fn mediate_public_routine_execution(
             control: PublicRoutineControl::Run,
             on_reserved: None,
         },
+    )
+}
+
+#[cfg(test)]
+pub(crate) fn mediate_public_routine_execution_with_reservation_publication<'a>(
+    authority_root: &Path,
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    prepared: PreparedRoutineExecution,
+    on_reserved: &'a mut ReservationPublicationCallback<'a>,
+) -> Result<RoutineMediationResult, RoutineError> {
+    mediate_public_routine_execution_with_control(
+        context,
+        plan,
+        prepared,
+        ProductionExecutionControl::with_reservation_publication(
+            custody::issue_test_custody(authority_root),
+            PublicRoutineControl::Run,
+            on_reserved,
+        ),
     )
 }
 

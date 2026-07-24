@@ -76,7 +76,9 @@ pub(crate) use runtime_adapter::{
 pub(crate) use runtime_adapter::{RoutineCancellation, RoutineReuseInput};
 
 #[cfg(test)]
-pub(crate) use runtime_adapter::mediate_public_routine_execution;
+pub(crate) use runtime_adapter::{
+    mediate_public_routine_execution, mediate_public_routine_execution_with_reservation_publication,
+};
 
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use runtime_adapter::{

@@ -29,6 +29,16 @@ fn child_lease_publication_refusal_reaps_before_stage_cleanup() {
 }
 
 #[test]
+fn host_reservation_publication_failure_settles_without_workspace_effect() {
+    publication_precommit::host_reservation_publication_failure_settles_without_workspace_effect();
+}
+
+#[test]
+fn ambiguous_host_reservation_publication_preserves_recovery_custody() {
+    publication_precommit::ambiguous_host_reservation_publication_preserves_recovery_custody();
+}
+
+#[test]
 fn terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay() {
     publication_ambiguity::terminal_publication_ambiguity_preserves_cleanup_and_refuses_replay();
 }

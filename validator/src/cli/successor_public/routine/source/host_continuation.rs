@@ -207,44 +207,68 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
             .remove_alias_if_present(checkpoint_binding, handoff_alias.as_ref())
             .map_err(PublicFailure::Host)?;
     }
-    let mut reservation_attestation_failed = false;
+    let mut reservation_publication_failed = false;
     let mut publish_reserved =
         |reservation: &crate::routine_work::RoutineReservationPublication| {
-            let attested = state.authenticate_public_state(
-                target,
-                context.context_id(),
-                plan.binding().candidate_id(),
-                plan.plan_id(),
-                snapshot.snapshot_id(),
-                reservation.continuation(),
-                reservation.recovery_marker(),
-                reservation.attempt_grant(),
-                reservation.authenticated_ledger_head(),
-                "reserved",
-                None,
-                false,
-            );
-            if attested.is_err() {
-                reservation_attestation_failed = true;
+            if state
+                .authenticate_public_state(
+                    target,
+                    context.context_id(),
+                    plan.binding().candidate_id(),
+                    plan.plan_id(),
+                    snapshot.snapshot_id(),
+                    reservation.continuation(),
+                    reservation.recovery_marker(),
+                    reservation.attempt_grant(),
+                    reservation.authenticated_ledger_head(),
+                    "reserved",
+                    None,
+                    false,
+                )
+                .is_err()
+            {
+                reservation_publication_failed = true;
+                return Err(crate::routine_work::RoutineError::new(
+                    crate::routine_work::RoutineErrorId::ObservationFailed,
+                    "routine-host-reservation-checkpoint-failed",
+                    None,
+                ));
             }
-            attested
-                .and_then(|_| {
-                    state.record_reserved_checkpoint(host::ReservedCheckpoint {
-                        binding: checkpoint_binding,
-                        continuation: reservation.continuation(),
-                        recovery_marker: reservation.recovery_marker(),
-                        attempt_grant: reservation.attempt_grant(),
-                        authenticated_ledger_head: reservation.authenticated_ledger_head(),
-                        finding_binding: finding_binding.as_ref(),
+            if let Err(error) = state.record_reserved_checkpoint(host::ReservedCheckpoint {
+                binding: checkpoint_binding,
+                continuation: reservation.continuation(),
+                recovery_marker: reservation.recovery_marker(),
+                attempt_grant: reservation.attempt_grant(),
+                authenticated_ledger_head: reservation.authenticated_ledger_head(),
+                finding_binding: finding_binding.as_ref(),
+            }) {
+                let persisted = state
+                    .exact_checkpoint(checkpoint_binding, Some(reservation.continuation()))
+                    .and_then(|checkpoint| checkpoint.ok_or(host::HostFailure::Invalid))
+                    .and_then(|checkpoint| {
+                        if !checkpoint.is_reserved()
+                            || checkpoint.recovery_marker() != reservation.recovery_marker()
+                            || checkpoint.attempt_grant() != reservation.attempt_grant()
+                            || checkpoint.ledger_head() != reservation.authenticated_ledger_head()
+                        {
+                            return Err(host::HostFailure::Invalid);
+                        }
+                        state.authenticate_checkpoint(target, &checkpoint, false)
                     })
-                })
-                .map_err(|_| {
-                    crate::routine_work::RoutineError::new(
-                        crate::routine_work::RoutineErrorId::ObservationFailed,
-                        "routine-host-reservation-checkpoint-failed",
-                        None,
-                    )
-                })
+                    .is_ok();
+                let _ = error;
+                reservation_publication_failed = true;
+                return Err(crate::routine_work::RoutineError::new(
+                    crate::routine_work::RoutineErrorId::ObservationFailed,
+                    if persisted {
+                        "routine-host-reservation-checkpoint-ambiguous"
+                    } else {
+                        "routine-host-reservation-checkpoint-failed"
+                    },
+                    None,
+                ));
+            }
+            Ok(())
         };
     let mediated = mediate_public_routine_execution_with_control(
         context,
@@ -259,7 +283,7 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
     let result = match mediated {
         Ok(result) => result,
         Err(error) => {
-            if !reservation_attestation_failed {
+            if !reservation_publication_failed {
                 terminal_event::mark_post_effect_ambiguity(&state, target, context, plan, snapshot);
             }
             return Err(PublicFailure::Routine(error));

@@ -4,7 +4,7 @@ use super::super::super::production_mediation::{
 };
 use super::super::super::reservation_failure::{
     CapturedCleanup, PrimaryFailure, TransactionFailure, failure_record, finish_error,
-    finish_panic, observe,
+    finish_panic, observe, reservation_publication_failure_record,
 };
 use super::owner::ReservationOwner;
 use super::process_execution::execute_intent;
@@ -47,7 +47,10 @@ pub(in crate::routine_work::runtime_adapter::production) fn mediate_reserved_eff
             owner.attempt_grant(),
             owner.authenticated_head(),
         );
-        publish(&publication)?;
+        if let Err(error) = publish(&publication) {
+            let record = reservation_publication_failure_record(owner.failure_binding(), &error);
+            return finish_error(error, None, owner.finish_failure(&record));
+        }
     }
     if control == PublicRoutineControl::InterruptAfterReservation {
         return interrupted_after_reservation(&request, &owner);

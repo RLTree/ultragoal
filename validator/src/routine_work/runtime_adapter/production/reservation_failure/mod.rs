@@ -142,6 +142,31 @@ pub(super) fn failure_record(
     }
 }
 
+/// Records an error from the host's reservation projection before an effect can
+/// start. The durable reservation has been created, but no process, launch, or
+/// output custody exists to reconcile.
+pub(super) fn reservation_publication_failure_record(
+    binding: FailureBinding<'_>,
+    error: &RoutineError,
+) -> ReservationFailureEvidence {
+    let projection_ambiguous = error.cause() == "routine-host-reservation-checkpoint-ambiguous";
+    failure_record(
+        binding,
+        false,
+        FailureParts {
+            primary: FailureEvidence::Error(error.evidence()),
+            process_cleanup: CleanupEvidence::NotRequired,
+            launch_cleanup: None,
+            // A confirmed host projection may have survived an error returned
+            // after its atomic replacement. Preserve the durable reservation
+            // for the public continuation route instead of declaring no effect.
+            output_cleanup: projection_ambiguous
+                .then(|| CleanupEvidence::Error(error.evidence()))
+                .unwrap_or(CleanupEvidence::NotRequired),
+        },
+    )
+}
+
 pub(super) fn parts_from_error(error: &RoutineError, cleanup: &CapturedCleanup) -> FailureParts {
     let (primary, process_cleanup, launch_cleanup) = error_parts(error);
     FailureParts {

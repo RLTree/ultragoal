@@ -25,7 +25,7 @@ impl FileLedger {
             || !valid(candidate_id)
             || !valid(plan_id)
             || !valid(snapshot_id)
-            || !valid(continuation)
+            || !valid_continuation(continuation)
             || !valid(recovery_marker)
             || !valid(attempt_grant)
             || !valid(authenticated_ledger_head)
@@ -61,6 +61,10 @@ impl FileLedger {
         })?
         .into_result()
     }
+}
+
+fn valid_continuation(value: &str) -> bool {
+    value.strip_prefix("routine-cont-").is_some_and(valid)
 }
 
 fn continuation_for(record: &ProtocolRecord) -> String {
