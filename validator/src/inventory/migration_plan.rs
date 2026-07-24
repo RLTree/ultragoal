@@ -38,10 +38,16 @@ impl MigrationVerification {
     }
 
     pub(crate) fn verified(&self) -> bool {
-        self.authority_error_codes.is_empty()
-            && self.plan.pending_count() == 0
-            && self.plan.effect_count() == 0
+        verified(
+            self.authority_error_codes.len(),
+            self.plan.pending_count(),
+            self.plan.effect_count(),
+        )
     }
+}
+
+fn verified(authority_error_count: usize, pending_count: usize, effect_count: usize) -> bool {
+    authority_error_count == 0 && pending_count == 0 && effect_count == 0
 }
 
 impl From<InventoryError> for MigrationPlanAdapterError {
@@ -119,14 +125,7 @@ pub(super) fn verify(
     catalog
         .revalidate_identity()
         .map_err(MigrationPlanAdapterError::from)?;
-    let authority_error_codes = catalog
-        .findings()
-        .iter()
-        .filter(|finding| finding.severity == crate::inventory::FindingSeverity::Error)
-        .map(|finding| finding.code.clone())
-        .collect::<std::collections::BTreeSet<_>>()
-        .into_iter()
-        .collect();
+    let authority_error_codes = authority_error_codes(&catalog);
     let catalog_id = catalog.catalog_id().to_owned();
     let plan = derive(context, &catalog, reads, registry_observation)?;
     reads
@@ -137,6 +136,17 @@ pub(super) fn verify(
         authority_error_codes,
         plan,
     })
+}
+
+fn authority_error_codes(catalog: &AuthorityCatalog) -> Vec<String> {
+    catalog
+        .findings()
+        .iter()
+        .filter(|finding| finding.severity == crate::inventory::FindingSeverity::Error)
+        .map(|finding| finding.code.clone())
+        .collect::<std::collections::BTreeSet<_>>()
+        .into_iter()
+        .collect()
 }
 
 fn surface(entry: &InventoryEntry) -> Result<InventorySurface, MigrationPlanAdapterError> {
@@ -177,4 +187,32 @@ fn observed_digest(entry: &InventoryEntry) -> Result<String, MigrationPlanAdapte
 
 fn digest(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn authority_errors_and_open_migration_work_cannot_verify() {
+        let catalog = AuthorityCatalog::canonical_for_test(
+            "context".to_owned(),
+            "contract".to_owned(),
+            BTreeMap::new(),
+            Vec::new(),
+            vec![crate::inventory::InventoryFinding::error(
+                "parallel_authority",
+                Some("LEGACY:duplicate"),
+                Some("legacy/duplicate.rs"),
+                "duplicate authority remains active".to_owned(),
+            )],
+        )
+        .unwrap();
+        assert_eq!(authority_error_codes(&catalog), ["parallel_authority"]);
+        assert!(!verified(1, 0, 0));
+        assert!(!verified(0, 1, 0));
+        assert!(!verified(0, 0, 1));
+        assert!(verified(0, 0, 0));
+    }
 }

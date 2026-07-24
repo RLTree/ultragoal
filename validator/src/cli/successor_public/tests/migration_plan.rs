@@ -78,6 +78,10 @@ fn migration_verify_is_public_read_only_and_bound_to_the_current_authority_catal
         .is_some_and(|value| value.starts_with("sha256:")));
     assert_eq!(projection["authority_error_codes"], serde_json::json!([]));
     assert_eq!(
+        projection["verification_scope"],
+        "current inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface"
+    );
+    assert_eq!(
         projection["plan"]["schema_version"],
         "ProductMigrationPlanProjection-v2"
     );

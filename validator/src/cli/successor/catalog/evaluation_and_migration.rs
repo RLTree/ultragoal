@@ -2,8 +2,8 @@ use super::super::command_contract::{
     CommandDescriptor, EvalAction, MigrateAction, SuccessorCommand,
 };
 use super::options::{
-    ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
-    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, descriptor,
+    descriptor, ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
+    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT,
 };
 use crate::context::EffectClass;
 
@@ -61,7 +61,7 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Migrate(MigrateAction::Verify),
         Some("verify"),
         EffectClass::Read,
-        "Verify replacement behavior and absence of duplicate authority.",
+        "Verify current inventory errors and migration-plan closure without mutation.",
         REGISTRY_OPTION,
     ),
     descriptor(

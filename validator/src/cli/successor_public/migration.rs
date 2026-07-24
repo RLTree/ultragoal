@@ -36,6 +36,7 @@ struct VerificationOutcome<'a> {
     catalog_id: &'a str,
     authority_error_codes: &'a [String],
     plan: serde_json::Value,
+    verification_scope: &'static str,
     claim_ceiling: &'static str,
 }
 
@@ -59,7 +60,8 @@ pub(super) fn verify(context: &LiveContext, invocation: &ParsedInvocation) -> Ru
         catalog_id: verification.catalog_id(),
         authority_error_codes: verification.authority_error_codes(),
         plan,
-        claim_ceiling: "exact current-source migration authority verified read-only; migration effects, retirement, package, install, runtime, readiness, and release claims remain withheld",
+        verification_scope: "current inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface",
+        claim_ceiling: "exact current-source migration inventory and plan closure verified read-only; migration effects, retirement, package, install, runtime, readiness, and release claims remain withheld",
     };
     match serde_json::to_vec(&outcome) {
         Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(
@@ -121,7 +123,7 @@ fn projection_unavailable() -> RuntimeOutcome {
 fn verification_unavailable() -> RuntimeOutcome {
     failure(
         DiagnosticId::ProjectionFailed,
-        "the current authority inventory and adopted registry did not yield one exact read-only migration verification",
+        "the current authority inventory and adopted registry did not yield one exact read-only migration inventory and plan verification",
         "ProductMigrationVerification-v1",
         "repair the current semantic inventory or adopted registry without granting migration effects",
         "migration effects, retirement, package, install, runtime, readiness, and release remain withheld",
