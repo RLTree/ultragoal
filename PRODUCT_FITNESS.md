@@ -1,34 +1,45 @@
-# Product Fitness And Quality-In-Use
+# Product Fitness and Quality in Use
 
-Product Fitness is mandatory for product-impacting claims.
+Product Fitness is required when the current claim concerns a product
+milestone, repeated use, daily-driver status, readiness, release, or product
+success. It is not a recurring receipt requirement for ordinary implementation.
 
-Every product-impacting claim MUST attach
-`validation_artifacts/harness/product-fitness-receipt.json` or MUST withhold the
-claim with blocker, owner, reason, affected claim ids, required follow-up, and
-claim ceiling.
+## Current milestone
 
-Product Fitness is separate from Product Cohesion. Product Cohesion proves
-journey coherence. Product Fitness proves audience, job, context, outcome, and
-quality-in-use fit.
+The current claim is `CL-USABLE-LOOP`. The exact installed candidate must help
+the intended repository operator:
 
-Product Fitness proof MUST bind:
+- fit a representative repository safely;
+- run useful dirty-tree affected work;
+- understand a representative failure;
+- recover or refuse safely;
+- preserve unrelated state; and
+- repeat useful work without hidden writes or governance churn.
 
-- target audience;
-- job to be done;
-- context of use;
-- desired user outcome;
-- business or mission outcome;
-- critical journey;
-- first value event;
-- assumption tests;
-- user evidence;
-- effectiveness, efficiency, satisfaction, freedom from risk, and context
-  coverage;
-- accessibility evidence bound to the journey;
-- cognitive-load and recovery burden;
-- continuance evidence for repeated-use or daily-driver claims;
+Record only the observations needed to decide that claim:
+
+- target user and repository context;
+- useful outcome and first value event;
+- exact candidate and product surface;
+- time to verified value;
+- human interventions;
+- effectiveness and failure/recovery result;
+- accessibility of commands, decisions, and failures;
+- cognitive, recovery, and trust burden;
+- retained artifact cost;
+- observed false pass or false rejection; and
 - claim ceiling.
 
-Reviewer agreement, install success, smoke tests, test pass counts, fixture pass
-counts, package publication, first use, feature delivery, and Product Cohesion
-receipts alone MUST NOT prove product success.
+One concise candidate-bound outcome may retain these observations at the
+milestone boundary. Do not create per-command, periodic, or receipt-of-receipt
+copies.
+
+## Claim separation
+
+Product Cohesion asks whether the journey makes sense. Product Fitness asks
+whether it helps the intended user in context. Source checks, package bytes,
+install success, smoke tests, fixture counts, reviewer agreement, and first use
+cannot prove either one alone.
+
+Repeated-use, daily-driver, public availability, and release require later
+contracts and evidence. The current milestone deliberately does not claim them.

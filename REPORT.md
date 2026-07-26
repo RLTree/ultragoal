@@ -1,4 +1,10 @@
-# Harness Ultragoal Plugin Proposal
+# Superseded Harness Ultragoal Plugin Proposal
+
+> This report is historical rationale, not current product or planning
+> authority. The current goal is `GOAL_CONTRACT.md`; the only active plan is
+> `docs/exec-plans/active/usable-product-milestone.md`. Historical lane,
+> receipt, and completion mechanics below must not be refreshed or used to gate
+> ordinary work.
 
 ## Executive Summary
 

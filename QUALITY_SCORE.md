@@ -1,8 +1,8 @@
 # QUALITY_SCORE
 
 Use this deterministic scorecard for agent-authored work. Final reports may
-summarize the categories, but the score comes from commands and receipts, not
-vibes.
+summarize the categories, but the score comes from current observations on the
+named surface, not vibes or artifact volume.
 
 | Category | Pass signal |
 | --- | --- |
@@ -14,7 +14,7 @@ vibes.
 | Observability | Run receipts, ledgers, logs, metrics, traces, or screenshots are named. |
 | Product cohesion | User journey, UI/runtime evidence, and human-attention exceptions are joined. |
 | Docs/architecture fit | Agent docs route correctly and active ExecPlans are current. |
-| Receipts | Exact commands, exit codes, artifacts, and digests are present. |
+| Evidence economy | Proof matches the current claim; ordinary output stays ephemeral and retained evidence has a finite invalidation/deletion rule. |
 | Residual gaps | Gaps are listed as blockers or tech debt, never hidden. |
 
 No category can pass on "looks good" or probabilistic review alone.

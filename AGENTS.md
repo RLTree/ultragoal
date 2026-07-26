@@ -7,18 +7,23 @@ Read in this order for non-trivial work:
 1. `AGENT_STANDARDS.md`
 2. The routed `agent-standards/` module for the task
 3. `ARCHITECTURE.md`
-4. `PLANS.md`
-5. The specialized root doc for the task:
+4. `GOAL_CONTRACT.md`
+5. `PLANS.md`
+6. The specialized root doc for the task:
    `SECURITY.md`, `RELIABILITY.md`, `PRODUCT_SENSE.md`, `DESIGN.md`,
    `PRODUCT_FITNESS.md`, `FRONTEND.md`, or `QUALITY_SCORE.md`
-6. `docs/exec-plans/active/`
-7. `docs/design-docs/`, `docs/product-specs/`, `docs/generated/`, or
+7. `docs/exec-plans/active/`
+8. `docs/design-docs/`, `docs/product-specs/`, `docs/generated/`, or
    `docs/references/` when routed there
-8. `validation_artifacts/`
+9. `validation_artifacts/`
 
 Hard rules:
 
 - Follow the repo standards before editing.
+- Follow the current goal contract and its single active ExecPlan. Historical
+  v2 lane, backlog, completion, receipt, and mandatory-law proof projections
+  are frozen compatibility inputs; do not refresh them or use them to gate
+  ordinary work.
 - Use ExecPlans for long-running or multi-lane work.
 - Preserve user changes.
 - Use isolated workspaces for concurrent lanes.
@@ -34,15 +39,15 @@ Hard rules:
   Check routed surfaces such as `ARCHITECTURE.md`, `PLANS.md`, specialized
   root docs, active ExecPlans, `docs/**`, and `agent-standards/**`.
 - Test pass counts, smoke tests, fixture tests, mocks, and reviewer signoff are
-  not coverage proof. Coverage claims require a coverage receipt or an explicit
-  blocker/ratchet floor.
+  not coverage proof. Make a coverage claim only from current coverage
+  measurement; ordinary work need not create a durable coverage artifact.
 - Treat memory and chat as context, not current proof.
 - Keep project-specific facts in repo-local docs.
 - For user-facing products or control surfaces, use `PRODUCT_SENSE.md` and
   Product Cohesion evidence before claiming the product makes sense.
-- For product success, repeated-use, daily-driver, release, readiness, or
-  quality-in-use claims, use `PRODUCT_FITNESS.md` and a valid Product Fitness
-  receipt. Install success, smoke tests, feature delivery, reviewer agreement,
+- For product milestones, repeated-use, daily-driver, release, readiness, or
+  quality-in-use claims, use `PRODUCT_FITNESS.md` and same-surface product
+  evidence. Install success, smoke tests, feature delivery, reviewer agreement,
   and first use are not product success proof.
 
 Run the repo's check entrypoint before completion claims.

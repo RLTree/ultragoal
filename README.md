@@ -10,6 +10,19 @@ package, marketplace, install, cache, host discovery, runtime behavior, product
 journeys, readiness, and release are separate truth surfaces. The presence of
 these files proves none of the higher surfaces by itself.
 
+## Current delivery milestone
+
+The current goal is one usable product loop, not completion of the historical
+successor receipt graph. Start with [the goal contract](GOAL_CONTRACT.md) and
+[the single active ExecPlan](docs/exec-plans/active/usable-product-milestone.md).
+
+The finite route is: current-behavior baseline, only the required disjoint
+implementation lanes, one root fan-in, and one authorized installed product
+journey. Ordinary work uses focused ephemeral checks. High-risk boundary proof
+and release-grade evidence run only when those claims are current. Historical
+v2 registries, receipts, and mandatory-law proof projections are frozen
+compatibility inputs and are not refreshed.
+
 ## Start here
 
 Use `$harness-ultragoal:harness-ultragoal` as the only first-entry skill. It

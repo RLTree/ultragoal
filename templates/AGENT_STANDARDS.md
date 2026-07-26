@@ -60,9 +60,11 @@ record the gap before acting.
 - Documentation freshness is a completion obligation. Load
   `agent-standards/01-namespace-and-progressive-disclosure.md` when work may
   affect repo-owned docs or generated docs.
-- Coverage proof is a completion obligation for material source claims. Load
+- Coverage proof is required only when making a coverage or source-completeness
+  claim. Ordinary implementation still tests changed behavior but does not emit
+  a durable coverage artifact by default. Load
   `agent-standards/02-boundaries-validation-and-enforcement.md` and
-  `agent-standards/07-cli-authority-and-proof-surfaces.md`.
+  `agent-standards/07-cli-authority-and-proof-surfaces.md` for coverage claims.
 - Future Codex app worktree lane owners use the lowest supported reasoning level
   that fits the named risk; material reviewers may require higher reasoning.
   Record model and reasoning only when Codex exposes them, otherwise as unknown.
@@ -73,8 +75,10 @@ record the gap before acting.
   same-surface proof at the declared evidence level. Engine proof, Product
   Cohesion alone, Product Fitness alone, reviewer agreement, install success,
   or smoke tests are forbidden substitutes.
-- Material review uses the four merged canonical personas with the required model,
-  reasoning, full-scope, fresh-context cadence.
+- Review scope follows the current claim. Ordinary work uses focused checks;
+  high-risk boundary changes use the relevant independent falsifier; a full
+  four-persona round is reserved for a current product, release, or completion
+  claim that actually spans all four lenses.
 - A bounded review completes its named invariant surface and batches every
   demonstrated sibling defect into one response. One material defect rejects
   the candidate, but is not an early-stop condition unless continuing would be
@@ -93,28 +97,24 @@ record the gap before acting.
   scrubber, quality receipt, skill update, persona update, routed standard,
   resource-map update, hook, or backlog row.
 
-## Review Team Reminder
+## Review Routing
 
-The canonical material review team is:
+The canonical falsifier roles are:
 
 1. Contract and Claim Falsifier.
 2. Orchestration and Recovery Falsifier.
 3. Security Trust-Boundary Falsifier.
 4. Product and Simplicity Falsifier.
 
-Every material review round is a sign-off attempt using all four canonical
-personas with full current scope, fresh reviewers, current anchors, and the
-current claim ceiling. Use only runtime-supported model and reasoning
-configuration, and record it only when exposed. All four must return `SIGN_OFF` in the
-same round. Any `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round;
-repair, regenerate anchors, close reviewers, and start a fresh full-scope
-round.
+Select only the roles needed to falsify the current claim. Use one independent
+focused role for a high-risk authority, security, recovery, or product
+boundary. Use all four only for a product, release, or completion claim spanning
+all four surfaces. A completed review closes while candidate bytes and consumed
+dependencies stay unchanged.
 
-Before launching reviewers, run the Material Review Scope Gate. Delta-only or
-advisory review is allowed only for non-signoff follow-up or deterministic
-validator deltas and cannot satisfy material `SIGN_OFF`. If deterministic
-preflight blocks, repair the validator/receipt/package problem before spending
-reviewer tokens.
+Before launching reviewers, confirm the exact candidate, claim, failure model,
+and cheapest credible oracle. Do not regenerate unrelated anchors or run a
+full-team review merely because a historical plan required one.
 
 ## Completion Report
 

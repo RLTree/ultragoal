@@ -1,7 +1,15 @@
-# Harness Ultragoal Successor Live Authority
+# Frozen Harness Ultragoal Successor v2 Records
 
-This directory records live-repository adoption and execution state for
-`harness-ultragoal-successor-contract-v2`.
+> **Superseded operational surface.** The current authority is
+> `GOAL_CONTRACT.md` and
+> `docs/exec-plans/active/usable-product-milestone.md`. Do not update,
+> regenerate, or use files in this directory to schedule work or block
+> ordinary delivery.
+
+This directory preserves compatibility, migration, and recovery inputs from
+`harness-ultragoal-successor-contract-v2`. Its records are historical context,
+not current source, package, install, runtime, product, release, or completion
+proof.
 
 The immutable, digest-verified handoff is preserved at
 `../ultragoal-contract-2026-07-successor-v2/`. Its internal
@@ -13,6 +21,6 @@ The handoff, its snapshot findings, and its review receipts are context. They do
 not prove current source, package, installation, discovery, runtime behavior,
 product journeys, release, or completion.
 
-Root-owned live records in this directory must be updated only from freshly
-observed repository/runtime state. A stale record lowers affected claim ceilings;
-it never silently carries a prior claim forward.
+The future retirement lane may delete this directory only after current-reader,
+compatibility-promise, unique-recovery-state, and active-claim checks show that
+no live consumer needs it. Git history is the archive after that point.

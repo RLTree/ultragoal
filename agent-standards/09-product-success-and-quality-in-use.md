@@ -2,57 +2,55 @@
 
 ## Product Success Contract
 
-Product-impacting work requires initiation-time Product Success Contract
-authority.
+A product milestone, repeated-use claim, daily-driver claim, or release claim
+requires initiation-time Product Success Contract authority.
 
-- Product success, Product Fitness, Product Cohesion, release readiness,
-  daily-driver readiness, marketplace readiness, reviewer readiness, install
-  usefulness, user value, and operator value claims trace to a current Product
-  Success Contract or append-only amendment.
-- The contract names claim ids, product surface, target user or operator, job
-  to be done, context of use, desired user outcome, business or mission
-  outcome, critical journey, first value event, quality dimensions, evidence
-  ladder, forbidden substitutions, review owner, and claim ceiling.
-- Markdown-only, optional, stale, wrong-goal, wrong-claim, placeholder,
-  actorless, or digest-mismatched product contracts fail.
+- The contract names the claim id, product surface, intended actor, job,
+  context, desired outcome, critical journey, first value event, relevant
+  quality dimensions, evidence tier, forbidden substitutions, review owner,
+  and claim ceiling.
+- A focused implementation lane may inherit the current milestone contract; it
+  does not create its own product-success contract or receipt.
+- Markdown-only planning can authorize the work but cannot prove the product
+  claim. Stale, wrong-goal, wrong-candidate, placeholder, or actorless evidence
+  lowers only the claim that consumes it.
 
 ## Product Fitness
 
-Product Fitness proves that the product helps the intended user in the intended
-context.
+Product Fitness asks whether the product helps the intended actor in the
+declared context.
 
-- Receipts bind audience, job, context, outcome, quality-in-use dimensions,
-  accessibility, cognitive load, recovery burden, trust burden, human attention
-  cost, continuance when claimed, proof surface, and claim ceiling.
-- Product research distinguishes observed, inferred, assumed, and missing
-  evidence. Memory, stale screenshots, old packets, or docs are context only
-  until refreshed or explicitly bound as historical evidence.
-- Product-facing claims require current discovery, audit, source-backed
-  research, telemetry or usage evidence when adoption is claimed, and typed
-  reviewer disposition when judgment is required.
+- Evidence distinguishes observed, inferred, assumed, and missing facts.
+- Quality dimensions are selected because the current job depends on them;
+  do not expand every claim into a universal quality audit.
+- Adoption and continuance claims require current usage evidence. A single
+  representative journey may prove first useful value only.
+- Accessibility, cognitive load, recovery burden, trust burden, and human
+  attention cost are evaluated when they are material to the current surface
+  or claim.
+- Memory, old screenshots, old packets, historical receipts, install success,
+  unit tests, or reviewer agreement do not substitute for same-surface use.
 
 ## Product Cohesion
 
-Product Cohesion proves journey coherence. It does not prove success alone.
+Product Cohesion asks whether the critical journey makes sense from beginning
+to end.
 
-- Cohesion receipts bind critical journey id, journey steps, interaction
-  boundaries, product surface, user/operator role, first value event, and
-  same-surface proof requirement from the Product Success Contract.
-- Product Cohesion alone, Product Fitness alone, Quality Score alone, install
-  success, package publication, smoke tests, unit tests, fixture passes,
-  reviewer approval, app-registry existence, or dogfood outside the declared
-  audience/context cannot support product success.
-- Live product success requires same-surface proof at the declared evidence
-  ladder level, including failure and recovery paths when those dimensions are
-  part of the contract.
+- The journey binds steps, interaction boundaries, actor, first value event,
+  failure path, recovery path, and the same-surface requirement.
+- Cohesion, source checks, package publication, discovery, smoke tests, or
+  fixtures may support a milestone but do not independently prove product
+  success.
+- Persist one concise milestone outcome only when it supports a current claim,
+  cross-process handoff, recovery, or release. Ordinary journey observations
+  may remain in command output and the active plan.
 
 ## Review Ownership
 
 Product proof is owned, not inferred.
 
-- Review packets, review targets, archives, package inventory, final packets,
-  setup outputs, retrofit outputs, and install/cache receipts include current
-  product-success lineage for product-impacting candidates.
-- A Product/Simplicity reviewer or dedicated Product Success owner reviews
-  product contract lineage, Fitness obligations, Cohesion obligations, proof
-  joins, substitution blocks, and claim ceiling.
+- The active plan names the Product/Simplicity reviewer or product owner.
+- Review checks current contract lineage, forbidden substitutions, journey
+  evidence, failure and recovery, and the claim ceiling.
+- A full release packet or broader Fitness record is required only for the
+  corresponding release, repeated-use, or daily-driver claim.
