@@ -55,24 +55,53 @@ The root owns shared schemas, dependency files, public grammar and application
 programming interfaces (APIs), migrations, effect authority, claim promotion,
 and final acceptance. Workers request shared changes in their handoff.
 
-Fan-in happens once, in dependency order. The integrator classifies missing or
-failed lanes, checks ownership violations, resolves contradictions against
-current evidence, applies shared wiring, runs integrated checks, and closes or
-cancels every lane. A merged patch or worker summary is not integration proof.
+Every launched lane binds:
+
+- one exact root-frozen base commit and tree;
+- the exact shared-interface fields it consumes;
+- exclusive path and semantic ownership;
+- forbidden and root-owned surfaces;
+- a local oracle and proof tier;
+- relevant dependency identities;
+- a repair budget, cancellation lineage, and stop condition; and
+- one commit-bound return envelope.
+
+Lanes never consume, merge, cherry-pick, or coordinate through another lane's
+unintegrated work. If a shared interface changes, root cancels only its declared
+consumers and issues a new version. A worker may request a shared change but
+cannot implement or approve it.
+
+Root alone moves a lane through `defined`, `ready`, `active`, `accepted`,
+`no_change`, `blocked`, `cancelled`, `merged`, or `waived`. A lane is
+ineligible for fan-in if its head is not descended from the frozen base, its
+diff escapes ownership, it contains a peer merge, its oracle is missing, or its
+proof is bound to a different candidate or dependency.
+
+Fan-in happens once, in a declared deterministic order. The integrator
+classifies missing or failed lanes, checks commit ancestry and ownership,
+rejects conflicts or peer merges, resolves shared requests against current
+authority, applies root-only wiring, runs integrated checks, freezes one
+candidate, and closes or cancels every lane. A merged patch or worker summary
+is not integration proof.
 
 ## Finite verification modes
 
-Select the smallest mode that can falsify the current claim:
+Select the lowest tier that can falsify the current claim:
 
-- **Ordinary implementation:** focused changed-behavior checks and clean diff;
-  output is ephemeral.
-- **High-risk boundary:** explicit failure model, relevant negative or fault
-  evidence, recovery/rollback where touched, and one independent focused
-  review.
-- **Product milestone:** exact integrated candidate plus representative
-  same-surface journey and concise quality-in-use outcome.
-- **Release:** fresh release-candidate identity, distribution, install,
-  discovery, runtime, security, rollback, and human approval.
+- **T0 context / micro:** provenance and explicit currentness limit only.
+- **T1 lane commit / standard:** exact base/head commit and tree, exclusive
+  owned diff, focused changed-behavior checks, and clean handoff.
+- **T2 integrated candidate / standard:** deterministic fan-in, shared wiring,
+  integrated checks, and exact candidate freeze.
+- **T3 consequential boundary / elevated:** explicit failure model, relevant
+  negative or fault evidence, recovery/rollback where touched, and one
+  independent focused review.
+- **T4 product milestone / critical for authorized effects:** exact installed
+  candidate plus representative same-surface journey and concise
+  quality-in-use outcome.
+- **T5 release / critical:** fresh release-candidate identity, distribution,
+  install, discovery, runtime, security, migration, rollback, and human
+  approval.
 
 Do not run release or completion gates on ordinary work. Do not rerun a review
 against byte-identical authority solely to seek another result.
@@ -85,10 +114,17 @@ Everything else stays in command output, ignored worktree state, or the commit
 history.
 
 Retained evidence declares owner, claim, exact candidate or environment,
-invalidation trigger, and deletion boundary. It invalidates when a consumed
-authority input changes, its environment identity changes, its stated
-freshness window expires, or current same-surface evidence contradicts it.
-Unrelated changes and age alone do not force regeneration.
+proof surface, maximum claim, consumed authority/dependency set, oracle,
+invalidation trigger, and deletion boundary. T1 and T2 use the commit, plan
+entry, and concise handoff rather than a new durable receipt unless the
+observation is irreproducible or crosses a custody boundary.
+
+Evidence invalidates when its candidate commit/tree or a declared consumed
+authority/dependency changes, its relevant environment identity changes, its
+stated freshness window expires, or current same-surface evidence contradicts
+it. Rerun only proofs that declare the changed dependency. Unrelated lanes,
+unconsumed docs, branch movement preserving the exact commit/tree, and age
+alone do not force regeneration.
 
 Stale evidence loses authority but does not block unrelated work. Delete
 superseded reproducible evidence at integration or teardown after confirming no

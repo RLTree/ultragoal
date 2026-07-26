@@ -13,10 +13,11 @@ mandatory-law receipt projections under `agent-standards/policy/`,
 `agent-standards/enforcement.*`, and `docs/mandatory-law-surfaces.*` are frozen
 compatibility and migration inputs. They do not schedule work, require refresh,
 promote claims, or block ordinary delivery. Their self-declared authority is
-superseded by this contract and `AMEND-002`. Current product behavior and
-protected invariants still require direct baseline inspection. Remove legacy
-inputs only after the retirement lane proves that no current reader,
-compatibility promise, unique recovery state, or active claim needs them.
+superseded by this contract, the scope reset in `AMEND-002`, and the strict
+lane/proof decomposition in `AMEND-003`. Current product behavior and protected
+invariants still require direct baseline inspection. Remove legacy inputs only
+after the retirement lane proves that no current reader, compatibility promise,
+unique recovery state, or active claim needs them.
 
 The only active plan is
 `docs/exec-plans/active/usable-product-milestone.md`. If another active plan
@@ -106,6 +107,13 @@ of every historical v2 claim.
   and release claims use stronger proof only when those claims are current.
 - There is one root-owned fan-in. No worker writes shared public grammar,
   manifests, shared schemas, dependency files, or claim decisions.
+- Every launched lane consumes the same root-frozen `BASE-0` commit and
+  `IFACE-0` interface contract. Lanes never consume or merge one another's
+  unintegrated work.
+- Lane proof is bound to exact base/head commits and trees, owned paths,
+  consumed dependencies, and a local oracle. The commit plus concise handoff is
+  sufficient unless the observation is irreproducible or must cross a custody
+  boundary.
 - Stale evidence loses authority; it does not trigger regeneration or block an
   unrelated change.
 
@@ -146,7 +154,7 @@ No separate receipt graph owns a layer.
 | Gate | Applies when | Required result | Not required |
 | --- | --- | --- | --- |
 | G0 Current-behavior baseline | Once, before implementation lanes | Surface-by-surface `no_change`, `partial_change`, `change_required`, or `blocked`; shared interface freeze | Full audit, material review, durable receipt |
-| G1 Lane acceptance | Every implementation lane | Focused changed-behavior checks, failure-path checks where touched, clean commit, concise handoff | Full repository gate, four-persona review, package or runtime proof |
+| G1 Lane acceptance | Every implementation lane | Exact base/head commit and tree, exclusive owned diff, focused changed-behavior checks, failure-path checks where touched, clean concise handoff | Full repository gate, four-persona review, package or runtime proof |
 | G2 Boundary proof | A lane changes security, authority, custody, concurrency, recovery, migration, or external effects | Explicit failure model, relevant negative/fault evidence, one independent focused review | Unrelated claim refresh or broad receipt regeneration |
 | G3 Root fan-in | Once after required lanes are accepted | Dependency-order merge, shared wiring by root, integrated checks, conflict and completeness review | Worker-result aggregation as proof |
 | G4 Usable product milestone | Once on the exact integrated candidate | Authorized install/discovery/runtime journey and `CL-USABLE-LOOP` outcome | Release, publication, repeated-use, or mastery proof |
@@ -158,13 +166,14 @@ declared inputs or contract.
 
 ## Proof tiers
 
-| Tier | Maximum supported statement |
-| --- | --- |
-| T0 Context | A document, historical artifact, or unverified observation exists |
-| T1 Source | Current source satisfies focused static or behavioral checks |
-| T2 Integrated candidate | Required lanes compose and integrated checks pass |
-| T3 Same-surface product | The exact installed candidate completes the authorized representative journey |
-| T4 Release | The exact release candidate passes release-specific evidence and human approval |
+| Tier | Assurance profile | Maximum supported statement |
+| --- | --- | --- |
+| T0 Context | Micro | A document, historical artifact, or unverified observation exists |
+| T1 Lane commit | Standard | One exact owned commit satisfies its frozen local contract and focused oracle |
+| T2 Integrated candidate | Standard | Required accepted or waived lanes compose at the single root fan-in and integrated checks pass |
+| T3 Consequential boundary | Elevated | The named security, authority, custody, concurrency, recovery, migration, install, host, or external-effect boundary is supported by focused negative/fault evidence and independent review |
+| T4 Same-surface product | Critical for authorized effects | The exact installed candidate completes the authorized representative journey and supports `CL-USABLE-LOOP` only |
+| T5 Release | Critical | The exact release candidate passes release-specific evidence and Tree approval for the explicitly authorized release claim |
 
 Higher tiers do not erase a failure at a lower authoritative boundary. Test
 volume, coverage percentage, receipt existence, or reviewer agreement cannot
@@ -185,18 +194,24 @@ invalidation rule, and deletion boundary. Use one item per claim and proof
 surface; do not create receipts of receipts, per-command mirrors, or periodic
 refresh copies.
 
+Every accepted proof, retained or ephemeral, names the candidate commit and
+tree, proof surface, maximum claim, consumed authority/dependency set, oracle,
+and environment identity only when the behavior depends on it.
+
 Evidence invalidates only when:
 
-- an authority-bearing byte or declared consumed dependency changes;
+- its candidate commit/tree, an authority-bearing byte, or a declared consumed
+  dependency changes;
 - the relevant installed/runtime environment identity changes;
 - an external fact with a stated freshness window expires; or
 - a contradictory same-surface observation appears.
 
-Unrelated documentation, timestamps, branch movement that preserves the exact
-candidate, or the mere age of reproducible local output do not invalidate
-evidence. Superseded or detached artifacts lose authority immediately and are
-deleted at the next safe integration or teardown boundary after unique recovery
-value is ruled out. Git history is the archive.
+Unrelated lanes, unconsumed documentation, timestamps, branch movement that
+preserves the exact candidate, or the mere age of reproducible local output do
+not invalidate evidence. Rerun only proofs that declare the changed dependency.
+Superseded or detached artifacts lose authority immediately and are deleted at
+the next safe integration or teardown boundary after unique recovery value is
+ruled out. Git history is the archive.
 
 ## Model and orchestration cost policy
 
@@ -233,13 +248,14 @@ artifact says it is due.
 
 ## Tree decisions
 
-No Tree decision is required for the planning reset or read-only baseline.
-Before G4, Tree must select the representative repository and authorize the
-exact local install and repository-write scope. After G4, Tree decides whether
-to stop at the usable-product milestone, run a second materially different
-journey, or authorize G5 release work. Publishing, marketplace changes,
-credentials, and destructive retirement always require separate explicit
-authority.
+No Tree decision is required for the planning reset or read-only baseline. If
+the baseline exposes a product-value, scope, risk, or shared-interface choice
+with no safe default, only the affected lanes stop for Tree. Before G4, Tree
+must select the representative repository and authorize the exact local install
+and repository-write scope. After G4, Tree decides whether to stop at the
+usable-product milestone, run a second materially different journey, or
+authorize G5 release work. Publishing, marketplace changes, credentials, and
+destructive retirement always require separate explicit authority.
 
 ## Current claim ceiling
 

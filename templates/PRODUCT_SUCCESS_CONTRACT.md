@@ -3,9 +3,10 @@
 # Product Success Contract
 
 This document is the current product-success authority, derived from
-`GOAL_CONTRACT.md` and bound by `AMEND-002`. The predecessor JSON under
-`examples/generated/` is frozen v2 context and must not be refreshed or used
-to raise a current claim.
+`GOAL_CONTRACT.md`. `AMEND-002` established its bounded milestone and
+`AMEND-003` clarifies the strict lane, proof-tier, and invalidation contract.
+The predecessor JSON under `examples/generated/` is frozen v2 context and must
+not be refreshed or used to raise a current claim.
 
 Harness Ultragoal has one current product claim: `CL-USABLE-LOOP`. It means an
 authorized operator can use the exact installed candidate on a representative
