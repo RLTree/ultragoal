@@ -1,0 +1,47 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OD-009-SCOPED-002",
+  "decision_name": "unreachable_authority_cleanup",
+  "decision_date": "2026-07-18",
+  "decision_owner": "human_repository_owner",
+  "authorization": "Tree explicitly requested removal of all dead code identified by the P0 semantic production closure and approved the parent integrator's recommended OD-009 decision boundary.",
+  "root_decision": "authorize_exact_scoped_physical_deletion",
+  "authorized_base": {
+    "commit": "0355039bf621113e7089c235a298c7a8b085397f",
+    "tree": "5f4e313b8902cfc09175688de7272ecf6abbe0c2",
+    "required_status": "clean"
+  },
+  "authorized_cohort": {
+    "cohort_id": "unreachable_rust_authority",
+    "tracked_path_count": 126,
+    "path_inventory_sha256": "a62e9adf57a1b3a71b9d79ba758b922bb85fdfad44d0cbdd0e22a12797dbdda0",
+    "path_content_aggregate_sha256": "3c336923406154e7b31442f770c0e3a38f3a48bfb1419bf5d2ae577f4b9f2b3c",
+    "aggregate_algorithm": "sha256 of sorted relative_path, TAB, sha256(HEAD blob), newline rows",
+    "tracked_roots": [
+      "validator/src/archive/",
+      "validator/src/argument_parser/",
+      "validator/src/audit/",
+      "validator/src/claim_semantics/",
+      "validator/src/cli/coverage/",
+      "validator/src/cli/current_state/",
+      "validator/src/cli/package/",
+      "validator/src/command/",
+      "validator/src/migration/retirement/",
+      "validator/src/self_tests/"
+    ],
+    "selection_rule": "Every path is absent from Cargo production and test module reachability after following mod, path, include, inline-module, and production-package-macro edges. Compile probes and intentionally standalone roots are excluded.",
+    "migration_action": "delete the exact unreachable cohort, remove its package inventory entries and five obsolete command migration rows, and preserve the supported successor router"
+  },
+  "scope_rule": "Authorization applies only when the exact path inventory and content aggregate match the clean authorized base. It does not authorize any other historical, legacy, generated, cache, receipt, artifact, or user-file deletion.",
+  "ongoing_authority": "migration/authority-routes.json destructive_cleanup_authorized remains false; this is a consumed one-shot decision, not a reusable deletion capability.",
+  "historical_record_policy": "Accepted contracts, WorkerResults, reviews, and earlier root decisions remain unchanged historical evidence.",
+  "required_reconciliation": [
+    "remove deleted paths from the current package manifest",
+    "remove obsolete migration rows for deleted command authorities",
+    "prove the supported production and test roots still compile",
+    "prove semantic namespace and authored-file laws on the exact correction candidate"
+  ],
+  "rollback": "Git history preserves the exact authorized base. Reintroduction requires a current production purpose and duplicate-authority review.",
+  "claim_effect": "none",
+  "claim_ceiling": "source_and_migration_debt_closure_only; package, install, cache, marketplace, app-registry, discovery, runtime, Product Fitness, readiness, release, completion, and mastery remain withheld"
+}

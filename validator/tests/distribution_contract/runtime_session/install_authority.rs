@@ -2,7 +2,11 @@
 struct MemoryInstall(Option<Vec<u8>>);
 
 impl InstallEffects for MemoryInstall {
-    fn read_installed(&mut self, _: &str, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_installed(
+        &mut self,
+        _: &str,
+        _: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
 
@@ -11,7 +15,7 @@ impl InstallEffects for MemoryInstall {
         _: &str,
         expected: &ExpectedPrior,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         let matches = match expected {
             ExpectedPrior::Absent => self.0.is_none(),
             ExpectedPrior::ExactDigest(expected) => {
@@ -46,16 +50,15 @@ fn confined_install_authority_issues_installed_and_runtime_surfaces() {
         Some(binding.binding_sha256())
     );
     let mut runtime_install_effects = ScopedInstall::new(fixture.confined());
-    let plan = RuntimeProbePlan::from_installed_package(
+    let plan = RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
         binding,
-        &host,
-        installed.snapshot(),
-        &mut runtime_install_effects,
-        &package,
-        &executable,
-        valid_args(),
-        Duration::from_secs(10),
-    )
+        host: &host,
+        install: installed.snapshot(),
+        effects: &mut runtime_install_effects,
+        package: &package,
+        program: &executable,
+        timeout: Duration::from_secs(10),
+    })
     .unwrap();
     let (_, runtime_surface) = plan.execute_bound().unwrap();
     assert_eq!(
@@ -102,16 +105,15 @@ fn memory_install_snapshot_cannot_issue_installed_or_runtime_authority() {
         ErrorId::ProvenanceMismatch
     );
     assert_eq!(
-        RuntimeProbePlan::from_installed_package(
+        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
             binding,
-            &host,
-            installed.snapshot(),
-            &mut memory,
-            &package,
-            &executable,
-            valid_args(),
-            Duration::from_secs(10),
-        )
+            host: &host,
+            install: installed.snapshot(),
+            effects: &mut memory,
+            package: &package,
+            program: &executable,
+            timeout: Duration::from_secs(10),
+        })
         .unwrap_err()
         .id(),
         ErrorId::ProvenanceMismatch
@@ -150,16 +152,15 @@ fn cross_root_install_snapshot_cannot_mint_other_journey_authority() {
     );
     let mut runtime_effects_b = ScopedInstall::new(fixture_b.confined());
     assert_eq!(
-        RuntimeProbePlan::from_installed_package(
-            binding_b,
-            &host_b,
-            installed_a.snapshot(),
-            &mut runtime_effects_b,
-            &package_b,
-            &executable_b,
-            valid_args(),
-            Duration::from_secs(10),
-        )
+        RuntimeProbePlan::from_installed_package(InstalledPackageRuntimeProbeRequest {
+            binding: binding_b,
+            host: &host_b,
+            install: installed_a.snapshot(),
+            effects: &mut runtime_effects_b,
+            package: &package_b,
+            program: &executable_b,
+            timeout: Duration::from_secs(10),
+        })
         .unwrap_err()
         .id(),
         ErrorId::ProvenanceMismatch

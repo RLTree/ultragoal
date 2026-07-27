@@ -167,6 +167,7 @@ impl TaskAudit {
         &self.findings
     }
 
+    #[cfg(test)]
     fn revalidate(&self, spec: &EvaluationSpec, context: &str, candidate: &str) -> bool {
         self.eligible
             && self.live_context_id == context

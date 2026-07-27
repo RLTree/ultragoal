@@ -5,7 +5,7 @@ const SCHEMA_REF: &str = "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CON
 const STATUS: &str = "run_scoped_evidence_only";
 const NO_CLAIM: &str = "This worker does not claim readiness, release, or completion.";
 const HISTORICAL_CONTENT_SET_DIGEST: &str =
-    "0055b9045e3631cad124e4e194985af11137a47d597f60657255e432b53e2f8a";
+    "e8f0d2008f9ec866dbd5dc0f9ab0d54116026a2bd92cc4603bb65e92f95d197f";
 const MAX_FILES: usize = 256;
 const MAX_HISTORICAL_FILES: usize = 16;
 const MAX_FILE_BYTES: u64 = 2 * 1024 * 1024;

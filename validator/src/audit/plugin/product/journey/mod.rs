@@ -9,14 +9,6 @@ pub(crate) fn failures(root: &Path, value: &Value) -> Vec<String> {
     failures_with_digest(root, value, crate::package::inventory::package_digest(root))
 }
 
-pub(crate) fn failures_with_candidate(
-    root: &Path,
-    value: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    failures_with_digest(root, value, Ok(target_digest.to_string()))
-}
-
 fn failures_with_digest(
     root: &Path,
     value: &Value,

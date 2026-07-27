@@ -54,6 +54,7 @@ impl FileHostEffectLedger {
         Ok(ledger)
     }
 
+    #[cfg(test)]
     pub(in crate::distribution::host_effect) fn open(
         root: &Path,
         ledger_id: String,

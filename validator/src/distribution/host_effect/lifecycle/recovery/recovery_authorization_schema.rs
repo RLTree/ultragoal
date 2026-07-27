@@ -1,3 +1,4 @@
+#[cfg(test)]
 const RECOVERY_AUTHORIZATION_SCHEMA: &str =
     "harness-ultragoal.host-effect-recovery-authorization.v2";
 

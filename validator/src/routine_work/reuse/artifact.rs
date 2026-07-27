@@ -101,7 +101,7 @@ pub fn capture_executed_result(
         return Err(observation("captured-run-result-tool-binding-mismatch"));
     }
     let work = ExecutedWork {
-        facts: parsed.facts,
+        facts: Box::new(parsed.facts),
         capture_run_sha256: sha256(&run_json),
     };
     let receipt_json = receipt::completed_bytes(expectation, &work)?;

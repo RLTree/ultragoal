@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 
 pub(crate) fn execute(
     context: &LiveContext,
@@ -7,7 +8,7 @@ pub(crate) fn execute(
 ) -> RuntimeOutcome {
     #[cfg(target_vendor = "apple")]
     {
-        return supported::execute(context, prepared, home).unwrap_or_else(host_failure);
+        supported::execute(context, prepared, home).unwrap_or_else(host_failure)
     }
     #[cfg(not(target_vendor = "apple"))]
     {
@@ -19,14 +20,14 @@ pub(crate) fn execute(
 pub(crate) fn recover_pending(
     context: &LiveContext,
     home: &Path,
-) -> Result<Option<RuntimeOutcome>, RuntimeOutcome> {
+) -> Result<Option<RuntimeOutcome>, Box<RuntimeOutcome>> {
     #[cfg(target_vendor = "apple")]
     {
-        return match supported::recover_pending(context, home) {
+        match supported::recover_pending(context, home) {
             Ok(outcome) => Ok(outcome),
             Err(HostFailure::Unavailable) => Ok(None),
-            Err(failure) => Err(host_failure(failure)),
-        };
+            Err(failure) => Err(Box::new(host_failure(failure))),
+        }
     }
     #[cfg(not(target_vendor = "apple"))]
     {
@@ -114,8 +115,8 @@ pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
         HostFailure::Unavailable => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "preprovisioned repository-fit host authority state is unavailable",
-            "install or repair the owner-only Harness Ultragoal host state, then rerun the exact accepted plan",
+            "the canonical owner-only host state root is unavailable",
+            "restore a canonical owner-only $HOME/.codex/state root, then rerun the exact accepted plan",
             "none",
             "no workspace effect is authorized or performed",
         ),
@@ -157,12 +158,14 @@ pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
         Diagnostic::new(
             id,
             class,
-            cause,
-            "HCT-FIT public production authority",
-            repair,
-            effect,
-            "ultragoal --json fit apply --plan <plan> --accept-plan <sha256>",
-            ceiling,
+            DiagnosticDetails {
+                cause,
+                affected_surface: "HCT-FIT public production authority",
+                repair,
+                effect,
+                rerun: "ultragoal --json fit apply --plan <plan> --accept-plan <sha256>",
+                ceiling,
+            },
         ),
     )
 }

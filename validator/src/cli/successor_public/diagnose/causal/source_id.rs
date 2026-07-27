@@ -87,16 +87,16 @@ pub(crate) fn corruption_projection(
         Ok(Some(explanation)) => serde_json::to_value(explanation).ok(),
         _ => None,
     };
-    if let Some(explanation) = explanation {
-        if store.revalidate().is_ok() {
-            return projection(
-                "available",
-                explanation,
-                EventSelection::empty(),
-                QueryWindow::unavailable(),
-                Some(failure),
-            );
-        }
+    if let Some(explanation) = explanation
+        && store.revalidate().is_ok()
+    {
+        return projection(
+            "available",
+            explanation,
+            EventSelection::empty(),
+            QueryWindow::unavailable(),
+            Some(failure),
+        );
     }
     unavailable(failure, EventSelection::empty())
 }

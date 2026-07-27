@@ -3,10 +3,6 @@ impl FakeStore {
         self.state.lock().unwrap().fail_on_cas = Some(number);
     }
 
-    pub(crate) fn operation(&self, id: &str) -> Option<MigrationOperation> {
-        self.state.lock().unwrap().operations.get(id).cloned()
-    }
-
     pub(crate) fn operation_count(&self) -> usize {
         self.state.lock().unwrap().operations.len()
     }

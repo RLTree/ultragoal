@@ -1,4 +1,5 @@
 use super::super::RUST_SOURCE_SYNTAX_BEHAVIOR;
+use super::outcome::ExecutedIntentProjection;
 use super::*;
 
 #[must_use = "the exact prepared intent must receive one process observation"]
@@ -213,11 +214,13 @@ impl IntentExecutionRequest {
             context,
             plan,
             &self.token,
-            &self.snapshot_id,
-            &self.dependencies,
-            &self.framed_input_sha256,
-            &observation,
-            output_files,
+            ExecutedIntentProjection {
+                snapshot_id: &self.snapshot_id,
+                dependencies: &self.dependencies,
+                framed_input_sha256: &self.framed_input_sha256,
+                observation: &observation,
+                output_files,
+            },
         )?;
         self.token.advance()?;
         Ok(IntentResult::Executed(result))

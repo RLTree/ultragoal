@@ -3,7 +3,9 @@
 fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
     let (fixture, plan, archive) = candidate();
     let package = verify_package(&plan, &archive).unwrap();
-    let runtime_program = fixture.0.join("runtime/runtime-probe-bin");
+    let runtime_program = fixture
+        .0
+        .join("plugins/harness-ultragoal/runtime/ultragoal");
     let host = HostCapabilityDeclaration::isolated(
         &fixture.0,
         &fixture.0.join("project"),
@@ -88,14 +90,15 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         confined_registry_observation(&fixture, &binding, &host, installed.snapshot());
     let before = snapshot_tree(&fixture.0);
     let runtime_plan = RuntimeProbePlan::from_installed_package(
-        binding.clone(),
-        &host,
-        installed.snapshot(),
-        &mut ScopedInstall::new(confined.clone()),
-        &package,
-        &runtime_program,
-        Vec::new(),
-        Duration::from_secs(5),
+        ultragoal::distribution::InstalledPackageRuntimeProbeRequest {
+            binding: binding.clone(),
+            host: &host,
+            install: installed.snapshot(),
+            effects: &mut ScopedInstall::new(confined.clone()),
+            package: &package,
+            program: &runtime_program,
+            timeout: Duration::from_secs(5),
+        },
     )
     .unwrap();
     let (_, runtime) = runtime_plan.execute_bound().unwrap();

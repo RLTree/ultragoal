@@ -17,7 +17,7 @@ fn package() -> PackageIdentity {
 
 fn permit_binding(
     plan: &HostCommandPlan,
-    executable: &PinnedHostExecutable,
+    executable: &SelectedCodexExecutable,
 ) -> HostEffectPermitBinding {
     HostEffectPermitBinding {
         context_id: repeated_digest('1'),
@@ -37,12 +37,14 @@ fn permit_binding(
         external_request_sha256: repeated_digest('e'),
         command_plan_sha256: plan.plan_sha256().to_owned(),
         argv_sha256: repeated_digest('f'),
-        executable_identity_sha256: executable.identity().binding_sha256().unwrap(),
+        executable_identity_sha256: executable.binding_sha256().unwrap(),
         target_identity_sha256: repeated_digest('1'),
         target_generation: 1,
         issued_at_unix_ms: 1_000,
         expires_at_unix_ms: 2_000,
         expected_head_sha256: repeated_digest('2'),
+        lifecycle_record: None,
+        lifecycle_record_sha256: None,
         decision: HostEffectDecision::Authorize,
     }
 }
@@ -116,14 +118,12 @@ fn ledger_transition_graph_forbids_retry_and_terminal_revival() {
 #[cfg(unix)]
 #[test]
 fn pinned_executable_revalidates_exact_object_and_content() {
-    let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
-    assert!(is_digest(&pinned.identity().binding_sha256().unwrap()));
+    let fixture = selected_test_fixture("authority-digest", b"#!/bin/sh\nexit 0\n");
+    let pinned = fixture.selected().unwrap();
+    assert!(is_digest(&pinned.binding_sha256().unwrap()));
     pinned.revalidate().unwrap();
 
-    let mut changed = OpenOptions::new().write(true).open(&fixture.path).unwrap();
-    changed.write_all(b"#!/bin/sh\nexit 9\n").unwrap();
-    changed.sync_all().unwrap();
+    fixture.replace_contents(b"#!/bin/sh\nexit 9\n");
     assert_eq!(
         pinned.revalidate().unwrap_err().id(),
         HostEffectLedgerErrorId::Tampered
@@ -133,21 +133,18 @@ fn pinned_executable_revalidates_exact_object_and_content() {
 #[cfg(unix)]
 #[test]
 fn pinned_executable_rejects_named_replacement_and_hardlinks() {
-    let fixture = ExecutableFixture::new(b"#!/bin/sh\nexit 0\n");
-    let pinned = PinnedHostExecutable::pin(&fixture.path).unwrap();
-    let held = fixture.root.join("held");
-    fs::rename(&fixture.path, &held).unwrap();
-    fixture.write_executable(&fixture.path, b"#!/bin/sh\nexit 1\n");
+    let fixture = selected_test_fixture("authority-replacement", b"#!/bin/sh\nexit 0\n");
+    let pinned = fixture.selected().unwrap();
+    fixture.rename_and_replace(b"#!/bin/sh\nexit 1\n");
     assert_eq!(
         pinned.revalidate().unwrap_err().id(),
         HostEffectLedgerErrorId::Tampered
     );
 
-    let hardlink = fixture.root.join("hardlink");
-    fs::hard_link(&fixture.path, &hardlink).unwrap();
-    let error = match PinnedHostExecutable::pin(&fixture.path) {
-        Ok(_) => panic!("hard-linked executable unexpectedly pinned"),
-        Err(error) => error,
-    };
-    assert_eq!(error.id(), HostEffectLedgerErrorId::InvalidRecord);
+    let hardlink_fixture = selected_test_fixture("authority-hardlink", b"#!/bin/sh\nexit 1\n");
+    hardlink_fixture.replace_with_hard_link_from(&fixture);
+    assert_eq!(
+        hardlink_fixture.selected().unwrap().revalidate().unwrap_err().id(),
+        HostEffectLedgerErrorId::Tampered
+    );
 }

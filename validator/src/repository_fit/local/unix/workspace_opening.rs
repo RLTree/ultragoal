@@ -124,20 +124,12 @@ impl Workspace {
                 parent_expected,
                 &mut enumeration_budget,
             ),
-            platform_path::LeafRead::Present {
-                bytes,
-                file,
-                expected,
-                parent_expected,
-            } => platform_path::finish_present(
+            platform_path::LeafRead::Present(leaf) => platform_path::finish_present(
                 self,
                 &directory,
                 &expected_parent,
                 name,
-                bytes,
-                file,
-                expected,
-                parent_expected,
+                leaf,
                 maximum_bytes,
                 &mut enumeration_budget,
             ),
@@ -217,12 +209,14 @@ impl Workspace {
         {
             return Err(error(FitErrorId::StaleBinding));
         }
-        Ok(platform_path::LeafRead::Present {
-            bytes: first,
-            file,
-            expected: path_before,
-            parent_expected,
-        })
+        Ok(platform_path::LeafRead::Present(
+            platform_path::PresentLeaf {
+                bytes: first,
+                file,
+                expected: path_before,
+                parent_expected,
+            },
+        ))
     }
 
     pub(crate) fn verify_root(&self) -> Result<(), FitError> {

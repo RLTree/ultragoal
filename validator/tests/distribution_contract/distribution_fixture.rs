@@ -18,7 +18,6 @@ static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(0);
 pub struct Fixture {
     pub root: PathBuf,
     pub request: Value,
-    pub artifact_sha256: String,
 }
 
 impl Fixture {
@@ -52,7 +51,6 @@ impl Fixture {
         Self {
             root,
             request: request(),
-            artifact_sha256,
         }
     }
 

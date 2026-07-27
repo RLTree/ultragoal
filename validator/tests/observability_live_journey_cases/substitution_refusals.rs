@@ -11,10 +11,10 @@ pub(crate) fn bound_race_symlink_and_fifo_substitution_refuse_without_hidden_eff
             .unwrap()
     );
     let original = raced
-        .store_path()
+        .store_path(&binding)
         .with_file_name("successor-events.original.jsonl");
-    fs::rename(raced.store_path(), &original).unwrap();
-    fs::write(raced.store_path(), b"").unwrap();
+    fs::rename(raced.store_path(&binding), &original).unwrap();
+    fs::write(raced.store_path(&binding), b"").unwrap();
     let before_race_query = observe(raced.root());
     let error = store.query(&query(&binding)).unwrap_err();
     assert!(
@@ -25,7 +25,7 @@ pub(crate) fn bound_race_symlink_and_fifo_substitution_refuse_without_hidden_eff
         "unexpected race error: {error}"
     );
     assert_eq!(observe(raced.root()), before_race_query);
-    assert_eq!(fs::read(raced.store_path()).unwrap(), b"");
+    assert_eq!(fs::read(raced.store_path(&binding)).unwrap(), b"");
     assert!(!fs::read(&original).unwrap().is_empty());
 
     let linked = JourneyRepository::new("symlink-parent", false, false);
@@ -49,8 +49,9 @@ pub(crate) fn bound_race_symlink_and_fifo_substitution_refuse_without_hidden_eff
     assert_eq!(fs::read_dir(&outside).unwrap().count(), outside_before);
 
     let fifo = JourneyRepository::new("fifo-leaf", false, false);
-    fs::create_dir_all(fifo.store_path().parent().unwrap()).unwrap();
-    let fifo_name = CString::new(fifo.store_path().as_os_str().as_bytes()).unwrap();
+    let fifo_binding = public_binding(&fifo);
+    fs::create_dir_all(fifo.store_path(&fifo_binding).parent().unwrap()).unwrap();
+    let fifo_name = CString::new(fifo.store_path(&fifo_binding).as_os_str().as_bytes()).unwrap();
     let result = unsafe { libc::mkfifo(fifo_name.as_ptr(), 0o600) };
     assert_eq!(
         result,
@@ -64,6 +65,9 @@ pub(crate) fn bound_race_symlink_and_fifo_substitution_refuse_without_hidden_eff
         4,
         "successor_runtime_observability_unavailable",
     );
+    raced.teardown();
+    linked.teardown();
+    fifo.teardown();
 }
 
 #[test]
@@ -79,7 +83,7 @@ pub(crate) fn source_built_query_exits_at_the_lock_deadline_with_deterministic_z
     let holder = OpenOptions::new()
         .read(true)
         .write(true)
-        .open(repository.store_path())
+        .open(repository.store_path(&binding))
         .unwrap();
     holder.lock().unwrap();
 
@@ -158,6 +162,7 @@ pub(crate) fn source_built_query_exits_at_the_lock_deadline_with_deterministic_z
         released["local_policy"]["lock_timeout_millis"],
         EventStore::supported_lock_timeout_millis()
     );
+    repository.teardown();
 }
 
 pub(crate) fn assert_public_lock_timeout(

@@ -1,8 +1,6 @@
 use super::lease::isolated_environment;
-use super::{
-    ExecutedFixture, ExpectedOutcome, FixtureExecutionRecord, FixtureScheduleError, FixtureSpec,
-    IsolationLease, LeaseDisposition, ObservedOutcome,
-};
+use super::{ExecutedFixture, FixtureExecutionRecord};
+use super::{FixtureScheduleError, FixtureSpec, IsolationLease, LeaseDisposition, ObservedOutcome};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 

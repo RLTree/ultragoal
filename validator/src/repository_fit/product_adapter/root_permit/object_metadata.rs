@@ -83,6 +83,8 @@ pub(crate) fn stable_readlink_at(parent: &File, name: &str) -> Result<String, Fi
 pub(crate) fn readlink_at(parent: &File, name: &str) -> Result<Vec<u8>, FitAdapterError> {
     let name = CString::new(name).map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?;
     let mut bytes = vec![0_u8; 64 * 1024];
+    // SAFETY: `parent` is an open directory descriptor, `name` is NUL-free,
+    // and `bytes` is writable for exactly the supplied capacity.
     let length = unsafe {
         libc::readlinkat(
             parent.as_raw_fd(),
@@ -104,13 +106,18 @@ pub(crate) fn exact_entry_at(parent: &File, name: &str) -> Result<ExactEntry, Fi
         .try_clone()
         .map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?
         .into_raw_fd();
+    // SAFETY: `duplicated` is an owned duplicate of an open directory
+    // descriptor. Ownership transfers to `fdopendir` only on success.
     let directory = unsafe { libc::fdopendir(duplicated) };
     if directory.is_null() {
+        // SAFETY: `fdopendir` did not take ownership on failure, so the
+        // duplicated descriptor remains valid and must be released here.
         unsafe {
             libc::close(duplicated);
         }
         return Err(adapter_error(AdapterErrorId::TargetUnavailable));
     }
+    // SAFETY: `directory` is a non-null DIR pointer returned by `fdopendir`.
     unsafe {
         libc::rewinddir(directory);
     }
@@ -120,12 +127,18 @@ pub(crate) fn exact_entry_at(parent: &File, name: &str) -> Result<ExactEntry, Fi
     let mut entries = 0_usize;
     let mut name_bytes = 0_usize;
     loop {
+        // SAFETY: Darwin exposes a writable thread-local errno pointer through
+        // `__error`; this only clears the current thread's errno before read.
         unsafe {
             *libc::__error() = 0;
         }
+        // SAFETY: `directory` remains valid and `readdir` returns either null
+        // or a pointer valid until the next directory-stream operation.
         let entry = unsafe { libc::readdir(directory) };
         if entry.is_null() {
             let failed = last_errno() != 0;
+            // SAFETY: `directory` is still owned by this function on the
+            // terminal read path and has not previously been closed.
             unsafe {
                 libc::closedir(directory);
             }
@@ -134,6 +147,8 @@ pub(crate) fn exact_entry_at(parent: &File, name: &str) -> Result<ExactEntry, Fi
             }
             break;
         }
+        // SAFETY: a successful `readdir` yields a valid dirent whose d_name
+        // is NUL-terminated for the duration described above.
         let observed = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
         if matches!(observed, b"." | b"..") {
             continue;
@@ -141,6 +156,8 @@ pub(crate) fn exact_entry_at(parent: &File, name: &str) -> Result<ExactEntry, Fi
         entries += 1;
         name_bytes = name_bytes.saturating_add(observed.len());
         if entries > MAX_TARGET_ENTRY_SCAN || name_bytes > MAX_TARGET_NAME_BYTES {
+            // SAFETY: this early-return path still exclusively owns the open
+            // directory stream.
             unsafe {
                 libc::closedir(directory);
             }
@@ -163,5 +180,7 @@ pub(crate) fn exact_entry_at(parent: &File, name: &str) -> Result<ExactEntry, Fi
 
 #[cfg(target_vendor = "apple")]
 pub(crate) fn last_errno() -> i32 {
+    // SAFETY: Darwin exposes a valid thread-local errno pointer through
+    // `__error`; reading the current thread's integer does not outlive it.
     unsafe { *libc::__error() }
 }

@@ -53,10 +53,18 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
             ActiveStatus::Active
         );
     }
-    for command in [
-        "inspect", "next", "fit", "check", "diagnose", "prove", "observe", "package", "eval",
-        "migrate",
-    ] {
+    for command in ["inspect", "next", "fit", "check", "diagnose"] {
+        assert_eq!(
+            catalog
+                .entries()
+                .iter()
+                .find(|entry| entry.stable_id == format!("COMMAND:{command}"))
+                .unwrap()
+                .active_status,
+            ActiveStatus::Active
+        );
+    }
+    for command in ["prove", "observe", "package", "eval", "migrate"] {
         assert_eq!(
             catalog
                 .entries()
@@ -111,7 +119,7 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
             .iter()
             .filter(|finding| finding.code == "candidate_component_not_active")
             .count(),
-        10
+        5
     );
     assert_eq!(
         catalog
@@ -133,7 +141,8 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
             .iter()
             .any(|finding| finding.code == "invalid_compatibility_route_wrapper")
     );
-    assert!(catalog.has_error_findings());
+    assert!(!catalog.has_error_findings());
+    assert!(catalog.closure_status().is_closed());
     for api in [
         "API:LiveContext::build",
         "API:EffectClass",
@@ -141,6 +150,18 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
         "API:CandidateIdentity",
         "API:InventoryBuilder",
         "API:AuthorityCatalog",
+    ] {
+        assert_eq!(
+            catalog
+                .entries()
+                .iter()
+                .find(|entry| entry.stable_id == api)
+                .unwrap()
+                .active_status,
+            ActiveStatus::Active
+        );
+    }
+    for api in [
         "API:GeneratedSurfaceIndex",
         "API:PackageSnapshot",
         "API:InstallSnapshot",
@@ -156,7 +177,7 @@ fn current_live_catalog_reports_contract_definitions_and_missing_topology() {
                 .find(|entry| entry.stable_id == api)
                 .unwrap()
                 .active_status,
-            ActiveStatus::Active
+            ActiveStatus::Definition
         );
     }
     let hct_eval = catalog

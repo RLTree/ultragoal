@@ -1,8 +1,10 @@
 #[cfg(test)]
 pub(super) use super::local_store::store_path;
-use super::local_store::{LocalStore, LocalStoreFailure, local_policy};
+use super::local_store::{
+    LocalStore, LocalStoreFailure, local_policy, routine_observations_from_events,
+};
 use super::public_output_allowed;
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
+use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
     EffectClass, ExitClass, ObserveAction, OptionName, ParsedInvocation, ParsedValue,
     SuccessorCommand,
@@ -15,7 +17,7 @@ use std::path::Path;
 const SOURCE_ID: &str = "successor-runtime";
 pub(super) fn query_local(
     root: &Path,
-    context: &LiveContext,
+    read_context: &LiveContext,
     invocation: &ParsedInvocation,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Observe(ObserveAction::Query)
@@ -23,22 +25,34 @@ pub(super) fn query_local(
     {
         return invalid_invocation();
     }
-    let filter = match invocation.arguments.as_slice() {
-        [] => None,
-        [argument]
-            if argument.name == OptionName::Filter
-                && matches!(argument.value, ParsedValue::Identifier(_)) =>
-        {
-            let ParsedValue::Identifier(value) = &argument.value else {
-                unreachable!()
-            };
-            Some(value.as_str())
+    let mut requested_target = None;
+    let mut filter = None;
+    for argument in &invocation.arguments {
+        match (&argument.name, &argument.value) {
+            (OptionName::Target, ParsedValue::RepositoryTarget(value))
+                if requested_target.is_none() =>
+            {
+                requested_target = Some(value.as_str());
+            }
+            (OptionName::Filter, ParsedValue::Identifier(value)) if filter.is_none() => {
+                filter = Some(value.as_str());
+            }
+            _ => return invalid_invocation(),
         }
-        _ => return invalid_invocation(),
-    };
-    if context.revalidate().is_err() {
+    }
+    if read_context.revalidate().is_err() {
         return stale_context();
     }
+    let routine_binding =
+        match super::routine::current_observability_context(root, requested_target, read_context) {
+            Ok(context) => context,
+            Err(()) => return observability_unavailable(LocalStoreFailure::binding()),
+        };
+    let (store_root, context) = routine_binding
+        .as_ref()
+        .map_or((root, read_context), |binding| {
+            (binding.target.as_path(), &binding.context)
+        });
     let binding = match SemanticEvent::for_context(
         context,
         SOURCE_ID,
@@ -63,7 +77,7 @@ pub(super) fn query_local(
             Err(_) => return invalid_invocation(),
         };
     }
-    let store = match LocalStore::open(root, context, SOURCE_ID) {
+    let store = match LocalStore::open(store_root, context, SOURCE_ID) {
         Ok(store) => store,
         Err(failure) => return observability_unavailable(failure),
     };
@@ -90,6 +104,7 @@ pub(super) fn query_local(
         "filter": filter,
         "store_status": store_status,
         "event_count": count,
+        "routine_observations": routine_observations_from_events(&events),
         "events": events,
         "causal_status": "not_evaluated",
         "claim_effect": "none",
@@ -121,12 +136,14 @@ fn invalid_invocation() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::UnexpectedArguments,
             ExitClass::InvalidInvocation,
-            "observe query received arguments outside the typed route contract",
-            "HCT-OBSERVE query adapter",
-            "invoke observe query with at most one typed --filter identifier",
-            "read",
-            "ultragoal --json observe query",
-            "observability and dependent claims remain unchanged",
+            DiagnosticDetails {
+                cause: "observe query received arguments outside the typed route contract",
+                affected_surface: "HCT-OBSERVE query adapter",
+                repair: "invoke observe query with at most one confined --target and one typed --filter identifier",
+                effect: "read",
+                rerun: "ultragoal --json observe query",
+                ceiling: "observability and dependent claims remain unchanged",
+            },
         ),
     )
 }
@@ -137,12 +154,14 @@ fn stale_context() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::StaleContext,
             ExitClass::ActionableFinding,
-            "the live candidate changed during the local observability query",
-            "HCT-OBSERVE query adapter",
-            "rebuild one LiveContext and query the separately bound current-candidate store",
-            "read",
-            "ultragoal --json observe query",
-            "same-candidate observability and dependent claims are withheld",
+            DiagnosticDetails {
+                cause: "the live candidate changed during the local observability query",
+                affected_surface: "HCT-OBSERVE query adapter",
+                repair: "rebuild one LiveContext and query the separately bound current-candidate store",
+                effect: "read",
+                rerun: "ultragoal --json observe query",
+                ceiling: "same-candidate observability and dependent claims are withheld",
+            },
         ),
     )
 }
@@ -153,12 +172,14 @@ fn observability_unavailable(failure: LocalStoreFailure) -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::ObservabilityUnavailable,
             ExitClass::UnsupportedCapability,
-            failure.summary(),
-            failure.surface(),
-            failure.repair(),
-            "read",
-            "ultragoal --json observe query",
-            "observability and dependent claims remain withheld",
+            DiagnosticDetails {
+                cause: failure.summary(),
+                affected_surface: failure.surface(),
+                repair: failure.repair(),
+                effect: "read",
+                rerun: "ultragoal --json observe query",
+                ceiling: "observability and dependent claims remain withheld",
+            },
         ),
     )
 }
@@ -169,12 +190,14 @@ fn observability_lock_timeout() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::ObservabilityUnavailable,
             ExitClass::ActionableFinding,
-            "the bounded local event store lock deadline expired before a stable query could begin",
-            "HCT-OBSERVE local store lock",
-            "retry after the current local writer finishes or diagnose the process holding the confined store lock",
-            "read",
-            "ultragoal --json observe query",
-            "observability and dependent claims remain withheld until one bounded query succeeds",
+            DiagnosticDetails {
+                cause: "the bounded local event store lock deadline expired before a stable query could begin",
+                affected_surface: "HCT-OBSERVE local store lock",
+                repair: "retry after the current local writer finishes or diagnose the process holding the confined store lock",
+                effect: "read",
+                rerun: "ultragoal --json observe query",
+                ceiling: "observability and dependent claims remain withheld until one bounded query succeeds",
+            },
         ),
     )
 }

@@ -59,7 +59,7 @@ fn changed_allowlist_or_generic_package_consumer_blocks_route() {
         let repo = TestRepo::new(&format!("agent-route-{mutation}"));
         prepare(&repo, &[CASES[0]], true);
         let path = match mutation {
-            "allowlist" => "validator/src/inventory/agent_reader_guard_digests.rs",
+            "allowlist" => "validator/src/inventory/agent_reader_guard_digests/mod.rs",
             _ => "validator/src/package/inventory/mod.rs",
         };
         let mut bytes = fs::read(repo.root.join(path)).unwrap();

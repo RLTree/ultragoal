@@ -51,6 +51,89 @@ specialized workflows. If a repository-dependent route lacks a target, or a
 write route lacks required authority, stop before execution and ask one focused
 question. Unknown intents produce no route.
 
+## Calibrated next action
+
+Route selection is followed by one ephemeral calibration. It names the next
+dependency-legal action that reaches operator value, one representative
+acceptance check, the lowest sufficient exposed execution configuration, the
+required review scope, the current proof boundary, and whether any output must
+persist. It is returned as guidance only: `LANE_REGISTRY.json`, root authority,
+and the claim kernel remain authoritative, while `next` remains a zero-write
+read model.
+
+Use one lean Goal, Success, Context, Constraints, Output, Verification contract
+across exposed routes. Change model, reasoning, or orchestration before
+rewriting a working prompt, and change the prompt only for a measured missing
+goal, context, boundary, output, or verification requirement. Never infer the
+effective configuration from prompt text.
+
+Spend review and proof where they can affect a decision. Routine observation
+needs no independent reviewer; a material source or lane freeze gets one
+exhaustive risk-matched specialist; material or major root integration and
+protected cross-domain, product, release, and completion boundaries get the
+milestone team. Reproducible checks and outputs stay ephemeral. Durable evidence
+exists only while a current claim,
+cross-process handoff, irreproducible observation, audit, or recovery path
+consumes it.
+
+## Automatic Agentic advisory selection
+
+The Harness front door automatically makes the advisory calibration after it
+has selected one operational route. It selects no lens for an already-specified
+or no-change task; otherwise it selects one available explicit Agentic skill
+only when current evidence identifies a material ambiguity. This is a second
+calibration inside the existing route, not a second route or lifecycle. It
+reads current candidate, lifecycle, risk, authority, evidence, active
+truth-loop, and failure context and chooses the smallest sufficient primary
+lens. Supporting lenses appear only when one material decision crosses layers.
+Missing or stale co-install exposure is an explicit unavailable-advice result,
+not permission to infer a lens from source or cache bytes.
+
+The existing eight-skill `ultragoal` co-install view is retained for its
+bounded current scope. The complete Agentic Engineering 3.0 skill set is
+reachable through three additional stage-scoped views:
+
+- core advisory for task framing, context, architecture, construction,
+  orchestration, verification, security, and learning;
+- product/lifecycle advisory for discovery, feasibility, authentic use,
+  requirements, Product Fitness, experimentation, release, readiness,
+  maintenance, and retirement; and
+- Rust systems advisory for architecture, runtime, durability, protocols,
+  verification, and observability.
+
+The three stage views cover all thirty Agentic skills. Each view retains the
+external `harness-ultragoal` gateway, exact plugin and source identity,
+candidate binding, closed skill set, and measured discovery budget. The source
+projection rejects a substituted profile, candidate, configuration, source
+digest, skill set, or second implicit gateway; actual host configuration and
+fresh-session discovery remain separate proof surfaces. Agentic's gateway is
+explicit-only when co-installed. The current mapped source is Agentic
+Engineering `3.0.1`, whose `FILE-MANIFEST.sha256` is
+`sha256:b0cf70a7db8fe86964acac725ac1a97502edf9369a8b3e8ce23b676ac78260fe`.
+A full thirty-skill view is not loaded by
+default and must first demonstrate a safe combined context margin and no
+routing degradation.
+
+Advice has no lease, permission, effect, evidence, review, or claim authority.
+The source selector consumes one exact candidate-bound profile and catalog
+projection, verifies their complete rendered skill set, and produces either a
+plain-language, proposal-only selection or a visible no-selection/fail-closed
+result. It does not persist an activation tracker: unchanged input suppresses
+reactivation, while changed candidate, context, configuration, lifecycle,
+evidence, assumption, risk, failure mechanism, profile, or active transition
+invalidates prior advice. A root-issued `EngineeringAdvisoryAdoption-v1` can
+then record reuse, extension, mapping as a projection, or rejection through an
+existing UltraGoal owner. It is candidate/context/proposal-digest bound and
+cannot create advisory effect, evidence, or claim authority. Public CLI
+routing, package, installation, discovery, runtime, and journey proof remain
+separate pending surfaces.
+
+The ordinary response remains plain language. `inspect` may expose the
+activated disciplines and rationale, while advanced inspection may expose
+exact skill paths, evidence, alternatives, adoption decisions, invalidation
+conditions, and claim ceiling. An explicit expert request uses the same
+authority boundary and cannot disable mandatory guards.
+
 ## Representative journeys
 
 ### Fresh repository
@@ -66,6 +149,14 @@ question. Unknown intents produce no route.
 Use `repository-fit`. Classify existing owners and preserve all unrelated
 modified, staged, untracked, and worktree state. Conflicts remain findings;
 they are never resolved by preference or hidden behind generated output.
+When the first blocked journey transition is only routine activation,
+`fit plan --routine-config` may plan the two owned routine configuration files.
+That explicit scope excludes every conflicting template and `.gitignore`; the
+accepted apply still revalidates the same scoped candidate and cannot widen it.
+When those files are current but the routine artifact store is not ignored,
+`fit plan --local-state` may plan only the existing `.gitignore` policy. It
+carries no template mutation and uses the same accepted apply, rollback, and
+revalidation path.
 
 ### Routine repeat use
 
@@ -74,6 +165,14 @@ current candidate and environment, run only the dependency-closed affected set,
 and compare the full declared workspace boundary before and after. A strict
 claim boundary follows through `prove`; routine work does not become release
 ceremony.
+
+For a public routine interruption, `check routine` accepts only the typed
+`--interrupt-after reservation` control and returns an opaque continuation.
+Resuming requires that exact continuation and the host-authenticated binding.
+An exact completed binding returns its authenticated prior result without a new
+effect; stale, cross-binding, forged, or ambiguous records remain refusals.
+Use `diagnose-and-observe` to read the resulting finding and event evidence;
+those read routes do not reconcile or mutate routine state.
 
 ### Failure and diagnosis
 
@@ -129,6 +228,29 @@ product outcome or authority, an external write, an unavailable required
 access, a secret boundary, or a destructive decision. The interruption names
 the exhausted safe routes, the exact blocker, preserved state, and the exact
 next action.
+
+## Calibrated assurance
+
+Use the smallest proof loop that can honestly support the current claim.
+Implementation uses cheap deterministic checks. A material source lane or
+worktree freeze receives one exhaustive review of its complete named invariant
+from one risk-matched specialist and can support only source or lane acceptance.
+The four-persona team is reserved for major root integration, Product Fitness,
+release, completion, protected cross-domain change, or explicit escalation.
+
+Re-review requires changed authority-bearing bytes, a changed consumed
+dependency, a newly eligible claim surface, or observed behavior that
+contradicts the prior decision. A clean exhaustive pass closes the loop;
+speculative hardening becomes bounded backlog rather than another review round.
+Routine output stays ephemeral. Persist only the smallest artifact consumed by
+an active claim, cross-process handoff, irreproducible observation, audit, or
+recovery need, and delete it when that need ends.
+
+Mandatory security, privacy, destructive-effect, authority, identity, recovery,
+and proof-separation boundaries never become optional. Other universal checks
+must earn their cost through recurrence or strong cross-repository evidence and
+must remain precise, inexpensive, actionable, and easier to maintain than the
+failures they prevent.
 
 ## Truth surfaces
 

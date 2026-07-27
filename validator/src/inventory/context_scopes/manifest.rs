@@ -177,7 +177,7 @@ fn actual_entries(reads: &ReadSession, root: &Path) -> Result<ActualEntries, Inv
             ));
         }
         let path = entry.path();
-        let full_relative = relative(root, &path)?;
+        let full_relative = relative(root, path)?;
         let within = full_relative
             .strip_prefix(&format!("{CANDIDATE_ROOT}/"))
             .filter(|value| valid_relative(value))

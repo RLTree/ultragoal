@@ -1,3 +1,4 @@
+#[cfg(test)]
 pub(super) fn propose_recovery(
     classification: &PublicationClassification,
     authorization: RecoveryAuthorization,

@@ -14,7 +14,7 @@ pub(super) fn validate(
         || deletion
         || reason.trim().is_empty()
         || reason.len() > 1024
-        || !value::sorted_strings(&replacement_targets)
+        || !value::replacement_targets(&replacement_targets)
     {
         return Err("generated_authority_retained_context_invalid");
     }

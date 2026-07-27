@@ -4,7 +4,6 @@ mod error;
 mod filesystem;
 mod host;
 mod host_capability;
-#[cfg(test)]
 pub(crate) mod host_effect;
 mod install;
 mod json;
@@ -23,21 +22,26 @@ mod spec;
 mod supply;
 mod verify;
 
+/// A bounded adapter failure. Callers retain their domain-specific failure mapping.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct EffectFailure;
+
 pub use cache::{CacheExpectation, CacheSnapshot, reconcile_cache_read_only};
-pub use cache_observation::{CacheReader, reconcile_cache_file};
+pub use cache_observation::{CacheReader, publish_cache_file, reconcile_cache_file};
 pub use error::{DistributionError, DistributionErrorId};
+pub(crate) use filesystem::ReadOnlyWorkspace;
+pub(crate) use filesystem::canonical_temporary_parent;
 pub use filesystem::{ConfinedRoot, ScopedFile, ScopedInstall, ScopedTree};
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
-pub use host::{
-    CommandOutput, HostAuthorization, HostCommand, HostCommandPlan, HostExecutionSnapshot,
-    HostExecutor, execute_authorized,
-};
+pub(crate) use host::HostCommandPlanProjection;
+pub use host::{HostCommand, HostCommandPlan};
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };
+pub(crate) use host_effect::resolve_codex_executable;
 pub use install::{
     ExpectedPrior, InstallEffects, InstallPlan, InstallScope, InstallSnapshot, InstallTransaction,
     RollbackInstallError, install, rollback_install, uninstall,
@@ -55,6 +59,18 @@ pub use model::{
     reject_stale_version_reuse, verify_bound_surface_chain,
 };
 pub use observations::{RuntimeObservation, RuntimeVerdict};
+pub(crate) use package::ISOLATED_MARKETPLACE_NAME;
+#[cfg(not(test))]
+pub use package::{
+    CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,
+    ProductionPackageError, ProductionPackageErrorId, ProductionPackageSession,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
+};
+#[cfg(test)]
+pub(crate) use package::{
+    CandidateCliPayload, ProductionPackageArtifact, ProductionPackageErrorId,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
+};
 pub use package::{
     ExpectedTree, MaterializeEffects, MaterializeTransaction, PackageArtifactBinding,
     PackageArtifactTransaction, PackageEffects, PackageEntry, PackagePlan, PackageRole,
@@ -63,17 +79,16 @@ pub use package::{
     reconcile_package_artifact, recover_package_artifact, rollback_materialization,
     rollback_package_artifact, tree_sha256, verify_package,
 };
-#[cfg(not(test))]
-pub use package::{
-    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-    ProductionPackageSession, capture_product_package, verify_product_package,
-};
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
-    observe_registry_file, observe_supported_host_discovery, registry_document,
+    observe_registry_file, observe_supported_host_discovery, publish_discovery_file,
+    publish_registry_file, registry_document,
 };
-pub use runtime_probe::{RuntimeProbePlan, execute_runtime_probe};
+pub use runtime_probe::{
+    InstalledPackageRuntimeProbeRequest, RuntimeProbePlan, canonical_runtime_help_json,
+    execute_runtime_probe, publish_installed_runtime_probe,
+};
 pub use supply::{
     ProvenanceExpectation, ProvenanceSnapshot, SignatureExpectation, SignatureSnapshot,
     SignatureVerifierEffects, verify_provenance, verify_signature,

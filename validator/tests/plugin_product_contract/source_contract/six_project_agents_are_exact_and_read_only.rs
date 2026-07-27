@@ -134,25 +134,42 @@ fn package_membership_missing_duplicate_and_unknown_rows_fail_closed() {
 
 #[test]
 fn canonical_commands_match_the_typed_successor_catalog() {
-    let catalog = read("validator/src/cli/successor/catalog.rs");
-    for group in [
-        "InspectTarget::Capabilities",
-        "FitAction::Inspect",
-        "FitAction::Plan",
-        "FitAction::Apply",
-        "FitAction::Verify",
-        "CheckProfile::Routine",
-        "CheckProfile::Strict",
-        "SuccessorCommand::Diagnose",
-        "SuccessorCommand::Prove",
-        "ObserveAction::Query",
-        "ObserveAction::Export",
-        "EvalAction::Audit",
-        "MigrateAction::Plan",
-        "MigrateAction::Verify",
-        "MigrateAction::Retire",
+    for (path, commands) in [
+        (
+            "validator/src/cli/successor/catalog/inspection.rs",
+            &["InspectTarget::Capabilities"] as &[_],
+        ),
+        (
+            "validator/src/cli/successor/catalog/repository_fit_and_checks.rs",
+            &[
+                "FitAction::Inspect",
+                "FitAction::Plan",
+                "FitAction::Apply",
+                "FitAction::Verify",
+                "CheckProfile::Routine",
+                "CheckProfile::Strict",
+                "SuccessorCommand::Diagnose",
+                "SuccessorCommand::Prove",
+            ],
+        ),
+        (
+            "validator/src/cli/successor/catalog/observability_and_package.rs",
+            &["ObserveAction::Query", "ObserveAction::Export"],
+        ),
+        (
+            "validator/src/cli/successor/catalog/evaluation_and_migration.rs",
+            &[
+                "EvalAction::Audit",
+                "MigrateAction::Plan",
+                "MigrateAction::Verify",
+                "MigrateAction::Retire",
+            ],
+        ),
     ] {
-        assert!(catalog.contains(group), "missing typed command {group}");
+        let catalog = read(path);
+        for command in commands {
+            assert!(catalog.contains(command), "missing typed command {command}");
+        }
     }
 }
 

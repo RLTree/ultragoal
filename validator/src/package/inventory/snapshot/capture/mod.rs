@@ -7,6 +7,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
 const MANIFEST_PATH: &str = "plugin-manifest-draft.json";
+const MARKETPLACE_CATALOG_PATH: &str = ".agents/plugins/marketplace.json";
 const MAX_MANIFEST_PATHS: usize = 100_000;
 
 pub(crate) struct PackageCapture {

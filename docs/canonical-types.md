@@ -63,7 +63,7 @@ The catalog must include every required red fixture id and each row must point a
 
 ## Semantic Validator Boundary
 
-JSON Schema enforces artifact shape and many local invariants. Cross-document and cross-field obligations are validator-owned: claim/evidence surface matching, product-cohesion proof coupling, backlog row joins, generated ready-artifact provenance, derived amendment deltas, target-repo audit receipts, and live-beneficial non-fixture status. The package validator now covers the included fixtures; non-package/live plugin claims remain blocked until their own receipts and dogfood evidence exist.
+JSON Schema enforces artifact shape and many local invariants. Cross-document and cross-field obligations are validator-owned: claim/evidence surface matching, product-cohesion proof coupling, backlog row joins, generated ready-artifact provenance, derived amendment deltas, and live-beneficial non-fixture status. The package validator now covers the included fixtures; non-package/live plugin claims remain blocked until their own receipts and dogfood evidence exist.
 
 ## Contract Amendments
 

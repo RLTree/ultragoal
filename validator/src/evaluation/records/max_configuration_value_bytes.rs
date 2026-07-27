@@ -111,6 +111,7 @@ pub struct CanonicalEvaluationRun {
 }
 
 impl CanonicalEvaluationRun {
+    #[cfg(test)]
     pub(crate) fn from_parts(
         run: &EvaluationRun,
         runtime_configuration: RuntimeConfiguration,

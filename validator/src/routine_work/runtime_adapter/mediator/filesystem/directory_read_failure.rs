@@ -4,10 +4,12 @@ use super::*;
 pub(crate) fn readdir_failed() -> bool {
     #[cfg(target_os = "macos")]
     {
+        // SAFETY: libc returns the current thread's valid errno storage on macOS.
         unsafe { *libc::__error() != 0 }
     }
     #[cfg(any(target_os = "linux", target_os = "android"))]
     {
+        // SAFETY: libc returns the current thread's valid errno storage on Linux and Android.
         unsafe { *libc::__errno_location() != 0 }
     }
     #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "android")))]
@@ -22,6 +24,7 @@ pub(crate) struct DirectoryStream(pub(crate) *mut libc::DIR);
 #[cfg(unix)]
 impl Drop for DirectoryStream {
     fn drop(&mut self) {
+        // SAFETY: DirectoryStream owns the successful fdopendir result and drops it once.
         unsafe {
             libc::closedir(self.0);
         }
@@ -32,30 +35,14 @@ impl Drop for DirectoryStream {
 pub(crate) type CaptureHook = Box<dyn FnOnce() + Send + 'static>;
 
 #[cfg(test)]
-pub(crate) type ReadSourceCaptureHook = Box<dyn FnOnce() + Send + 'static>;
-
-#[cfg(test)]
 pub(crate) fn capture_hook() -> &'static Mutex<Option<CaptureHook>> {
     static HOOK: OnceLock<Mutex<Option<CaptureHook>>> = OnceLock::new();
     HOOK.get_or_init(|| Mutex::new(None))
 }
 
 #[cfg(test)]
-pub(crate) fn read_source_capture_hook() -> &'static Mutex<Option<ReadSourceCaptureHook>> {
-    static HOOK: OnceLock<Mutex<Option<ReadSourceCaptureHook>>> = OnceLock::new();
-    HOOK.get_or_init(|| Mutex::new(None))
-}
-
-#[cfg(test)]
 pub(crate) fn set_test_output_capture_hook(hook: impl FnOnce() + Send + 'static) {
     *capture_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
-}
-
-#[cfg(test)]
-pub(crate) fn set_test_read_source_capture_hook(hook: impl FnOnce() + Send + 'static) {
-    *read_source_capture_hook()
         .lock()
         .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(Box::new(hook));
 }
@@ -71,22 +58,8 @@ pub(crate) fn run_test_capture_hook() {
     }
 }
 
-#[cfg(test)]
-pub(crate) fn run_test_read_source_capture_hook() {
-    if let Some(hook) = read_source_capture_hook()
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
-        .take()
-    {
-        hook();
-    }
-}
-
 #[cfg(not(test))]
 pub(crate) fn run_test_capture_hook() {}
-
-#[cfg(not(test))]
-pub(crate) fn run_test_read_source_capture_hook() {}
 
 pub(crate) fn digest_reader(reader: &mut File, limit: u64) -> Result<String, RoutineError> {
     let mut hasher = Sha256::new();
@@ -110,7 +83,7 @@ pub(crate) fn digest_reader(reader: &mut File, limit: u64) -> Result<String, Rou
 
 pub(crate) fn decode_path(value: &str) -> Result<PathBuf, RoutineError> {
     if value.is_empty()
-        || value.len() % 2 != 0
+        || !value.len().is_multiple_of(2)
         || value.len() > 16_384
         || !value
             .bytes()

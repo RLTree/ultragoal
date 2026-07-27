@@ -50,6 +50,8 @@ impl Group {
 pub enum InspectTarget {
     Summary,
     Context,
+    Orchestration,
+    Inception,
     Inventory,
     Capabilities,
     Findings,

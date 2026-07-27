@@ -172,10 +172,13 @@ pub(crate) fn open_anchored(
     if create_new {
         flags |= O_CREAT | O_EXCL;
     }
+    // SAFETY: `directory` is an owned descriptor and `name` is a live CString;
+    // the mode is used only with the fixed create-new flags.
     let descriptor = unsafe { openat(directory.as_raw_fd(), name.as_ptr(), flags, 0o600_i32) };
     if descriptor < 0 {
         return Err(io_error(target, std::io::Error::last_os_error()));
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 

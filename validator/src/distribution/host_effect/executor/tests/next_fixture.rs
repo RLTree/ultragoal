@@ -1,10 +1,15 @@
+use crate::plugin_product::lifecycle::{
+    plan, HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, PackageAuthority, Version,
+};
+
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(0);
 
 struct Fixture {
     roots: Vec<PathBuf>,
     target_root: PathBuf,
     ledger_root: PathBuf,
-    executable: PathBuf,
+    executable_fixture: SelectedCodexExecutableTestFixture,
     home: PathBuf,
     project: PathBuf,
 }
@@ -25,20 +30,16 @@ impl Fixture {
         let project = support_root.join("project");
         create_mode(&home, 0o700);
         create_mode(&project, 0o700);
-        let executable = support_root.join("codex-fixture");
-        let mut file = OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .open(&executable)
-            .unwrap();
-        file.write_all(b"#!/bin/sh\nexit 0\n").unwrap();
-        file.sync_all().unwrap();
-        fs::set_permissions(&executable, fs::Permissions::from_mode(0o700)).unwrap();
+        let executable_fixture = selected_test_fixture("executor-next", b"#!/bin/sh\nexit 0\n");
         Self {
-            roots: vec![target_root.clone(), ledger_root.clone(), support_root],
+            roots: vec![
+                target_root.clone(),
+                ledger_root.clone(),
+                support_root,
+            ],
             target_root,
             ledger_root,
-            executable,
+            executable_fixture,
             home,
             project,
         }
@@ -65,13 +66,10 @@ impl Fixture {
         crate::distribution::host_effect::lifecycle::ObservedTargetIdentity,
     ) {
         let package = self.package();
-        let host = HostCapabilityDeclaration::isolated(
-            &self.home,
-            &self.project,
-            "fixture-host",
-            Some(&self.executable),
-        )
-        .unwrap();
+        let host = self
+            .executable_fixture
+            .host_capability(&self.home, &self.project, "fixture-host")
+            .unwrap();
         let journey = JourneyBinding::new(package, &host, "fixture-marketplace").unwrap();
         let scope =
             AcceptedHostScope::personal(&journey, "fixture-marketplace".to_owned()).unwrap();
@@ -79,6 +77,49 @@ impl Fixture {
             ConfinedHostEffectTarget::bind(&self.target_root, scope.clone(), 1).unwrap();
         (scope, target, identity)
     }
+}
+
+fn lifecycle_custody(fixture: &Fixture, command_plan: &HostCommandPlan) -> HostLifecycleCustody {
+    let package = fixture.package();
+    let authority = PackageAuthority {
+        version: Version::parse(package.source().version()).unwrap(),
+        package_sha256: package.archive_sha256().to_owned(),
+        inventory_sha256: package.tree_sha256().to_owned(),
+        candidate_id: package.source().candidate_id().to_owned(),
+    };
+    let lifecycle = plan(
+        &crate::plugin_product::lifecycle::LifecycleState::default(),
+        &LifecycleRequest {
+            intent: LifecycleIntent::FreshInstall,
+            target: Some(authority),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: None,
+            },
+        },
+    )
+    .unwrap();
+    HostLifecycleCustody::take(
+        lifecycle,
+        HostLifecycleBinding::new(
+            package,
+            command_plan.clone(),
+            digest('1'),
+            digest('2'),
+            HostLifecycleExpectedObservations {
+                installed_sha256: digest('3'),
+                cache_sha256: digest('4'),
+                registry_sha256: digest('5'),
+                discovery_sha256: digest('6'),
+                runtime_sha256: digest('7'),
+                command_count: command_plan.commands().len(),
+            },
+        )
+        .unwrap(),
+    )
+    .unwrap()
 }
 
 impl Drop for Fixture {
@@ -107,7 +148,7 @@ fn permit_binding(
 ) -> HostEffectPermitBinding {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let executable = fixture.executable_fixture.selected().unwrap();
     let head = ledger.head().unwrap();
     HostEffectPermitBinding {
         context_id: package.source().context_id().to_owned(),
@@ -127,12 +168,14 @@ fn permit_binding(
         external_request_sha256: digest('e'),
         command_plan_sha256: plan.plan_sha256().to_owned(),
         argv_sha256: digest('f'),
-        executable_identity_sha256: executable.identity().binding_sha256().unwrap(),
+        executable_identity_sha256: executable.binding_sha256().unwrap(),
         target_identity_sha256: target.target_sha256().to_owned(),
         target_generation: target.generation(),
         issued_at_unix_ms: 1_000,
         expires_at_unix_ms: 200_000,
         expected_head_sha256: head.head_sha256().to_owned(),
+        lifecycle_record: None,
+        lifecycle_record_sha256: None,
         decision: HostEffectDecision::Authorize,
     }
 }
@@ -144,7 +187,7 @@ fn authorized_effect(
 ) -> AuthorizedHostEffect {
     let package = fixture.package();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let executable = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let executable = fixture.executable_fixture.selected().unwrap();
     let binding = permit_binding(fixture, ledger, target, '2');
     let authority =
         HostEffectAuthority::generate("fixture-root".to_owned(), "fixture-ledger".to_owned())

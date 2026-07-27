@@ -4,6 +4,17 @@ use std::path::Path;
 
 const CHECK_ID: &str = "authority-source-binding";
 
+pub(crate) struct AuthorityGraphInputs<'a> {
+    pub root: &'a Path,
+    pub inventory: &'a BTreeSet<String>,
+    pub mandatory: &'a Value,
+    pub obligations: &'a Value,
+    pub trace: &'a Value,
+    pub standards: &'a Value,
+    pub standards_audit: &'a str,
+    pub red_ids: &'a BTreeSet<String>,
+}
+
 pub(super) fn failures(
     root: &Path,
     inventory: &BTreeSet<String>,
@@ -16,34 +27,25 @@ pub(super) fn failures(
     let standards_audit =
         std::fs::read_to_string(root.join("templates/agent-standards/enforcement-audit.tsv"))
             .unwrap_or_default();
-    authority_graph_failures(
+    authority_graph_failures(AuthorityGraphInputs {
         root,
         inventory,
-        &mandatory,
-        &obligations,
-        &trace,
-        &standards,
-        &standards_audit,
+        mandatory: &mandatory,
+        obligations: &obligations,
+        trace: &trace,
+        standards: &standards,
+        standards_audit: &standards_audit,
         red_ids,
-    )
+    })
 }
 
-pub(crate) fn authority_graph_failures(
-    root: &Path,
-    inventory: &BTreeSet<String>,
-    mandatory: &Value,
-    obligations: &Value,
-    trace: &Value,
-    standards: &Value,
-    standards_audit: &str,
-    red_ids: &BTreeSet<String>,
-) -> Vec<(String, String)> {
-    let obligation_ids = ids(obligations, "obligations", "id");
-    let trace_law_ids = ids(trace, "entries", "law_id");
-    let standards_ids = ids(standards, "rows", "id");
-    let audit_ids = audit_row_ids(standards_audit);
+pub(crate) fn authority_graph_failures(inputs: AuthorityGraphInputs<'_>) -> Vec<(String, String)> {
+    let obligation_ids = ids(inputs.obligations, "obligations", "id");
+    let trace_law_ids = ids(inputs.trace, "entries", "law_id");
+    let standards_ids = ids(inputs.standards, "rows", "id");
+    let audit_ids = audit_row_ids(inputs.standards_audit);
     let mut out = Vec::new();
-    for row in mandatory
+    for row in inputs.mandatory
         .get("laws")
         .and_then(Value::as_array)
         .into_iter()
@@ -87,10 +89,10 @@ pub(crate) fn authority_graph_failures(
             );
         }
         super::graph_edges::require_mandatory_law_paths(
-            root, inventory, law, row, red_ids, &mut out,
+            inputs.root, inputs.inventory, law, row, inputs.red_ids, &mut out,
         );
     }
-    super::graph_edges::require_trace_paths(root, inventory, trace, &mut out);
+    super::graph_edges::require_trace_paths(inputs.root, inputs.inventory, inputs.trace, &mut out);
     out
 }
 

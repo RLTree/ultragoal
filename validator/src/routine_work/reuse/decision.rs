@@ -36,7 +36,7 @@ pub fn assess_reuse(
             ReuseDecision::Miss(ReuseMiss::ResultSubstitution)
         } else {
             ReuseDecision::Hit(VerifiedReuse {
-                facts: observed.facts.clone(),
+                facts: Box::new(observed.facts.clone()),
             })
         };
     ensure_unchanged(

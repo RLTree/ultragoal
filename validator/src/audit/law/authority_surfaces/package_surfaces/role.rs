@@ -17,8 +17,8 @@ pub(super) fn product_role_from_path(rel: &str) -> String {
         "verified local repair-loop execution and node status reporting"
     } else if rel.starts_with("validator/src/cli/observe/") {
         "command telemetry query and repair explanation"
-    } else if rel.starts_with("validator/src/cli/control/plane/") {
-        "claim control-plane proof and refusal execution"
+    } else if rel.starts_with("validator/src/audit/cli/control_plane/") {
+        "read-only claim authority validation"
     } else if rel.starts_with("validator/src/cli/package/inventory/") {
         "package truth inventory and boundary reconciliation"
     } else if rel.starts_with("validator/src/cli/coverage/") {

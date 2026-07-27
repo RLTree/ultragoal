@@ -18,11 +18,7 @@ struct RootAuthority {
 impl ConfinedRoot {
     #[cfg(any(target_os = "macos", target_os = "linux"))]
     pub fn open(path: &Path) -> Result<Self, DistributionError> {
-        let temporary = std::env::var_os("CODEX_WORKTREE_TMP")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .canonicalize()
-            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        let temporary = canonical_temporary_parent()?;
         let canonical = path
             .canonicalize()
             .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
@@ -31,7 +27,8 @@ impl ConfinedRoot {
         let name = canonical
             .file_name()
             .and_then(|row| row.to_str())
-            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?;
+            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?
+            .to_owned();
         if canonical.parent() != Some(temporary.as_path())
             || !name.starts_with("hul-distribution-")
             || !metadata.is_dir()
@@ -39,7 +36,16 @@ impl ConfinedRoot {
         {
             return Err(error(DistributionErrorId::InvalidPath));
         }
-        let parent = Directory::open_path(&temporary)?;
+        Self::open_bound(canonical, &temporary, &name)
+    }
+
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    fn open_bound(
+        canonical: PathBuf,
+        parent_path: &Path,
+        name: &str,
+    ) -> Result<Self, DistributionError> {
+        let parent = Directory::open_path(parent_path)?;
         let root = parent.open_directory(name)?.retain_confined_root()?;
         let identity = root.identity();
         let root_id = sha256(
@@ -133,6 +139,19 @@ impl ConfinedRoot {
     pub(super) fn validate_relative(&self, relative: &str) -> Result<(), DistributionError> {
         validate_relative_path(relative)?;
         self.revalidate()
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn remove_owned(self) -> Result<(), DistributionError> {
+        let authority = std::sync::Arc::try_unwrap(self.authority)
+            .map_err(|_| error(DistributionErrorId::ObjectChanged))?;
+        authority.revalidate()?;
+        super::remove::remove_tree_identity(&authority.parent, &authority.name, authority.identity)
+    }
+
+    #[cfg(not(unix))]
+    pub(crate) fn remove_owned(self) -> Result<(), DistributionError> {
+        Err(error(DistributionErrorId::CapabilityMismatch))
     }
 }
 

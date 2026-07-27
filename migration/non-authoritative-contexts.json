@@ -51,16 +51,34 @@
       "root": "docs/ultragoal-successor-live/worker-results",
       "path_policy": "lease-json-worker-result-v1",
       "schema_ref": "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/IMPLEMENTATION_DEPENDENCY_GRAPH.json#/worker_output_schema",
-      "historical_content_set_digest": "0055b9045e3631cad124e4e194985af11137a47d597f60657255e432b53e2f8a",
+      "historical_content_set_digest": "e8f0d2008f9ec866dbd5dc0f9ab0d54116026a2bd92cc4603bb65e92f95d197f",
       "historical_files": [
+        {"path":"LEASE-N02-COMMAND-INVENTORY-DEAUTH-001.json","sha256":"21da0d4bd57ca47338c4676e0cbd66f07f95a8dec892a16a3712aa77cc838d3c"},
+        {"path":"LEASE-N02-COMMAND-INVENTORY-DEAUTH-002.json","sha256":"fb99b97163daff4db6c338bf591ab0af385820d2b41511c81e9e64a0a25e3ac3"},
         {"path":"LEASE-N03-CAPTURE-001.json","sha256":"3dde558f1ff010b4a773287a4ec6bab2e2a6b0351b31ca03f407090e96560315"},
         {"path":"LEASE-N03-CAPTURE-002.json","sha256":"c7d9eb9cb283756036e3e64600d4e57de23c183a45c00dd8c15fb6f94d0d94d4"},
         {"path":"LEASE-N03-CAPTURE-003.json","sha256":"e55a026b7993efc08403bede6ff74623c09dea7344d07dfd6531753b8ab2215f"},
         {"path":"LEASE-N03-STATE-001.json","sha256":"1b6e01b3afcc8b668cd970f227e22c5bb8200fe3b41f14410816b8f219b769d3"},
-        {"path":"LEASE-N03-STATE-002.json","sha256":"1efad6e43cefdb3c6765be3a617b5e4c196940edb0ee11302305d4049611a813"}
+        {"path":"LEASE-N03-STATE-002.json","sha256":"1efad6e43cefdb3c6765be3a617b5e4c196940edb0ee11302305d4049611a813"},
+        {"path":"LEASE-N11-PRODUCTION-EVALUATION-RUNTIME-001.json","sha256":"0836a4a57d38b8726ac75580c4882e9bdbb79db93fe496e924cf0b9797cc95cd"}
       ],
       "authority": {"binding": false},
       "status": "run_scoped_evidence_only"
+    }
+  ],
+  "proposal_contexts": [
+    {
+      "context_id": "predecessor-plugin-proposal-report-2026-07-02",
+      "path": "REPORT.md",
+      "sha256": "7638fbe3ac770524c5e8ef6e8ecbb0083de35c4c488d29d28a3861cec4d79a82",
+      "authority": {
+        "binding": false
+      },
+      "active_product_replaced": true,
+      "replacement_contract_id": "harness-ultragoal-successor-contract-v2",
+      "status": "replaced_historical_context",
+      "preserve": true,
+      "physical_deletion_authorized": false
     }
   ]
 }

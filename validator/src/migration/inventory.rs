@@ -33,22 +33,27 @@ impl MigrationInventory {
         Ok(inventory)
     }
 
+    #[cfg(test)]
     pub fn inventory_sha256(&self) -> &str {
         &self.inventory_sha256
     }
 
+    #[cfg(test)]
     pub fn candidate_id(&self) -> &str {
         &self.candidate_id
     }
 
+    #[cfg(test)]
     pub(crate) fn live_context_id(&self) -> &str {
         &self.live_context_id
     }
 
+    #[cfg(test)]
     pub(crate) fn catalog_id(&self) -> &str {
         &self.catalog_id
     }
 
+    #[cfg(test)]
     pub(crate) fn read_session_id(&self) -> &str {
         &self.read_session_id
     }
@@ -101,6 +106,7 @@ impl MigrationInventory {
     }
 }
 
+#[cfg(test)]
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct CompatibilityRoute {
     route_id: String,

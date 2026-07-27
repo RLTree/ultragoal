@@ -1,4 +1,5 @@
 const ROOT_PREFIX: &str = "hul-supported-host-effect-";
+const ISOLATED_PACKAGE_ROOT_PREFIX: &str = "hul-distribution-host-effect-";
 const MAX_PUBLICATION_BYTES: usize = 1024 * 1024;
 const PUBLICATION_MODE: u32 = 0o400;
 
@@ -55,5 +56,11 @@ impl std::fmt::Debug for ConfinedHostEffectTarget {
             .field("canonical_path", &self.anchor.canonical_path)
             .field("target_generation", &self.anchor.target_generation)
             .finish_non_exhaustive()
+    }
+}
+
+impl ConfinedHostEffectTarget {
+    pub(in crate::distribution::host_effect) fn cwd_fd(&self) -> std::os::fd::RawFd {
+        self.anchor.directory.as_raw_fd()
     }
 }

@@ -2,10 +2,10 @@ impl Store {
     pub(crate) fn write_atomic(&self, name: &str, bytes: &[u8]) -> Result<(), OrchestrationError> {
         self.verify_root()?;
         let target_before = self.exact_stat(name)?;
-        if let Some(target) = target_before {
-            if !target.regular || target.links != 1 || target.length > MAX_JOURNAL_BYTES {
-                return Err(OrchestrationError::JournalCorrupt);
-            }
+        if target_before.is_some_and(|target| {
+            !target.regular || target.links != 1 || target.length > MAX_JOURNAL_BYTES
+        }) {
+            return Err(OrchestrationError::JournalCorrupt);
         }
         let (temp_name, mut file) = self.create_temp(name)?;
         let result = (|| {
@@ -21,6 +21,11 @@ impl Store {
             #[cfg(test)]
             super::test_hook::run();
             super::sys::rename_relative(&self.directory, &temp_name, name)?;
+            #[cfg(test)]
+            super::test_hook::run_post_rename();
+            self.verify_root()?;
+            self.sync_root()?;
+            self.verify_root()?;
             Ok(())
         })();
         if result.is_err() {

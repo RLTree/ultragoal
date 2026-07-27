@@ -48,6 +48,20 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
             "{identifier}"
         );
     }
+    for identifier in [
+        "supporting_command",
+        "helper_registry",
+        "shared_authority",
+        "common_adapter",
+    ] {
+        assert_eq!(
+            crate::audit::namespace::source::path_labels::generic_identifier_bucket_label(
+                identifier
+            ),
+            None,
+            "{identifier} has a concrete behavioral remainder"
+        );
+    }
 
     assert_eq!(
         crate::audit::namespace::source::path_labels::product_opaque_goal_work_string_label(
@@ -104,7 +118,7 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
         ),
         (
             "validation_artifacts/observability/progress/checkpoint.json",
-            "progress",
+            "checkpoint_progress",
         ),
         (
             "validation_artifacts/observability/proof-status/source-audit.json",
@@ -119,6 +133,23 @@ fn namespace_path_labels_classify_goal_work_and_generic_source_names() {
             "{artifact_path}"
         );
     }
+
+    for product_state_name in ["phase", "checkpoint", "progress", "scratch"] {
+        assert_eq!(
+            crate::audit::namespace::source::path_labels::product_opaque_goal_work_label(
+                product_state_name
+            ),
+            None,
+            "{product_state_name} must be classified in its product context"
+        );
+    }
+    assert_eq!(
+        crate::audit::namespace::source::path_labels::product_opaque_goal_work_label(
+            "validator/src/repository_fit/path.rs"
+        ),
+        None,
+        "fit and path in different namespaces are not the fit_path goal-work name"
+    );
 }
 
 #[test]

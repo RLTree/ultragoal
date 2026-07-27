@@ -1,6 +1,9 @@
 use super::*;
 
-#[cfg(test)]
+#[cfg(target_os = "macos")]
+use std::cell::Cell;
+
+#[cfg(target_os = "macos")]
 thread_local! {
     static TEST_LAST_SPAWN_GROUP: Cell<Option<ProcessGroupId>> = const { Cell::new(None) };
 }
@@ -18,9 +21,9 @@ pub(crate) struct StartedProcessIdentity {
 }
 
 impl StartedProcessIdentity {
-    pub(super) fn new(child: &BoundChild, group: ProcessGroupId) -> Self {
+    pub(super) fn new(process_id: i32, group: ProcessGroupId) -> Self {
         Self {
-            process_id: child.pid(),
+            process_id,
             process_group_id: group.0,
         }
     }
@@ -61,9 +64,6 @@ pub(crate) enum ProcessFailurePoint {
     Cleanup,
 }
 
-pub(crate) type ReaderHandle = JoinHandle<Result<Drained, RoutineError>>;
-pub(crate) type WriterHandle = JoinHandle<Result<(), RoutineError>>;
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct ProcessGroupId(i32);
 
@@ -81,134 +81,103 @@ impl ProcessGroupId {
         Ok(Self(value))
     }
 
+    #[cfg(test)]
     pub(crate) fn signal_target(self) -> Result<i32, RoutineError> {
         self.0
             .checked_neg()
             .filter(|target| *target < 0)
             .ok_or_else(|| mediator_error("mediator-process-group-invalid"))
     }
+
+    #[cfg(test)]
+    pub(crate) fn raw(self) -> i32 {
+        self.0
+    }
 }
 
-/// Owns every spawned-process resource until explicit setup settlement.
+#[cfg(target_os = "macos")]
 pub(crate) struct SpawnSetupGuard {
-    pub(crate) child: Option<BoundChild>,
-    pub(crate) process_group: Option<ProcessGroupId>,
-    pub(crate) stdout: Option<File>,
-    pub(crate) stderr: Option<File>,
-    pub(crate) stdin: Option<File>,
-    pub(crate) readers_done: Arc<AtomicBool>,
-    pub(crate) stdout_reader: Option<ReaderHandle>,
-    pub(crate) stderr_reader: Option<ReaderHandle>,
-    pub(crate) stdin_writer: Option<WriterHandle>,
+    pub(super) process: Option<crate::process_custody::DarwinSuspendedProcess>,
+    pub(super) process_group: ProcessGroupId,
 }
 
+#[cfg(target_os = "macos")]
 impl SpawnSetupGuard {
     pub(crate) fn new(spawned: SpawnedProcess) -> Self {
-        let process_group = ProcessGroupId::from_child_id(spawned.child.id()).ok();
-        #[cfg(test)]
-        TEST_LAST_SPAWN_GROUP.with(|slot| slot.set(process_group));
+        let process_group = ProcessGroupId::from_child_id(spawned.process.group() as u32)
+            .expect("Darwin process group must be the positive child pid");
+        TEST_LAST_SPAWN_GROUP.with(|slot| slot.set(Some(process_group)));
         Self {
-            child: Some(spawned.child),
+            process: Some(spawned.process),
             process_group,
-            stdout: Some(spawned.stdout),
-            stderr: Some(spawned.stderr),
-            stdin: Some(spawned.stdin),
-            readers_done: Arc::new(AtomicBool::new(false)),
-            stdout_reader: None,
-            stderr_reader: None,
-            stdin_writer: None,
         }
     }
 
     pub(crate) fn process_group(&self) -> Result<ProcessGroupId, RoutineError> {
-        self.process_group
-            .ok_or_else(|| mediator_error("mediator-process-group-invalid"))
+        Ok(self.process_group)
     }
 
-    pub(crate) fn child(&self) -> Result<&BoundChild, RoutineError> {
-        self.child
+    pub(crate) fn process_id(&self) -> Result<i32, RoutineError> {
+        self.process
             .as_ref()
+            .map(|process| process.pid)
             .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
     }
 
+    pub(crate) fn validate_loaded(&self, program: &PinnedExecutable) -> Result<(), RoutineError> {
+        use std::os::unix::fs::MetadataExt;
+        let metadata = program
+            .file
+            .metadata()
+            .map_err(|_| mediator_error("mediator-executable-metadata-failed"))?;
+        self.process
+            .as_ref()
+            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))?
+            .validate_loaded_vnode(program.path(), metadata.dev(), metadata.ino())
+            .map_err(|_| mediator_error("mediator-loaded-executable-unobserved"))
+    }
+
+    pub(crate) fn take_process(
+        &mut self,
+    ) -> Result<crate::process_custody::DarwinSuspendedProcess, RoutineError> {
+        self.process
+            .take()
+            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
+    }
+
+    #[cfg(test)]
     pub(crate) fn into_running(mut self, process_group: ProcessGroupId) -> RunningProcess {
         RunningProcess {
-            child: self.child.take(),
-            process_group,
-            readers_done: Arc::clone(&self.readers_done),
-            stdout_reader: self.stdout_reader.take(),
-            stderr_reader: self.stderr_reader.take(),
-            stdin_writer: self.stdin_writer.take(),
+            process: self.process.take(),
+            _process_group: process_group,
         }
     }
 }
 
+#[cfg(all(target_os = "macos", test))]
+impl Drop for SpawnSetupGuard {
+    fn drop(&mut self) {
+        let _ = self.process.take();
+    }
+}
+
+#[cfg(target_os = "macos")]
 #[cfg(test)]
 pub(crate) fn test_last_spawn_group() -> Option<ProcessGroupId> {
     TEST_LAST_SPAWN_GROUP.with(Cell::get)
 }
 
-/// Owns child, group, and I/O threads until explicit process settlement.
+#[cfg(target_os = "macos")]
+#[cfg(test)]
 pub(crate) struct RunningProcess {
-    pub(crate) child: Option<BoundChild>,
-    pub(crate) process_group: ProcessGroupId,
-    pub(crate) readers_done: Arc<AtomicBool>,
-    pub(crate) stdout_reader: Option<ReaderHandle>,
-    pub(crate) stderr_reader: Option<ReaderHandle>,
-    pub(crate) stdin_writer: Option<WriterHandle>,
+    pub(super) process: Option<crate::process_custody::DarwinSuspendedProcess>,
+    pub(crate) _process_group: ProcessGroupId,
 }
 
-impl RunningProcess {
-    pub(crate) fn child_mut(&mut self) -> Result<&mut BoundChild, RoutineError> {
-        self.child
-            .as_mut()
-            .ok_or_else(|| mediator_error("mediator-child-custody-missing"))
-    }
-
-    pub(crate) fn resume(&self) -> Result<(), RoutineError> {
-        maybe_inject_process_failure(
-            ProcessFailurePoint::Resume,
-            "mediator-process-resume-injected",
-        )?;
-        signal_group(self.process_group, libc::SIGCONT)
-    }
-
-    pub(crate) fn terminate_and_reap(&mut self) -> Result<(), RoutineError> {
-        let process_group = self.process_group;
-        terminate_and_reap(self.child_mut()?, process_group)
-    }
-
-    pub(crate) fn join_io(&mut self) -> Result<(Drained, Drained), RoutineError> {
-        self.readers_done.store(true, Ordering::Release);
-        maybe_inject_process_failure(
-            ProcessFailurePoint::StdoutJoin,
-            "mediator-stdout-reader-join-injected",
-        )?;
-        let stdout = self
-            .stdout_reader
-            .take()
-            .ok_or_else(|| mediator_error("mediator-stdout-reader-missing"))?
-            .join()
-            .map_err(|_| mediator_error("mediator-stdout-reader-failed"))??;
-        maybe_inject_process_failure(
-            ProcessFailurePoint::StderrJoin,
-            "mediator-stderr-reader-join-injected",
-        )?;
-        let stderr = self
-            .stderr_reader
-            .take()
-            .ok_or_else(|| mediator_error("mediator-stderr-reader-missing"))?
-            .join()
-            .map_err(|_| mediator_error("mediator-stderr-reader-failed"))??;
-        maybe_inject_process_failure(
-            ProcessFailurePoint::StdinJoin,
-            "mediator-stdin-writer-join-injected",
-        )?;
-        self.stdin_writer
-            .take()
-            .ok_or_else(|| mediator_error("mediator-stdin-writer-missing"))?
-            .join()
-            .map_err(|_| mediator_error("mediator-stdin-writer-failed"))??;
-        Ok((stdout, stderr))
+#[cfg(target_os = "macos")]
+#[cfg(test)]
+impl Drop for RunningProcess {
+    fn drop(&mut self) {
+        let _ = self.process.take();
     }
 }

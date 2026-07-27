@@ -1,4 +1,5 @@
 use super::StateEngine;
+use super::adopted_claims::{RootClaimStage, stage_root, stage_target};
 use super::adopted_registry::load_adopted_claims;
 use super::catalog::{
     ActionDefinition, ActionKind, ClaimSpec, CommandBinding, DependencyActionCatalog,
@@ -14,6 +15,8 @@ use crate::context::{EffectClass, LiveContext};
 use crate::inventory::AuthorityCatalog;
 use std::collections::BTreeSet;
 
+use super::adopted_journey::append_first_truth_loop_route;
+
 pub(crate) fn derive_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
@@ -26,16 +29,50 @@ pub(crate) fn issue_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
 ) -> Result<DependencyActionCatalog, StateError> {
-    let (claim_registry_id, claims) = load_adopted_claims()?;
-    let spec = live_spec(context, authority_catalog, &claims);
+    let loaded = load_adopted_claims()?;
+    let claim_registry_id = loaded.claim_registry_sha256.clone();
+    let staged = stage_target(
+        context,
+        authority_catalog,
+        &loaded.registry,
+        loaded.claim_registry_sha256.clone(),
+        loaded.contract_manifest_sha256,
+        loaded.handoff_sha256,
+    )?;
+    let claims = loaded
+        .registry
+        .claims
+        .into_iter()
+        .map(|claim| ClaimSpec {
+            claim_id: claim.claim_id,
+            maximum_dimensions: vec![claim.allowed_ceiling_on_pass],
+        })
+        .collect::<Vec<_>>();
+    let spec = live_spec(context, authority_catalog, &claims, staged.stage_id()?);
     PolicyAuthority::from_adopted_claim_registry(claim_registry_id, claims, spec)?
         .issue(context, authority_catalog)
+}
+
+pub(crate) fn stage_root_claims(
+    context: &LiveContext,
+    authority_catalog: &AuthorityCatalog,
+) -> Result<RootClaimStage, StateError> {
+    let loaded = load_adopted_claims()?;
+    stage_root(
+        context,
+        authority_catalog,
+        &loaded.registry,
+        loaded.claim_registry_sha256,
+        loaded.contract_manifest_sha256,
+        loaded.handoff_sha256,
+    )
 }
 
 fn live_spec(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
     claims: &[ClaimSpec],
+    staged_reconciliation_id: &str,
 ) -> DependencyActionSpec {
     let reductions = all_reductions(claims);
     let codes = authority_catalog
@@ -47,7 +84,7 @@ fn live_spec(
         .iter()
         .map(|code| inventory_policy(code, &reductions))
         .collect();
-    let actions = codes
+    let mut actions = codes
         .iter()
         .enumerate()
         .map(|(index, code)| ActionDefinition {
@@ -61,55 +98,107 @@ fn live_spec(
             authority: AuthorityRequirement::Root,
             command_id: Some("migrate-plan".to_owned()),
             authority_request: None,
+            evidence_led: None,
         })
-        .collect();
+        .collect::<Vec<_>>();
+    let mut dependencies = vec![DependencyFact {
+        dependency_id: "reconciliation-kernel".to_owned(),
+        observation_id: staged_reconciliation_id.to_owned(),
+        status: DependencyStatus::Missing,
+        authority: FactAuthority::DirectProbe,
+        scope: Scope {
+            surface: "claim-graph".to_owned(),
+            relative_path: None,
+        },
+        cause: "canonical claim reconciliation is not yet supplied".to_owned(),
+        repair: Some(repair(
+            "repair-reconciliation-kernel",
+            RepairTargetKind::Dependency,
+            "reconciliation-kernel",
+            "Implement the canonical reconciliation kernel",
+        )),
+        ceiling_reductions: reductions.clone(),
+    }];
+    let mut commands = vec![
+        CommandBinding {
+            command_id: "inspect-inception".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "inspect".to_owned(),
+                "inception".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+        CommandBinding {
+            command_id: "inspect-json".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "inspect".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+        CommandBinding {
+            command_id: "migrate-plan".to_owned(),
+            argv: vec![
+                "ultragoal".to_owned(),
+                "--json".to_owned(),
+                "migrate".to_owned(),
+                "plan".to_owned(),
+            ],
+            effect: EffectClass::Read,
+        },
+    ];
+    append_first_truth_loop_route(&mut dependencies, &mut commands, &mut actions, &reductions);
+    let inception =
+        crate::product_inception::bind_actions(context, authority_catalog, &mut actions, &codes);
+    if matches!(
+        inception,
+        crate::product_inception::RankingDisposition::InceptionRequired
+    ) {
+        dependencies.push(DependencyFact {
+            dependency_id: "product-inception".to_owned(),
+            observation_id: context.context_id().to_owned(),
+            status: DependencyStatus::Missing,
+            authority: FactAuthority::DirectProbe,
+            scope: Scope {
+                surface: "product-success-brief".to_owned(),
+                relative_path: Some("PRODUCT_SUCCESS_BRIEF.json".to_owned()),
+            },
+            cause: "a current valid Product Success Brief v2 is required".to_owned(),
+            repair: Some(repair(
+                "repair-product-inception",
+                RepairTargetKind::Dependency,
+                "product-inception",
+                "Inspect and repair the current Product Success Brief",
+            )),
+            ceiling_reductions: reductions.clone(),
+        });
+        actions.push(ActionDefinition {
+            action_id: "inspect-product-inception".to_owned(),
+            priority: 1,
+            kind: ActionKind::Command,
+            repair_id: "repair-product-inception".to_owned(),
+            requires_dependencies: Vec::new(),
+            required_capabilities: Vec::new(),
+            effect: EffectClass::Read,
+            authority: AuthorityRequirement::Root,
+            command_id: Some("inspect-inception".to_owned()),
+            authority_request: None,
+            evidence_led: None,
+        });
+    }
     DependencyActionSpec {
         expected_context_id: context.context_id().to_owned(),
         expected_authority_catalog_id: authority_catalog.catalog_id().to_owned(),
         claims: claims.to_vec(),
-        dependencies: vec![DependencyFact {
-            dependency_id: "reconciliation-kernel".to_owned(),
-            observation_id: "root-policy".to_owned(),
-            status: DependencyStatus::Missing,
-            authority: FactAuthority::DirectProbe,
-            scope: Scope {
-                surface: "claim-graph".to_owned(),
-                relative_path: None,
-            },
-            cause: "canonical claim reconciliation is not yet supplied".to_owned(),
-            repair: Some(repair(
-                "repair-reconciliation-kernel",
-                RepairTargetKind::Dependency,
-                "reconciliation-kernel",
-                "Implement the canonical reconciliation kernel",
-            )),
-            ceiling_reductions: reductions,
-        }],
+        dependencies,
         inventory_policies,
         capability_requirements: Vec::new(),
         runtime_metadata: RuntimeMetadata::default(),
         runtime_requirements: Vec::new(),
-        commands: vec![
-            CommandBinding {
-                command_id: "inspect-json".to_owned(),
-                argv: vec![
-                    "ultragoal".to_owned(),
-                    "--json".to_owned(),
-                    "inspect".to_owned(),
-                ],
-                effect: EffectClass::Read,
-            },
-            CommandBinding {
-                command_id: "migrate-plan".to_owned(),
-                argv: vec![
-                    "ultragoal".to_owned(),
-                    "--json".to_owned(),
-                    "migrate".to_owned(),
-                    "plan".to_owned(),
-                ],
-                effect: EffectClass::Read,
-            },
-        ],
+        commands,
         actions,
         host_goal: HostGoalObservation::default(),
     }

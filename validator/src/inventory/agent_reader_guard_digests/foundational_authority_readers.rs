@@ -6,6 +6,16 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
     ),
     reader!("validator/src/agent_roles.rs", "../agent_roles.rs", false),
     reader!(
+        "validator/src/audit/namespace/law/plugin_interfaces.rs",
+        "../audit/namespace/law/plugin_interfaces.rs",
+        true
+    ),
+    reader!(
+        "validator/src/audit/source_governance/scope/roots.rs",
+        "../audit/source_governance/scope/roots.rs",
+        false
+    ),
+    reader!(
         "validator/src/audit/contract.rs",
         "../audit/contract.rs",
         false
@@ -31,44 +41,52 @@ pub(crate) const FOUNDATIONAL_AUTHORITY_READERS: &[ReaderSpec] = &[
         false
     ),
     reader!(
+        "validator/src/cli/successor_public/capabilities.rs",
+        "../cli/successor_public/capabilities.rs",
+        false
+    ),
+    reader!(
+        "validator/src/cli/successor_public/repository_fixture.rs",
+        "../cli/successor_public/repository_fixture.rs",
+        false
+    ),
+    reader!(
+        "validator/src/distribution/package/product/packaged_entries.rs",
+        "../distribution/package/product/packaged_entries.rs",
+        false
+    ),
+    reader!(
+        "validator/src/inventory/agent_reader_guard_digests/foundational_authority_readers.rs",
+        "foundational_authority_readers.rs",
+        false
+    ),
+    reader!(
+        "validator/src/inventory/plugin_manifest_hooks/max_timeout_seconds.rs",
+        "plugin_manifest_hooks/max_timeout_seconds.rs",
+        false
+    ),
+    reader!(
+        "validator/src/orchestration/artifact/max_artifact_bytes.rs",
+        "../orchestration/artifact/max_artifact_bytes.rs",
+        false
+    ),
+    reader!(
         "validator/src/inventory/registry/topology.rs",
         "registry/topology.rs",
+        false
+    ),
+    // This scope guard mentions root-owned agent paths only to reject lane
+    // authority over them. Binding its exact bytes prevents that negative
+    // vocabulary from becoming an untracked descriptor reader.
+    reader!(
+        "validator/src/inventory/registry/frontier/scope_ownership.rs",
+        "registry/frontier/scope_ownership.rs",
         false
     ),
     reader!(
         "validator/src/package/inventory/mod.rs",
         "../package/inventory/mod.rs",
         false
-    ),
-    reader!(
-        "validator/src/claim_semantics/plugin_policy/mod.rs",
-        "../claim_semantics/plugin_policy/mod.rs",
-        true
-    ),
-    reader!(
-        "validator/src/claim_semantics/coverage/receipt/exclusions.rs",
-        "../claim_semantics/coverage/receipt/exclusions.rs",
-        true
-    ),
-    reader!(
-        "validator/src/claim_semantics/retired_reviewer_policy.rs",
-        "../claim_semantics/retired_reviewer_policy.rs",
-        true
-    ),
-    reader!(
-        "validator/src/cli/control/plane/registry/mod.rs",
-        "../cli/control/plane/registry/mod.rs",
-        false
-    ),
-    reader!(
-        "validator/src/cli/control/plane/registry/agent_rows.rs",
-        "../cli/control/plane/registry/agent_rows.rs",
-        true
-    ),
-    reader!(
-        "validator/src/cli/live_loop/surfaces/input_spec/path_rules.rs",
-        "../cli/live_loop/surfaces/input_spec/path_rules.rs",
-        true
     ),
     reader!(
         "validator/src/audit/plugin/registry/mod.rs",

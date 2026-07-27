@@ -199,6 +199,28 @@ impl DesiredState {
     pub fn state_sha256(&self) -> &str {
         &self.state_sha256
     }
+
+    /// Binds the local-state-only fit scope without inventing template files.
+    pub(crate) fn local_state_scope(
+        context_id: String,
+        candidate_id: String,
+    ) -> Result<Self, FitError> {
+        if !valid_digest(&context_id) || !valid_digest(&candidate_id) {
+            return Err(error(FitErrorId::InvalidSpec));
+        }
+        let encoded = serde_json::to_vec(&(
+            "repository-fit-local-state-scope-v1",
+            &context_id,
+            &candidate_id,
+        ))
+        .map_err(|_| error(FitErrorId::InvalidSpec))?;
+        Ok(Self {
+            context_id,
+            candidate_id,
+            files: Vec::new(),
+            state_sha256: digest(&encoded),
+        })
+    }
 }
 
 pub trait FitReader {

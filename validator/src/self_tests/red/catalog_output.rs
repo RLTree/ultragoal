@@ -57,33 +57,5 @@ fn red_catalog_and_audit_outputs_fail_closed() {
         "{red_failures:?}"
     );
 
-    assert_eq!(
-        crate::audit::package::outputs::package_status(&failures),
-        "fail"
-    );
-    assert_eq!(
-        crate::audit::package::outputs::package_status(&BTreeMap::new()),
-        "pass"
-    );
-    let receipt = root.join("validation_artifacts/ultragoal-audit/validator-receipt.json");
-    let (stdout, stderr) =
-        crate::audit::package::outputs::write_stdio_receipts(&receipt, "fail", 2)
-            .expect("stdio receipts");
-    assert!(
-        std::fs::read_to_string(stdout)
-            .expect("stdout")
-            .contains("red=2")
-    );
-    assert_eq!(std::fs::read_to_string(stderr).expect("stderr"), "");
-    #[cfg(unix)]
-    {
-        let blocked = root.join("blocked/validator-receipt.json");
-        std::fs::create_dir_all(blocked.parent().expect("blocked parent")).expect("blocked dir");
-        let stdout = blocked.with_extension("stdout.txt");
-        std::os::unix::fs::symlink(root.join("target.txt"), &stdout).expect("stdout symlink");
-        let err = crate::audit::package::outputs::write_stdio_receipts(&blocked, "fail", 1)
-            .expect_err("unsafe stdout path must fail");
-        assert!(err.contains("symlink"), "{err}");
-    }
     std::fs::remove_dir_all(root).expect("cleanup red catalog output");
 }

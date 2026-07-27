@@ -100,7 +100,6 @@ pub(crate) const REQUIRED_LAWS: &[&str] = &[
     "standards-gardener-promotion",
     "subagent-custom-agent-sandbox-approval-inheritance",
     "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-    "target-repo-audit-capability",
     "targeted-refactor-debt-removal-standards-gardener-cadence",
     "template-generation-governance-template-creator-boundary",
     "third-party-dependency-legibility-typed-adapters",

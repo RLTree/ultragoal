@@ -2,13 +2,13 @@ use super::model::{HCT_CLAIMS, RouteSpec, spec};
 
 const KIND: &str = "legacy-finalizer-authority";
 
-pub(super) const ROUTES: [RouteSpec; 12] = [
+pub(super) const ROUTES: [RouteSpec; 7] = [
     spec(
         "finalizer-audit-packet-root-to-hct-claims",
         "LEGACY-FINALIZER:validator/src/audit/final_packet/mod.rs",
         KIND,
         "validator/src/audit/final_packet/mod.rs",
-        "87cc50b150f580daa210a04d4c505777d04089ff863c1accc78de95b9a23dc89",
+        "8ad93a594b4dcf8a9d405155019f2551465a1ec46d76c9d0110c2c7349776f45",
         &HCT_CLAIMS,
     ),
     spec(
@@ -24,7 +24,7 @@ pub(super) const ROUTES: [RouteSpec; 12] = [
         "LEGACY-FINALIZER:validator/src/audit/final_packet/observability/tests.rs",
         KIND,
         "validator/src/audit/final_packet/observability/tests.rs",
-        "8f65ad0ddbfc09acdf7f30e2d3ccdeda9790268f2fffb57baad92789af7cef8a",
+        "39d8013ef6c370c80ceb00b2cac432b087449c58b4ef20afdb1666cfdc8cb2fc",
         &HCT_CLAIMS,
     ),
     spec(
@@ -40,7 +40,7 @@ pub(super) const ROUTES: [RouteSpec; 12] = [
         "LEGACY-FINALIZER:validator/src/audit/final_packet/references/mod.rs",
         KIND,
         "validator/src/audit/final_packet/references/mod.rs",
-        "c8a23f52623de8513de9624c9327954bca33c8e1bc6d88d5336e0a71f7383827",
+        "7371ea939982a1010ed66d56b8a2fd04074087c66cf62f35dbd54e4ef5283b05",
         &HCT_CLAIMS,
     ),
     spec(
@@ -57,46 +57,6 @@ pub(super) const ROUTES: [RouteSpec; 12] = [
         KIND,
         "validator/src/audit/final_packet/references/source_audit.rs",
         "0601fad955489f01bdaa9507f71e0aeb2af169532c25a1eafc688fd7c0bec219",
-        &HCT_CLAIMS,
-    ),
-    spec(
-        "finalizer-cli-packet-root-to-hct-claims",
-        "LEGACY-FINALIZER:validator/src/cli/final_packet/mod.rs",
-        KIND,
-        "validator/src/cli/final_packet/mod.rs",
-        "5fe33fa3d0882af6e5569982a398d2431fa2e3eff1eaa9ff1ee81cc623d918ab",
-        &HCT_CLAIMS,
-    ),
-    spec(
-        "finalizer-cli-proof-root-to-hct-claims",
-        "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/mod.rs",
-        KIND,
-        "validator/src/cli/final_packet/proof/mod.rs",
-        "0c83e164791d6ddaa9ecf3eef4e73983c948efe02db44b228ba28e0fbbc4ad56",
-        &HCT_CLAIMS,
-    ),
-    spec(
-        "finalizer-cli-proof-spans-to-hct-claims",
-        "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/spans.rs",
-        KIND,
-        "validator/src/cli/final_packet/proof/spans.rs",
-        "cdc83ba6e1d221f1a4f3d47d50d91de920e40cd848cbf3333ea2e51cf825c6e1",
-        &HCT_CLAIMS,
-    ),
-    spec(
-        "finalizer-cli-proof-stdout-to-hct-claims",
-        "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/stdout.rs",
-        KIND,
-        "validator/src/cli/final_packet/proof/stdout.rs",
-        "bca6f32953f4cda700b61bdb6ff05509ff4cfe5751daada8275027c67c1d73f2",
-        &HCT_CLAIMS,
-    ),
-    spec(
-        "finalizer-cli-proof-tests-to-hct-claims",
-        "LEGACY-FINALIZER:validator/src/cli/final_packet/proof/tests.rs",
-        KIND,
-        "validator/src/cli/final_packet/proof/tests.rs",
-        "a4290e40a1487955f7f945afb75d4760ab3816efac020202a017f78a84ef44d9",
         &HCT_CLAIMS,
     ),
 ];

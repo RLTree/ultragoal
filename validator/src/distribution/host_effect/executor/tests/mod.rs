@@ -7,17 +7,17 @@ use crate::distribution::host_effect::lifecycle::{
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy, DescriptorExecutionAdapter,
     DescriptorExecutionCapability, DescriptorExecutionPrimitive, HostEffectAcceptanceRequest,
     HostEffectPreparationRequest, HostTargetObserver, PublicationAcknowledgementIdentity,
-    PublicationClassificationId, RootPlanCustody, SupportedHostLifecycleCoordinator,
+    PublicationClassificationId, SupportedHostLifecycleCoordinator,
     SupportedHostLifecycleError, SupportedHostLifecycleErrorId, TrustedTimeSample, lifecycle_error,
 };
 use crate::distribution::host_effect::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectDecision,
     HostEffectLedgerError, HostEffectLedgerErrorId, HostEffectLedgerHead, HostEffectLedgerRecord,
     HostEffectPermitBinding, HostEffectReservation, HostEffectState, HostEffectTransition,
-    PinnedHostExecutable,
+    SelectedCodexExecutable, SelectedCodexExecutableTestFixture, selected_test_fixture,
 };
 use crate::distribution::{
-    HostCapabilityDeclaration, HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
+    HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
 };
 use std::collections::VecDeque;
 use std::fs::{self, OpenOptions};

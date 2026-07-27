@@ -40,7 +40,7 @@ fn generated_and_schema_drift_are_discovered() {
     repo.write("source.txt", source);
     repo.write(
         "migration/generated-surface-authority.json",
-        br#"{"schema_version":"GeneratedSurfaceAuthority-v2","contract_id":"harness-ultragoal-successor-contract-v2","surfaces":[{"disposition":"canonical_projection","output":"docs/generated/current-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},{"disposition":"canonical_projection","output":"docs/generated/stale-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}]}"#,
+        br#"{"schema_version":"GeneratedSurfaceAuthority-v3","contract_id":"harness-ultragoal-successor-contract-v2","registry_projection":{"generator":"migration/generated-surface-authority.json","canonical_sources":["migration/generated-surface-authority.json"],"regeneration_command":"migration/generated-surface-authority.json write"},"surfaces":[{"disposition":"canonical_projection","output":"docs/generated/current-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},{"disposition":"canonical_projection","output":"docs/generated/stale-input.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]}]}"#,
     );
     repo.write("docs/generated/stale.json", br#"{"value":1}"#);
     repo.write(

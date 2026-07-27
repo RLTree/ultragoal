@@ -1,5 +1,4 @@
 pub(crate) mod agent;
-pub(crate) mod artifacts;
 pub(crate) mod cli;
 pub(crate) mod clock;
 pub(crate) mod contract;
@@ -18,10 +17,9 @@ pub(crate) mod package;
 pub(crate) mod plugin;
 pub(crate) mod product;
 pub(crate) mod promptfoo;
-pub(crate) mod receipt;
 pub(crate) mod red;
 pub(crate) mod research;
-pub(crate) mod review_history;
+pub(crate) mod review_record;
 pub(crate) mod rust;
 pub(crate) mod session;
 pub(crate) mod source_governance;

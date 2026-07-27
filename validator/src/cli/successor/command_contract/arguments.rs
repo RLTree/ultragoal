@@ -1,3 +1,8 @@
+use super::super::error::ParseErrorId;
+use std::path::{Path, PathBuf};
+
+const MAX_HOST_PATH_BYTES: usize = 4096;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum OptionName {
     Target,
@@ -12,9 +17,16 @@ pub enum OptionName {
     ApprovePublish,
     Spec,
     Input,
+    Cli,
     Candidate,
     Registry,
     ApproveRetirement,
+    PackageRoot,
+    RetainIsolatedRoot,
+    RoutineConfig,
+    LocalState,
+    InterruptAfter,
+    Continuation,
 }
 
 impl OptionName {
@@ -32,9 +44,16 @@ impl OptionName {
             Self::ApprovePublish => "--approve-publish",
             Self::Spec => "--spec",
             Self::Input => "--input",
+            Self::Cli => "--cli",
             Self::Candidate => "--candidate",
             Self::Registry => "--registry",
             Self::ApproveRetirement => "--approve-retirement",
+            Self::PackageRoot => "--package-root",
+            Self::RetainIsolatedRoot => "--retain-isolated-root",
+            Self::RoutineConfig => "--routine-config",
+            Self::LocalState => "--local-state",
+            Self::InterruptAfter => "--interrupt-after",
+            Self::Continuation => "--continuation",
         }
     }
 }
@@ -43,7 +62,9 @@ impl OptionName {
 pub enum ValueKind {
     Flag,
     Identifier,
+    RepositoryTarget,
     RelativePath,
+    HostPath,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -63,10 +84,54 @@ impl RelativePath {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepositoryTarget(pub(crate) String);
+
+impl RepositoryTarget {
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct HostPath(pub(crate) PathBuf);
+
+impl HostPath {
+    pub(crate) fn parse(value: &str) -> Result<Self, ParseErrorId> {
+        let path = Self(value.into());
+        if path.is_valid() {
+            Ok(path)
+        } else {
+            Err(ParseErrorId::InvalidPath)
+        }
+    }
+
+    pub fn as_path(&self) -> &Path {
+        &self.0
+    }
+
+    pub(crate) fn is_valid(&self) -> bool {
+        Self::is_valid_path(&self.0)
+    }
+
+    pub(crate) fn is_valid_path(path: &Path) -> bool {
+        path.to_str().is_some_and(|value| {
+            !value.is_empty()
+                && value.len() <= MAX_HOST_PATH_BYTES
+                && !value
+                    .bytes()
+                    .any(|byte| byte == 0 || byte.is_ascii_control())
+                && Path::new(value).is_absolute()
+        })
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ParsedValue {
     Flag,
     Identifier(String),
+    RepositoryTarget(RepositoryTarget),
     RelativePath(RelativePath),
+    HostPath(HostPath),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

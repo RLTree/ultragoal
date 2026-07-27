@@ -37,7 +37,7 @@
     "id_rule": "N00-N17",
     "dependency_rule": "Keep N00 and all historical N01-N11 evidence PRE-ADOPTION-SOURCE/noneligible until N00 atomically adopts the graph. After adoption, N02 full inventory closure and re-observation must precede N03; the scheduler frontier is N04-N07 after N03, N09 after N02+N05, N08 after N04-N07, N10 after N03+N06+N09, N11 after N06+N07+N08, and N12 after N10+N11.",
     "scope_rule": "Use only graph write scopes. Root-only nodes have empty scope_ids and fail closed. N13 is read-only multi-scope.",
-    "lease_rule": "P0 may issue only its exact root-debt repair lease. Every non-P0 lease requires the adopted current epoch, current compile/namespace/standards gates, a ready-or-later pre-handoff lane, integrated exact dependency identities, and owned files/generated outputs/fixtures confined to reconciled semantic roots. Four-persona exposure gates only product, signoff, release, and completion. Any consumed-set intersection or upstream identity change invalidates; refresh only clean lanes at a root integration boundary and never externally rebase a dirty lane.",
+    "lease_rule": "A completed P0 repair is terminal, historical, and non-reissuable. Every non-P0 lease requires the adopted current epoch, a READY frontier with compile/namespace/standards observations bound to the exact source base, then a unique branch and registered clean managed worktree created from that same identity before the ACTIVE frontier is recorded. The lane must have integrated exact dependency identities and owned files/generated outputs/fixtures confined to reconciled semantic roots. Four-persona exposure gates only product, signoff, release, and completion. Any consumed-set intersection or upstream identity change invalidates; refresh only clean lanes at a root integration boundary and never externally rebase a dirty lane.",
     "ref_rule": "Resolve all eight source refs as one current byte set; stale, missing, historical, or partial refs block selection.",
     "retention_rule": "Never broad-delete .codex-worktree while unique fixture repositories or retained home/tmp evidence exist."
   },
@@ -52,8 +52,8 @@
     "parent_handoff": null,
     "plan_ref": null,
     "plan_digest": null,
-    "base_commit": "97e24c9706e7b489bdbdc6184ff9520a7116c6fd",
-    "base_tree": "c1d0cc65ffce60e4d917e14cb8b9ac4664d71a3e",
+  "base_commit": "766e3b8ac669dac0f49ce10ce352c912381b180f",
+  "base_tree": "f6d3c09a7594f4f3d963a050cb89571ab42aa696",
     "branch": null,
     "worktree": null,
     "shared_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
@@ -69,7 +69,9 @@
       "observed_root_tree": null,
       "next_action": "issue_or_retain_withheld"
     },
-    "consumed_set": {"dependency_identities": [], "files": [], "symbols": [], "generated_outputs": [], "fixtures": [], "effects": []},
+    "changed_set": {"kind": "changed", "algorithm": "git-diff-name-status", "version": "v1", "from": {"commit": "766e3b8ac669dac0f49ce10ce352c912381b180f", "tree": "f6d3c09a7594f4f3d963a050cb89571ab42aa696"}, "to": {"commit": "766e3b8ac669dac0f49ce10ce352c912381b180f", "tree": "f6d3c09a7594f4f3d963a050cb89571ab42aa696"}, "classification": "unknown", "categories": {"files": [], "symbols": [], "generated_outputs": [], "fixtures": [], "effects": []}, "category_digests": {"files": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "symbols": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "generated_outputs": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "fixtures": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "effects": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}, "aggregate_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "intersection": {"status": "unknown", "categories": []}},
+    "consumed_set": {"kind": "consumed", "algorithm": "registry-scope-consumption", "version": "v1", "from": {"commit": "766e3b8ac669dac0f49ce10ce352c912381b180f", "tree": "f6d3c09a7594f4f3d963a050cb89571ab42aa696"}, "to": {"commit": "766e3b8ac669dac0f49ce10ce352c912381b180f", "tree": "f6d3c09a7594f4f3d963a050cb89571ab42aa696"}, "classification": "unknown", "dependency_identities": [], "categories": {"files": [], "symbols": [], "generated_outputs": [], "fixtures": [], "effects": []}, "category_digests": {"files": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "symbols": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "generated_outputs": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "fixtures": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "effects": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}, "aggregate_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "intersection": {"status": "unknown", "categories": []}},
+    "receipt_child": {"status": "unissued", "path": null, "commit": null, "tree": null, "parent_commit": null, "parent_tree": null, "source_commit": null, "source_tree": null},
     "invalidated_by": [],
     "invalidation_rule": "invalidate on any consumed-set intersection or upstream identity change",
     "rebase_rule": "refresh only from a clean lane at a root integration boundary; dirty lanes are never externally rebased",
@@ -120,7 +122,7 @@
     ],
     "all_lanes": "blocked",
     "leases": "unissued",
-    "p0": "root_only; issuance atomically snapshots exact current diagnostics into allowed paths and does not promote a claim",
+    "p0": "root_only; issuance atomically snapshots exact current diagnostics into allowed paths and does not promote a claim; completed P0 is closed and cannot be reissued",
     "candidate": "persist only an already-existing observation boundary; derive the containing clean HEAD/tree during validation and never serialize it into its own candidate bytes"
   },
   "root_only_overrides": {

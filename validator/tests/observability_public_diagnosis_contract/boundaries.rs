@@ -52,15 +52,16 @@ fn ancestor_symlink_is_not_followed_or_disclosed() {
         fs::read(outside.join("private.txt")).unwrap(),
         outside_before
     );
+    repository.teardown();
 }
 
 #[test]
 fn fifo_and_multiply_linked_leaf_fail_closed_without_interpretation() {
     let fifo = Repository::new("fifo-leaf", true, false);
-    let _ = binding(&fifo);
+    let fifo_binding = binding(&fifo);
     let fifo_finding = selected_finding(&fifo);
-    fs::create_dir_all(fifo.store_path().parent().unwrap()).unwrap();
-    let name = CString::new(fifo.store_path().as_os_str().as_bytes()).unwrap();
+    fs::create_dir_all(fifo.store_path(&fifo_binding).parent().unwrap()).unwrap();
+    let name = CString::new(fifo.store_path(&fifo_binding).as_os_str().as_bytes()).unwrap();
     assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
     assert_path_boundary(&fifo, &fifo_finding);
 
@@ -74,9 +75,14 @@ fn fifo_and_multiply_linked_leaf_fail_closed_without_interpretation() {
             .unwrap()
     );
     let outside = linked.outside("outside-hardlink.jsonl");
-    hard_link(linked.store_path(), &outside).unwrap();
-    assert_eq!(fs::metadata(linked.store_path()).unwrap().nlink(), 2);
+    hard_link(linked.store_path(&binding), &outside).unwrap();
+    assert_eq!(
+        fs::metadata(linked.store_path(&binding)).unwrap().nlink(),
+        2
+    );
     let outside_before = fs::read(&outside).unwrap();
     assert_path_boundary(&linked, &linked_finding);
     assert_eq!(fs::read(&outside).unwrap(), outside_before);
+    fifo.teardown();
+    linked.teardown();
 }

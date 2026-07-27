@@ -5,6 +5,10 @@ fn validate_adoption(
     adoption: &TransitionAdoption,
 ) -> Result<PlanDisposition, ProductMigrationError> {
     if adoption.schema_version != ADOPTION_SCHEMA
+        || source.file_kind != SurfaceFileKind::Regular
+        || source.link_count != 1
+        || canonical.file_kind != SurfaceFileKind::Regular
+        || canonical.link_count != 1
         || canonical.status != SurfaceStatus::Active
         || adoption.source_digest_sha256 != source.digest_sha256
         || adoption.canonical_target_digest_sha256 != canonical.digest_sha256
@@ -116,10 +120,11 @@ fn reject_active_duplicate_authority(
     let mut writers = BTreeMap::<&str, &str>::new();
     let mut routes = BTreeMap::<&str, &str>::new();
     let mut generated = BTreeMap::<&str, &str>::new();
-    for surface in surfaces
-        .iter()
-        .filter(|surface| surface.status == SurfaceStatus::Active)
-    {
+    for surface in surfaces.iter().filter(|surface| {
+        surface.status == SurfaceStatus::Active
+            && surface.file_kind == SurfaceFileKind::Regular
+            && surface.link_count == 1
+    }) {
         for (values, seen) in [
             (&surface.active_readers, &mut readers),
             (&surface.active_writers, &mut writers),

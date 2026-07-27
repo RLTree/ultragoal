@@ -54,10 +54,6 @@ impl ReservationRequest {
         &self.semantic_keys
     }
 
-    pub(crate) fn reservation_sha256(&self) -> &str {
-        &self.reservation_sha256
-    }
-
     pub(crate) fn validate_shape(&self) -> bool {
         self.schema_version == "MigrationReservationRequest-v1"
             && valid_sha256(&self.operation_id)

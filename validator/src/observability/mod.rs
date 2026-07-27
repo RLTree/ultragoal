@@ -18,8 +18,8 @@ mod privacy;
 mod query;
 mod store;
 
-pub use event::SemanticEvent;
+pub use event::{SemanticEvent, SemanticEventInput};
 pub use explain::CausalExplanation;
-pub use export::ExportAdapter;
+pub use export::{ExplicitExportRequest, ExportAdapter};
 pub use query::EventQuery;
 pub use store::EventStore;

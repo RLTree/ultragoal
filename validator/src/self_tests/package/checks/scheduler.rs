@@ -66,7 +66,6 @@ fn package_checks_preserve_current_check_context_inside_parallel_text_task() {
             "schema-valid".to_string(),
             "source-obligation-coverage".to_string(),
         ],
-        &[],
         crate::scheduler::SchedulerConfig::from_jobs(Some(2)).expect("jobs"),
     );
     let source_obligation = results

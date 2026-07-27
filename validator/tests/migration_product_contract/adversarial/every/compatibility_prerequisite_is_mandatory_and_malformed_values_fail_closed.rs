@@ -156,7 +156,7 @@ fn compatibility_plan_requires_trusted_boundary_authority_and_rejects_equal_or_c
     boundary.remove("deadline_unix_ms");
     boundary.insert("product_version".to_owned(), json!("0.0.13"));
     let input = compatibility_input_with_route(route, '0');
-    for version in ["0.0.13", "0.0.14"] {
+    for version in ["0.0.13", "0.0.14", "0.0.15"] {
         let mut authority = FakeAuthority::boundary();
         authority.current_product_version = version.to_owned();
         assert_eq!(

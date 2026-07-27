@@ -24,9 +24,9 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/RLTree/plugin-policies",
-    "privacyPolicyURL": "https://github.com/RLTree/plugin-policies/blob/main/privacy-policy.md",
-    "termsOfServiceURL": "https://github.com/RLTree/plugin-policies/blob/main/terms-of-service.md",
+    "websiteURL": "https://github.com/RLTree/plugin-policies/blob/master/products/harness-ultragoal/0.0.34/product.md",
+    "privacyPolicyURL": "https://github.com/RLTree/plugin-policies/blob/master/products/harness-ultragoal/0.0.34/privacy.md",
+    "termsOfServiceURL": "https://github.com/RLTree/plugin-policies/blob/master/products/harness-ultragoal/0.0.34/terms.md",
     "defaultPrompt": [
       "Use $harness-ultragoal:harness-ultragoal to classify this request and route it to the smallest authoritative workflow."
     ]

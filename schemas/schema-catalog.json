@@ -315,10 +315,6 @@
       "path": "schemas/standards-gardening-receipt.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/target-repo-receipt.schema.json",
-      "path": "schemas/target-repo-receipt.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/transcript-quality-receipt.schema.json",
       "path": "schemas/transcript-quality-receipt.schema.json"
     },

@@ -2,19 +2,19 @@ use super::markers::RawAuthorityMarker;
 
 pub(super) fn boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> bool {
     match marker {
-        RawAuthorityMarker::RawJson => {
+        RawAuthorityMarker::Json => {
             typed_record_projection_text(text)
                 || classified_product_projection_boundary(rel, text)
                 || product_map_projection_text(text)
         }
-        RawAuthorityMarker::RawMap => {
+        RawAuthorityMarker::Map => {
             classified_product_projection_boundary(rel, text) || product_map_projection_text(text)
         }
-        RawAuthorityMarker::RawPath => {
+        RawAuthorityMarker::Path => {
             classified_product_projection_boundary(rel, text)
                 || execution_projection_text(rel, text)
         }
-        RawAuthorityMarker::RawObservation | RawAuthorityMarker::RawString => false,
+        RawAuthorityMarker::Observation | RawAuthorityMarker::String => false,
     }
 }
 
@@ -62,7 +62,6 @@ fn projection_value_text(text: &str) -> bool {
         || text.contains("telemetry::query_result")
         || text.contains("PathBuf::from(format!(")
         || text.contains("CommandTelemetry")
-        || text.contains("metric.to_value(")
         || text.contains("FnOnce() -> Value")
         || text.contains("diagnostic::failure_value")
         || text.contains("receipt_from_control_graph")

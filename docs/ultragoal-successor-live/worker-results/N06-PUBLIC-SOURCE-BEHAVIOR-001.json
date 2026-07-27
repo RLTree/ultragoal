@@ -1,0 +1,36 @@
+{
+  "worker": "/root/n06_behavior_handoff",
+  "lease_id": "N06-PUBLIC-SOURCE-BEHAVIOR-001",
+  "context_id": "n06-public-source-behavior-only",
+  "candidate_identity": {
+    "base_commit": "4200a54199273dd81c2d6b5a90017b2b80530116",
+    "accepted_head_commit": "3c9a8a4ec3851f5a4035a4a56c917da82cd1650d",
+    "accepted_head_tree": "97cd6e8c537fa8cc720c35d394c70165eb059cb6"
+  },
+  "base_state": {"head": "4200a54199273dd81c2d6b5a90017b2b80530116", "tree": "4b94f0c5c742ccbc0035b2854c9de63f489ff293"},
+  "final_state": {"head_before_result_commit": "3c9a8a4ec3851f5a4035a4a56c917da82cd1650d", "tree_before_result_commit": "97cd6e8c537fa8cc720c35d394c70165eb059cb6", "worktree_clean_before_result": true},
+  "touched_paths": ["Cargo.toml", "validator/tests/routine_public_production_contract/production_scenario_cases/contender_process/mod.rs", "docs/ultragoal-successor-live/worker-results/N06-PUBLIC-SOURCE-BEHAVIOR-001.json"],
+  "touched_semantics": ["development SHA-256 performance", "public routine contender fixture dead-code removal", "N06 public-source claim ceiling"],
+  "generated_outputs": [],
+  "fixtures": ["routine_public_production_contract"],
+  "effects": [{"kind": "local test fixture", "external": false, "result": "explicit teardown; no retained fixture state"}],
+  "requirements": ["N06 public-source behavior only", "warning-free retained public suite", "bounded independent review"],
+  "dependency_nodes": ["N06"],
+  "changes": [
+    {"commit": "0e73a1ed2286e82de1382d8919d133fba7b061c8", "summary": "Removed unused contender termination wrapper."},
+    {"commit": "3c9a8a4ec3851f5a4035a4a56c917da82cd1650d", "summary": "Root-owned sha2 development optimization."}
+  ],
+  "commands_and_tests": [
+    {"command": "CARGO_TARGET_DIR=/tmp/hul-n06-behavior-target CARGO_BUILD_JOBS=12 perl -e 'alarm 120; exec @ARGV' cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_public_production_contract -j12 -- --test-threads=2", "result": "43 passed, 0 failed in 85.52 seconds."},
+    {"command": "cargo test --manifest-path validator/Cargo.toml --locked --offline --test routine_work_contract --no-run -j12", "result": "blocked: 95 warnings-as-errors from isolated broad production-module import; not passing evidence."}
+  ],
+  "artifacts": [],
+  "findings": [
+    {"severity": "accepted-narrow-ceiling", "finding": "Independent Terra/high review accepted the bounded public-source behavior invariant with no material finding."},
+    {"severity": "withheld", "finding": "Private mutation, race, rollback, recovery, and catalog controls remain unaccepted because their legacy isolated roots fail warnings-deny compilation."}
+  ],
+  "unresolved_dependencies": ["Private N06 control suites require a root-owned topology decision before they can support any broader N06 claim."],
+  "requested_root_changes": [{"request": "Keep N06 at public-source-behavior-only ceiling; do not promote downstream authority or private-control claims from this WorkerResult."}],
+  "limitations": ["No install, runtime, coverage, readiness, release, completion, full-N06, or downstream-eligibility claim is made.", "The three legacy private roots are preserved unchanged and explicitly withheld, not retired or treated as passing."],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

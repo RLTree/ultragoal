@@ -10,7 +10,10 @@ pub use crate::audit::law::surface::receipt::workflow::{
     restartable_execplan_value_failures,
 };
 
-const VALID_RECEIPTS: &[(&str, fn(&Path, &Value) -> Vec<String>)] = &[
+type ReceiptCheck = fn(&Path, &Value) -> Vec<String>;
+type ValidReceipt = (&'static str, ReceiptCheck);
+
+const VALID_RECEIPTS: &[ValidReceipt] = &[
     (
         "fixtures/law-surfaces/valid/runtime-tool-identity-receipt.json",
         runtime_tool_identity_value_failures,

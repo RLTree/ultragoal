@@ -1,0 +1,173 @@
+{
+  "schema_version": "RootOrchestrationDecision-v1",
+  "decision_id": "AGENTIC-ENGINEERING-V3-P0-CURRENT-CANDIDATE-003",
+  "accepted_increment": {
+    "diagnosis_head": "4f9de727ffbaab456159e1b489061cc9abdb0fad",
+    "diagnosis_tree": "d6287f364f04e6e3dad0d629c48eb71efbdc766d",
+    "advisory_head": "5106c94b507dcd36f3abad4b82b4b2f040ed49dd",
+    "advisory_tree": "1a9b0225fce8622d37747240dce8672aea3ff282"
+  },
+  "decision": "accept_current_candidate_p0_authority_projections",
+  "sole_executable_and_claim_authority": "harness-ultragoal",
+  "sole_implicit_front_door": "harness-ultragoal",
+  "agentic_engineering_role": "explicit_advisory_candidate_artifacts_only",
+  "source_materials": {
+    "upgrade_artifact_manifest_sha256": "sha256:5a35b99e6ba3d7ea41e77721163948466d432b47eddae736bb1752a40dc3ff59",
+    "upgrade_file_manifest_sha256": "sha256:74b6847acaa740797aa87d19967bc2e1e71ed534b3654592e9960e48171d0b06",
+    "agentic_ultragoal_profile_sha256": "sha256:a2d2a098a035654f7c40837b3fd58032c4e7d250cba302c23055adb446d13ea3",
+    "manifest_verification": "all listed upgrade-material files passed sha256sum verification",
+    "authority": "advisory_no_claim"
+  },
+  "contract_lineage": {
+    "goal_contract": "GOAL_CONTRACT.md",
+    "latest_amendment": "AMEND-004",
+    "new_amendment_required": false,
+    "reason": "This increment closes current-candidate implementation gaps under the already-adopted evidence-led sequencing and CL-EVAL-IMPROVEMENT boundaries without changing a required claim or ceiling."
+  },
+  "artifact_decisions": [
+    {
+      "artifact": "Agentic Architecture Brief",
+      "decision": "map_as_projection",
+      "owner": "ARCHITECTURE.md and root decisions",
+      "boundary": "proposal_only_no_claim"
+    },
+    {
+      "artifact": "Codex execution contract",
+      "decision": "reuse",
+      "owner": "Goal Contract, active ExecPlan, WorkPackage, LeaseSpec, LeaseRegistry",
+      "boundary": "no_peer_plan_task_or_lease_authority"
+    },
+    {
+      "artifact": "NoChangeDecision-v1",
+      "decision": "reuse",
+      "owner": "ProductState CurrentBehaviorDisposition",
+      "boundary": "candidate_bound_no_effect_no_claim"
+    },
+    {
+      "artifact": "VerificationModeContract-v1",
+      "decision": "extend",
+      "owner": "root-issued dependency action catalog and engineering_advisory",
+      "boundary": "root_sealed_risk_oracle_truth_surface_selection_no_universal_tdd"
+    },
+    {
+      "artifact": "TaskEvidencePacket-v1",
+      "decision": "map_as_projection",
+      "owner": "WorkPackage, ScopePolicy, active LeaseRegistry entry",
+      "boundary": "exact_current_binding_active_lease_proposal_only_WorkerResult_v1_unchanged"
+    },
+    {
+      "artifact": "ReviewVerdict-v1",
+      "decision": "map_as_projection",
+      "owner": "exact ReviewRecord and root acceptance authority",
+      "boundary": "structured_findings_exact_review_binding_reviewer_cannot_promote"
+    },
+    {
+      "artifact": "RepairLoopContract-v1",
+      "decision": "extend",
+      "owner": "current ProductState repairs and existing improvement-loop authority",
+      "boundary": "current_binding_authoritative_repair_no_parallel_counter_no_claim"
+    },
+    {
+      "artifact": "LearningAdoptionRecord-v1",
+      "decision": "reuse_existing_p1_extension",
+      "owner": "docs/improvement-loop-registry.json",
+      "boundary": "one_learning_per_record_no_peer_knowledge_store"
+    },
+    {
+      "artifact": "Knowledge Projection Card",
+      "decision": "reuse_existing_generated_projection",
+      "owner": "validator/src/audit/improvement_loop",
+      "boundary": "digest_linked_read_only_projection"
+    },
+    {
+      "artifact": "SkillEvalCase-v1",
+      "decision": "reuse_existing_product_eval_mapping",
+      "owner": "schemas/product-eval-protocol.schema.json",
+      "boundary": "behavior_evidence_no_claim_promotion"
+    },
+    {
+      "artifact": "Product Fitness Field Pulse",
+      "decision": "park_until_representative_product_fitness_observation",
+      "owner": "Product Fitness v2",
+      "boundary": "read_only_projection_no_new_receipt"
+    },
+    {
+      "artifact": "Product Journey Review",
+      "decision": "reuse",
+      "owner": "product-journey-review and Product Fitness authorities",
+      "boundary": "one_agent_journey_is_not_human_or_broad_product_fit"
+    },
+    {
+      "artifact": "Lifecycle Assurance Plan",
+      "decision": "reject",
+      "owner": "Goal Contract, amendments, ExecPlan, migration and claim registries",
+      "boundary": "no_parallel_lifecycle"
+    },
+    {
+      "artifact": "Agentic Rust modules",
+      "decision": "reject_direct_adoption",
+      "owner": "current UltraGoal Rust domains",
+      "boundary": "no_peer_runtime_effect_supervisor_telemetry_or_learning_authority"
+    },
+    {
+      "artifact": "Agentic templates",
+      "decision": "reject_as_authoritative_artifacts",
+      "owner": "existing UltraGoal contracts plans schemas and projections",
+      "boundary": "transient_checklist_use_only"
+    },
+    {
+      "artifact": "Compound Engineering and Superpowers",
+      "decision": "reject_runtime_dependency",
+      "owner": "none",
+      "boundary": "mechanism_and_failure_evidence_only"
+    }
+  ],
+  "review": {
+    "model": "gpt-5.6-terra",
+    "reasoning": "medium",
+    "initial_disposition": "REWORK",
+    "material_findings": [
+      "TaskEvidencePacket accepted policy-valid but unissued leases",
+      "ReviewVerdict was not revalidated against the exact ReviewRecord",
+      "repair circuit accepted caller-supplied repairs without current ProductState authority"
+    ],
+    "coherent_correction": "5106c94b507dcd36f3abad4b82b4b2f040ed49dd",
+    "confirmation_disposition": "ACCEPT"
+  },
+  "verification": {
+    "engineering_advisory": "7 passed, 0 failed",
+    "production_compile": "cargo check --locked -p ultragoal --lib passed without warnings",
+    "changed_authored_rust_max_lines": 236,
+    "diff_check": "pass"
+  },
+  "compatibility_and_migration": {
+    "public_runtime_schema_change": false,
+    "worker_result_change": false,
+    "historical_projection_policy": "Older or deserialized advisory packets remain proposal-only and cannot satisfy current P0 authority joins without exact current owners.",
+    "migration": "No data migration or second reader/writer is introduced. Callers must provide the existing authoritative ScopePolicy, active LeaseRegistry, ReviewRecord, ProductState, and Binding.",
+    "next_plugin_version": "0.0.20"
+  },
+  "claim_ceiling": {
+    "supported": [
+      "source_local_current_candidate_advisory_projection",
+      "source_local_active_lease_task_evidence_binding",
+      "source_local_exact_review_verdict_binding",
+      "source_local_product_state_repair_circuit_binding",
+      "source_local_routine_scoped_public_diagnosis"
+    ],
+    "withheld": [
+      "package_0_0_20",
+      "installed_0_0_20",
+      "fresh_app_discovery_0_0_20",
+      "runtime_0_0_20",
+      "empirical_product_improvement",
+      "human_use",
+      "daily_driver",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "rollback": "Revert the accepted advisory projection increment and this decision while retaining AMEND-004, existing UltraGoal authorities, and the independently accepted diagnosis repair.",
+  "no_claim_statement": "Agentic artifacts remain proposal-only. This decision cannot issue authority, execute effects, accept work, promote claims, or substitute for package, install, discovery, runtime, journey, Product Fitness, readiness, release, or completion evidence."
+}

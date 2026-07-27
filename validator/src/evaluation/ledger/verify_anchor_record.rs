@@ -69,6 +69,10 @@ fn scan_anchor_journal(
             || record.payload.core.lock_identity != lock_identity
             || record.payload.core.anchor_authority != anchor_authority
             || record.payload.core.binding != *binding
+            || !reservation_identity_valid(
+                &record.payload.core.state,
+                record.payload.core.reservation_id_sha256.as_deref(),
+            )
             || !state_valid(&record.payload.core.state)
         {
             return Err(EvaluationLedgerError::new(
@@ -107,6 +111,13 @@ fn state_valid(state: &EvaluationLedgerState) -> bool {
             super::valid_identifier(causal_code)
         }
         EvaluationLedgerState::Initialized | EvaluationLedgerState::Reserved => true,
+    }
+}
+
+fn reservation_identity_valid(state: &EvaluationLedgerState, value: Option<&str>) -> bool {
+    match state {
+        EvaluationLedgerState::Initialized => value.is_none(),
+        _ => value.is_some_and(super::valid_sha256),
     }
 }
 

@@ -1,5 +1,5 @@
 use super::super::command_contract::{CommandDescriptor, InspectTarget, SuccessorCommand};
-use super::options::descriptor;
+use super::options::{CAPABILITIES_OPTION, descriptor};
 use crate::context::EffectClass;
 
 pub(super) const COMMANDS: &[CommandDescriptor] = &[
@@ -18,6 +18,20 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         &[],
     ),
     descriptor(
+        SuccessorCommand::Inspect(InspectTarget::Orchestration),
+        Some("orchestration"),
+        EffectClass::Read,
+        "Inspect the current canonical orchestration frontier without authority exposure.",
+        &[],
+    ),
+    descriptor(
+        SuccessorCommand::Inspect(InspectTarget::Inception),
+        Some("inception"),
+        EffectClass::Read,
+        "Inspect the current Product Success Brief and first truth loop without writes.",
+        &[],
+    ),
+    descriptor(
         SuccessorCommand::Inspect(InspectTarget::Inventory),
         Some("inventory"),
         EffectClass::Read,
@@ -28,8 +42,8 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Inspect(InspectTarget::Capabilities),
         Some("capabilities"),
         EffectClass::Read,
-        "Inspect exposed tools and supported capability surfaces.",
-        &[],
+        "Inspect exposed tools and candidate-bound agent authority availability.",
+        CAPABILITIES_OPTION,
     ),
     descriptor(
         SuccessorCommand::Inspect(InspectTarget::Findings),

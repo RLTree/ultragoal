@@ -44,6 +44,27 @@ quality-in-use metrics, accessibility gate, cognitive-load gate, recovery gate,
 continuance signal when repeated use is claimed, proof surface, actor-disjoint
 review, and claim ceiling.
 
+The v2 receipt keeps this one canonical receipt family and adds typed operator,
+evidence-class, independent source-to-journey identities, public-entry/bypass,
+real-work, and minimal manual journey observations. Every identity is observed
+or explicitly withheld. Legacy dogfood receipts remain non-product
+orchestration records and are forbidden substitutions for this receipt.
+
+The v2 receipt declares one `claimed_surface` and a ceiling for every truth
+surface. The claimed ceiling must equal that surface's ceiling. A live claim
+requires current same-surface evidence for the claimed surface and the
+dependency predecessors needed to reach it. Later or unrelated surfaces remain
+withheld without lowering an earlier valid claim: installed evidence can prove
+an observed marketplace surface, while journey and human-use claims still
+require a current journey observation.
+
+The typed disposition keeps v1 compatibility and validates v2 operator kind,
+evidence class, exact observed-or-withheld surface identities, public entry and
+bypass rejection, real repository/task outcome, manual journey observations,
+candidate freshness, per-surface claim-ceiling support, and an explicit legacy
+dogfood substitution rejection. `dogfood-receipt.v1` is rejected by both typed
+and audit Product Fitness paths.
+
 ## Claim Ceiling
 
 Package/static/fixture Product Fitness proof supports only the plugin

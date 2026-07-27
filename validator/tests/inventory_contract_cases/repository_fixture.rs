@@ -81,9 +81,21 @@ impl TestRepo {
             root.join("migration/generated-surface-authority.json"),
         )
         .unwrap();
+        crate::generated_authority_fixture::copy_declared_files(&root);
         fs::copy(
             live_root().join("migration/non-authoritative-contexts.json"),
             root.join("migration/non-authoritative-contexts.json"),
+        )
+        .unwrap();
+        fs::copy(
+            live_root().join("LANE_REGISTRY.json"),
+            root.join("LANE_REGISTRY.json"),
+        )
+        .unwrap();
+        fs::create_dir_all(root.join("templates")).unwrap();
+        fs::copy(
+            live_root().join("templates/LANE_REGISTRY.json"),
+            root.join("templates/LANE_REGISTRY.json"),
         )
         .unwrap();
         fs::create_dir_all(root.join(".codex-plugin")).unwrap();

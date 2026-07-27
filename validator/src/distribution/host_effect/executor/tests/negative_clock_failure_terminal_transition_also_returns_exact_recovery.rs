@@ -1,5 +1,5 @@
 #[test]
-fn negative_clock_failure_terminal_transition_also_returns_exact_recovery() {
+fn unrecorded_handoff_cannot_be_released_or_reused() {
     let fixture = Fixture::new();
     let (_scope, target, target_identity) = fixture.scope_and_target();
     let durable =
@@ -45,6 +45,8 @@ fn negative_clock_failure_terminal_transition_also_returns_exact_recovery() {
     );
     assert_eq!(recovery.outcome().unwrap().command_output_sha256.len(), 1);
     assert!(recovery.has_exact_current_ledger_observation());
+    assert_eq!(recovery.terminal_state(), None);
+    assert_eq!(recovery.disposition_state(), None);
     assert!(recovery.verify_binding());
     assert_eq!(
         durable.read(&permit_id).unwrap().unwrap().state(),
@@ -108,7 +110,7 @@ fn negative_preflight_ledger_substitution_after_handoff_is_identity_bearing() {
 }
 
 #[test]
-fn race_committed_terminal_error_is_reobserved_as_committed_but_unverifiable() {
+fn recorded_ambiguous_outcome_remains_fail_closed_without_authenticated_reobservation() {
     let fixture = Fixture::new();
     let (_scope, target, target_identity) = fixture.scope_and_target();
     let durable =
@@ -153,6 +155,8 @@ fn race_committed_terminal_error_is_reobserved_as_committed_but_unverifiable() {
         recovery.outcome().unwrap().state,
         HostEffectState::Ambiguous
     );
+    assert_eq!(recovery.terminal_state(), Some(HostEffectState::Ambiguous));
+    assert_eq!(recovery.disposition_state(), None);
     assert!(recovery.verify_binding());
     assert_eq!(
         durable.read(&permit_id).unwrap().unwrap().state(),

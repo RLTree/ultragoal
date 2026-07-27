@@ -25,3 +25,26 @@ where the harness resolves routine ambiguity without dumping work into a
 
 If the work touches model/tool behavior, add deterministic eval cases first or
 record why this run is policy-only.
+
+## Invisible Advisory, Inspectable Decisions
+
+An operator should receive the right design or decision help without knowing
+that Agentic Engineering exists. The default Harness response therefore names
+the intended outcome, current result, material tradeoff, and next action in
+plain language. It does not present a catalog of disciplines or ask the user to
+choose an internal lifecycle.
+
+Small, already-specified, and already-correct tasks should feel smaller, not
+more ceremonial. The product selects no change or one smallest sufficient
+advisory lens when that is enough. A supporting lens appears only when a real
+cross-layer dependency requires it.
+
+Operators who want more control can inspect the activated disciplines and
+rationale. Advanced users can inspect exact skill paths, evidence, alternatives,
+root adoption decisions, invalidation conditions, and claim ceilings or
+explicitly request a lens. Explicit preference never hides a material decision
+or effect and cannot bypass protected authority.
+
+Reactivation should be visible only when it changes the useful result: a new
+candidate, lifecycle boundary, evidence item, assumption, risk, or failure
+mechanism. Unchanged evidence must not create another advisory turn.

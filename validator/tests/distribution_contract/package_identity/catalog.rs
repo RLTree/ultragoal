@@ -74,14 +74,17 @@ fn source_fixture(label: &str) -> (Fixture, Vec<u8>) {
 struct ArchiveSink(Option<Vec<u8>>);
 
 impl PackageEffects for ArchiveSink {
-    fn read_package(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_package(
+        &mut self,
+        _: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
     fn compare_exchange_package(
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         if self.0.as_deref().map(digest).as_deref() != expected {
             return Ok(false);
         }
@@ -99,7 +102,11 @@ struct TreeSink {
 }
 
 impl MaterializeEffects for TreeSink {
-    fn read_tree(&mut self, _: usize, _: usize) -> Result<Option<Vec<TreeObject>>, ()> {
+    fn read_tree(
+        &mut self,
+        _: usize,
+        _: usize,
+    ) -> Result<Option<Vec<TreeObject>>, crate::distribution::EffectFailure> {
         let mut rows = self.objects.clone();
         if self.corrupt_after_write && self.transitions > 0 {
             if let Some(first) = rows.as_mut().and_then(|value| value.first_mut()) {
@@ -112,7 +119,7 @@ impl MaterializeEffects for TreeSink {
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[TreeObject]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         self.transitions += 1;
         if let Some(race) = self.race.take() {
             self.objects = Some(race);
@@ -122,7 +129,7 @@ impl MaterializeEffects for TreeSink {
             .as_deref()
             .map(tree_sha256)
             .transpose()
-            .map_err(|_| ())?;
+            .map_err(|_| crate::distribution::EffectFailure)?;
         if current.as_deref() != expected {
             return Ok(false);
         }

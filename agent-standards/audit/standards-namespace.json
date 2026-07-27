@@ -109,8 +109,8 @@
       "standard_id": "std-product-fitness-001",
       "audit_status": "pass",
       "evidence_path": "schemas/product-fitness-receipt.schema.json",
-      "evidence_digest": "sha256:e695adcc2388fc35f3a218d70da6e43232864f42115446fba6f925f8b24734e6",
-      "audited_at": "2026-06-29T00:00:00Z",
+      "evidence_digest": "sha256:33ab47f7dea77e4339f6c8d654c4ea9b49899e0619c2cfdbf1181f834a5be702",
+      "audited_at": "2026-07-20T00:00:00Z",
       "claim_ceiling_impact": "product-fitness, product-readiness, release, daily-driver, material-signoff"
     },
     {

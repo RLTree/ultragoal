@@ -16,6 +16,8 @@ pub use super::provenance::{
 mod claim_catalog;
 #[path = "fact_catalog.rs"]
 mod fact_catalog;
+#[path = "verification_modes.rs"]
+mod verification_modes;
 
 pub(crate) use claim_catalog::*;
 pub use fact_catalog::*;

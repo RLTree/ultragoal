@@ -1,12 +1,11 @@
 use super::*;
 
-pub(crate) const BASE: &str = ".git/codex-scratch/observability/local-diagnosis-069";
+pub(crate) const BASE: &str = "harness-ultragoal-observability-tests";
 pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-observability-private-canary-069";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/observability-canary-069";
 pub(crate) const PRIVATE_EMAIL: &str = "private-observability-069@example.invalid";
-pub(crate) const STORE_RELATIVE: &str =
-    "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(crate) const STORE_PARENT: &str = "validation_artifacts/observability/spool";
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Debug, Deserialize)]
@@ -66,22 +65,21 @@ pub(crate) struct Observation {
 }
 
 pub(crate) struct JourneyRepository {
-    pub(crate) container: PathBuf,
+    scratch: crate::observability_fixture_scratch::ScratchDirectory,
     pub(crate) root: PathBuf,
 }
 
 impl JourneyRepository {
     pub(crate) fn new(label: &str, legacy_conflict: bool, dirty: bool) -> Self {
-        let container = live_root().join(BASE).join(format!(
-            "{}-{}-{}",
-            safe_label(label),
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let root = container.join("repo");
+        let scratch = crate::observability_fixture_scratch::ScratchDirectory::new(
+            "local-diagnosis-069",
+            &safe_label(label),
+            NEXT.fetch_add(1, Ordering::Relaxed),
+        );
+        let root = scratch.container().join("repo");
         fs::create_dir_all(&root).expect("create journey repository");
         let root = fs::canonicalize(root).expect("canonical journey repository");
-        let repository = Self { container, root };
+        let repository = Self { scratch, root };
         repository.git(&["init", "--quiet"]);
         repository.git(&["config", "user.email", "observability-069@example.invalid"]);
         repository.git(&["config", "user.name", "Observability Journey"]);
@@ -108,6 +106,10 @@ impl JourneyRepository {
         }
         repository.git(&["add", "-A"]);
         repository.git(&["commit", "--quiet", "-m", "observability fixture"]);
+        crate::observability_authority_fixture::establish_fixture_authority(
+            &live_root(),
+            repository.root(),
+        );
         if dirty {
             fs::write(
                 repository.root.join("tracked.txt"),
@@ -124,12 +126,19 @@ impl JourneyRepository {
         &self.root
     }
 
-    pub(crate) fn store_path(&self) -> PathBuf {
-        self.root.join(STORE_RELATIVE)
+    pub(crate) fn store_path(&self, binding: &Binding) -> PathBuf {
+        self.root.join(STORE_PARENT).join(
+            EventStore::binding_leaf_name(
+                &binding.context_id,
+                &binding.candidate_id,
+                &binding.source_id,
+            )
+            .unwrap(),
+        )
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {
-        self.container.join(name)
+        self.scratch.container().join(name)
     }
 
     pub(crate) fn run(&self, args: &[&str]) -> Output {
@@ -179,12 +188,8 @@ impl JourneyRepository {
         assert!(output.status.success(), "git {args:?}: {output:?}");
         output
     }
-}
-
-impl Drop for JourneyRepository {
-    fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(live_root().join(BASE)));
-        let _ = fs::remove_dir_all(&self.container);
+    pub(crate) fn teardown(self) {
+        self.scratch.teardown();
     }
 }
 
@@ -205,38 +210,5 @@ pub(crate) fn catalog() -> Catalog {
 
 pub(crate) fn copy_authority_inputs(root: &Path) {
     let live = live_root();
-    let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    fs::create_dir_all(&target).expect("contract target");
-    let mut files = fs::read_dir(&source)
-        .expect("contract directory")
-        .map(|entry| entry.expect("contract entry").path())
-        .filter(|path| path.is_file())
-        .collect::<Vec<_>>();
-    files.sort();
-    for path in files {
-        fs::copy(&path, target.join(path.file_name().expect("contract name")))
-            .expect("copy contract file");
-    }
-    for name in ["FINAL-HANDOFF-MANIFEST.sha256", "README.md"] {
-        fs::copy(
-            source.parent().expect("contract parent").join(name),
-            target.parent().expect("target parent").join(name),
-        )
-        .expect("copy handoff input");
-    }
-    fs::create_dir_all(root.join("migration")).expect("migration directory");
-    for name in ["authority-routes.json", "generated-surface-authority.json"] {
-        fs::copy(
-            live.join("migration").join(name),
-            root.join("migration").join(name),
-        )
-        .expect("copy migration input");
-    }
-    fs::create_dir_all(root.join(".codex-plugin")).expect("plugin directory");
-    fs::write(
-        root.join(".codex-plugin/plugin.json"),
-        b"{\"name\":\"harness-ultragoal\",\"version\":\"0.0.0-test\"}\n",
-    )
-    .expect("plugin descriptor");
+    crate::observability_authority_fixture::copy_current_inventory_inputs(&live, root);
 }

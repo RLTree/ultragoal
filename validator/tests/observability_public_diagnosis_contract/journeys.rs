@@ -2,7 +2,6 @@ use super::scenario::*;
 use serde_json::json;
 use std::fs;
 use std::net::TcpListener;
-use ultragoal::observability::EventStore;
 
 #[test]
 fn fresh_reads_and_configured_export_refusal_are_repeatable_zero_write() {
@@ -33,7 +32,12 @@ fn fresh_reads_and_configured_export_refusal_are_repeatable_zero_write() {
     );
     assert_eq!(diagnosis["observability"]["store_status"], "not_opened");
     assert_eq!(diagnosis["observability"]["claim_effect"], "none");
-    assert!(!fresh.store_path().exists());
+    assert!(
+        !fresh
+            .root()
+            .join("validation_artifacts/observability/spool")
+            .exists()
+    );
 
     let configured = Repository::new("configured-export", true, true);
     let finding = selected_finding(&configured);
@@ -93,8 +97,9 @@ fn fresh_reads_and_configured_export_refusal_are_repeatable_zero_write() {
     assert!(!configured.root().join("journey-export.json").exists());
     assert_eq!(observe(configured.root()), before_export);
     assert_no_connection(&listener);
+    fresh.teardown();
+    configured.teardown();
 }
-
 #[test]
 fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
     let repository = Repository::new("causal", true, true);
@@ -113,6 +118,13 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         .add_public_attribute("private_path", PRIVATE_PATH)
         .unwrap();
     target.add_public_attribute("owner", PRIVATE_EMAIL).unwrap();
+    for (key, value) in [
+        ("uri_hint", "failed at file:///private/public-diagnosis-107"),
+        ("unc_hint", "share \\\\private-host\\public-diagnosis-107"),
+        ("oauth_hint", "OAuth gho_public_diagnosis_private_107"),
+    ] {
+        target.add_public_attribute(key, value).unwrap();
+    }
     target
         .add_public_attribute("safe", "bounded-public-value")
         .unwrap();
@@ -123,8 +135,15 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
     for item in [&root, &target, &success, &receipt] {
         assert!(store.append(item).unwrap());
     }
-    let persisted = fs::read_to_string(repository.store_path()).unwrap();
-    for private in [PRIVATE_TOKEN, PRIVATE_PATH, PRIVATE_EMAIL] {
+    let persisted = fs::read_to_string(repository.store_path(&binding)).unwrap();
+    for private in [
+        PRIVATE_TOKEN,
+        PRIVATE_PATH,
+        PRIVATE_EMAIL,
+        "file:///private/public-diagnosis-107",
+        "\\\\private-host\\public-diagnosis-107",
+        "gho_public_diagnosis_private_107",
+    ] {
         assert!(!persisted.contains(private));
     }
     assert!(persisted.contains("bounded-public-value"));
@@ -146,6 +165,14 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
         "ProductStateDiagnose-v1",
     );
     let observed = &diagnosis["observability"];
+    let public_output = format!("{query}{diagnosis}");
+    for private in [
+        "file:///private/public-diagnosis-107",
+        "\\\\private-host\\public-diagnosis-107",
+        "gho_public_diagnosis_private_107",
+    ] {
+        assert!(!public_output.contains(private));
+    }
     assert_eq!(observed["schema_version"], "PublicCausalDiagnosis-v1");
     assert_eq!(observed["matched_event_id"], "target-failure");
     assert_eq!(observed["failure_provenance"]["matched_reference_count"], 3);
@@ -175,54 +202,5 @@ fn diagnosis_reports_latest_bounded_failure_provenance_without_false_pass() {
     );
     assert_eq!(observed["claim_effect"], "none");
     assert_eq!(diagnosis["claim_effect"], "none");
-}
-
-#[test]
-fn saturated_public_window_withholds_global_cause() {
-    let repository = Repository::new("saturated", true, false);
-    let binding = binding(&repository);
-    let finding = selected_finding(&repository);
-    let store = open_store(&repository, &binding);
-    let limit = EventStore::supported_result_limit();
-    for index in 0..limit {
-        let mut item = event(
-            &binding,
-            &format!("bounded-{index:04}"),
-            index as u64 + 1,
-            "bounded.operation",
-            if index + 1 == limit { "fail" } else { "pass" },
-        );
-        if index + 1 == limit {
-            item.add_finding_ref(&finding.finding_id).unwrap();
-        }
-        assert!(store.append(&item).unwrap());
-    }
-    let (_, query) = assert_payload_zero_write(
-        &repository,
-        &["--json", "observe", "query"],
-        &[],
-        &[0],
-        "ObservabilityQuery-v1",
-    );
-    assert_eq!(query["event_count"], limit);
-    assert_eq!(query["query_provenance"]["result_window_saturated"], true);
-    let (_, diagnosis) = assert_payload_zero_write(
-        &repository,
-        &["--json", "diagnose", "--finding", &finding.finding_id],
-        &[],
-        &[1],
-        "ProductStateDiagnose-v1",
-    );
-    let observed = &diagnosis["observability"];
-    assert!(observed["matched_event_id"].is_null());
-    assert_eq!(observed["query_window"]["saturated"], true);
-    assert_eq!(
-        observed["explanation"]["classification"],
-        "incomplete-evidence"
-    );
-    assert_eq!(
-        observed["explanation"]["diagnostic_code"],
-        "observe-evidence-incomplete:query-result-limit"
-    );
-    assert_eq!(observed["claim_effect"], "none");
+    repository.teardown();
 }

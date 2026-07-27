@@ -5,22 +5,11 @@
     {
       "disposition": "retained_context",
       "output": "docs/generated/observability/command-inventory.json",
-      "sha256": "4ccb8fb8c3e9f175ed898b497fa4b36ef2642421f424a11e407029e6ad7fd12e",
+      "sha256": "287bfe334ee9c29679979fd7cd3e319da97691da2ae0f63771ac28b61fde66ae",
       "reason": "Retained predecessor observability catalog; the HCT-OBSERVE successor is unavailable and active package or query authority is forbidden.",
       "replacement_targets": [
         "HCT-INVENTORY",
         "HCT-OBSERVE"
-      ],
-      "preserve": true,
-      "physical_deletion_authorized": false
-    },
-    {
-      "disposition": "retained_context",
-      "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-      "sha256": "34eae3d4c4cab4de549d0d1f3f37423b6f55ef24cd2e2ac1b6b7ecbe58951814",
-      "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
-      "replacement_targets": [
-        "HCT-CLAIMS"
       ],
       "preserve": true,
       "physical_deletion_authorized": false

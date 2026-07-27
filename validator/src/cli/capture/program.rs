@@ -102,6 +102,8 @@ fn validate_path(path: &Path) -> Result<(), String> {
 fn open_no_follow(path: &Path) -> Result<File, String> {
     let path = CString::new(path.as_os_str().as_bytes())
         .map_err(|_| "capture program capability path contains NUL".to_owned())?;
+    // SAFETY: `path` is a NUL-terminated CString retained for the call and the
+    // fixed flags prevent following links or inheriting the descriptor.
     let fd = unsafe {
         libc::open(
             path.as_ptr(),
@@ -111,6 +113,7 @@ fn open_no_follow(path: &Path) -> Result<File, String> {
     if fd < 0 {
         return Err("capture program capability open failed".to_owned());
     }
+    // SAFETY: `open` returned a new owned nonnegative descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 

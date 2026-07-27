@@ -50,6 +50,8 @@ pub(super) fn rollback(
 fn rename_exclusive(parent: &File, from: &str, to: &str) -> Result<(), RoutineError> {
     let from = validate_name(from)?;
     let to = validate_name(to)?;
+    // SAFETY: `parent` is live and both validated names are NUL-terminated
+    // components; `RENAME_EXCL` refuses replacement of another directory.
     if unsafe {
         libc::renameatx_np(
             parent.as_raw_fd(),
@@ -69,6 +71,7 @@ fn rename_exclusive(parent: &File, from: &str, to: &str) -> Result<(), RoutineEr
 
 fn remove_directory(parent: &File, name: &str) -> Result<(), RoutineError> {
     let name = validate_name(name)?;
+    // SAFETY: `parent` is live and `name` identifies the checked, empty directory.
     if unsafe { libc::unlinkat(parent.as_raw_fd(), name.as_ptr(), libc::AT_REMOVEDIR) } != 0 {
         return Err(error("routine-production-output-rollback-remove-failed"));
     }

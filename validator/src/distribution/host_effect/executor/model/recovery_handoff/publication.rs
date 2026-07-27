@@ -188,6 +188,45 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    pub(crate) fn disposition_binding_sha256(&self) -> &str {
+        match self {
+            Self::Publication { binding_sha256, .. }
+            | Self::TerminalTransition { binding_sha256, .. }
+            | Self::PostPublicationTerminalTransition { binding_sha256, .. }
+            | Self::PostReservation { binding_sha256, .. } => binding_sha256,
+        }
+    }
+
+    pub(crate) fn terminal_state(&self) -> Option<HostEffectState> {
+        match self {
+            Self::TerminalTransition {
+                exact_current_ledger_observation: true,
+                outcome,
+                classification:
+                    HostEffectTerminalRecoveryClassification::TerminalCommittedAndVerified
+                    | HostEffectTerminalRecoveryClassification::TerminalCommittedButUnverifiable,
+                ..
+            } => Some(outcome.state),
+            Self::PostReservation {
+                exact_current_ledger_observation: true,
+                ledger_record,
+                ledger_classification:
+                    HostEffectPostReservationLedgerClassification::TerminalObserved,
+                ..
+            } => Some(ledger_record.state()),
+            _ => None,
+        }
+    }
+
+    pub(crate) fn disposition_state(&self) -> Option<HostEffectState> {
+        match self.terminal_state() {
+            Some(state @ (HostEffectState::Settled | HostEffectState::Failed)) => Some(state),
+            Some(HostEffectState::Ambiguous) | None => None,
+            Some(HostEffectState::Reserved | HostEffectState::InFlight) => None,
+        }
+    }
+
+    #[cfg(test)]
     pub(crate) fn ledger_head(&self) -> &HostEffectLedgerHead {
         match self {
             Self::Publication { ledger_head, .. }
@@ -199,6 +238,7 @@ impl HostEffectRecoveryHandoff {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn observation(&self) -> Option<&PublicationInventoryObservation> {
         match self {
             Self::Publication { observation, .. } => Some(observation),

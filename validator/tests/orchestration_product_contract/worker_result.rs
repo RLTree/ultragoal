@@ -1,6 +1,6 @@
-use crate::orchestration::{LeaseSpec, ScopePolicy, WorkPackage, WorkerResultV1};
 use serde_json::Value;
 use std::collections::BTreeSet;
+use ultragoal::orchestration::{LeaseSpec, ScopePolicy, WorkPackage, WorkerResultV1};
 
 const ENVELOPE: &str = include_str!(
     "../../../docs/ultragoal-successor-live/work-packages/ORCHESTRATION-RECOVERY-PRODUCT-CORRECTION-029.json"

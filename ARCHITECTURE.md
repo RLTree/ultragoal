@@ -42,14 +42,84 @@ may construct, clone, settle, release, recover, roll back, register, or reopen
 routine authority. Source-shape checks are secondary regression controls, not
 semantic authority proof.
 
+Repository fit also carries one private semantic local-state policy for the
+runtime evidence path. It reconciles the required `validation_artifacts/`
+ignore rule inside an arbitrary user `.gitignore` while preserving unrelated
+bytes, newline shape, mode, and dirt. Inspection, planning, and verification
+remain zero-write; apply carries the policy as a prepared mutation through the
+existing confined compare-exchange, rollback, recovery, and revalidation
+transaction. `.gitignore` is not a template-managed file and no whole-file
+manifest authority is introduced. The public `fit plan --local-state` route
+binds that policy alone; it cannot create or update a template-managed path.
+Its production precondition is the descriptor-bound repository root and exact
+`.gitignore` target, not unrelated repository or Git-internal contents that
+the one-file effect never reads or follows.
+
+Routine-configuration fit uses the same narrow-scope rule for its two canonical
+configuration targets. Their descriptor chains, root binding, scope, and exact
+path set form the protected boundary; unrelated repository and Git-internal
+objects remain outside that effect. Complete-repository fit retains the full
+recursive protected-tree capture.
+
+Routine dirty-state capture treats Git-visible tracked and untracked paths as
+repository authority and excludes paths that the same bound Git observation
+classifies as ignored. This permits ordinary build caches such as `target/`
+without weakening visible symlink, hard-link, special-file, substitution, or
+concurrent-mutation refusal. Selected routine inputs and declared output scopes
+retain their separate exact filesystem revalidation.
+
 Local agent authority is one private production transaction under
-`plugin_product/agent_discovery/`. The registry control plane supplies one
-explicit home/package/project root set, while the transaction independently
+`plugin_product/agent_discovery/`. The public read route
+`inspect capabilities --package-root <host-path>` supplies one typed
+home/package/project root set, while the transaction independently
 captures source, package, installed, cache, empty-or-unrelated global, and
 project authority under one candidate and session binding. Registry rows are a
 four-role projection of the canonical six-role observation. This local
 observation never proves host discovery, new-session comprehension, runtime
 activation, route eligibility, exposure, or a claim effect.
+
+## Agentic Engineering Advisory Layer
+
+Harness Ultragoal has one implicit front door and one operational authority
+chain:
+
+```text
+user intent
+  -> Harness Ultragoal front door
+  -> current candidate, state, lifecycle, risk, evidence, and truth loop
+  -> smallest sufficient Agentic Engineering advisory selection
+  -> proposal-only, no-claim advice
+  -> root reuse / extend / map / reject decision
+  -> existing plan, lease, effect, recovery, evidence, and claim owners
+  -> operator-facing result
+```
+
+`engineering_advisory` owns the typed, read-only selection and adoption
+projections. `plugin_product::skill_catalog` owns exact plugin, profile,
+gateway, skill-set, candidate, and discovery-budget validation. Neither owns a
+lifecycle, scheduler, activation store, effect, receipt, or claim. The
+selection projection has no durable status: it is recomputed from current
+authority and binds one primary lens plus only the supporting lenses required
+by a genuine cross-layer decision.
+
+All thirty Agentic Engineering skills are mapped to existing Harness lifecycle
+owners. The existing eight-skill `ultragoal` co-install view and the core,
+product/lifecycle, and Rust-system stage views are candidate-bound projections
+under the external Harness gateway; the latter three cover the full skill set.
+A full profile is optional and must earn a safe combined discovery and context
+margin. Agentic's own gateway is explicit-only when co-installed.
+
+Advice becomes stale when its candidate, context, lifecycle, evidence,
+assumption, risk, failure mechanism, profile, or active truth-loop binding
+changes. That change causes a new selection. An unchanged fingerprint returns
+the current disposition and cannot recursively reactivate. Explicit expert
+requests use the same selector and adoption boundary; they never bypass
+authorization, effects, recovery, migration, or claim controls.
+
+The default product response describes the result, important tradeoff, and next
+action without requiring Agentic terminology. Intermediate and advanced
+read-only inspection expose the selected lenses, rationale, exact inputs,
+alternatives, adoption decision, unsupported surfaces, and claim ceiling.
 
 ## Public Surfaces
 
@@ -111,6 +181,8 @@ validation_artifacts/          candidate-bound evidence, never behavior
   compatibility, and retirement tests.
 
 `scripts/check` is the repository-wide source/standards/coverage gate. The
-public `check strict --claim cli-self-law-compliance` route is the product
-self-law surface; neither command proves installation, runtime activation,
-journey fitness, release, or completion by itself.
+public `check strict` route has separate recursively read-only adapters for
+`cli-self-law-compliance` and the source-local
+`namespace-progressive-disclosure` law. A pass supports only the requested
+adapter's exact claim; none of these commands proves installation, runtime
+activation, journey fitness, release, or completion by itself.

@@ -1,3 +1,10 @@
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PromotionStatus {
+    ImprovementCandidate,
+    Rejected,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct PromotionDecision {
     pub baseline_candidate_id: String,

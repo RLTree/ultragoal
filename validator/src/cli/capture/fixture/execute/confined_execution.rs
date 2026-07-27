@@ -1,16 +1,33 @@
 use super::*;
 
+pub(crate) struct ConfinedExecution<'a> {
+    pub(crate) fixture: &'a FixtureSpec,
+    pub(crate) source_executable: &'a Path,
+    pub(crate) executable_kind: PinnedExecutableKind,
+    pub(crate) executable_bytes: &'a [u8],
+    pub(crate) arguments: &'a [std::ffi::OsString],
+    pub(crate) cwd: &'a Path,
+    pub(crate) environment: &'a BTreeMap<String, String>,
+    pub(crate) output_limit: usize,
+    pub(crate) interrupt: &'a Arc<AtomicBool>,
+}
+
+type ConfinedExecutionOutcome = (Option<i32>, Vec<u8>, bool, Option<&'static str>);
+
 pub(crate) fn run_confined(
-    fixture: &FixtureSpec,
-    source_executable: &Path,
-    executable_kind: PinnedExecutableKind,
-    executable_bytes: &[u8],
-    arguments: &[std::ffi::OsString],
-    cwd: &Path,
-    environment: &BTreeMap<String, String>,
-    output_limit: usize,
-    interrupt: &Arc<AtomicBool>,
-) -> Result<(Option<i32>, Vec<u8>, bool, Option<&'static str>), FixtureScheduleError> {
+    request: ConfinedExecution<'_>,
+) -> Result<ConfinedExecutionOutcome, FixtureScheduleError> {
+    let ConfinedExecution {
+        fixture,
+        source_executable,
+        executable_kind,
+        executable_bytes,
+        arguments,
+        cwd,
+        environment,
+        output_limit,
+        interrupt,
+    } = request;
     #[cfg(not(unix))]
     {
         let _ = (
@@ -64,6 +81,8 @@ pub(crate) fn run_confined(
             use std::os::unix::process::CommandExt;
 
             let directory = snapshot.directory.as_raw_fd();
+            // SAFETY: this closure runs only in the spawned child before exec;
+            // `directory` is a live descriptor owned by `snapshot` until spawn.
             unsafe {
                 command.pre_exec(move || {
                     if libc::fchdir(directory) != 0 {
@@ -228,19 +247,4 @@ impl Drop for TestNativeSnapshot {
             );
         }
     }
-}
-
-pub(crate) fn digest(bytes: &[u8]) -> String {
-    use sha2::{Digest, Sha256};
-    format!("sha256:{:x}", Sha256::digest(bytes))
-}
-
-#[cfg(test)]
-pub(crate) static TEST_PRE_LAUNCH_PAUSED: AtomicBool = AtomicBool::new(false);
-
-#[cfg(test)]
-pub(crate) fn pre_launch_hook() -> &'static std::sync::Mutex<Option<(std::path::PathBuf, u64)>> {
-    static HOOK: std::sync::OnceLock<std::sync::Mutex<Option<(std::path::PathBuf, u64)>>> =
-        std::sync::OnceLock::new();
-    HOOK.get_or_init(|| std::sync::Mutex::new(None))
 }

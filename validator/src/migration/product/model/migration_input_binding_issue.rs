@@ -26,34 +26,22 @@ impl MigrationInputBinding {
         }
     }
 
-    pub(crate) fn live_context_id(&self) -> &str {
-        &self.live_context_id
-    }
-
+    #[cfg(test)]
     pub(crate) fn candidate_id(&self) -> &str {
         &self.candidate_id
     }
 
-    pub(crate) fn catalog_id(&self) -> &str {
-        &self.catalog_id
-    }
-
+    #[cfg(test)]
     pub(crate) fn read_session_id(&self) -> &str {
         &self.read_session_id
     }
 
-    pub(crate) fn inventory_sha256(&self) -> &str {
-        &self.inventory_sha256
-    }
-
-    pub(crate) fn registry_sha256(&self) -> &str {
-        &self.registry_sha256
-    }
-
+    #[cfg(test)]
     pub(crate) fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
 
+    #[cfg(test)]
     pub(super) fn validate(&self) -> bool {
         self.schema_version == "MigrationProductInputBinding-v1"
             && valid_sha256(&self.live_context_id)
@@ -120,6 +108,7 @@ impl ProductInputSnapshot {
     }
 }
 
+#[cfg(test)]
 pub(crate) trait MigrationInputSource {
     /// Captures the exact current semantic inventory and adopted registry bytes
     /// in one root-owned read session.

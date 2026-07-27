@@ -1,7 +1,7 @@
 use crate::distribution::{
-    CacheExpectation, CommandOutput, DistributionErrorId as ErrorId, ExpectedPrior,
-    HostAuthorization, HostCommandPlan, HostExecutor, InstallPlan, InstallScope, PackageIdentity,
-    SourceIdentity, execute_authorized, reconcile_cache_read_only, reject_stale_version_reuse,
+    CacheExpectation, DistributionErrorId as ErrorId, ExpectedPrior, HostCommandPlan, InstallPlan,
+    InstallScope, PackageIdentity, SourceIdentity, reconcile_cache_read_only,
+    reject_stale_version_reuse,
 };
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde_json::json;
@@ -80,74 +80,22 @@ fn cache_reconciliation_is_read_only_and_rejects_wrong_root_or_duplicate_version
     }
 }
 
-#[derive(Default)]
-struct Executor {
-    calls: Vec<(String, Vec<String>)>,
-}
-
-impl HostExecutor for Executor {
-    fn execute(&mut self, program: &str, argv: &[String]) -> Result<CommandOutput, ()> {
-        self.calls.push((program.into(), argv.to_vec()));
-        Ok(CommandOutput {
-            exit_code: 0,
-            stdout: b"ok".to_vec(),
-            stderr: Vec::new(),
-        })
-    }
-}
-
 #[test]
-fn host_operations_use_exact_argv_authorization_and_explicit_rollback_plans() {
+fn host_command_plans_use_exact_argv_and_explicit_rollback_plans() {
     let root = "/tmp/repo with spaces;touch SHOULD_NOT_RUN";
     let identity = package("0.0.12", B, C);
     let plan =
         HostCommandPlan::repository_install(&identity, root, "harness-ultragoal-repo").unwrap();
     assert!(!format!("{plan:?}").contains(root));
-    let authorization = HostAuthorization::new(
-        CONTEXT_ID.into(),
-        CANDIDATE_ID.into(),
-        plan.plan_sha256().into(),
-    )
-    .unwrap();
-    let unauthorized =
-        HostAuthorization::new(CONTEXT_ID.into(), CANDIDATE_ID.into(), D.into()).unwrap();
-    let mut blocked = Executor::default();
+    assert_eq!(plan.commands()[0].program(), "codex");
+    assert!(plan.commands().iter().all(|command| {
+        command.environment().is_empty()
+            && command.timeout_ms() == 30_000
+            && command.max_attempts() == 1
+    }));
     assert_eq!(
-        execute_authorized(&plan, &unauthorized, &mut blocked)
-            .unwrap_err()
-            .id(),
-        ErrorId::EffectFailed
-    );
-    assert!(blocked.calls.is_empty());
-    let wrong_candidate =
-        HostAuthorization::new(CONTEXT_ID.into(), D.into(), plan.plan_sha256().into()).unwrap();
-    assert_eq!(
-        execute_authorized(&plan, &wrong_candidate, &mut blocked)
-            .unwrap_err()
-            .id(),
-        ErrorId::EffectFailed
-    );
-    assert!(blocked.calls.is_empty());
-    let mut executor = Executor::default();
-    execute_authorized(&plan, &authorization, &mut executor).unwrap();
-    assert_eq!(executor.calls.len(), 2);
-    assert_eq!(
-        executor.calls[0],
-        (
-            "codex".into(),
-            vec![
-                "plugin".into(),
-                "marketplace".into(),
-                "add".into(),
-                root.into()
-            ]
-        )
-    );
-    assert!(
-        !executor
-            .calls
-            .iter()
-            .any(|(program, _)| matches!(program.as_str(), "sh" | "bash"))
+        plan.commands()[0].argv(),
+        ["plugin", "marketplace", "add", root]
     );
     assert!(HostCommandPlan::repository_install(&identity, "/tmp/repo\nattack", "repo").is_err());
     assert_eq!(

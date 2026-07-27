@@ -9,16 +9,6 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "compiled API declaration"
     ),
     source!(
-        "validator/src/lib.rs",
-        include_bytes!("../../../lib.rs"),
-        "root public module export authority"
-    ),
-    source!(
-        "validator/tests/public_api_witness.rs",
-        include_bytes!("../../../../tests/public_api_witness.rs"),
-        "external crate visibility witness"
-    ),
-    source!(
         "validator/src/command_witness.rs",
         include_bytes!("../../../command_witness.rs"),
         "compiled command row digest"
@@ -34,8 +24,8 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "evaluation and migration command rows"
     ),
     source!(
-        "validator/src/cli/successor/catalog/fitting_and_validation.rs",
-        include_bytes!("../../../cli/successor/catalog/fitting_and_validation.rs"),
+        "validator/src/cli/successor/catalog/repository_fit_and_checks.rs",
+        include_bytes!("../../../cli/successor/catalog/repository_fit_and_checks.rs"),
         "repository fit and validation command rows"
     ),
     source!(
@@ -84,6 +74,66 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "parsed invocation model"
     ),
     source!(
+        "validator/src/cli/successor_public/operation_binding/mod.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/mod.rs"),
+        "supported operation activation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/operation_binding/groups.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/groups.rs"),
+        "complete command-group activation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/operation_binding/package/inventory.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package/inventory.rs"),
+        "package inventory operation API authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/operation_binding/package/install_test.rs",
+        include_bytes!("../../../cli/successor_public/operation_binding/package/install_test.rs"),
+        "isolated package installation operation API authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/output_limit.rs",
+        include_bytes!("../../../cli/successor_public/output_limit.rs"),
+        "public dispatcher consumption of operation authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/package_dispatch.rs",
+        include_bytes!("../../../cli/successor_public/package_dispatch.rs"),
+        "package verification dispatcher authority"
+    ),
+    source!(
+        "validator/src/cli/successor_public/package_inventory/mod.rs",
+        include_bytes!("../../../cli/successor_public/package_inventory/mod.rs"),
+        "package inventory production dispatch"
+    ),
+    source!(
+        "validator/src/cli/successor_public/package_install_test/mod.rs",
+        include_bytes!("../../../cli/successor_public/package_install_test/mod.rs"),
+        "isolated package installation production dispatch"
+    ),
+    source!(
+        "validator/src/distribution/filesystem/root/workspace_context.rs",
+        include_bytes!("../../../distribution/filesystem/root/workspace_context.rs"),
+        "workspace-bound package output authority"
+    ),
+    source!(
+        "validator/src/distribution/package/product/inventory_publication.rs",
+        include_bytes!("../../../distribution/package/product/inventory_publication.rs"),
+        "atomic package inventory publication"
+    ),
+    source!(
+        "validator/src/cli/successor_public/evaluation/run.rs",
+        include_bytes!("../../../cli/successor_public/evaluation/run.rs"),
+        "evaluation run unsupported-capability route"
+    ),
+    source!(
+        "validator/src/cli/successor_public/orchestration.rs",
+        include_bytes!("../../../cli/successor_public/orchestration.rs"),
+        "bounded public orchestration projection"
+    ),
+    source!(
         "validator/src/inventory/mod.rs",
         include_bytes!("../../mod.rs"),
         "public inventory export"
@@ -114,6 +164,21 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "exact activation guard"
     ),
     source!(
+        "validator/src/inventory/registry/command_activation/guard.rs",
+        include_bytes!("guard.rs"),
+        "frontier-aware activation decision"
+    ),
+    source!(
+        "validator/src/inventory/registry/command_activation/exact_source_manifest.rs",
+        include_bytes!("exact_source_manifest.rs"),
+        "activation source and row verifier"
+    ),
+    source!(
+        "validator/src/inventory/registry/command_activation/activation_rows.rs",
+        include_bytes!("activation_rows.rs"),
+        "exact activation row reconciliation"
+    ),
+    source!(
         "validator/src/inventory/registry/data.rs",
         include_bytes!("../data.rs"),
         "registry identifier and row storage"
@@ -123,16 +188,34 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         include_bytes!("../integrity.rs"),
         "adopted registry integrity gate"
     ),
-    source!(
-        "validator/src/inventory/registry/mod.rs",
-        include_bytes!("../mod.rs"),
-        "registry load and guard export"
+    registry_source!("frontier/mod.rs", "frontier authority"),
+    registry_source!("frontier/inspection.rs", "bounded frontier projection"),
+    registry_source!(
+        "frontier/validated_snapshot.rs",
+        "shared validated frontier snapshot"
     ),
-    source!(
-        "validator/src/inventory/registry/semantic.rs",
-        include_bytes!("../semantic.rs"),
-        "active API row construction"
+    registry_source!("frontier/change_impact.rs", "change authority"),
+    registry_source!("frontier/envelope_codec.rs", "envelope integrity"),
+    registry_source!("frontier/handoff_adjacency.rs", "handoff authority"),
+    registry_source!("frontier/lifecycle.rs", "lane lifecycle authority"),
+    registry_source!("frontier/lease_issuance/mod.rs", "lease authority"),
+    registry_source!(
+        "frontier/lease_issuance/worktree_identity.rs",
+        "active worktree identity authority"
     ),
+    registry_source!(
+        "frontier/lease_issuance/debt_worktree/mod.rs",
+        "P0 worktree lease authority"
+    ),
+    registry_source!(
+        "frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
+        "P0 diagnostic source authority"
+    ),
+    registry_source!("frontier/scope_ownership.rs", "scope authority"),
+    registry_source!("frontier/scope_consumption.rs", "consumption authority"),
+    registry_source!("load.rs", "frontier-bound registry construction"),
+    registry_source!("mod.rs", "registry load and guard export"),
+    registry_source!("semantic.rs", "active API row construction"),
     source!(
         "validator/src/inventory/registry/sources.rs",
         include_bytes!("../sources.rs"),
@@ -164,76 +247,3 @@ const WITNESS_SOURCES: &[WitnessSource] = &[
         "production catalog and closure export"
     ),
 ];
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-struct ActivationRow {
-    stable_id: String,
-    digest_sha256: String,
-    active_status: ActiveStatus,
-    references: Vec<String>,
-}
-
-impl ActivationRow {
-    fn from_entry(entry: &InventoryEntry) -> Self {
-        Self {
-            stable_id: entry.stable_id.clone(),
-            digest_sha256: entry.digest_sha256.clone(),
-            active_status: entry.active_status,
-            references: entry.references.clone(),
-        }
-    }
-}
-
-fn exact_rows(
-    actual: impl IntoIterator<Item = ActivationRow>,
-    expected: &BTreeMap<String, ActivationRow>,
-) -> Result<(), InventoryError> {
-    let mut observed = BTreeMap::new();
-    for row in actual {
-        if !expected.contains_key(&row.stable_id) {
-            return Err(InventoryError::Activation(ActivationFailure::UnknownRow));
-        }
-        if let Some(existing) = observed.insert(row.stable_id.clone(), row.clone()) {
-            return Err(InventoryError::Activation(if existing == row {
-                ActivationFailure::DuplicateRow
-            } else {
-                ActivationFailure::ConflictingRow
-            }));
-        }
-    }
-    if observed.len() != expected.len()
-        || expected
-            .keys()
-            .any(|stable_id| !observed.contains_key(stable_id))
-    {
-        return Err(InventoryError::Activation(ActivationFailure::MissingRow));
-    }
-    if expected
-        .iter()
-        .any(|(stable_id, expected)| observed.get(stable_id) != Some(expected))
-    {
-        return Err(InventoryError::Activation(
-            ActivationFailure::ConflictingRow,
-        ));
-    }
-    Ok(())
-}
-
-fn exact_set(
-    actual: impl IntoIterator<Item = String>,
-    expected: &BTreeSet<String>,
-) -> Result<(), InventoryError> {
-    let mut observed = BTreeSet::new();
-    for stable_id in actual {
-        if !expected.contains(&stable_id) {
-            return Err(InventoryError::Activation(ActivationFailure::UnknownRow));
-        }
-        if !observed.insert(stable_id) {
-            return Err(InventoryError::Activation(ActivationFailure::DuplicateRow));
-        }
-    }
-    if &observed != expected {
-        return Err(InventoryError::Activation(ActivationFailure::MissingRow));
-    }
-    Ok(())
-}

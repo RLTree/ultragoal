@@ -1,12 +1,14 @@
 use super::successor::clap_grammar::parser_command;
 use super::successor::command_contract::{CommandDescriptor, HelpTarget};
 use super::successor::{
-    EffectClass, Group, OptionName, OutputMode, ParseErrorId, ParseOutcome, ParsedValue, ValueKind,
-    catalog, effect_name, parse_args, render_help,
+    EffectClass, Group, OptionName, OptionSpec, OutputMode, ParseErrorId, ParseOutcome,
+    ParsedValue, ValueKind, catalog, effect_name, parse_args, render_help,
 };
 use clap::{ArgAction, builder::ValueRange};
 use std::collections::BTreeSet;
 
+mod arguments;
+use arguments::{push_option, required_args};
 #[test]
 fn catalog_exposes_exactly_the_ten_contract_groups() {
     let groups: BTreeSet<_> = catalog()
@@ -16,22 +18,24 @@ fn catalog_exposes_exactly_the_ten_contract_groups() {
     assert_eq!(groups, BTreeSet::from(Group::ALL));
     assert_eq!(Group::ALL.len(), 10);
 }
-
 #[test]
 fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
     let mut routes = BTreeSet::new();
     for descriptor in catalog() {
+        let options: &[OptionSpec] = descriptor.options;
         assert!(routes.insert((descriptor.command.group(), descriptor.subcommand)));
         let mut args = vec![descriptor.command.group().as_str().to_owned()];
         if let Some(subcommand) = descriptor.subcommand {
             args.push(subcommand.to_owned());
         }
-        for option in descriptor.options.iter().filter(|option| option.required) {
+        for option in options.iter().filter(|option| option.required) {
             args.push(option.name.as_str().to_owned());
             match option.kind {
                 ValueKind::Flag => {}
                 ValueKind::Identifier => args.push("candidate-1".to_owned()),
+                ValueKind::RepositoryTarget => args.push(".".to_owned()),
                 ValueKind::RelativePath => args.push("artifacts/result.json".to_owned()),
+                ValueKind::HostPath => args.push("/package".to_owned()),
             }
         }
         let ParseOutcome::Invocation(parsed) = parse_args(args).expect("catalog route parses")
@@ -55,12 +59,15 @@ fn every_catalog_route_is_unique_and_parses_from_its_descriptor() {
                 .all(|argument| match &argument.value {
                     ParsedValue::Flag => true,
                     ParsedValue::Identifier(value) => !value.is_empty(),
+                    ParsedValue::RepositoryTarget(path) => !path.as_str().is_empty(),
                     ParsedValue::RelativePath(path) => !path.as_str().is_empty(),
+                    ParsedValue::HostPath(path) => {
+                        path.is_valid() && path.as_path().is_absolute()
+                    }
                 })
         );
     }
 }
-
 #[test]
 fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
     let command = parser_command();
@@ -71,7 +78,6 @@ fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
         .collect();
     let expected_groups: BTreeSet<_> = Group::ALL.iter().map(|group| group.as_str()).collect();
     assert_eq!(clap_groups, expected_groups);
-
     for descriptor in catalog() {
         let group = command
             .find_subcommand(descriptor.command.group().as_str())
@@ -102,7 +108,10 @@ fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
             assert!(matches!(argument.get_action(), &ArgAction::Set));
             let expected_arity = match option.kind {
                 ValueKind::Flag => ValueRange::EMPTY,
-                ValueKind::Identifier | ValueKind::RelativePath => ValueRange::SINGLE,
+                ValueKind::Identifier
+                | ValueKind::RepositoryTarget
+                | ValueKind::RelativePath
+                | ValueKind::HostPath => ValueRange::SINGLE,
             };
             assert_eq!(argument.get_num_args(), Some(expected_arity));
             let value_name = argument
@@ -114,13 +123,14 @@ fn compiled_clap_grammar_covers_every_catalog_route_and_option() {
                 match option.kind {
                     ValueKind::Flag => None,
                     ValueKind::Identifier => Some("ID"),
+                    ValueKind::RepositoryTarget => Some("REPOSITORY"),
                     ValueKind::RelativePath => Some("RELATIVE_PATH"),
+                    ValueKind::HostPath => Some("HOST_PATH"),
                 }
             );
         }
     }
 }
-
 #[test]
 fn clap_requiredness_arity_and_singleton_behavior_match_every_option_spec() {
     for descriptor in catalog() {
@@ -135,11 +145,9 @@ fn clap_requiredness_arity_and_singleton_behavior_match_every_option_spec() {
             } else {
                 assert!(omission.is_ok());
             }
-
             let mut once = omitted.clone();
             push_option(&mut once, option.name, option.kind);
             assert!(parse_args(once).is_ok());
-
             let mut duplicate = omitted.clone();
             push_option(&mut duplicate, option.name, option.kind);
             push_option(&mut duplicate, option.name, option.kind);
@@ -165,7 +173,6 @@ fn clap_requiredness_arity_and_singleton_behavior_match_every_option_spec() {
         }
     }
 }
-
 #[test]
 fn help_is_a_projection_of_the_same_compiled_catalog() {
     let human = render_help(HelpTarget::Root, OutputMode::Human);
@@ -199,7 +206,6 @@ fn help_is_a_projection_of_the_same_compiled_catalog() {
         assert!(json.contains(effect_name(descriptor.effect)));
     }
 }
-
 #[test]
 fn sensitive_effects_are_never_attached_to_read_routes() {
     for descriptor in catalog() {
@@ -222,29 +228,5 @@ fn sensitive_effects_are_never_attached_to_read_routes() {
             }
             _ => assert_eq!(descriptor.effect, EffectClass::Read),
         }
-    }
-}
-
-fn required_args(descriptor: &CommandDescriptor, omit: Option<OptionName>) -> Vec<String> {
-    let mut args = vec![descriptor.command.group().as_str().to_owned()];
-    if let Some(subcommand) = descriptor.subcommand {
-        args.push(subcommand.to_owned());
-    }
-    for option in descriptor
-        .options
-        .iter()
-        .filter(|option| option.required && Some(option.name) != omit)
-    {
-        push_option(&mut args, option.name, option.kind);
-    }
-    args
-}
-
-fn push_option(args: &mut Vec<String>, name: OptionName, kind: ValueKind) {
-    args.push(name.as_str().to_owned());
-    match kind {
-        ValueKind::Flag => {}
-        ValueKind::Identifier => args.push("candidate-1".to_owned()),
-        ValueKind::RelativePath => args.push("artifacts/result.json".to_owned()),
     }
 }

@@ -23,13 +23,13 @@ pub(crate) fn selected_finding(repository: &JourneyRepository) -> SelectedFindin
 pub(crate) fn open_store(repository: &JourneyRepository, binding: &Binding) -> EventStore {
     fs::create_dir_all(
         repository
-            .store_path()
+            .store_path(binding)
             .parent()
             .expect("observability spool parent"),
     )
     .expect("create observability spool");
     EventStore::open_bound(
-        repository.store_path(),
+        repository.store_path(binding),
         &binding.context_id,
         &binding.candidate_id,
         &binding.source_id,
@@ -38,16 +38,16 @@ pub(crate) fn open_store(repository: &JourneyRepository, binding: &Binding) -> E
 }
 
 pub(crate) fn event(binding: &Binding, id: &str, sequence: u64, operation: &str) -> SemanticEvent {
-    SemanticEvent::new(
-        &binding.context_id,
-        &binding.candidate_id,
-        &binding.source_id,
-        id,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: binding.context_id.clone(),
+        candidate_id: binding.candidate_id.clone(),
+        source_id: binding.source_id.clone(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: sequence,
         sequence,
-        sequence,
-        operation,
-        "fail",
-    )
+        operation: operation.to_owned(),
+        outcome: "fail".to_owned(),
+    })
     .expect("candidate-bound semantic event")
 }
 
@@ -184,4 +184,5 @@ pub(crate) fn fresh_binary_absent_help_query_diagnose_and_export_refusal_are_zer
     assert!(!repository.root().join("journey-export.json").exists());
     assert_no_connection(&listener);
     assert_eq!(observe(repository.root()), initial);
+    repository.teardown();
 }

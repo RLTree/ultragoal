@@ -1,9 +1,11 @@
 #[cfg(test)]
 use crate::cli::successor::parse_args;
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
+use crate::cli::successor::runtime::{
+    Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession,
+};
 use crate::cli::successor::{
-    CheckProfile, EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome,
-    ParsedInvocation, SuccessorCommand, render_help, version_text,
+    EffectClass, ExitClass, FitAction, InspectTarget, OutputMode, ParseOutcome, ParsedInvocation,
+    SuccessorCommand, render_help, version_text,
 };
 use crate::context::{BuildRequest, LiveContext};
 use crate::inventory::{
@@ -18,12 +20,25 @@ mod output_emission;
 #[path = "output_limit.rs"]
 mod output_limit;
 
+mod capabilities;
+mod context_and_failures;
 mod diagnose;
+mod evaluation;
 mod fit;
+mod inception;
 mod local_store;
+mod migration;
 mod observe;
+mod operation_binding;
+mod orchestration;
+mod package_build;
+mod package_cli_payload;
+mod package_dispatch;
+mod package_install_test;
+mod package_inventory;
+mod package_verify;
 mod public_context;
-mod routine;
+pub(crate) mod routine;
 mod strict;
 
 #[cfg(test)]
@@ -39,7 +54,9 @@ mod diagnose_tests;
 mod diagnose_boundary_tests;
 
 #[cfg(test)]
-mod test_support;
+mod repository_fixture;
 
+pub(crate) use context_and_failures::*;
+pub(crate) use operation_binding::{active_api_identifiers, active_command_groups};
 pub(crate) use output_emission::*;
 pub(crate) use output_limit::*;

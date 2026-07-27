@@ -4,14 +4,14 @@
     {
       "standard_id": "cli-control-plane-authority",
       "audit_status": "pending",
-      "evidence_path": "validator/src/cli/control/plane/proof/transaction.rs",
-      "evidence_digest": "sha256:bd5e197d0c7f7f39540683eb2038f3b82ad0bf2008e22230106606f8741ec8df",
+      "evidence_path": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
+      "evidence_digest": "sha256:d55d4fb5e786afd1e107c3f6cd3df9ba1d86f62e6a56d0159bdd138587acec37",
       "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal"
     },
     {
       "standard_id": "cli-performance-latency-speed-iteration-fitness",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/cli/performance.rs",
       "evidence_digest": "sha256:2ce4e604b4adb706e672cf2139abb663702823ed31bb2ccd3014f2191ed63c70",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -20,8 +20,8 @@
     {
       "standard_id": "cli-self-law-compliance",
       "audit_status": "pending",
-      "evidence_path": "validator/src/cli/control/plane/proof/transaction.rs",
-      "evidence_digest": "sha256:bd5e197d0c7f7f39540683eb2038f3b82ad0bf2008e22230106606f8741ec8df",
+      "evidence_path": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
+      "evidence_digest": "sha256:d55d4fb5e786afd1e107c3f6cd3df9ba1d86f62e6a56d0159bdd138587acec37",
       "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal"
     },
@@ -59,7 +59,7 @@
     },
     {
       "standard_id": "rust-cache-no-cache-honesty",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -67,7 +67,7 @@
     },
     {
       "standard_id": "rust-command-loop-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -75,7 +75,7 @@
     },
     {
       "standard_id": "rust-developer-experience-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -83,7 +83,7 @@
     },
     {
       "standard_id": "rust-memory-resource-discipline",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",
@@ -91,7 +91,7 @@
     },
     {
       "standard_id": "rust-toolchain-substrate-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",

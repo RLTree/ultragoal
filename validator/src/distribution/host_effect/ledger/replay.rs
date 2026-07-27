@@ -171,6 +171,17 @@ fn validate_reservation(
 fn validate_persisted_reservation(
     value: &PersistedReservation,
 ) -> Result<(), HostEffectLedgerError> {
+    let record_is_valid = match (
+        value.lifecycle_record.as_ref(),
+        value.lifecycle_record_sha256.as_ref(),
+    ) {
+        (Some(record), Some(digest)) => {
+            record.validate().is_ok()
+                && matches!(digest_json(record), Ok(actual) if actual == *digest)
+        }
+        (None, None) => cfg!(test),
+        _ => false,
+    };
     if !valid_id(&value.issuer_id)
         || !valid_id(&value.ledger_id)
         || !is_digest(&value.key_id)
@@ -179,6 +190,12 @@ fn validate_persisted_reservation(
         || !is_digest(&value.nonce_sha256)
         || !is_digest(&value.binding_sha256)
         || !is_digest(&value.expected_head_sha256)
+        || value
+            .lifecycle_record_sha256
+            .as_ref()
+            .is_some_and(|value| !is_digest(value))
+        || value.lifecycle_record.is_some() != value.lifecycle_record_sha256.is_some()
+        || !record_is_valid
         || value.issued_at_unix_ms >= value.expires_at_unix_ms
     {
         return Err(invalid_record());

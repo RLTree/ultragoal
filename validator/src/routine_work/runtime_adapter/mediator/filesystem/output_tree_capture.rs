@@ -83,6 +83,7 @@ pub(crate) fn capture_tree(
 
 #[cfg(unix)]
 pub(crate) fn open_child(directory: &File, name: &CStr) -> Result<File, RoutineError> {
+    // SAFETY: directory is open, and name is a NUL-terminated child name.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -93,6 +94,7 @@ pub(crate) fn open_child(directory: &File, name: &CStr) -> Result<File, RoutineE
     if descriptor < 0 {
         return Err(mediator_error("mediator-output-object-unsafe"));
     }
+    // SAFETY: successful openat returns a newly owned descriptor consumed once by File.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
@@ -127,6 +129,7 @@ pub(crate) fn require_current_child(
 #[cfg(unix)]
 pub(crate) fn directory_names(directory: &File) -> Result<Vec<String>, RoutineError> {
     let dot = c".";
+    // SAFETY: directory is open and dot is a NUL-terminated relative directory name.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -137,8 +140,10 @@ pub(crate) fn directory_names(directory: &File) -> Result<Vec<String>, RoutineEr
     if descriptor < 0 {
         return Err(mediator_error("mediator-output-directory-open-failed"));
     }
+    // SAFETY: descriptor is newly owned and fdopendir takes ownership on success.
     let stream = unsafe { libc::fdopendir(descriptor) };
     if stream.is_null() {
+        // SAFETY: fdopendir failed, so this branch still owns the successful openat descriptor.
         unsafe {
             libc::close(descriptor);
         }
@@ -148,6 +153,7 @@ pub(crate) fn directory_names(directory: &File) -> Result<Vec<String>, RoutineEr
     let mut names = Vec::new();
     loop {
         clear_readdir_error();
+        // SAFETY: stream is owned by DirectoryStream and remains valid for this read.
         let entry = unsafe { libc::readdir(stream.0) };
         if entry.is_null() {
             if readdir_failed() {
@@ -155,6 +161,7 @@ pub(crate) fn directory_names(directory: &File) -> Result<Vec<String>, RoutineEr
             }
             break;
         }
+        // SAFETY: a non-null dirent has a NUL-terminated d_name valid until the next readdir.
         let name = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) };
         let bytes = name.to_bytes();
         if bytes == b"." || bytes == b".." {
@@ -171,10 +178,12 @@ pub(crate) fn directory_names(directory: &File) -> Result<Vec<String>, RoutineEr
 #[cfg(unix)]
 pub(crate) fn clear_readdir_error() {
     #[cfg(target_os = "macos")]
+    // SAFETY: libc returns the current thread's valid errno storage on macOS.
     unsafe {
         *libc::__error() = 0;
     }
     #[cfg(any(target_os = "linux", target_os = "android"))]
+    // SAFETY: libc returns the current thread's valid errno storage on Linux and Android.
     unsafe {
         *libc::__errno_location() = 0;
     }

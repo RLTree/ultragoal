@@ -100,7 +100,7 @@ fn validate_preparse_guards(
         }
     }
     let has_help = text.iter().any(|token| matches!(*token, "--help" | "-h"));
-    let has_version = text.iter().any(|token| *token == "--version");
+    let has_version = text.contains(&"--version");
     if has_help && has_version {
         return fail(ParseErrorId::InvalidHelpPosition, output_mode);
     }

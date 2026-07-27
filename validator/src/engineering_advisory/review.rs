@@ -1,0 +1,207 @@
+use super::AdvisoryError;
+use crate::orchestration::{Binding, ReviewDecision, ReviewRecord};
+use serde::{Deserialize, Serialize};
+use std::collections::{BTreeMap, BTreeSet};
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReviewMaterialityOutput {
+    pub binding: Binding,
+    pub review_id: String,
+    pub findings: BTreeMap<String, ReviewFinding>,
+    pub claim_ceiling: BTreeMap<String, BTreeSet<String>>,
+    pub unverifiable_claims: BTreeSet<String>,
+    pub rerun_command_id: String,
+    pub material: bool,
+}
+
+pub type MaterialityOutput = ReviewMaterialityOutput;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub enum ReviewFindingSeverity {
+    #[serde(rename = "P0")]
+    P0,
+    #[serde(rename = "P1")]
+    P1,
+    #[serde(rename = "P2")]
+    P2,
+    #[serde(rename = "P3")]
+    P3,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReviewFinding {
+    pub code: String,
+    pub severity: ReviewFindingSeverity,
+    pub evidence: BTreeSet<String>,
+    pub suggested_action: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReviewVerdict {
+    pub schema_version: String,
+    pub binding: Binding,
+    pub review_id: String,
+    pub reviewer: String,
+    pub worker: String,
+    pub decision: ReviewDecision,
+    pub material: bool,
+    pub independent: bool,
+    pub finding_codes: BTreeSet<String>,
+    pub findings: BTreeMap<String, ReviewFinding>,
+    pub unverifiable_claims: BTreeSet<String>,
+    pub claim_ceiling: BTreeMap<String, BTreeSet<String>>,
+    pub rerun_command_id: String,
+    pub reviewer_can_promote: bool,
+    pub no_claim_statement: String,
+}
+
+pub const REVIEW_VERDICT_NO_CLAIM: &str =
+    "Review advice cannot accept, integrate, promote, or raise a claim ceiling.";
+
+impl ReviewVerdict {
+    pub fn from_review(
+        review: &ReviewRecord,
+        materiality: &ReviewMaterialityOutput,
+    ) -> Result<Self, AdvisoryError> {
+        review
+            .validate()
+            .map_err(|_| AdvisoryError::InvalidReview("review record is invalid"))?;
+        let review_id = review
+            .review_id()
+            .map_err(|_| AdvisoryError::InvalidReview("review identity is invalid"))?;
+        if materiality.review_id != review_id || materiality.binding != review.binding {
+            return Err(AdvisoryError::StaleBinding);
+        }
+        validate_findings(&review.finding_codes, &materiality.findings)?;
+        if !review
+            .reproduced_commands
+            .contains(&materiality.rerun_command_id)
+        {
+            return Err(AdvisoryError::InvalidReview(
+                "review rerun is not reproduced",
+            ));
+        }
+        validate_claim_ceiling(&materiality.claim_ceiling)?;
+        let decision = if !materiality.unverifiable_claims.is_empty() {
+            ReviewDecision::Rework
+        } else if !materiality.material {
+            ReviewDecision::Rework
+        } else {
+            review.decision
+        };
+        Ok(Self {
+            schema_version: "ReviewVerdict-v1".to_owned(),
+            binding: review.binding.clone(),
+            review_id,
+            reviewer: review.reviewer.clone(),
+            worker: review.worker.clone(),
+            decision,
+            material: materiality.material,
+            independent: review.reviewer != review.worker,
+            finding_codes: review.finding_codes.clone(),
+            findings: materiality.findings.clone(),
+            unverifiable_claims: materiality.unverifiable_claims.clone(),
+            claim_ceiling: materiality.claim_ceiling.clone(),
+            rerun_command_id: materiality.rerun_command_id.clone(),
+            reviewer_can_promote: false,
+            no_claim_statement: REVIEW_VERDICT_NO_CLAIM.to_owned(),
+        })
+    }
+
+    pub fn validate(&self) -> Result<(), AdvisoryError> {
+        if self.schema_version != "ReviewVerdict-v1"
+            || !self.independent
+            || self.reviewer_can_promote
+            || self.no_claim_statement != REVIEW_VERDICT_NO_CLAIM
+            || self.reviewer == self.worker
+            || self.rerun_command_id.is_empty()
+        {
+            return Err(AdvisoryError::InvalidReview(
+                "review verdict authority boundary violated",
+            ));
+        }
+        validate_findings(&self.finding_codes, &self.findings)?;
+        validate_claim_ceiling(&self.claim_ceiling)?;
+        if !self.unverifiable_claims.is_empty() && self.decision == ReviewDecision::Pass {
+            return Err(AdvisoryError::InvalidReview(
+                "unverifiable review cannot pass",
+            ));
+        }
+        Ok(())
+    }
+
+    pub fn validate_against(&self, review: &ReviewRecord) -> Result<(), AdvisoryError> {
+        review
+            .validate()
+            .map_err(|_| AdvisoryError::InvalidReview("review record is invalid"))?;
+        let review_id = review
+            .review_id()
+            .map_err(|_| AdvisoryError::InvalidReview("review identity is invalid"))?;
+        self.validate()?;
+        let expected_decision = if !self.unverifiable_claims.is_empty() || !self.material {
+            ReviewDecision::Rework
+        } else {
+            review.decision
+        };
+        if self.binding != review.binding
+            || self.review_id != review_id
+            || self.reviewer != review.reviewer
+            || self.worker != review.worker
+            || self.finding_codes != review.finding_codes
+            || self.decision != expected_decision
+            || !review.reproduced_commands.contains(&self.rerun_command_id)
+        {
+            return Err(AdvisoryError::StaleBinding);
+        }
+        Ok(())
+    }
+}
+
+fn validate_findings(
+    expected: &BTreeSet<String>,
+    findings: &BTreeMap<String, ReviewFinding>,
+) -> Result<(), AdvisoryError> {
+    if findings.keys().cloned().collect::<BTreeSet<_>>() != *expected
+        || findings.iter().any(|(code, finding)| {
+            finding.code != *code
+                || finding.evidence.is_empty()
+                || finding.evidence.iter().any(String::is_empty)
+                || finding
+                    .suggested_action
+                    .as_ref()
+                    .is_some_and(String::is_empty)
+        })
+    {
+        return Err(AdvisoryError::InvalidReview(
+            "structured review findings do not match the root review record",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_claim_ceiling(
+    claim_ceiling: &BTreeMap<String, BTreeSet<String>>,
+) -> Result<(), AdvisoryError> {
+    if claim_ceiling.iter().any(|(claim, dimensions)| {
+        claim.is_empty()
+            || dimensions.is_empty()
+            || claim.contains("complete")
+            || dimensions.iter().any(|dimension| {
+                matches!(
+                    dimension.as_str(),
+                    "material_signoff"
+                        | "major_root_integration"
+                        | "product"
+                        | "readiness"
+                        | "release"
+                        | "completion"
+                )
+            })
+    }) {
+        return Err(AdvisoryError::ClaimPromotion);
+    }
+    Ok(())
+}

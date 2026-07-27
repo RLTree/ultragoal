@@ -1,4 +1,3 @@
-use serde_json::Value;
 use std::path::Path;
 
 pub fn package_failures(root: &Path) -> Vec<String> {
@@ -16,28 +15,6 @@ pub fn package_failures(root: &Path) -> Vec<String> {
     );
     out.extend(plans_failures(&plans));
     out.extend(automation_failures(&toml, &prompt, false));
-    out
-}
-
-pub fn value_failures(value: &Value) -> Vec<String> {
-    let plans = value
-        .get("plans_md")
-        .and_then(Value::as_str)
-        .unwrap_or_default();
-    let toml = value
-        .get("automation_toml")
-        .and_then(Value::as_str)
-        .unwrap_or_default();
-    let prompt = value
-        .get("automation_prompt")
-        .and_then(Value::as_str)
-        .unwrap_or_default();
-    let activation = value
-        .get("activation_candidate")
-        .and_then(Value::as_bool)
-        .unwrap_or(false);
-    let mut out = plans_failures(plans);
-    out.extend(automation_failures(toml, prompt, activation));
     out
 }
 

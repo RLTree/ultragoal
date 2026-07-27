@@ -63,24 +63,8 @@ impl BoundStoreIdentity {
     pub(super) fn parent(&self) -> &VerifiedParent {
         &self.parent
     }
-
-    #[cfg(test)]
-    pub(super) fn hold_mutex_for_test(
-        &self,
-        ready: std::sync::mpsc::Sender<()>,
-        release: std::sync::mpsc::Receiver<()>,
-    ) -> Result<(), String> {
-        let guard = self
-            .value
-            .try_lock()
-            .map_err(|_| "observe-store-test-identity-holder-failed".to_owned())?;
-        ready
-            .send(())
-            .map_err(|_| "observe-store-test-identity-ready-failed".to_owned())?;
-        release
-            .recv()
-            .map_err(|_| "observe-store-test-identity-release-failed".to_owned())?;
-        drop(guard);
-        Ok(())
-    }
 }
+
+#[cfg(test)]
+#[path = "identity_tests/mod.rs"]
+mod tests;

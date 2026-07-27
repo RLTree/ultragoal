@@ -2,3 +2,5 @@ interface:
   display_name: "Harness Ultragoal"
   short_description: "Route work through the Ultragoal product"
   default_prompt: "Use $harness-ultragoal:harness-ultragoal to classify this request and route it to the smallest authoritative workflow."
+policy:
+  allow_implicit_invocation: true

@@ -2,14 +2,16 @@ use serde_json::Value;
 use std::path::Path;
 
 mod cargo;
+mod operation;
+pub(crate) mod receipt;
 mod surface;
 
 const CLI_SCHEMA: &str = "schemas/cli-control-plane-receipt.schema.json";
 const SURFACE_SCHEMA: &str = "schemas/package-surface-audit-receipt.schema.json";
-const CONTROL_SOURCE: &str = "validator/src/cli/control/plane/mod.rs";
-const CONTROL_RECEIPT: &str = "validator/src/cli/control/plane/receipt.rs";
-const CONTROL_SURFACE: &str = "validator/src/cli/control/plane/surface/mod.rs";
-const CONTROL_TYPES: &str = "validator/src/cli/control/plane/types.rs";
+const CONTROL_SOURCE: &str = "validator/src/audit/cli/control_plane/authority/mod.rs";
+const CONTROL_RECEIPT: &str = "validator/src/audit/cli/control_plane/authority/receipt/mod.rs";
+const CONTROL_SURFACE: &str = "validator/src/audit/cli/control_plane/authority/surface.rs";
+const CONTROL_TYPES: &str = "validator/src/audit/cli/control_plane/authority/operation.rs";
 const INSTALL_AUDIT_RECEIPT: &str = "validation_artifacts/cli/install-audit-receipt.json";
 const CACHE_AUDIT_RECEIPT: &str = "validation_artifacts/cli/cache-audit-receipt.json";
 const UPDATE_GOAL_RECEIPT: &str = "validation_artifacts/cli/update-goal-eligibility.json";
@@ -165,17 +167,17 @@ fn require_receipts(root: &Path, out: &mut Vec<String>) {
                         root,
                         &value,
                         &expected_candidate,
-                        crate::cli::control::plane::operation::ControlOperation::InstallAudit,
+                        operation::SurfaceOperation::InstallAudit,
                     )
                 } else if operation == "cache_audit" {
                     surface::receipt_failures(
                         root,
                         &value,
                         &expected_candidate,
-                        crate::cli::control::plane::operation::ControlOperation::CacheAudit,
+                        operation::SurfaceOperation::CacheAudit,
                     )
                 } else {
-                    crate::cli::control::plane::receipt::same_candidate_fail_closed_failures(
+                    receipt::same_candidate_fail_closed_failures(
                         &value,
                         &expected_candidate,
                         operation,

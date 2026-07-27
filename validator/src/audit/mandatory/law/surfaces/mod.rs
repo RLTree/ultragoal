@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 mod current_law;
-mod dependencies;
+pub(crate) mod dependencies;
 mod independent;
 mod production;
 mod registry;
@@ -77,14 +77,6 @@ pub(crate) fn current_check_failures_for_test(
     production::current_check_failures(value, law, failures)
 }
 
-pub(crate) fn anti_theater_dependency_failures(
-    root: &Path,
-    store: &crate::schema_catalog::SchemaStore,
-    law: &str,
-) -> Vec<String> {
-    dependencies::anti_theater_failures(root, store, law)
-}
-
 pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
     let Some(rows) = value.get("laws").and_then(Value::as_array) else {
         return vec!["mandatory_law_registry_missing_laws".to_string()];
@@ -117,10 +109,10 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         if !registry::trace_entry_exists(root, law) {
             out.push(format!("mandatory_law_missing_foundational_trace:{law}"));
         }
-        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str) {
-            if !root.join(path).is_file() {
-                out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
-            }
+        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str)
+            && !root.join(path).is_file()
+        {
+            out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
         }
         for red in row
             .get("red_fixture_ids")

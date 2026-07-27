@@ -125,18 +125,22 @@ impl VerifiedParent {
 
 #[cfg(unix)]
 pub(crate) fn inspect_leaf(parent: &VerifiedParent) -> Result<Option<FileIdentity>, String> {
-    let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
+    let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: the verified parent retains a live directory descriptor, the
+    // leaf name is a NUL-terminated `CString`, and `stat` is writable storage.
     let result = unsafe {
         libc::fstatat(
             parent.directory().as_raw_fd(),
             parent.name.as_ptr(),
-            &mut stat,
+            stat.as_mut_ptr(),
             libc::AT_SYMLINK_NOFOLLOW,
         )
     };
     if result == 0 {
+        // SAFETY: a successful `fstatat` initialized the complete stat value.
+        let stat = unsafe { stat.assume_init() };
         validate_stat(&stat)?;
-        return Ok(Some(identity_stat(&stat)));
+        return Ok(Some(identity_stat(&stat)?));
     }
     let error = std::io::Error::last_os_error();
     if error.kind() == std::io::ErrorKind::NotFound {
@@ -152,6 +156,8 @@ pub(crate) fn open_leaf(
     flags: libc::c_int,
     operation: &str,
 ) -> Result<File, String> {
+    // SAFETY: the verified parent keeps the directory descriptor live, its
+    // leaf name is NUL-terminated, and the flags reject symlink traversal.
     let fd = unsafe {
         libc::openat(
             parent.directory().as_raw_fd(),
@@ -167,6 +173,7 @@ pub(crate) fn open_leaf(
         }
         return Err(io_code(operation, error));
     }
+    // SAFETY: successful `openat` returns one owned file descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 

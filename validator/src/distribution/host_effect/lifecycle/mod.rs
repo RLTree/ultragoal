@@ -11,20 +11,16 @@ mod binding;
 mod coordinator;
 mod recovery;
 
-#[cfg(test)]
 pub(in crate::distribution::host_effect) use binding::HostEffectAcceptanceRequest;
-#[cfg(test)]
-pub(crate) use binding::{
-    AcceptedHostEffect, AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
-    AcceptedReconciliationPolicy, AcceptedRollbackPolicy, RootPlanCustody,
-};
 pub(crate) use binding::{AcceptedHostScope, HostObjectIdentity, ObservedTargetIdentity};
-#[cfg(test)]
+pub(crate) use binding::{
+    AcceptedHostState, AcceptedLifecycleOperation, AcceptedLifecyclePlan,
+    AcceptedReconciliationPolicy, AcceptedRollbackPolicy,
+};
 pub(in crate::distribution::host_effect) use coordinator::HostEffectPreparationRequest;
-#[cfg(test)]
+pub(crate) use coordinator::TrustedTimeSample;
 pub(crate) use coordinator::{
     DescriptorExecutionAdapter, DescriptorExecutionPrimitive, SupportedHostLifecycleCoordinator,
-    TrustedTimeSample,
 };
 pub(crate) use coordinator::{
     DescriptorExecutionCapability, DescriptorExecutionHandoff, DescriptorExecutionPlatform,
@@ -45,7 +41,6 @@ pub(crate) use recovery::{
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum SupportedHostLifecycleErrorId {
-    UnsupportedPlatform,
     DescriptorExecutionUnavailable,
     InvalidAcceptedIdentity,
     CoordinatorSubstitution,
@@ -58,6 +53,7 @@ pub(crate) enum SupportedHostLifecycleErrorId {
     AuthorityRejected,
     LedgerRejected,
     HandoffConstructionFailed,
+    #[cfg(test)]
     RecoveryAuthorizationRequired,
     RecoveryUnsafe,
 }
@@ -73,7 +69,7 @@ impl SupportedHostLifecycleError {
     }
 }
 
-pub(super) const fn lifecycle_error(
+pub(in crate::distribution::host_effect) const fn lifecycle_error(
     id: SupportedHostLifecycleErrorId,
 ) -> SupportedHostLifecycleError {
     SupportedHostLifecycleError { id }

@@ -30,16 +30,25 @@ pub(crate) use execution_authority::{
 };
 pub(in crate::routine_work) use mediator::ObservedProcessCustody;
 pub(crate) use mediator::{
-    PRODUCTION_SUPPORT_LIMIT, RoutineCancellation, RoutineMediationResult, RoutineMediatorStatus,
-    RoutineNodeDisposition, RoutineReuseInput,
+    PRODUCTION_SUPPORT_LIMIT, RoutineCancellation, RoutineContinuationOutcome,
+    RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition, RoutineReuseInput,
+    RoutineTerminalOutcome,
 };
 #[cfg(test)]
 pub(crate) use mediator::{
-    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
-    validate_output_confinement_after, validate_read_confinement_after_bind,
+    set_test_output_capture_hook, test_last_spawn_group_absent, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };
-pub(crate) use production::mediate_public_routine_execution;
 pub(in crate::routine_work) use production::{LaunchCleanupEvidence, ObservedLaunchCleanup};
+pub(crate) use production::{
+    ProductionExecutionControl, PublicRoutineControl, RoutineCustodyCapability,
+    RoutineReservationPublication, authenticate_public_routine_checkpoint,
+    mediate_public_routine_execution_with_control, reconcile_public_routine_reservation,
+};
+#[cfg(test)]
+pub(crate) use production::{
+    mediate_public_routine_execution, mediate_public_routine_execution_with_reservation_publication,
+};
 #[cfg(all(test, target_vendor = "apple"))]
 pub(crate) use production::{
     set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,

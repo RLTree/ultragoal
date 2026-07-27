@@ -1,4 +1,5 @@
 use super::*;
+use serde::Deserialize;
 
 #[derive(Clone)]
 pub(crate) struct RoutineCancellation {
@@ -29,6 +30,28 @@ pub(crate) enum RoutineMediatorStatus {
     CompleteExecution,
     IncompleteExecution,
     Cancelled,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum RoutineTerminalOutcome {
+    Complete,
+    Failed,
+    Cancelled,
+    Incomplete,
+    Ambiguous,
+}
+
+impl RoutineTerminalOutcome {
+    pub(crate) fn as_str(self) -> &'static str {
+        match self {
+            Self::Complete => "complete",
+            Self::Failed => "failed",
+            Self::Cancelled => "cancelled",
+            Self::Incomplete => "incomplete",
+            Self::Ambiguous => "ambiguous",
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -77,5 +100,9 @@ pub(crate) struct RoutineMediationResult {
     pub(crate) status: RoutineMediatorStatus,
     pub(crate) nodes: Vec<RoutineNodeMediation>,
     pub(crate) recovery_marker: Option<String>,
+    pub(crate) continuation: Option<String>,
+    pub(crate) attempt_grant: Option<String>,
+    pub(crate) checkpoint_head: Option<String>,
+    pub(crate) terminal_outcome: Option<RoutineTerminalOutcome>,
     pub(crate) support_limit: &'static str,
 }

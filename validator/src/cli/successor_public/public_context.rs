@@ -1,13 +1,15 @@
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome, RuntimeSession};
+use crate::cli::successor::runtime::{
+    Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession,
+};
 use crate::cli::successor::{ExitClass, ParsedInvocation};
 use crate::context::LiveContext;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::fs::File;
 use std::io::Read;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
-const MAX_SELF_EXECUTABLE_BYTES: u64 = 512 * 1024 * 1024;
+const MAX_SELF_EXECUTABLE_BYTES: u64 = 128 * 1024 * 1024;
 
 pub(super) fn project(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
     project_with_limit(context, invocation, super::MAX_PUBLIC_OUTPUT)
@@ -68,17 +70,20 @@ pub(super) fn project_with_limit(
 }
 
 fn capture_runtime_identity() -> Option<serde_json::Value> {
-    let path = std::env::current_exe().ok()?;
-    let first = executable_identity(&path)?;
-    let rebound = std::env::current_exe().ok()?;
-    let second = executable_identity(&rebound)?;
-    if first != second || path != rebound {
+    let path = std::env::current_exe().ok()?.canonicalize().ok()?;
+    let identity = executable_identity(&path)?;
+    let rebound = std::env::current_exe().ok()?.canonicalize().ok()?;
+    let rebound_metadata = rebound.metadata().ok()?;
+    if path != rebound
+        || rebound_metadata.len() != identity.byte_length
+        || rebound_metadata.modified().ok()? != identity.modified
+    {
         return None;
     }
     Some(json!({
         "version": env!("CARGO_PKG_VERSION"),
-        "executable_sha256": first.sha256,
-        "executable_byte_length": first.byte_length,
+        "executable_sha256": identity.sha256,
+        "executable_byte_length": identity.byte_length,
         "self_bound": true,
     }))
 }
@@ -88,11 +93,9 @@ struct ExecutableIdentity {
     sha256: String,
     byte_length: u64,
     modified: std::time::SystemTime,
-    path: PathBuf,
 }
 
 fn executable_identity(path: &Path) -> Option<ExecutableIdentity> {
-    let path = path.canonicalize().ok()?;
     let before = path.metadata().ok()?;
     if !before.is_file() || before.len() == 0 || before.len() > MAX_SELF_EXECUTABLE_BYTES {
         return None;
@@ -123,7 +126,6 @@ fn executable_identity(path: &Path) -> Option<ExecutableIdentity> {
         sha256: format!("sha256:{:x}", hasher.finalize()),
         byte_length: bytes,
         modified: after.modified().ok()?,
-        path,
     })
 }
 
@@ -134,12 +136,14 @@ fn projection_failure() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::ProjectionFailed,
             class,
-            "the bounded public context projection could not be produced",
-            "public context output",
-            "repair the public projection without exposing the internal LiveContext payload",
-            "read",
-            "ultragoal --json inspect context",
-            "public context and dependent claims remain withheld",
+            DiagnosticDetails {
+                cause: "the bounded public context projection could not be produced",
+                affected_surface: "public context output",
+                repair: "repair the public projection without exposing the internal LiveContext payload",
+                effect: "read",
+                rerun: "ultragoal --json inspect context",
+                ceiling: "public context and dependent claims remain withheld",
+            },
         ),
     )
 }

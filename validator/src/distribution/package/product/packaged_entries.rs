@@ -1,11 +1,18 @@
 fn packaged_entries(
     source: &SourcePackageSnapshot,
+    cli_payload: Option<&CandidateCliPayload>,
 ) -> Result<Vec<PackageEntry>, ProductionPackageError> {
     let mut entries = Vec::with_capacity(source.packaged_paths().len());
     for path in source.packaged_paths() {
+        if cli_payload.is_some() && path == "runtime/runtime-probe-bin" {
+            continue;
+        }
         let bytes = source
             .bytes(path)
             .ok_or_else(|| failure(ProductionPackageErrorId::MembershipMismatch))?;
+        if path == MARKETPLACE_CATALOG_PATH && !is_canonical_marketplace_catalog(bytes) {
+            return Err(failure(ProductionPackageErrorId::MembershipMismatch));
+        }
         let mode = source
             .unix_mode(path)
             .ok_or_else(|| failure(ProductionPackageErrorId::MembershipMismatch))?;
@@ -19,7 +26,11 @@ fn packaged_entries(
         });
     }
     entries.sort_by(|left, right| left.path.cmp(&right.path));
-    if entries.len() != source.packaged_paths().len()
+    if entries.len()
+        != source
+            .packaged_paths()
+            .len()
+            .saturating_sub(usize::from(cli_payload.is_some()))
         || entries.windows(2).any(|pair| pair[0].path == pair[1].path)
         || entries
             .iter()
@@ -39,12 +50,26 @@ fn packaged_entries(
             }
         }
     }
+    if let Some(payload) = cli_payload {
+        entries.push(PackageEntry {
+            path: CLI_RUNTIME_ENTRY.to_owned(),
+            mode: 0o755,
+            role: PackageRole::Executable,
+            sha256: payload.sha256().to_owned(),
+            bytes: payload.bytes().to_vec(),
+        });
+    }
+    entries.sort_by(|left, right| left.path.cmp(&right.path));
     Ok(entries)
 }
 
 fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageError> {
     let role = if path == SUPPORTED_MANIFEST_PATH {
         PackageRole::Manifest
+    } else if path == MARKETPLACE_CATALOG_PATH {
+        PackageRole::Data
+    } else if path == "runtime/runtime-probe-bin" {
+        PackageRole::Executable
     } else if CANONICAL_SKILLS
         .iter()
         .any(|name| path == format!("skills/{name}/SKILL.md"))
@@ -58,7 +83,9 @@ fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageE
     } else {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     };
-    if mode != 0o644 {
+    if (role == PackageRole::Executable && mode != 0o755)
+        || (role != PackageRole::Executable && mode != 0o644)
+    {
         return Err(failure(ProductionPackageErrorId::MembershipMismatch));
     }
     Ok(role)

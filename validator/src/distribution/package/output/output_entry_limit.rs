@@ -108,7 +108,7 @@ pub fn publish_package_artifact(
     match output.compare_exchange_tree(previous_sha256.as_deref(), Some(&replacement)) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let result = read(output).and_then(|observed| {
         reconcile_package_artifact(snapshot, binding, observed.as_deref())?;

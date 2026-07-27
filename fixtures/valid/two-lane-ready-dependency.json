@@ -755,7 +755,6 @@
       "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
       "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
       "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
-      "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
       "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
       "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
       "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",
@@ -1840,15 +1839,6 @@
       "fixtures/red/subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red.json",
       "fixtures/red/subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red.json",
       "fixtures/red/target-advanced-after-validation.json",
-      "fixtures/red/target-repo-audit-capability-fixture-used-as-live-target-red.json",
-      "fixtures/red/target-repo-audit-capability-generic-repo-support-overclaim-red.json",
-      "fixtures/red/target-repo-audit-capability-mode-substitution-red.json",
-      "fixtures/red/target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red.json",
-      "fixtures/red/target-repo-audit-capability-source-obligation-parity-red.json",
-      "fixtures/red/target-repo-audit-capability-target-classification-missing-red.json",
-      "fixtures/red/target-repo-audit-capability-target-command-missing-success-emitted-red.json",
-      "fixtures/red/target-repo-audit-capability-unknown-language-runtime-accepted-red.json",
-      "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red.json",
       "fixtures/red/targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red.json",
@@ -4386,7 +4376,7 @@
       "validator/src/audit/plugin/registry/live/mod.rs",
       "validator/src/audit/plugin/registry/mod.rs",
       "validator/src/audit/product/fitness/mod.rs",
-      "validator/src/audit/product/fitness/evidence.rs",
+      "validator/src/audit/product/fitness/evidence/mod.rs",
       "validator/src/audit/product/fitness/receipt/mod.rs",
       "validator/src/audit/product/fitness/substitutions.rs",
       "validator/src/audit/product/mod.rs",
@@ -4420,8 +4410,7 @@
       "validator/src/claim_semantics/claim/mod.rs",
       "validator/src/claim_semantics/claim/proof/mod.rs",
       "validator/src/claim_semantics/claim/proof/text.rs",
-      "validator/src/claim_semantics/coverage/digests.rs",
-      "validator/src/claim_semantics/coverage/mod.rs",
+      "validator/src/audit/coverage/scope/digests.rs",
       "validator/src/claim_semantics/coverage/policy.rs",
       "validator/src/claim_semantics/coverage/ready/join.rs",
       "validator/src/claim_semantics/coverage/ready/mod.rs",
@@ -4431,18 +4420,6 @@
       "validator/src/claim_semantics/coverage/receipt/rules.rs",
       "validator/src/claim_semantics/dogfood_receipt.rs",
       "validator/src/claim_semantics/json_patch.rs",
-      "validator/src/claim_semantics/lane/actor/freshness.rs",
-      "validator/src/claim_semantics/lane/actor/mod.rs",
-      "validator/src/claim_semantics/lane/dependency.rs",
-      "validator/src/claim_semantics/lane/isolation.rs",
-      "validator/src/claim_semantics/lane/mod.rs",
-      "validator/src/claim_semantics/lane/paths.rs",
-      "validator/src/claim_semantics/lane/policy.rs",
-      "validator/src/claim_semantics/lane/root/mod.rs",
-      "validator/src/claim_semantics/lane/root/scope.rs",
-      "validator/src/claim_semantics/lane/runtime/mod.rs",
-      "validator/src/claim_semantics/lane/runtime/state.rs",
-      "validator/src/claim_semantics/lane/status.rs",
       "validator/src/claim_semantics/mod.rs",
       "validator/src/claim_semantics/plugin_policy/mod.rs",
       "validator/src/claim_semantics/product/cohesion.rs",
@@ -4454,8 +4431,6 @@
       "validator/src/claim_semantics/product/text/policy.rs",
       "validator/src/claim_semantics/promotion_receipt.rs",
       "validator/src/claim_semantics/ready/join.rs",
-      "validator/src/claim_semantics/ready/mod.rs",
-      "validator/src/claim_semantics/ready/receipt.rs",
       "validator/src/claim_semantics/retired_reviewer_policy.rs",
       "validator/src/claim_semantics/semantic/mod.rs",
       "validator/src/claim_semantics/semantic/receipt/gates.rs",
@@ -4520,17 +4495,6 @@
       "validator/src/package/inventory/closure/package_entries.rs",
       "validator/src/package/resource/mod.rs",
       "validator/src/package/resource/purpose.rs",
-      "validator/src/red/filesystem/fixtures.rs",
-      "validator/src/red/filesystem/mod.rs",
-      "validator/src/red/fixture/bases.rs",
-      "validator/src/red/fixture/mod.rs",
-      "validator/src/red/fixture/observation.rs",
-      "validator/src/red/fixture/package.rs",
-      "validator/src/red/fixture/review/mod.rs",
-      "validator/src/red/fixture/review/round.rs",
-      "validator/src/red/fixture/row.rs",
-      "validator/src/red/fixture/schema.rs",
-      "validator/src/red/fixtures/mod.rs",
       "validator/src/red/mod.rs",
       "validator/src/review/materiality.rs",
       "validator/src/review/mod.rs",
@@ -4712,14 +4676,8 @@
       "validator/src/self_tests/receipts/validator/mod.rs",
       "validator/src/self_tests/receipts/validator/boundaries.rs",
       "validator/src/self_tests/red/catalog_output.rs",
-      "validator/src/self_tests/red/filesystem.rs",
-      "validator/src/self_tests/red/fixture/boundaries/mod.rs",
-      "validator/src/self_tests/red/fixture/mod.rs",
-      "validator/src/self_tests/red/fixture/runtime/binding.rs",
-      "validator/src/self_tests/red/fixture/runtime/mod.rs",
       "validator/src/self_tests/red/mod.rs",
       "validator/src/self_tests/red/registry_schema_target_edges.rs",
-      "validator/src/self_tests/red/schema.rs",
       "validator/src/self_tests/review/archive/materiality.rs",
       "validator/src/self_tests/review/claim_ceiling.rs",
       "validator/src/self_tests/review/materiality.rs",
@@ -5690,10 +5648,6 @@
         "status": "pass"
       },
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation": {
-        "details": "pass",
-        "status": "pass"
-      },
-      "target-repo-audit-capability": {
         "details": "pass",
         "status": "pass"
       },
@@ -17754,96 +17708,6 @@
         "status": "fail",
         "validator_exit": 1
       },
-      "target-repo-audit-capability-fixture-used-as-live-target-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:fixture_used_as_live_target",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:fixture_used_as_live_target",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:2d6a3d464cd4ca2223cf41d326104f623fbdd34d1702a83862d1683840969a77",
-        "packet_path": "fixtures/red/target-repo-audit-capability-fixture-used-as-live-target-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-generic-repo-support-overclaim-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:generic_repo_support_overclaim",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:a3e996beb8b3b665e4375db5d2b56cf8f2fb9deb5ba1140e4b3eeec7316efd9b",
-        "packet_path": "fixtures/red/target-repo-audit-capability-generic-repo-support-overclaim-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-mode-substitution-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:mode_substitution",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:mode_substitution",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:7f1dcfbb2242f3fad9689c0a8aea5d2bf640b3d9c5d0f5037967aeb346f37d1e",
-        "packet_path": "fixtures/red/target-repo-audit-capability-mode-substitution-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:product_surface_not_detected_product_claim_emitted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:product_surface_not_detected_product_claim_emitted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:953433a39b0bdecb9bae8dbb2ba4353d01607d04acae7a43a4cbf479c921c0cf",
-        "packet_path": "fixtures/red/target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-source-obligation-parity-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:source_obligation_parity",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:source_obligation_parity",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:89a09343ba5e150bec5c7bd02cb823a2c342500399897758ed55fdb3485c2cd3",
-        "packet_path": "fixtures/red/target-repo-audit-capability-source-obligation-parity-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-target-classification-missing-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_classification_missing",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_classification_missing",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:924724bcbc70fd125fd68f2986c42a4c50f9bc234414538d3084b73db4210ba9",
-        "packet_path": "fixtures/red/target-repo-audit-capability-target-classification-missing-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-target-command-missing-success-emitted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_command_missing_success_emitted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:target_command_missing_success_emitted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:f28c3822cc62e655e9dda5eb20018018bb0037621f2097083d613288cef67d23",
-        "packet_path": "fixtures/red/target-repo-audit-capability-target-command-missing-success-emitted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-unknown-language-runtime-accepted-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unknown_language_runtime_accepted",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unknown_language_runtime_accepted",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:a4939aeb695213f38b036f113ebdfab8c194dc09a11c5a6d0e578d1e05d52b96",
-        "packet_path": "fixtures/red/target-repo-audit-capability-unknown-language-runtime-accepted-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
-      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red": {
-        "expected_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
-        "expected_failing_check": "target-repo-audit-capability",
-        "observed_error": "mandatory_law_specific_guard_not_enforced:target-repo-audit-capability:unsupported_repo_marked_fit_repo_ready",
-        "observed_failing_check": "target-repo-audit-capability",
-        "packet_digest": "sha256:654ba5f53abca13eefdf5e768057ffbced8cfb3eed1f3eb66004ec5e44b04213",
-        "packet_path": "fixtures/red/target-repo-audit-capability-unsupported-repo-marked-fit-repo-red.json",
-        "status": "pass",
-        "validator_exit": 1
-      },
       "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red": {
         "expected_error": "mandatory_law_specific_guard_not_enforced:targeted-refactor-debt-removal-standards-gardener-cadence:backlog_debt_supporting_claim",
         "expected_failing_check": "source-obligation-coverage",
@@ -19151,7 +19015,6 @@
       "standards-gardener-promotion",
       "subagent-custom-agent-sandbox-approval-inheritance",
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-      "target-repo-audit-capability",
       "targeted-refactor-debt-removal-standards-gardener-cadence",
       "template-generation-governance-template-creator-boundary",
       "third-party-dependency-legibility-typed-adapters",
@@ -20332,15 +20195,6 @@
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
       "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
       "target-advanced-after-validation",
-      "target-repo-audit-capability-fixture-used-as-live-target-red",
-      "target-repo-audit-capability-generic-repo-support-overclaim-red",
-      "target-repo-audit-capability-mode-substitution-red",
-      "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-      "target-repo-audit-capability-source-obligation-parity-red",
-      "target-repo-audit-capability-target-classification-missing-red",
-      "target-repo-audit-capability-target-command-missing-success-emitted-red",
-      "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-      "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
       "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -20598,7 +20452,7 @@
           "path": "validator/src/audit/coverage/mod.rs"
         },
         {
-          "digest": "sha256:f2b99b5e2f0075f1b0bdda0d4bcc9b616ee4f84a568d0085f97d74223fcc882b",
+          "digest": "sha256:4bc1b10f8f8d225bbfc1f667ed52763073814b50c4cdbef84bc6d104a06a74e3",
           "path": "validator/src/audit/coverage/scope/mod.rs"
         },
         {
@@ -20810,8 +20664,8 @@
           "path": "validator/src/audit/product/fitness/mod.rs"
         },
         {
-          "digest": "sha256:7589b97a8fcb86cad8e848b580bc3d0a31b776bcda1cdecc34fbfa96c7f7e0be",
-          "path": "validator/src/audit/product/fitness/evidence.rs"
+          "digest": "sha256:73a5338fa2d041ca985aebd2a2bb827de0ad0f7e995198b85007d067efd60929",
+          "path": "validator/src/audit/product/fitness/evidence/mod.rs"
         },
         {
           "digest": "sha256:93bc1f62210b609a69b26803d41d199c60268293fdc99e4780db36e1c6c16b76",
@@ -20892,7 +20746,8 @@
         {
           "digest": "sha256:d87960b60d93f1b61edeaaf4da67be0f14cefedd80a94723d731ab158caf1ddb",
           "path": "validator/src/audit/text_guards/stale_review.rs"
-        },        {
+        },
+        {
           "digest": "sha256:92fde06c5cece43a2e0ed81763959a81b8dd552167ab8eb4fffd56eb7e7bb5a5",
           "path": "validator/src/bin/ultragoal.rs"
         },
@@ -20941,12 +20796,8 @@
           "path": "validator/src/claim_semantics/claim/proof/text.rs"
         },
         {
-          "digest": "sha256:470d2107ee603f630318c56b358c5bd5cfd2cd972fe47f3205bb3b879ee8ea09",
-          "path": "validator/src/claim_semantics/coverage/digests.rs"
-        },
-        {
-          "digest": "sha256:ef4b6b7d428b9c794b5935c580d100efde1699d46c91da6172bec374a1fc1b0f",
-          "path": "validator/src/claim_semantics/coverage/mod.rs"
+          "digest": "sha256:8f7b57ad0dae3f586b233f145dce4a1088a2e655eba03bd07ceb2483924bc27f",
+          "path": "validator/src/audit/coverage/scope/digests.rs"
         },
         {
           "digest": "sha256:e4177c5f486c5c0a569e28774e670a5070003abbaa85fef790af1d76fabcb107",
@@ -20985,55 +20836,7 @@
           "path": "validator/src/claim_semantics/json_patch.rs"
         },
         {
-          "digest": "sha256:bc60c7002409b2369f2eb56138bed9e06f18f2ade7724e0a1155e58c2b1ce406",
-          "path": "validator/src/claim_semantics/lane/actor/freshness.rs"
-        },
-        {
-          "digest": "sha256:c7a635362af7aaff94f6f74c7fbb4a289c65f59f43608f7277c33ab3fa2d6a63",
-          "path": "validator/src/claim_semantics/lane/actor/mod.rs"
-        },
-        {
-          "digest": "sha256:07bae6ba33ddda56c8e4bfc7e6fd046345293c3c580a45ba413b81df4265d7bd",
-          "path": "validator/src/claim_semantics/lane/dependency.rs"
-        },
-        {
-          "digest": "sha256:7f091b00f83d11b2047e20946214091e3b4aaa12fb059a4fe299a7d1c4b80405",
-          "path": "validator/src/claim_semantics/lane/isolation.rs"
-        },
-        {
-          "digest": "sha256:265b59fa7c0c761cb521a9df870449140e3a62ba2b6c187d360f03575cfb021b",
-          "path": "validator/src/claim_semantics/lane/mod.rs"
-        },
-        {
-          "digest": "sha256:cd014198c1097cdd0dba43152a7cc3dc0a7e12d443fd0d5c686b6af585eebb03",
-          "path": "validator/src/claim_semantics/lane/paths.rs"
-        },
-        {
-          "digest": "sha256:53525eeb49e05e6eee5dd1136c85b76649d14419c269f98229983b63b241d277",
-          "path": "validator/src/claim_semantics/lane/policy.rs"
-        },
-        {
-          "digest": "sha256:885589f6d7f1e1eebc9f773a13c82261790a964ed278030e6ddb3a6cd8f0ea12",
-          "path": "validator/src/claim_semantics/lane/root/mod.rs"
-        },
-        {
-          "digest": "sha256:24a928f21e37e3a37590122c6ba89e8aebe7091060ae152940873ebad8f6c3b2",
-          "path": "validator/src/claim_semantics/lane/root/scope.rs"
-        },
-        {
-          "digest": "sha256:419264b1da032f5edd148ac86ccc2b109c0d564d50508467c463bc11cd73a88f",
-          "path": "validator/src/claim_semantics/lane/runtime/mod.rs"
-        },
-        {
-          "digest": "sha256:355d20951115bb4cff110abf5e5b64e52d112fc8cb70ff7fdba983932e9dad45",
-          "path": "validator/src/claim_semantics/lane/runtime/state.rs"
-        },
-        {
-          "digest": "sha256:17b0fc92ff03f569306dbe00cf182f33fb8b25ea12be1368b80837aea03bcf69",
-          "path": "validator/src/claim_semantics/lane/status.rs"
-        },
-        {
-          "digest": "sha256:4148c68e699dd9af59545f2c53c495e0fb490ca9da06bf4b48cb53585e10ba7a",
+          "digest": "sha256:87b6dc14fbb7257c03029daad2d4e08df59d9167746079bf3484dfe8bfb11abd",
           "path": "validator/src/claim_semantics/mod.rs"
         },
         {
@@ -21075,14 +20878,6 @@
         {
           "digest": "sha256:09d8ab858c5799ae75c403bc270a55bab7cda416a320fad852712a7d7efdfdec",
           "path": "validator/src/claim_semantics/ready/join.rs"
-        },
-        {
-          "digest": "sha256:08d276626b4bd5155f7d29263b57629f1d3dc449771866ce6d59f75f24793805",
-          "path": "validator/src/claim_semantics/ready/mod.rs"
-        },
-        {
-          "digest": "sha256:eee39ba3d3469f81279a29a08fd960341b6b246b83ad216da69e14f136dd2b17",
-          "path": "validator/src/claim_semantics/ready/receipt.rs"
         },
         {
           "digest": "sha256:2ce44fd53b6e948a0003fb4b8376274b2a4c6a279b3862e515ad0429532b4664",
@@ -21333,50 +21128,6 @@
           "path": "validator/src/package/resource/purpose.rs"
         },
         {
-          "digest": "sha256:a6509b5f1fe49785cd2e182e24cdfc50accd254b53a84111ba2ef641aa2c4728",
-          "path": "validator/src/red/filesystem/fixtures.rs"
-        },
-        {
-          "digest": "sha256:8db3b881670b69baa8a921b70ca71714c7e1d1b853ca54da72e71857665b835f",
-          "path": "validator/src/red/filesystem/mod.rs"
-        },
-        {
-          "digest": "sha256:53f91fce22ebbc3a29c5b74f41b8a34aee9380d58d5b2fc32db616d417672249",
-          "path": "validator/src/red/fixture/bases.rs"
-        },
-        {
-          "digest": "sha256:77ed92e5c107b61af92e384979e0e32e2224fe78098fb73dd990ddca9c277b10",
-          "path": "validator/src/red/fixture/mod.rs"
-        },
-        {
-          "digest": "sha256:e026b41108d7a139f6949b2b947f96b5bc71a325c72f02ab7e99fd18ef76d65e",
-          "path": "validator/src/red/fixture/observation.rs"
-        },
-        {
-          "digest": "sha256:92e192e02691f021b4d302496626d5a42fade0a292f6236f9a0aaf630c9d24b3",
-          "path": "validator/src/red/fixture/package.rs"
-        },
-        {
-          "digest": "sha256:946f3eea7e22ab266e324afbd80e10113d4555f92e48de7724fd02c87961ece3",
-          "path": "validator/src/red/fixture/review/mod.rs"
-        },
-        {
-          "digest": "sha256:a360f87b3a721d52b38bb4f0eefb96496a69c368c9aae53c65f8d587d2aee7e9",
-          "path": "validator/src/red/fixture/review/round.rs"
-        },
-        {
-          "digest": "sha256:b276d537bf4fba53333ebf7f09bd8e92842e75def4508b492ade0257b97f6be2",
-          "path": "validator/src/red/fixture/row.rs"
-        },
-        {
-          "digest": "sha256:54b56e85e5b4fafb9a591df7418c5589f022a704fbc428743b33546be4b9601c",
-          "path": "validator/src/red/fixture/schema.rs"
-        },
-        {
-          "digest": "sha256:ed88915c77af5e2a657b7a6fa93d0ad29478ef82e41514c06d3eef9ac3c02657",
-          "path": "validator/src/red/fixtures/mod.rs"
-        },
-        {
           "digest": "sha256:cfb5b5f4c3f7cdf602709a7ed4c360c92c5c19395273486d5b380b1900135686",
           "path": "validator/src/red/mod.rs"
         },
@@ -21605,7 +21356,7 @@
           "path": "validator/src/self_tests/audit/source_audit.rs"
         },
         {
-          "digest": "sha256:cc09350de56147db111d97f7bc008d3996d3357897f31815c8423e42436c75c0",
+          "digest": "sha256:65e17a7f25a32c79c4773fe2b007e7da1db70c03f8dafe874c66c0977991a451",
           "path": "validator/src/self_tests/boundaries/artifact_refs.rs"
         },
         {
@@ -21625,7 +21376,7 @@
           "path": "validator/src/self_tests/boundaries/workspace_fixtures.rs"
         },
         {
-          "digest": "sha256:918904001c2ffafde0ed48a935bbcb06ee84ad2c82af0dc2b34dc1946cfe0f0d",
+          "digest": "sha256:ae79dfebf1316c5fcd36ab0bd670ebe89b0951c6cfc18b714c8981a5d96ec600",
           "path": "validator/src/self_tests/boundaries/typed_authority_edges.rs"
         },
         {
@@ -21917,7 +21668,7 @@
           "path": "validator/src/self_tests/coverage/rootless_digest_guards.rs"
         },
         {
-          "digest": "sha256:3ba063fa609e76bba5e2133f3d22d07491c2dcf5909c2fef51adf832b0164665",
+          "digest": "sha256:eb552a9efeca02a5979ccdf0e331080e9f10ab4ab75089cc302374a44b8fac49",
           "path": "validator/src/self_tests/coverage/scope/authority.rs"
         },
         {
@@ -22089,36 +21840,12 @@
           "path": "validator/src/self_tests/red/catalog_output.rs"
         },
         {
-          "digest": "sha256:5b8f20b9425bc5b6535ecb8bc8d2ab1243a9dca85399f31db986dd246cc41d34",
-          "path": "validator/src/self_tests/red/filesystem.rs"
-        },
-        {
-          "digest": "sha256:311fcea1f812f3fe7f626f4c6d8e84531dbdc91588632ecf10348dad879c0301",
-          "path": "validator/src/self_tests/red/fixture/boundaries/mod.rs"
-        },
-        {
-          "digest": "sha256:1d51b05a0b679801a6f446a75531684835fdf51cd5999a8369964f203058598b",
-          "path": "validator/src/self_tests/red/fixture/mod.rs"
-        },
-        {
-          "digest": "sha256:920c1b5b0157a9b947cdf1b21cde8da842cbca9e83cb620a737b35aff90d6d40",
-          "path": "validator/src/self_tests/red/fixture/runtime/binding.rs"
-        },
-        {
-          "digest": "sha256:95ef4f914d1598b1e2b6547a95adc95d9798ded4c5cc3d7316be0e9a4129130f",
-          "path": "validator/src/self_tests/red/fixture/runtime/mod.rs"
-        },
-        {
           "digest": "sha256:87c3cb7fffe4829e943618c1ddc5fdc901c9912d8bcb0d98aaecca559a5c7ca1",
           "path": "validator/src/self_tests/red/mod.rs"
         },
         {
           "digest": "sha256:39d2c8c56e008eb2a8a857b6a97b647e398900c94300b7136b92b0bf8f35ed2c",
           "path": "validator/src/self_tests/red/registry_schema_target_edges.rs"
-        },
-        {
-          "digest": "sha256:aa4b9e35e77b8791866300b4ce2152fbc146263ea56ba918f15b7f64d3af750a",
-          "path": "validator/src/self_tests/red/schema.rs"
         },
         {
           "digest": "sha256:2bbcdc2e10a8a12fca40ddc6259e16591f00069c69f99e4c30161fb0e269d5d3",

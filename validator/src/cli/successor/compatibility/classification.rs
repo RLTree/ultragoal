@@ -1,7 +1,7 @@
 use super::super::command_contract::LegacyCommand;
 use std::ffi::OsString;
 
-#[path = "route_catalog.rs"]
+#[path = "route_catalog/mod.rs"]
 mod route_catalog;
 
 pub(crate) fn classify_legacy_command(args: &[OsString]) -> Option<LegacyCommand> {

@@ -11,7 +11,7 @@ pub(crate) fn selected_finding_joins_state_repair_to_explicit_local_cause_withou
         .join("validation_artifacts/observability/spool");
     fs::create_dir_all(&spool).unwrap();
     let store = EventStore::for_context(
-        super::super::observe::store_path(&repository.root),
+        super::super::observe::store_path(&repository.root, &context, "successor-runtime").unwrap(),
         &context,
         "successor-runtime",
     )
@@ -127,7 +127,7 @@ pub(crate) fn present_store_without_a_bound_event_withholds_cause_without_writes
         .join("validation_artifacts/observability/spool");
     fs::create_dir_all(&spool).unwrap();
     let store = EventStore::for_context(
-        super::super::observe::store_path(&repository.root),
+        super::super::observe::store_path(&repository.root, &context, "successor-runtime").unwrap(),
         &context,
         "successor-runtime",
     )

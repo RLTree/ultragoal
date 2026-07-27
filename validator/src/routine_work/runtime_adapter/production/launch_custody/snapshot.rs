@@ -25,8 +25,9 @@ pub(in crate::routine_work::runtime_adapter::production) struct LaunchBinding<'a
 }
 
 pub(in crate::routine_work::runtime_adapter::production) fn launch_root(
-    authority_root: &Path,
+    custody: &super::super::RoutineCustodyCapability,
 ) -> Result<PathBuf, RoutineError> {
+    let authority_root = custody.authority_root();
     let parent = authority_root
         .parent()
         .ok_or_else(|| error("routine-production-launch-root-invalid"))?

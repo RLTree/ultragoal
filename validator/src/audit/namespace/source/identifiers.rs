@@ -1,4 +1,4 @@
-use crate::audit::source_governance::rust_syntax::{RustSyntaxRequest, analyze};
+use crate::audit::source_governance::rust_syntax::{analyze, RustSyntaxRequest};
 use crate::audit::source_governance::{GovernedInventory, GovernedSource};
 #[cfg(test)]
 use std::collections::BTreeSet;
@@ -49,10 +49,7 @@ fn failures_for_sources<'a>(sources: impl Iterator<Item = &'a GovernedSource>) -
             }
         }
         let source_text = String::from_utf8_lossy(&source.bytes);
-        failures.extend(source_text.lines().enumerate().filter_map(|(index, line)| {
-            super::string_labels::failure(&source.relative, index + 1, line)
-        }));
-        failures.extend(super::string_labels::raw_source_failures(
+        failures.extend(super::string_scanner::failures(
             &source.relative,
             &source_text,
         ));
@@ -81,4 +78,8 @@ fn classification(
             "rename_identifier_by_the_product_behavior_or_domain_contract_it_serves",
         )
     })
+}
+
+pub(super) fn semantic_identifier(identifier: &str) -> bool {
+    classification(identifier).is_none()
 }

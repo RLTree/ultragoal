@@ -4,9 +4,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 #[cfg(all(test, unix))]
+#[path = "../generated_tests/mod.rs"]
 mod batch_tests;
-#[cfg(test)]
-mod tests;
 
 pub(super) struct State {
     classifications: BTreeMap<String, Result<Classification, ()>>,
@@ -39,6 +38,9 @@ impl State {
 
     pub(super) fn row(&self, relative: &str) -> PackageSurfaceRow {
         match self.classifications.get(relative) {
+            Some(Ok(Classification::AdoptedSchemaContract)) => {
+                row::adopted_schema_contract(relative)
+            }
             Some(Ok(Classification::RetainedContext {
                 replacement_targets,
             })) => row::retained_context(relative, replacement_targets),

@@ -6,15 +6,13 @@ pub(crate) static TEST_ARTIFACT_PAUSE_MS: AtomicU64 = AtomicU64::new(0);
 pub(crate) static TEST_ARTIFACT_PAUSED: AtomicBool = AtomicBool::new(false);
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn set_test_artifact_pause_ms(milliseconds: u64) {
+pub fn set_test_artifact_pause_ms(milliseconds: u64) {
     TEST_ARTIFACT_PAUSED.store(false, Ordering::SeqCst);
     TEST_ARTIFACT_PAUSE_MS.store(milliseconds, Ordering::SeqCst);
 }
 
 #[cfg(test)]
-#[allow(dead_code)]
-pub(crate) fn test_artifact_is_paused() -> bool {
+pub fn test_artifact_is_paused() -> bool {
     TEST_ARTIFACT_PAUSED.load(Ordering::SeqCst)
 }
 

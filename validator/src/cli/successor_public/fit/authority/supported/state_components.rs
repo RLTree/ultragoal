@@ -1,7 +1,7 @@
 use super::*;
 
-pub(crate) const STATE_COMPONENTS: &[&str] =
-    &[".codex", "state", "harness-ultragoal", "repository-fit"];
+pub(crate) const HOST_STATE_COMPONENTS: &[&str] = &[".codex", "state"];
+pub(crate) const FIT_STATE_COMPONENTS: &[&str] = &["harness-ultragoal", "repository-fit"];
 pub(crate) const AUTHORITY_DIRECTORY: &str = "authority";
 pub(crate) const PENDING_DIRECTORY: &str = "pending";
 pub(crate) const PENDING_SCHEMA: &str = "harness-ultragoal.repository-fit-pending.v1";
@@ -83,9 +83,11 @@ pub(crate) struct MonotonicClock;
 impl RepositoryFitTrustedClock for MonotonicClock {
     fn trusted_tick(&self) -> Result<u64, FitAdapterError> {
         let mut value = std::mem::MaybeUninit::<libc::timespec>::uninit();
+        // SAFETY: `value` points to writable storage for the duration of the call and CLOCK_MONOTONIC is valid.
         if unsafe { libc::clock_gettime(libc::CLOCK_MONOTONIC, value.as_mut_ptr()) } != 0 {
             return Err(FitAdapterError::trusted_clock_unavailable());
         }
+        // SAFETY: clock_gettime returned zero, so it initialized `value`.
         let value = unsafe { value.assume_init() };
         if value.tv_sec < 0 || !(0..1_000_000_000).contains(&value.tv_nsec) {
             return Err(FitAdapterError::trusted_clock_unavailable());

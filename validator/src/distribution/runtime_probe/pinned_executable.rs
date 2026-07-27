@@ -65,18 +65,6 @@ impl PinnedRuntimeExecutable {
         &self.sha256
     }
 
-    fn execution_path(&self) -> PathBuf {
-        #[cfg(unix)]
-        {
-            use std::os::fd::AsRawFd;
-            PathBuf::from(format!("/dev/fd/{}", self.file.as_raw_fd()))
-        }
-        #[cfg(not(unix))]
-        {
-            self.path.clone()
-        }
-    }
-
     fn shell_script(&self) -> bool {
         self.shell_script
     }
@@ -103,10 +91,12 @@ impl PinnedRuntimeExecutable {
 
 #[cfg(unix)]
 fn clear_close_on_exec(fd: std::os::fd::RawFd) -> Result<(), DistributionError> {
+    // SAFETY: `fd` is borrowed from an open File and F_GETFD has no pointer arguments.
     let flags = unsafe { libc::fcntl(fd, libc::F_GETFD) };
     if flags < 0 {
         return Err(error(DistributionErrorId::UnsafeObject));
     }
+    // SAFETY: `fd` is borrowed from an open File and the flag value is valid for F_SETFD.
     if unsafe { libc::fcntl(fd, libc::F_SETFD, flags & !libc::FD_CLOEXEC) } < 0 {
         return Err(error(DistributionErrorId::UnsafeObject));
     }

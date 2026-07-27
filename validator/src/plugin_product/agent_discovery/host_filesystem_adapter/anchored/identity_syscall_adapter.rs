@@ -43,6 +43,7 @@ fn execute(
 ) -> Result<IdentitySyscallResponse, IdentitySyscallError> {
     match request {
         IdentitySyscallRequest::OpenRoot { path } => {
+            // SAFETY: `path` is a live, NUL-terminated C string for this call.
             let descriptor = unsafe {
                 libc::open(
                     path.as_ptr(),
@@ -57,6 +58,7 @@ fn execute(
         }
         IdentitySyscallRequest::InspectRegular { directory_fd, name } => {
             let mut metadata = std::mem::MaybeUninit::<libc::stat>::uninit();
+            // SAFETY: `name` is NUL-terminated and `metadata` provides writable `stat` storage.
             let result = unsafe {
                 libc::fstatat(
                     directory_fd,
@@ -68,6 +70,7 @@ fn execute(
             if result != 0 {
                 return Err(IdentitySyscallError::MetadataRejected);
             }
+            // SAFETY: successful `fstatat` initialized the entire `stat` value.
             let metadata = unsafe { metadata.assume_init() };
             Ok(IdentitySyscallResponse::RegularIdentity {
                 mode: metadata.st_mode as u32,

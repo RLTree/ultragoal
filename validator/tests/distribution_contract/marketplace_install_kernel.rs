@@ -50,9 +50,9 @@ struct MarketplaceSink {
 }
 
 impl MarketplaceEffects for MarketplaceSink {
-    fn read(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read(&mut self, _: usize) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         if self.fail_after_write && self.transitions > 0 {
-            return Err(());
+            return Err(crate::distribution::EffectFailure);
         }
         let mut bytes = self.bytes.clone();
         if self.corrupt_after_write && self.transitions > 0 {
@@ -64,7 +64,7 @@ impl MarketplaceEffects for MarketplaceSink {
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         self.transitions += 1;
         if let Some(race) = self.race.take() {
             self.bytes = Some(race);

@@ -62,6 +62,35 @@ pub(crate) fn discover(
                 continue;
             }
             seen.insert(rel.clone());
+            if let Some(SurfaceSpec::AdoptedSchemaContract {
+                schema,
+                source_contract,
+                amendment_log,
+                ..
+            }) = authority.get(&rel)
+            {
+                entries.push(physical_regular_entry(
+                    reads,
+                    root,
+                    &path,
+                    PhysicalEntryDescriptor {
+                        stable_id: format!("GENERATED:{rel}"),
+                        kind: "adopted-schema-contract",
+                        owner: "OWN-PRODUCT-ARCHITECTURE",
+                        authority_state: AuthorityState::Canonical,
+                        active_status: ActiveStatus::Active,
+                        generator: None,
+                        provenance: vec![
+                            schema.as_str().to_owned(),
+                            source_contract.as_str().to_owned(),
+                            amendment_log.as_str().to_owned(),
+                            authority::REGISTRY_PATH.to_owned(),
+                        ],
+                        references: Vec::new(),
+                    },
+                )?);
+                continue;
+            }
             if let Some(SurfaceSpec::RetainedContext {
                 sha256,
                 replacement_targets,
@@ -168,12 +197,14 @@ pub(crate) fn discover(
         .filter(|(output, _)| !seen.contains(*output))
     {
         match spec {
-            SurfaceSpec::CanonicalProjection { .. } => error(
-                findings,
-                "registered_generated_surface_missing",
-                output,
-                "externally authorized generated output is missing",
-            ),
+            SurfaceSpec::AdoptedSchemaContract { .. } | SurfaceSpec::CanonicalProjection { .. } => {
+                error(
+                    findings,
+                    "registered_generated_surface_missing",
+                    output,
+                    "externally authorized generated output is missing",
+                )
+            }
             SurfaceSpec::RetainedContext { .. } => {
                 let (code, message) = retained_absence(root, output);
                 error(findings, code, output, message);

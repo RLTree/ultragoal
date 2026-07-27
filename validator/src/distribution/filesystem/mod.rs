@@ -13,6 +13,8 @@ mod walk;
 
 pub use file::{ScopedFile, ScopedInstall};
 pub use root::ConfinedRoot;
+pub(crate) use root::ReadOnlyWorkspace;
+pub(crate) use root::canonical_temporary_parent;
 pub use tree::ScopedTree;
 
 #[cfg(all(test, unix))]

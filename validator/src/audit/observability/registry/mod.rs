@@ -42,10 +42,6 @@ pub(crate) fn required_dimension_families() -> Vec<(
     Vec::new()
 }
 
-pub(crate) fn command_inventory_failures(_root: &Path) -> Vec<String> {
-    vec![SUCCESSOR_CATALOG_UNAVAILABLE.to_owned()]
-}
-
 fn require_law_rows(root: &Path, out: &mut Vec<String>) {
     for (rel, key, code) in [
         (

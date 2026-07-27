@@ -37,7 +37,7 @@
       "gate_or_fixture_path": "validator/src/audit/observability/mod.rs",
       "id": "full-local-observability-stack-integration-non-opaque-failure",
       "owner_lane": "root",
-      "required_behavior": "Every law-bearing CLI/check/proof path must emit typed logs, metrics, traces, diagnostics, query hints, redaction/bounds proof, and current observability receipt binding.",
+      "required_behavior": "Every law-bearing command emits a typed redacted diagnostic envelope. Durable logs are required for effects or reconstruction, metrics for aggregate rate latency capacity or saturation claims, traces for multi-step or cross-process causality, and evals for model-behavior or improvement claims. All four channels join only for the observability capability claim and representative product or release proof.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ],

@@ -20,7 +20,14 @@ fn typed_commands_and_effects_cover_representative_routes() {
     );
     assert_eq!(check.effect, EffectClass::WorkspaceWrite);
 
-    let query = invocation(&["observe", "query", "--filter", "finding:open"]);
+    let query = invocation(&[
+        "observe",
+        "query",
+        "--target",
+        "nested",
+        "--filter",
+        "finding:open",
+    ]);
     assert_eq!(
         query.command,
         SuccessorCommand::Observe(ObserveAction::Query)

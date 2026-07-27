@@ -5,21 +5,24 @@ use super::source::SourceAgentCatalog;
 use super::supported::{SupportedHostAgentAuthorityReader, SupportedHostAgentRoots};
 use std::path::{Path, PathBuf};
 
-pub(crate) struct LocalAgentAuthorityRequest<'a> {
+/// The complete, explicit authority set consumed by repository agent adoption.
+///
+/// Callers must supply every root that contributes to the sealed observation;
+/// this avoids ambient discovery and gives the public adapter one typed result
+/// to project without inventing a second authority model.
+pub(crate) struct AgentRepositoryAdoptionRequest<'a> {
     pub(crate) source_root: &'a Path,
     pub(crate) package_root: PathBuf,
     pub(crate) installed_root: PathBuf,
-    pub(crate) cache_root: PathBuf,
+    pub(crate) cache_family_root: PathBuf,
     pub(crate) global_root: PathBuf,
     pub(crate) project_root: PathBuf,
     pub(crate) candidate_id: &'a str,
     pub(crate) session_id: &'a str,
 }
 
-pub(crate) struct LocalAgentRoleObservation {
+pub(crate) struct AgentRepositoryRoleObservation {
     name: String,
-    manifest_path: String,
-    descriptor_sha256: String,
     package_matches: bool,
     installed_matches: bool,
     cache_matches: bool,
@@ -27,15 +30,9 @@ pub(crate) struct LocalAgentRoleObservation {
     project_matches: bool,
 }
 
-impl LocalAgentRoleObservation {
+impl AgentRepositoryRoleObservation {
     pub(crate) fn name(&self) -> &str {
         &self.name
-    }
-    pub(crate) fn manifest_path(&self) -> &str {
-        &self.manifest_path
-    }
-    pub(crate) fn descriptor_sha256(&self) -> &str {
-        &self.descriptor_sha256
     }
     pub(crate) fn package_matches(&self) -> bool {
         self.package_matches
@@ -54,27 +51,40 @@ impl LocalAgentRoleObservation {
     }
 }
 
-pub(crate) struct LocalAgentAuthorityObservation {
+pub(crate) struct AgentRepositoryAdoption {
     source_catalog_sha256: String,
     binding_sha256: String,
-    roles: Vec<LocalAgentRoleObservation>,
+    fresh_session_observed: bool,
+    route_eligible: bool,
+    roles: Vec<AgentRepositoryRoleObservation>,
 }
 
-impl LocalAgentAuthorityObservation {
+impl AgentRepositoryAdoption {
     pub(crate) fn source_catalog_sha256(&self) -> &str {
         &self.source_catalog_sha256
     }
     pub(crate) fn binding_sha256(&self) -> &str {
         &self.binding_sha256
     }
-    pub(crate) fn roles(&self) -> &[LocalAgentRoleObservation] {
+    pub fn fresh_session_observed(&self) -> bool {
+        self.fresh_session_observed
+    }
+
+    /// This is a source-local route decision only. It is not host discovery,
+    /// installation, runtime activation, or a claim effect.
+    pub fn route_eligible(&self) -> bool {
+        self.route_eligible
+    }
+
+    pub(crate) fn roles(&self) -> &[AgentRepositoryRoleObservation] {
         &self.roles
     }
 }
 
-pub(crate) fn observe_local_authority(
-    request: LocalAgentAuthorityRequest<'_>,
-) -> Result<LocalAgentAuthorityObservation, AgentDiscoveryError> {
+/// Executes the one sealed, read-only agent/repository adoption transaction.
+pub(crate) fn adopt_agent_repository(
+    request: AgentRepositoryAdoptionRequest<'_>,
+) -> Result<AgentRepositoryAdoption, AgentDiscoveryError> {
     let source = SourceAgentCatalog::capture(
         request.source_root,
         request.candidate_id,
@@ -84,7 +94,7 @@ pub(crate) fn observe_local_authority(
     let roots = SupportedHostAgentRoots::new(
         request.package_root,
         request.installed_root,
-        request.cache_root,
+        request.cache_family_root.join(source.plugin_version()),
         request.global_root,
         request.project_root,
     );
@@ -92,8 +102,6 @@ pub(crate) fn observe_local_authority(
     let eligibility = session.verify(&mut reader)?;
     if eligibility.package_version() != source.plugin_version()
         || !super::filesystem::valid_sha256(eligibility.sandbox_effect_sha256())
-        || eligibility.new_session_observed()
-        || eligibility.route_eligible()
         || eligibility.has_claim_effect()
     {
         return Err(AgentDiscoveryError::new(
@@ -105,9 +113,11 @@ pub(crate) fn observe_local_authority(
         .into_iter()
         .map(|agent| role_observation(&agent, eligibility.layers()))
         .collect();
-    Ok(LocalAgentAuthorityObservation {
+    Ok(AgentRepositoryAdoption {
         source_catalog_sha256: eligibility.source_catalog_sha256().to_owned(),
         binding_sha256: eligibility.binding_sha256().to_owned(),
+        fresh_session_observed: eligibility.new_session_observed(),
+        route_eligible: eligibility.route_eligible(),
         roles,
     })
 }
@@ -115,12 +125,10 @@ pub(crate) fn observe_local_authority(
 fn role_observation(
     source: &CanonicalAgentObservation,
     layers: &[super::model::AgentLayerObservation],
-) -> LocalAgentRoleObservation {
+) -> AgentRepositoryRoleObservation {
     let matches = |layer| layer_matches(layers, layer, source);
-    LocalAgentRoleObservation {
+    AgentRepositoryRoleObservation {
         name: source.name().to_owned(),
-        manifest_path: source.manifest_path().to_owned(),
-        descriptor_sha256: source.descriptor_sha256().to_owned(),
         package_matches: matches(AgentAuthorityLayer::Package),
         installed_matches: matches(AgentAuthorityLayer::Installed),
         cache_matches: matches(AgentAuthorityLayer::Cache),

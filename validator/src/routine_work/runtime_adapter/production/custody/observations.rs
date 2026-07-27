@@ -1,5 +1,9 @@
-use super::super::super::mediator::{IntentExecutionRequest, ObjectIdentity, StagedProgram};
+use super::super::super::mediator::{
+    IntentExecutionRequest, ObjectIdentity, RoutineMediationResult, RoutineNodeDisposition,
+    StagedProgram,
+};
 use super::super::DurableSettlement;
+use super::store::{TerminalMediation, TerminalNodeMediation};
 use crate::routine_work::runtime_adapter::RoutineEffectIntent;
 use crate::routine_work::{CleanupEvidence, ReservationFailureEvidence};
 use std::collections::BTreeMap;
@@ -44,9 +48,76 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Termina
     pub(super) outcome: DurableSettlement,
     pub(super) result_sha256: String,
     pub(super) artifacts: BTreeMap<String, String>,
+    pub(super) mediation: Option<TerminalMediation>,
     pub(super) process_cleanup: CleanupEvidence,
     pub(super) staged_cleanup: CleanupEvidence,
     pub(super) failure_evidence: Option<ReservationFailureEvidence>,
+}
+
+impl TerminalObservation {
+    pub(super) fn mediated(
+        outcome: DurableSettlement,
+        result: &RoutineMediationResult,
+        artifacts: BTreeMap<String, String>,
+        process_cleanup: CleanupEvidence,
+        staged_cleanup: CleanupEvidence,
+    ) -> Result<Self, crate::routine_work::RoutineError> {
+        let mediation = if outcome == DurableSettlement::Complete {
+            Some(TerminalMediation {
+                nodes: result
+                    .nodes()
+                    .iter()
+                    .map(|node| {
+                        if node.disposition != RoutineNodeDisposition::Executed {
+                            return Err(crate::routine_work::RoutineError::new(
+                                crate::routine_work::RoutineErrorId::InvalidRequest,
+                                "routine-production-terminal-mediation-invalid",
+                                None,
+                            ));
+                        }
+                        Ok(TerminalNodeMediation {
+                            intent_id: node.intent_id.clone(),
+                            node_id: node.node_id.clone(),
+                            plan_order: node.plan_order,
+                            result_artifact_sha256: node
+                                .result_artifact_sha256
+                                .clone()
+                                .ok_or_else(|| {
+                                    crate::routine_work::RoutineError::new(
+                                        crate::routine_work::RoutineErrorId::InvalidRequest,
+                                        "routine-production-terminal-mediation-invalid",
+                                        None,
+                                    )
+                                })?,
+                        })
+                    })
+                    .collect::<Result<Vec<_>, _>>()?,
+            })
+        } else {
+            None
+        };
+        Ok(Self {
+            outcome,
+            result_sha256: crate::routine_work::digest::digest_of(result)?,
+            artifacts,
+            mediation,
+            process_cleanup,
+            staged_cleanup,
+            failure_evidence: None,
+        })
+    }
+
+    pub(super) fn failed(result_sha256: String, evidence: &ReservationFailureEvidence) -> Self {
+        Self {
+            outcome: DurableSettlement::Failed,
+            result_sha256,
+            artifacts: BTreeMap::new(),
+            mediation: None,
+            process_cleanup: evidence.process_cleanup.clone(),
+            staged_cleanup: evidence.staged_cleanup.clone(),
+            failure_evidence: Some(evidence.clone()),
+        }
+    }
 }
 
 pub(super) fn request_intent(intent: &RoutineEffectIntent) -> IntentObservation {

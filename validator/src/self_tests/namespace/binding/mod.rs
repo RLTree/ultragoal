@@ -7,6 +7,7 @@ mod path_label_edges;
 mod raw_string_edges;
 mod semantic_names;
 mod topology;
+mod wire_contract;
 
 fn write_json(path: &Path, value: &Value) {
     if let Some(parent) = path.parent() {

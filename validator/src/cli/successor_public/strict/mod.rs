@@ -7,13 +7,17 @@ use std::path::Path;
 use std::thread;
 
 mod check_projection;
+mod claim_reconciliation_stage_adapter;
 mod failure_diagnostics;
+mod namespace_law_adapter;
 mod python_source_law_adapter;
-mod zero_write_guard;
+pub(crate) mod zero_write_guard;
 
 use check_projection::{CheckResult, LawFinding};
 
 const SELF_LAW_CLAIM: &str = "cli-self-law-compliance";
+const NAMESPACE_LAW_CLAIM: &str = "namespace-progressive-disclosure";
+const CLAIM_RECONCILIATION_STAGE: &str = "claim-reconciliation-stage";
 const LAW_JOBS: usize = 16;
 
 pub(super) fn execute(root: &Path, invocation: &ParsedInvocation) -> RuntimeOutcome {
@@ -26,7 +30,10 @@ pub(super) fn execute(root: &Path, invocation: &ParsedInvocation) -> RuntimeOutc
             "strict-check claims remain withheld",
         );
     };
-    if claim_id != SELF_LAW_CLAIM {
+    if !matches!(
+        claim_id,
+        SELF_LAW_CLAIM | NAMESPACE_LAW_CLAIM | CLAIM_RECONCILIATION_STAGE
+    ) {
         return failure_diagnostics::unsupported_claim();
     }
     let before = match zero_write_guard::capture(root) {
@@ -46,7 +53,12 @@ pub(super) fn execute(root: &Path, invocation: &ParsedInvocation) -> RuntimeOutc
             "strict-check claims remain withheld",
         );
     }
-    let (checks, mut findings) = run_law_checks(root, &context);
+    let (checks, mut findings) = match claim_id {
+        SELF_LAW_CLAIM => run_law_checks(root, &context),
+        NAMESPACE_LAW_CLAIM => namespace_law_adapter::run(root),
+        CLAIM_RECONCILIATION_STAGE => claim_reconciliation_stage_adapter::run(&context),
+        _ => unreachable!("supported strict claims are checked before execution"),
+    };
     if context.revalidate().is_err() {
         return failure_diagnostics::stale_candidate();
     }

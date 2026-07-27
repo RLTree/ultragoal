@@ -1,7 +1,9 @@
 use super::bound_context::CandidateIdentity;
+use super::capability;
 use super::digest::{add_framed, sha256_hex};
 use super::error::{ContextError, io_error};
 use super::process::{run_bounded, run_bounded_allow_failure};
+use super::read_session::ReadSession;
 use sha2::{Digest, Sha256};
 use std::ffi::{OsStr, OsString};
 use std::fs::{self, File};
@@ -30,9 +32,30 @@ fn git_args(arguments: &[&str]) -> Vec<OsString> {
     .map(OsString::from)
     .collect()
 }
-
 fn run(git: &Path, cwd: &Path, arguments: &[&str]) -> Result<Vec<u8>, ContextError> {
     Ok(run_bounded(git, &git_args(arguments), cwd, GIT_TIMEOUT)?.stdout)
+}
+/// Runs a read-only Git query through the capability captured by this session.
+pub(crate) fn query(reads: &ReadSession, arguments: &[&str]) -> Result<Vec<u8>, ContextError> {
+    reads.revalidate()?;
+    let recorded = reads
+        .context
+        .capabilities()
+        .tool("git")
+        .filter(|tool| tool.available)
+        .ok_or_else(|| ContextError::ConcurrentMutation("Git substrate unavailable".to_owned()))?;
+    let executable = recorded.executable.as_deref().ok_or_else(|| {
+        ContextError::ConcurrentMutation("Git substrate path unavailable".to_owned())
+    })?;
+    let git = Path::new(executable);
+    if capability::executable_identity("git", git)? != *recorded {
+        return Err(ContextError::ConcurrentMutation(
+            "Git substrate identity changed".to_owned(),
+        ));
+    }
+    let output = run(git, reads.root(), arguments)?;
+    reads.revalidate()?;
+    Ok(output)
 }
 
 fn optional(git: &Path, cwd: &Path, arguments: &[&str]) -> Result<Option<Vec<u8>>, ContextError> {
@@ -50,7 +73,6 @@ fn path_from_bytes(bytes: Vec<u8>) -> PathBuf {
         PathBuf::from(String::from_utf8_lossy(&bytes).into_owned())
     }
 }
-
 fn os_bytes(value: &OsStr) -> Vec<u8> {
     #[cfg(unix)]
     {
@@ -61,11 +83,9 @@ fn os_bytes(value: &OsStr) -> Vec<u8> {
         value.to_string_lossy().as_bytes().to_vec()
     }
 }
-
 fn canonical(path: PathBuf) -> Result<PathBuf, ContextError> {
     path.canonicalize().map_err(|error| io_error(path, error))
 }
-
 fn checked_relative(bytes: &[u8]) -> Result<PathBuf, ContextError> {
     let path = path_from_bytes(bytes.to_vec());
     if path.components().any(|component| {
@@ -118,7 +138,6 @@ fn trim_line(mut bytes: Vec<u8>) -> Vec<u8> {
     }
     bytes
 }
-
 fn text(value: Option<Vec<u8>>, field: &str) -> Result<Option<String>, ContextError> {
     value
         .map(trim_line)

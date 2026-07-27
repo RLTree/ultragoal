@@ -72,9 +72,13 @@ pub(crate) fn observe_recovery_target_contract(
 #[cfg(target_vendor = "apple")]
 pub(crate) fn retained_descriptor_path(root: &File) -> Result<PathBuf, FitAdapterError> {
     let mut buffer = [0 as libc::c_char; libc::PATH_MAX as usize];
+    // SAFETY: `root` is an open descriptor and `buffer` is a writable
+    // PATH_MAX-sized C buffer, as required by Darwin's F_GETPATH operation.
     if unsafe { libc::fcntl(root.as_raw_fd(), libc::F_GETPATH, buffer.as_mut_ptr()) } < 0 {
         return Err(adapter_error(AdapterErrorId::TargetUnavailable));
     }
+    // SAFETY: successful F_GETPATH writes a NUL-terminated absolute path into
+    // the supplied buffer, which remains live for this conversion.
     let bytes = unsafe { CStr::from_ptr(buffer.as_ptr()) }.to_bytes();
     if bytes.first() != Some(&b'/') {
         return Err(adapter_error(AdapterErrorId::TargetUnavailable));
@@ -125,10 +129,9 @@ pub(crate) fn target_rollback_equivalent(
         return false;
     }
     let leaves = request
-        .desired
-        .files
+        .target_paths()
         .iter()
-        .map(|file| file.path.as_str())
+        .map(|path| path.as_str().to_owned())
         .collect::<BTreeSet<_>>();
     current
         .rows

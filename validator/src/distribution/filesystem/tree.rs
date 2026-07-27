@@ -11,7 +11,9 @@ use super::owned::OwnedFile;
 #[cfg(unix)]
 use super::remove::remove_tree;
 #[cfg(unix)]
-use super::tree_ops::{OwnedTree, debris, same_snapshot, snapshot_at, transition_tree, write_tree};
+use super::tree_ops::{
+    OwnedTree, TreeTransition, debris, same_snapshot, snapshot_at, transition_tree, write_tree,
+};
 
 static NONCE: AtomicU64 = AtomicU64::new(0);
 
@@ -110,16 +112,16 @@ impl ScopedTree {
             return Ok(false);
         }
         self.root.revalidate_parent(&self.relative, &parent)?;
-        let transitioned = transition_tree(
-            &root,
-            &parent,
-            &name,
-            &stage_name,
-            &backup_name,
-            before.as_ref(),
+        let transitioned = transition_tree(TreeTransition {
+            root: &root,
+            target_parent: &parent,
+            target: &name,
+            stage_name: &stage_name,
+            backup_name: &backup_name,
+            before: before.as_ref(),
             replacement,
-            stage.as_mut(),
-        )?;
+            stage: stage.as_mut(),
+        })?;
         if !transitioned {
             return Ok(false);
         }
@@ -151,7 +153,7 @@ impl ScopedTree {
         let debris = debris(&root, token)?;
         let backups = debris.iter().filter(|(_, backup)| *backup).count();
         let target_present = target_directory_present(&parent, &name)?;
-        if backups > 1 || backups == 1 && target_present {
+        if backups > 1 || (backups == 1 && target_present) {
             return Err(error(DistributionErrorId::InstallConflict));
         }
         let mut changed = false;
@@ -215,15 +217,21 @@ fn restore_recovery_backup(
 }
 
 impl MaterializeEffects for ScopedTree {
-    fn read_tree(&mut self, entries: usize, bytes: usize) -> Result<Option<Vec<TreeObject>>, ()> {
-        self.inspect(entries, bytes).map_err(|_| ())
+    fn read_tree(
+        &mut self,
+        entries: usize,
+        bytes: usize,
+    ) -> Result<Option<Vec<TreeObject>>, crate::distribution::EffectFailure> {
+        self.inspect(entries, bytes)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 
     fn compare_exchange_tree(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[TreeObject]>,
-    ) -> Result<bool, ()> {
-        self.apply(expected_sha256, replacement).map_err(|_| ())
+    ) -> Result<bool, crate::distribution::EffectFailure> {
+        self.apply(expected_sha256, replacement)
+            .map_err(|_| crate::distribution::EffectFailure)
     }
 }

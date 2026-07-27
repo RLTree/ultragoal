@@ -23,10 +23,13 @@ The first value event is a useful verified repository result whose execution,
 failure, recovery, preservation, and remaining claim limits the operator can
 understand.
 
-This plan does not authorize product implementation today, dependency changes,
-runtime launches, local installation, target-repository writes, external
-effects, credentials, publication, destructive retirement, deployment, or
-release.
+The original 2026-07-25 plan did not authorize implementation or external
+effects. On 2026-07-27 Tree authorized this bounded repair integration,
+repository-native verification, private GitHub repository and pull-request
+work, local plugin lifecycle reconciliation, and publication before final
+Plugin Eval scoring. That authorization does not extend to unrelated target
+repositories, credentials disclosure, deployment, destructive retirement, or
+release-readiness claims.
 
 ## Current status
 
@@ -35,8 +38,11 @@ release.
   revision.
 - Product-delivery program: active.
 - B0 current-behavior baseline and shared-interface freeze: active; the
-  Agentic advisory addendum is frozen, while unrelated delivery-reset lanes
-  remain unstarted.
+  Agentic advisory addendum is frozen.
+- I0 advisory repair fan-in: active under Tree's 2026-07-27 authorization.
+  Delivery-reset contracts are reconciled with the descendant live-product
+  source retirement; deleted legacy routes and superseded active plans remain
+  deleted.
 - L1–L4: blocked on B0 and the exact `BASE-0` / `IFACE-0` freeze.
 - I0 single root fan-in: blocked on every required lane being accepted,
   classified `no_change`, or explicitly blocked.
@@ -202,9 +208,12 @@ run an unrelated broad suite or generate replacement receipts.
 
 ### B0 addendum — Agentic advisory integration freeze (2026-07-27)
 
-- `BASE-0`: `d25e689db61a5d406d457456a2285fb8e68285b1`, tree as recorded by
-  the implementation branch before this addendum. The retired `5dae7dd` and
-  unreachable merge `9344d013` are not inputs.
+- `BASE-1/contracts`: `d25e689db61a5d406d457456a2285fb8e68285b1`.
+  `BASE-1/source`: descendant live-product head
+  `5dae7dd24490b1a37bacb48b40694a840067fbe7`. The reconciliation keeps the
+  delivery-reset contracts and active-plan model while consuming the
+  live-product line's completed source retirement. It does not restore deleted
+  legacy routes, superseded active plans, or unreachable merge `9344d013`.
 - `IFACE-0/advisory-pack-set`: `AgenticPackSet-v1` is a caller-supplied,
   candidate-bound value. It has one required `agentic-engineering` base pack,
   optional named companion packs, exact package versions, manifest digests,
@@ -417,9 +426,9 @@ One merged tree or a worker-summary aggregation is not T2 proof.
 | Gate | Trigger | Required Tree decision | Current status | Effect if absent |
 | --- | --- | --- | --- | --- |
 | D0 Conditional product/interface gate | B0 finds a value, scope, risk, or shared-interface choice with no safe default | Select the product behavior or narrow the goal | Not currently required | Only affected lanes remain blocked; independent legal work may continue |
-| D1 Representative-use gate | Before J0 | Select the representative repository and authorize exact local install and repository-write scope | Needed later | No install, host mutation, target write, J0, or `CL-USABLE-LOOP` decision |
+| D1 Representative-use gate | Before J0 | Select the representative repository and authorize exact local install and repository-write scope | Approved only for local plugin lifecycle reconciliation and clean-home evaluation; no unrelated target-repository write | No broader target write or `CL-USABLE-LOOP` decision |
 | D2 Post-milestone direction | After J0 | Stop, run one materially different journey, or authorize a separate release contract | Not yet due | Goal stops after the bounded milestone |
-| D3 External/destructive authority | Only if separately proposed | Approve credentials, publication, deployment, marketplace change, or destructive retirement | Not authorized | Affected action is forbidden |
+| D3 External/destructive authority | Only if separately proposed | Approve credentials, publication, deployment, marketplace change, or destructive retirement | Approved for private repositories, pull requests, merge, and named plugin publication only | Deployment, credentials disclosure, and destructive retirement remain forbidden |
 
 Agents may not infer these decisions from prior receipts, old plans, memory,
 repository state, or worker agreement.
@@ -549,6 +558,13 @@ does not block lanes or cause reproof.
   `AgenticPackSet-v1` through the existing Harness front door. No Agentic
   router, cached-package inference, state store, receipt, effect, or claim
   authority is introduced.
+- **2026-07-27 — source reconciliation:** preserve the newest delivery-reset
+  contracts while bringing forward the live-product line's completed source
+  retirement. This is an explicit combined descendant, not a restoration of
+  the deleted legacy architecture.
+- **2026-07-27 — bounded delivery authority:** Tree authorized private remote,
+  pull-request, merge, local publication, and post-publication evaluation work
+  for this repair. Claims remain limited to evidence from each exact surface.
 
 ## Outcomes and claim ceiling
 

@@ -7,7 +7,7 @@ use std::path::Path;
 
 const CONTEXT_ID: &str = "predecessor-plugin-proposal-report-2026-07-02";
 const RELATIVE_PATH: &str = "REPORT.md";
-const CONTENT_DIGEST: &str = "e0a5534bf81ca2c8c0bc173081c82af1a75acc324ab291993a71c2dda35e58a5";
+const CONTENT_DIGEST: &str = "7638fbe3ac770524c5e8ef6e8ecbb0083de35c4c488d29d28a3861cec4d79a82";
 const REPLACEMENT_CONTRACT: &str = "harness-ultragoal-successor-contract-v2";
 const STATUS: &str = "replaced_historical_context";
 const MAX_PROPOSAL_BYTES: u64 = 256 * 1024;

@@ -2,8 +2,8 @@ use super::super::command_contract::{
     CommandDescriptor, ObserveAction, PackageAction, SuccessorCommand,
 };
 use super::options::{
-    EXPORT_OPTIONS, FILTER_OPTION, INPUT_OPTION, INPUT_OUTPUT, OUTPUT_OPTION, PUBLISH_OPTIONS,
-    descriptor,
+    EXPORT_OPTIONS, INPUT_OUTPUT_RETAIN, OBSERVE_QUERY_OPTIONS, OUTPUT_OPTION,
+    PACKAGE_BUILD_OPTIONS, PACKAGE_VERIFY_OPTIONS, PUBLISH_OPTIONS, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -13,7 +13,7 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         Some("query"),
         EffectClass::Read,
         "Query local semantic events without access-metadata writes.",
-        FILTER_OPTION,
+        OBSERVE_QUERY_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Observe(ObserveAction::Export),
@@ -34,21 +34,21 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         Some("build"),
         EffectClass::WorkspaceWrite,
         "Build deterministic package bytes and local provenance inputs.",
-        OUTPUT_OPTION,
+        PACKAGE_BUILD_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::Verify),
         Some("verify"),
         EffectClass::Read,
         "Verify package bytes and inventory without mutation.",
-        INPUT_OPTION,
+        PACKAGE_VERIFY_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::InstallTest),
         Some("install-test"),
         EffectClass::WorkspaceWrite,
         "Exercise an isolated install and write a local verification artifact.",
-        INPUT_OUTPUT,
+        INPUT_OUTPUT_RETAIN,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::Publish),

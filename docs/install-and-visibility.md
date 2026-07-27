@@ -27,10 +27,22 @@ adopts a bounded compatibility route.
 
 The supported repository catalog path is `.agents/plugins/marketplace.json`.
 Its local plugin source is relative to the marketplace root and begins with
-`./`. The reserved 0.0.12 root integration uses the package materialization
+`./`. The current 0.0.15 root integration uses the package materialization
 path `./plugins/harness-ultragoal`; catalog bytes are invalid evidence until
 that relative target exists and its package identity is independently
 reconciled.
+
+An installed candidate carries exactly one compiled CLI runtime entry,
+`runtime/ultragoal`. The public package commands require the confined explicit
+input `target/ultragoal/release/ultragoal`; they never run Cargo or accept a
+source-owned fallback while packaging. Once materialized at the catalog source,
+the supported host execution path is
+`plugins/harness-ultragoal/runtime/ultragoal`; running a separate copy outside
+that resolved source cannot support the installed journey. The package binds
+the explicitly selected native payload to the candidate label and archive
+identity; it does not establish source-to-binary compilation provenance.
+Compilation provenance and actual runtime behavior remain separate proof
+surfaces.
 
 A repository marketplace is non-default host configuration. After the root has
 accepted the catalog and materialized the exact package, an authorized operator
@@ -44,6 +56,14 @@ codex plugin add harness-ultragoal@<repository-marketplace-name>
 Do not execute those commands during source validation. They mutate host state
 and require the selected repository marketplace, package bytes, and authority
 to be current.
+
+The source-local `HostCommandPlan` binds those exact argv rows to the package
+identity and carries an empty scrubbed environment, a 30-second timeout, and
+one attempt. The integrated source now joins that plan to sealed lifecycle
+admission, the production host-handoff caller, and typed fail-closed outcome
+records. Source controls still do not prove command execution, host mutation,
+installation, or fresh-task discovery: those require current host observations
+against the exact package candidate and remain separate claim surfaces.
 
 ## Personal marketplace
 
@@ -116,6 +136,19 @@ an operator canary echoed by a failure blocks reuse of the result.
 Package, marketplace, install, cache, app registry, Plugins UI, discovery, and
 runtime are not synonyms. A successful lower layer does not raise a higher claim.
 
+The source-local public observation route is:
+
+```text
+ultragoal --root <project-root> --json inspect capabilities --package-root <package-root>
+```
+
+`--root` and `--package-root` must be distinct absolute host paths, and `HOME`
+must be an absolute host path before installed, cache, or global authority is
+read. Missing roots report `unavailable`; aliased or unsafe authority reports
+`blocked`. A verified six-role projection is still only a local source/package/
+project observation: it deliberately reports host discovery and runtime
+exposure as unavailable and cannot raise a claim.
+
 ## Lifecycle coordinator boundary
 
 The source-local lifecycle coordinator covers eight operations with typed
@@ -124,7 +157,7 @@ plan, apply, verify, and recovery semantics:
 | Operation | Required invariant |
 | --- | --- |
 | Fresh install | The observed state is absent and a host write is explicitly authorized. |
-| Monotonic update | The target version is strictly newer and the expected installed digest still matches. |
+| Monotonic update | The plugin manifest version and marketplace-observed plugin version both advance to the same strictly newer version, the expected installed digest still matches, and marketplace registration plus plugin installation are explicitly refreshed. |
 | Failed-update recovery | The exact captured prior installed and cache authority is restored before reuse. |
 | Authorized rollback | The target is older and a separate downgrade authorization is present. |
 | Idempotent reinstall | Matching installed and cache bytes are verified without replacement. |
@@ -136,6 +169,13 @@ Planning and verification are read-only. Applying a host mutation remains
 behind an explicit adapter and authorization; source tests do not authorize or
 perform installation. Every effect rechecks the observed prior state. A failed
 effect restores that prior authority or returns a recovery-required result.
+
+Never retain a configured local marketplace whose root is a disposable build
+or `/private/tmp` path. Materialize the exact accepted package at a durable
+local marketplace root, increment the version on every changed installable
+candidate, refresh marketplace registration and plugin installation, then use a
+fresh Codex task for discovery. A cache entry or an enabled row does not by
+itself prove fresh app recognition.
 
 Product Fitness is independently withheld until accessibility, cognitive
 load, recovery burden, continuance, and real-use evidence are all bound to the

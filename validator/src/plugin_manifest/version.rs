@@ -97,10 +97,8 @@ fn parse_identifiers(value: &str, strict_numeric: bool) -> Option<Vec<Identifier
             {
                 return None;
             }
-            if part.bytes().all(|byte| byte.is_ascii_digit()) {
-                if strict_numeric {
-                    return Numeric::parse(part).map(Identifier::Numeric);
-                }
+            if strict_numeric && part.bytes().all(|byte| byte.is_ascii_digit()) {
+                return Numeric::parse(part).map(Identifier::Numeric);
             }
             Some(Identifier::Text(part.to_owned()))
         })

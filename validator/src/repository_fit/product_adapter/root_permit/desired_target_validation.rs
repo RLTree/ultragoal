@@ -36,6 +36,20 @@ pub(crate) fn require_desired_target<E: RepositoryFitPermitEffects>(
             return Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid));
         }
     }
+    if let Some(local_state) = request.plan.local_state.as_ref() {
+        let object = present_target_row(&rows, local_state.path.as_str())
+            .ok_or_else(|| adapter_error(AdapterErrorId::ApplyOutcomeInvalid))?;
+        if object.kind != "regular"
+            || object.device != root_object.device
+            || object.links != 1
+            || object.uid != root_object.uid
+            || object.gid != root_object.gid
+            || object.mode & 0o7777 != local_state.desired_mode
+            || object.payload_sha256.as_deref() != Some(local_state.desired_sha256().as_str())
+        {
+            return Err(adapter_error(AdapterErrorId::ApplyOutcomeInvalid));
+        }
+    }
     Ok(snapshot)
 }
 
@@ -57,12 +71,7 @@ pub(crate) fn managed_ancestor_contract(
     snapshot: &TargetSnapshot,
     request: &OpaqueFitApplyRequest,
 ) -> Result<ManagedAncestorContract, FitAdapterError> {
-    let target_paths = request
-        .desired
-        .files
-        .iter()
-        .map(|file| file.path.clone())
-        .collect::<Vec<_>>();
+    let target_paths = request.target_paths();
     let paths = managed_ancestor_paths_for_targets(&target_paths);
     let snapshot_rows = snapshot
         .rows

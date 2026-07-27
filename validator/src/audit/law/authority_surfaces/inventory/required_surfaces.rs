@@ -75,7 +75,10 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
         "source",
         "validator/src/audit/namespace/source/string_labels.rs",
     ),
-    package("source", "validator/src/audit/namespace/source/topology.rs"),
+    package(
+        "source",
+        "validator/src/audit/namespace/source/topology/mod.rs",
+    ),
     package("schema", "schemas/mandatory-law-surfaces.schema.json"),
     package("schema", "schemas/red-packet.schema.json"),
     package("schema", "schemas/final-packet-proof.schema.json"),
@@ -170,11 +173,11 @@ pub(super) const REQUIRED_SURFACES: &[RequiredSurface] = &[
     ),
     package(
         "claim_guard",
-        "validator/src/cli/control/plane/proof/transaction.rs",
+        "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
     ),
     package(
         "claim_guard",
-        "validator/src/cli/control/plane/proof/diagnostic.rs",
+        "validator/src/audit/cli/control_plane/authority/mod.rs",
     ),
     runtime(
         "final_packet_blocker",

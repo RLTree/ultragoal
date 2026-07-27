@@ -1,4 +1,3 @@
-use serde::Serialize;
 use serde_json::Value;
 use std::path::Path;
 
@@ -9,24 +8,8 @@ pub fn read_json(path: &Path) -> Result<Value, String> {
         .map_err(|err| format!("{}: malformed json: {err}", path.display()))
 }
 
-pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
-    let text = serde_json::to_string_pretty(value)
-        .map_err(|err| format!("{}: json encode failed: {err}", path.display()))?;
-    crate::output_path::write(path, format!("{text}\n"), "json")
-}
-
 pub fn object_get<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
     value.as_object().and_then(|obj| obj.get(key))
-}
-
-pub fn string(value: &Value, key: &str) -> Option<String> {
-    object_get(value, key)
-        .and_then(Value::as_str)
-        .map(ToOwned::to_owned)
-}
-
-pub fn bool_value(value: &Value, key: &str) -> Option<bool> {
-    object_get(value, key).and_then(Value::as_bool)
 }
 
 pub fn array<'a>(value: &'a Value, key: &str) -> Vec<&'a Value> {

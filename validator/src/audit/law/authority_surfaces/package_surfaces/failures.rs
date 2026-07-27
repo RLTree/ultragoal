@@ -167,14 +167,6 @@ fn validate_command_aliases(root: &Path, out: &mut Vec<(String, String)>) {
             "delete the alias or classify it as parser_boundary compatibility with claim limits and sunset",
         );
     }
-    if source::contains(root, "validator/src/cli/usage.rs", "ultragoal-validator") {
-        push(
-            out,
-            "usage:ultragoal-validator",
-            "help text exposes ultragoal-validator as an active command surface without contract",
-            "remove the compatibility command language or add a typed alias contract",
-        );
-    }
 }
 
 fn validate_rows(rows: &[row::PackageSurfaceRow], out: &mut Vec<(String, String)>) {
@@ -202,12 +194,4 @@ fn push(out: &mut Vec<(String, String)>, surface: &str, why: &str, repair: &str)
     out.push((CHECK_ID.to_string(), format!(
         "failure_class=purpose_backed_surface_violation;surface={surface};why_failed={why};claim_impact={CLAIM_IMPACT};smallest_repair={repair};narrow_rerun={NARROW_RERUN}"
     )));
-}
-
-#[cfg(test)]
-pub(crate) fn failures_for_test(
-    root: &Path,
-    inventory: &BTreeSet<String>,
-) -> Vec<(String, String)> {
-    failures(root, inventory)
 }

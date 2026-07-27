@@ -6,9 +6,6 @@ fn errors_do_not_echo_host_or_descriptor_input() {
             catalog[secret] = serde_json::json!(secret);
         });
     });
-    let rendered = format!(
-        "{}",
-        crate::agent_discovery::AgentDiscoveryError::new(error)
-    );
+    let rendered = format!("{}", super::super::AgentDiscoveryError::new(error));
     assert!(!rendered.contains(secret));
 }

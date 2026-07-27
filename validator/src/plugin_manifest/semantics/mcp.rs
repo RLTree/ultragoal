@@ -24,7 +24,7 @@ fn inline_valid(servers: &BTreeMap<String, PluginMcpServer>) -> bool {
 }
 
 fn server_valid(server: &PluginMcpServer) -> bool {
-    let common = unique_list(&server.args, ITEM_LIMIT)
+    let valid_shared_settings = unique_list(&server.args, ITEM_LIMIT)
         && environment_map(&server.env)
         && header_map(&server.headers);
     let stdio = server.kind == "stdio"
@@ -36,5 +36,5 @@ fn server_valid(server: &PluginMcpServer) -> bool {
         && server.command.is_none()
         && server.args.is_empty()
         && server.env.is_empty();
-    common && (stdio || http)
+    valid_shared_settings && (stdio || http)
 }

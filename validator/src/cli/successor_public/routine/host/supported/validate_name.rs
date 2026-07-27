@@ -25,7 +25,7 @@ pub(crate) fn identity(metadata: &fs::Metadata) -> Identity {
 pub(crate) fn stat_identity(metadata: &libc::stat) -> Identity {
     Identity {
         device: metadata.st_dev as u64,
-        inode: metadata.st_ino as u64,
+        inode: metadata.st_ino,
         owner: metadata.st_uid,
         mode: metadata.st_mode as u32,
         links: metadata.st_nlink as u64,

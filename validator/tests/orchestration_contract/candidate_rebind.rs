@@ -1,6 +1,6 @@
-use crate::durable_journal_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 
 #[test]
 fn integrated_candidate_replays_only_at_its_final_binding() {

@@ -1,6 +1,8 @@
 const STATE_NAME: &str = "promotion-review.state";
 const ANCHOR_NAME: &str = "promotion-review.anchor.journal";
 const LOCK_NAME: &str = "promotion-review.lock";
+const INITIAL_ANCHOR_NAME: &str = ".promotion-review.anchor.journal.initializing";
+const INITIAL_STATE_NAME: &str = ".promotion-review.state.initializing";
 const MAX_LEDGER_BYTES: u64 = 1024 * 1024;
 const MAX_ANCHOR_JOURNAL_BYTES: u64 = 16 * 1024 * 1024;
 const MAX_ANCHOR_RECORD_BYTES: usize = 1024 * 1024;
@@ -93,6 +95,16 @@ pub enum PromotionLedgerState {
     RecoveryRequired {
         causal_code: String,
     },
+}
+
+/// The locked journal decision for an attempted one-shot review consumption.
+/// A caller receives the causal losing state rather than treating a later read
+/// as proof that it lost the same race.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) enum PromotionConsumptionOutcome {
+    Consumed,
+    AlreadyConsumed { review_id: String },
+    Refused { causal_code: &'static str },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

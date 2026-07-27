@@ -1,10 +1,12 @@
-use super::observability::{EventQuery, EventStore, ExportAdapter, SemanticEvent};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
+use ultragoal::observability::{
+    EventQuery, EventStore, ExportAdapter, SemanticEvent, SemanticEventInput,
+};
 
 static NEXT_DIR: AtomicU64 = AtomicU64::new(1);
 
@@ -57,16 +59,16 @@ pub fn query() -> EventQuery {
 }
 
 pub fn event(id: &str, at: u64, sequence: u64, outcome: &str) -> SemanticEvent {
-    SemanticEvent::new(
-        "ctx-1",
-        "cand-1",
-        "source-1",
-        id,
-        at,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: "ctx-1".to_owned(),
+        candidate_id: "cand-1".to_owned(),
+        source_id: "source-1".to_owned(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: at,
         sequence,
-        "check.run",
-        outcome,
-    )
+        operation: "check.run".to_owned(),
+        outcome: outcome.to_owned(),
+    })
     .expect("bounded event")
 }
 

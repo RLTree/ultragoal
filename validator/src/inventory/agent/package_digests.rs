@@ -36,6 +36,14 @@ pub(crate) const PACKAGE_READERS: &[ReaderSpec] = &[
         "../package/inventory/anchored/sys.rs"
     ),
     package_reader!(
+        "validator/src/package/inventory/draft_manifest/mod.rs",
+        "../package/inventory/draft_manifest/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/draft_manifest/validation.rs",
+        "../package/inventory/draft_manifest/validation.rs"
+    ),
+    package_reader!(
         "validator/src/package/inventory/closure/mod.rs",
         "../package/inventory/closure/mod.rs"
     ),
@@ -106,5 +114,9 @@ pub(crate) const PACKAGE_READERS: &[ReaderSpec] = &[
     package_reader!(
         "validator/src/package/inventory/snapshot/capture/mod.rs",
         "../package/inventory/snapshot/capture/mod.rs"
+    ),
+    package_reader!(
+        "validator/src/package/inventory/snapshot/capture/manifest.rs",
+        "../package/inventory/snapshot/capture/manifest.rs"
     ),
 ];

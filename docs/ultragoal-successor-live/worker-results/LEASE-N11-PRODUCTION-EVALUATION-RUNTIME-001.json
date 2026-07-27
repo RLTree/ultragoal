@@ -1,0 +1,134 @@
+{
+  "worker": "codex-thread-019f795c-1806-7c03-8a77-b6157300ecca",
+  "lease_id": "N11-PRODUCTION-EVALUATION-RUNTIME-001",
+  "context_id": "sha256:6460607f60e16643d44345ddbe9aee9fe77f3841d70ca3c2111eb3cdff67e6d1",
+  "candidate_identity": {
+    "candidate_id": "sha256:6460607f60e16643d44345ddbe9aee9fe77f3841d70ca3c2111eb3cdff67e6d1",
+    "context_id": "sha256:6460607f60e16643d44345ddbe9aee9fe77f3841d70ca3c2111eb3cdff67e6d1",
+    "source_parent_commit": "6b32bdb59a987778e54b73465896aa848292b3d6",
+    "source_parent_tree": "3c8c118ba13cf26c95727520a5355d0469cb8a49",
+    "receipt_only": true,
+    "receipt_self_excluded": true,
+    "source_path_inventory": [
+      "validator/src/evaluation/ledger/file/recovery_requirement.rs",
+      "validator/src/evaluation/ledger/file/state_transition.rs",
+      "validator/src/evaluation/ledger/initialization/ledger_access.rs",
+      "validator/src/evaluation/ledger/mod.rs",
+      "validator/src/evaluation/ledger/owner_transaction.rs",
+      "validator/src/evaluation/tests/mod.rs",
+      "validator/src/evaluation/tests/recovery.rs",
+      "validator/src/evaluation/tests/recovery_custody.rs",
+      "validator/src/evaluation/tests/recovery_setup.rs",
+      "validator/tests/evaluation_runtime_contract/execution/binding.rs"
+    ]
+  },
+  "base_state": {
+    "lease_base_commit": "2af35eabb85bfb0c63489d68467831b9f27256f4",
+    "lease_base_tree": "2d1cf5287afb1708e26ea4065ba5a6d6293162c1",
+    "source_review": "accepted including narrow source-law split review",
+    "receipt_authority": "root-issued receipt-only child"
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "claim_ceiling": "Source-local and test-gated evaluation custody only.",
+    "source_parent_commit": "6b32bdb59a987778e54b73465896aa848292b3d6",
+    "source_parent_tree": "3c8c118ba13cf26c95727520a5355d0469cb8a49",
+    "accepted_review": "Terra high correction review ACCEPT; narrow split review ACCEPT",
+    "unsupported": "Non-test runtime activation, root adapter wiring, installed behavior, representative journeys, readiness, release, and completion."
+  },
+  "touched_paths": [
+    "validator/src/evaluation/ledger/file/recovery_requirement.rs",
+    "validator/src/evaluation/ledger/file/state_transition.rs",
+    "validator/src/evaluation/ledger/initialization/ledger_access.rs",
+    "validator/src/evaluation/ledger/mod.rs",
+    "validator/src/evaluation/ledger/owner_transaction.rs",
+    "validator/src/evaluation/tests/mod.rs",
+    "validator/src/evaluation/tests/recovery.rs",
+    "validator/src/evaluation/tests/recovery_custody.rs",
+    "validator/src/evaluation/tests/recovery_setup.rs",
+    "validator/tests/evaluation_runtime_contract/execution/binding.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N11-PRODUCTION-EVALUATION-RUNTIME-001.json"
+  ],
+  "touched_semantics": [
+    "evaluation-ledger-recovery",
+    "evaluation-owner-invocation-binding",
+    "evaluation-panic-replay-refusal"
+  ],
+  "generated_outputs": [
+    "docs/ultragoal-successor-live/worker-results/LEASE-N11-PRODUCTION-EVALUATION-RUNTIME-001.json"
+  ],
+  "fixtures": [
+    "validator/src/evaluation/tests/recovery_custody.rs",
+    "validator/tests/evaluation_runtime_contract/execution/binding.rs"
+  ],
+  "effects": [
+    {"class": "workspace_write", "target": "evaluation_ledger", "performed": true},
+    {"class": "fixture_write", "target": "evaluation_contract", "performed": true},
+    {"class": "process", "target": "focused_evaluation_tests", "performed": true},
+    {"class": "root_authority", "target": "root_adapter", "performed": false}
+  ],
+  "requirements": [
+    "evaluation-custody",
+    "evaluation-recovery",
+    "evaluation-replay-refusal"
+  ],
+  "dependency_nodes": ["N06", "N07", "N08"],
+  "changes": [
+    {
+      "area": "ambiguous execution custody",
+      "result": "A fixture effect followed by panic remains recovery-required and cannot acquire a replay reservation without an authenticated same-reservation publication."
+    },
+    {
+      "area": "invocation binding",
+      "result": "The owner derives reservation identity from the complete typed execution binding."
+    },
+    {
+      "area": "source-law module split",
+      "result": "Private ledger transition custody and test-only recovery setup/custody cases are separated into semantic modules below the 250-line authored-file limit."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-n11-correction-target CARGO_BUILD_JOBS=1 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=1 cargo test --locked --offline --manifest-path validator/Cargo.toml --lib evaluation::tests::recovery_custody::execution_panic_is_interrupted_and_requires_explicit_recovery -- --exact --test-threads=1",
+      "status": "pass",
+      "summary": "1 passed; effect-then-panic remains nonterminal and replay-rejected."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/hul-n11-correction-target CARGO_BUILD_JOBS=1 CARGO_INCREMENTAL=0 CARGO_PROFILE_TEST_DEBUG=0 RUST_TEST_THREADS=1 cargo test --locked --offline --manifest-path validator/Cargo.toml --lib evaluation::tests::runtime_contract -- --test-threads=1",
+      "status": "pass",
+      "summary": "41 passed; focused custody, recovery, rollback, race, privacy, and false-pass contract surface."
+    }
+  ],
+  "artifacts": [],
+  "findings": [
+    {"severity": "review", "result": "ACCEPT", "scope": "source-lane custody terminal recovery replay invariant"}
+  ],
+  "unresolved_dependencies": [
+    "root-adapter-wiring",
+    "non-test-runtime-activation",
+    "installed-runtime-proof"
+  ],
+  "requested_root_changes": [
+    {
+      "path": "validator/src/cli/capture/fixture/mod.rs",
+      "expected_sha256": "sha256:1b1264a111a906d1d9feec9d37826c3016a1cbdd7fe76032b5602bc72645de3b",
+      "request": "Ungate the confined adapter only with a sealed admission and typed recovery boundary."
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/bridge/evaluation_bridge.rs",
+      "expected_sha256": "sha256:c2925f9c63d369aedabb8cf79b9f63f7ba48dbed9aaf18bc6cbbba735d78fc36",
+      "request": "Integrate the existing confined bridge atomically; do not expose raw ledger custody."
+    },
+    {
+      "path": "validator/src/cli/capture/fixture/bridge/scheduled_invocation.rs",
+      "expected_sha256": "sha256:e6bae692484b17c96bd8e128ab32a539e997fe6f4da5f361d24a50f359b50f46",
+      "request": "Bind complete invocation custody at the root adapter boundary."
+    }
+  ],
+  "limitations": [
+    "This receipt is self-excluded from its source inventory and has no authority over its own final commit or tree.",
+    "The source remains test-gated until the root-owned adapter decision is integrated.",
+    "No raw production no-effect recovery authority is exposed by this lane."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

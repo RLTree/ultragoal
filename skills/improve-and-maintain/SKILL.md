@@ -43,6 +43,26 @@ For research refresh, verify current primary sources and separate external
 fact, binding requirement, advisory practice, hypothesis, and rejected
 recommendation. Submit law or registry changes to the root.
 
+## Decide whether machinery earns its keep
+
+Before promoting a universal check, agent, workflow, prompt rule, artifact, or
+adapter, answer:
+
+1. Which current representative failure or protected boundary requires it?
+2. Is the need recurrent, cross-repository, or unconditionally security,
+   privacy, destructive-effect, or authority critical?
+3. Does an existing maintained component already own the behavior?
+4. Can the mechanism be precise, inexpensive, actionable, and verified on the
+   real surface?
+5. Does it remove more operator attention, coordination, maintenance, and
+   artifact cost than it adds without lowering quality?
+
+Choose `keep`, `conditional`, `simplify`, `repository_fit_specific`, or
+`retire`. Use manual-first handling for real but infrequent work. Do not
+universalize a one-off preference, add an enforcement layer because a schema
+can represent it, or preserve machinery whose output is routinely regenerated
+or ignored by the next owner.
+
 ## Migrate, verify, and retire
 
 ```text
@@ -84,7 +104,8 @@ separately after an authorized operation.
 Report audited validity, paired behavioral observations, failures,
 non-regression, source classifications, proposed improvement or migration,
 effects, active readers and writers, compatibility state, rollback, retirement
-blockers, unsupported capabilities, and highest candidate-only ceiling.
+blockers, maintenance disposition, attention-cost evidence, unsupported
+capabilities, and highest candidate-only ceiling.
 
 Metric gains, scorecards, research prose, receipts, tests, telemetry, or
 generated registries do not prove improvement, migration, retirement,

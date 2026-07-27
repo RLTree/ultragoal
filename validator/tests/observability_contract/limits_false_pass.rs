@@ -1,5 +1,5 @@
-use super::observability::{EventQuery, EventStore, SemanticEvent};
 use super::scenario::{TestDir, event, query, store};
+use ultragoal::observability::{EventQuery, EventStore, SemanticEvent, SemanticEventInput};
 
 #[test]
 fn attribute_row_event_store_scan_and_result_limits_fail_closed() {
@@ -121,16 +121,16 @@ fn claim_like_fields_and_receipt_only_rows_are_explicit_false_pass_controls() {
     );
 
     let dir = TestDir::new("receipt-only");
-    let receipt = SemanticEvent::new(
-        "ctx-1",
-        "cand-1",
-        "receipt-source",
-        "receipt-row",
-        1,
-        1,
-        "receipt.present",
-        "fail",
-    )
+    let receipt = SemanticEvent::new(SemanticEventInput {
+        context_id: "ctx-1".to_owned(),
+        candidate_id: "cand-1".to_owned(),
+        source_id: "receipt-source".to_owned(),
+        event_id: "receipt-row".to_owned(),
+        observed_at_unix_ms: 1,
+        sequence: 1,
+        operation: "receipt.present".to_owned(),
+        outcome: "fail".to_owned(),
+    })
     .unwrap();
     let receipt_store =
         EventStore::open_bound(dir.store_path(), "ctx-1", "cand-1", "receipt-source").unwrap();
