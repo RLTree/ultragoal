@@ -1,6 +1,6 @@
 ---
 name: harness-ultragoal
-description: "Route Harness Ultragoal requests through one concise front door. Use for first entry, intent classification, capability and authority disclosure, or selection among repository fitting, routine work, diagnosis, durable goal execution, strict proof, maintenance, and product-journey review."
+description: "Route Harness Ultragoal requests through one concise front door. Use when first entry, intent classification, capability or authority disclosure, or selection among repository fitting, routine work, diagnosis, goal execution, proof, maintenance, and journey review is needed."
 ---
 
 # Harness Ultragoal

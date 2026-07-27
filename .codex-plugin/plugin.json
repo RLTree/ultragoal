@@ -1,6 +1,6 @@
 {
   "name": "harness-ultragoal",
-  "version": "0.0.12",
+  "version": "0.0.34",
   "description": "Repository fit, routine work, diagnosis, proof, orchestration, evaluation, and migration through one Harness Ultragoal front door.",
   "author": {
     "name": "Terry Noblin"
@@ -24,6 +24,9 @@
       "Read",
       "Write"
     ],
+    "websiteURL": "https://github.com/RLTree/plugin-policies",
+    "privacyPolicyURL": "https://github.com/RLTree/plugin-policies/blob/main/privacy-policy.md",
+    "termsOfServiceURL": "https://github.com/RLTree/plugin-policies/blob/main/terms-of-service.md",
     "defaultPrompt": [
       "Use $harness-ultragoal:harness-ultragoal to classify this request and route it to the smallest authoritative workflow."
     ]

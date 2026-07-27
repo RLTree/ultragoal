@@ -1,6 +1,6 @@
 ---
 name: diagnose-and-observe
-description: "Diagnose Harness Ultragoal failures and query local semantic state without mutation. Use for causal explanations, typed findings, repair planning, exact reruns, deterministic next actions, local event queries, privacy review, or explicitly authorized export."
+description: "Diagnose Harness Ultragoal failures and query local semantic state without mutation. Use when causal explanations, typed findings, repair planning, exact reruns, deterministic next actions, local event queries, privacy review, or explicitly authorized export are needed."
 ---
 
 # Diagnose And Observe

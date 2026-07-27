@@ -1,6 +1,6 @@
 ---
 name: goal-run
-description: "Orchestrate durable, dependency-closed Harness Ultragoal work under one root. Use for multi-scope goals, adaptive dependency graphs, disjoint worker leases, checkpoints, independent reviews, recovery after interruption, authority stops, or honest ceiling reporting."
+description: "Orchestrate durable, dependency-closed Harness Ultragoal work under one root. Use when multi-scope goals, dependency graphs, disjoint work, checkpoints, recovery after interruption, authority stops, or honest ceiling reporting are needed."
 ---
 
 # Goal Run

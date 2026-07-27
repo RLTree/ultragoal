@@ -1,6 +1,6 @@
 ---
 name: agent-improvement-loop
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:agent-improvement-loop` requests. Preserve the request and route it to `$harness-ultragoal:improve-and-maintain`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:agent-improvement-loop`. Preserve the request and route it to `$harness-ultragoal:improve-and-maintain`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

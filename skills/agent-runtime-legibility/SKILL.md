@@ -1,6 +1,6 @@
 ---
 name: agent-runtime-legibility
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:agent-runtime-legibility` requests. Preserve the request and route it to `$harness-ultragoal:routine-work`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:agent-runtime-legibility`. Preserve the request and route it to `$harness-ultragoal:routine-work`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

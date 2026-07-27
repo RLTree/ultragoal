@@ -1,6 +1,6 @@
 ---
 name: standards-gardener
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:standards-gardener` requests. Preserve the request and route it to `$harness-ultragoal:improve-and-maintain`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:standards-gardener`. Preserve the request and route it to `$harness-ultragoal:improve-and-maintain`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

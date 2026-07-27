@@ -1,6 +1,6 @@
 ---
 name: proof-gate
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:proof-gate` requests. Preserve the request and route it to `$harness-ultragoal:prove`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:proof-gate`. Preserve the request and route it to `$harness-ultragoal:prove`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

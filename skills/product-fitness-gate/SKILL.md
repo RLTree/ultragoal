@@ -1,6 +1,6 @@
 ---
 name: product-fitness-gate
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:product-fitness-gate` requests. Preserve the request and route it to `$harness-ultragoal:prove`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:product-fitness-gate`. Preserve the request and route it to `$harness-ultragoal:prove`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

@@ -3,6 +3,11 @@ use crate::cli::successor::{ExitClass, ParsedInvocation};
 use crate::context::LiveContext;
 use serde_json::json;
 use sha2::{Digest, Sha256};
+use std::fs::File;
+use std::io::Read;
+use std::path::{Path, PathBuf};
+
+const MAX_SELF_EXECUTABLE_BYTES: u64 = 512 * 1024 * 1024;
 
 pub(super) fn project(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
     project_with_limit(context, invocation, super::MAX_PUBLIC_OUTPUT)
@@ -17,8 +22,11 @@ pub(super) fn project_with_limit(
         return RuntimeSession::new(context, None).dispatch(invocation);
     }
 
+    let Some(runtime) = capture_runtime_identity() else {
+        return projection_failure();
+    };
     let machine = serde_json::to_vec(&json!({
-        "schema_version": "HarnessPublicContext-v1",
+        "schema_version": "HarnessPublicContext-v2",
         "context_id": context.context_id(),
         "roots": {
             "repository_root_id": root_id(
@@ -38,6 +46,7 @@ pub(super) fn project_with_limit(
         "permissions": context.permissions(),
         "effect": context.effect(),
         "selected_inputs": context.selected_inputs(),
+        "runtime": runtime,
     }));
 
     if context.revalidate().is_err() {
@@ -56,6 +65,66 @@ pub(super) fn project_with_limit(
         ),
         _ => projection_failure(),
     }
+}
+
+fn capture_runtime_identity() -> Option<serde_json::Value> {
+    let path = std::env::current_exe().ok()?;
+    let first = executable_identity(&path)?;
+    let rebound = std::env::current_exe().ok()?;
+    let second = executable_identity(&rebound)?;
+    if first != second || path != rebound {
+        return None;
+    }
+    Some(json!({
+        "version": env!("CARGO_PKG_VERSION"),
+        "executable_sha256": first.sha256,
+        "executable_byte_length": first.byte_length,
+        "self_bound": true,
+    }))
+}
+
+#[derive(Eq, PartialEq)]
+struct ExecutableIdentity {
+    sha256: String,
+    byte_length: u64,
+    modified: std::time::SystemTime,
+    path: PathBuf,
+}
+
+fn executable_identity(path: &Path) -> Option<ExecutableIdentity> {
+    let path = path.canonicalize().ok()?;
+    let before = path.metadata().ok()?;
+    if !before.is_file() || before.len() == 0 || before.len() > MAX_SELF_EXECUTABLE_BYTES {
+        return None;
+    }
+    let mut hasher = Sha256::new();
+    let mut file = File::open(&path).ok()?;
+    let mut bytes = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+    loop {
+        let read = file.read(&mut buffer).ok()?;
+        if read == 0 {
+            break;
+        }
+        bytes = bytes.checked_add(read as u64)?;
+        if bytes > MAX_SELF_EXECUTABLE_BYTES {
+            return None;
+        }
+        hasher.update(&buffer[..read]);
+    }
+    let after = path.metadata().ok()?;
+    if before.len() != bytes
+        || after.len() != bytes
+        || before.modified().ok()? != after.modified().ok()?
+    {
+        return None;
+    }
+    Some(ExecutableIdentity {
+        sha256: format!("sha256:{:x}", hasher.finalize()),
+        byte_length: bytes,
+        modified: after.modified().ok()?,
+        path,
+    })
 }
 
 fn projection_failure() -> RuntimeOutcome {

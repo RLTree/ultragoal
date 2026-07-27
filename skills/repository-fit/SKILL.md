@@ -1,6 +1,6 @@
 ---
 name: repository-fit
-description: "Inspect, plan, apply, and verify Harness Ultragoal setup for fresh or existing repositories. Use for first-time fitting, retrofits, partial installations, ownership conflicts, idempotency checks, rollback planning, or preservation of local repository authority."
+description: "Inspect, plan, apply, and verify Harness Ultragoal setup for fresh or existing repositories. Use when first-time fitting, retrofits, partial installations, ownership conflicts, idempotency checks, rollback planning, or preservation of repository authority is needed."
 ---
 
 # Repository Fit

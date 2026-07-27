@@ -1,6 +1,6 @@
 ---
 name: ultragoal
-description: Deprecated compatibility alias for explicit `$harness-ultragoal:ultragoal` requests. Preserve the request and route it to `$harness-ultragoal:harness-ultragoal`; do not use this alias as independent workflow authority.
+description: "Use when a compatibility request explicitly names `$harness-ultragoal:ultragoal`. Preserve the request and route it to `$harness-ultragoal:harness-ultragoal`; do not use this alias as independent workflow authority."
 ---
 
 # Deprecated Compatibility Route

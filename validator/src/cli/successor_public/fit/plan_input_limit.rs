@@ -49,6 +49,39 @@ pub(crate) fn inspect(context: &LiveContext, invocation: &ParsedInvocation) -> R
     }
 }
 
+/// `next` and `diagnose` may use this only after the existing inventory/state
+/// projection is unavailable. It probes the existing repository-fit owner and
+/// returns a typed read-only diagnostic instead of synthesizing ProductState.
+pub(crate) fn repository_fit_required(
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+) -> RuntimeOutcome {
+    if !matches!(
+        invocation.command,
+        SuccessorCommand::Next | SuccessorCommand::Diagnose
+    ) || invocation.effect != EffectClass::Read
+        || context.revalidate().is_err()
+    {
+        return invalid_invocation();
+    }
+    if inspect_target(context).is_err() || context.revalidate().is_err() {
+        return super::super::state_unavailable();
+    }
+    RuntimeOutcome::failure(
+        ExitClass::ActionableFinding,
+        Diagnostic::new(
+            DiagnosticId::RepositoryFitRequired,
+            ExitClass::ActionableFinding,
+            "the current inventory or ProductState is unavailable; repository fit must be inspected before a routine recommendation or diagnosis can be derived",
+            "repository fit",
+            "inspect the repository through the existing repository-fit owner",
+            "read",
+            "ultragoal --json fit inspect --target .",
+            "claim_effect=none; no ProductState, routine checkpoint, or completion claim was manufactured",
+        ),
+    )
+}
+
 pub(crate) fn plan(context: &LiveContext, invocation: &ParsedInvocation) -> RuntimeOutcome {
     if !valid_read_invocation(invocation, FitAction::Plan) {
         return invalid_invocation();

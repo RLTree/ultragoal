@@ -101,9 +101,9 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
                 Ok(state) => diagnose::diagnose_local(root, &context, &state, &invocation),
-                Err(_) => state_unavailable(),
+                Err(_) => fit::repository_fit_required(&context, &invocation),
             },
-            Err(_) => inventory_unavailable(),
+            Err(_) => fit::repository_fit_required(&context, &invocation),
         },
         SuccessorCommand::Inspect(
             InspectTarget::Summary | InspectTarget::Findings | InspectTarget::Claims,
@@ -111,9 +111,9 @@ pub(crate) fn execute_invocation_with_home(
         | SuccessorCommand::Next => match InventoryBuilder::new(&context).build() {
             Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
                 Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
-                Err(_) => state_unavailable(),
+                Err(_) => fit::repository_fit_required(&context, &invocation),
             },
-            Err(_) => inventory_unavailable(),
+            Err(_) => fit::repository_fit_required(&context, &invocation),
         },
         _ => crate::cli::successor::runtime::unavailable(&invocation),
     }

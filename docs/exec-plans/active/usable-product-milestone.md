@@ -34,7 +34,9 @@ release.
 - Strict lane-contract decomposition: complete in the commit containing this
   revision.
 - Product-delivery program: active.
-- B0 current-behavior baseline and shared-interface freeze: ready, not started.
+- B0 current-behavior baseline and shared-interface freeze: active; the
+  Agentic advisory addendum is frozen, while unrelated delivery-reset lanes
+  remain unstarted.
 - L1–L4: blocked on B0 and the exact `BASE-0` / `IFACE-0` freeze.
 - I0 single root fan-in: blocked on every required lane being accepted,
   classified `no_change`, or explicitly blocked.
@@ -197,6 +199,40 @@ cargo test -p ultragoal --test distribution_contract --offline
 
 A missing selector or unavailable tool is a B0 finding. It is not permission to
 run an unrelated broad suite or generate replacement receipts.
+
+### B0 addendum — Agentic advisory integration freeze (2026-07-27)
+
+- `BASE-0`: `d25e689db61a5d406d457456a2285fb8e68285b1`, tree as recorded by
+  the implementation branch before this addendum. The retired `5dae7dd` and
+  unreachable merge `9344d013` are not inputs.
+- `IFACE-0/advisory-pack-set`: `AgenticPackSet-v1` is a caller-supplied,
+  candidate-bound value. It has one required `agentic-engineering` base pack,
+  optional named companion packs, exact package versions, manifest digests,
+  enabled-skill lists, and an aggregate digest. Validation is pure and rejects
+  duplicate names or skills, substituted/stale candidate digests, omitted
+  enabled skills within a declared pack, and any gateway other than
+  `external:harness-ultragoal`.
+- `IFACE-0/advisory-selection`: selection returns an exact fully-qualified
+  skill plus the aggregate pack-set digest with `proposal_only=true` and
+  `claim_effect=none`. An absent optional lens is typed
+  `advice_unavailable`; it is never inferred from source, cache, or install
+  state. This is not a router, selector store, lifecycle, receipt, effect, or
+  claim authority.
+- `IFACE-0/public-context`: `ultragoal --json inspect context` moves to
+  `HarnessPublicContext-v2`, retaining opaque roots and adding only redacted
+  current-process runtime version, executable SHA-256, byte length, and
+  `self_bound=true`. The executable path remains internal and capture is
+  revalidated before output.
+- `IFACE-0/unfitted-read-route`: when `next` or `diagnose` cannot derive the
+  existing inventory/ProductState, the existing repository-fit owner is probed
+  read-only. A successful probe returns typed `repository_fit_required` with
+  `effect=read`, `claim_effect=none`, and exact rerun
+  `ultragoal --json fit inspect --target .`; no ProductState or routine
+  checkpoint is manufactured.
+- This is root-owned I0 shared wiring because it changes public context,
+  shared diagnostics, plugin metadata, and a new pure package boundary. It
+  consumes no lane-local unmerged work and requires focused T3-style negative
+  coverage for candidate substitution, redaction, and zero-write behavior.
 
 ## Exclusive ownership map
 
@@ -465,7 +501,9 @@ does not block lanes or cause reproof.
 - [x] Define `BASE-0` / `IFACE-0`, commit-bound handoffs, dependency-specific
   invalidation, deterministic merge slots, Tree gates, repair budgets, and
   cancellation.
-- [ ] B0: record current behavior and freeze `BASE-0` / `IFACE-0`.
+- [~] B0: record current behavior and freeze `BASE-0` / `IFACE-0`; the
+  Agentic advisory addendum is recorded, while the broader milestone baseline
+  remains active.
 - [ ] Launch only lanes classified `change_required` or `partial_change`.
 - [ ] I0: merge or waive each required lane once and freeze `CANDIDATE-0`.
 - [ ] D1: obtain Tree's exact representative-use authority.
@@ -507,6 +545,10 @@ does not block lanes or cause reproof.
 - **2026-07-25 — relevant invalidation only:** a proof reruns only when a
   declared consumed dependency changes or same-surface evidence contradicts
   it.
+- **2026-07-27 — explicit advisory packs:** consume only candidate-bound
+  `AgenticPackSet-v1` through the existing Harness front door. No Agentic
+  router, cached-package inference, state store, receipt, effect, or claim
+  authority is introduced.
 
 ## Outcomes and claim ceiling
 
