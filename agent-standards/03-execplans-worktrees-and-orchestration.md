@@ -1,109 +1,84 @@
-# ExecPlans, Worktrees, And Orchestration
+# ExecPlans, Worktrees, and Orchestration
 
 ## ExecPlans
 
-Long-running work uses self-contained living ExecPlans. A future agent should
-be able to restart from the plan alone.
+Long-running or multi-lane work uses one self-contained living ExecPlan. A
+future agent must be able to restart from it alone.
 
-An ExecPlan includes purpose, observable outcomes, current progress,
-discoveries, decision log, concrete steps, validation, explicit blockers,
-idempotence, recovery, and artifacts.
+The plan includes purpose, observable outcomes, current progress, discoveries,
+decisions, owned/shared paths, dependency graph, concrete steps, validation,
+blockers, idempotence, recovery, retained artifacts, and claim ceiling.
 
-Revise plans as work proceeds. Do not leave stale plan claims behind because a
-later chat message corrected them.
+Revise the plan as work proceeds. Do not leave stale state because chat later
+corrected it.
 
-## Worktree And State Isolation
+## Isolation and ownership
 
-Concurrent agents work in isolated workspaces. Isolation includes branch,
-working tree, state roots, artifact roots, ports, caches, scratch paths,
-credentials, and mutable runtime state.
+Concurrent lanes use isolated branches, worktrees, state roots, artifact
+roots, ports, caches, targets, scratch paths, credentials, and mutable runtime
+state.
 
-- Agents preserve user changes and never sweep unrelated files into their work.
-- Resource limits, build concurrency, and process cleanup are lane-local unless
-  the user explicitly establishes a host-global coordination contract. No
-  session may invent a host-global build or test slot, require permission
-  handshakes from unrelated sessions, or block their independent execution.
-  Concurrent isolated builds are permitted; each lane bounds and cleans up only
-  the processes and artifacts it owns.
-- Dirty worktrees, foreign edits, and stale state roots are blockers or
-  coordination points, not reasons to widen scope.
-- Teardown preserves only irreproducible evidence that still anchors an active
-  claim or recovery need. Reproducible build, test, debug, target, cache, and
-  scratch output is deleted with the workspace.
-- Codex app-managed worktree threads are the preferred owners for ExecPlan
-  macro-lanes that should be visible, resumable, and independently operable in
-  the Codex app.
-- This preference is conditional. If the active goal, spine, parent contract,
-  or phase order blocks worktrees, no standard here permits launching them.
-- Future Codex app worktree lane owners use the lowest supported reasoning
-  level that fits the named risk. Raise reasoning only when the lane contract
-  names a concrete risk that requires it. Material reviewers remain separate
-  and may use higher reasoning. Record model and reasoning only when exposed.
-- Branch first, worktree second. The orchestrator must ensure the branch ref
-  exists before requesting an app worktree from that branch.
-- Repo-managed Codex app environments should create ignored per-worktree state
-  under `.codex-worktree/`, write a sanitized `.codex-worktree/run-command`
-  wrapper, and assign isolated state, scratch, home, temp, port, cache, and
-  target directories. The `env.sh` projection is compatibility-only and must
-  not be sourced for lane commands.
-- Runtime output belongs in ignored per-worktree state, not in repo-managed
-  `.codex/` configuration.
-- Durable identity belongs in repo-managed contracts and, only when a named
-  claim or cross-process handoff requires it, one canonical receipt. Ephemeral
-  worktree, cache, debug, replay, build, test, and local environment state
-  belongs in ignored per-worktree paths.
-- One worktree per macro-lane is reused across that lane's repair and review
-  loops.
-- Worktrees are storage debt. Clean merged worktrees must be closed after
-  verification; dirty, stale, unmerged, or abandoned worktrees require an audit
-  record naming owner, branch, status, age, and next action.
+- Preserve user changes and never sweep unrelated files into a lane.
+- Dirty worktrees and foreign edits are blockers or coordination points, not
+  permission to widen scope.
+- A lane writes only its exclusive paths and owns only its declared semantic
+  decisions. Worktree isolation does not cure overlapping authority.
+- All sibling lanes consume the same root-frozen base and shared interface.
+  They do not merge, cherry-pick, copy, or inspect one another's unintegrated
+  work.
+- A shared-interface change cancels only declared consumers.
+- Runtime output belongs in ignored lane-local state.
+- Preserve durable evidence only while a current claim, irreproducible
+  observation, custody handoff, or recovery need consumes it.
+- Reuse one worktree across a lane's bounded repair loop. Close a clean merged
+  worktree after its branch tip and required evidence are preserved.
 
-## Orchestration Doctrine
+Codex app-managed worktree tasks are preferred for substantial macro-lanes
+that need visible independent continuation. This preference does not override
+the active goal, phase order, ownership, authority, or effect restrictions.
+Create or verify the branch ref before creating its worktree.
 
-Organize substantial work around deliverables and proof, not chat sessions.
+Use the lowest supported model and reasoning that fits the named lane risk.
+Record model/reasoning only when exposed; otherwise use `unknown`.
 
-- Successful orchestration means the parent can answer, from current artifacts,
-  who owns each lane, which branch and worktree it uses, what it may edit, what
-  it depends on, what proof it owes, whether its state is fresh, and what must
-  happen next.
-- The orchestrator owns the dependency graph, not the lane implementation. It
-  defines lane contracts, creates or verifies workspaces, routes current
-  context, watches readiness and blockers, reconciles dependencies, preserves
-  proof anchors, and prevents stale or overlapping work from being treated as
-  complete.
-- Macro-lane owners should be app-visible Codex worktree threads when the work
-  needs independent continuation, app sidebar visibility, or user handoff.
-- The launch prompt or thread setup records the lane-owner model and reasoning
-  only when Codex exposes them; otherwise it records `unknown`. Lane owners use
-  the lowest supported reasoning that fits the risk, not reviewer settings.
-- Hidden subagents are not substitutes for app-visible macro-lane owners when
-  the user expects to inspect or continue the lane in Codex.
-- Lane completion is not root completion. A lane-ready claim must be joined to
-  current root state, dependency state, proof anchors, clean worktree, teardown
-  condition, and review gate before the parent may claim the larger deliverable
-  is complete.
-- When a dependency lane lands, the orchestrator merges it to the root
-  integration branch, verifies the stated root gate, confirms the lane branch
-  tip is reachable, and advances newly unblocked dependent worktree threads.
-- If advancing a dependent worktree would overwrite dirty scoped work, create
-  conflicts, or require semantic choices, classify it as lane-local
-  reconciliation and steer the lane owner to resolve it in lane context.
-- `PLANS.md` is stable ExecPlan law, not active project state. Worker ids,
-  phase progress, backlog rows, receipt state, and completion claims belong in
-  active ExecPlans, lane registries, verification backlogs, receipts, or
-  completion manifests.
+## Orchestrator responsibilities
 
-## Lane Completion Message
+The root orchestrator owns the graph, frozen interface, workspaces,
+dependencies, readiness, fan-in, shared wiring, proof joins, claim decisions,
+and teardown. It does not implement lane-local behavior.
 
-Lane agents notify the parent with a ready package, not a vague "done."
+For every lane it can answer:
 
-Required fields:
+- owner, branch, worktree, base commit/tree, and current head/tree;
+- exact owned, forbidden, and shared paths;
+- exact shared-interface fields and dependencies consumed;
+- local oracle, proof tier, budget, and stop condition;
+- current disposition and freshness;
+- minimal evidence and claim ceiling; and
+- next action and teardown condition.
 
-- lane id, branch, worktree, and current commit;
-- changed owned paths and confirmation that forbidden/shared paths were not
-  modified;
-- commands run, exit codes, and only the artifact paths that remain necessary;
-- the minimal current proof anchor and claim ceiling; name `none` when no
-  durable receipt is required;
-- dirty worktree status or explicit preserved uncommitted paths;
-- blockers, withheld claims, and next recommended parent action.
+Lane acceptance is not root acceptance. Root verifies ancestry and ownership,
+rejects peer merges and semantic conflicts, merges accepted lanes once in the
+declared order, applies only root-owned wiring, runs integrated checks, freezes
+one candidate, and closes or cancels every lane.
+
+`PLANS.md` is stable law. The single active ExecPlan owns current lane state.
+Add a registry, backlog, completion manifest, or receipt only when a current
+cross-process consumer needs a machine contract the plan cannot safely supply.
+
+## Lane return envelope
+
+A lane returns:
+
+- lane id, branch, worktree, base/head commits and trees;
+- disposition: `accepted_candidate`, `no_change`, or `blocked`;
+- exact changed owned paths and confirmation that forbidden/shared paths were
+  not changed;
+- consumed shared-interface fields and relevant dependencies;
+- focused commands, exit codes, and material outcomes;
+- required failure-path or boundary evidence;
+- requested root-owned changes not made;
+- residual risk and local claim ceiling; and
+- clean/dirty state plus safe teardown disposition.
+
+The envelope is a message, not a durable receipt by default.

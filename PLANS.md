@@ -1,122 +1,136 @@
-# ExecPlans
+# ExecPlan Law
 
-> PLANS.md is stable ExecPlan law, not the project plan ledger.
-> Adapt it only for repo terminology and path conventions. Do not put active
-> project status, worker or thread ids, phase progress, backlog items, receipt
-> state, or completion claims here.
-> Project-specific state belongs in `docs/exec-plans/active/*`,
-> `LANE_REGISTRY.json`, `VERIFICATION_BACKLOG.json`,
-> `COMPLETION_MANIFEST.json`, receipts, or `AMENDMENTS.jsonl`.
+`PLANS.md` defines stable planning rules. Current project state belongs in one
+self-contained file under `docs/exec-plans/active/`.
 
-An ExecPlan is a self-contained living design document that a coding agent can follow to deliver a working behavior.
+## One milestone, one active plan
 
-## Non-Negotiable Requirements
+Each goal has one observable product milestone and one active ExecPlan. The
+plan names:
 
-- The ExecPlan must be self-contained.
-- A novice agent must be able to restart from the ExecPlan alone.
-- The ExecPlan must produce demonstrably working behavior.
-- Terms of art must be defined in plain language.
-- Progress, discoveries, decisions, outcomes, validation, and recovery must stay current.
+- user outcome and non-goals;
+- current facts, assumptions, and claim ceiling;
+- exact owned, forbidden, and shared surfaces;
+- dependency order and one integration owner;
+- finite gates and proof tiers;
+- commands or oracles that distinguish correct from incorrect behavior;
+- cost, repair, stop, recovery, and teardown rules; and
+- Tree decisions with no safe default.
 
-## Required Sections
+Overlapping active plans are an orchestration defect. Remove superseded plans
+from the active tree; Git retains history.
 
-- Purpose / Big Picture
+## Progress and restartability
+
+The active plan is the current state record. It keeps these sections current:
+
+- Purpose and observable outcome
 - Progress
-- Surprises & Discoveries
-- Decision Log
-- Outcomes & Retrospective
-- Context and Orientation
-- Plan of Work
-- Concrete Steps
-- Validation and Acceptance
-- Idempotence and Recovery
-- Artifacts and Notes
-- Interfaces and Dependencies
+- Surprises and discoveries
+- Decision log
+- Context and orientation
+- Lane map and dependency graph
+- Concrete steps
+- Validation and acceptance
+- Idempotence and recovery
+- Artifacts and retention
+- Outcomes and retrospective
 
-## Lane Extension
+A future agent must be able to resume from the plan without chat, a stale
+registry, or a wall of receipts.
 
-For macro-lanes, also include:
+## Parallelism and exclusive ownership
 
-- owner;
-- owner thread type, usually a Codex app-managed worktree thread for
-  long-running macro-lanes that need sidebar visibility, resumability, or user
-  handoff;
-- lane-owner model and reasoning when Codex exposes them, using the lowest
-  supported reasoning level that fits the named risk and recording `unknown`
-  rather than inferring unavailable metadata;
-- launch prompt path or exact prompt text used to bind the lane agent to this
-  ExecPlan;
-- branch and worktree creation order, including the rule that branch refs are
-  created or verified before an app worktree is requested from that branch;
-- worktree path or creation receipt, and the command or `codex_app.create_thread`
-  target used to create it;
-- per-worktree environment setup, including the generated
-  `.codex-worktree/run-command` wrapper and isolated state roots; agents must
-  use the wrapper for validation commands and must not source compatibility
-  `env.sh`;
-- state roots and artifact roots;
-- port, cache, target, temp, scratch, and home isolation requirements;
-- owned paths;
-- forbidden/shared paths;
-- dependencies;
-- dependency blocker lifting rule: when upstream dependencies land and root
-  verification passes, the orchestrator launches or resumes newly unblocked
-  lane worktree threads without waiting for another user nudge;
-- dependency landing and dependent-worktree advancement rules;
-- claim ceiling;
-- live beneficial end-to-end proof requirement;
-- ready receipt path;
-- review cadence and the named invariant for bounded lane review;
-- review model and reasoning: one risk-matched specialist performs the routine
-  exhaustive invariant pass; four merged canonical personas are reserved for
-  consequential cross-domain milestones and product, release, or completion
-  signoff, with runtime-supported configuration recorded only when exposed;
-- parent-thread completion message contract;
-- teardown condition, including what proves the branch tip is preserved, the
-  worktree is clean, evidence has been captured, and the worktree can be closed.
+Use one lane for coupled work. Use parallel lanes only when:
 
-## Orchestrator Responsibilities
+1. each lane can progress without another lane's uncommitted state;
+2. path ownership and semantic decisions do not overlap;
+3. shared interfaces are frozen before fan-out;
+4. every lane has a local oracle, budget, stop condition, and concise handoff;
+5. all lanes consume the same root-frozen base; and
+6. one root owner has reserved integration and verification capacity.
 
-An ExecPlan macro-lane must make orchestration state visible enough that a
-future parent session can continue without guessing. The plan must name the
-lane owner, branch, worktree, dependencies, proof anchors, blockers, and next
-action. If any of those are unknown, the plan records the gap and the exact
-probe required to resolve it.
+Root owns shared schemas, dependency files, public grammar and application
+programming interfaces, migrations, effect authority, claim promotion, and
+final acceptance. Workers request shared changes in their handoff.
 
-The orchestrator is responsible for creating or verifying lane workspaces,
-keeping dependency order honest, merging landed dependency lanes into the root
-integration branch, advancing dependent worktrees only when it preserves their
-scoped changes, and routing conflicts back to the lane owner when semantic
-choices are required. The parent does not force, reset, stash, or repair a dirty
-lane from outside the lane context unless the plan explicitly authorizes that
-reconciliation.
+Every launched lane binds:
 
-Codex app worktree threads are the preferred lane owners for substantial
-macro-lanes because they are app-visible and resumable. When creating one from
-a branch starting state, create or verify the branch first, then create the
-worktree thread. A failed worktree initialization caused by a missing branch is
-an orchestration defect that must be recorded in `Surprises & Discoveries` and
-fixed before the lane can proceed.
+- exact base commit and tree;
+- exact shared-interface fields consumed;
+- exclusive path and semantic ownership;
+- forbidden and root-owned surfaces;
+- local oracle and proof tier;
+- relevant dependency identities;
+- repair budget, cancellation lineage, and stop condition; and
+- one commit-bound return envelope.
 
-Future lane-owner threads should use the lowest supported reasoning level that
-fits the lane risk. Do not copy reviewer reasoning onto implementation lane
-owners. Increase lane-owner reasoning only when the ExecPlan names the risk,
-scope, and expected payoff. Record model and reasoning only when exposed.
+Lanes never consume, merge, cherry-pick, or coordinate through another lane's
+unintegrated work. If a shared interface changes, root cancels only declared
+consumers and issues a new version.
 
-## Lane Ready Message
+Root alone moves a lane through `defined`, `ready`, `active`, `accepted`,
+`no_change`, `blocked`, `cancelled`, `merged`, or `waived`.
 
-A lane agent does not tell the parent "done" without a ready package. The final
-lane message to the parent includes:
+Fan-in happens once, in a deterministic order. The integrator checks ancestry
+and ownership, rejects peer merges and semantic conflicts, applies root-only
+wiring, runs integrated checks, freezes one candidate, and closes or cancels
+every lane. A merged patch or worker summary is not integration proof.
 
-- lane id, branch, worktree, and current commit;
-- changed owned paths and confirmation that forbidden/shared paths were not
-  modified;
-- exact commands run with exit codes and artifact paths;
-- ready receipt path, validator receipt path when relevant, and claim ceiling;
-- current worktree status, including any preserved uncommitted paths;
-- blockers, withheld claims, dependency changes, and next recommended parent
-  action.
+## Finite proof tiers
 
-The parent then either steers repair, merges the lane, runs root verification,
-updates the lane registry, tears down the worktree, or launches the next
-newly-unblocked macro-lane.
+Use the lowest tier able to falsify the current claim:
+
+- **T0 Context / micro:** provenance and explicit currentness limit.
+- **T1 Lane commit / standard:** exact base/head commit and tree, exclusive
+  owned diff, focused changed-behavior checks, and clean handoff.
+- **T2 Integrated candidate / standard:** deterministic fan-in, shared wiring,
+  integrated checks, and exact candidate freeze.
+- **T3 Consequential boundary / elevated:** explicit failure model, relevant
+  negative or fault evidence, recovery or rollback where touched, and one
+  focused independent review.
+- **T4 Product milestone / critical for authorized effects:** exact installed
+  candidate, authorized representative same-surface journey, and concise
+  quality-in-use outcome.
+- **T5 Release / critical:** fresh release-candidate identity, distribution,
+  install, discovery, runtime, security, migration, rollback, and Tree
+  approval.
+
+Do not run release or completion gates on ordinary work. Do not re-review
+byte-identical authority solely to seek another result.
+
+## Evidence economy and invalidation
+
+Persist evidence only for a named current claim, cross-process custody,
+irreproducible observation, recovery need, or authorized release. T1 and T2
+normally use commits, the active plan, and a concise handoff.
+
+Retained evidence declares owner, claim, exact candidate or environment,
+surface, maximum statement, consumed dependencies, oracle, invalidation
+trigger, and deletion boundary.
+
+Evidence invalidates only when its candidate or a declared consumed dependency
+changes, a relevant environment identity changes, its explicit freshness
+window expires, or contradictory same-surface evidence appears. Unrelated
+lanes, unconsumed docs, branch movement preserving the commit/tree, and age
+alone do not force regeneration.
+
+Stale evidence loses authority but does not block unrelated work. Delete
+superseded reproducible evidence after unique recovery value is ruled out.
+
+## Model and cost routing
+
+Use Luna for narrow deterministic work, Terra for ordinary engineering, and
+Sol for ambiguous or high-risk judgment. Use Ultra only for genuinely
+independent streams with disjoint ownership and explicit root fan-in capacity.
+
+Every lane has a budget. Stop and replan after two failed repair attempts,
+budget exhaustion, or evidence that coordination costs more than the saved
+time. Escalate reasoning only for a named risk the lower route did not retire.
+
+## Completion
+
+Lane completion means its owned commit and local oracle are ready for fan-in.
+Goal completion means the single milestone passes its gate on the exact
+integrated candidate. Release, repeated-use, daily-driver, and broad product
+success claims require later authority and evidence.

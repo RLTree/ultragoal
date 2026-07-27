@@ -1,274 +1,246 @@
-# Harness Ultragoal Successor Live Goal Contract
+# Harness Ultragoal Usable Product Goal
 
 ## Authority
 
-This is the current readable projection of the adopted
-`harness-ultragoal-successor-contract-v2`. The immutable adopted base remains
-the bundle rooted at
-`docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256`.
-Post-adoption requirements are authoritative only when an append-only row in
-`AMENDMENTS.jsonl` binds this projection and its affected required claim IDs.
+This is the current product-delivery authority for Harness Ultragoal. Tree
+authorized the finite reset to replace the recursive
+`harness-ultragoal-successor-contract-v2` delivery loop with a strict path to
+one usable product milestone.
 
-The base contract hash is the SHA-256 of the exact handoff-manifest bytes. A
-current contract hash is the SHA-256 of the exact `GOAL_CONTRACT.md` bytes.
-Each amendment hash is SHA-256 over the repository's canonical JSON for that
-row with `amendment_hash` omitted: object keys sorted recursively, arrays
-preserved, UTF-8 compact JSON, and a `sha256:` prefix. The amendment-log digest is the
-SHA-256 of the exact `AMENDMENTS.jsonl` bytes. The first row uses the all-zero
-SHA-256 as `previous_amendment_hash`; later rows use the preceding row's
-`amendment_hash`.
+This successor-line reconciliation is append-only: `AMEND-001` through
+`AMEND-005` remain historical contract lineage, and `AMEND-006` records this
+approved scope reset. It does not rewrite or discard the repaired successor
+architecture at committed base
+`5dae7dd24490b1a37bacb48b40694a840067fbe7`.
 
-## Objective
+The v2 handoff bundle, `LANE_REGISTRY.json`, `VERIFICATION_BACKLOG.json`,
+`COMPLETION_MANIFEST.json`, `docs/ultragoal-successor-live/`, prior active
+plans, and legacy mandatory-law projections are frozen compatibility and
+migration inputs. They do not schedule work, require periodic refresh, promote
+claims, or block unrelated delivery. Remove one only after current readers,
+compatibility promises, unique recovery value, and active claim dependencies
+are ruled out.
 
-Complete Harness Ultragoal as the smallest calibrated agentic-engineering
-harness that makes ambitious repository work executable, inspectable,
-recoverable, and cheaper to supervise.
+The only active plan is
+`docs/exec-plans/active/usable-product-milestone.md`. Conflicting active plans
+must be resolved, not combined.
 
-The product loop is:
+## Outcome contract
 
-1. choose a falsifiable problem;
-2. write one lean outcome contract;
-3. select the lowest sufficient model, reasoning effort, and orchestration
-   route;
-4. account for important alternatives and failure states;
-5. verify each claim on its real surface;
-6. ship reversibly; and
-7. use real-world evidence to improve, narrow, or retire the harness.
+- **Actor:** a repository operator using the Harness Ultragoal Codex plugin and
+  typed Rust command-line interface (CLI).
+- **Job:** safely fit a repository, run useful affected work on a dirty tree,
+  diagnose a representative failure, recover, and continue without losing
+  unrelated work.
+- **Product outcome:** reach a useful verified result through one
+  understandable flow with bounded supervision.
+- **Mission outcome:** reduce attention and delivery risk without replacing
+  product work with governance or evidence maintenance.
+- **Current decision:** close only gaps that prevent the milestone below.
 
-## Required Claim IDs
+## Single milestone
 
-The adopted claim graph remains closed and unchanged:
+`CL-USABLE-LOOP` is the only claim this goal advances.
 
-- `CL-SOURCE`
-- `CL-PACKAGE`
-- `CL-INSTALL`
-- `CL-DISCOVERY`
-- `CL-RUNTIME`
-- `CL-FIT`
-- `CL-ROUTINE`
-- `CL-OBSERVABILITY`
-- `CL-STRICT`
-- `CL-ORCHESTRATION`
-- `CL-EVAL-IMPROVEMENT`
-- `CL-REAL-JOURNEY`
-- `CL-RELEASE`
-- `CL-COMPLETION`
+It passes only when one exact integrated candidate completes this sequence on
+a Tree-selected, representative, non-toy repository:
 
-No amendment may remove, merge, hide, or weaken one of these claims without an
-explicitly approved weakening amendment, blocking backlog, and lowered claim
-ceiling.
+1. build the current-source plugin package;
+2. install it in an explicitly authorized local scope;
+3. observe the same bytes through supported host discovery;
+4. enter through the documented Harness Ultragoal front door;
+5. inspect and fit the repository without changing unrelated state;
+6. run a useful dirty-tree affected check;
+7. encounter one representative failure;
+8. receive a causal diagnosis and exact safe next action;
+9. recover or refuse safely with state preserved; and
+10. repeat useful work without stale custody, hidden writes, or a new
+    governance cycle.
 
-## Strengthened Requirements
+Acceptance also requires:
 
-### Custody and convergence
+- no unapproved external, destructive, credential, publishing, deployment, or
+  production effect;
+- unchanged unrelated tracked and untracked repository state;
+- one candidate identity across source, package, install, discovery, and
+  runtime observations;
+- legible disclosure of what ran, what did not, why, and what remains;
+- concise time-to-value, intervention, recovery, and retained-artifact
+  observations in the milestone outcome; and
+- evidence no stronger or broader than the tier for its current claim.
 
-- N06 custody safety is enforced primarily through typed state, ownership,
-  module privacy, opaque leaves, and explicit transitions. Partial source-text,
-  alias, or control-flow inference cannot carry the custody claim.
-- Illegal custody mutation, implicit destructive cleanup, caller-forged cleanup
-  evidence, premature settlement, and release with live custody must be
-  structurally prevented and behaviorally exercised across failure, panic,
-  interruption, replay, recovery, cleanup, and false-pass routes.
-- After materially distinct bypass classes recur against the same enforcement
-  mechanism, root must record one decision before further patches: retain it
-  with new evidence, replace it, or narrow the affected claim. This decision
-  reuses existing authority; it does not create a counter, validator, receipt,
-  tracker, or review subsystem.
+This milestone does not prove public release, marketplace availability,
+universal host support, repeated adoption, daily-driver status, or completion
+of every historical v2 claim.
 
-### Review and proof economy
+## Current architecture and integration boundary
 
-- Repair-loop checks stay focused and ephemeral. One independent source review
-  exhaustively falsifies the complete named invariant and batches all material
-  sibling, descendant, rollback, recovery, reconciliation, cleanup, replay,
-  security, and false-pass defects into one decision.
-- One material defect still means REWORK, but review does not stop at the first
-  defect. A fresh review follows an exact new freeze.
-- `WorkerResult-v1` remains the single lane handoff receipt and is generated
-  once only after source acceptance. Rejected candidates do not regenerate it.
-- Logs, targets, caches, scratch trees, compiler output, reproducible test
-  output, and duplicate receipts remain ephemeral. Durable evidence is retained
-  only for a named current claim, cross-process custody, irreproducible
-  observation, or recovery need, with one owner, invalidation trigger, retention
-  boundary, and deletion path.
-- Full multi-persona and same-surface proof runs only at material integration,
-  product, release, and completion boundaries where it can support or block a
-  current claim.
+The reconciliation inspected the clean successor commit and the separate dirty
+project checkout read-only. Uncommitted checkout changes are not inputs to this
+contract or any future lane base.
 
-### Current-source product value
+Observed at `5dae7dd2`:
 
-- After N06 integration, the next product milestone is the smallest
-  dependency-closed current-source installed journey. Package, install,
-  discovery, and runtime identities are measured separately.
-- That journey must exercise repository fit, dirty-tree routine work, a
-  representative failure, diagnosis, recovery, preserved unrelated state, and
-  a useful operator outcome on a real non-toy repository.
-- Before any mastery-level or broadly reusable claim, repeat the critical
-  journey on two materially different real repositories: one established and
-  dirty, and one fresh or substantially different. If unavailable, keep the
-  claim narrow and name the blocker.
-- Product Fitness records one minimal manual-first row per journey: time to
-  verified value, human interventions, review rounds, recovery outcome,
-  retained artifact/cache cost, and any observed false pass or false rejection.
-  No telemetry platform is added solely for these measurements.
+- the product has a Codex plugin surface and one typed Rust CLI with the public
+  groups `inspect`, `next`, `fit`, `check`, `diagnose`, `prove`, `observe`,
+  `package`, `eval`, and `migrate`;
+- repository fit owns confined narrow policies and exact preservation;
+- routine work has one private custody leaf for durable state, execution,
+  cleanup, terminal publication, rollback, and recovery;
+- routine dirty-state capture distinguishes Git-visible tracked and untracked
+  authority from ignored build state;
+- distribution, plugin lifecycle, local agent discovery, package identity,
+  host observation, and runtime identity remain separate boundaries;
+- `engineering_advisory` is an existing proposal-only authority projection
+  consumed by state, while `plugin_product::skill_catalog` owns exact Agentic
+  profiles and gateway validation; and
+- recent committed repairs cover routine checkpoint execution identity,
+  installed recovery continuity, package candidates, and read-only migration
+  verification. Their historical receipts do not prove this candidate.
 
-### Evidence-led sequencing
+The reset/refinement line also proposed a candidate-bound
+`AgenticPackSet-v1`, richer redacted public context, and a typed unfitted
+read-route diagnosis. Those product bytes are not imported by this
+planning-only reconciliation. The baseline must classify each proposal as
+`no_change`, `change_required`, or outside `CL-USABLE-LOOP`; any required
+shared implementation stays root-owned at the single fan-in.
 
-- Project initiation and recovery select one high-information first truth loop
-  bound to a real operator, job, repository, task, public entry surface, first
-  value event, protected invariants, causal failure or recovery control,
-  evidence class, and honest claim ceiling.
-- The Product Success Brief is a typed inception projection, not a second goal
-  contract. The Product Success Contract and append-only amendments remain
-  normative. The inception route is read-only and cannot create, update, or
-  approve the brief or promote a claim.
-- Among dependency-legal actions, integration of an accepted candidate remains
-  first. Remaining work ranks protected invariants before the first broken
-  transition of the active truth loop, then false passes or false rejections,
-  repeated cross-context gaps, bounded experiments, and speculative work.
-  Numeric priority and caller-authored prose cannot bypass this ordering.
-- Additional depth activates only from a protected invariant, a current typed
-  observed failure, a repeated cross-context gap, or an explicit bounded
-  experiment. Parked depth is derived on read; no trigger-state mirror,
-  scheduler, tracker, receipt family, or permanent operator/observer pair is
-  introduced.
-- Repository fit, routine work, goal execution, diagnosis, and product-journey
-  review remain the execution and observation authorities. Routine observations
-  stay ephemeral until an existing canonical Product Fitness claim boundary
-  requires one receipt.
-- Intent, research, prototype, source, package, installed, runtime, agent-use,
-  human-use, and repeated-human-use evidence remain distinct. Legacy dogfood
-  orchestration receipts cannot substitute for Product Fitness, real use,
-  human use, daily-driver status, readiness, release, or completion.
+## Product and delivery decisions
 
-### Agentic Engineering advisory layer
+- One milestone replaces the historical fourteen-claim completion graph for
+  current delivery.
+- One active ExecPlan replaces overlapping active plans.
+- Root first runs one read-only current-behavior baseline and freezes shared
+  interfaces.
+- Up to four disjoint implementation lanes consume the same frozen base and
+  interface. They never consume one another's unintegrated work.
+- Root alone owns shared public grammar, manifests, schemas, dependency files,
+  migrations, effect authority, integration, and claim decisions.
+- There is one fan-in. A worker commit or receipt is not integration proof.
+- Ordinary implementation uses focused ephemeral checks. Consequential
+  boundaries and release claims escalate only when those claims are current.
+- Proof binds exact commits and trees, owned paths, consumed dependencies,
+  local oracle, surface, and maximum claim.
+- Stale evidence loses authority; it does not trigger regeneration or block an
+  unrelated change.
 
-- `$harness-ultragoal:harness-ultragoal` remains the only implicit first-entry
-  gateway. Harness Ultragoal alone owns routing, goals, amendments, plans,
-  state, leases, worker custody, permissions, effects, recovery, evidence,
-  migrations, integration, claims, readiness, release, and completion.
-- Agentic Engineering 3.0 is the design, decision, verification-design,
-  engineering-learning, and lifecycle-advisory layer above those operational
-  owners. Its complete thirty-skill surface is reachable automatically at the
-  lifecycle boundary where each lens adds value, without requiring an operator
-  to know a skill name, profile, discipline, or internal pathway.
-- Advisory selection is an ephemeral, read-only projection bound to the exact
-  candidate, current context, lifecycle stage, active truth-loop transition,
-  protected invariants, contemplated effects, evidence, risk, authority,
-  uncertainty, and observed failure class. It chooses one smallest sufficient
-  primary lens and adds supporting lenses only for a genuine cross-layer
-  decision.
-- Routine, already-specified, and no-change work does not activate unnecessary
-  advisory machinery. Missing or substituted skills, profiles, inputs,
-  candidates, or gateway bindings fail visibly and closed. Selection cannot
-  authorize an effect, issue custody, mutate state, or raise a claim.
-- Advice reactivates only when candidate identity, lifecycle stage, evidence,
-  assumptions, risk, failure mechanism, or active truth-loop state changes.
-  Byte-identical context and unchanged evidence return the current disposition
-  and cannot create an advisory loop.
-- Agentic output is always `proposal_only` and `no_claim`. Root must explicitly
-  `reuse`, `extend`, `map`, or `reject` it through an existing Harness owner
-  before it can affect a plan, implementation, verification, learning,
-  migration, Product Fitness observation, or claim.
-- Default output remains plain language: the goal, result, important tradeoff,
-  and next action. Intermediate inspection exposes activated disciplines and a
-  short rationale. Advanced inspection exposes exact skill paths, inputs,
-  evidence, alternatives, adoption decision, invalidation trigger, and claim
-  ceiling. Explicit expert requests are supported but cannot disable mandatory
-  security, privacy, authority, destructive-effect, recovery, or claim guards.
-- Stage-scoped core, product/lifecycle, and Rust advisory profiles retain the
-  external Harness gateway, bind exact plugin version, source digest,
-  candidate, and configuration, and must preserve a measured discovery and
-  context-budget margin. A full profile is retained only when representative
-  measurement shows no routing degradation.
-- Agentic scripts, schemas, templates, references, research, profiles,
-  generated knowledge, and evaluation assets are adopted only through an
-  existing Harness authority. Opaque or unbounded scripts do not execute;
-  generated prose cannot become authority; and no peer lifecycle, router,
-  graph, state store, receipt family, knowledge store, or claim registry is
-  introduced.
-- Missing live model comparisons, Rust compilation, or field use in the
-  upstream Agentic package do not block this normative integration. They
-  constrain only the same-surface product claims that later Harness
-  implementation, installation, runtime, journey, and Product Fitness evidence
-  may support.
+## Protected invariants
 
-### Calibrated enforcement
+These apply at every proof tier:
 
-- Security, privacy, destructive-effect, and authority boundaries remain
-  mandatory regardless of observed frequency.
-- Other rules become universal only when recurrence or strong cross-repository
-  evidence shows lower correctness or attention cost and the check is precise,
-  inexpensive, and actionable.
-- Guidance, checks, agents, workflows, and proof machinery that do not earn
-  their maintenance and attention cost are simplified, made repository-fit
-  specific, or retired without weakening a protected claim boundary.
-- Active plans, worktrees, caches, candidate identities, amendment lineage, and
-  claim ceilings are reconciled at integration boundaries. Reproducible
-  artifacts and disposable caches are removed when no active claim or recovery
-  need depends on them.
+- authorize before effects;
+- parse untrusted input before product behavior;
+- preserve unrelated user work;
+- keep help, read, inspect, diagnose, and next-action routes free of hidden
+  writes;
+- bind effectful work to explicit repository, candidate, and authority;
+- fail closed on path escape, ambiguous ownership, stale custody, or possible
+  post-effect ambiguity;
+- make interruption, cancellation, retry, and recovery explicit where touched;
+- never let a worker, model output, receipt, generated row, or reviewer mint
+  root authority or raise a claim ceiling; and
+- keep secrets, credentials, private paths, prompts, transcripts, and raw host
+  output out of durable evidence.
 
-## Current Claim Ceiling
+## Finite gate hierarchy
 
-This amendment promotes no claim. The adopted contract, accepted P0/P1 Agentic
-increments, and all accepted bounded source increments remain preserved. The
-full Agentic advisory architecture is contract authority only until its exact
-implementation, package, install, discovery, runtime, routing, reactivation,
-journey, and Product Fitness surfaces pass independently. The sealed
-host-lifecycle source increment is integrated, but current-source
-package/install/discovery/runtime behavior, Product Fitness, real-repository
-journeys, readiness, release, completion, and mastery remain withheld until
-their exact dependency-closed, same-surface evidence passes.
+| Gate | Applies when | Required result | Explicitly not required |
+| --- | --- | --- | --- |
+| G0 Current-behavior baseline | Once before write lanes | Per-surface disposition and shared `BASE-0` / `IFACE-0` freeze | Full audit, durable receipt, material review |
+| G1 Lane acceptance | Every implementation lane | Exact base/head/tree, owned diff, focused success/failure checks, clean handoff | Full repository, package, runtime, or four-lens proof |
+| G2 Boundary proof | Security, authority, custody, concurrency, recovery, migration, install/host, or external effects change | Failure model, relevant negative/fault/recovery evidence, one focused independent falsifier | Unrelated claim or receipt refresh |
+| G3 Root fan-in | Once after required lane dispositions | Deterministic merge order, shared wiring, ownership audit, integrated checks, exact candidate | Worker-result aggregation as proof |
+| G4 Usable product milestone | Once on the integrated candidate | Authorized install/discovery/runtime journey and concise `CL-USABLE-LOOP` outcome | Release, publication, repeated use, mastery |
+| G5 Release | Only after explicit Tree authorization | Fresh release-grade package, install, discovery, runtime, migration, security, rollback, and approval evidence | Automatic continuation from G4 |
 
-## Dependency and evidence semantics
+A failed gate repairs its smallest owning boundary and reruns that gate. Earlier
+work reopens only when the failed change intersects its declared inputs.
 
-- Source acceptance, execution outcome, and claim availability are orthogonal.
-  N11 is source-accepted for its audit route and fail-closed public refusal;
-  its positive execution outcome is externally blocked and
-  `CL-EVAL-IMPROVEMENT` remains withheld.
-- The N11 external blocker releases only root-owned N12 claim-ceiling
-  reconciliation. It does not mean that N11 executed successfully and cannot
-  promote an evaluation, product, runtime, release, or completion claim.
-  N11 reopens when a host can jointly prove confinement and
-  identity-conditioned cleanup, or when its source, consumed dependency,
-  authority, or host-capability identity changes.
-- `N12_A_STAGED` is a source-integrated implementation state consumed only by
-  N14. It promotes no claim and binds its own source identity plus every
-  contract, schema, claim-registry, dependency, generated-output, fixture, and
-  effect identity it consumes. Any change reopens it.
-- Preliminary N13 work is isolated, advisory, non-citable, and discarded before
-  the final journey freeze. All tracked source, generated authority, public CLI,
-  migration, retirement, and distribution mutations finish before that freeze.
-- Product proof seals distinct source, generated, package, install, discovery,
-  and runtime identities. A later mutation invalidates every affected proof;
-  proof outputs and final reconciliation artifacts are excluded from the
-  product identity only when their schema declares that exclusion.
-- Aggregate review records preserve separate persona rows, operation IDs,
-  prompt and schema hashes, structured-output validation, evidence pointers,
-  and individual dispositions. An aggregate summary cannot replace those rows.
-- N13 supports a single installed-journey ceiling by default. Daily-driver,
-  broadly reusable, or mastery claims require the repeated real-repository and
-  Product Fitness evidence above.
-- N16 may establish release mechanics while blockers remain, but it cannot
-  promote readiness or release. N17 is non-mutating and emits the typed final
-  reconciliation artifact; completion remains withheld for every blocked or
-  unsupported required claim.
+## Proof tiers
 
-## Product Success Lineage
+| Tier | Profile | Maximum supported statement |
+| --- | --- | --- |
+| T0 Context | Micro | Named context or historical input exists with a stated currentness limit |
+| T1 Lane commit | Standard | One exact owned commit satisfies its frozen local contract and oracle |
+| T2 Integrated candidate | Standard | Required lane dispositions compose at the single root fan-in and integrated checks pass |
+| T3 Consequential boundary | Elevated | The named authority/security/recovery/install/host/effect boundary is supported by focused adverse evidence and independent review |
+| T4 Same-surface product | Critical for authorized effects | The exact installed candidate completes the representative journey and supports `CL-USABLE-LOOP` only |
+| T5 Release | Critical | The exact release candidate passes release-specific evidence and Tree approval for the authorized claim |
 
-`examples/generated/PRODUCT_SUCCESS_CONTRACT.json` is the current schema-bound,
-package-visible product-success authority for this live goal. Its claims map
-one-to-one to the adopted claim IDs above. Product Fitness, Product Cohesion,
-journey, readiness, release, and completion evidence must bind its current
-contract ID and exact target digest. Its zero receipt digest is an explicit
-contract-only sentinel; root issues the single current receipt only at the
-product proof boundary.
+Test volume, coverage percentage, receipt existence, or reviewer agreement
+cannot substitute for the named surface.
 
-## Prompting Basis
+## Evidence retention and invalidation
 
-- https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6
-- https://developers.openai.com/api/docs/guides/latest-model
-- https://learn.chatgpt.com/docs/models
+Observations are ephemeral by default. Persist only the smallest item needed
+for:
 
-These sources support lean prompts, representative evaluation, lowest
-sufficient reasoning, and Ultra only for meaningfully separable work. They do
-not replace repository behavior or same-surface proof.
+1. the current `CL-USABLE-LOOP` decision;
+2. cross-process custody that cannot be reconstructed cheaply;
+3. an irreproducible external or host observation;
+4. security, custody, or recovery state needed to resume safely; or
+5. a Tree-authorized release decision.
+
+Every retained item names claim, owner, candidate/environment, proof surface,
+maximum statement, consumed dependencies, oracle, invalidation trigger,
+retention boundary, and deletion path. Do not create receipts of receipts,
+periodic refresh copies, or command mirrors.
+
+Evidence invalidates only when:
+
+- candidate commit/tree, authority-bearing bytes, or a declared consumed
+  dependency changes;
+- relevant installed/runtime environment identity changes;
+- an external fact's explicit freshness window expires; or
+- contradictory same-surface observation appears.
+
+Unrelated lanes, unconsumed docs, timestamps, branch movement preserving the
+candidate, and age of reproducible output do not invalidate it. Rerun only
+proofs that declare the changed dependency. Delete superseded reproducible
+artifacts after unique recovery value is ruled out; Git is the archive.
+
+## Model, cost, and repair policy
+
+- **Luna:** narrow repeatable transformations with one easy oracle.
+- **Terra:** ordinary implementation, focused repair, and normal analysis.
+- **Sol:** ambiguous cross-boundary design, security/authority judgment, root
+  integration, or independent falsification.
+- **Ultra:** only when at least two ready packages are genuinely independent,
+  ownership is disjoint, and root has reserved fan-in capacity.
+
+Use the lowest reasoning effort that passes a representative oracle. Every
+lane sets a budget and two-attempt repair limit. Attempt two must state a new
+causal hypothesis or stronger oracle. Stop parallelism when coordination,
+duplicate investigation, or integration cost exceeds saved critical-path time.
+
+## Stop conditions and Tree gates
+
+Stop the affected boundary for:
+
+- missing Tree authority for install, target-repository mutation, destructive
+  action, external write, publication, credentials, deployment, or release;
+- unresolved shared-interface, ownership, or semantic conflict;
+- possible secret or private-data exposure;
+- ambiguous post-effect or custody state;
+- an untrustworthy local oracle;
+- two failed repair attempts without a new causal hypothesis;
+- budget exhaustion without evidence the next attempt changes the failure
+  mode; or
+- a material product, scope, or risk decision with no safe default.
+
+Independent legal work does not stop because another lane is blocked.
+
+No Tree decision is required for read-only G0. Before G4, Tree must select the
+representative repository and authorize exact local install and write scope.
+After G4, Tree chooses to stop, run a second materially different journey, or
+authorize a separate G5 release contract. Publishing, marketplace changes,
+credentials, deployment, and destructive retirement always require separate
+explicit authority.
+
+## Current claim ceiling
+
+This reconciliation supports only a current finite goal contract and
+executable plan. It does not establish source correctness, package identity,
+installation, host discovery, runtime behavior, Product Fitness, release
+readiness, or `CL-USABLE-LOOP`. Those remain unavailable until their finite
+gate passes on the exact candidate.

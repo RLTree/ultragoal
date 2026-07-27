@@ -1,128 +1,62 @@
-# Review And Completion
+# Review and Completion
 
-## Hypercritical Review Law
+## Falsification law
 
-Reviewers falsify first. Approval is allowed only after likely counterexamples
-were checked against current files, receipts, commands, fixtures, or runtime
-evidence.
+Review tests a current claim against likely counterexamples. It is not a
+recurring ceremony.
 
-- Current artifacts outrank prose.
-- No proof substitution: CLI proof does not prove UI behavior; mock proof does
-  not prove live behavior; target fixtures do not prove external products; old
-  receipts do not prove the current package.
-- Source proof, install proof, cache proof, app-registry proof, reviewer
-  exposure proof, final-packet proof, and update-goal proof are separate
-  surfaces. A pass on one surface cannot close another.
-- Missing receipts, stale digests, blocked approvals, dirty worktrees, absent
-  required commands, or unreachable proof are `REVISE_BEFORE_NEXT_PHASE` or
-  `BLOCKED`, not non-blocking notes.
-- Receipt relevance decides severity. A mismatch blocks only when that exact
-  receipt is the current claimed proof anchor for the reviewed phase, claim,
-  install surface, review round, or distribution surface. Historical, detached,
-  regenerated, superseded, or non-claimed receipt drift is cleanup or context,
-  not a reason to fail the round unless it changes the claim ceiling.
-- Check every repeated proof field when a count, id, digest, path, required list,
-  generated artifact, or schema enum changes.
-- Rerun the current local gate when feasible. If a reviewer cannot rerun it,
-  the verdict must label the evidence as supplied-only and explain the
-  exception.
-- Negative fixtures must pin the bug class.
-- A reviewer completes the bounded named invariant surface and returns all
-  demonstrated sibling and descendant defects in one consolidated result. One
-  material defect is sufficient for rejection, but review does not stop at the
-  first defect unless continuing would be unsafe, destructive, or out of scope.
-- A fresh review is eligible only after authority-bearing candidate bytes or a
-  consumed dependency changed, a previously unreviewed claim surface became
-  current, or observed behavior contradicted the prior decision. Do not rerun
-  review against a byte-identical candidate merely to seek more findings.
-- When one exhaustive pass covers the named invariant and produces no material
-  finding, close that review loop. Record speculative hardening as backlog or
-  residual risk; it cannot keep the candidate in review or trigger duplicate
-  reviewers without a concrete counterexample.
-- Approval must name the proof anchors checked and the claim ceiling that
-  remains unsupported.
+- Current candidate bytes and same-surface observations outrank prose.
+- Source, package, install, host discovery, runtime, recovery, journey,
+  release, and quality in use are separate surfaces.
+- Missing evidence blocks only the claim that consumes it. Historical,
+  detached, superseded, or unrelated evidence drift does not restart delivery.
+- Check repeated ids, digests, paths, generated outputs, and schema values only
+  when the current change or claim consumes them.
+- Rerun the focused current gate when feasible. Label supplied-only evidence.
+- Negative fixtures pin the intended failure class.
+- One exhaustive pass over the named invariant returns all demonstrated
+  siblings in scope. Stop only when continuation is unsafe, destructive, or
+  outside authority.
+- Review reopens only when relevant candidate bytes, consumed authority or
+  dependencies, or the claim surface changes, or current observation
+  contradicts it.
+- Approval names checked surfaces and every unsupported material claim.
 
-## Review Cadence Law
+## Proportional independent review
 
-Routine material lane review uses one risk-matched specialist and one exact
-freeze. The reviewer completes the whole named invariant, including applicable
-sibling, rollback, recovery, race, interruption, security, and false-pass
-classes. This review can support source or lane acceptance only. It cannot
-support Product Fitness, readiness, release, or completion.
+| Work or claim | Independent review |
+| --- | --- |
+| Ordinary implementation confined to an owned lane | None by default; root inspects diff and focused checks at fan-in |
+| Security, authority, custody, concurrency, recovery, migration, install/host, or external-effect boundary | One fresh focused falsifier for the touched boundary |
+| Current product milestone | Product/Simplicity same-surface journey review plus any boundary falsifier required by the candidate |
+| Release-grade or repository-wide completion spanning all four lenses | Full four-lens team once against one unchanged candidate |
 
-The default routine reviewer route is GPT-5.6 Terra with high reasoning on the
-standard tier. GPT-5.6 Sol with high reasoning is reserved for the bounded
-four-persona milestone team below. If the requested route is unavailable,
-record the actual route and lower the review claim; do not silently substitute
-a routine Sol review or promote advisory feedback to milestone signoff.
+The four lenses are Contract and Claim, Orchestration and Recovery, Security
+Trust Boundary, and Product and Simplicity.
 
-Use the repo-defined four-persona team only for a consequential cross-domain
-milestone, major root integration signoff, Product Fitness boundary, release,
-completion, or explicit escalation. The enforceable milestone result is the
-typed review receipt bound to the validator, review-target, and archive anchors.
+Do not require all four for ordinary lanes, planning-only docs, focused repair,
+or a claim that does not span all four. Do not rerun review because unrelated
+receipts aged or historical plans asked for another round.
 
-Required personas:
+Before review bind exact candidate/diff, current claim, specific failure model
+or journey, cheapest credible oracle, and claim ceiling. Persist no separate
+review receipt unless a current claim, irreproducible observation,
+cross-process custody, recovery need, or authorized release consumes it.
 
-1. Contract and Claim Falsifier.
-2. Orchestration and Recovery Falsifier.
-3. Security Trust-Boundary Falsifier.
-4. Product and Simplicity Falsifier.
-
-Every milestone round uses all four personas, fresh-context reviewers, full
-scope, current claim-relevant anchors, and the current claim ceiling. Later
-milestone rounds are not scoped only to previous blockers.
-
-Spawn installed custom agent types only after the active Codex registry exposes
-them. Disk cache sync and `~/.codex/agents/` TOML presence are not enough.
-Material sign-off requires a typed active-registry exposure receipt. Generic
-reviewers are a degraded fallback for advisory development feedback only, and
-only when seeded with the exact canonical persona prompt. Generic reviewers
-cannot satisfy material sign-off.
-
-Cadence:
-
-- Every milestone review round is a sign-off attempt. Recompute only the
-  canonical claim anchors whose candidate, authority surface, or freshness rule
-  makes them necessary for that round; do not regenerate detached, historical,
-  superseded, or unrelated receipts.
-- Use all four installed personas with runtime-supported model and reasoning
-  configuration, recording those values only when Codex exposes them.
-- Give every reviewer the full current scope, current anchors, and current
-  claim ceiling.
-- Use fresh reviewers every round. Do not reuse agents across rounds.
-- All four must return `SIGN_OFF` in the same round. Any
-  `REVISE_BEFORE_NEXT_PHASE` or `BLOCKED` invalidates the round; repair,
-  regenerate anchors, close reviewers, and start a fresh full-scope round.
-
-For bounded invariant review, use the lowest sufficient standard-tier route.
-Persist no separate review receipt unless a current claim, cross-process
-handoff, irreproducible observation, or recovery need consumes it. One
-exhaustive pass with no material finding closes the loop.
-
-## Completion And Claim Ceiling Law
+## Completion and claim ceilings
 
 Do not say complete, ready, done, fixed, passing, or production-ready without
-fresh named evidence.
+fresh named evidence from the same surface.
 
-Completion means the exact required commands or artifacts exist now. Missing
-coverage, missing deterministic checks, blocked review or approval, dirty
-worktrees, absent receipts, stale generated authorities, or insufficient live
-proof must be called `BLOCKED`, `REVISE_BEFORE_NEXT_PHASE`, or explicitly
-unsupported.
+Completion means the current contract's acceptance checks passed for the exact
+candidate. Missing evidence, blocked approval, dirty owned work, stale consumed
+authority, or unavailable same-surface proof lowers the affected claim; it
+does not reopen unrelated claims.
 
-Final packets, archives, review targets, transaction finalization, and
-update-goal eligibility must fail closed on stale evidence, forged proof,
-private proof paths, missing Product Success lineage, missing same-surface
-proof, circular dependencies, altered claim ceilings, or packet claims added
-outside required claim ids.
+Useful output on one representative real task can close the bounded product
+milestone. It does not prove repeated use, daily-driver fitness, public
+availability, release readiness, or repository-wide completion.
 
-Production-use proof is required before production-ready claims. A mechanic or
-product surface is not complete until it has produced useful output on a real,
-non-toy task large enough to reveal whether the feature serves its intended
-purpose at the required quality bar.
-
-## Completion Report Contract
-
-For non-trivial work, final reports include verification, security review,
-performance review, quality review, and claim ceiling. Write `N/A` when a
-section truly does not apply.
+For non-trivial work, final reports state outcome and ceiling, exact
+verification and result, residual blockers, and security/performance
+implications or `N/A`. Do not manufacture an artifact merely to link it.
