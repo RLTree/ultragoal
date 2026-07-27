@@ -105,7 +105,7 @@ fn routine_next_projects_when_adopted_state_is_unavailable() {
 }
 
 #[test]
-fn public_diagnose_retains_inventory_failure_when_no_routine_surface_exists() {
+fn public_diagnose_requires_repository_fit_when_no_routine_surface_exists() {
     let repo = Repository::new("routine-diagnosis-no-surface");
     fs::remove_file(repo.root.join("migration/authority-routes.json")).unwrap();
     let home = empty_home("routine-diagnosis-no-surface");
@@ -116,10 +116,16 @@ fn public_diagnose_retains_inventory_failure_when_no_routine_surface_exists() {
     };
     let streams =
         execute_invocation_with_home(&repo.root, invocation, Some(&home)).render(OutputMode::Json);
-    assert_eq!(streams.exit_code, 4);
+    assert_eq!(streams.exit_code, 1);
     assert!(streams.stdout.is_empty());
     let output = String::from_utf8(streams.stderr).unwrap();
-    assert!(output.contains("successor_runtime_inventory_unavailable"));
+    let value: serde_json::Value = serde_json::from_str(&output).unwrap();
+    assert_eq!(value["diagnostic_id"], "repository_fit_required");
+    assert_eq!(value["effect"], "read");
+    assert_eq!(
+        value["exact_rerun"],
+        "ultragoal --json fit inspect --target ."
+    );
     assert!(!output.contains(repo.root.to_str().unwrap()));
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
