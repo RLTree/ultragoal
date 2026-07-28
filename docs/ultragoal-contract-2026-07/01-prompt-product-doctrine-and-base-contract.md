@@ -6,7 +6,7 @@ Paste or reference this in the parent session.
 Rebind to the active Harness Ultragoal June 25 candidate contract and finish the plugin repo itself into full Harness Ultragoal compliance with zero exceptions.
 
 Source root:
-`/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
+`<operator-home>/Projects/harness-ultragoal-plugin-proposal`
 
 Use the side-thread audit as required evidence, but verify everything live before editing. Current known violations from side audit:
 
@@ -803,7 +803,7 @@ Mandatory integration objectives from the synthesis:
 Gold-Standard Stack Developer Experience Addendum:
 
 The zip archive
-`/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
+`<operator-home>/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
 adds concrete developer-experience, stack, command-loop, receipt, cache,
 resource, garbage-collection, supply-chain, product, CI/local-parity, and
 HU-STACK law guidance. Treat it as an additional Gate 93 synthesis source,

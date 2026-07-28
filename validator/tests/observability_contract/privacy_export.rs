@@ -1,7 +1,7 @@
 use super::scenario::{AdapterMode, MockAdapter, TestDir, event, query, store};
 use std::fs;
 use std::time::Duration;
-
+use ultragoal::observability::ExplicitExportRequest;
 #[test]
 fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
     let dir = TestDir::new("redaction");
@@ -20,6 +20,9 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
         ("tmp_path", "/private/tmp/secret.txt"),
         ("home_hint", "~/private/secret.txt"),
         ("windows_hint", "C:\\Users\\private\\secret.txt"),
+        ("uri_hint", "failed at file:///private/secret.txt"),
+        ("unc_hint", "share \\\\private\\secret"),
+        ("oauth_hint", "OAuth gho_private_oauth_token"),
         ("provider_hint", "xoxb-private-token"),
         ("cloud_hint", "AKIAPRIVATEKEYVALUE"),
         ("ssn_hint", "123-45-6789"),
@@ -48,6 +51,9 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
         "/private/tmp",
         "~/private",
         "C:\\Users",
+        "file:///private",
+        "private\\secret",
+        "gho_private_oauth_token",
         "xoxb-private-token",
         "AKIAPRIVATEKEYVALUE",
         "123-45-6789",
@@ -64,7 +70,6 @@ fn tokens_pii_paths_and_bypass_variants_are_dropped_before_persistence() {
             .is_empty()
     );
 }
-
 #[test]
 fn explicit_export_roundtrip_receives_only_redacted_candidate_bound_events() {
     let dir = TestDir::new("export-ok");
@@ -76,13 +81,13 @@ fn explicit_export_roundtrip_receives_only_redacted_candidate_bound_events() {
     let mut adapter = MockAdapter::new(AdapterMode::Ok);
 
     let count = store
-        .export_explicit(
-            &query(),
-            true,
-            true,
-            Duration::from_secs(1),
-            Some(&mut adapter),
-        )
+        .export_explicit(ExplicitExportRequest {
+            query: &query(),
+            configured: true,
+            consent_granted: true,
+            timeout: Duration::from_secs(1),
+            adapter: Some(&mut adapter),
+        })
         .unwrap();
     assert_eq!(count, 1);
     assert_eq!(adapter.export_calls, 1);
@@ -100,19 +105,37 @@ fn absent_disabled_denied_unavailable_wrong_candidate_and_unredacted_adapters_fa
 
     assert!(
         store
-            .export_explicit(&query(), false, true, timeout, None)
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: false,
+                consent_granted: true,
+                timeout,
+                adapter: None,
+            })
             .unwrap_err()
             .contains("disabled")
     );
     assert!(
         store
-            .export_explicit(&query(), true, false, timeout, None)
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: false,
+                timeout,
+                adapter: None,
+            })
             .unwrap_err()
             .contains("consent")
     );
     assert!(
         store
-            .export_explicit(&query(), true, true, timeout, None)
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
+                timeout,
+                adapter: None,
+            })
             .unwrap_err()
             .contains("absent")
     );
@@ -121,7 +144,13 @@ fn absent_disabled_denied_unavailable_wrong_candidate_and_unredacted_adapters_fa
     unavailable.available = false;
     assert!(
         store
-            .export_explicit(&query(), true, true, timeout, Some(&mut unavailable))
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
+                timeout,
+                adapter: Some(&mut unavailable),
+            })
             .is_err()
     );
     assert_eq!(unavailable.export_calls, 0);
@@ -130,7 +159,13 @@ fn absent_disabled_denied_unavailable_wrong_candidate_and_unredacted_adapters_fa
     wrong_candidate.candidate_id = "cand-2".to_owned();
     assert!(
         store
-            .export_explicit(&query(), true, true, timeout, Some(&mut wrong_candidate))
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
+                timeout,
+                adapter: Some(&mut wrong_candidate),
+            })
             .unwrap_err()
             .contains("wrong-candidate")
     );
@@ -140,13 +175,13 @@ fn absent_disabled_denied_unavailable_wrong_candidate_and_unredacted_adapters_fa
     unredacted_contract.redacted_only = false;
     assert!(
         store
-            .export_explicit(
-                &query(),
-                true,
-                true,
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
                 timeout,
-                Some(&mut unredacted_contract)
-            )
+                adapter: Some(&mut unredacted_contract),
+            })
             .unwrap_err()
             .contains("redaction-contract")
     );
@@ -192,7 +227,13 @@ fn outage_delay_duplicate_and_partial_ack_lower_only_export_proof() {
         store.append(&event("event", 1, 1, "fail")).unwrap();
         let mut adapter = MockAdapter::new(mode);
         let error = store
-            .export_explicit(&query(), true, true, timeout, Some(&mut adapter))
+            .export_explicit(ExplicitExportRequest {
+                query: &query(),
+                configured: true,
+                consent_granted: true,
+                timeout,
+                adapter: Some(&mut adapter),
+            })
             .unwrap_err();
         assert!(error.contains(expected), "{label}: {error}");
         assert_eq!(

@@ -1,39 +1,90 @@
 #[test]
 fn process_backend_is_descriptor_bound_empty_environment_contained_and_darwin_closed() {
-    let process = source("validator/src/distribution/host_effect/executor/process.rs");
-    let model = source("validator/src/distribution/host_effect/executor/model.rs");
+    let executor = source("validator/src/distribution/host_effect/executor/mod.rs");
+    let descriptor = source(
+        "validator/src/distribution/host_effect/selected_codex_executable/execution/descriptor.rs",
+    );
+    let process_group = source(
+        "validator/src/distribution/host_effect/selected_codex_executable/execution/process_group.rs",
+    );
+    let launch = source(
+        "validator/src/distribution/host_effect/selected_codex_executable/immutable_launch.rs",
+    );
+    let darwin = source(
+        "validator/src/distribution/host_effect/selected_codex_executable/execution/darwin.rs",
+    );
+    let process_custody = source("validator/src/process_custody/mod.rs");
+    let routine_darwin_spawn =
+        source("validator/src/routine_work/runtime_adapter/mediator/process/darwin_spawn.rs");
+    let exact_output_limit =
+        source("validator/src/distribution/host_effect/executor/model/exact_output_limit_bytes.rs");
+    let policy =
+        source("validator/src/distribution/host_effect/executor/model/execution_policy/strict.rs");
     for required in [
         "execveat(",
         "libc::AT_EMPTY_PATH",
         "fexecve(",
-        "executable.file().as_raw_fd()",
-        "let environment = [std::ptr::null",
-        "libc::setpgid",
-        "terminate_process_group",
-        "libc::kill(-child",
+        "executable.launch_file().as_raw_fd()",
+        "let environment_values",
+        "environment.push(std::ptr::null())",
+        "libc::fchdir(cwd)",
         "policy.stdout_limit()",
         "policy.stderr_limit()",
         "policy.timeout()",
-        "UnsupportedPlatform",
-        "defense in depth and performs no fork, spawn, or write",
     ] {
         assert!(
-            process.contains(required),
-            "missing process token {required}"
+            descriptor.contains(required),
+            "missing descriptor token {required}"
         );
     }
-    assert!(!process.contains("Command::new"));
-    assert!(!process.contains("/bin/sh"));
-    assert!(!process.contains("/usr/bin/env"));
+    for required in ["libc::setpgid", "terminate_process_group"] {
+        assert!(
+            descriptor.contains(required),
+            "missing descriptor token {required}"
+        );
+    }
+    for required in ["libc::kill(-child", "libc::kill(child"] {
+        assert!(
+            process_group.contains(required),
+            "missing process-group token {required}"
+        );
+    }
+    for required in [
+        "libc::memfd_create",
+        "libc::F_SEAL_SEAL",
+        "libc::F_SEAL_WRITE",
+        "libc::F_GET_SEALS",
+        "expected_sha256",
+    ] {
+        assert!(launch.contains(required), "missing launch token {required}");
+    }
+    assert!(executor.contains("Darwin remains unsupported"));
+    assert!(darwin.contains("UnsupportedPlatform"));
+    assert!(darwin.contains("refuse before spawn"));
+    assert!(!darwin.contains("posix_spawn"));
+    assert!(!darwin.contains("process_custody"));
+    assert!(!darwin.contains("program.path()"));
+    assert!(!process_custody.contains("spawn_suspended_descriptor"));
+    assert!(routine_darwin_spawn.contains("program: &PinnedExecutable"));
+    assert!(!descriptor.contains("Command::new"));
+    assert!(!descriptor.contains("/bin/sh"));
+    assert!(!descriptor.contains("/usr/bin/env"));
     for required in [
         "EXACT_OUTPUT_LIMIT_BYTES: usize = 1024 * 1024",
         "MAX_TIMEOUT_MS: u64 = 5 * 60 * 1000",
+    ] {
+        assert!(
+            exact_output_limit.contains(required),
+            "missing output-limit token {required}"
+        );
+    }
+    for required in [
         "if !environment.is_empty()",
         "EnvironmentInjection",
         "inherited_environment: false",
-        "environment_entries: 0",
+        "environment_entries: environment.len()",
     ] {
-        assert!(model.contains(required), "missing model token {required}");
+        assert!(policy.contains(required), "missing policy token {required}");
     }
 }
 

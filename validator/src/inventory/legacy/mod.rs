@@ -69,6 +69,9 @@ pub(crate) fn discover(
             continue;
         }
         let rel = PathBuf::from(&rel_text);
+        if super::behavioral_role::for_path(&rel).is_some() {
+            continue;
+        }
         if !scope::inspect(&rel) {
             continue;
         }

@@ -1,4 +1,3 @@
-use super::compatibility::{STRUCTURAL_WITNESS_KIND, by_legacy_name, inspect_wrapper};
 use super::component_expectations::expected_names;
 use super::fs::{
     PhysicalEntryDescriptor, check_symlink, component_name, physical_entry, regular_files, relative,
@@ -94,60 +93,25 @@ pub(crate) fn discover_skills(
             })?;
             continue;
         };
-        let legacy = registry.legacy_skills.contains_key(&declared)
-            || registry.legacy_skills.contains_key(&directory_name);
-        let route_expected = legacy
-            .then(|| by_legacy_name(&declared).or_else(|| by_legacy_name(&directory_name)))
-            .flatten();
-        let route_witness = if route_expected.is_some() {
-            inspect_wrapper(reads, root, &path, &directory_name, &declared)?
+        let stable_id = format!("SKILL:{declared}");
+        let authority = if canonical.contains(&declared) {
+            AuthorityState::Canonical
         } else {
-            None
+            AuthorityState::Context
         };
-        if route_expected.is_some() && route_witness.is_none() {
-            findings.push(InventoryFinding::error(
-                "invalid_compatibility_route_wrapper",
-                Some(&format!("LEGACY-SKILL:{declared}")),
-                Some(&relative(root, &path)?),
-                "legacy skill is not the exact explicit-only compatibility wrapper".to_owned(),
-            ));
-        }
-        let (stable_id, authority) = if legacy {
-            (format!("LEGACY-SKILL:{declared}"), AuthorityState::Legacy)
-        } else {
-            (
-                format!("SKILL:{declared}"),
-                if canonical.contains(&declared) {
-                    AuthorityState::Canonical
-                } else {
-                    AuthorityState::Context
-                },
-            )
-        };
-        let kind = if route_witness.is_some() {
-            STRUCTURAL_WITNESS_KIND
-        } else {
-            "skill"
-        };
-        let provenance = route_witness
-            .map(|route| vec![route.metadata_path()])
-            .unwrap_or_default();
-        let references = route_witness
-            .map(|route| vec![route.canonical_id()])
-            .unwrap_or_default();
         entries.push(physical_entry(
             reads,
             root,
             &path,
             PhysicalEntryDescriptor {
                 stable_id,
-                kind,
+                kind: "skill",
                 owner: "OWN-PLUGIN-PRODUCT",
                 authority_state: authority,
                 active_status: ActiveStatus::Active,
                 generator: None,
-                provenance,
-                references,
+                provenance: Vec::new(),
+                references: Vec::new(),
             },
         )?);
     }

@@ -42,7 +42,7 @@ impl JourneyFixture {
                 0o644,
             ),
             (
-                "runtime/runtime-probe-bin",
+                "runtime/ultragoal",
                 runtime_probe_bytes(),
                 "executable",
                 0o755,
@@ -132,17 +132,10 @@ struct Entry<'a> {
 }
 
 pub fn runtime_probe_bytes() -> Vec<u8> {
-    [
-        "#!/bin/sh\n",
-        "case \"$1\" in\n",
-        "  stale) nonce=stale ;;\n",
-        "  slow) sleep 1; nonce=\"$HUL_SESSION_NONCE\" ;;\n",
-        "  \"\"|valid) nonce=\"$HUL_SESSION_NONCE\" ;;\n",
-        "  *) nonce=stale ;;\n",
-        "esac\n",
-        "printf '%s\\n' \"HUL_RUNTIME_OBSERVATION={\\\"schema\\\":\\\"harness-ultragoal.runtime-probe.v1\\\",\\\"session_nonce\\\":\\\"$nonce\\\"}\"\n",
-    ]
-    .concat()
+    format!(
+        "#!/bin/sh\ntest \"$1\" = --json && test \"$2\" = --help || exit 64\nsleep 0.15\n/bin/cat <<'HUL_HELP'\n{}\nHUL_HELP\n",
+        crate::distribution::canonical_runtime_help_json(),
+    )
     .into_bytes()
 }
 

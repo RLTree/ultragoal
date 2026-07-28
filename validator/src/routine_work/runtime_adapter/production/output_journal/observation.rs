@@ -55,6 +55,8 @@ pub(super) fn open_root(root: &Path) -> Result<File, RoutineError> {
     }
     let name = CString::new(root.as_os_str().as_bytes())
         .map_err(|_| error("routine-production-output-root-invalid"))?;
+    // SAFETY: `name` is a NUL-terminated absolute path checked against its
+    // canonical form, and the returned descriptor is adopted only on success.
     let fd = unsafe {
         libc::open(
             name.as_ptr(),
@@ -64,6 +66,7 @@ pub(super) fn open_root(root: &Path) -> Result<File, RoutineError> {
     if fd < 0 {
         return Err(error("routine-production-output-root-open-failed"));
     }
+    // SAFETY: successful `open` returns a newly owned descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 
@@ -136,6 +139,8 @@ pub(super) fn stat_at(
 ) -> Result<Option<OutputDirectoryIdentity>, RoutineError> {
     let name = validate_name(name)?;
     let mut value = MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: `parent` is live, `name` is NUL-terminated, and `value` is writable
+    // `libc::stat` storage for `fstatat` to initialize.
     let result = unsafe {
         libc::fstatat(
             parent.as_raw_fd(),
@@ -145,6 +150,7 @@ pub(super) fn stat_at(
         )
     };
     if result == 0 {
+        // SAFETY: the zero result from `fstatat` initialized `value`.
         let stat = unsafe { value.assume_init() };
         return Ok(Some(OutputDirectoryIdentity {
             device: stat.st_dev as u64,
@@ -166,7 +172,7 @@ pub(super) fn validate_directory(
 ) -> Result<(), RoutineError> {
     if value.device != root_device
         || value.mode & u32::from(libc::S_IFMT) != u32::from(libc::S_IFDIR)
-        || value.owner != unsafe { libc::geteuid() }
+        || value.owner != current_user_id()
         || value.mode & 0o22 != 0
     {
         return Err(error("routine-production-output-component-unsafe"));
@@ -176,6 +182,7 @@ pub(super) fn validate_directory(
 
 pub(super) fn open_at(parent: &File, name: &str) -> Result<File, RoutineError> {
     let name = validate_name(name)?;
+    // SAFETY: `parent` is live and `name` is a validated NUL-terminated component.
     let fd = unsafe {
         libc::openat(
             parent.as_raw_fd(),
@@ -186,5 +193,11 @@ pub(super) fn open_at(parent: &File, name: &str) -> Result<File, RoutineError> {
     if fd < 0 {
         return Err(error("routine-production-output-open-failed"));
     }
+    // SAFETY: successful `openat` returns a newly owned descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
+}
+
+pub(super) fn current_user_id() -> u32 {
+    // SAFETY: `geteuid` only reads this process's credential and takes no pointers.
+    unsafe { libc::geteuid() }
 }

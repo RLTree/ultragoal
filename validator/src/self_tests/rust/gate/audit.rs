@@ -34,7 +34,7 @@ fn rust_devx_audit_receipt_edges_are_typed() {
     assert!(
         crate::audit::rust::developer::receipt_failures(
             &json!({
-                "schema": crate::cli::rust::operation::RUST_RECEIPT_SCHEMA,
+                "schema": "harness-ultragoal.rust-devx-receipt.v1",
                 "status":"fail",
                 "claim_ceiling":"withheld_or_blocked",
                 "law_ids":[rust_law.id],
@@ -55,7 +55,7 @@ fn rust_devx_audit_receipt_edges_are_typed() {
     );
     let gc_same = crate::audit::rust::developer::receipt_failures(
         &json!({
-            "schema": crate::cli::garbage::collection::operation::GC_RECEIPT_SCHEMA,
+            "schema": "harness-ultragoal.workspace-gc-receipt.v1",
             "status":"pass",
             "law_ids":[gc_law.id],
             "digests":{"candidate":"sha256:same"},
@@ -132,7 +132,7 @@ fn rust_devx_audit_live_root_covers_current_surface_presence() {
 fn rust_devx_missing_prefix_detection_covers_present_and_absent_rows() {
     let failures = vec![(
         "rust-developer-experience-authority".to_string(),
-        "rust_devx_missing_artifact:validator/src/cli/rust/mod.rs".to_string(),
+        "rust_devx_missing_artifact:schemas/rust-devx-receipt.schema.json".to_string(),
     )];
     assert!(has_failure_prefix(&failures, "rust_devx_missing_artifact:"));
     assert!(!has_failure_prefix(&failures, "rust_devx_missing_receipt:"));

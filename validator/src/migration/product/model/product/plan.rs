@@ -6,7 +6,7 @@ impl ProductMigrationPlan {
         mut effects: Vec<PlannedMigrationEffect>,
         compatibility_boundary_observation: Option<CompatibilityBoundaryObservation>,
     ) -> Result<Self, ProductMigrationError> {
-        if items.is_empty() || items.len() > MAX_PRODUCT_ITEMS || effects.len() > items.len() {
+        if items.len() > MAX_PRODUCT_ITEMS || effects.len() > items.len() {
             return Err(ProductMigrationError::new(
                 "migration-product-plan-count-refused",
             ));
@@ -92,30 +92,31 @@ impl ProductMigrationPlan {
         Ok(Self { projection })
     }
 
+    #[cfg(test)]
     pub(crate) fn plan_sha256(&self) -> &str {
         &self.projection.plan_sha256
     }
 
+    #[cfg(test)]
     pub(crate) fn input_binding(&self) -> &MigrationInputBinding {
         &self.projection.input_binding
     }
 
+    #[cfg(test)]
     pub(crate) fn effects(&self) -> &[PlannedMigrationEffect] {
         &self.projection.effects
     }
 
+    #[cfg(test)]
     pub(super) fn compatibility_boundary_binding(&self) -> Option<&CompatibilityBoundaryBinding> {
         self.projection.compatibility_boundary_binding.as_ref()
-    }
-
-    pub(crate) fn items(&self) -> &[ProductPlanItem] {
-        &self.projection.items
     }
 
     pub(crate) fn projection(&self) -> ProductMigrationPlanProjection {
         self.projection.clone()
     }
 
+    #[cfg(test)]
     pub(crate) fn verify_projection(
         &self,
         projection: &ProductMigrationPlanProjection,
@@ -128,6 +129,7 @@ impl ProductMigrationPlan {
         Ok(())
     }
 
+    #[cfg(test)]
     pub(super) fn validate(&self) -> Result<(), ProductMigrationError> {
         let expected_boundary_binding =
             match self.projection.compatibility_boundary_binding.as_ref() {

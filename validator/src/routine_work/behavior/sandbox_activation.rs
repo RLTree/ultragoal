@@ -53,8 +53,12 @@ pub(crate) fn activate_and_read_frame(
 #[cfg(target_os = "macos")]
 fn activate(profile: &CStr) -> Result<(), ()> {
     let mut error = std::ptr::null_mut();
+    // SAFETY: `profile` is a NUL-terminated `CString`, and `error` is a valid
+    // writable out-pointer for the sandbox API call.
     let result = unsafe { sandbox_init(profile.as_ptr(), 0, &mut error) };
     if !error.is_null() {
+        // SAFETY: a non-null error pointer is allocated by `sandbox_init` and
+        // must be released with the matching sandbox API function.
         unsafe { sandbox_free_error(error) };
     }
     (result == 0).then_some(()).ok_or(())

@@ -22,26 +22,26 @@ pub(crate) fn inventory_findings(
             continue;
         }
         let policy = policies[0];
-        output.push(finding(
-            observation.code.clone(),
-            match observation.severity {
+        output.push(finding(FindingInput {
+            code: observation.code.clone(),
+            severity: match observation.severity {
                 InventorySeverity::Error => FindingSeverity::Error,
                 InventorySeverity::Warning => FindingSeverity::Warning,
                 InventorySeverity::Info => FindingSeverity::Info,
             },
-            FindingSource::AuthorityCatalog {
+            source: FindingSource::AuthorityCatalog {
                 catalog_id: inputs.authority_catalog_id.clone(),
                 code: observation.code.clone(),
             },
-            Scope {
+            scope: Scope {
                 surface: policy.scope_surface.clone(),
                 relative_path: observation.relative_path.clone(),
             },
-            observation.entry_id.iter().cloned().collect(),
-            observation.cause.clone(),
-            policy.repair.clone(),
-            policy.ceiling_reductions.clone(),
-        ));
+            dependency_ids: observation.entry_id.iter().cloned().collect(),
+            cause: observation.cause.clone(),
+            repair: policy.repair.clone(),
+            reductions: policy.ceiling_reductions.clone(),
+        }));
     }
 }
 
@@ -78,22 +78,22 @@ pub(crate) fn dependency_findings(
                 })
                 .collect::<Vec<_>>()
                 .join(",");
-            output.push(finding(
-                "contradictory-dependency",
-                FindingSeverity::Error,
-                FindingSource::DependencyCatalog {
+            output.push(finding(FindingInput {
+                code: "contradictory-dependency".to_owned(),
+                severity: FindingSeverity::Error,
+                source: FindingSource::DependencyCatalog {
                     catalog_id: catalog.catalog_id().to_owned(),
                     observation_id: "multiple".to_owned(),
                 },
-                Scope {
+                scope: Scope {
                     surface: "dependency-graph".to_owned(),
                     relative_path: None,
                 },
-                BTreeSet::from([dependency_id.to_owned()]),
+                dependency_ids: BTreeSet::from([dependency_id.to_owned()]),
                 cause,
-                contradiction_repair(dependency_id),
+                repair: contradiction_repair(dependency_id),
                 reductions,
-            ));
+            }));
             continue;
         }
         let status = *statuses.iter().next().expect("nonempty dependency facts");
@@ -106,19 +106,19 @@ pub(crate) fn dependency_findings(
                 fatal.push(format!("missing-repair:{dependency_id}"));
                 continue;
             };
-            output.push(finding(
-                dependency_code(status),
-                dependency_severity(status),
-                FindingSource::DependencyCatalog {
+            output.push(finding(FindingInput {
+                code: dependency_code(status).to_owned(),
+                severity: dependency_severity(status),
+                source: FindingSource::DependencyCatalog {
                     catalog_id: catalog.catalog_id().to_owned(),
                     observation_id: fact.observation_id.clone(),
                 },
-                fact.scope.clone(),
-                BTreeSet::from([dependency_id.to_owned()]),
-                fact.cause.clone(),
+                scope: fact.scope.clone(),
+                dependency_ids: BTreeSet::from([dependency_id.to_owned()]),
+                cause: fact.cause.clone(),
                 repair,
-                fact.ceiling_reductions.clone(),
-            ));
+                reductions: fact.ceiling_reductions.clone(),
+            }));
         }
     }
     states

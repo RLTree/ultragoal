@@ -50,6 +50,7 @@ fn unlink_checked(
         restore_name(parent, &disposal, &quarantine)?;
         return Err(error(DistributionErrorId::ObjectChanged));
     }
+    // SAFETY: the descriptor is reopened from the retained parent and `disposal` is NUL-terminated.
     if unsafe {
         let directory = parent.mutation_descriptor()?;
         libc::unlinkat(

@@ -2,42 +2,42 @@ const LIVE_LEGACY_AGENTS: [(&str, &str, &str); 7] = [
     (
         "harness_contract_claim_falsifier",
         "custom-agents/harness-contract-claim-falsifier.toml",
-        include_str!("../../../../custom-agents/harness-contract-claim-falsifier.toml"),
+        "name = \"harness_contract_claim_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_material_review_scope_gatekeeper",
         "custom-agents/harness-material-review-scope-gatekeeper.toml",
-        include_str!("../../../../custom-agents/harness-material-review-scope-gatekeeper.toml"),
+        "name = \"harness_material_review_scope_gatekeeper\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_orchestration_recovery_falsifier",
         "custom-agents/harness-orchestration-recovery-falsifier.toml",
-        include_str!("../../../../custom-agents/harness-orchestration-recovery-falsifier.toml"),
+        "name = \"harness_orchestration_recovery_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_product_simplicity_falsifier",
         "custom-agents/harness-product-simplicity-falsifier.toml",
-        include_str!("../../../../custom-agents/harness-product-simplicity-falsifier.toml"),
+        "name = \"harness_product_simplicity_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_repo_initializer",
         "custom-agents/harness-repo-initializer.toml",
-        include_str!("../../../../custom-agents/harness-repo-initializer.toml"),
+        "name = \"harness_repo_initializer\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_retrofit_planner",
         "custom-agents/harness-retrofit-planner.toml",
-        include_str!("../../../../custom-agents/harness-retrofit-planner.toml"),
+        "name = \"harness_retrofit_planner\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
     (
         "harness_security_trust_boundary_falsifier",
         "custom-agents/harness-security-trust-boundary-falsifier.toml",
-        include_str!("../../../../custom-agents/harness-security-trust-boundary-falsifier.toml"),
+        "name = \"harness_security_trust_boundary_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
     ),
 ];
 
 fn verify_with(
-    configure: impl FnOnce(&mut crate::authority_fixtures::FixtureTransaction) + 'static,
+    configure: impl FnOnce(&mut super::authority_fixtures::FixtureTransaction) + 'static,
 ) -> AgentDiscoveryErrorId {
     let repo = TempRepo::canonical();
     let source = repo.capture();

@@ -1,3 +1,4 @@
+#[cfg(test)]
 fn totals(results: &[EvaluationTaskResult]) -> (u64, u64) {
     results.iter().fold((0, 0), |(earned, possible), result| {
         (
@@ -7,6 +8,7 @@ fn totals(results: &[EvaluationTaskResult]) -> (u64, u64) {
     })
 }
 
+#[cfg(test)]
 fn run_digest(
     spec: &EvaluationSpec,
     execution_session_id: &str,
@@ -21,6 +23,7 @@ fn run_digest(
     )
 }
 
+#[cfg(test)]
 fn run_digest_fields(
     spec_sha256: &str,
     live_context_id: &str,

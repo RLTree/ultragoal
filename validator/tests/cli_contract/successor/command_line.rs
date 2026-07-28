@@ -1,14 +1,15 @@
 use super::successor::command_contract::HelpTarget;
 use super::successor::{
-    LegacyCommand, OutputMode, ParseErrorId, ParseOutcome, SuccessorCommand, parse_command_line,
+    LegacyCommand, OutputMode, ParseErrorId, ParseFailure, ParseOutcome, ParsedCommandLine,
+    SuccessorCommand, WorkspaceRoot, parse_command_line,
 };
 use std::path::Path;
 
 #[test]
 fn typed_workspace_root_defaults_and_preserves_explicit_authority() {
-    let (root, _) = parse_command_line(["inspect"])
-        .expect("default root parses")
-        .into_parts();
+    let parsed: ParsedCommandLine = parse_command_line(["inspect"]).expect("default root parses");
+    let (root, _) = parsed.into_parts();
+    let root: WorkspaceRoot = root;
     assert_eq!(root.into_path_buf(), Path::new("."));
 
     for args in [
@@ -80,7 +81,8 @@ fn malformed_roots_fail_with_typed_non_echoing_errors() {
         ),
     ];
     for (args, expected) in cases {
-        let failure = parse_command_line(args.iter().copied()).expect_err("root must fail");
+        let failure: ParseFailure =
+            parse_command_line(args.iter().copied()).expect_err("root must fail");
         assert_eq!(failure.error.id(), *expected, "{args:?}");
         let rendered = failure.render();
         assert!(!rendered.contains("private-inline"));

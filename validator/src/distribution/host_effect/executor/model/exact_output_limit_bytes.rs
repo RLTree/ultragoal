@@ -21,6 +21,7 @@ pub(crate) enum HostEffectExecutorErrorId {
     ProcessSpawnFailed,
     ProcessFailed,
     OutputOverflow,
+    #[cfg(any(target_os = "linux", target_os = "freebsd", test))]
     Timeout,
     Cancelled,
     PartialAcknowledgement,
@@ -105,6 +106,7 @@ impl HostEffectExecutorFailure {
         self.id
     }
 
+    #[cfg(test)]
     pub(crate) const fn terminal_state(&self) -> Option<HostEffectState> {
         self.terminal_state
     }

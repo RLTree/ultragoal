@@ -8,6 +8,7 @@
       "migration/generated-surface-authority/agent-standards-indexes.json",
       "migration/generated-surface-authority/agent-standards-tools.json",
       "migration/generated-surface-authority/dependency-locks.json",
+      "migration/generated-surface-authority/product-success-contract.json",
       "migration/generated-surface-authority/retained-predecessor-context.json"
     ],
     "regeneration_command": "scripts/project-generated-authority write"
@@ -47,7 +48,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "41bfed481ffab255de316c27396beedb18c68a05ece1b0130bae069b1ea598df"
+      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
     },
     {
       "disposition": "source_projection",
@@ -70,7 +71,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
     },
     {
       "disposition": "source_projection",
@@ -93,12 +94,12 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
     },
     {
       "disposition": "retained_context",
       "output": "docs/generated/observability/command-inventory.json",
-      "sha256": "4ccb8fb8c3e9f175ed898b497fa4b36ef2642421f424a11e407029e6ad7fd12e",
+      "sha256": "287bfe334ee9c29679979fd7cd3e319da97691da2ae0f63771ac28b61fde66ae",
       "reason": "Retained predecessor observability catalog; the HCT-OBSERVE successor is unavailable and active package or query authority is forbidden.",
       "replacement_targets": [
         "HCT-INVENTORY",
@@ -108,15 +109,17 @@
       "physical_deletion_authorized": false
     },
     {
-      "disposition": "retained_context",
+      "disposition": "adopted_schema_contract",
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
-      "sha256": "34eae3d4c4cab4de549d0d1f3f37423b6f55ef24cd2e2ac1b6b7ecbe58951814",
-      "reason": "Retained predecessor product-success example; it is not claim authority and HCT-CLAIMS is its canonical replacement.",
-      "replacement_targets": [
-        "HCT-CLAIMS"
-      ],
-      "preserve": true,
-      "physical_deletion_authorized": false
+      "sha256": "0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
+      "schema": "schemas/product-success-contract.schema.json",
+      "schema_sha256": "6027f3385d5ecaace7fa0e45237bc7433bf560aa3c81a43b48c0b700df10f4f5",
+      "source_contract": "GOAL_CONTRACT.md",
+      "source_contract_sha256": "6488e75196f28582adac4ea6079ce0878a6ad7059b720eaea68b08b780874b7a",
+      "amendment_log": "AMENDMENTS.jsonl",
+      "amendment_id": "AMEND-005",
+      "amendment_hash": "39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d",
+      "claim_ceiling": "contract_authority_only"
     },
     {
       "disposition": "retained_context",
@@ -215,7 +218,7 @@
         "AGENTS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8ee0f93a66fea8bbb089571d7b3eafbb6cf71fc930530779def0bcf415bb95a8"
+      "output_sha256": "360b0308f8a133992d52f1d96fb6cce96d28f30dc5c64e5cbf7394c5d6b5f147"
     },
     {
       "disposition": "source_projection",
@@ -225,7 +228,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "2e022850e5917eba3cd45940408dd8b75ac6b5bc977acc3b4dc18ff581b3ff5e"
+      "output_sha256": "b8108bd876a08efe2ae4a595914e22d7e56f0f4be98362a4b3b735b24306ac40"
     },
     {
       "disposition": "source_projection",
@@ -235,7 +238,7 @@
         "PLANS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8fccc836862d7337b01d01dd079b033e3eec6b04e155ffeb4753476b58eb0467"
+      "output_sha256": "77c3507ed83a0f4e66ea660ef8ca8d2d2a039bb23c6868144f3ac632e70def31"
     },
     {
       "disposition": "source_projection",
@@ -245,7 +248,7 @@
         "PRODUCT_SUCCESS_CONTRACT.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "296715eaace5b12874f9a224c5c6b7d1d71a0adaeefd9e13a0c88b4d63678141"
+      "output_sha256": "1c9f0c81572251ec10962766967c8cb061e3c1a1ecf701cdf248a6740359f606"
     },
     {
       "disposition": "source_projection",
@@ -275,7 +278,7 @@
         "agent-standards/03-execplans-worktrees-and-orchestration.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "a6964f16c9d3a3cd59b099760e2bdace7c39ba85bac120dc9321ca83c2e11b00"
+      "output_sha256": "e084315fba7a0e1534735470cced6f347ce8385e6056069be237a98ff0b37af2"
     },
     {
       "disposition": "source_projection",
@@ -295,7 +298,7 @@
         "agent-standards/05-review-and-completion.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "3dc206c5f8b5911dc8cf3c6715e18977d042fe93869aa822afe9f95b26d3bf4e"
+      "output_sha256": "dd6f765285e4df407c4fb7d09e5ff62166304bb4b7c8345579c8d85d570bccee"
     },
     {
       "disposition": "source_projection",
@@ -325,7 +328,7 @@
         "agent-standards/08-observability-and-repair-loop.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "526de65cc8206bb510281227b87489d57a0cac133257a927da12567754100006"
+      "output_sha256": "86743381fc072ab4e66280c1a886d5df0f0729934926abea5e8be4fa71b789f8"
     },
     {
       "disposition": "source_projection",
@@ -335,7 +338,7 @@
         "agent-standards/09-product-success-and-quality-in-use.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "e7f0caed482241c504f3c8c973d1de75ca54b8b928e8a409df71ec4d0e32c9b7"
+      "output_sha256": "92e3d540b5f427d300bd0632d55e2baa87f7f7f3835bf4b532cacb9086fd92ae"
     },
     {
       "disposition": "source_projection",
@@ -398,7 +401,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "41bfed481ffab255de316c27396beedb18c68a05ece1b0130bae069b1ea598df"
+      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
     },
     {
       "disposition": "source_projection",
@@ -421,7 +424,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "8711360b639d74b41d940f792a002927d58b07fffd6ef939f1b13787b0da3d13"
+      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
     },
     {
       "disposition": "source_projection",
@@ -444,7 +447,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "7c784031ce5b152516ee8062cce3a10127f2f2ccce6b6becaaaff42f666b9e3f"
+      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
     },
     {
       "disposition": "source_projection",
@@ -464,7 +467,7 @@
         "scripts/agent_standards_validation/command.py"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "f7f6cc8cece512c7f00130bd965e4b266cc4e6650bd8e1dc49e3cfccc4c065ee"
+      "output_sha256": "6ab3219116347e81a2f771a5da5878aa0c7200941199ead3de6baa1cb0ebd745"
     },
     {
       "disposition": "source_projection",
@@ -474,7 +477,7 @@
         "scripts/agent_standards_validation/contracts.py"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "51ec5ad27085c770a97d12b73edd43ecadc89ddbd95276e4331f3b5c6a5b55e7"
+      "output_sha256": "ce4a553a7f15242b5325bc88e0e6b1e3410d9ee2f3f3c769b1ba02e943994df1"
     },
     {
       "disposition": "source_projection",
@@ -484,7 +487,7 @@
         "scripts/check-agent-standards"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "822b8d7fe36ebc60e8c683c09cbe95016efcfdb1675bf3c3541603537d01c098"
+      "output_sha256": "c4636267e9b5771e05099cb2887bdb6ec87338f064c4e2fd6d3a1293f4aed8c7"
     }
   ]
 }

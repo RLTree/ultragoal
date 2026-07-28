@@ -11,6 +11,8 @@ use ultragoal::state::{
     RuntimeMetadata, StateEngine, StateError,
 };
 
+use super::authority_inputs;
+
 static NEXT: AtomicU64 = AtomicU64::new(0);
 
 #[test]
@@ -70,6 +72,17 @@ impl TempRepo {
             .parent()
             .unwrap()
             .to_path_buf();
+        fs::copy(
+            live.join("LANE_REGISTRY.json"),
+            root.join("LANE_REGISTRY.json"),
+        )
+        .unwrap();
+        fs::create_dir_all(root.join("templates")).unwrap();
+        fs::copy(
+            live.join("templates/LANE_REGISTRY.json"),
+            root.join("templates/LANE_REGISTRY.json"),
+        )
+        .unwrap();
         let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
         let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
         fs::create_dir_all(&target).unwrap();
@@ -90,13 +103,14 @@ impl TempRepo {
             .unwrap();
         }
         fs::create_dir_all(root.join("migration")).unwrap();
-        for name in ["authority-routes.json", "generated-surface-authority.json"] {
+        for name in ["authority-routes.json"] {
             fs::copy(
                 live.join("migration").join(name),
                 root.join("migration").join(name),
             )
             .unwrap();
         }
+        authority_inputs::copy_declared_files(&live, &root);
         fs::create_dir_all(root.join(".codex-plugin")).unwrap();
         fs::write(
             root.join(".codex-plugin/plugin.json"),

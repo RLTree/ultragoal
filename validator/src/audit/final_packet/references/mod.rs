@@ -41,7 +41,8 @@ fn check_performance_ref(root: &Path, receipt: &Value, expected: &str, out: &mut
     else {
         return;
     };
-    for failure in crate::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
+    for failure in
+        crate::audit::cli::performance::receipt::same_candidate_pass_failures(&value, expected)
     {
         out.push(format!("final_packet_proof_cli_performance_ref:{failure}"));
     }
@@ -169,11 +170,11 @@ fn embedded_status_failures(
         }
         _ => {}
     }
-    if let Some(actual) = value.get("status").and_then(Value::as_str) {
-        if embedded_status != Some(actual) {
-            out.push(format!(
-                "final_packet_proof_ref_status_disagreement:{label}"
-            ));
-        }
+    if let Some(actual) = value.get("status").and_then(Value::as_str)
+        && embedded_status != Some(actual)
+    {
+        out.push(format!(
+            "final_packet_proof_ref_status_disagreement:{label}"
+        ));
     }
 }

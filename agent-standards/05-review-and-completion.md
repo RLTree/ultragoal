@@ -64,6 +64,11 @@ Before review, bind:
 Reviewer tools, model, reasoning, or registry exposure are recorded only when a
 current claim depends on them. Tool registration is not product proof.
 
+For bounded invariant review, use the lowest sufficient standard-tier route.
+Persist no separate review receipt unless a current claim, cross-process
+handoff, irreproducible observation, or recovery need consumes it. One
+exhaustive pass with no material finding closes the loop.
+
 ## Completion And Claim Ceiling Law
 
 Do not say complete, ready, done, fixed, passing, or production-ready without

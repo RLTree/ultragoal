@@ -2,6 +2,7 @@ impl Directory {
     pub(crate) fn open_path(path: &Path) -> Result<Self, DistributionError> {
         let path = CString::new(path.as_os_str().as_bytes())
             .map_err(|_| error(DistributionErrorId::InvalidPath))?;
+        // SAFETY: `path` is a NUL-terminated CString for the duration of this call.
         let descriptor = unsafe {
             libc::open(
                 path.as_ptr(),
@@ -11,6 +12,7 @@ impl Directory {
         if descriptor < 0 {
             return Err(open_error());
         }
+        // SAFETY: open returned this unique, owned file descriptor.
         let file = unsafe { File::from_raw_fd(descriptor) };
         let metadata = file
             .metadata()
@@ -92,6 +94,7 @@ impl Directory {
         let relative = joined(&self.relative, text);
         hooks::before(EffectPoint::OpenDirectory, &relative);
         let parent = self.current_descriptor()?;
+        // SAFETY: `parent` is a live directory descriptor and `name` is NUL-terminated.
         let descriptor = unsafe {
             libc::openat(
                 parent.as_raw_fd(),
@@ -102,6 +105,7 @@ impl Directory {
         if descriptor < 0 {
             return Err(open_error());
         }
+        // SAFETY: openat returned this unique, owned file descriptor.
         let file = unsafe { File::from_raw_fd(descriptor) };
         let metadata = file
             .metadata()
@@ -131,6 +135,7 @@ impl Directory {
             .map_err(|_| error(DistributionErrorId::InvalidPath))?;
         hooks::before(EffectPoint::Mkdir, &joined(&self.relative, text));
         let parent = self.current_descriptor()?;
+        // SAFETY: `parent` is a live directory descriptor and `name` is NUL-terminated.
         let result = unsafe { libc::mkdirat(parent.as_raw_fd(), name.as_ptr(), 0o700) };
         if result != 0 && last_errno() != Some(libc::EEXIST) {
             return Err(error(DistributionErrorId::EffectFailed));
@@ -145,6 +150,7 @@ impl Directory {
             .map_err(|_| error(DistributionErrorId::InvalidPath))?;
         hooks::before(EffectPoint::Mkdir, &joined(&self.relative, text));
         let parent = self.current_descriptor()?;
+        // SAFETY: `parent` is a live directory descriptor and `name` is NUL-terminated.
         if unsafe { libc::mkdirat(parent.as_raw_fd(), name.as_ptr(), 0o700) } != 0 {
             return Err(error(DistributionErrorId::EffectFailed));
         }
@@ -155,6 +161,7 @@ impl Directory {
         let name = component(name)?;
         let parent = self.current_descriptor()?;
         let mut value = std::mem::MaybeUninit::<libc::stat>::uninit();
+        // SAFETY: `parent` is live, `name` is NUL-terminated, and `value` is writable stat storage.
         let result = unsafe {
             libc::fstatat(
                 parent.as_raw_fd(),
@@ -169,6 +176,7 @@ impl Directory {
                 _ => Err(error(DistributionErrorId::ObjectUnavailable)),
             };
         }
+        // SAFETY: successful fstatat initialized `value` completely.
         let value = unsafe { value.assume_init() };
         let mode = value.st_mode as libc::mode_t;
         let kind = match mode & libc::S_IFMT {
@@ -179,7 +187,7 @@ impl Directory {
         Ok(Some(EntryMetadata {
             identity: DirectoryIdentity {
                 device: value.st_dev as u64,
-                inode: value.st_ino as u64,
+                inode: value.st_ino,
             },
             kind,
             links: value.st_nlink as u64,

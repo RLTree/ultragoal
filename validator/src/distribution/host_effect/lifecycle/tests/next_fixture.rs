@@ -1,3 +1,9 @@
+use crate::plugin_product::lifecycle::{
+    HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    HostLifecycleRecord, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
+    PackageAuthority, Version,
+};
+
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
 
 fn d(byte: char) -> String {
@@ -12,14 +18,16 @@ struct Fixture {
     root: PathBuf,
     home: PathBuf,
     project: PathBuf,
-    executable: PathBuf,
-    alternate_executable: PathBuf,
+    selected_fixture: SelectedCodexExecutableTestFixture,
+    alternate_fixture: SelectedCodexExecutableTestFixture,
     package: PackageIdentity,
     host: HostCapabilityDeclaration,
     journey: JourneyBinding,
     lifecycle: AcceptedLifecyclePlan,
     scope: AcceptedHostScope,
     plan: HostCommandPlan,
+    projection: HostCommandPlanProjection,
+    lifecycle_record: HostLifecycleRecord,
     target: ObservedTargetIdentity,
 }
 
@@ -35,15 +43,10 @@ impl Fixture {
         let project = root.join("project");
         fs::create_dir(&home).unwrap();
         fs::create_dir(&project).unwrap();
-        let executable = root.join("codex");
-        let alternate_executable = root.join("codex-other");
-        fs::write(&executable, b"descriptor-execution-fixture-v1").unwrap();
-        fs::write(&alternate_executable, b"descriptor-execution-fixture-v1").unwrap();
-        #[cfg(unix)]
-        {
-            fs::set_permissions(&executable, fs::Permissions::from_mode(0o700)).unwrap();
-            fs::set_permissions(&alternate_executable, fs::Permissions::from_mode(0o700)).unwrap();
-        }
+        let selected_fixture =
+            selected_test_fixture("lifecycle-primary", b"descriptor-execution-fixture-v1");
+        let alternate_fixture =
+            selected_test_fixture("lifecycle-alternate", b"descriptor-execution-fixture-v1");
         let source = SourceIdentity::new(
             d(seed),
             d(next_hex(seed)),
@@ -54,17 +57,17 @@ impl Fixture {
         )
         .unwrap();
         let package = PackageIdentity::new(source, d('e'), d('f')).unwrap();
-        let host = HostCapabilityDeclaration::isolated(
-            &home,
-            &project,
-            "host-lifecycle-063-v1",
-            Some(&executable),
-        )
-        .unwrap();
+        let host = selected_fixture
+            .host_capability(&home, &project, "host-lifecycle-063-v1")
+            .unwrap();
         let journey = JourneyBinding::new(package.clone(), &host, "local-marketplace").unwrap();
         let lifecycle = lifecycle(&package);
         let scope = AcceptedHostScope::personal(&journey, "local-marketplace".to_owned()).unwrap();
         let plan = HostCommandPlan::personal_install(&package, "local-marketplace").unwrap();
+        let projection = plan.projection().unwrap();
+        let lifecycle_record = lifecycle_custody_for(&package, &plan)
+            .pre_effect_record()
+            .clone();
         let object =
             HostObjectIdentity::from_metadata(&fs::symlink_metadata(&project).unwrap()).unwrap();
         let target = ObservedTargetIdentity::new(&scope, 7, object).unwrap();
@@ -72,24 +75,26 @@ impl Fixture {
             root,
             home,
             project,
-            executable,
-            alternate_executable,
+            selected_fixture,
+            alternate_fixture,
             package,
             host,
             journey,
             lifecycle,
             scope,
             plan,
+            projection,
+            lifecycle_record,
             target,
         }
     }
 
-    fn pin(&self) -> PinnedHostExecutable {
-        PinnedHostExecutable::pin(&self.executable).unwrap()
+    fn pin(&self) -> SelectedCodexExecutable {
+        self.selected_fixture.selected().unwrap()
     }
 
-    fn pin_alternate(&self) -> PinnedHostExecutable {
-        PinnedHostExecutable::pin(&self.alternate_executable).unwrap()
+    fn pin_alternate(&self) -> SelectedCodexExecutable {
+        self.alternate_fixture.selected().unwrap()
     }
 }
 
@@ -101,7 +106,7 @@ impl Drop for Fixture {
 
 fn acceptance<'a>(
     fixture: &'a Fixture,
-    executable: &'a PinnedHostExecutable,
+    executable: &'a SelectedCodexExecutable,
     expected_head: HostEffectLedgerHead,
 ) -> HostEffectAcceptanceRequest<'a> {
     HostEffectAcceptanceRequest {
@@ -110,17 +115,29 @@ fn acceptance<'a>(
         host: fixture.host.clone(),
         lifecycle: fixture.lifecycle.clone(),
         scope: fixture.scope.clone(),
-        plan: &fixture.plan,
+        plan: &fixture.projection,
         executable,
         expected_target: fixture.target.clone(),
         expected_head,
+        lifecycle_record: &fixture.lifecycle_record,
     }
+}
+
+fn acceptance_with_custody<'a>(
+    fixture: &'a Fixture,
+    executable: &'a SelectedCodexExecutable,
+    expected_head: HostEffectLedgerHead,
+    custody: &'a HostLifecycleCustody,
+) -> HostEffectAcceptanceRequest<'a> {
+    let mut request = acceptance(fixture, executable, expected_head);
+    request.lifecycle_record = custody.pre_effect_record();
+    request
 }
 
 fn preparation<'a>(
     accepted: &'a AcceptedHostEffect,
-    custody: &'a mut RootPlanCustody,
-    executable: PinnedHostExecutable,
+    custody: &'a mut HostLifecycleCustody,
+    executable: SelectedCodexExecutable,
     target: &'a mut dyn HostTargetObserver,
     clock: &'a mut dyn RootTrustedClock,
     adapter: &'a mut dyn DescriptorExecutionAdapter,
@@ -133,6 +150,55 @@ fn preparation<'a>(
         clock,
         adapter,
     }
+}
+
+fn lifecycle_custody(fixture: &Fixture) -> HostLifecycleCustody {
+    lifecycle_custody_for(&fixture.package, &fixture.plan)
+}
+
+fn lifecycle_custody_for(
+    package: &PackageIdentity,
+    command_plan: &HostCommandPlan,
+) -> HostLifecycleCustody {
+    let authority = PackageAuthority {
+        version: Version::parse(package.source().version()).unwrap(),
+        package_sha256: package.archive_sha256().to_owned(),
+        inventory_sha256: package.tree_sha256().to_owned(),
+        candidate_id: package.source().candidate_id().to_owned(),
+    };
+    let lifecycle = crate::plugin_product::lifecycle::plan(
+        &crate::plugin_product::lifecycle::LifecycleState::default(),
+        &LifecycleRequest {
+            intent: LifecycleIntent::FreshInstall,
+            target: Some(authority),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: None,
+            },
+        },
+    )
+    .unwrap();
+    HostLifecycleCustody::take(
+        lifecycle,
+        HostLifecycleBinding::new(
+            package.clone(),
+            command_plan.clone(),
+            d('1'),
+            d('2'),
+            HostLifecycleExpectedObservations {
+                installed_sha256: d('3'),
+                cache_sha256: d('4'),
+                registry_sha256: d('5'),
+                discovery_sha256: d('6'),
+                runtime_sha256: d('7'),
+                command_count: command_plan.commands().len(),
+            },
+        )
+        .unwrap(),
+    )
+    .unwrap()
 }
 
 fn lifecycle(package: &PackageIdentity) -> AcceptedLifecyclePlan {
@@ -156,39 +222,5 @@ fn next_hex(value: char) -> char {
         '9' => 'a',
         'a'..='e' => char::from_u32(value as u32 + 1).unwrap(),
         _ => '1',
-    }
-}
-
-struct RecordingLedger {
-    inner: Mutex<LedgerState>,
-    head_calls: AtomicUsize,
-    reserve_calls: AtomicUsize,
-    transition_calls: AtomicUsize,
-}
-
-struct LedgerState {
-    head: HostEffectLedgerHead,
-    records: BTreeMap<String, HostEffectLedgerRecord>,
-}
-
-impl RecordingLedger {
-    fn new(generation: u64, head_sha256: String) -> Self {
-        Self {
-            inner: Mutex::new(LedgerState {
-                head: HostEffectLedgerHead::new(generation, head_sha256).unwrap(),
-                records: BTreeMap::new(),
-            }),
-            head_calls: AtomicUsize::new(0),
-            reserve_calls: AtomicUsize::new(0),
-            transition_calls: AtomicUsize::new(0),
-        }
-    }
-
-    fn observed_head(&self) -> HostEffectLedgerHead {
-        self.inner.lock().unwrap().head.clone()
-    }
-
-    fn writes(&self) -> usize {
-        self.reserve_calls.load(Ordering::Relaxed) + self.transition_calls.load(Ordering::Relaxed)
     }
 }

@@ -3,7 +3,6 @@ use serde_json::Value;
 use std::path::{Path, PathBuf};
 
 pub(crate) struct SkillLinkFailure {
-    pub(crate) code: &'static str,
     pub(crate) detail: String,
 }
 
@@ -55,7 +54,6 @@ fn classify_ref(
         return None;
     }
     Some(SkillLinkFailure {
-        code: "skill_local_reference_missing",
         detail: format!(
             "{skill_rel}: {} exists at package root but not from skill directory",
             rel.display()

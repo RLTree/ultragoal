@@ -10,14 +10,22 @@ impl AcceptedHostEffect {
                 SupportedHostLifecycleErrorId::StaleLedgerHead,
             ));
         }
+        let lifecycle_intent = serde_json::to_string(&self.lifecycle_record.permit_join().1)
+            .map_err(|_| invalid())?
+            .trim_matches('"')
+            .to_owned();
         Ok(HostEffectPermitBinding {
             context_id: self.package.source().context_id().to_owned(),
             candidate_id: self.package.source().candidate_id().to_owned(),
             package_identity_sha256: self.package_identity_sha256.clone(),
             journey_binding_sha256: self.journey_binding_sha256.clone(),
             session_issuance_sha256: self.session_issuance_sha256.clone(),
-            lifecycle_plan_sha256: self.lifecycle.plan_sha256().to_owned(),
-            lifecycle_intent: self.lifecycle.operation().as_str().to_owned(),
+            // The permit carries the durable lifecycle-plan identity. The
+            // accepted projection remains bound through the session and
+            // external-request digests below, but it cannot replace the
+            // record that the ledger will persist with the permit.
+            lifecycle_plan_sha256: self.lifecycle_record.permit_join().0.to_owned(),
+            lifecycle_intent,
             expected_pre_state_sha256: self.expected_pre_state_sha256.clone(),
             expected_post_state_sha256: self.expected_post_state_sha256.clone(),
             rollback_policy_sha256: self.rollback_policy_sha256.clone(),
@@ -34,58 +42,14 @@ impl AcceptedHostEffect {
             issued_at_unix_ms,
             expires_at_unix_ms,
             expected_head_sha256: current_head.head_sha256().to_owned(),
+            lifecycle_record: Some(self.lifecycle_record.clone()),
+            lifecycle_record_sha256: Some(
+                serde_json::to_vec(&self.lifecycle_record)
+                    .map(|bytes| format!("sha256:{:x}", Sha256::digest(bytes)))
+                    .map_err(|_| invalid())?,
+            ),
             decision: HostEffectDecision::Authorize,
         })
-    }
-}
-
-pub(crate) struct RootPlanCustody {
-    plan: Option<HostCommandPlan>,
-}
-
-impl std::fmt::Debug for RootPlanCustody {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("RootPlanCustody")
-            .field("released", &self.is_released())
-            .finish_non_exhaustive()
-    }
-}
-
-impl RootPlanCustody {
-    pub(in crate::distribution::host_effect) fn bind(
-        plan: HostCommandPlan,
-        accepted: &AcceptedHostEffect,
-    ) -> Result<Self, SupportedHostLifecycleError> {
-        if plan.plan_sha256() != accepted.command_plan_sha256 {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::PlanSubstitution,
-            ));
-        }
-        Ok(Self { plan: Some(plan) })
-    }
-
-    pub(crate) fn is_released(&self) -> bool {
-        self.plan.is_none()
-    }
-
-    pub(super) fn plan_sha256(&self) -> Option<&str> {
-        self.plan.as_ref().map(HostCommandPlan::plan_sha256)
-    }
-
-    /// Returns non-authoritative plan data for effect construction while this
-    /// custody token remains live. Only `commit_release` consumes authority.
-    pub(super) fn candidate_plan(&self) -> Result<HostCommandPlan, SupportedHostLifecycleError> {
-        self.plan
-            .clone()
-            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
-    }
-
-    pub(super) fn commit_release(&mut self) -> Result<(), SupportedHostLifecycleError> {
-        self.plan
-            .take()
-            .map(|_| ())
-            .ok_or_else(|| lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution))
     }
 }
 
@@ -163,21 +127,4 @@ fn session_issuance(
     });
     nonce.fill(0);
     result
-}
-
-fn command_plan_sha256(
-    package: &PackageIdentity,
-    plan: &HostCommandPlan,
-) -> Result<String, SupportedHostLifecycleError> {
-    #[derive(Serialize)]
-    struct Binding<'a> {
-        schema: &'static str,
-        package: &'a PackageIdentity,
-        commands: &'a [crate::distribution::HostCommand],
-    }
-    digest_json(&Binding {
-        schema: "harness-ultragoal.host-command-plan.v1",
-        package,
-        commands: plan.commands(),
-    })
 }

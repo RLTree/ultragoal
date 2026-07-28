@@ -161,6 +161,12 @@ fn real_public_lock_sequence(invocation: &Invocation) {
     assert_eq!(tree(&invocation.home), before_home);
     assert_eq!(status(&invocation.root), before_status);
     assert!(!invocation.root.join("target").exists());
+    assert!(
+        !invocation
+            .root
+            .join("validation_artifacts/observability/spool")
+            .exists()
+    );
     assert_eq!(
         fs::read_dir(authority_root(&invocation.home))
             .unwrap()

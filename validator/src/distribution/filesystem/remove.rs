@@ -7,13 +7,37 @@ const REMOVE_DEPTH_LIMIT: usize = 64;
 
 #[cfg(unix)]
 pub(super) fn remove_tree(parent: &Directory, name: &str) -> Result<(), DistributionError> {
+    remove_tree_with_identity(parent, name, None)
+}
+
+#[cfg(unix)]
+pub(super) fn remove_tree_identity(
+    parent: &Directory,
+    name: &str,
+    expected: super::descriptor::DirectoryIdentity,
+) -> Result<(), DistributionError> {
+    remove_tree_with_identity(parent, name, Some(expected))
+}
+
+#[cfg(unix)]
+fn remove_tree_with_identity(
+    parent: &Directory,
+    name: &str,
+    expected: Option<super::descriptor::DirectoryIdentity>,
+) -> Result<(), DistributionError> {
     let Some(metadata) = parent.stat(name)? else {
         return Ok(());
     };
-    if metadata.kind != EntryKind::Directory || metadata.identity.device != parent.root_device() {
+    if metadata.kind != EntryKind::Directory
+        || metadata.identity.device != parent.root_device()
+        || expected.is_some_and(|identity| identity != metadata.identity)
+    {
         return Err(error(DistributionErrorId::UnsafeObject));
     }
     let directory = parent.open_directory(name)?;
+    if expected.is_some_and(|identity| identity != directory.identity()) {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
     let mut visited = 0usize;
     remove_children(&directory, 0, &mut visited)?;
     let current = parent.stat(name)?;

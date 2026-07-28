@@ -49,10 +49,6 @@ impl EffectFault {
             ambiguous: true,
         }
     }
-
-    pub(crate) const fn code(&self) -> &'static str {
-        self.code
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

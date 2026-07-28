@@ -1,9 +1,13 @@
 const MAX_SURFACES: usize = 16_384;
+#[cfg(test)]
 const MAX_ROUTES: usize = 4_096;
 const MAX_REFS_PER_SURFACE: usize = 4_096;
 const MAX_IDENTIFIER_BYTES: usize = 160;
 const MAX_PATH_BYTES: usize = 768;
+const MAX_STABLE_IDENTIFIER_BYTES: usize = MAX_IDENTIFIER_BYTES + 1 + MAX_PATH_BYTES;
+#[cfg(test)]
 const MAX_AUTHORIZATION_TTL_MS: u64 = 10 * 60 * 1_000;
+#[cfg(test)]
 const REQUIRED_FALSE_PASS_CONTROLS: [&str; 5] = [
     "proof-artifact",
     "receipt-production",
@@ -39,8 +43,12 @@ impl std::error::Error for MigrationError {}
 #[serde(rename_all = "snake_case")]
 pub enum SurfaceFileKind {
     Regular,
+    Semantic,
+    #[cfg(test)]
     Directory,
+    #[cfg(test)]
     Symlink,
+    #[cfg(test)]
     Special,
 }
 
@@ -113,14 +121,6 @@ impl InventorySurface {
         }
     }
 
-    pub fn stable_id(&self) -> &str {
-        &self.stable_id
-    }
-
-    pub fn status(&self) -> SurfaceStatus {
-        self.status
-    }
-
     fn findings(&self) -> Vec<String> {
         let mut findings = Vec::new();
         if !valid_stable_identifier(&self.stable_id) || !valid_identifier(&self.kind) {
@@ -132,11 +132,11 @@ impl InventorySurface {
         if !valid_sha256(&self.digest_sha256) {
             findings.push("migration-surface-digest-invalid".to_owned());
         }
-        if self.file_kind != SurfaceFileKind::Regular {
-            findings.push("migration-surface-non-regular".to_owned());
-        }
-        if self.link_count != 1 {
-            findings.push("migration-surface-hardlink-rejected".to_owned());
+        if !matches!(
+            (self.file_kind, self.link_count),
+            (SurfaceFileKind::Regular, 1) | (SurfaceFileKind::Semantic, 0)
+        ) {
+            findings.push("migration-surface-identity-invalid".to_owned());
         }
         for (label, values) in [
             ("reader", &self.active_readers),

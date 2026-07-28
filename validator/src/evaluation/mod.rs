@@ -9,17 +9,29 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
+#[cfg(test)]
 mod ledger;
+#[cfg(test)]
+mod production_input;
+#[cfg(test)]
 mod promotion_ledger;
 mod records;
 mod research;
+#[cfg(test)]
 pub(crate) mod runtime;
 
-pub use ledger::{
+#[cfg(test)]
+mod tests;
+
+#[cfg(test)]
+pub(in crate::evaluation) use ledger::TestFileEvaluationExecutionLedger as FileEvaluationExecutionLedger;
+#[cfg(test)]
+pub(crate) use ledger::{
     EvaluationExecutionBinding, EvaluationExecutionBindingRequest, EvaluationLedgerError,
-    EvaluationLedgerState, FileEvaluationExecutionLedger,
+    EvaluationLedgerState, ExecutionReservationOutcome,
 };
-pub use promotion_ledger::{
+#[cfg(test)]
+pub(crate) use promotion_ledger::{
     FilePromotionReviewLedger, PromotionLedgerBinding, PromotionLedgerState,
 };
 pub use records::{
@@ -33,7 +45,8 @@ pub use research::{
     ProposalAnalyses, RejectedRecommendation, ResearchAudit, ResearchFinding, ResearchSource,
     ResearchSourceClass, ResearchSourceRecord, ResearchSourceRecordDefinition, VerifiedSourceFact,
 };
-pub use runtime::{ProductionEvaluationRun, ProductionRuntimeError};
+#[cfg(test)]
+pub(crate) use runtime::ProductionRuntimeError;
 
 include!("max_tasks.rs");
 
@@ -49,12 +62,21 @@ include!("local_run.rs");
 
 include!("promotion/display.rs");
 
+#[cfg(test)]
+include!("promotion/evidence_descriptor.rs");
+
+#[cfg(test)]
+include!("promotion/authority.rs");
+
+#[cfg(test)]
 include!("promotion/issuance.rs");
 
 include!("promotion/decision.rs");
 
+#[cfg(test)]
 include!("promotion/reconciliation.rs");
 
+#[cfg(test)]
 include!("runs_comparable.rs");
 
 include!("totals.rs");

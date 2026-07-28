@@ -23,6 +23,14 @@ pub(crate) fn check(
     crate::audit::red::identity::check(root, store, &ids, failures);
 }
 
+pub(crate) fn law_guard_behavior_verified(root: &Path, id: &str, law: &str, field: &str) -> bool {
+    // Repository-authored packets and receipts cannot prove that a production
+    // law rejected a red stimulus. Keep this authority withheld until a
+    // platform-backed observer can bind sealed production output.
+    let _ = (root, id, law, field);
+    false
+}
+
 fn push(failures: &mut BTreeMap<String, Vec<String>>, detail: impl Into<String>) {
     failures
         .entry("red-fixture-coverage".to_string())

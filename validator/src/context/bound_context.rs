@@ -1,7 +1,26 @@
 use super::error::ContextError;
+use super::request::ToolProbe;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
+
+#[cfg(unix)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct WorktreeDirectoryIdentity {
+    device: u64,
+    inode: u64,
+}
+
+#[cfg(unix)]
+impl WorktreeDirectoryIdentity {
+    pub(super) fn new(device: u64, inode: u64) -> Self {
+        Self { device, inode }
+    }
+
+    pub(crate) fn matches(self, device: u64, inode: u64) -> bool {
+        self.device == device && self.inode == inode
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(rename_all = "kebab-case")]
@@ -143,26 +162,27 @@ pub(super) struct ContextPayload {
     selected_inputs: Vec<SelectedInputIdentity>,
 }
 
+pub(super) struct ContextPayloadInput {
+    pub(super) roots: RootIdentity,
+    pub(super) candidate: CandidateIdentity,
+    pub(super) configuration: ConfigurationIdentity,
+    pub(super) capabilities: CapabilitySet,
+    pub(super) permissions: PermissionIdentity,
+    pub(super) effect: EffectBoundary,
+    pub(super) selected_inputs: Vec<SelectedInputIdentity>,
+}
+
 impl ContextPayload {
-    #[allow(clippy::too_many_arguments)]
-    pub(super) fn new(
-        roots: RootIdentity,
-        candidate: CandidateIdentity,
-        configuration: ConfigurationIdentity,
-        capabilities: CapabilitySet,
-        permissions: PermissionIdentity,
-        effect: EffectBoundary,
-        selected_inputs: Vec<SelectedInputIdentity>,
-    ) -> Self {
+    pub(super) fn new(input: ContextPayloadInput) -> Self {
         Self {
             schema_version: "LiveContext-v1",
-            roots,
-            candidate,
-            configuration,
-            capabilities,
-            permissions,
-            effect,
-            selected_inputs,
+            roots: input.roots,
+            candidate: input.candidate,
+            configuration: input.configuration,
+            capabilities: input.capabilities,
+            permissions: input.permissions,
+            effect: input.effect,
+            selected_inputs: input.selected_inputs,
         }
     }
 }
@@ -172,6 +192,11 @@ pub struct LiveContext {
     context_id: String,
     #[serde(flatten)]
     payload: ContextPayload,
+    #[serde(skip)]
+    capability_probes: Vec<ToolProbe>,
+    #[cfg(unix)]
+    #[serde(skip)]
+    worktree_directory_identity: WorktreeDirectoryIdentity,
 }
 
 impl LiveContext {
@@ -203,10 +228,27 @@ impl LiveContext {
         Path::new(&self.payload.roots.worktree_root)
     }
 
-    pub(super) fn from_payload(payload: ContextPayload, context_id: String) -> Self {
+    #[cfg(unix)]
+    pub(crate) fn matches_worktree_directory(&self, device: u64, inode: u64) -> bool {
+        self.worktree_directory_identity.matches(device, inode)
+    }
+
+    pub(super) fn from_payload(
+        payload: ContextPayload,
+        context_id: String,
+        capability_probes: Vec<ToolProbe>,
+        #[cfg(unix)] worktree_directory_identity: WorktreeDirectoryIdentity,
+    ) -> Self {
         Self {
             context_id,
             payload,
+            capability_probes,
+            #[cfg(unix)]
+            worktree_directory_identity,
         }
+    }
+
+    pub(super) fn capability_probes(&self) -> &[ToolProbe] {
+        &self.capability_probes
     }
 }

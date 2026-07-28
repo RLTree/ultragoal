@@ -13,11 +13,11 @@ fn corruption_is_read_only_until_explicit_truncated_tail_recovery() {
     assert!(store.append(&retained).unwrap());
     OpenOptions::new()
         .append(true)
-        .open(repository.store_path())
+        .open(repository.store_path(&binding))
         .unwrap()
         .write_all(b"{\"row_version\":\"SemanticEventRow-v1\"")
         .unwrap();
-    let corrupt_bytes = fs::read(repository.store_path()).unwrap();
+    let corrupt_bytes = fs::read(repository.store_path(&binding)).unwrap();
     let (_, diagnostic) =
         assert_diagnostic_zero_write(&repository, &["--json", "observe", "query"], 4);
     assert_eq!(
@@ -40,7 +40,10 @@ fn corruption_is_read_only_until_explicit_truncated_tail_recovery() {
         diagnosis["observability"]["explanation"]["classification"],
         "corruption"
     );
-    assert_eq!(fs::read(repository.store_path()).unwrap(), corrupt_bytes);
+    assert_eq!(
+        fs::read(repository.store_path(&binding)).unwrap(),
+        corrupt_bytes
+    );
     let removed = store.recover_truncated_tail().unwrap();
     assert!(removed > 0);
     assert_eq!(store.recover_truncated_tail().unwrap(), 0);
@@ -52,4 +55,5 @@ fn corruption_is_read_only_until_explicit_truncated_tail_recovery() {
         "ObservabilityQuery-v1",
     );
     assert_eq!(recovered["events"][0]["event_id"], "retained-failure");
+    repository.teardown();
 }

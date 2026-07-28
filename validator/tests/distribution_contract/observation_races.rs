@@ -13,7 +13,10 @@ struct MutatingCache {
 }
 
 impl CacheReader for MutatingCache {
-    fn read_cache(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_cache(
+        &mut self,
+        _: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         let value = self
             .rows
             .get(self.reads)

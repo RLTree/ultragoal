@@ -8,13 +8,7 @@ pub(crate) struct BoundaryRow {
     pub(crate) authorities: &'static [AuthorityKind],
 }
 
-const PROCESS: &[AuthorityKind] = &[AuthorityKind::Process];
-
-pub(super) const BOUNDARY_ROWS: &[BoundaryRow] = &[BoundaryRow {
-    path: "validator/src/cli/successor_public/strict/python_source_law_adapter/process.rs",
-    symbol: "run",
-    authorities: PROCESS,
-}];
+pub(super) const BOUNDARY_ROWS: &[BoundaryRow] = &[];
 
 pub(super) fn validation_failures(
     rows: &[BoundaryRow],

@@ -161,37 +161,46 @@ pub struct LifecyclePlan {
 
 static NEXT_PLAN_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
+pub(super) type LifecycleActionAuthority = Arc<AtomicU8>;
+pub(super) type RecoveryStateAuthority = Arc<Mutex<Option<LifecycleState>>>;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u8)]
 pub(super) enum LifecycleActionState {
     Planned = 0,
-    Applying = 1,
-    RecoveryAvailable = 2,
-    Recovering = 3,
-    Closed = 4,
+    Transferred = 1,
+    Applying = 2,
+    RecoveryAvailable = 3,
+    Recovering = 4,
+    Closed = 5,
 }
 
 impl LifecycleActionState {
     fn decode(value: u8) -> Result<Self, LifecycleError> {
         match value {
             0 => Ok(Self::Planned),
-            1 => Ok(Self::Applying),
-            2 => Ok(Self::RecoveryAvailable),
-            3 => Ok(Self::Recovering),
-            4 => Ok(Self::Closed),
+            1 => Ok(Self::Transferred),
+            2 => Ok(Self::Applying),
+            3 => Ok(Self::RecoveryAvailable),
+            4 => Ok(Self::Recovering),
+            5 => Ok(Self::Closed),
             _ => Err(LifecycleError::InvalidTransition),
         }
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub(super) enum PlanAuthorizationSeal {
+    #[default]
     Unsealed,
-    Sealed {
-        issuance_id: u64,
-        observed: LifecycleState,
-        request: LifecycleRequest,
-        action_state: Arc<AtomicU8>,
-        recovery_state: Arc<Mutex<Option<LifecycleState>>>,
-    },
+    Sealed(Box<PlanAuthorizationSealData>),
+}
+
+#[derive(Clone)]
+pub(super) struct PlanAuthorizationSealData {
+    issuance_id: u64,
+    observed: LifecycleState,
+    request: LifecycleRequest,
+    action_state: LifecycleActionAuthority,
+    recovery_state: RecoveryStateAuthority,
 }

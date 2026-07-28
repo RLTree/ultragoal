@@ -28,6 +28,20 @@ fn path_escape_and_ambiguous_path_encodings_are_rejected() {
 }
 
 #[test]
+fn current_repository_marker_is_accepted_only_for_repository_targets() {
+    assert!(parse_args(["fit", "inspect", "--target", "."]).is_ok());
+    assert!(parse_args(["check", "routine", "--target", "."]).is_ok());
+    assert_eq!(
+        error_id(["prove", "--claim", "CL-SOURCE", "--output", "."]),
+        ParseErrorId::InvalidPath
+    );
+    assert_eq!(
+        error_id(["migrate", "apply", "--plan", ".", "--accept-plan", "plan-1"]),
+        ParseErrorId::InvalidPath
+    );
+}
+
+#[test]
 fn effect_override_and_implicit_write_attempts_are_rejected() {
     for args in [
         vec!["fit", "apply", "--effect=read"],
@@ -122,7 +136,7 @@ fn parse_results_are_deterministic_and_do_not_downgrade_effects() {
         "fit",
         "apply",
         "--plan",
-        "fit/plan.json",
+        "/tmp/fit-plan.json",
         "--accept-plan",
         "sha256:1234",
     ];

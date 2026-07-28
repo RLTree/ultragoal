@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 use crate::routine_work::PRODUCTION_SUPPORT_LIMIT;
 
 pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
@@ -71,7 +72,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
         PublicFailure::Host(HostFailure::Unavailable) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "preprovisioned owner-only routine host authority is unavailable",
+            "owner-only routine host authority is unavailable or unsafe",
             "routine production host authority",
             "install or repair the owner-only routine-public authority, adapter directory, and lock file",
             "none",
@@ -95,6 +96,15 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
+        PublicFailure::ContinuationUnavailable => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the routine custody already has a terminal or pending record and no exact continuation was supplied",
+            "routine continuation authority",
+            "retry only with the opaque continuation emitted by a reservation interruption; selectors never grant reuse or recovery authority",
+            "none",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
         PublicFailure::PersistenceAfterEffect => (
             ExitClass::InternalFailure,
             DiagnosticId::ProjectionFailed,
@@ -107,7 +117,18 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
     };
     RuntimeOutcome::failure(
         class,
-        Diagnostic::new(id, class, cause, surface, repair, effect, RERUN, ceiling),
+        Diagnostic::new(
+            id,
+            class,
+            DiagnosticDetails {
+                cause,
+                affected_surface: surface,
+                repair,
+                effect,
+                rerun: RERUN,
+                ceiling,
+            },
+        ),
     )
 }
 

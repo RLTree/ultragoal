@@ -23,6 +23,8 @@ use super::outcome::OutputFileRecord;
 mod confinement_transitions;
 #[path = "directory_read_failure.rs"]
 mod directory_read_failure;
+#[path = "executable_bound.rs"]
+mod executable_bound;
 #[path = "executable_identity.rs"]
 mod executable_identity;
 #[path = "framed_read_input.rs"]

@@ -2,6 +2,7 @@ use super::super::{
     InventorySurface, MigrationInventory, SurfaceFileKind, SurfaceStatus, digest, safe_reference,
     safe_relative_path, valid_identifier, valid_sha256, valid_stable_identifier,
 };
+use crate::inventory::{MAX_MIGRATION_REGISTRY_BYTES, MIGRATION_REGISTRY_PATH};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;

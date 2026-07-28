@@ -92,6 +92,22 @@ pub(crate) struct InspectionProjection {
     pub(crate) root_binding: String,
     pub(crate) inspection_sha256: String,
     pub(crate) files: Vec<ObservedFileProjection>,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct LocalStatePolicyProjection {
+    pub(crate) path: String,
+    pub(crate) required_rule: String,
+    pub(crate) disposition: String,
+    pub(crate) observed_sha256: Option<String>,
+    pub(crate) observed_unix_mode: Option<u32>,
+    pub(crate) desired_unix_mode: u32,
+    pub(crate) desired_sha256: String,
+    pub(crate) replacement_sha256: String,
+    pub(crate) replacement_byte_length: usize,
+    pub(crate) mutation_required: bool,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -154,6 +170,7 @@ pub(crate) struct PlanProjection {
     pub(crate) checks: Vec<CheckProjection>,
     pub(crate) mutations: Vec<MutationProjection>,
     pub(crate) conflicts: Vec<ConflictProjection>,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
     pub(crate) rollback_mutation_count: usize,
 }
 
@@ -165,6 +182,7 @@ pub(crate) struct FitInspectProjection {
     pub(crate) authority: TemplateAuthorityProjection,
     pub(crate) desired: DesiredProjection,
     pub(crate) inspection: InspectionProjection,
+    pub(crate) local_state: LocalStatePolicyProjection,
     pub(crate) effect: String,
     pub(crate) claim_effect: String,
     pub(crate) support_limit: String,

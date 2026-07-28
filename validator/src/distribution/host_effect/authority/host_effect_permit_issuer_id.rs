@@ -32,6 +32,16 @@ impl HostEffectPermit {
     }
 }
 
+impl VerifiedHostEffectPermit {
+    pub(in crate::distribution::host_effect) fn binding(&self) -> &HostEffectPermitBinding {
+        self.permit.binding()
+    }
+
+    pub(in crate::distribution::host_effect) fn into_permit(self) -> HostEffectPermit {
+        self.permit
+    }
+}
+
 impl Drop for HostEffectPermit {
     fn drop(&mut self) {
         zeroize(&mut self.nonce);
@@ -56,6 +66,7 @@ pub(crate) struct HostEffectAuthorityError {
 }
 
 impl HostEffectAuthorityError {
+    #[cfg(test)]
     pub(crate) const fn id(&self) -> HostEffectAuthorityErrorId {
         self.id
     }
@@ -83,8 +94,20 @@ fn validate_binding(binding: &HostEffectPermitBinding) -> Result<(), HostEffectA
         &binding.target_identity_sha256,
         &binding.expected_head_sha256,
     ];
+    let lifecycle_join_is_valid = binding.lifecycle_record.as_ref().is_none_or(|record| {
+        record.validate().is_ok()
+            && binding.lifecycle_record_sha256.as_ref().is_some_and(
+                |digest| matches!(digest_json(record), Ok(actual) if actual == *digest),
+            )
+            && record.permit_join().0 == binding.lifecycle_plan_sha256
+            && serde_json::to_string(&record.permit_join().1)
+                .ok()
+                .is_some_and(|intent| intent.trim_matches('"') == binding.lifecycle_intent)
+    });
     if digests.into_iter().any(|row| !is_digest(row))
         || !valid_id(&binding.lifecycle_intent)
+        || (cfg!(not(test)) && binding.lifecycle_record.is_none())
+        || !lifecycle_join_is_valid
         || binding.target_generation == 0
         || binding.issued_at_unix_ms >= binding.expires_at_unix_ms
         || binding

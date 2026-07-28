@@ -7,8 +7,11 @@
 Observability is the harness sensory system. It exists so an agent can diagnose
 and repair a failure without spelunking raw source or receipt walls.
 
-- Four channels are required: metrics for alerting, traces and wide events for
-  investigation, logs for reconstruction, and evals for behavioral quality.
+- Four channels are available: metrics for aggregate alerting, traces and wide
+  events for multi-step causality, logs for durable reconstruction, and evals
+  for model or behavioral quality. Select channels by the claim and risk; all
+  four are required together only for the observability capability claim and
+  representative product or release proof.
 - Two planes are required: product/system health and agent quality.
 - Product truth, observability truth, and artifact truth stay separate and are
   reconciled by candidate digest, run id, correlation id, receipt id, and claim
@@ -16,9 +19,10 @@ and repair a failure without spelunking raw source or receipt walls.
 
 ## Law-Bearing Envelope
 
-Every law-bearing command, check, receipt path, fixture path, setup path,
-external path, long-running path, and claim guard emits an agent-legible
-envelope when applicable:
+Every law-bearing command emits a typed, redacted diagnostic envelope. Checks,
+receipt paths, fixtures, setup, external effects, long-running operations, and
+claim guards add the fields and durable channels their failure and claim
+surface require:
 
 - run id, correlation id, trace id, span id, parent span id;
 - candidate digest, command, subcommand, operation, surface;
@@ -34,14 +38,17 @@ span ids, user ids, candidate digests, receipt paths, private paths, or secrets.
 
 ## Query And Explain Contract
 
-An observable command surface requires real command telemetry, not just tests.
+An observable command surface requires real command telemetry appropriate to
+its claim, not just tests.
 
 - Validation proves mechanics: parser, help, schema, field emission, redaction
   helper, fixture shape, and unit branches.
 - Production proof requires a real current-candidate command run, useful
-  stdout, same-candidate receipt, non-empty bounded log query, bounded metric
-  signal, trace tree with valid parentage, useful explain output, source
-  inspection, relevant fixtures, and explicit claim ceiling.
+  output, an explicit claim ceiling, and the claim-relevant channels: durable
+  logs for effects or reconstruction, metrics for aggregate rate/latency/
+  capacity claims, traces for multi-step or cross-process causality, and evals
+  for model-behavior or improvement claims. The observability capability and
+  representative product/release proof join all four channels.
 - Local spool or local JSON is transition/debug evidence only unless the stack
   is explicitly unavailable and the unavailable-live proof blocks higher claims.
 - Query commands reject stale digest, wrong run/correlation, private path leak,
@@ -54,7 +61,8 @@ The routine repair loop is executable:
 
 1. Recompute or read the current candidate digest.
 2. Run the highest-authority failing command once.
-3. Query logs, metrics, and traces by run id, correlation id, and digest.
+3. Query the claim-relevant logs, metrics, traces, or evals by operation
+   identity and digest.
 4. Run the relevant explain command.
 5. Repair the smallest root cause.
 6. Rerun the narrow command.

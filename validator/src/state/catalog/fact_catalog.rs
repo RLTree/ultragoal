@@ -59,6 +59,27 @@ pub enum ActionKind {
     AuthorityRequest,
 }
 
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum ActionPriorityClass {
+    ProtectedInvariant,
+    ActiveTruthLoopTransition,
+    FalsePassOrRejection,
+    RepeatedCrossContextGap,
+    BoundedExperiment,
+    Speculative,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct EvidenceLedActionBinding {
+    pub class: ActionPriorityClass,
+    pub brief_digest: String,
+    pub transition_id: Option<String>,
+    pub transition_order: Option<u32>,
+    pub active_trigger_ids: Vec<String>,
+    pub parked_trigger_ids: Vec<String>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct CommandBinding {
     pub command_id: String,
@@ -78,6 +99,8 @@ pub struct ActionDefinition {
     pub authority: AuthorityRequirement,
     pub command_id: Option<String>,
     pub authority_request: Option<AuthorityRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evidence_led: Option<EvidenceLedActionBinding>,
 }
 
 /// A caller-authored policy proposal. It is untrusted until the root-owned
@@ -103,6 +126,8 @@ pub struct DependencyActionCatalog {
     pub(crate) catalog_id: String,
     #[serde(skip)]
     pub(crate) spec_id: String,
+    pub(crate) verification_modes:
+        BTreeMap<String, crate::engineering_advisory::VerificationModeContract>,
     #[serde(skip)]
     pub(crate) authority: Option<PolicyPermit>,
     #[serde(flatten)]
@@ -119,7 +144,9 @@ impl DependencyActionCatalog {
         if !problems.is_empty() {
             return Err(StateError::InvalidCatalog(problems.join(",")));
         }
-        let bytes = serde_json::to_vec(&CatalogIdentity::from(&spec))
+        let empty_verification_modes =
+            BTreeMap::<String, crate::engineering_advisory::VerificationModeContract>::new();
+        let bytes = serde_json::to_vec(&(CatalogIdentity::from(&spec), &empty_verification_modes))
             .map_err(|error| StateError::Serialization(error.to_string()))?;
         if bytes.len() > super::super::limits::MAX_CATALOG_BYTES {
             return Err(StateError::ResourceLimit(
@@ -131,6 +158,7 @@ impl DependencyActionCatalog {
             schema_version: "DependencyActionCatalog-v1",
             catalog_id: spec_id.clone(),
             spec_id,
+            verification_modes: BTreeMap::new(),
             authority: None,
             spec,
         })
@@ -157,12 +185,6 @@ impl DependencyActionCatalog {
         self.catalog_id = permit.permit_id().to_owned();
         self.authority = Some(permit);
         Ok(self)
-    }
-
-    pub(crate) fn recompute_spec_id(&self) -> Result<String, StateError> {
-        let bytes = serde_json::to_vec(&CatalogIdentity::from(&self.spec))
-            .map_err(|error| StateError::Serialization(error.to_string()))?;
-        Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
     }
 
     #[cfg(test)]

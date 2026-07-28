@@ -27,8 +27,13 @@ fn deterministic_generated_index_regenerates_and_tamper_drifts() {
     repo.write(
         "migration/generated-surface-authority.json",
         serde_json::to_vec(&serde_json::json!({
-            "schema_version": "GeneratedSurfaceAuthority-v2",
+            "schema_version": "GeneratedSurfaceAuthority-v3",
             "contract_id": "harness-ultragoal-successor-contract-v2",
+            "registry_projection": {
+                "generator": "migration/generated-surface-authority.json",
+                "canonical_sources": ["migration/generated-surface-authority.json"],
+                "regeneration_command": "migration/generated-surface-authority.json write"
+            },
             "surfaces": [
                 {"disposition":"canonical_projection","output":"generated/missing.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},
                 {"disposition":"canonical_projection","output":"generated/no-generator.json","generator":"HCT-INVENTORY","recipe":"input-digest-index-v1","inputs":["source.txt"]},

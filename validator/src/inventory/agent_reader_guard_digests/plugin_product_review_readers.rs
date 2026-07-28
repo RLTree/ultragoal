@@ -8,6 +8,16 @@ pub(crate) const PLUGIN_PRODUCT_REVIEW_READERS: &[ReaderSpec] = &[
         false
     ),
     reader!(
+        "validator/src/plugin_product/agent_discovery/host/capture.rs",
+        "../plugin_product/agent_discovery/host/capture.rs",
+        false
+    ),
+    reader!(
+        "validator/src/plugin_product/agent_discovery/local_authority.rs",
+        "../plugin_product/agent_discovery/local_authority.rs",
+        false
+    ),
+    reader!(
         "validator/src/plugin_product/agent_discovery/model.rs",
         "../plugin_product/agent_discovery/model.rs",
         false
@@ -18,43 +28,33 @@ pub(crate) const PLUGIN_PRODUCT_REVIEW_READERS: &[ReaderSpec] = &[
         false
     ),
     reader!(
-        "validator/src/review/round/config.rs",
-        "../review/round/config.rs",
+        "validator/src/plugin_product/agent_discovery/source/catalog_identity_codec/mod.rs",
+        "../plugin_product/agent_discovery/source/catalog_identity_codec/mod.rs",
         false
     ),
     reader!(
-        "validator/src/review/round/personas.rs",
-        "../review/round/personas.rs",
+        "validator/src/plugin_product/agent_discovery/source/revalidation.rs",
+        "../plugin_product/agent_discovery/source/revalidation.rs",
         false
     ),
     reader!(
-        "validator/src/review/round/registry/mod.rs",
-        "../review/round/registry/mod.rs",
-        true
-    ),
-    reader!(
-        "validator/src/review/round/registry/reader/mod.rs",
-        "../review/round/registry/reader/mod.rs",
+        "validator/src/plugin_product/agent_discovery/supported/catalog_codec/mod.rs",
+        "../plugin_product/agent_discovery/supported/catalog_codec/mod.rs",
         false
     ),
     reader!(
-        "validator/src/review/round/registry/reader/json.rs",
-        "../review/round/registry/reader/json.rs",
+        "validator/src/plugin_product/agent_discovery/supported/report/recording.rs",
+        "../plugin_product/agent_discovery/supported/report/recording.rs",
         false
     ),
     reader!(
-        "validator/src/review/round/registry/reader/path.rs",
-        "../review/round/registry/reader/path.rs",
+        "validator/src/plugin_product/agent_discovery/supported/root_identity_codec/mod.rs",
+        "../plugin_product/agent_discovery/supported/root_identity_codec/mod.rs",
         false
     ),
     reader!(
-        "validator/src/review/round/registry/semantics.rs",
-        "../review/round/registry/semantics.rs",
+        "validator/src/plugin_product/agent_discovery/supported/roots.rs",
+        "../plugin_product/agent_discovery/supported/roots.rs",
         false
-    ),
-    reader!(
-        "validator/src/review/round/registry/validation.rs",
-        "../review/round/registry/validation.rs",
-        true
     ),
 ];

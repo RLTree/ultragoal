@@ -2,7 +2,7 @@
   "schema_version": "RootOrchestrationDecision-v1",
   "decision_id": "ULTRA-ROUTING-SELF-CHECK-001",
   "guidance_source": {
-    "path": "/Users/terrynoblin/.codex/AGENTS.md",
+    "path": "<operator-home>/.codex/AGENTS.md",
     "sha256": "e940983e6d15c0de18acbb35bde4662b692b85b7b046849a3595b4d5b349637f",
     "section": "Ultra Orchestration Routing Law"
   },

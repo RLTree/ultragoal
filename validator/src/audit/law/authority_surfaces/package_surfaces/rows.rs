@@ -1,28 +1,6 @@
-use super::{InventoryArtifactBinding, cargo, document, generated, module_ownership, row, source};
-use serde_json::Value;
+use super::{cargo, generated, module_ownership, row, source};
 use std::collections::BTreeSet;
 use std::path::Path;
-
-pub(in crate::audit::law::authority_surfaces) fn value(
-    root: &Path,
-    inventory: &BTreeSet<String>,
-) -> Value {
-    document::full(rows(root, inventory))
-}
-
-pub(in crate::audit::law::authority_surfaces) fn summary_value(
-    root: &Path,
-    inventory: &BTreeSet<String>,
-    artifact: &InventoryArtifactBinding,
-) -> Value {
-    document::summary(rows(root, inventory), artifact)
-}
-
-fn rows(root: &Path, inventory: &BTreeSet<String>) -> Vec<row::PackageSurfaceRow> {
-    let source_paths = source::actual_paths(root).unwrap_or_default();
-    let generated = generated::State::build(root, inventory);
-    from_paths(root, inventory, &source_paths, &generated)
-}
 
 pub(super) fn from_paths(
     root: &Path,

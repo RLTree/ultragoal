@@ -15,4 +15,7 @@ mod bounded_descriptor_read;
 #[path = "descriptor_capture.rs"]
 mod descriptor_capture;
 
+#[cfg(not(test))]
 pub(crate) use descriptor_capture::*;
+#[cfg(test)]
+pub use descriptor_capture::*;

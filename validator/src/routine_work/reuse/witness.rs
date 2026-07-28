@@ -22,7 +22,7 @@ pub(crate) struct ResultFacts {
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct ExecutedWork {
-    pub(crate) facts: ResultFacts,
+    pub(crate) facts: Box<ResultFacts>,
     pub(crate) capture_run_sha256: String,
 }
 
@@ -81,7 +81,7 @@ impl CapturedExecution {
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct VerifiedReuse {
-    pub(crate) facts: ResultFacts,
+    pub(crate) facts: Box<ResultFacts>,
 }
 
 impl VerifiedReuse {

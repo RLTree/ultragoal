@@ -7,7 +7,7 @@ mod projection_catalog;
 use classifiers::{
     typed_cli_command_boundary_text, typed_law_check_boundary_text, typed_path_boundary_text,
 };
-use markers::{RawAuthorityMarker, raw_authority_markers};
+use markers::{raw_authority_markers, RawAuthorityMarker};
 
 pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     raw_authority_markers(text)
@@ -65,18 +65,18 @@ fn parser_boundary_text(rel: &str, text: &str, marker: &RawAuthorityMarker) -> b
     }
     parser_boundary_path(rel)
         || match marker {
-            RawAuthorityMarker::RawPath => {
+            RawAuthorityMarker::Path => {
                 typed_cli_command_boundary_text(rel, text)
                     || typed_path_boundary_text(rel, text)
                     || reads_structured_input(text)
                     || (contains_json_value_binding(text) && typed_law_check_boundary_text(text))
             }
-            RawAuthorityMarker::RawMap => {
+            RawAuthorityMarker::Map => {
                 reads_structured_input(text) || typed_law_check_boundary_text(text)
             }
-            RawAuthorityMarker::RawJson
-            | RawAuthorityMarker::RawString
-            | RawAuthorityMarker::RawObservation => {
+            RawAuthorityMarker::Json
+            | RawAuthorityMarker::String
+            | RawAuthorityMarker::Observation => {
                 reads_structured_input(text)
                     || typed_law_check_boundary_text(text)
                     || schema_catalog_boundary(text)

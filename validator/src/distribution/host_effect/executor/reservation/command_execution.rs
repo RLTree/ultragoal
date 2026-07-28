@@ -37,6 +37,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
                 command,
                 &self.policy,
                 cancellation,
+                self.target.cwd_fd(),
             ) {
                 Ok(capture) => capture,
                 Err(failure) => {

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Agent-First Repo Init (Legacy Alias)"
-  short_description: "Route this legacy alias to its canonical skill"
-  default_prompt: "Use $harness-ultragoal:agent-first-repo-init to preserve and route my unchanged request through its canonical skill."
-policy:
-  allow_implicit_invocation: false

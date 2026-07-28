@@ -1,5 +1,6 @@
 use super::super::successor::runtime::{
-    RuntimeSession, StateDisposition, StateProjection, StateView,
+    Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome, RuntimeSession, StateDisposition,
+    StateProjection, StateView,
 };
 use super::super::successor::{EffectClass, OptionArgument, OptionName, OutputMode, ParsedValue};
 use super::{Repository, context, parsed, tree_snapshot};
@@ -158,6 +159,64 @@ fn missing_mismatched_and_unknown_state_fail_closed_without_input_echo() {
     assert!(missing.stdout.is_empty());
     assert_diagnostic(&missing.stderr, "successor_runtime_finding_not_present");
     assert!(!String::from_utf8_lossy(&missing.stderr).contains("absent"));
+}
+
+#[test]
+fn unavailable_diagnostics_and_authority_requests_keep_typed_exit_behavior() {
+    let repository = Repository::new("state-view-authority-request");
+    let context = context(&repository.root);
+    let state = FakeState {
+        context_id: context.context_id().to_owned(),
+        state_id: "sha256:authority-request",
+        findings: 1,
+        disposition: StateDisposition::AuthorityRequest,
+    };
+    let streams = RuntimeSession::new(&context, Some(&state))
+        .dispatch(&parsed(&["--json", "next"]))
+        .render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 3);
+
+    let unavailable =
+        super::super::successor::runtime::unavailable(&parsed(&["--json", "fit", "plan"]))
+            .render(OutputMode::Json);
+    assert_eq!(unavailable.exit_code, 4);
+    assert_diagnostic(
+        &unavailable.stderr,
+        "successor_runtime_downstream_tool_unavailable",
+    );
+
+    for (id, expected) in [
+        (
+            DiagnosticId::ContextUnavailable,
+            "successor_runtime_context_unavailable",
+        ),
+        (
+            DiagnosticId::InventoryUnavailable,
+            "successor_runtime_inventory_unavailable",
+        ),
+        (
+            DiagnosticId::ObservabilityUnavailable,
+            "successor_runtime_observability_unavailable",
+        ),
+    ] {
+        let outcome: RuntimeOutcome = RuntimeOutcome::failure(
+            super::super::successor::ExitClass::UnsupportedCapability,
+            Diagnostic::new(
+                id,
+                super::super::successor::ExitClass::UnsupportedCapability,
+                DiagnosticDetails {
+                    cause: "typed unavailable diagnostic",
+                    affected_surface: "N03 diagnostic contract",
+                    repair: "repair the named adapter before retrying",
+                    effect: "read",
+                    rerun: "ultragoal --json inspect context",
+                    ceiling: "source-local runtime behavior only",
+                },
+            ),
+        );
+        let rendered = outcome.render(OutputMode::Json);
+        assert_diagnostic(&rendered.stderr, expected);
+    }
 }
 
 fn assert_versioned(bytes: &[u8], expected: &str) {

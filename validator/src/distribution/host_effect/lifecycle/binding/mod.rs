@@ -1,7 +1,7 @@
 use super::{SupportedHostLifecycleError, SupportedHostLifecycleErrorId, lifecycle_error};
 use crate::distribution::{
-    Capability, HostCapabilityDeclaration, HostCapabilityState, HostCommandPlan, JourneyBinding,
-    PackageIdentity,
+    Capability, HostCapabilityDeclaration, HostCapabilityState, HostCommandPlan,
+    HostCommandPlanProjection, JourneyBinding, PackageIdentity,
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256};
@@ -9,10 +9,12 @@ use std::fs::Metadata;
 use std::path::Path;
 
 use super::super::{
-    HostEffectDecision, HostEffectLedgerHead, HostEffectPermitBinding, PinnedHostExecutable,
+    HostEffectDecision, HostEffectLedgerHead, HostEffectPermitBinding, SelectedCodexExecutable,
 };
 
 include!("session_nonce_bytes.rs");
+
+include!("accepted_intent.rs");
 
 include!("accepted/personal_scope.rs");
 

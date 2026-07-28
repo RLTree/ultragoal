@@ -91,12 +91,17 @@ pub(crate) fn revalidate_sources(
 
 fn api_rows() -> Result<BTreeMap<String, ActivationRow>, InventoryError> {
     let mut rows = BTreeMap::new();
-    for api in crate::api_witness::implemented_public_apis() {
+    let active = crate::cli::successor_public::active_api_identifiers();
+    for api in crate::api_witness::compatible_public_apis() {
         let stable_id = format!("API:{api}");
         let row = ActivationRow {
             stable_id: stable_id.clone(),
             digest_sha256: sha256_hex(api.as_bytes()),
-            active_status: ActiveStatus::Active,
+            active_status: if active.contains(api) {
+                ActiveStatus::Active
+            } else {
+                ActiveStatus::Definition
+            },
             references: Vec::new(),
         };
         if rows.insert(stable_id, row).is_some() {

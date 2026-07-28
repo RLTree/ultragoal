@@ -4,10 +4,11 @@ pub(in crate::distribution::host_effect) struct HostEffectAcceptanceRequest<'a> 
     pub host: HostCapabilityDeclaration,
     pub lifecycle: AcceptedLifecyclePlan,
     pub scope: AcceptedHostScope,
-    pub plan: &'a HostCommandPlan,
-    pub executable: &'a PinnedHostExecutable,
+    pub plan: &'a HostCommandPlanProjection,
+    pub executable: &'a SelectedCodexExecutable,
     pub expected_target: ObservedTargetIdentity,
     pub expected_head: HostEffectLedgerHead,
+    pub lifecycle_record: &'a crate::plugin_product::lifecycle::HostLifecycleRecord,
 }
 
 impl AcceptedHostEffect {
@@ -25,13 +26,19 @@ impl AcceptedHostEffect {
             executable,
             expected_target,
             expected_head,
+            lifecycle_record,
         } = request;
         package.validate().map_err(|_| invalid())?;
-        if !lifecycle.operation().is_effectful() {
-            // The accepted plugin lifecycle emits no external request for
-            // repeat use or idempotent reinstall. This effect boundary must
-            // not turn either no-op intent into executable authority.
+        if lifecycle_record.validate().is_err()
+            || lifecycle_record.package() != &package
+            || !matches_accepted_intent(lifecycle.operation(), lifecycle_record.permit_join().1)
+        {
             return Err(invalid());
+        }
+        if lifecycle_record.command_plan_sha256() != plan.plan_sha256() {
+            return Err(lifecycle_error(
+                SupportedHostLifecycleErrorId::PlanSubstitution,
+            ));
         }
         if journey.package() != &package
             || journey.capability_sha256() != host.capability_sha256()
@@ -40,7 +47,6 @@ impl AcceptedHostEffect {
             return Err(invalid());
         }
         scope.validate_for(&journey)?;
-        scope.validate_plan(&package, lifecycle.operation(), plan)?;
         let required = scope.required_capabilities(lifecycle.operation());
         if required
             .iter()
@@ -59,15 +65,14 @@ impl AcceptedHostEffect {
             schema: "harness-ultragoal.accepted-package-identity.v1",
             package: &package,
         })?;
-        let command_plan_sha256 = command_plan_sha256(&package, plan)?;
-        if command_plan_sha256 != plan.plan_sha256() {
+        let command_plan_sha256 = plan.plan_sha256().to_owned();
+        if command_plan_sha256 != lifecycle_record.command_plan_sha256()
+            || plan.command_count() == 0
+        {
             return Err(invalid());
         }
-        let argv_sha256 = argv_sha256(plan)?;
-        let executable_identity_sha256 = executable
-            .identity()
-            .binding_sha256()
-            .map_err(|_| invalid())?;
+        let argv_sha256 = plan.argv_sha256().to_owned();
+        let executable_identity_sha256 = executable.binding_sha256().map_err(|_| invalid())?;
         let expected_pre_state_sha256 = digest_json(&StateBinding {
             schema: "harness-ultragoal.accepted-pre-state.v1",
             state: &lifecycle.before,
@@ -128,6 +133,7 @@ impl AcceptedHostEffect {
             command_plan_sha256,
             argv_sha256,
             executable_identity_sha256,
+            lifecycle_record: lifecycle_record.clone(),
         })
     }
 
@@ -145,9 +151,9 @@ impl AcceptedHostEffect {
 
     pub(super) fn require_plan(
         &self,
-        custody: &RootPlanCustody,
+        custody: &crate::plugin_product::lifecycle::HostLifecycleCustody,
     ) -> Result<(), SupportedHostLifecycleError> {
-        if custody.plan_sha256() != Some(self.command_plan_sha256.as_str()) {
+        if custody.plan_sha256() != self.command_plan_sha256 {
             return Err(lifecycle_error(
                 SupportedHostLifecycleErrorId::PlanSubstitution,
             ));
@@ -157,13 +163,12 @@ impl AcceptedHostEffect {
 
     pub(super) fn require_executable(
         &self,
-        executable: &PinnedHostExecutable,
+        executable: &SelectedCodexExecutable,
     ) -> Result<(), SupportedHostLifecycleError> {
         executable
             .revalidate()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
         let observed = executable
-            .identity()
             .binding_sha256()
             .map_err(|_| lifecycle_error(SupportedHostLifecycleErrorId::ExecutableSubstitution))?;
         if observed != self.executable_identity_sha256 {
@@ -199,5 +204,11 @@ impl AcceptedHostEffect {
 
     pub(super) fn expected_head(&self) -> &HostEffectLedgerHead {
         &self.expected_head
+    }
+
+    pub(super) fn lifecycle_record(
+        &self,
+    ) -> &crate::plugin_product::lifecycle::HostLifecycleRecord {
+        &self.lifecycle_record
     }
 }

@@ -32,10 +32,6 @@ impl Effects {
         )
     }
 
-    pub(super) fn completed_effects(&self) -> &[LifecycleEffect] {
-        &self.effects[..self.next_effect]
-    }
-
     #[cfg(test)]
     pub(super) fn mutation_count(&self) -> usize {
         self.mutations.len()
@@ -88,7 +84,7 @@ impl Effects {
         .map_err(AdapterError::distribution)?;
         self.mutations.push(Mutation::Installed {
             surface,
-            transaction,
+            transaction: Box::new(transaction),
         });
         self.set_surface(surface, replacement);
         self.logical.generation = self.expected_after.generation;

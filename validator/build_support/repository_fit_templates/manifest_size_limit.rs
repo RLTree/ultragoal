@@ -1,5 +1,41 @@
 use super::*;
 
+#[cfg(unix)]
+use std::ffi::CString;
+#[cfg(unix)]
+use std::os::fd::{AsRawFd, FromRawFd};
+
+#[cfg(unix)]
+unsafe extern "C" {
+    fn openat(directory: i32, path: *const i8, flags: i32, ...) -> i32;
+}
+
+#[cfg(any(target_os = "linux", target_os = "android"))]
+pub(crate) const DIRECTORY_FLAG: i32 = 0x10000;
+#[cfg(target_os = "macos")]
+pub(crate) const DIRECTORY_FLAG: i32 = 0x100000;
+#[cfg(any(target_os = "linux", target_os = "android"))]
+pub(crate) const CREATE_EXCLUSIVE_FLAGS: i32 = 0x40 | 0x80;
+#[cfg(target_os = "macos")]
+pub(crate) const CREATE_EXCLUSIVE_FLAGS: i32 = 0x0200 | 0x0800;
+
+#[cfg(unix)]
+pub(crate) fn open_staged_leaf(
+    parent: &File,
+    name: &CString,
+    flags: i32,
+    mode: u32,
+) -> Result<File, std::io::Error> {
+    // SAFETY: parent is a live directory descriptor, name is NUL-terminated,
+    // and ownership of a successful descriptor is transferred to File.
+    let descriptor = unsafe { openat(parent.as_raw_fd(), name.as_ptr(), flags, mode as i32) };
+    if descriptor < 0 {
+        return Err(std::io::Error::last_os_error());
+    }
+    // SAFETY: openat returned one newly owned descriptor.
+    Ok(unsafe { File::from_raw_fd(descriptor) })
+}
+
 pub(crate) const MAX_MANIFEST_BYTES: u64 = 8 * 1024 * 1024;
 pub(crate) const MAX_SOURCE_BYTES: u64 = 8 * 1024 * 1024;
 pub(crate) const MAX_TOTAL_BYTES: usize = 64 * 1024 * 1024;
@@ -140,4 +176,63 @@ where
         stage_manifest_sources_after_cleanup(manifest_bytes, templates, output, after_inspection)
     }));
     finish_operation(output, result, "template source staging panicked")
+}
+
+#[cfg(all(test, unix))]
+mod publication_tests {
+    use std::os::unix::fs::symlink;
+
+    #[test]
+    fn staged_publication_writes_a_new_regular_file() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "staged-publication-positive",
+        );
+        std::fs::create_dir_all(&root).expect("root");
+        let staged = root.join("staged.bin");
+        super::write_staged(&staged, b"trusted bytes").expect("publish");
+        assert_eq!(std::fs::read(&staged).expect("read"), b"trusted bytes");
+        std::fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn staged_publication_rejects_leaf_and_ancestor_symlinks() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "staged-publication-symlinks",
+        );
+        let outside = root.join("outside");
+        std::fs::create_dir_all(&outside).expect("outside");
+        let victim = outside.join("victim");
+        let staged = root.join("staged.bin");
+        std::fs::write(&victim, b"unchanged").expect("victim");
+        symlink(&victim, &staged).expect("leaf symlink");
+        assert!(super::write_staged(&staged, b"attacker bytes").is_err());
+        assert_eq!(std::fs::read(&victim).expect("victim read"), b"unchanged");
+
+        let linked_parent = root.join("linked-parent");
+        symlink(&outside, &linked_parent).expect("ancestor symlink");
+        assert!(
+            super::write_staged(&linked_parent.join("created.bin"), b"attacker bytes").is_err()
+        );
+        assert!(!outside.join("created.bin").exists());
+        std::fs::remove_dir_all(root).expect("cleanup");
+    }
+
+    #[test]
+    fn staged_publication_path_verification_rejects_a_replaced_parent() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+            "staged-publication-replaced-parent",
+        );
+        let parent = root.join("parent");
+        std::fs::create_dir_all(&parent).expect("parent");
+        let path = parent.join("staged.bin");
+        std::fs::write(&path, b"trusted").expect("leaf");
+        let (opened_parent, _) = super::open_staged_parent(&path).expect("open parent");
+        let expected_leaf = std::fs::metadata(&path).expect("leaf metadata");
+        std::fs::rename(&parent, root.join("moved-parent")).expect("replace parent");
+        std::fs::create_dir(&parent).expect("replacement");
+        assert!(
+            super::verify_staged_publication_path(&path, &opened_parent, &expected_leaf).is_err()
+        );
+        std::fs::remove_dir_all(root).expect("cleanup");
+    }
 }

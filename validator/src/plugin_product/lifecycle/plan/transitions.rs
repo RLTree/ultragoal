@@ -56,6 +56,9 @@ fn failed_update_recovery(
     request: &LifecycleRequest,
 ) -> Result<(LifecycleState, Vec<LifecycleEffect>), LifecycleError> {
     require_write(&request.authorization)?;
+    if !observed.recovery_required {
+        return Err(LifecycleError::InvalidTransition);
+    }
     let prior = request
         .prior_authority
         .clone()

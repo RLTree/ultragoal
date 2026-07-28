@@ -124,37 +124,21 @@ fn test_directory_scan_pause(root: &Path) {
 #[cfg(not(test))]
 fn test_directory_scan_pause(_: &Path) {}
 
-impl PromotionReviewAuthority for FilePromotionReviewLedger {
-    fn authority_id(&self) -> &str {
+impl FilePromotionReviewLedger {
+    pub(super) fn authority_id(&self) -> &str {
         &self.binding.authority_id
     }
 
-    fn reviewer_id(&self) -> &str {
+    pub(super) fn reviewer_id(&self) -> &str {
         &self.binding.reviewer_id
     }
 
-    fn review_session_id(&self) -> &str {
+    pub(super) fn review_session_id(&self) -> &str {
         &self.binding.review_session_id
     }
 
-    fn current_binding(&self) -> (&str, &str) {
+    pub(super) fn current_review_binding(&self) -> (&str, &str) {
         (&self.binding.live_context_id, &self.binding.candidate_id)
-    }
-
-    fn issue_attestation(&mut self, binding_sha256: &str) -> Result<String, EvaluationError> {
-        self.issue_bound_attestation(binding_sha256)
-            .map_err(|_| EvaluationError::new("evaluation-review-ledger-issuance-refused"))
-    }
-
-    fn verify_and_consume(
-        &mut self,
-        binding_sha256: &str,
-        reviewer_id: &str,
-        review_id: &str,
-        attestation_sha256: &str,
-    ) -> bool {
-        self.consume_attestation(binding_sha256, reviewer_id, review_id, attestation_sha256)
-            .unwrap_or(false)
     }
 }
 

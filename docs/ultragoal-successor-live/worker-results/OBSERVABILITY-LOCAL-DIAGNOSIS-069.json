@@ -2109,7 +2109,7 @@
     "worker_result_exclusion": "docs/ultragoal-successor-live/worker-results/OBSERVABILITY-LOCAL-DIAGNOSIS-069.json"
   },
   "base_state": {
-    "repo_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repo_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "d19c52e995bb3163e0e638f9ac542a7382eed898",
     "head_tree": "f4588382e96ce9d42d223f5c108bce2c5c1d0df4",

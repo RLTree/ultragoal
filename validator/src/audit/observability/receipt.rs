@@ -20,9 +20,7 @@ pub(super) fn check(root: &Path, out: &mut Vec<String>) {
 }
 
 fn check_value(value: &Value, candidate: &str, out: &mut Vec<String>) {
-    if value.get("schema").and_then(Value::as_str)
-        != Some("harness-ultragoal.observability-receipt.v1")
-    {
+    if value.get("schema").and_then(Value::as_str) != Some(super::RECEIPT_SCHEMA) {
         out.push("observability_proof_wrong_schema".to_string());
     }
     if value.get("candidate_digest").and_then(Value::as_str) != Some(candidate) {

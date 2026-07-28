@@ -1,6 +1,7 @@
 use super::*;
 use crate::fixture_scheduler::FixtureExecutionRecordCapture;
 
+#[cfg(test)]
 impl FixtureExecutor for FixtureCaptureAdapter {
     fn execute(
         &self,
@@ -44,17 +45,17 @@ impl FixtureCaptureAdapter {
             #[cfg(test)]
             PinnedExecutableKind::TestNativeSnapshot => {}
         }
-        let (exit, stdout, overflow, early_termination) = run_confined(
+        let (exit, stdout, overflow, early_termination) = run_confined(ConfinedExecution {
             fixture,
-            &self.executable,
-            self.executable_kind,
-            &executable_bytes,
-            &self.arguments,
-            lease.root(),
+            source_executable: &self.executable,
+            executable_kind: self.executable_kind,
+            executable_bytes: &executable_bytes,
+            arguments: &self.arguments,
+            cwd: lease.root(),
             environment,
-            self.output_limit,
-            &self.interrupt,
-        )?;
+            output_limit: self.output_limit,
+            interrupt: &self.interrupt,
+        })?;
         let output_redacted = sensitive_text(&stdout);
         let stdout_digest = digest(if output_redacted {
             b"<redacted>"

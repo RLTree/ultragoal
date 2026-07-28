@@ -1,6 +1,6 @@
 use super::model::{BuildClosurePolicy, BuildInputKind, ClosureError, RequiredBuildInput};
 
-/// Exact source-local closure before root extends it from fresh dep-info.
+/// Declared product inputs before root extends them from fresh dep-info.
 pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError> {
     use BuildInputKind::{
         CargoLock, CargoManifest, DynamicInput, RuntimeAuthority, RustSource, VerifierInput,
@@ -9,6 +9,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ("Cargo.lock", CargoLock),
         ("Cargo.toml", CargoManifest),
         ("validator/Cargo.toml", CargoManifest),
+        ("validator/src/lib.rs", RustSource),
         ("docs/install-and-visibility.md", RuntimeAuthority),
         ("docs/plugin-resource-map.md", RuntimeAuthority),
         (
@@ -25,7 +26,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ),
         (
             "fixtures/plugin-product/root-wiring-request.json",
-            RuntimeAuthority,
+            VerifierInput,
         ),
         ("fixtures/plugin-product/route-cases.tsv", RuntimeAuthority),
         ("skills/diagnose-and-observe/SKILL.md", RuntimeAuthority),
@@ -44,7 +45,23 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             RustSource,
         ),
         (
-            "validator/src/plugin_product/lifecycle/model.rs",
+            "validator/src/plugin_product/lifecycle/model/mod.rs",
+            RustSource,
+        ),
+        (
+            "validator/src/plugin_product/lifecycle/model/plan_authorization_seal_issue.rs",
+            RustSource,
+        ),
+        (
+            "validator/src/plugin_product/lifecycle/model/recovery_authorization_seal_issue.rs",
+            RustSource,
+        ),
+        (
+            "validator/src/plugin_product/lifecycle/model/sha256_prefix.rs",
+            RustSource,
+        ),
+        (
+            "validator/src/plugin_product/lifecycle/model/validate_digest.rs",
             RustSource,
         ),
         (
@@ -96,7 +113,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             RustSource,
         ),
         (
-            "validator/tests/plugin_product_contract/dependency_closure.rs",
+            "validator/tests/plugin_product_contract/dependency_closure/mod.rs",
             VerifierInput,
         ),
         (
@@ -104,7 +121,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/lifecycle_contract.rs",
+            "validator/tests/plugin_product_contract/lifecycle_contract/mod.rs",
             VerifierInput,
         ),
         (
@@ -112,7 +129,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/product_fitness_contract.rs",
+            "validator/tests/plugin_product_contract/product_fitness_contract/mod.rs",
             VerifierInput,
         ),
         (
@@ -120,22 +137,13 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/source_contract.rs",
+            "validator/tests/plugin_product_contract/source_contract/mod.rs",
             VerifierInput,
         ),
         (
-            "validator/tests/plugin_product_contract/zero_write.rs",
+            "validator/tests/plugin_product_contract/zero_write/mod.rs",
             VerifierInput,
         ),
-        (
-            "docs/ultragoal-successor-live/root-decisions/CANONICAL-PLUGIN-TRANSITIVE-PRODUCT-FITNESS-REWORK-020.json",
-            DynamicInput,
-        ),
-        (
-            "docs/ultragoal-successor-live/worker-results/CANONICAL-PLUGIN-DEPENDENCY-CLOSURE-018.json",
-            DynamicInput,
-        ),
-        ("schemas/product-fitness-receipt.schema.json", DynamicInput),
         (
             "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/02-PLUGIN-PRODUCT-AND-JOURNEYS.md",
             DynamicInput,
@@ -169,40 +177,41 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
             DynamicInput,
         ),
         (
-            "validator/src/audit/product/fitness/evidence.rs",
-            VerifierInput,
-        ),
-        ("validator/src/audit/product/fitness/mod.rs", VerifierInput),
-        (
-            "validator/src/audit/product/fitness/receipt/fields.rs",
-            VerifierInput,
+            "validator/src/cli/successor/catalog/mod.rs",
+            RuntimeAuthority,
         ),
         (
-            "validator/src/audit/product/fitness/receipt/mod.rs",
-            VerifierInput,
+            "validator/src/cli/successor/catalog/inspection.rs",
+            RuntimeAuthority,
         ),
         (
-            "validator/src/audit/product/fitness/substitutions.rs",
-            VerifierInput,
+            "validator/src/cli/successor/catalog/repository_fit_and_checks.rs",
+            RuntimeAuthority,
         ),
-        ("validator/src/cli/successor/catalog.rs", RuntimeAuthority),
-        ("validator/src/distribution/cache.rs", RustSource),
-        ("validator/src/distribution/install.rs", RustSource),
+        (
+            "validator/src/cli/successor/catalog/observability_and_package.rs",
+            RuntimeAuthority,
+        ),
+        (
+            "validator/src/cli/successor/catalog/evaluation_and_migration.rs",
+            RuntimeAuthority,
+        ),
+        (
+            "validator/src/cli/successor/catalog/options.rs",
+            RuntimeAuthority,
+        ),
+        ("validator/src/distribution/cache/mod.rs", RustSource),
+        ("validator/src/distribution/install/mod.rs", RustSource),
         ("validator/src/distribution/mod.rs", RustSource),
         ("validator/src/distribution/model.rs", RustSource),
         ("validator/src/distribution/package/snapshot.rs", RustSource),
-        ("validator/src/distribution/runtime_probe.rs", RustSource),
-        ("validator/src/distribution/verify.rs", RustSource),
+        (
+            "validator/src/distribution/runtime_probe/mod.rs",
+            RustSource,
+        ),
+        ("validator/src/distribution/verify/mod.rs", RustSource),
         ("validator/src/orchestration/model.rs", VerifierInput),
-        ("validator/src/orchestration/worker.rs", VerifierInput),
-        (
-            "validator/src/review/round/product/fitness/criteria.rs",
-            VerifierInput,
-        ),
-        (
-            "validator/src/review/round/product/fitness/mod.rs",
-            VerifierInput,
-        ),
+        ("validator/src/orchestration/worker/mod.rs", VerifierInput),
     ];
     BuildClosurePolicy::new(
         rows.into_iter()

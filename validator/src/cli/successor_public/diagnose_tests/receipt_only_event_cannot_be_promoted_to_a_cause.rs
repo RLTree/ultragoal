@@ -11,7 +11,7 @@ pub(crate) fn receipt_only_event_cannot_be_promoted_to_a_cause() {
         .join("validation_artifacts/observability/spool");
     fs::create_dir_all(&spool).unwrap();
     let store = EventStore::for_context(
-        super::super::observe::store_path(&repository.root),
+        super::super::observe::store_path(&repository.root, &context, "successor-runtime").unwrap(),
         &context,
         "successor-runtime",
     )
@@ -58,7 +58,8 @@ pub(crate) fn complete_corrupt_store_is_reported_as_corruption_and_never_repaire
         .root
         .join("validation_artifacts/observability/spool");
     fs::create_dir_all(&spool).unwrap();
-    let path = super::super::observe::store_path(&repository.root);
+    let path =
+        super::super::observe::store_path(&repository.root, &context, "successor-runtime").unwrap();
     let store = EventStore::for_context(&path, &context, "successor-runtime").unwrap();
     let event = SemanticEvent::for_context(
         &context,

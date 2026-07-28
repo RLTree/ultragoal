@@ -1,7 +1,7 @@
 use super::super::contracts::{RepositoryPath, Sha256Digest};
 use super::super::path;
 
-const MAX_INPUTS: usize = 512;
+const MAX_INPUTS: usize = 256;
 
 pub(in crate::generated_authority) fn paths(
     values: Vec<String>,
@@ -57,4 +57,30 @@ pub(in crate::generated_authority) fn token(value: &str) -> bool {
 
 pub(in crate::generated_authority) fn sorted_strings(values: &[String]) -> bool {
     !values.is_empty() && values.windows(2).all(|pair| pair[0] < pair[1])
+}
+
+pub(in crate::generated_authority) fn replacement_targets(values: &[String]) -> bool {
+    values.len() <= 256
+        && sorted_strings(values)
+        && values.iter().all(|value| replacement_target(value))
+}
+
+fn replacement_target(value: &str) -> bool {
+    ["HCT-", "PS-"]
+        .iter()
+        .any(|prefix| uppercase_semantic_identifier(value, prefix))
+        || ["SKILL:", "AGENT:", "COMMAND:", "CONTRACT-REGISTRY:"]
+            .iter()
+            .any(|prefix| value.strip_prefix(prefix).is_some_and(token))
+}
+
+fn uppercase_semantic_identifier(value: &str, prefix: &str) -> bool {
+    let Some(suffix) = value.strip_prefix(prefix) else {
+        return false;
+    };
+    let mut bytes = suffix.bytes();
+    bytes
+        .next()
+        .is_some_and(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit())
+        && bytes.all(|byte| byte.is_ascii_uppercase() || byte.is_ascii_digit() || byte == b'-')
 }

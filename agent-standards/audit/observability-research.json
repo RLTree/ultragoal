@@ -19,7 +19,7 @@
     },
     {
       "standard_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/observability/mod.rs",
       "evidence_digest": "sha256:d2982eb379ba3386a9e5a2327976c0aac311e7122ede10d897c19cd68fb7f4c3",
       "audited_at": "2026-07-03T10:37:16Z",
@@ -27,7 +27,7 @@
     },
     {
       "standard_id": "harness-improvement-loop-trace-feedback-eval-codex-handoff",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/cli/improvement_loop/mod.rs",
       "evidence_digest": "sha256:28971d4975d9a3b67d48b8c5eb14855a50f060008672dfe0bb2d2e5db912cb96",
       "audited_at": "2026-07-03T10:37:16Z",

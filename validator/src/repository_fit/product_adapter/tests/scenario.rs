@@ -65,6 +65,7 @@ impl Fixture {
             )
             .unwrap();
         }
+        self.write(".gitignore", b"validation_artifacts/\n");
     }
 
     pub(super) fn plan(&self, context: &LiveContext) -> PreparedFitApply {
@@ -179,7 +180,7 @@ pub(super) fn assert_zero_write<T>(fixture: &Fixture, operation: impl FnOnce() -
     result
 }
 
-fn git(root: &Path, arguments: &[&str]) {
+pub(super) fn git(root: &Path, arguments: &[&str]) {
     let status = Command::new("git")
         .env("GIT_OPTIONAL_LOCKS", "0")
         .args(arguments)

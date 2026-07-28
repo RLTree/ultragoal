@@ -1,28 +1,36 @@
 use super::*;
 
 pub(crate) fn directory_is_empty(directory: &File) -> Result<bool, FitError> {
+    // SAFETY: `directory` owns a live descriptor; `fcntl` does not retain the borrow.
     let descriptor = unsafe { libc::fcntl(directory.as_raw_fd(), libc::F_DUPFD_CLOEXEC, 0) };
     if descriptor < 0 {
         return Err(error(FitErrorId::ReadFailed));
     }
+    // SAFETY: `descriptor` is a successful owned duplicate transferred to `fdopendir`.
     let stream = unsafe { libc::fdopendir(descriptor) };
     if stream.is_null() {
+        // SAFETY: `fdopendir` did not take ownership when it returned null.
         unsafe { libc::close(descriptor) };
         return Err(error(FitErrorId::ReadFailed));
     }
+    // SAFETY: `stream` is a non-null directory stream returned by `fdopendir`.
     unsafe { libc::rewinddir(stream) };
     let mut entries = 0usize;
     let mut name_bytes = 0usize;
     let result = loop {
+        // SAFETY: `__error` returns valid thread-local errno storage on Apple.
         unsafe { *libc::__error() = 0 };
+        // SAFETY: `stream` remains owned by this function until the final `closedir`.
         let entry = unsafe { libc::readdir(stream) };
         if entry.is_null() {
+            // SAFETY: `__error` returns valid thread-local errno storage on Apple.
             break if unsafe { *libc::__error() } == 0 {
                 Ok(true)
             } else {
                 Err(error(FitErrorId::ReadFailed))
             };
         }
+        // SAFETY: a non-null `readdir` result has a NUL-terminated name until the next stream call.
         let name = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
         entries = entries.saturating_add(1);
         name_bytes = name_bytes.saturating_add(name.len());
@@ -33,6 +41,7 @@ pub(crate) fn directory_is_empty(directory: &File) -> Result<bool, FitError> {
             break Ok(false);
         }
     };
+    // SAFETY: this function owns `stream` and closes it exactly once after enumeration.
     let closed = unsafe { libc::closedir(stream) };
     if closed != 0 {
         Err(error(FitErrorId::ReadFailed))
@@ -43,6 +52,7 @@ pub(crate) fn directory_is_empty(directory: &File) -> Result<bool, FitError> {
 
 pub(crate) fn mkdir_at(directory: &File, name: &str, mode: u32) -> Result<(), FitError> {
     let name = CString::new(name).map_err(|_| error(FitErrorId::InvalidPath))?;
+    // SAFETY: the directory descriptor is live and `name` is a NUL-terminated `CString`.
     if unsafe { libc::mkdirat(directory.as_raw_fd(), name.as_ptr(), mode as libc::mode_t) } == 0 {
         Ok(())
     } else {
@@ -57,6 +67,7 @@ pub(crate) fn mkdir_at(directory: &File, name: &str, mode: u32) -> Result<(), Fi
 
 pub(crate) fn create_file_at(directory: &File, name: &str, mode: u32) -> Result<File, FitError> {
     let name = CString::new(name).map_err(|_| error(FitErrorId::InvalidPath))?;
+    // SAFETY: the directory descriptor is live and `name` is a NUL-terminated `CString`.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -68,6 +79,7 @@ pub(crate) fn create_file_at(directory: &File, name: &str, mode: u32) -> Result<
     if descriptor < 0 {
         return Err(error(FitErrorId::EffectFailed));
     }
+    // SAFETY: successful `openat` returns a newly owned descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
@@ -101,6 +113,7 @@ pub(crate) fn rename_between(
 ) -> Result<(), FitError> {
     let source = CString::new(source).map_err(|_| error(FitErrorId::InvalidPath))?;
     let target = CString::new(target).map_err(|_| error(FitErrorId::InvalidPath))?;
+    // SAFETY: both descriptors are live and both names are NUL-terminated `CString` values.
     if unsafe {
         libc::renameatx_np(
             source_directory.as_raw_fd(),
@@ -126,6 +139,7 @@ pub(crate) fn rename_between(
 
 pub(crate) fn unlink_at(directory: &File, name: &str, flags: i32) -> Result<(), FitError> {
     let name = CString::new(name).map_err(|_| error(FitErrorId::InvalidPath))?;
+    // SAFETY: the directory descriptor is live and `name` is a NUL-terminated `CString`.
     if unsafe { libc::unlinkat(directory.as_raw_fd(), name.as_ptr(), flags) } == 0 {
         Ok(())
     } else {
@@ -140,6 +154,7 @@ pub(crate) fn unlink_at(directory: &File, name: &str, flags: i32) -> Result<(), 
 
 pub(crate) fn descriptor_path(file: &File) -> Result<PathBuf, FitError> {
     let mut buffer = [0 as libc::c_char; libc::PATH_MAX as usize];
+    // SAFETY: `file` owns a live descriptor and `buffer` is writable for `F_GETPATH`.
     if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_GETPATH, buffer.as_mut_ptr()) } < 0 {
         return Err(error(
             match std::io::Error::last_os_error().raw_os_error() {

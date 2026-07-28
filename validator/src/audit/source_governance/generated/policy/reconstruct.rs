@@ -42,6 +42,19 @@ fn current_registry_with_between(
     let mut tool_outputs = BTreeSet::new();
     for surface in registry.surfaces.values() {
         match surface {
+            GeneratedSurface::AdoptedSchemaContract {
+                output,
+                schema,
+                source_contract,
+                amendment_log,
+                ..
+            } => {
+                revalidation_paths.extend(
+                    [output, schema, source_contract, amendment_log]
+                        .into_iter()
+                        .map(|path| path.as_str().to_owned()),
+                );
+            }
             GeneratedSurface::SourceProjection {
                 output,
                 generator,

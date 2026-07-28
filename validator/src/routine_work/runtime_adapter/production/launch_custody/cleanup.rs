@@ -124,6 +124,8 @@ fn rename_exclusive(parent: &fs::File, from: &[u8], to: &[u8]) -> Result<(), Rou
         .map_err(|_| error("routine-production-launch-directory-name-invalid"))?;
     let to =
         CString::new(to).map_err(|_| error("routine-production-launch-directory-name-invalid"))?;
+    // SAFETY: `parent` is a live parent-directory descriptor; both names are
+    // validated NUL-terminated entry names and `RENAME_EXCL` prevents replacement.
     if unsafe {
         libc::renameatx_np(
             parent.as_raw_fd(),
@@ -147,6 +149,15 @@ fn rename_exclusive(_parent: &fs::File, _from: &[u8], _to: &[u8]) -> Result<(), 
 pub(in crate::routine_work::runtime_adapter::production) fn cleanup_staged(
     staged: &StagedProgram,
 ) -> Result<(), RoutineError> {
+    if ObjectIdentity::from(
+        &staged
+            .directory_file
+            .metadata()
+            .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
+    ) != staged.directory_identity
+    {
+        return Err(error("routine-production-launch-directory-mismatch"));
+    }
     cleanup_partial_stage(
         &staged.directory,
         staged.directory_identity,

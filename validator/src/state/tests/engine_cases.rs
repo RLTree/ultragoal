@@ -23,8 +23,8 @@ fn no_findings_is_an_explicit_no_op_not_completion() {
 
 #[test]
 fn contradictory_facts_are_causal_and_lower_only_mapped_dimensions() {
-    let mut spec = spec();
-    spec.dependencies = vec![
+    let mut initial = spec();
+    initial.dependencies = vec![
         DependencyFact {
             dependency_id: "dep-a".to_owned(),
             observation_id: "probe-a".to_owned(),
@@ -50,7 +50,7 @@ fn contradictory_facts_are_causal_and_lower_only_mapped_dimensions() {
             ceiling_reductions: reduction(&["runtime"]),
         },
     ];
-    let state = derive_bound(inputs(), &catalog(spec)).unwrap();
+    let state = derive_bound(inputs(), &catalog(initial)).unwrap();
     assert!(
         state
             .findings()
@@ -123,6 +123,7 @@ fn blocked_external_dependency_selects_one_exact_authority_request() {
             EffectClass::Read,
         )
         .authority_decision,
+        evidence_led: None,
     });
     let state = derive_bound(inputs(), &catalog(spec)).unwrap();
     assert_eq!(state.next_action().kind, NextActionKind::AuthorityRequest);

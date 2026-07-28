@@ -1,8 +1,8 @@
-use crate::orchestration::*;
-use crate::orchestration_fixture::{
+use super::orchestration_fixture::{
     CountingSink, LIVE_LIB_BYTES, LIVE_MANIFEST_BYTES, LIVE_PRIOR_BYTES, binding, bootstrap,
     content_digest, digest, graph_one, policy, root,
 };
+use crate::orchestration::*;
 use std::cell::Cell;
 use std::collections::BTreeMap;
 use std::fs;
@@ -17,7 +17,10 @@ pub struct JournalRoot(PathBuf);
 impl JournalRoot {
     pub fn new(label: &str) -> Self {
         let serial = NEXT_JOURNAL.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
+        let target_tmp = std::env::var_os("CARGO_TARGET_TMPDIR")
+            .map(PathBuf::from)
+            .unwrap_or_else(std::env::temp_dir);
+        let path = target_tmp.join(format!(
             "orchestration-journal-{label}-{}-{serial}",
             std::process::id()
         ));

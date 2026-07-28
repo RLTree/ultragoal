@@ -18,33 +18,29 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
-#[path = "file_ledger_reconcile_expired.rs"]
-mod file_ledger_reconcile_expired;
-#[path = "file_ledger_reserve.rs"]
-mod file_ledger_reserve;
-#[path = "file_ledger_with_held_snapshot.rs"]
-mod file_ledger_with_held_snapshot;
+#[path = "effect_settlement.rs"]
+mod effect_settlement;
 #[path = "object_identity.rs"]
 mod object_identity;
+#[path = "process_lock.rs"]
+mod process_lock;
 #[path = "record_authentication.rs"]
 mod record_authentication;
 #[path = "replay_detection.rs"]
 mod replay_detection;
-#[path = "reservation_identity.rs"]
-mod reservation_identity;
-#[path = "snapshot_decoding.rs"]
-mod snapshot_decoding;
-#[path = "store_create_exclusive.rs"]
-mod store_create_exclusive;
-#[path = "store_open.rs"]
-mod store_open;
+#[path = "reservation/mod.rs"]
+mod reservation;
+#[path = "snapshot/mod.rs"]
+mod snapshot;
+#[path = "store/mod.rs"]
+mod store;
 #[path = "transition_validation.rs"]
 mod transition_validation;
 
 pub(crate) use object_identity::*;
 pub(crate) use record_authentication::*;
 pub(crate) use replay_detection::*;
-pub(crate) use reservation_identity::*;
-pub(crate) use snapshot_decoding::*;
-pub(crate) use store_create_exclusive::*;
+pub(crate) use reservation::*;
+pub(crate) use snapshot::*;
+pub(crate) use store::*;
 pub(crate) use transition_validation::*;

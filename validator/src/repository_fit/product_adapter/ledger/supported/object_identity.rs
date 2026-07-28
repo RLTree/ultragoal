@@ -8,10 +8,12 @@ pub(crate) fn exact_identity(
 ) -> Result<FileIdentity, LedgerError> {
     let named = store.exact_stat(name)?.ok_or_else(tampered)?;
     let opened = file_identity(&file.metadata().map_err(|_| tampered())?);
+    // SAFETY: `geteuid` reads the calling process's effective UID and has no preconditions.
+    let expected_uid = unsafe { libc::geteuid() };
     if named != opened
         || opened.device != store.root_identity.device
         || opened.links != 1
-        || opened.uid != unsafe { libc::geteuid() }
+        || opened.uid != expected_uid
         || opened.mode & libc::S_IFMT as u32 != libc::S_IFREG as u32
         || opened.mode & 0o7777 != expected_mode
     {
@@ -55,6 +57,7 @@ pub(crate) fn descriptor_path(file: &File) -> Result<PathBuf, LedgerError> {
     let request = format!("/dev/fd/{}", file.as_raw_fd());
     let request = CString::new(request).map_err(|_| invalid_store())?;
     let mut buffer = vec![0_i8; libc::PATH_MAX as usize];
+    // SAFETY: `file` supplies a live descriptor, and `buffer` is writable for `PATH_MAX` bytes.
     if unsafe {
         libc::fcntl(
             file.as_raw_fd(),
@@ -65,8 +68,9 @@ pub(crate) fn descriptor_path(file: &File) -> Result<PathBuf, LedgerError> {
     {
         return Err(tampered());
     }
+    // SAFETY: successful `F_GETPATH` writes a NUL-terminated path into `buffer`.
     let path = unsafe { CStr::from_ptr(buffer.as_ptr()) };
-    if path.to_bytes().is_empty() || path.to_bytes()[0] != b'/' {
+    if path.to_bytes().first() != Some(&b'/') {
         return Err(tampered());
     }
     let _ = request;
@@ -130,6 +134,7 @@ pub(crate) fn rename_relative(
 ) -> Result<(), LedgerError> {
     let source = CString::new(source).map_err(|_| invalid_store())?;
     let target = CString::new(target).map_err(|_| invalid_store())?;
+    // SAFETY: `directory` is a live directory descriptor and both names are NUL-terminated.
     if unsafe {
         libc::renameat(
             directory.as_raw_fd(),
@@ -146,6 +151,7 @@ pub(crate) fn rename_relative(
 
 pub(crate) fn unlink_relative(directory: &File, name: &str) -> Result<(), LedgerError> {
     let name = CString::new(name).map_err(|_| invalid_store())?;
+    // SAFETY: `directory` is a live directory descriptor and `name` is NUL-terminated.
     if unsafe { libc::unlinkat(directory.as_raw_fd(), name.as_ptr(), 0) } != 0 {
         return Err(ledger_io());
     }
@@ -157,7 +163,7 @@ pub(crate) fn decode_digest(value: &str) -> Result<[u8; 32], LedgerError> {
         return Err(tampered());
     }
     let mut bytes = [0u8; 32];
-    for (index, pair) in value[7..].as_bytes().chunks_exact(2).enumerate() {
+    for (index, pair) in value.as_bytes()[7..].chunks_exact(2).enumerate() {
         let pair = std::str::from_utf8(pair).map_err(|_| tampered())?;
         bytes[index] = u8::from_str_radix(pair, 16).map_err(|_| tampered())?;
     }

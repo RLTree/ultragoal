@@ -12,6 +12,13 @@ pub(crate) fn public_router_adopts_only_live_successor_authority() {
         vec!["next"],
         vec!["--json", "inspect", "inventory"],
         vec!["package", "build", "--output", "out.json"],
+        vec![
+            "--json",
+            "package",
+            "verify",
+            "--input",
+            "target/ultragoal/package.hugpkg",
+        ],
         vec!["observe", "query"],
         vec![
             "observe",
@@ -92,7 +99,7 @@ pub(crate) fn fit_target_option_selects_the_context_root_instead_of_being_ignore
 }
 
 #[test]
-pub(crate) fn fit_apply_fails_closed_without_preprovisioned_host_authority() {
+pub(crate) fn fit_apply_fails_closed_without_existing_host_state_root() {
     let repo = Repository::new("fit-apply-authority-unavailable");
     let ParseOutcome::Invocation(plan_invocation) = parse_args(["--json", "fit", "plan"]).unwrap()
     else {
@@ -105,12 +112,8 @@ pub(crate) fn fit_apply_fails_closed_without_preprovisioned_host_authority() {
         .as_str()
         .unwrap()
         .to_owned();
-    fs::create_dir_all(repo.root.join("validation_artifacts")).unwrap();
-    fs::write(
-        repo.root.join("validation_artifacts/fit-plan.json"),
-        &plan.stdout,
-    )
-    .unwrap();
+    let plan_path = repo.root.with_extension("fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
     let before_tree = tree(&repo.root);
     let before_status = repo.status();
     let ParseOutcome::Invocation(invocation) = parse_args([
@@ -118,7 +121,7 @@ pub(crate) fn fit_apply_fails_closed_without_preprovisioned_host_authority() {
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ])
@@ -138,4 +141,5 @@ pub(crate) fn fit_apply_fails_closed_without_preprovisioned_host_authority() {
     ));
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
+    fs::remove_file(plan_path).unwrap();
 }

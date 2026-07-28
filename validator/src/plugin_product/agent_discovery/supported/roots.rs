@@ -1,3 +1,4 @@
+use super::root_distinctness::require_distinct_authority_roots;
 use super::root_identity_codec::{RootIdentityCodecRequest, encode};
 use super::{MAX_HOST_AGENT_ENTRIES, conflict};
 use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
@@ -10,7 +11,6 @@ use crate::plugin_product::agent_discovery::model::{
 use std::collections::BTreeSet;
 use std::ffi::{OsStr, OsString};
 use std::path::{Path, PathBuf};
-
 /// Explicit roots for one source-local supported-host observation transaction.
 #[derive(Clone, Debug)]
 pub struct SupportedHostAgentRoots {
@@ -20,7 +20,6 @@ pub struct SupportedHostAgentRoots {
     global_root: PathBuf,
     project_root: PathBuf,
 }
-
 impl SupportedHostAgentRoots {
     pub fn new(
         package_root: impl Into<PathBuf>,
@@ -38,7 +37,6 @@ impl SupportedHostAgentRoots {
         }
     }
 }
-
 #[derive(Clone)]
 pub(super) struct SupportedRootSet {
     package: PluginAuthorityRoot,
@@ -47,18 +45,24 @@ pub(super) struct SupportedRootSet {
     global: GlobalAuthorityRoot,
     project: PluginAuthorityRoot,
 }
-
 impl SupportedRootSet {
     pub(super) fn open(roots: &SupportedHostAgentRoots) -> Result<Self, AgentDiscoveryError> {
-        Ok(Self {
+        let roots = Self {
             package: PluginAuthorityRoot::open(&roots.package_root)?,
             installed: PluginAuthorityRoot::open(&roots.installed_root)?,
             cache: PluginAuthorityRoot::open(&roots.cache_root)?,
             global: GlobalAuthorityRoot::open(&roots.global_root)?,
             project: PluginAuthorityRoot::open(&roots.project_root)?,
-        })
+        };
+        require_distinct_authority_roots(
+            &roots.package,
+            &roots.installed,
+            &roots.cache,
+            &roots.global,
+            &roots.project,
+        )?;
+        Ok(roots)
     }
-
     pub(super) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
         self.package.revalidate()?;
         self.installed.revalidate()?;
@@ -66,7 +70,6 @@ impl SupportedRootSet {
         self.global.revalidate()?;
         self.project.revalidate()
     }
-
     pub(super) fn identity_sha256(&self) -> String {
         let package = self.package.identity_sha256();
         let installed = self.installed.identity_sha256();
@@ -83,7 +86,6 @@ impl SupportedRootSet {
         .expect("fixed root identity tuple serializes")
         .sha256()
     }
-
     pub(super) fn capture(
         &self,
         layer: AgentAuthorityLayer,
@@ -97,10 +99,9 @@ impl SupportedRootSet {
         }
     }
 }
-
 #[derive(Clone)]
-struct PluginAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct PluginAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
     plugin: AnchoredDirectory,
 }
@@ -160,8 +161,8 @@ impl PluginAuthorityRoot {
 }
 
 #[derive(Clone)]
-struct GlobalAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct GlobalAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
 }
 

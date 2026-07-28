@@ -1,12 +1,15 @@
 const MARKETPLACE_LIMIT: usize = 1024 * 1024;
 
 pub trait MarketplaceEffects {
-    fn read(&mut self, maximum: usize) -> Result<Option<Vec<u8>>, ()>;
+    fn read(
+        &mut self,
+        maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure>;
     fn compare_exchange(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()>;
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 pub fn apply_marketplace(
@@ -17,10 +20,17 @@ pub fn apply_marketplace(
     if before.as_deref().map(sha256).as_deref() != plan.expected_sha256() {
         return Err(error(DistributionErrorId::InstallConflict));
     }
+    if before.as_deref() == Some(plan.replacement()) {
+        return Ok(MarketplaceTransaction::new(
+            sha256(plan.replacement()),
+            before,
+            false,
+        ));
+    }
     match effects.compare_exchange(plan.expected_sha256(), Some(plan.replacement())) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let after = match read_marketplace(effects) {
         Ok(value) => value,
@@ -36,6 +46,7 @@ pub fn apply_marketplace(
     Ok(MarketplaceTransaction::new(
         sha256(plan.replacement()),
         before,
+        true,
     ))
 }
 
@@ -62,6 +73,6 @@ fn restore_marketplace(
     match effects.compare_exchange(Some(&candidate), plan.rollback.as_deref()) {
         Ok(true) => Ok(()),
         Ok(false) => Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => Err(error(DistributionErrorId::RollbackFailed)),
+        Err(_) => Err(error(DistributionErrorId::RollbackFailed)),
     }
 }

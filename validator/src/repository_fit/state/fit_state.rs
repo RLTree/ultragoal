@@ -20,6 +20,19 @@ impl FitPlan {
     pub fn rollback_plan(&self) -> &RollbackPlan {
         &self.rollback
     }
+
+    pub(crate) fn all_mutations(&self) -> Vec<Mutation> {
+        self.mutations
+            .iter()
+            .cloned()
+            .chain(
+                self.local_state
+                    .as_ref()
+                    .and_then(|state| state.mutation.as_ref())
+                    .cloned(),
+            )
+            .collect()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

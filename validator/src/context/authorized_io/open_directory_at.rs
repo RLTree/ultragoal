@@ -8,10 +8,13 @@ pub(crate) fn open_directory_at(
 ) -> Result<File, ContextError> {
     let name = c_name(name, target)?;
     let flags = O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC;
+    // SAFETY: `directory` is an owned descriptor, `name` remains valid for the
+    // call, and all flags are fixed descriptor-confinement flags.
     let descriptor = unsafe { openat(directory.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return Err(io_error(target, std::io::Error::last_os_error()));
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
@@ -23,10 +26,13 @@ pub(crate) fn open_regular_at(
 ) -> Result<File, ContextError> {
     let name = c_name(name, target)?;
     let flags = O_RDONLY | O_NOFOLLOW | O_CLOEXEC;
+    // SAFETY: `directory` is an owned descriptor, `name` remains valid for the
+    // call, and all flags are fixed descriptor-confinement flags.
     let descriptor = unsafe { openat(directory.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return Err(io_error(target, std::io::Error::last_os_error()));
     }
+    // SAFETY: `openat` returned a new owned nonnegative descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 

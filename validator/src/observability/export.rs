@@ -22,26 +22,28 @@ pub trait ExportAdapter {
     ) -> Result<Vec<String>, String>;
 }
 
+pub struct ExplicitExportRequest<'a> {
+    pub query: &'a EventQuery,
+    pub configured: bool,
+    pub consent_granted: bool,
+    pub timeout: Duration,
+    pub adapter: Option<&'a mut dyn ExportAdapter>,
+}
+
 impl EventStore {
-    #[allow(clippy::too_many_arguments)]
-    pub fn export_explicit(
-        &self,
-        query: &EventQuery,
-        configured: bool,
-        consent_granted: bool,
-        timeout: Duration,
-        adapter: Option<&mut dyn ExportAdapter>,
-    ) -> Result<usize, String> {
-        if !configured {
+    pub fn export_explicit(&self, request: ExplicitExportRequest<'_>) -> Result<usize, String> {
+        if !request.configured {
             return Err("observe-export-disabled: explicit configuration is required".to_owned());
         }
-        if !consent_granted {
+        if !request.consent_granted {
             return Err("observe-export-consent-denied: explicit consent is required".to_owned());
         }
-        if timeout.is_zero() || timeout > Duration::from_secs(60) {
+        if request.timeout.is_zero() || request.timeout > Duration::from_secs(60) {
             return Err("observe-export-timeout-invalid".to_owned());
         }
-        let adapter = adapter.ok_or_else(|| "observe-export-adapter-absent".to_owned())?;
+        let adapter = request
+            .adapter
+            .ok_or_else(|| "observe-export-adapter-absent".to_owned())?;
         privacy::validate_identifier("export-adapter-id", adapter.adapter_id())?;
         if !adapter.is_available() {
             return Err("observe-export-adapter-unavailable".to_owned());
@@ -52,7 +54,7 @@ impl EventStore {
         if adapter.bound_candidate_id() != self.candidate_id {
             return Err("observe-export-wrong-candidate".to_owned());
         }
-        let events = self.query(query)?;
+        let events = self.query(request.query)?;
         let safe_events = events
             .iter()
             .map(SemanticEvent::sanitized_for_export)
@@ -67,18 +69,19 @@ impl EventStore {
         }
         let started = Instant::now();
         let accepted = adapter
-            .export(&safe_events, timeout)
+            .export(&safe_events, request.timeout)
             .map_err(|_| "observe-export-adapter-outage".to_owned())?;
-        ensure_within_timeout(started, timeout)?;
+        ensure_within_timeout(started, request.timeout)?;
         reconcile_ids(&ids, &accepted, "acceptance")?;
-        let remaining = timeout
+        let remaining = request
+            .timeout
             .checked_sub(started.elapsed())
             .filter(|remaining| !remaining.is_zero())
             .ok_or_else(|| "observe-export-timeout".to_owned())?;
         let acknowledged = adapter
             .reconcile(&self.candidate_id, &ids, remaining)
             .map_err(|_| "observe-export-reconciliation-outage".to_owned())?;
-        ensure_within_timeout(started, timeout)?;
+        ensure_within_timeout(started, request.timeout)?;
         reconcile_ids(&ids, &acknowledged, "roundtrip")?;
         Ok(ids.len())
     }

@@ -1,11 +1,11 @@
 use super::*;
 
-pub(crate) const BASE: &str = ".git/codex-scratch/observability/public-diagnosis-107";
+pub(crate) const BASE: &str = "harness-ultragoal-observability-tests";
 pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const PRIVATE_TOKEN: &str = "sk-public-diagnosis-private-107";
 pub(crate) const PRIVATE_PATH: &str = "/Users/private/public-diagnosis-107";
 pub(crate) const PRIVATE_EMAIL: &str = "public-diagnosis-107@example.invalid";
-pub(crate) const STORE: &str = "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(crate) const STORE_PARENT: &str = "validation_artifacts/observability/spool";
 pub(crate) static NEXT: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Debug)]
@@ -22,22 +22,21 @@ pub(crate) struct SelectedFinding {
 }
 
 pub(crate) struct Repository {
-    pub(crate) container: PathBuf,
+    scratch: crate::observability_fixture_scratch::ScratchDirectory,
     pub(crate) root: PathBuf,
 }
 
 impl Repository {
     pub(crate) fn new(label: &str, conflict: bool, dirty: bool) -> Self {
-        let container = live_root().join(BASE).join(format!(
-            "{}-{}-{}",
-            safe_label(label),
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        let root = container.join("repo");
+        let scratch = crate::observability_fixture_scratch::ScratchDirectory::new(
+            "public-diagnosis-107",
+            &safe_label(label),
+            NEXT.fetch_add(1, Ordering::Relaxed),
+        );
+        let root = scratch.container().join("repo");
         fs::create_dir_all(&root).unwrap();
         let root = fs::canonicalize(root).unwrap();
-        let repository = Self { container, root };
+        let repository = Self { scratch, root };
         repository.git(&["init", "--quiet"]);
         repository.git(&["config", "user.email", "public-diagnosis@example.invalid"]);
         repository.git(&["config", "user.name", "Public Diagnosis"]);
@@ -62,6 +61,10 @@ impl Repository {
         }
         repository.git(&["add", "-A"]);
         repository.git(&["commit", "--quiet", "-m", "fixture"]);
+        crate::observability_authority_fixture::establish_fixture_authority(
+            &live_root(),
+            repository.root(),
+        );
         if dirty {
             fs::write(
                 repository.root.join("tracked.txt"),
@@ -77,12 +80,19 @@ impl Repository {
         &self.root
     }
 
-    pub(crate) fn store_path(&self) -> PathBuf {
-        self.root.join(STORE)
+    pub(crate) fn store_path(&self, binding: &Binding) -> PathBuf {
+        self.root.join(STORE_PARENT).join(
+            EventStore::binding_leaf_name(
+                &binding.context_id,
+                &binding.candidate_id,
+                &binding.source_id,
+            )
+            .unwrap(),
+        )
     }
 
     pub(crate) fn outside(&self, name: &str) -> PathBuf {
-        self.container.join(name)
+        self.scratch.container().join(name)
     }
 
     pub(crate) fn run(&self, args: &[&str]) -> Output {
@@ -132,12 +142,8 @@ impl Repository {
             .unwrap();
         assert!(output.status.success(), "git {args:?}: {output:?}");
     }
-}
-
-impl Drop for Repository {
-    fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(live_root().join(BASE)));
-        let _ = fs::remove_dir_all(&self.container);
+    pub(crate) fn teardown(self) {
+        self.scratch.teardown();
     }
 }
 
@@ -149,9 +155,9 @@ pub(crate) fn live_root() -> PathBuf {
 }
 
 pub(crate) fn open_store(repository: &Repository, binding: &Binding) -> EventStore {
-    fs::create_dir_all(repository.store_path().parent().unwrap()).unwrap();
+    fs::create_dir_all(repository.store_path(binding).parent().unwrap()).unwrap();
     EventStore::open_bound(
-        repository.store_path(),
+        repository.store_path(binding),
         &binding.context_id,
         &binding.candidate_id,
         &binding.source_id,
@@ -166,52 +172,20 @@ pub(crate) fn event(
     operation: &str,
     outcome: &str,
 ) -> SemanticEvent {
-    SemanticEvent::new(
-        &binding.context_id,
-        &binding.candidate_id,
-        &binding.source_id,
-        id,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: binding.context_id.clone(),
+        candidate_id: binding.candidate_id.clone(),
+        source_id: binding.source_id.clone(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: sequence,
         sequence,
-        sequence,
-        operation,
-        outcome,
-    )
+        operation: operation.to_owned(),
+        outcome: outcome.to_owned(),
+    })
     .unwrap()
 }
 
 pub(crate) fn copy_authority_inputs(root: &Path) {
     let live = live_root();
-    let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
-    fs::create_dir_all(&target).unwrap();
-    let mut files = fs::read_dir(&source)
-        .unwrap()
-        .map(|entry| entry.unwrap().path())
-        .filter(|path| path.is_file())
-        .collect::<Vec<_>>();
-    files.sort();
-    for path in files {
-        fs::copy(&path, target.join(path.file_name().unwrap())).unwrap();
-    }
-    for name in ["FINAL-HANDOFF-MANIFEST.sha256", "README.md"] {
-        fs::copy(
-            source.parent().unwrap().join(name),
-            target.parent().unwrap().join(name),
-        )
-        .unwrap();
-    }
-    fs::create_dir_all(root.join("migration")).unwrap();
-    for name in ["authority-routes.json", "generated-surface-authority.json"] {
-        fs::copy(
-            live.join("migration").join(name),
-            root.join("migration").join(name),
-        )
-        .unwrap();
-    }
-    fs::create_dir_all(root.join(".codex-plugin")).unwrap();
-    fs::write(
-        root.join(".codex-plugin/plugin.json"),
-        b"{\"name\":\"harness-ultragoal\",\"version\":\"0.0.0-test\"}\n",
-    )
-    .unwrap();
+    crate::observability_authority_fixture::copy_current_inventory_inputs(&live, root);
 }

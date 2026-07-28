@@ -68,6 +68,7 @@ impl PublicationClassification {
     }
 }
 
+#[cfg(test)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum RecoveryProposalAction {
@@ -76,6 +77,7 @@ pub(crate) enum RecoveryProposalAction {
     ReconcileCommittedStateBeforeAcknowledgement,
 }
 
+#[cfg(test)]
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct RecoveryProposal {
     action: RecoveryProposalAction,
@@ -84,6 +86,7 @@ pub(crate) struct RecoveryProposal {
     automatic_cleanup: bool,
 }
 
+#[cfg(test)]
 impl RecoveryProposal {
     pub(crate) const fn action(&self) -> RecoveryProposalAction {
         self.action
@@ -94,6 +97,7 @@ impl RecoveryProposal {
     }
 }
 
+#[cfg(test)]
 pub(super) struct RecoveryAuthorization {
     schema_version: String,
     classification_sha256: String,
@@ -105,6 +109,7 @@ pub(super) struct RecoveryAuthorization {
     authorization_sha256: String,
 }
 
+#[cfg(test)]
 pub(super) fn issue_recovery_authorization(
     classification: &PublicationClassification,
     coordinator_binding_sha256: &str,

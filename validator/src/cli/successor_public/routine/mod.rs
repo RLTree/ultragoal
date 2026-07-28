@@ -21,25 +21,33 @@ use crate::context::{BuildRequest, LiveContext, ToolCapability};
 use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
-    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, RepoPath,
-    RoutineAdapterSpec, RoutineCancellation, RoutineInvocationSpec, RoutinePlan, RoutineReuseInput,
+    ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionExecutionControl,
+    PublicRoutineControl, RepoPath, RoutineAdapterSpec, RoutineInvocationSpec, RoutinePlan,
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
-    bind_rust_source_syntax_invocation, load_production_catalog, mediate_public_routine_execution,
-    plan_routine, prepare_routine_execution, validate_immutable_routine_program,
+    bind_rust_source_syntax_invocation, load_production_catalog,
+    mediate_public_routine_execution_with_control, plan_routine, prepare_routine_execution,
+    reconcile_public_routine_reservation, validate_immutable_routine_program,
 };
 use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+#[path = "source/diagnosis.rs"]
+mod diagnosis;
 #[path = "invocation_binding.rs"]
 mod invocation_binding;
-#[path = "source_configuration.rs"]
+#[path = "source/observability_context.rs"]
+mod observability_context;
+#[path = "source/configuration.rs"]
 mod source_configuration;
-#[path = "source_context.rs"]
+#[path = "source/context.rs"]
 mod source_context;
-#[path = "source_selection.rs"]
+#[path = "source/selection.rs"]
 mod source_selection;
 
+pub(crate) use diagnosis::*;
+pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;
+pub(crate) use observability_context::*;
 pub(crate) use source_configuration::*;
 pub(crate) use source_selection::*;

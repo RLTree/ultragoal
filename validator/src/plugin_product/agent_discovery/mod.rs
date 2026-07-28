@@ -15,9 +15,12 @@ mod session;
 mod source;
 mod supported;
 
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
 pub(crate) use local_authority::{
-    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, LocalAgentRoleObservation,
-    observe_local_authority,
+    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };
 
 #[cfg(all(test, unix))]
@@ -34,17 +37,12 @@ pub use host::{
     HostAgentAuthorityTransactionError, ReadOnlyEffectEnforcement, ReadOnlyEffectRequest,
 };
 #[cfg(test)]
-pub use model::{
-    AgentAuthorityLayer, AgentLayerObservation, AgentRouteEligibility, CanonicalAgentObservation,
-    HostFileKind,
-};
+pub use model::AgentAuthorityLayer;
 #[cfg(test)]
 pub use session::AgentDiscoverySession;
 #[cfg(test)]
 pub use source::SourceAgentCatalog;
 #[cfg(test)]
 pub use supported::{
-    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
-    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReader,
-    SupportedHostAgentAuthorityReport, SupportedHostAgentRoots,
+    SupportedAgentAuthorityFindingKind, SupportedHostAgentAuthorityReader, SupportedHostAgentRoots,
 };

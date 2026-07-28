@@ -53,7 +53,7 @@ pub(super) enum AgentProtocolCodecRequest<'a> {
 
 pub(super) enum AgentProtocolCodecResponse {
     Digest(String),
-    Catalog(RawLayerCatalog),
+    Catalog(Box<RawLayerCatalog>),
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -180,6 +180,7 @@ fn execute(
         }
         AgentProtocolCodecRequest::DecodeCatalog { bytes } => {
             return serde_json::from_slice(bytes)
+                .map(Box::new)
                 .map(AgentProtocolCodecResponse::Catalog)
                 .map_err(|_| AgentProtocolCodecError::Decode);
         }
@@ -190,7 +191,7 @@ fn execute(
 
 pub(super) fn decode_catalog(bytes: &[u8]) -> Result<RawLayerCatalog, AgentProtocolCodecError> {
     match execute(AgentProtocolCodecRequest::DecodeCatalog { bytes })? {
-        AgentProtocolCodecResponse::Catalog(catalog) => Ok(catalog),
+        AgentProtocolCodecResponse::Catalog(catalog) => Ok(*catalog),
         AgentProtocolCodecResponse::Digest(_) => Err(AgentProtocolCodecError::Decode),
     }
 }

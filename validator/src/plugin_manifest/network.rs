@@ -46,7 +46,7 @@ pub(crate) fn https(value: &str) -> bool {
         return false;
     };
     let end = rest
-        .find(|character| matches!(character, '/' | '?' | '#'))
+        .find(|character| ['/', '?', '#'].contains(&character))
         .unwrap_or(rest.len());
     let authority = &rest[..end];
     if authority.is_empty() || authority.contains('@') || authority.starts_with('[') {

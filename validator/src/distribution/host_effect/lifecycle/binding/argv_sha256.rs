@@ -1,31 +1,3 @@
-fn argv_sha256(plan: &HostCommandPlan) -> Result<String, SupportedHostLifecycleError> {
-    #[derive(Serialize)]
-    struct ExactArgv<'a> {
-        schema: &'static str,
-        commands: &'a [crate::distribution::HostCommand],
-        shell: bool,
-        inherited_environment: bool,
-        output_limit_bytes: u64,
-        timeout_required: bool,
-    }
-    if plan.commands().is_empty()
-        || plan
-            .commands()
-            .iter()
-            .any(|command| command.program() != "codex" || command.argv().is_empty())
-    {
-        return Err(invalid());
-    }
-    digest_json(&ExactArgv {
-        schema: "harness-ultragoal.exact-host-command-argv.v1",
-        commands: plan.commands(),
-        shell: false,
-        inherited_environment: false,
-        output_limit_bytes: 1024 * 1024,
-        timeout_required: true,
-    })
-}
-
 fn validate_name(value: &str) -> Result<(), SupportedHostLifecycleError> {
     if value.is_empty()
         || value.len() > 128
@@ -41,8 +13,6 @@ fn validate_name(value: &str) -> Result<(), SupportedHostLifecycleError> {
 fn project_identity(value: &str) -> Result<String, SupportedHostLifecycleError> {
     let canonical = Path::new(value).canonicalize().map_err(|_| invalid())?;
     if Path::new(value) != canonical {
-        // The argv path itself is effectful input. Reject aliases so a stable
-        // target descriptor cannot be paired with a later-resolved symlink.
         return Err(invalid());
     }
     let metadata = std::fs::symlink_metadata(&canonical).map_err(|_| invalid())?;

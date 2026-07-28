@@ -55,8 +55,7 @@ impl<E> ScopedEffects<E> {
         authorized_target: TargetCapture,
     ) -> Self {
         let allowed = request
-            .plan
-            .mutations
+            .all_mutations()
             .iter()
             .map(|mutation| AllowedMutation {
                 path: mutation.path.clone(),
@@ -71,12 +70,7 @@ impl<E> ScopedEffects<E> {
             inner,
             allowed,
             root: root.to_path_buf(),
-            target_paths: request
-                .desired
-                .files
-                .iter()
-                .map(|file| file.path.clone())
-                .collect(),
+            target_paths: request.target_paths(),
             target_prestate,
             authorized_target,
             scope_violation: false,

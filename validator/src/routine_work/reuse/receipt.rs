@@ -62,12 +62,7 @@ impl ReuseReceipt {
         canonical(&wire(
             expectation,
             ReceiptState::Started,
-            RunOutcome::Interrupted,
-            false,
-            sha256(b"no-completed-behavior"),
-            BTreeMap::new(),
-            sha256(b"no-result-artifact"),
-            sha256(b"no-producer-capture"),
+            ReceiptContents::started(),
         ))
     }
 
@@ -90,35 +85,60 @@ pub(super) fn completed_bytes(
     canonical(&wire(
         expectation,
         ReceiptState::Complete,
-        work.facts.outcome,
-        work.facts.behavior_observed,
-        work.facts.behavior_sha256.clone(),
-        work.facts.output_digests.clone(),
-        work.facts.result_artifact_sha256.clone(),
-        work.capture_run_sha256.clone(),
+        ReceiptContents::from(work),
     ))
 }
 
-fn wire(
-    expectation: &ReuseExpectation,
-    state: ReceiptState,
+struct ReceiptContents {
     outcome: RunOutcome,
     behavior_observed: bool,
     behavior_sha256: String,
     output_digests: BTreeMap<String, String>,
     result_artifact_sha256: String,
     producer_capture_run_sha256: String,
+}
+
+impl ReceiptContents {
+    fn started() -> Self {
+        Self {
+            outcome: RunOutcome::Interrupted,
+            behavior_observed: false,
+            behavior_sha256: sha256(b"no-completed-behavior"),
+            output_digests: BTreeMap::new(),
+            result_artifact_sha256: sha256(b"no-result-artifact"),
+            producer_capture_run_sha256: sha256(b"no-producer-capture"),
+        }
+    }
+}
+
+impl From<&ExecutedWork> for ReceiptContents {
+    fn from(work: &ExecutedWork) -> Self {
+        Self {
+            outcome: work.facts.outcome,
+            behavior_observed: work.facts.behavior_observed,
+            behavior_sha256: work.facts.behavior_sha256.clone(),
+            output_digests: work.facts.output_digests.clone(),
+            result_artifact_sha256: work.facts.result_artifact_sha256.clone(),
+            producer_capture_run_sha256: work.capture_run_sha256.clone(),
+        }
+    }
+}
+
+fn wire(
+    expectation: &ReuseExpectation,
+    state: ReceiptState,
+    contents: ReceiptContents,
 ) -> ReceiptWire {
     ReceiptWire {
         schema_version: "VerifiedReuse-v2".to_owned(),
         binding: expectation.binding.clone(),
         state,
-        outcome,
-        behavior_observed,
-        behavior_sha256,
-        output_digests,
-        result_artifact_sha256,
-        producer_capture_run_sha256,
+        outcome: contents.outcome,
+        behavior_observed: contents.behavior_observed,
+        behavior_sha256: contents.behavior_sha256,
+        output_digests: contents.output_digests,
+        result_artifact_sha256: contents.result_artifact_sha256,
+        producer_capture_run_sha256: contents.producer_capture_run_sha256,
     }
 }
 

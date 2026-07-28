@@ -288,7 +288,7 @@ Operationalized objectives:
 ## Gold-Standard Stack Developer Experience Addendum
 
 The archive
-`/Users/terrynoblin/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
+`<operator-home>/Downloads/harness_ultragoal_gold_standard_stack_markdown_and_laws.zip`
 is a second synthesis input for execution planning. It is not primary authority
 for exact external version pins, but its HU-STACK laws, command loops,
 proof-surface separation, cache/resource/GC discipline, supply-chain baseline,

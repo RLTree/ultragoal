@@ -1,5 +1,82 @@
 use super::*;
 
+#[cfg(unix)]
+use std::ffi::CString;
+#[cfg(unix)]
+use std::os::unix::ffi::OsStrExt;
+
+#[cfg(unix)]
+pub(crate) fn open_staged_parent(path: &Path) -> Result<(File, CString), String> {
+    if !path.is_absolute() {
+        return Err("staged publication path is not absolute".to_owned());
+    }
+    let parent = path
+        .parent()
+        .ok_or_else(|| "staged publication parent is absent".to_owned())?;
+    let name = path
+        .file_name()
+        .ok_or_else(|| "staged publication leaf is absent".to_owned())?;
+    let name = CString::new(name.as_bytes())
+        .map_err(|_| "staged publication leaf contains NUL".to_owned())?;
+    let mut current =
+        File::open("/").map_err(|_| "staged publication root open failed".to_owned())?;
+    for component in parent.components() {
+        use std::path::Component;
+        let Component::Normal(component) = component else {
+            if matches!(component, Component::RootDir) {
+                continue;
+            }
+            return Err("staged publication parent is not canonical".to_owned());
+        };
+        let component = CString::new(component.as_bytes())
+            .map_err(|_| "staged publication parent contains NUL".to_owned())?;
+        current = open_staged_leaf(
+            &current,
+            &component,
+            0x0000 | DIRECTORY_FLAG | no_follow_nonblock_flags(),
+            0,
+        )
+        .map_err(|_| "staged publication parent open failed closed".to_owned())?;
+        if !current
+            .metadata()
+            .map_err(|_| "staged publication parent metadata unavailable".to_owned())?
+            .is_dir()
+        {
+            return Err("staged publication parent component is not a directory".to_owned());
+        }
+    }
+    Ok((current, name))
+}
+
+#[cfg(unix)]
+pub(crate) fn verify_staged_publication_path(
+    path: &Path,
+    expected_parent: &File,
+    expected_leaf: &fs::Metadata,
+) -> Result<(), String> {
+    let (parent, name) = open_staged_parent(path)?;
+    let parent_metadata = parent
+        .metadata()
+        .map_err(|_| "final staged publication parent metadata unavailable".to_owned())?;
+    let expected_parent_metadata = expected_parent
+        .metadata()
+        .map_err(|_| "expected staged publication parent metadata unavailable".to_owned())?;
+    if parent_metadata.dev() != expected_parent_metadata.dev()
+        || parent_metadata.ino() != expected_parent_metadata.ino()
+    {
+        return Err("staged publication path parent changed".to_owned());
+    }
+    let leaf = open_staged_leaf(&parent, &name, 0x0000 | no_follow_nonblock_flags(), 0)
+        .map_err(|_| "final staged publication leaf unavailable".to_owned())?;
+    let leaf_metadata = leaf
+        .metadata()
+        .map_err(|_| "final staged publication leaf metadata unavailable".to_owned())?;
+    if identity(&leaf_metadata) != identity(expected_leaf) {
+        return Err("staged publication path leaf changed".to_owned());
+    }
+    Ok(())
+}
+
 pub(crate) fn stage_manifest_sources_after_cleanup<F>(
     manifest_bytes: &[u8],
     templates: &Path,

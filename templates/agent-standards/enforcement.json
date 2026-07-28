@@ -216,7 +216,7 @@
       "source_law": "Gate 89 mandatory law: CLI Control Plane Authority",
       "required_behavior": "Harness Ultragoal claims must be computed, minted, or verified by the installed CLI control plane from typed current inputs; prose, checklist, reviewer agreement, source-only proof, install proof, cache proof, packet existence, or claim-ceiling text cannot satisfy completion, package, review, readiness, release, app, registry, reviewer, or update_goal claims.",
       "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
+      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
       "current_status": "active",
@@ -244,7 +244,7 @@
       "source_law": "Gate 89 mandatory law: CLI Self Law Compliance",
       "required_behavior": "The CLI, validator source, schemas, receipts, fixtures, reports, package inventory, generated hooks, command wrappers, init or retrofit outputs, configuration, product surfaces, and documentation must obey every law the CLI enforces; bootstrap, transition-only, source-only, target-only, stale, copied, or non-current proof cannot support completion, package, review, release, registry, app, reviewer, product, or update_goal claims.",
       "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/cli/control/plane/proof/transaction.rs",
+      "gate_or_fixture_path": "validator/src/audit/cli/control_plane/authority/receipt/mod.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release, app-registry, reviewer-exposure, update_goal",
       "current_status": "active",
@@ -538,7 +538,7 @@
     {
       "id": "full-local-observability-stack-integration-non-opaque-failure",
       "source_law": "mandatory law: Full Local Observability Stack Integration And Non-Opaque Failure",
-      "required_behavior": "Every law-bearing CLI/check/proof path must emit typed logs, metrics, traces, diagnostics, query hints, redaction/bounds proof, and current observability receipt binding.",
+      "required_behavior": "Every law-bearing command emits a typed redacted diagnostic envelope. Durable logs are required for effects or reconstruction, metrics for aggregate rate latency capacity or saturation claims, traces for multi-step or cross-process causality, and evals for model-behavior or improvement claims. All four channels join only for the observability capability claim and representative product or release proof.",
       "enforcement_status": "mechanized",
       "gate_or_fixture_path": "validator/src/audit/observability/mod.rs",
       "owner_lane": "root",
@@ -692,13 +692,13 @@
     {
       "id": "lane-worktree-isolation-cleanup",
       "source_law": "source obligation: Lane Worktree Isolation Cleanup",
-      "required_behavior": "Lane Worktree Isolation Cleanup must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
+      "required_behavior": "Lane Worktree Isolation Cleanup keeps branches, worktrees, state, artifacts, caches, processes, resource limits, and cleanup lane-local. Concurrent isolated builds are permitted. A session must not invent host-global build or test authority, require permission handshakes from unrelated sessions, or block their independent execution unless the user explicitly establishes a host-global coordination contract.",
       "enforcement_status": "mechanized",
       "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
       "owner_lane": "root",
       "claim_ids_affected": "completion, review, package, readiness, release",
       "current_status": "active",
-      "blocker_or_repair_action": "Run mandatory-law surface validation; fixture_only.",
+      "blocker_or_repair_action": "Remove invented host-global build or test slots and unrelated-session permission handshakes; keep resource limits and cleanup lane-local unless the user explicitly establishes a host-global coordination contract.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]
@@ -1500,20 +1500,6 @@
       "claim_ids_affected": "completion, review, package, readiness, release",
       "current_status": "active",
       "blocker_or_repair_action": "Run mandatory-law surface validation; subagent_claims_withheld_without_explicit_budgeted_reconciled_parent_synthesis.",
-      "required_execplan_refs": [
-        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
-      ]
-    },
-    {
-      "id": "target-repo-audit-capability",
-      "source_law": "mandatory law: Target Repo Audit Capability",
-      "required_behavior": "Target Repo Audit Capability must be enforced through typed receipts, validator checks, red fixtures, valid fixtures, and claim-ceiling guards.",
-      "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
-      "owner_lane": "root",
-      "claim_ids_affected": "completion, review, package, readiness, release",
-      "current_status": "active",
-      "blocker_or_repair_action": "Run mandatory-law surface validation; target_repo_claims_withheld_without_exact_target_capability_receipt.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]

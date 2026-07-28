@@ -1,5 +1,5 @@
 fn exact_reader(
-    source: &crate::agent_discovery::SourceAgentCatalog,
+    source: &super::super::SourceAgentCatalog,
     host: &SupportedHostFixture,
 ) -> SupportedHostAgentAuthorityReader {
     SupportedHostAgentAuthorityReader::open(source.clone(), host.roots()).unwrap()

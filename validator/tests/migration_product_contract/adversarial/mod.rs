@@ -4,7 +4,10 @@ use crate::migration::product::{
     ProductMigrationPlanProjection, apply_product_plan, derive_product_plan,
     issue_apply_authorization, recover_product_operation,
 };
-use crate::migration::{InventorySurface, MigrationInventory, SurfaceFileKind, SurfaceStatus};
+use crate::migration::{
+    InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,
+    SurfaceStatus,
+};
 use serde_json::json;
 use std::sync::{Arc, Barrier};
 use std::thread;
@@ -28,3 +31,5 @@ include!(
 );
 
 include!("filesystem_alias_special_hardlink_traversal_and_unicode_inputs_are_rejected.rs");
+
+include!("semantic_authority_observation_cannot_authorize_an_effect.rs");

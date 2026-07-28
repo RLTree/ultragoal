@@ -21,6 +21,12 @@ working tree, state roots, artifact roots, ports, caches, scratch paths,
 credentials, and mutable runtime state.
 
 - Agents preserve user changes and never sweep unrelated files into their work.
+- Resource limits, build concurrency, and process cleanup are lane-local unless
+  the user explicitly establishes a host-global coordination contract. No
+  session may invent a host-global build or test slot, require permission
+  handshakes from unrelated sessions, or block their independent execution.
+  Concurrent isolated builds are permitted; each lane bounds and cleans up only
+  the processes and artifacts it owns.
 - Dirty worktrees, foreign edits, and stale state roots are blockers or
   coordination points, not reasons to widen scope.
 - Teardown preserves only irreproducible evidence that still anchors an active

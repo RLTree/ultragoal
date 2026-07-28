@@ -98,12 +98,12 @@ pub(crate) fn descriptor_capture_rejects_parent_leaf_and_missing_boundary_hybrid
     assert_target_capture_hook_consumed_for_test();
     assert_eq!(failure.id(), AdapterErrorId::TargetUnavailable);
 
-    let shared = Fixture::new("descriptor-shared-ancestor-race");
-    shared.install_all();
-    let context = shared.context();
-    let request = shared.request(&context);
-    let active = shared.root.join("agent-standards");
-    let displaced = shared.container.join("descriptor-shared-a");
+    let race_fixture = Fixture::new("descriptor-shared-ancestor-race");
+    race_fixture.install_all();
+    let context = race_fixture.context();
+    let request = race_fixture.request(&context);
+    let active = race_fixture.root.join("agent-standards");
+    let displaced = race_fixture.container.join("descriptor-shared-a");
     let attacker =
         arm_capture_barrier(TargetCapturePhase::BeforeFinalChainRecheck, "", move || {
             replace_directory_preserving_children(&active, &displaced)
@@ -111,7 +111,7 @@ pub(crate) fn descriptor_capture_rejects_parent_leaf_and_missing_boundary_hybrid
     let failure = match new_authority().issue(
         &context,
         &request,
-        shared.effects(&request),
+        race_fixture.effects(&request),
         10,
         20,
         &nonce("descriptor-shared-ancestor-race"),

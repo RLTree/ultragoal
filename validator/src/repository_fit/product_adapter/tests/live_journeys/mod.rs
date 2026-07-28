@@ -31,6 +31,4 @@ mod race_after_effect_is_ambiguous_and_fresh_replanning_recovers;
 #[path = "scenario_fixture.rs"]
 mod scenario_fixture;
 
-pub(crate) use positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_idempotent::*;
-pub(crate) use race_after_effect_is_ambiguous_and_fresh_replanning_recovers::*;
 pub(crate) use scenario_fixture::*;

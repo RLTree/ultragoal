@@ -19,6 +19,8 @@ fn reservation(
         expected_head_sha256: head.head_sha256().to_owned(),
         issued_at_unix_ms: 1_000,
         expires_at_unix_ms: 2_000,
+        lifecycle_record: None,
+        lifecycle_record_sha256: None,
     }
 }
 

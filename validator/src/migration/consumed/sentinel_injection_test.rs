@@ -108,14 +108,6 @@ impl RetirementTarget {
         &self.target_id
     }
 
-    pub fn active_reader_count(&self) -> usize {
-        self.active_readers.len()
-    }
-
-    pub fn active_writer_count(&self) -> usize {
-        self.active_writers.len()
-    }
-
     /// Returns the deliberately safe, inspection-only representation. It
     /// contains counts and domain-separated commitments, never replacement
     /// authority, evidence, attestation, session, nonce, or consumption data.

@@ -13,7 +13,7 @@ pub(super) fn ensure_launch_root(root: &Path) -> Result<(), RoutineError> {
         Ok(metadata) => {
             if metadata.file_type().is_symlink()
                 || !metadata.is_dir()
-                || metadata.uid() != unsafe { libc::geteuid() }
+                || metadata.uid() != current_user_id()
                 || metadata.permissions().mode() != 0o40700
                 || root.canonicalize().ok().as_deref() != Some(root)
             {
@@ -35,4 +35,10 @@ pub(super) fn safe_token_name(value: &str) -> String {
     sha256(value.as_bytes())
         .trim_start_matches("sha256:")
         .to_owned()
+}
+
+#[cfg(unix)]
+fn current_user_id() -> u32 {
+    // SAFETY: `geteuid` only reads this process's credential and takes no pointers.
+    unsafe { libc::geteuid() }
 }

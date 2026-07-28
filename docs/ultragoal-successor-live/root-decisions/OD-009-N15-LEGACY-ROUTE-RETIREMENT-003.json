@@ -1,0 +1,48 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OD-009-N15-003",
+  "decision_name": "n15_legacy_route_retirement",
+  "decision_date": "2026-07-23",
+  "decision_owner": "human_repository_owner",
+  "authorization": "Tree explicitly approved the parent integrator's recommended OD-009 decision boundary and delegated the exact scoped recommendation to root judgment.",
+  "root_decision": "authorize_exact_scoped_physical_deletion",
+  "authorized_base": {
+    "commit": "0cbf1e3fbb3071e70a3565db35d675d9b9ba39e9",
+    "tree": "4dd31292f13ad7b36e155ee21fcaa4c02721290d",
+    "required_managed_worktree_status": "clean"
+  },
+  "parent_decisions": [
+    {
+      "path": "docs/ultragoal-successor-live/root-decisions/OD-008-GLOBAL-COMPATIBILITY-WINDOW.json",
+      "role": "0.0.20 compatibility window and 0.0.21 earliest removal authority"
+    },
+    {
+      "path": "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json",
+      "role": "one-shot exact-path physical-deletion doctrine"
+    }
+  ],
+  "authorized_cohort": {
+    "cohort_id": "n14_retained_agent_and_skill_routes",
+    "tracked_path_count": 42,
+    "path_inventory_sha256": "721c3eca1d4bd9c6499bc7e673d3787175184e2b1d0d5c34549ec63f0a54830f",
+    "path_content_aggregate_sha256": "11afed8cd7829f69cd96b28231dd8eb8f454fdf413e12076e89317ec9a48411e",
+    "aggregate_algorithm": "sha256 of sorted relative_path, TAB, sha256(HEAD blob), newline rows; path inventory is sha256 of sorted newline-terminated paths",
+    "selection_rule": "The exact 14 legacy agent paths and 28 legacy skill wrapper or metadata paths compiled into the accepted N14 MigrationAdoptionFamily-v1 at 913bc193057b9852080d28f083dd5debccd6bc2a.",
+    "migration_action": "Delete only these 42 exact paths after revalidating both aggregates; remove their 28 registry rows and current selection authority; preserve canonical replacements and historical decision records."
+  },
+  "scope_rule": "Authorization applies only when the clean managed worktree starts from the authorized base and both exact cohort aggregates match. It does not authorize deletion of any other source, schema, fixture, generated output, historical decision, review, receipt, cache, artifact, or user file.",
+  "derived_source_cleanup": "N15 may remove or simplify implementation modules whose sole current purpose is enforcing the deleted 28-route compatibility family, but only after production and test reachability proves no independent authority or durable-reader obligation remains. This is ordinary reviewed source replacement, not reusable deletion authority.",
+  "ongoing_authority": "migration/authority-routes.json destructive_cleanup_authorized remains false; this decision is consumed once and cannot authorize generic cleanup.",
+  "required_reconciliation": [
+    "remove all 28 accepted compatibility and context route rows and their family adoption object",
+    "remove current readers, writers, selectors, public routes, package entries, catalog entries, profiles, and implicit gateways for the retired paths",
+    "preserve exactly the eight canonical skills and current canonical agents",
+    "preserve historical contracts, root decisions, reviews, and receipts as byte-identical context",
+    "prove wrong-candidate, stale-inventory, path-substitution, duplicate-authority, and retired-route resurrection fail closed",
+    "bind the later root-owned package and marketplace version to 0.0.21 before installation or release claims",
+    "recompute current inventory, migration, generated-authority, documentation, and claim ceilings after integration"
+  ],
+  "rollback": "Git history preserves the exact 0.0.20 compatibility cohort. Reintroduction requires a new root decision, a current product need, and duplicate-authority review.",
+  "claim_effect": "none",
+  "claim_ceiling": "source_and_retirement_closure_only; package, install, cache, marketplace, app-registry, discovery, runtime, Product Fitness, readiness, release, completion, and mastery remain withheld"
+}

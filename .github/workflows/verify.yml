@@ -1,0 +1,80 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  harness:
+    name: Claim-neutral candidate smoke
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Confirm checkout retained no GitHub credential
+        shell: bash
+        run: |
+          if git -c core.fsmonitor=false config --local --get-regexp '^http\..*\.extraheader$' >/dev/null; then
+            echo "checkout retained an HTTP authorization header" >&2
+            exit 1
+          fi
+
+      - name: Compile warning-denied library
+        run: cargo check -p ultragoal --lib --locked
+
+      - name: Run exact deterministic boundary smoke
+        shell: bash
+        run: |
+          cargo test -p ultragoal --lib --locked -- --list >"$RUNNER_TEMP/ultragoal-lib-tests.txt"
+          cargo test -p ultragoal --test observability_contract --locked -- --list >"$RUNNER_TEMP/observability-tests.txt"
+
+          assert_registered_once() {
+            local list_path="$1"
+            local test_name="$2"
+            local count
+            count="$(grep -Fxc -- "${test_name}: test" "$list_path" || true)"
+            if [[ "$count" -ne 1 ]]; then
+              echo "expected one registered test named $test_name, observed $count" >&2
+              exit 1
+            fi
+          }
+
+          run_lib_test() {
+            local test_name="$1"
+            assert_registered_once "$RUNNER_TEMP/ultragoal-lib-tests.txt" "$test_name"
+            cargo test -p ultragoal --lib --locked "$test_name" -- --exact --include-ignored --test-threads=1
+          }
+
+          run_observability_test() {
+            local test_name="$1"
+            assert_registered_once "$RUNNER_TEMP/observability-tests.txt" "$test_name"
+            cargo test -p ultragoal --test observability_contract --locked "$test_name" -- --exact --include-ignored --test-threads=1
+          }
+
+          run_lib_test "context::process::tests::deadline_kills_and_reaps_the_process_group"
+          run_lib_test "context::process::tests::descendant_after_leader_exit_is_not_signaled_by_reused_group_identity"
+          run_lib_test "context::process::tests::stdout_and_stderr_are_drained_concurrently"
+          run_lib_test "inventory::context_scopes::evidence::tests::nested_private_strings_fail_worker_record_validation"
+          run_lib_test "routine_work::runtime_adapter::production::launch_custody::snapshot::bound_filesystem::tests::launch_directory_creation_fails_closed_without_identity_bound_kernel_primitive"
+          run_lib_test "self_tests::law::mandatory::surfaces::production::mandatory_law_production_binding_withholds_repository_authored_red_proof"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::independent_verification_is_targeted_not_universal"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::independent_verification_rejects_missing_and_unsafe_receipt_paths"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::independent_verification_rejects_pass_shaped_manual_receipts"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::independent_verification_rejects_safe_but_missing_receipt_file"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::independent_verification_rejects_shape_substitutes"
+          run_lib_test "self_tests::law::mandatory::surfaces::independent::receipt_paths::rejects_stale_or_private_evidence_paths"
+          run_observability_test "scenario::fixture_custody::tests::cleanup_refuses_replacement_directory_identity"
+          run_observability_test "scenario::fixture_custody::tests::fixture_custody_is_private_random_and_checked_on_cleanup"

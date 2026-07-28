@@ -23,6 +23,19 @@ pub(crate) enum PreparedRoutineExecution {
     Effect(RoutineEffectRequest),
 }
 
+impl PreparedRoutineExecution {
+    /// Stable identity for the exact execution shape that a host checkpoint may
+    /// replay.  A checkpoint must never be selected by the coarser live
+    /// context alone: the bound runner and read authority are part of an
+    /// effect protocol, while a no-op has its own immutable projection.
+    pub(crate) fn checkpoint_execution_id(&self) -> &str {
+        match self {
+            Self::NoOp(projection) => &projection.projection_id,
+            Self::Effect(request) => request.protocol_id(),
+        }
+    }
+}
+
 pub(crate) const REQUEST_STAGE_PREPARED: u8 = 0;
 pub(crate) const REQUEST_STAGE_MEDIATING: u8 = 1;
 pub(crate) const REQUEST_STAGE_RECONCILED: u8 = 2;

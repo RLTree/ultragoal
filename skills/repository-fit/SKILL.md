@@ -1,6 +1,6 @@
 ---
 name: repository-fit
-description: "Inspect, plan, apply, and verify Harness Ultragoal setup for fresh or existing repositories. Use for first-time fitting, retrofits, partial installations, ownership conflicts, idempotency checks, rollback planning, or preservation of local repository authority."
+description: "Inspect, plan, apply, and verify Harness Ultragoal setup for fresh or existing repositories. Use when first-time fitting, retrofits, partial installations, ownership conflicts, idempotency checks, rollback planning, or preservation of repository authority is needed."
 ---
 
 # Repository Fit
@@ -23,6 +23,8 @@ Probe the exact grammar before relying on it:
 ```text
 ultragoal --json fit inspect --target <relative-path>
 ultragoal --json fit plan --target <relative-path>
+ultragoal --json fit plan --routine-config --target <relative-path>
+ultragoal --json fit plan --local-state --target <relative-path>
 ```
 
 `fit inspect` records existing components, owners, modified/staged/untracked
@@ -30,6 +32,18 @@ state, worktrees, conflicts, unsupported capabilities, and the current claim
 ceiling. `fit plan` must bind the same live candidate and name every proposed
 mutation, preservation rule, conflict, authority need, rollback action, and
 postcondition.
+
+`--routine-config` is the one bounded retrofit scope for the installed routine
+loop. It plans only `config/routine-public.json` and `config/routines.json`;
+it never resolves unrelated ownership conflicts or adds the general local-state
+policy. The resulting plan records that scope, and `fit apply` recomputes the
+same scoped candidate-bound plan before any effect. Use it only when those two
+files are the missing transition; otherwise use the complete plan.
+
+`--local-state` is the narrow follow-on when only routine artifact retention is
+missing. It plans only the required `validation_artifacts/` `.gitignore` rule,
+preserves existing `.gitignore` bytes and mode, and cannot create or update a
+template-managed path.
 
 If the target is missing, classification is ambiguous, or ownership conflicts
 cannot be resolved safely, return a typed blocker. Do not silently choose a

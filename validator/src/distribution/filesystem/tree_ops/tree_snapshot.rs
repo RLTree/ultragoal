@@ -118,16 +118,29 @@ pub(super) fn write_tree(root: &Directory, rows: &[TreeObject]) -> Result<(), Di
 }
 
 #[cfg(unix)]
-pub(super) fn transition_tree(
-    root: &Directory,
-    target_parent: &Directory,
-    target: &str,
-    stage_name: &str,
-    backup_name: &str,
-    before: Option<&TreeSnapshot>,
-    replacement: Option<&[TreeObject]>,
-    stage: Option<&mut OwnedTree>,
-) -> Result<bool, DistributionError> {
+pub(super) struct TreeTransition<'a> {
+    pub(super) root: &'a Directory,
+    pub(super) target_parent: &'a Directory,
+    pub(super) target: &'a str,
+    pub(super) stage_name: &'a str,
+    pub(super) backup_name: &'a str,
+    pub(super) before: Option<&'a TreeSnapshot>,
+    pub(super) replacement: Option<&'a [TreeObject]>,
+    pub(super) stage: Option<&'a mut OwnedTree>,
+}
+
+#[cfg(unix)]
+pub(super) fn transition_tree(request: TreeTransition<'_>) -> Result<bool, DistributionError> {
+    let TreeTransition {
+        root,
+        target_parent,
+        target,
+        stage_name,
+        backup_name,
+        before,
+        replacement,
+        stage,
+    } = request;
     match (before, replacement, stage) {
         (None, None, None) => Ok(true),
         (None, Some(replacement), Some(stage)) => {
@@ -152,7 +165,7 @@ pub(super) fn transition_tree(
                 }
             }
         }
-        (Some(expected), replacement, stage) => transition_existing(
+        (Some(expected), replacement, stage) => transition_existing(ExistingTreeTransition {
             root,
             target_parent,
             target,
@@ -161,7 +174,7 @@ pub(super) fn transition_tree(
             expected,
             replacement,
             stage,
-        ),
+        }),
         _ => Err(error(DistributionErrorId::EffectFailed)),
     }
 }

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+case "${1-}" in
+  ""|valid) nonce="$HUL_SESSION_NONCE" ;;
+  *) nonce=invalid ;;
+esac
+
+printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"$nonce\"}"

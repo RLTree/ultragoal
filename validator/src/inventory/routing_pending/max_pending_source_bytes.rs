@@ -39,7 +39,6 @@ fn observed_authority_state(value: ObservedAuthorityState) -> &'static str {
         ObservedAuthorityState::Active => "active",
         ObservedAuthorityState::CompatibilityRouteRetained => "compatibility-route-retained",
         ObservedAuthorityState::ContextOnly => "context-only",
-        ObservedAuthorityState::Archived => "archived",
     }
 }
 
@@ -65,7 +64,6 @@ fn pending_route_candidate(route: &RouteRule) -> bool {
         .stable_id
         .as_deref()
         .is_some_and(|stable_id| by_stable_id(stable_id).is_some())
-        || route.matcher.kind.as_deref().is_some_and(is_source_kind)
 }
 
 fn entry_evidence(entry: &InventoryEntry) -> EntryEvidence<'_> {

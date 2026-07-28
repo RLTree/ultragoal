@@ -75,7 +75,7 @@
     },
     {
       "standard_id": "plugin-product-cohesion-authority",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "docs/plugin-cohesion-manifest.json",
       "evidence_digest": "sha256:556600fb012e2fdd1f6474346effb8cf157d3fcdcc7519cbb61aeacfe99e4309",
       "audited_at": "2026-07-06T00:00:00Z",
@@ -96,14 +96,6 @@
       "evidence_digest": "sha256:41c848ea277997f900430ebe72ef818b7ac3e2d1cc4b2d2ba0319d9781402810",
       "audited_at": "2026-07-14T17:37:26Z",
       "claim_ceiling_impact": "install, cache, app visibility"
-    },
-    {
-      "standard_id": "target-repo-audit-capability",
-      "audit_status": "pending",
-      "evidence_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
-      "evidence_digest": "sha256:fdeb93e7656cd724f885c7f7174caaa61b9de1839ffc08f80248e1020c58a826",
-      "audited_at": "2026-07-14T17:37:26Z",
-      "claim_ceiling_impact": "completion, review, package, readiness, release"
     }
   ]
 }

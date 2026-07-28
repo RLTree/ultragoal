@@ -55,9 +55,13 @@ impl Repo {
     fn new(label: &str) -> Self {
         let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
         fs::create_dir_all(root.join(".codex-plugin")).expect("plugin manifest directory");
+        fs::create_dir_all(root.join(".agents/plugins")).expect("marketplace catalog directory");
         fs::create_dir_all(root.join("schemas")).expect("schema directory");
+        fs::create_dir_all(root.join("runtime")).expect("runtime directory");
         fs::write(root.join("schemas/catalog.json"), "{}\n").expect("schema catalog");
         write_supported_manifest(&root, SUPPORTED_VERSION);
+        write_marketplace_catalog(&root);
+        write_runtime_probe(&root);
         for name in CANONICAL_SKILLS {
             let root = root.join("skills").join(name);
             fs::create_dir_all(root.join("agents")).expect("skill metadata directory");
@@ -75,6 +79,7 @@ impl Repo {
             .status()
             .expect("git init");
         assert!(status.success());
+        fs::write(root.join(".git/info/exclude"), "target/\n").expect("git output exclusion");
         Self { root }
     }
 
@@ -86,6 +91,35 @@ impl Repo {
         )
         .expect("live context")
     }
+
+    fn workspace_context(&self) -> LiveContext {
+        LiveContext::build(
+            BuildRequest::new(&self.root)
+                .expect_repository_root(&self.root)
+                .expect_worktree_root(&self.root)
+                .with_root_workspace_grant(&self.root),
+        )
+        .expect("workspace-write live context")
+    }
+}
+
+fn write_runtime_probe(root: &Path) {
+    let probe = root.join("runtime/runtime-probe-bin");
+    fs::write(
+        &probe,
+        include_bytes!("../../../../../../runtime/runtime-probe-bin"),
+    )
+    .expect("runtime probe");
+    #[cfg(unix)]
+    fs::set_permissions(&probe, fs::Permissions::from_mode(0o755)).expect("runtime probe mode");
+}
+
+fn write_marketplace_catalog(root: &Path) {
+    fs::write(
+        root.join(MARKETPLACE_CATALOG_PATH),
+        include_bytes!("../../../../../../.agents/plugins/marketplace.json"),
+    )
+    .expect("marketplace catalog");
 }
 
 impl Drop for Repo {
@@ -141,7 +175,7 @@ fn write_draft(root: &Path, version: &str) {
             "non_goals": [],
             "optional_connectors": [],
             "purpose": "test",
-            "resources": ["plugin-manifest-draft.json"],
+            "resources": [".agents/plugins/marketplace.json", "plugin-manifest-draft.json"],
             "schema_catalog": "schemas/catalog.json",
             "schemas": [],
             "skills": skills,

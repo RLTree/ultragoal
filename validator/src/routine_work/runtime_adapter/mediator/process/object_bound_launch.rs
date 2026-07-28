@@ -10,7 +10,7 @@ pub(crate) fn spawn_exact_program(
     let setup = SpawnSetupGuard::new(spawn_suspended(program, root, argv, environment)?);
     let (setup, ()) = setup.configure(|setup| {
         run_test_process_post_spawn_hook();
-        validate_loaded_executable(setup.child()?, program)?;
+        setup.validate_loaded(program)?;
         run_test_loaded_object_hook();
         program.validate()
     })?;

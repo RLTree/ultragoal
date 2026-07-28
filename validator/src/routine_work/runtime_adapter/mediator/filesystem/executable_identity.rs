@@ -56,7 +56,7 @@ impl PinnedExecutable {
             let canonical = path
                 .canonicalize()
                 .map_err(|_| mediator_error("mediator-executable-unavailable"))?;
-            if &canonical != path {
+            if canonical != path {
                 return Err(mediator_error("mediator-executable-not-canonical"));
             }
             let mut file = OpenOptions::new()
@@ -81,22 +81,6 @@ impl PinnedExecutable {
 
     pub(crate) fn path(&self) -> &Path {
         &self.path
-    }
-
-    #[cfg(target_os = "macos")]
-    pub(crate) fn validate_loaded_vnode(
-        &self,
-        device: u64,
-        inode: u64,
-    ) -> Result<(), RoutineError> {
-        if self.identity.device != device || self.identity.inode != inode {
-            return Err(RoutineError::new(
-                RoutineErrorId::ConcurrentMutation,
-                "mediator-loaded-executable-replaced",
-                None,
-            ));
-        }
-        Ok(())
     }
 
     #[cfg(unix)]

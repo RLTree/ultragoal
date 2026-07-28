@@ -1,0 +1,113 @@
+{
+  "schema": "harness-ultragoal.product-success-brief.v2",
+  "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
+  "product_success_contract_digest": "sha256:0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
+  "claim_ids": [
+    "CL-DISCOVERY",
+    "CL-EVAL-IMPROVEMENT",
+    "CL-FIT",
+    "CL-INSTALL",
+    "CL-ORCHESTRATION",
+    "CL-PACKAGE",
+    "CL-REAL-JOURNEY",
+    "CL-ROUTINE",
+    "CL-RUNTIME",
+    "CL-SOURCE"
+  ],
+  "target_problem": "Prove the nearest useful installed-daily-driver transition while making the complete Agentic Engineering advisory layer automatically useful through the single Harness front door.",
+  "audience": "Repository operator supervising current-source Harness Ultragoal work.",
+  "job_to_be_done": "Safely inspect the real current repository through the public front door, receive the smallest useful design or decision lens without naming a skill, then use that observed result to drive the shortest honest package, install, discovery, routine-work, recovery, and repeat-use journey.",
+  "context_of_use": "The exact current Harness Ultragoal source repository on a clean subject candidate; later routine work must preserve an operator-owned dirty change.",
+  "desired_outcome": "A useful, inspectable repository-fit observation with candidate-bound automatic advisory selection or an honest no-change disposition that identifies the next dependency-legal transition without claiming any unobserved product surface.",
+  "first_value_event": "The public read-only fit route produces an exact repository observation and an honest next action.",
+  "operator": {
+    "kind": "agent_with_human_supervision",
+    "actor_reference": "OWN-ULTRA-ROOT"
+  },
+  "real_work": {
+    "repository_identity": "sha256:02441b7bd8e523c2cd9e5f792205d26efc6c7c061e30c6219f0723e8e5857170",
+    "starting_candidate": "sha256:de12a3db58972792ff812c235abdd11891b0e006d9c8d0ba654f0a791d21bdab",
+    "dirty_state_expectation": "either",
+    "task_id": "current-source-installed-daily-driver",
+    "task": "Establish the first truthful transition of the real UltraGoal installed-daily-driver journey before creating or promoting broader product evidence.",
+    "expected_useful_outcome": "A zero-write fit observation with a deterministic next action; later journey stages remain separately evidenced or withheld."
+  },
+  "public_entry_surface": {
+    "surface_id": "PS-ENTRY",
+    "route": "harness-ultragoal",
+    "forbidden_bypasses": [
+      "direct internal CLI invocation",
+      "manual claim promotion",
+      "receipt substitution for behavior"
+    ]
+  },
+  "protected_invariants": [
+    {
+      "id": "preserve-unrelated-repository-state",
+      "claim_ids": [
+        "CL-FIT",
+        "CL-ROUTINE"
+      ],
+      "surfaces": [
+        "PS-ENTRY",
+        "PS-FIT-RETROFIT",
+        "PS-ROUTINE"
+      ],
+      "required_condition": "Read-only fit performs no repository or Git mutation, and later routine work preserves unrelated operator-owned state.",
+      "disposition": "fail_closed"
+    },
+    {
+      "id": "agentic-advice-remains-subordinate",
+      "claim_ids": [
+        "CL-EVAL-IMPROVEMENT",
+        "CL-ORCHESTRATION",
+        "CL-REAL-JOURNEY",
+        "CL-SOURCE"
+      ],
+      "surfaces": [
+        "PS-ENTRY",
+        "PS-CLI",
+        "PS-OBSERVE-LOCAL"
+      ],
+      "required_condition": "Automatic or explicit Agentic advice is candidate-bound, proposal-only, no-effect, and no-claim until Harness root adopts it through an existing owner.",
+      "disposition": "fail_closed"
+    }
+  ],
+  "first_truth_loop": {
+    "loop_id": "current-source-installed-daily-driver",
+    "positive_path": [
+      {
+        "transition_id": "inspect-real-repository",
+        "action_id": "inspect-installed-daily-driver",
+        "command_id": "fit-inspect",
+        "effect": "read",
+        "order": 1,
+        "dependency_ids": [],
+        "capability_ids": [],
+        "claim_ids": [
+          "CL-FIT"
+        ],
+        "product_surfaces": [
+          "PS-ENTRY",
+          "PS-FIT-RETROFIT"
+        ],
+        "expected_observation": "A current, read-only repository-fit observation identifies the first dependency-legal journey action while the Harness front door selects one smallest sufficient advisory lens or an honest no-change disposition.",
+        "evidence_class": "source"
+      }
+    ],
+    "first_value_transition": "inspect-real-repository",
+    "failure_control": {
+      "transition_id": "inspect-real-repository",
+      "failure": "Unsafe, stale, or incomplete repository input is refused before a product effect occurs.",
+      "diagnosis": "Inspect the fit finding and current inception projection through the public read route.",
+      "recovery": "Repair the named repository input or use the next valid dependency-legal route, then re-observe from the same public entry.",
+      "preservation": "Unrelated repository state remains unchanged throughout inspection and failed inspection."
+    },
+    "preservation_expectation": "The fit transition is recursively zero-write and does not alter repository, Git, or operator-owned state.",
+    "repeat_use_expectation": "The same public fit route can be repeated after a controlled routine-work interruption; advisory reasoning reactivates only for changed candidate, lifecycle, evidence, assumption, risk, or failure context, and prior observations never become runtime or human-use claims."
+  },
+  "depth_triggers": [],
+  "evidence_class": "source",
+  "evidence_ladder": "Current evidence is contract and source authority only. Automatic Agentic selection and reactivation, package, install, discovery, runtime, agent-use, human-use, and repeat-use require separate exact observations.",
+  "claim_ceiling": "source_only"
+}

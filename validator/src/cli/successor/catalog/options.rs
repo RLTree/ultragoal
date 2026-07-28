@@ -3,8 +3,9 @@ use super::super::command_contract::{
 };
 use crate::context::EffectClass;
 
-const TARGET: OptionSpec = option(OptionName::Target, ValueKind::RelativePath, false);
-const PLAN: OptionSpec = option(OptionName::Plan, ValueKind::RelativePath, true);
+const TARGET: OptionSpec = option(OptionName::Target, ValueKind::RepositoryTarget, false);
+const FIT_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::HostPath, true);
+const MIGRATION_PLAN: OptionSpec = option(OptionName::Plan, ValueKind::RelativePath, true);
 const ACCEPT_PLAN: OptionSpec = option(OptionName::AcceptPlan, ValueKind::Identifier, true);
 const CLAIM: OptionSpec = option(OptionName::Claim, ValueKind::Identifier, true);
 const FINDING: OptionSpec = option(OptionName::Finding, ValueKind::Identifier, false);
@@ -15,28 +16,42 @@ const PROVIDER: OptionSpec = option(OptionName::Provider, ValueKind::Identifier,
 const APPROVE_PUBLISH: OptionSpec = option(OptionName::ApprovePublish, ValueKind::Flag, true);
 const SPEC: OptionSpec = option(OptionName::Spec, ValueKind::RelativePath, true);
 const INPUT: OptionSpec = option(OptionName::Input, ValueKind::RelativePath, true);
+const CLI: OptionSpec = option(OptionName::Cli, ValueKind::RelativePath, true);
 const CANDIDATE: OptionSpec = option(OptionName::Candidate, ValueKind::Identifier, true);
 const REGISTRY: OptionSpec = option(OptionName::Registry, ValueKind::RelativePath, false);
 const APPROVE_RETIREMENT: OptionSpec = option(OptionName::ApproveRetirement, ValueKind::Flag, true);
+const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::HostPath, false);
+const RETAIN_ISOLATED_ROOT: OptionSpec =
+    option(OptionName::RetainIsolatedRoot, ValueKind::Flag, false);
+const ROUTINE_CONFIG: OptionSpec = option(OptionName::RoutineConfig, ValueKind::Flag, false);
+const LOCAL_STATE: OptionSpec = option(OptionName::LocalState, ValueKind::Flag, false);
+const INTERRUPT_AFTER: OptionSpec =
+    option(OptionName::InterruptAfter, ValueKind::Identifier, false);
+const CONTINUATION: OptionSpec = option(OptionName::Continuation, ValueKind::Identifier, false);
 
 pub(super) const TARGET_OPTION: &[OptionSpec] = &[TARGET];
-pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, PLAN, ACCEPT_PLAN];
+pub(super) const FIT_PLAN_OPTIONS: &[OptionSpec] = &[TARGET, ROUTINE_CONFIG, LOCAL_STATE];
+pub(super) const ROUTINE_OPTIONS: &[OptionSpec] = &[TARGET, INTERRUPT_AFTER, CONTINUATION];
+pub(super) const FIT_APPLY: &[OptionSpec] = &[TARGET, FIT_PLAN, ACCEPT_PLAN];
 pub(super) const STRICT_OPTIONS: &[OptionSpec] = &[TARGET, CLAIM];
-pub(super) const FINDING_OPTION: &[OptionSpec] = &[FINDING];
+pub(super) const DIAGNOSE_OPTIONS: &[OptionSpec] = &[TARGET, FINDING];
 pub(super) const CLAIM_OUTPUT: &[OptionSpec] = &[CLAIM, OUTPUT];
-pub(super) const FILTER_OPTION: &[OptionSpec] = &[FILTER];
+pub(super) const OBSERVE_QUERY_OPTIONS: &[OptionSpec] = &[TARGET, FILTER];
 pub(super) const EXPORT_OPTIONS: &[OptionSpec] = &[OUTPUT, APPROVE_EXPORT];
 pub(super) const OUTPUT_OPTION: &[OptionSpec] = &[OUTPUT];
-pub(super) const INPUT_OPTION: &[OptionSpec] = &[INPUT];
+pub(super) const PACKAGE_BUILD_OPTIONS: &[OptionSpec] = &[OUTPUT, CLI];
+pub(super) const PACKAGE_VERIFY_OPTIONS: &[OptionSpec] = &[INPUT, CLI];
 pub(super) const PUBLISH_OPTIONS: &[OptionSpec] = &[INPUT, PROVIDER, APPROVE_PUBLISH];
 pub(super) const SPEC_OPTION: &[OptionSpec] = &[SPEC];
 pub(super) const SPEC_OUTPUT: &[OptionSpec] = &[SPEC, OUTPUT];
 pub(super) const INPUT_OUTPUT: &[OptionSpec] = &[INPUT, OUTPUT];
+pub(super) const INPUT_OUTPUT_RETAIN: &[OptionSpec] = &[INPUT, OUTPUT, CLI, RETAIN_ISOLATED_ROOT];
 pub(super) const CANDIDATE_OUTPUT: &[OptionSpec] = &[CANDIDATE, OUTPUT];
 pub(super) const ADAPTER_OPTIONS: &[OptionSpec] = &[SPEC, PROVIDER];
 pub(super) const REGISTRY_OPTION: &[OptionSpec] = &[REGISTRY];
-pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[PLAN, ACCEPT_PLAN];
-pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[PLAN, APPROVE_RETIREMENT];
+pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[MIGRATION_PLAN, ACCEPT_PLAN];
+pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[MIGRATION_PLAN, APPROVE_RETIREMENT];
+pub(super) const CAPABILITIES_OPTION: &[OptionSpec] = &[PACKAGE_ROOT];
 
 const fn option(name: OptionName, kind: ValueKind, required: bool) -> OptionSpec {
     OptionSpec {

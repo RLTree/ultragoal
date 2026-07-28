@@ -1,6 +1,7 @@
 use super::bound_context::{CapabilitySet, ToolCapability};
 use super::digest::sha256_hex;
-use super::error::{ContextError, io_error};
+use super::error::{io_error, ContextError};
+use super::request::ToolProbe;
 use sha2::{Digest, Sha256};
 use std::env;
 use std::ffi::OsStr;
@@ -150,21 +151,38 @@ fn missing(name: String) -> ToolCapability {
     }
 }
 
-pub(crate) fn capture(names: &[String], git: &Path) -> Result<CapabilitySet, ContextError> {
+pub(crate) fn capture(probes: &[ToolProbe], git: &Path) -> Result<CapabilitySet, ContextError> {
     let path = env::var_os("PATH").unwrap_or_default();
-    let mut names = names.to_vec();
-    names.sort();
-    names.dedup();
-    let mut tools = Vec::with_capacity(names.len());
-    for name in names {
-        let discovered = if name == "git" {
-            Some(git.to_path_buf())
-        } else {
-            find_on_path(&name, &path)?
+    let mut probes = probes.to_vec();
+    probes.sort_by(|left, right| left.name().cmp(right.name()));
+    if probes
+        .windows(2)
+        .any(|pair| pair[0].name() == pair[1].name())
+    {
+        return Err(ContextError::InvalidRequest(
+            "duplicate capability probe name".to_owned(),
+        ));
+    }
+    let mut tools = Vec::with_capacity(probes.len());
+    for probe in probes {
+        let name = probe.name();
+        let discovered = match probe {
+            ToolProbe::Path(_) if name == "git" => Some(git.to_path_buf()),
+            ToolProbe::Path(_) => find_on_path(name, &path)?,
+            ToolProbe::CurrentExecutable(_) if name == "git" => {
+                return Err(ContextError::InvalidRequest(
+                    "Git substrate cannot be bound to the current executable".to_owned(),
+                ));
+            }
+            ToolProbe::CurrentExecutable(_) => Some(env::current_exe().map_err(|error| {
+                ContextError::UnsupportedCapability(format!(
+                    "current executable is unavailable for {name}: {error}"
+                ))
+            })?),
         };
         tools.push(match discovered {
-            Some(executable) => executable_identity(&name, &executable)?,
-            None => missing(name),
+            Some(executable) => executable_identity(name, &executable)?,
+            None => missing(name.to_owned()),
         });
     }
     Ok(CapabilitySet {

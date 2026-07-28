@@ -152,7 +152,11 @@ struct Verifier {
 }
 
 impl SignatureVerifierEffects for Verifier {
-    fn verify_signature(&mut self, _envelope: &[u8], _subject_sha256: &str) -> Result<bool, ()> {
+    fn verify_signature(
+        &mut self,
+        _envelope: &[u8],
+        _subject_sha256: &str,
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         self.calls += 1;
         Ok(self.accept)
     }

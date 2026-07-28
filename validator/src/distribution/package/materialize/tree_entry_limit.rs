@@ -76,24 +76,29 @@ pub trait MaterializeEffects {
         &mut self,
         maximum_entries: usize,
         maximum_bytes: usize,
-    ) -> Result<Option<Vec<TreeObject>>, ()>;
+    ) -> Result<Option<Vec<TreeObject>>, crate::distribution::EffectFailure>;
 
     fn compare_exchange_tree(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[TreeObject]>,
-    ) -> Result<bool, ()>;
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 #[derive(Debug)]
 pub struct MaterializeTransaction {
     installed_tree_sha256: String,
     previous: Option<Vec<TreeObject>>,
+    effect_applied: bool,
 }
 
 impl MaterializeTransaction {
     pub fn tree_sha256(&self) -> &str {
         &self.installed_tree_sha256
+    }
+
+    pub const fn reused_existing(&self) -> bool {
+        !self.effect_applied
     }
 }
 
@@ -108,11 +113,23 @@ pub fn materialize_package(
     if !expected_matches(expected, previous_sha256.as_deref()) {
         return Err(error(DistributionErrorId::InstallConflict));
     }
+    if let ExpectedTree::ExactDigest(expected_sha256) = expected {
+        if expected_sha256 != plan.source_tree_sha256() {
+            return Err(error(DistributionErrorId::InstallConflict));
+        }
+        if previous_sha256.as_deref() == Some(expected_sha256.as_str()) {
+            return Ok(MaterializeTransaction {
+                installed_tree_sha256: plan.source_tree_sha256().to_owned(),
+                previous,
+                effect_applied: false,
+            });
+        }
+    }
     let replacement = planned_tree(plan);
     match effects.compare_exchange_tree(previous_sha256.as_deref(), Some(&replacement)) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::EffectFailed)),
+        Err(_) => return Err(error(DistributionErrorId::EffectFailed)),
     }
     let verification = read(effects).and_then(|observed| {
         let observed = observed.ok_or_else(|| error(DistributionErrorId::ArchiveMismatch))?;
@@ -126,6 +143,7 @@ pub fn materialize_package(
     Ok(MaterializeTransaction {
         installed_tree_sha256: plan.source_tree_sha256().to_owned(),
         previous,
+        effect_applied: true,
     })
 }
 
@@ -133,6 +151,13 @@ pub fn rollback_materialization(
     transaction: MaterializeTransaction,
     effects: &mut impl MaterializeEffects,
 ) -> Result<(), DistributionError> {
+    if !transaction.effect_applied {
+        let current = read(effects)?;
+        if current != transaction.previous {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
+        return Ok(());
+    }
     restore(
         effects,
         &transaction.installed_tree_sha256,

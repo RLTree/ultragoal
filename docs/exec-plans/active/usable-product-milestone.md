@@ -23,10 +23,13 @@ The first value event is a useful verified repository result whose execution,
 failure, recovery, preservation, and remaining claim limits the operator can
 understand.
 
-This plan does not authorize product implementation today, dependency changes,
-runtime launches, local installation, target-repository writes, external
-effects, credentials, publication, destructive retirement, deployment, or
-release.
+The original 2026-07-25 plan did not authorize implementation or external
+effects. On 2026-07-27 Tree authorized this bounded repair integration,
+repository-native verification, private GitHub repository and pull-request
+work, local plugin lifecycle reconciliation, and publication before final
+Plugin Eval scoring. That authorization does not extend to unrelated target
+repositories, credentials disclosure, deployment, destructive retirement, or
+release-readiness claims.
 
 ## Current status
 
@@ -34,10 +37,19 @@ release.
 - Strict lane-contract decomposition: complete in the commit containing this
   revision.
 - Product-delivery program: active.
-- B0 current-behavior baseline and shared-interface freeze: ready, not started.
+- B0 current-behavior baseline and shared-interface freeze: active; the
+  Agentic advisory addendum is frozen.
+- I0 advisory repair fan-in: active under Tree's 2026-07-27 authorization.
+  Delivery-reset contracts are reconciled with the descendant live-product
+  source retirement; deleted legacy routes and superseded active plans remain
+  deleted.
 - L1–L4: blocked on B0 and the exact `BASE-0` / `IFACE-0` freeze.
 - I0 single root fan-in: blocked on every required lane being accepted,
   classified `no_change`, or explicitly blocked.
+- S0 security remediation: active against the sealed exact-revision normal
+  scan `a6857d95-8473-4832-ba9a-4cdf74c435fa` at `efdb0ac802b`. Repairs are
+  limited to the 29 candidate-bound findings and shared root causes; they do
+  not revive deleted legacy modules or raise a product claim.
 - J0 same-surface product journey: blocked on I0 and Tree gate D1.
 - Release: outside the current milestone and blocked on Tree gate D2.
 
@@ -197,6 +209,43 @@ cargo test -p ultragoal --test distribution_contract --offline
 
 A missing selector or unavailable tool is a B0 finding. It is not permission to
 run an unrelated broad suite or generate replacement receipts.
+
+### B0 addendum — Agentic advisory integration freeze (2026-07-27)
+
+- `BASE-1/contracts`: `d25e689db61a5d406d457456a2285fb8e68285b1`.
+  `BASE-1/source`: descendant live-product head
+  `5dae7dd24490b1a37bacb48b40694a840067fbe7`. The reconciliation keeps the
+  delivery-reset contracts and active-plan model while consuming the
+  live-product line's completed source retirement. It does not restore deleted
+  legacy routes, superseded active plans, or unreachable merge `9344d013`.
+- `IFACE-0/advisory-pack-set`: `AgenticPackSet-v1` is a caller-supplied,
+  candidate-bound value. It has one required `agentic-engineering` base pack,
+  optional named companion packs, exact package versions, manifest digests,
+  enabled-skill lists, and an aggregate digest. Validation is pure and rejects
+  duplicate names or skills, substituted/stale candidate digests, omitted
+  enabled skills within a declared pack, and any gateway other than
+  `external:harness-ultragoal`.
+- `IFACE-0/advisory-selection`: selection returns an exact fully-qualified
+  skill plus the aggregate pack-set digest with `proposal_only=true` and
+  `claim_effect=none`. An absent optional lens is typed
+  `advice_unavailable`; it is never inferred from source, cache, or install
+  state. This is not a router, selector store, lifecycle, receipt, effect, or
+  claim authority.
+- `IFACE-0/public-context`: `ultragoal --json inspect context` moves to
+  `HarnessPublicContext-v2`, retaining opaque roots and adding only redacted
+  current-process runtime version, executable SHA-256, byte length, and
+  `self_bound=true`. The executable path remains internal and capture is
+  revalidated before output.
+- `IFACE-0/unfitted-read-route`: when `next` or `diagnose` cannot derive the
+  existing inventory/ProductState, the existing repository-fit owner is probed
+  read-only. A successful probe returns typed `repository_fit_required` with
+  `effect=read`, `claim_effect=none`, and exact rerun
+  `ultragoal --json fit inspect --target .`; no ProductState or routine
+  checkpoint is manufactured.
+- This is root-owned I0 shared wiring because it changes public context,
+  shared diagnostics, plugin metadata, and a new pure package boundary. It
+  consumes no lane-local unmerged work and requires focused T3-style negative
+  coverage for candidate substitution, redaction, and zero-write behavior.
 
 ## Exclusive ownership map
 
@@ -381,9 +430,9 @@ One merged tree or a worker-summary aggregation is not T2 proof.
 | Gate | Trigger | Required Tree decision | Current status | Effect if absent |
 | --- | --- | --- | --- | --- |
 | D0 Conditional product/interface gate | B0 finds a value, scope, risk, or shared-interface choice with no safe default | Select the product behavior or narrow the goal | Not currently required | Only affected lanes remain blocked; independent legal work may continue |
-| D1 Representative-use gate | Before J0 | Select the representative repository and authorize exact local install and repository-write scope | Needed later | No install, host mutation, target write, J0, or `CL-USABLE-LOOP` decision |
+| D1 Representative-use gate | Before J0 | Select the representative repository and authorize exact local install and repository-write scope | Approved only for local plugin lifecycle reconciliation and clean-home evaluation; no unrelated target-repository write | No broader target write or `CL-USABLE-LOOP` decision |
 | D2 Post-milestone direction | After J0 | Stop, run one materially different journey, or authorize a separate release contract | Not yet due | Goal stops after the bounded milestone |
-| D3 External/destructive authority | Only if separately proposed | Approve credentials, publication, deployment, marketplace change, or destructive retirement | Not authorized | Affected action is forbidden |
+| D3 External/destructive authority | Only if separately proposed | Approve credentials, publication, deployment, marketplace change, or destructive retirement | Approved for private repositories, pull requests, merge, and named plugin publication only | Deployment, credentials disclosure, and destructive retirement remain forbidden |
 
 Agents may not infer these decisions from prior receipts, old plans, memory,
 repository state, or worker agreement.
@@ -465,8 +514,14 @@ does not block lanes or cause reproof.
 - [x] Define `BASE-0` / `IFACE-0`, commit-bound handoffs, dependency-specific
   invalidation, deterministic merge slots, Tree gates, repair budgets, and
   cancellation.
-- [ ] B0: record current behavior and freeze `BASE-0` / `IFACE-0`.
+- [~] B0: record current behavior and freeze `BASE-0` / `IFACE-0`; the
+  Agentic advisory addendum is recorded, while the broader milestone baseline
+  remains active.
 - [ ] Launch only lanes classified `change_required` or `partial_change`.
+- [~] S0: repair and independently falsify the 29 sealed Codex Security
+  findings (7 high, 13 medium, 9 low), then run a fresh exact-head closure
+  scan. Filesystem, subprocess, evidence-authority, privacy, and runtime
+  identity repairs remain candidate-bound and claim-neutral.
 - [ ] I0: merge or waive each required lane once and freeze `CANDIDATE-0`.
 - [ ] D1: obtain Tree's exact representative-use authority.
 - [ ] J0: run the product journey and decide `CL-USABLE-LOOP`.
@@ -492,6 +547,40 @@ does not block lanes or cause reproof.
   standards projection is current. The stale v2 projection is a named
   compatibility blocker; this planning pass does not refresh it or treat that
   refresh as product progress.
+- The sealed S0 scan covered all 5,047 committed files with zero unresolved
+  rows. It found repeated path-only check/use gaps, direct ambient Git and
+  repository-Python execution, self-attested proof boundaries, durable private
+  host metadata, and a public runtime projection that measured the
+  `current_exe` path occupant rather than the running image.
+- The exact built CLI reproduced two boundary failures: a nominally read-only
+  strict check executed repository-owned Python and wrote outside its target,
+  and a suspended process whose executable path was replaced reported the
+  replacement bytes with `self_bound=true`.
+- S0 repairs now route Git through the captured capability with bounded
+  process-group custody, remove repository-Python execution from strict
+  validation, bind affected filesystem sinks to opened objects, reject
+  self-attested proof, redact current-tree private metadata, and lower
+  path-only runtime identity to `self_bound=false`.
+- The first independent S0 falsification rejected candidate `b361280a` on six
+  residual boundaries: launch-directory creation, red-audit reads and circular
+  proof, post-reap process-group signaling plus hidden cleanup failure, scalar
+  private-key values, and pathname-recursive fixture cleanup. The follow-up
+  repair disables launch-directory staging without an identity-bound kernel
+  primitive, withholds repository-authored mandatory-law behavior proof,
+  rejects sensitive keys for every JSON value type, never signals a numeric
+  process group after leader custody is lost, surfaces cleanup ambiguity, and
+  retains private random test fixtures where identity-conditioned recursive
+  deletion is unavailable.
+- Independent re-review of frozen commit `d8a8550d` approved closure of those
+  six scoped boundaries with no direct security regression. Its ceiling does
+  not establish broader 29-finding closure, product availability, release, or
+  completion; the fresh exact-head normal scan remains required.
+- The warning-denied library build, changed-behavior tests, generated-authority
+  check, and all 121 standards-enforcement rows pass. `scripts/check .` reaches
+  only its declared exit-4 narrow-helper ceiling. The broad parallel library
+  suite remains an invalid aggregate oracle: two unchanged-base runs produced
+  different failure counts because shared fixtures and global test hooks
+  interfere. Candidate deltas are therefore rerun individually.
 
 ## Decision log
 
@@ -507,6 +596,46 @@ does not block lanes or cause reproof.
 - **2026-07-25 — relevant invalidation only:** a proof reruns only when a
   declared consumed dependency changes or same-surface evidence contradicts
   it.
+- **2026-07-27 — explicit advisory packs:** consume only candidate-bound
+  `AgenticPackSet-v1` through the existing Harness front door. No Agentic
+  router, cached-package inference, state store, receipt, effect, or claim
+  authority is introduced.
+- **2026-07-27 — source reconciliation:** preserve the newest delivery-reset
+  contracts while bringing forward the live-product line's completed source
+  retirement. This is an explicit combined descendant, not a restoration of
+  the deleted legacy architecture.
+- **2026-07-27 — bounded delivery authority:** Tree authorized private remote,
+  pull-request, merge, local publication, and post-publication evaluation work
+  for this repair. Claims remain limited to evidence from each exact surface.
+- **2026-07-27 — security repair boundary:** consume only the 29 findings from
+  sealed scan `a6857d95-8473-4832-ba9a-4cdf74c435fa`; prefer shared typed
+  owners for repeated root causes, require independent focused falsification,
+  and prove closure with a new exact-head normal scan before publication.
+- **2026-07-27 — privacy overrides byte preservation:** frozen compatibility
+  records that contain an operator username, home/worktree path, or private
+  task/session identity are redacted in the current tree. Only their exact
+  non-authoritative compatibility digests may be recomputed; their historical
+  semantics and authority ceiling remain frozen. Git history cannot be
+  redacted by this local repair and therefore remains private.
+- **2026-07-27 — honest runtime identity:** `self_bound=true` requires a
+  platform-backed binding to the running image. Path-only hashing may report
+  an unbound identity or fail closed, but must not preserve the stronger claim
+  for interface compatibility.
+- **2026-07-27 — unavailable custody stays unavailable:** production launch
+  staging and mandatory-law red-behavior coverage remain withheld when the
+  host cannot bind directory creation or sealed production observation to the
+  exact object. Product availability may decrease; security authority must not
+  be manufactured from a pathname or repository-authored packet.
+- **2026-07-27 — PR verification is claim-neutral:** the authorized GitHub
+  pull request adds a minimal read-only workflow pinned to immutable action
+  revisions. It runs warning-denied library compilation and exact,
+  inventory-checked changed-boundary smoke tests, forcing a selected body to
+  execute even when candidate source marks it ignored. Candidate-owned
+  generated authority and `scripts/check .` output remain local diagnostic
+  evidence, outside the required CI result, because a candidate cannot
+  independently authenticate its own status or pass strings. The job must not
+  relabel any candidate result as a passing product, readiness, release,
+  security proof, or completion check.
 
 ## Outcomes and claim ceiling
 

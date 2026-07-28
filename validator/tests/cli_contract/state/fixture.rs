@@ -13,6 +13,8 @@ use ultragoal::state::{
     InventoryPolicy, Repair, RepairTarget, RepairTargetKind, RuntimeMetadata,
 };
 
+use super::authority_inputs;
+
 pub(super) struct Fixture {
     pub root: PathBuf,
     pub context: LiveContext,
@@ -118,6 +120,17 @@ impl Drop for Fixture {
 }
 
 fn copy_authority_inputs(live: &Path, root: &Path) {
+    fs::copy(
+        live.join("LANE_REGISTRY.json"),
+        root.join("LANE_REGISTRY.json"),
+    )
+    .unwrap();
+    fs::create_dir_all(root.join("templates")).unwrap();
+    fs::copy(
+        live.join("templates/LANE_REGISTRY.json"),
+        root.join("templates/LANE_REGISTRY.json"),
+    )
+    .unwrap();
     let source = live.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     let target = root.join("docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT");
     fs::create_dir_all(&target).unwrap();
@@ -138,13 +151,14 @@ fn copy_authority_inputs(live: &Path, root: &Path) {
         .unwrap();
     }
     fs::create_dir_all(root.join("migration")).unwrap();
-    for name in ["authority-routes.json", "generated-surface-authority.json"] {
+    for name in ["authority-routes.json"] {
         fs::copy(
             live.join("migration").join(name),
             root.join("migration").join(name),
         )
         .unwrap();
     }
+    authority_inputs::copy_declared_files(live, root);
     fs::create_dir_all(root.join(".codex-plugin")).unwrap();
     fs::write(
         root.join(".codex-plugin/plugin.json"),

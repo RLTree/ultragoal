@@ -13,6 +13,13 @@ fn current_registry_is_exact_canonical_v3() {
             .registry
             .surfaces
             .values()
+            .any(|surface| matches!(surface, GeneratedSurface::AdoptedSchemaContract { .. }))
+    );
+    assert!(
+        response
+            .registry
+            .surfaces
+            .values()
             .any(|surface| matches!(surface, GeneratedSurface::SourceProjection { .. }))
     );
     assert!(

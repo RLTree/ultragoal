@@ -7,13 +7,19 @@ use std::path::{Path, PathBuf};
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 
-const STORE_PATH: &str = "validation_artifacts/observability/spool/successor-events.jsonl";
+const STORE_PARENT: &str = "validation_artifacts/observability/spool";
+pub(super) const RUNTIME_SOURCE_ID: &str = "successor-runtime";
 
 mod failure;
+mod terminal;
 pub(super) use failure::LocalStoreFailure;
+#[allow(unused_imports)]
+pub(super) use terminal::{RoutineTerminalEvent, terminal_event_id};
+pub(super) use terminal::{append_routine_terminal, routine_observations_from_events};
 
 pub(super) struct LocalStore {
     root: PathBuf,
+    path: PathBuf,
     before: StoreState,
     store: Option<EventStore>,
 }
@@ -24,17 +30,18 @@ impl LocalStore {
         context: &LiveContext,
         source_id: &str,
     ) -> Result<Self, LocalStoreFailure> {
-        let path = store_path(root);
+        let path = store_path(root, context, source_id)?;
         let before = store_state(root, &path).ok_or_else(LocalStoreFailure::open_boundary)?;
         let store = match before.leaf {
             LeafState::Absent { .. } => None,
             LeafState::Present { .. } => Some(
-                EventStore::for_context(path, context, source_id)
+                EventStore::for_context(&path, context, source_id)
                     .map_err(|error| LocalStoreFailure::open(&error))?,
             ),
         };
         Ok(Self {
             root: root.to_path_buf(),
+            path,
             before,
             store,
         })
@@ -75,15 +82,35 @@ impl LocalStore {
     }
 
     pub(super) fn revalidate(&self) -> Result<(), LocalStoreFailure> {
-        match store_state(&self.root, &store_path(&self.root)) {
+        match store_state(&self.root, &self.path) {
             Some(state) if state == self.before => Ok(()),
             _ => Err(LocalStoreFailure::changed()),
         }
     }
 }
 
-pub(super) fn store_path(root: &Path) -> PathBuf {
-    root.join(STORE_PATH)
+pub(super) fn store_path(
+    root: &Path,
+    context: &LiveContext,
+    source_id: &str,
+) -> Result<PathBuf, LocalStoreFailure> {
+    let binding = SemanticEvent::for_context(
+        context,
+        source_id,
+        "store-path-binding",
+        0,
+        0,
+        "observe.store",
+        "unknown",
+    )
+    .map_err(|_| LocalStoreFailure::binding())?;
+    let leaf = EventStore::binding_leaf_name(
+        binding.context_id(),
+        binding.candidate_id(),
+        binding.source_id(),
+    )
+    .map_err(|_| LocalStoreFailure::binding())?;
+    Ok(root.join(STORE_PARENT).join(leaf))
 }
 
 pub(super) fn local_policy() -> Value {

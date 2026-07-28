@@ -71,9 +71,9 @@ impl Fixture {
         fs::create_dir_all(binary.parent().unwrap()).unwrap();
         fs::copy(Self::source_binary(), &binary).unwrap();
         set_mode(&binary, 0o555);
-        set_mode(&home, 0o700);
+        set_mode(&home, 0o755);
         fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 1 }\n").unwrap();
-        fs::write(root.join(".gitignore"), b"target/\n").unwrap();
+        fs::write(root.join(".gitignore"), b"target/\nvalidation_artifacts/\n").unwrap();
 
         let graph = graph(nodes, routes);
         let catalog = catalog_bytes(nodes, graph.graph_id());
@@ -154,6 +154,18 @@ impl Fixture {
 
     pub fn lock_path(&self) -> PathBuf {
         self.state_root().join("adapter/adapter.lock")
+    }
+
+    pub fn checkpoint_path(&self) -> PathBuf {
+        super::continuation_paths::checkpoint_path(&self.state_root())
+    }
+
+    pub fn continuations_root(&self) -> PathBuf {
+        super::continuation_paths::continuations_root(&self.state_root())
+    }
+
+    pub fn checkpoint_stage_path(&self) -> PathBuf {
+        super::continuation_paths::checkpoint_stage_path(&self.state_root())
     }
 
     pub(crate) fn binary_path(&self) -> &Path {

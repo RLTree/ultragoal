@@ -42,10 +42,6 @@ fn flow_failures(root: &Path) -> Vec<String> {
     flow_manifest_failures(root, &PluginCohesionManifest::from_value(&value))
 }
 
-pub(crate) fn flow_manifest_projection_failures(root: &Path, flow: &Value) -> Vec<String> {
-    flow_manifest_failures(root, &PluginCohesionManifest::from_value(flow))
-}
-
 fn flow_manifest_failures(root: &Path, flow: &PluginCohesionManifest) -> Vec<String> {
     let mut out = Vec::new();
     if flow.schema != "harness-ultragoal.plugin-cohesion-manifest.v1" {
@@ -63,7 +59,7 @@ fn flow_manifest_failures(root: &Path, flow: &PluginCohesionManifest) -> Vec<Str
     }
     out.extend(crate::audit::plugin::flow::authority::failures(flow));
     for surface in &flow.required_surfaces {
-        if !root.join(&surface).is_file() {
+        if !root.join(surface).is_file() {
             out.push(format!("plugin_flow_setup_file_not_packaged:{surface}"));
         }
     }
@@ -163,15 +159,6 @@ fn visible_entry_failures(root: &Path) -> Vec<String> {
     out
 }
 
-pub fn plugin_json_failures(value: &Value) -> Vec<String> {
-    let prompt = PluginPromptProjection::from_value(value);
-    if prompt.mentions(FIT_REPO_ENTRYPOINT) {
-        Vec::new()
-    } else {
-        vec!["plugin_flow_entrypoint_not_visible".to_string()]
-    }
-}
-
 fn fit_repo_receipt_failures(root: &Path) -> Vec<String> {
     let receipt = match crate::json_boundary::read_json(&root.join(FIT_REPO_RECEIPT)) {
         Ok(value) => value,
@@ -184,14 +171,6 @@ pub fn fit_repo_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<Stri
     crate::audit::fit_repo_receipt::failures(root, receipt)
 }
 
-pub fn fit_repo_receipt_value_failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    crate::audit::fit_repo_receipt::failures_with_candidate(root, receipt, target_digest)
-}
-
 fn journey_failures(root: &Path) -> Vec<String> {
     let value = match crate::json_boundary::read_json(&root.join(JOURNEY)) {
         Ok(value) => value,
@@ -202,12 +181,4 @@ fn journey_failures(root: &Path) -> Vec<String> {
 
 pub fn journey_value_failures(root: &Path, value: &Value) -> Vec<String> {
     crate::audit::plugin::product::journey::failures(root, value)
-}
-
-pub fn journey_value_failures_with_candidate(
-    root: &Path,
-    value: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    crate::audit::plugin::product::journey::failures_with_candidate(root, value, target_digest)
 }

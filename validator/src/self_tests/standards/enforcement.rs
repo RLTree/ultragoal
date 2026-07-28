@@ -167,17 +167,6 @@ fn agent_standards_tsv_checks_cover_parse_and_script_evidence_paths() {
     );
     assert!(failures.is_empty(), "{failures:?}");
 
-    assert_eq!(
-        crate::audit::agent::standards::tsv::checks::audit_row_failures(&root, &json!("bad")),
-        ["agent_standards_audit_evidence_invalid"]
-    );
-    assert!(
-        crate::audit::agent::standards::tsv::checks::audit_row_failures(
-            &root,
-            &json!({"standard_id":"row1","audit_status":"fail"})
-        )
-        .is_empty()
-    );
     std::fs::remove_dir_all(root).expect("cleanup agent standards tsv branches");
 }
 

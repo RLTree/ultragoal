@@ -161,64 +161,35 @@
     "canonical_skills": [
       {
         "canonical": "harness-ultragoal",
-        "purpose": "Concise front door, intent classification, authority disclosure, and route selection.",
-        "legacy_routes": [
-          "ultragoal",
-          "harness-engineering"
-        ]
+        "purpose": "Concise front door, intent classification, authority disclosure, and route selection."
       },
       {
         "canonical": "repository-fit",
-        "purpose": "Fresh setup and existing-repository retrofit through inspect/plan/apply/verify.",
-        "legacy_routes": [
-          "agent-first-repo-init",
-          "agent-first-repo-retrofit",
-          "fit-repo"
-        ]
+        "purpose": "Fresh setup and existing-repository retrofit through inspect/plan/apply/verify."
       },
       {
         "canonical": "routine-work",
-        "purpose": "Dirty-tree-safe affected checks, verified reuse, and exact execution reporting.",
-        "legacy_routes": [
-          "execplan-lane",
-          "agent-runtime-legibility"
-        ]
+        "purpose": "Dirty-tree-safe affected checks, verified reuse, and exact execution reporting."
       },
       {
         "canonical": "diagnose-and-observe",
-        "purpose": "Causal diagnosis, local semantic observability, repair, and deterministic next action.",
-        "legacy_routes": [
-          "agent-observability-stack"
-        ]
+        "purpose": "Causal diagnosis, local semantic observability, repair, and deterministic next action."
       },
       {
         "canonical": "goal-run",
-        "purpose": "Durable Goal-mode execution, root orchestration, checkpoints, and honest stops.",
-        "legacy_routes": [
-          "orchestrator-reconciler"
-        ]
+        "purpose": "Durable Goal-mode execution, root orchestration, checkpoints, and honest stops."
       },
       {
         "canonical": "prove",
-        "purpose": "Claim-specific strict proof and independent reconciliation.",
-        "legacy_routes": [
-          "proof-gate",
-          "product-cohesion-gate",
-          "product-fitness-gate"
-        ]
+        "purpose": "Claim-specific strict proof and independent reconciliation."
       },
       {
         "canonical": "improve-and-maintain",
-        "purpose": "Evaluation, failure harvesting, research refresh, migration, compatibility, and retirement.",
-        "legacy_routes": [
-          "agent-improvement-loop",
-          "standards-gardener"
-        ]
+        "purpose": "Evaluation, failure harvesting, research refresh, migration, compatibility, and retirement."
       },
       {
         "canonical": "product-journey-review",
-        "purpose": "Fresh-user, fresh-agent, maintainer, security, recovery, and proof-falsification journeys.",
-        "legacy_routes": []
+        "purpose": "Fresh-user, fresh-agent, maintainer, security, recovery, and proof-falsification journeys."
       }
     ],
     "read_only_agent_roles": [

@@ -33,7 +33,7 @@ fn contention_timeout_cancellation_and_release_are_bounded_zero_write() {
     let holder = OpenOptions::new()
         .read(true)
         .write(true)
-        .open(repository.store_path())
+        .open(repository.store_path(&binding))
         .unwrap();
     holder.lock().unwrap();
     let listener = TcpListener::bind(("127.0.0.1", 0)).unwrap();
@@ -113,4 +113,5 @@ fn contention_timeout_cancellation_and_release_are_bounded_zero_write() {
         "lock-failure"
     );
     assert_no_connection(&listener);
+    repository.teardown();
 }

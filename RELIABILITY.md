@@ -17,6 +17,11 @@ revalidated.
   reuse verified state or produce the same supported outcome without duplicate
   effects.
 
+Routine snapshot stability is measured over the bound Git-visible repository
+state. Ignored build output is outside dirty-state authority; selected inputs
+and declared output scopes are still independently revalidated before and
+after effects.
+
 ## State And Recovery
 
 Product state is owned by the typed stores under `state/`, `orchestration/`,

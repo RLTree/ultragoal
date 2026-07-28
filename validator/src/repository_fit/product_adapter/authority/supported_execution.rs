@@ -1,3 +1,4 @@
+use super::super::root_permit::ProductionPermitActivation;
 use super::*;
 
 #[cfg(target_vendor = "apple")]
@@ -126,12 +127,14 @@ pub(crate) fn execute_supported(
     let (permit, lease) = match activate_production_permit(
         context,
         &request,
-        draft,
-        effects,
-        authority.identity,
-        issued_tick,
-        expires_tick,
-        nonce_sha256,
+        ProductionPermitActivation::new(
+            draft,
+            effects,
+            authority.identity,
+            issued_tick,
+            expires_tick,
+            nonce_sha256,
+        ),
     ) {
         Ok(pair) => pair,
         Err(error) => {

@@ -29,6 +29,7 @@ impl AnchoredDirectory {
         let name = component(name)?;
         let raw = directory_syscall_adapter::open_directory(self.handle.file.as_raw_fd(), &name)
             .map_err(|_| unsafe_entry())?;
+        // SAFETY: `open_directory` returned this owned, open file descriptor exactly once.
         let file = unsafe { File::from_raw_fd(raw) };
         anchored_directory(file)
     }
@@ -144,6 +145,7 @@ impl AnchoredDirectory {
         record_file_open_attempt();
         let raw = directory_syscall_adapter::open_regular_file(self.handle.file.as_raw_fd(), &name)
             .map_err(|_| unsafe_entry())?;
+        // SAFETY: `open_regular_file` returned this owned, open file descriptor exactly once.
         let mut file = unsafe { File::from_raw_fd(raw) };
         let before = file.metadata().map_err(|_| unsafe_entry())?;
         require_regular_single_link(&before, maximum)?;

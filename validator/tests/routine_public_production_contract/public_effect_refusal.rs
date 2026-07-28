@@ -3,8 +3,6 @@ use serde_json::Value;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::process::Output;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 pub(super) fn dirty_fixture(label: &str, provision_host: bool) -> Fixture {
     Fixture::new(
@@ -61,35 +59,107 @@ fn valid_host_runs_through_local_issuer_before_repeat() {
 }
 
 #[test]
-fn missing_local_host_repeat_refusals_never_initialize_state_or_outputs() {
-    let mut fixture = dirty_fixture("missing-local-host-repeat", false);
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
-    let before_status = fixture.status();
+fn missing_local_host_bootstraps_once_before_the_authoritative_effect() {
+    let mut fixture = dirty_fixture("missing-local-host-bootstrap", false);
     assert!(!fixture.state_root().exists());
 
-    for _ in 0..4 {
-        assert_public_refusal(&fixture.run());
-        assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-        assert!(!fixture.state_root().exists());
-    }
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    assert_eq!(Fixture::value(&first)["status"], "executed");
+    assert!(fixture.authority_root().is_dir());
+    assert!(fixture.lock_path().is_file());
+    assert!(
+        String::from_utf8(
+            fs::read(fixture.authority_root().join("routine-authority.state")).unwrap(),
+        )
+        .unwrap()
+        .contains("\"state\":\"complete\"")
+    );
+    let before_repeat = tree(&fixture.root);
+    assert_terminal_reuse(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_repeat);
+    fixture.teardown_after_assertions();
+}
+
+fn assert_terminal_reuse(output: &Output) {
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    assert_eq!(Fixture::value(output)["status"], "reused");
+    assert_eq!(Fixture::value(output)["effect"], "none");
+}
+
+#[test]
+fn fitted_routine_templates_bind_the_supported_rust_source_route() {
+    let mut fixture = dirty_fixture("fitted-routine-templates", false);
+    fs::write(
+        fixture.root.join("config/routines.json"),
+        include_bytes!("../../../templates/config/routines.json"),
+    )
+    .unwrap();
+    fs::write(
+        fixture.root.join("config/routine-public.json"),
+        include_bytes!("../../../templates/config/routine-public.json"),
+    )
+    .unwrap();
+
+    let output = fixture.run();
+
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "executed");
+    assert_eq!(value["nodes"][0]["node_id"], "syntax");
+    assert!(fixture.root.join("target/routine/syntax").is_dir());
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn concurrent_local_issuer_attempts_have_no_forged_success() {
-    let mut fixture = dirty_fixture("local-issuer-concurrent", true);
+fn interrupted_unpublished_bootstrap_stages_do_not_block_a_fresh_retry() {
+    const INTERRUPT_STAGES: &[&[&str]] = &[
+        &[],
+        &["authority"],
+        &["authority", "adapter"],
+        &["authority", "adapter", "adapter/adapter.lock"],
+    ];
+    for descendants in INTERRUPT_STAGES.iter().copied() {
+        let mut fixture = dirty_fixture("interrupted-bootstrap-stage", false);
+        let base = fixture.home.join(".codex/state/harness-ultragoal");
+        fs::create_dir_all(&base).unwrap();
+        for path in [
+            fixture.home.join(".codex"),
+            fixture.home.join(".codex/state"),
+            base.clone(),
+        ] {
+            fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+        let stage = base.join(".routine-public-bootstrap");
+        fs::create_dir(&stage).unwrap();
+        fs::set_permissions(&stage, fs::Permissions::from_mode(0o700)).unwrap();
+        for descendant in descendants {
+            let path = stage.join(descendant);
+            if descendant.ends_with("adapter.lock") {
+                fs::write(&path, []).unwrap();
+                fs::set_permissions(&path, fs::Permissions::from_mode(0o600)).unwrap();
+            } else {
+                fs::create_dir(&path).unwrap();
+                fs::set_permissions(&path, fs::Permissions::from_mode(0o700)).unwrap();
+            }
+        }
+
+        let output = fixture.run();
+
+        assert_eq!(output.status.code(), Some(0), "{output:?}");
+        assert_eq!(Fixture::value(&output)["status"], "executed");
+        assert!(fixture.state_root().is_dir());
+        assert!(!base.join(".routine-public-bootstrap").exists());
+        fixture.teardown_after_assertions();
+    }
+}
+
+#[test]
+fn concurrent_first_use_has_one_authoritative_effect() {
+    let mut fixture = dirty_fixture("local-issuer-concurrent", false);
 
     std::thread::scope(|scope| {
-        let done = Arc::new(AtomicBool::new(false));
-        let monitor_done = Arc::clone(&done);
-        let monitored = &fixture;
-        let monitor = scope.spawn(move || {
-            while !monitor_done.load(Ordering::Acquire) {
-                assert!(monitored.authority_root().exists());
-                std::thread::yield_now();
-            }
-        });
         let attempts = (0..8)
             .map(|_| scope.spawn(|| fixture.run()))
             .collect::<Vec<_>>();
@@ -103,16 +173,25 @@ fn concurrent_local_issuer_attempts_have_no_forged_success() {
         );
         for output in outputs {
             if !output.status.success() {
-                assert_public_refusal(&output);
+                assert_concurrent_loser_refusal(&output);
             }
         }
-        done.store(true, Ordering::Release);
-        monitor.join().unwrap();
     });
 
     assert!(fixture.authority_root().is_dir());
     assert!(fixture.root.join("target/routine/compile").is_dir());
     fixture.teardown_after_assertions();
+}
+
+fn assert_concurrent_loser_refusal(output: &Output) {
+    let diagnostic: Value = serde_json::from_slice(&output.stderr).unwrap();
+    if diagnostic["cause"]
+        == "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe"
+    {
+        assert_eq!(diagnostic["effect"], "none");
+    } else {
+        assert_public_refusal(output);
+    }
 }
 
 #[test]

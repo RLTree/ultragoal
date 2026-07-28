@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Validate current agent-standards authority without embedded script logic."""
 
+import sys
+
+sys.dont_write_bytecode = True
+
 from agent_standards_validation.command import main
 
 

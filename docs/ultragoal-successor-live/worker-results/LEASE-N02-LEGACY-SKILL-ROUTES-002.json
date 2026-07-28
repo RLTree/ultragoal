@@ -124,7 +124,7 @@
       "summary": "14 mappings, 14 templates, 14 explicit-only policies, 42 distinct-token conflict cases, and 14 repeated-same-alias cases passed."
     },
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each of 22 live skill directories>",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each of 22 live skill directories>",
       "result": "pass_22_of_22",
       "summary": "The restored system validator returned Skill is valid for all twenty-two live skill directories."
     },
@@ -134,7 +134,7 @@
       "summary": "All fourteen explicit-only metadata files remained byte-identical and WorkerResult 001 remained preserved."
     },
     {
-      "command": "bash /Users/terrynoblin/.codex/scripts/content-lint-deterministic.sh <fourteen leased SKILL.md files>",
+      "command": "bash <operator-home>/.codex/scripts/content-lint-deterministic.sh <fourteen leased SKILL.md files>",
       "result": "pass",
       "summary": "Layer 1 returned zero errors and zero warnings across fourteen inputs; manual cause/action and internal-terse review found no additional issue in the exact root-supplied clause."
     },

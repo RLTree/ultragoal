@@ -128,7 +128,7 @@ fn validate(packet: Packet) -> Result<RedPacketParseResponse, RedPacketParseErro
         || packet
             .preconditions
             .iter()
-            .any(|row| invalid_text(&row.path))
+            .any(|row| !row.exists || invalid_text(&row.path))
         || packet
             .postconditions
             .iter()
@@ -159,7 +159,7 @@ fn consume_contract_fields(packet: &Packet) {
         &packet.materialization.expected_validation_layer,
         packet.materialization.first_failure_must_match_expected,
         packet.materialization.post_patch_schema_valid,
-        packet.preconditions.iter().map(|row| row.exists).count(),
+        packet.preconditions.len(),
         packet.notes.as_deref(),
     );
 }

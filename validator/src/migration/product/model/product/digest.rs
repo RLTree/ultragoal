@@ -32,7 +32,10 @@ fn validate_inventory_paths(inventory: &MigrationInventory) -> Result<(), Produc
                 "migration-product-inventory-unicode-or-path-refused",
             ));
         }
-        if surface.file_kind != SurfaceFileKind::Regular || surface.link_count != 1 {
+        if !matches!(
+            (surface.file_kind, surface.link_count),
+            (SurfaceFileKind::Regular, 1) | (SurfaceFileKind::Semantic, 0)
+        ) {
             return Err(ProductMigrationError::new(
                 "migration-product-inventory-file-refused",
             ));
@@ -55,6 +58,7 @@ fn validate_inventory_paths(inventory: &MigrationInventory) -> Result<(), Produc
     Ok(())
 }
 
+#[cfg(test)]
 pub(super) fn exact_input_matches(
     binding: &MigrationInputBinding,
     input: &ProductInputSnapshot,

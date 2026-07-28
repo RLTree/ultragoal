@@ -1,0 +1,1 @@
+{"schema_version":"RoutineProductionCatalog-v2","graph_id":"sha256:0d9fc399bf907df9d597904dc789f7059eac4e16965e02c033d2331e3991ea23","routines":[{"node_id":"syntax","behavior_id":"rust-source-syntax-v1","depends_on":[],"read_sources":["src/lib.rs"],"timeout_ms":60000,"output_budget_bytes":1048576,"output_scopes":["target/routine/syntax"]}]}

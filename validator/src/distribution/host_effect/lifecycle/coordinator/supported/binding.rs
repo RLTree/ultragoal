@@ -38,100 +38,30 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
             clock,
             adapter,
         } = request;
-        // This must remain the first observable decision. In particular,
-        // Darwin may not contact clocks, targets, ledgers, permit authority, or
-        // descriptor adapters and may not release the plan.
-        if platform == DescriptorExecutionPlatform::Darwin {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::UnsupportedPlatform,
-            ));
+        let mut selected = Some(executable);
+        let result = self.prepare_selected(
+            platform,
+            PreparationContext {
+                accepted,
+                custody,
+                selected: &mut selected,
+                target,
+                clock,
+                adapter,
+            },
+        );
+        match result {
+            Ok(handoff) => Ok(handoff),
+            Err(error) => {
+                let cleanup = selected.take().ok_or_else(|| {
+                    lifecycle_error(SupportedHostLifecycleErrorId::PlanSubstitution)
+                })?;
+                Err(preserve_preparation_refusal(error, cleanup.finalize()))
+            }
         }
-        if !platform.supports_descriptor_execution() {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
-            ));
-        }
-
-        accepted.require_coordinator(&self.binding_sha256()?)?;
-        accepted.require_plan(custody)?;
-        accepted.require_executable(&executable)?;
-        let capability = adapter.descriptor_capability()?;
-        if capability.platform != platform {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::DescriptorExecutionUnavailable,
-            ));
-        }
-
-        let time_before = clock.sample()?;
-        let mut target_lease = target.acquire(accepted.expected_target())?;
-        let target_before = target_lease.identity().clone();
-        accepted.require_target(&target_before)?;
-        let head = self.ledger.ledger.head().map_err(|_| ledger_rejected())?;
-        if &head != accepted.expected_head() {
-            return Err(lifecycle_error(
-                SupportedHostLifecycleErrorId::StaleLedgerHead,
-            ));
-        }
-        let target_after = target_lease.revalidate()?;
-        if target_before != target_after {
-            return Err(lifecycle_error(SupportedHostLifecycleErrorId::TargetRace));
-        }
-        accepted.require_target(&target_after)?;
-        let time_after = clock.sample()?;
-        time_before.require_successor(&time_after)?;
-        let expires_at_unix_ms = time_after
-            .unix_ms()
-            .checked_add(MAX_PERMIT_TTL_MS)
-            .ok_or_else(untrusted_time)?;
-        let binding = accepted.derive_binding(time_after.unix_ms(), expires_at_unix_ms, &head)?;
-        let (permit, reservation) = self
-            .authority
-            .authority
-            .issue(binding)
-            .map_err(|_| authority_rejected())?;
-        self.authority
-            .authority
-            .verify(&permit, time_after.unix_ms())
-            .map_err(|_| authority_rejected())?;
-        let reserved = self
-            .ledger
-            .ledger
-            .reserve(reservation)
-            .map_err(|_| ledger_rejected())?;
-        let in_flight = self
-            .ledger
-            .ledger
-            .transition(
-                HostEffectTransition::new(
-                    permit.permit_id().to_owned(),
-                    HostEffectState::Reserved,
-                    HostEffectState::InFlight,
-                    reserved.current_head().clone(),
-                    None,
-                )
-                .map_err(|_| ledger_rejected())?,
-            )
-            .map_err(|_| ledger_rejected())?;
-        let target_final = target_lease.revalidate()?;
-        if target_after != target_final {
-            return Err(lifecycle_error(SupportedHostLifecycleErrorId::TargetRace));
-        }
-        accepted.require_target(&target_final)?;
-        // Construct against a non-authoritative plan copy so a final
-        // executable revalidation failure cannot consume root plan custody.
-        let plan = custody.candidate_plan()?;
-        let effect =
-            AuthorizedHostEffect::new(permit, in_flight, executable, plan).map_err(|_| {
-                lifecycle_error(SupportedHostLifecycleErrorId::HandoffConstructionFailed)
-            })?;
-        custody.commit_release()?;
-        Ok(DescriptorExecutionHandoff {
-            capability,
-            effect,
-            target: target_lease,
-        })
     }
 
+    #[cfg(test)]
     pub(super) fn authorize_recovery(
         &self,
         classification: &PublicationClassification,
@@ -148,11 +78,35 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
     }
 }
 
+fn preserve_preparation_refusal<E>(
+    error: SupportedHostLifecycleError,
+    cleanup: Result<(), E>,
+) -> SupportedHostLifecycleError {
+    let _ = cleanup;
+    error
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn cleanup_failure_does_not_replace_preparation_refusal() {
+        let refusal = lifecycle_error(SupportedHostLifecycleErrorId::TargetRace);
+        assert_eq!(preserve_preparation_refusal(refusal, Err(())), refusal);
+    }
+}
+
 pub(in crate::distribution::host_effect) struct HostEffectPreparationRequest<'a> {
     pub accepted: &'a AcceptedHostEffect,
-    pub custody: &'a mut RootPlanCustody,
-    pub executable: PinnedHostExecutable,
+    #[cfg(not(test))]
+    pub custody: &'a mut HostLifecycleCustody,
+    #[cfg(test)]
+    pub custody: &'a mut HostLifecycleCustody,
+    pub executable: SelectedCodexExecutable,
     pub target: &'a mut dyn HostTargetObserver,
     pub clock: &'a mut dyn RootTrustedClock,
     pub adapter: &'a mut dyn DescriptorExecutionAdapter,
 }
+
+include!("preparation.rs");

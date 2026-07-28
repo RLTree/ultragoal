@@ -1,6 +1,6 @@
 use super::*;
 
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, File};
 use std::io::{Seek, SeekFrom, Write};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
@@ -8,7 +8,13 @@ use crate::routine_work::runtime_adapter::mediator::{
     ObjectIdentity, PinnedExecutable, StagedProgram,
 };
 #[cfg(unix)]
-use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
+use std::os::unix::fs::PermissionsExt;
+
+#[cfg(unix)]
+#[path = "snapshot_bound_filesystem.rs"]
+mod bound_filesystem;
+#[cfg(unix)]
+use bound_filesystem::{create_bound_directory_at, create_exclusive_at, validate_directory_path};
 
 use super::acquisition::{LaunchAcquisitionCustody, observe_directory_stat};
 use super::cleanup::EntryClaim;
@@ -25,8 +31,9 @@ pub(in crate::routine_work::runtime_adapter::production) struct LaunchBinding<'a
 }
 
 pub(in crate::routine_work::runtime_adapter::production) fn launch_root(
-    authority_root: &Path,
+    custody: &super::super::RoutineCustodyCapability,
 ) -> Result<PathBuf, RoutineError> {
+    let authority_root = custody.authority_root();
     let parent = authority_root
         .parent()
         .ok_or_else(|| error("routine-production-launch-root-invalid"))?
@@ -49,18 +56,14 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
     {
         source.validate()?;
         ensure_launch_root(root)?;
-        let child = root.join(format!("launch-{}", safe_token_name(binding.grant_id)));
-        let mut builder = fs::DirBuilder::new();
-        builder.mode(0o700);
-        builder
-            .create(&child)
-            .map_err(|_| error("routine-production-launch-directory-create-failed"))?;
+        let child_name = format!("launch-{}", safe_token_name(binding.grant_id));
+        let child = root.join(&child_name);
+        let held_directory = create_bound_directory_at(root, &child_name)
+            .map_err(|_| error("routine-production-launch-directory-binding-unavailable"))?;
         let mut custody = LaunchAcquisitionCustody::created(child);
+        custody.hold_directory(held_directory);
         let result = catch_unwind(AssertUnwindSafe(|| {
             let child = custody.child().to_path_buf();
-            let held_directory = File::open(&child)
-                .map_err(|_| error("routine-production-launch-directory-open-failed"))?;
-            custody.hold_directory(held_directory);
             let directory = custody.duplicate_directory()?;
             observe_directory_stat()?;
             let created_directory_identity = ObjectIdentity::from(
@@ -80,12 +83,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
             let marker = child.join(LAUNCH_MARKER_NAME);
             let marker_bytes =
                 format!("{}\n{}\n", binding.grant_id, binding.recovery_marker).into_bytes();
-            let mut marker_file = OpenOptions::new()
-                .write(true)
-                .create_new(true)
-                .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
-                .mode(0o400)
-                .open(&marker)
+            let mut marker_file = create_exclusive_at(&directory, LAUNCH_MARKER_NAME, 0o400)
                 .map_err(|_| error("routine-production-launch-marker-create-failed"))?;
             let marker_created_identity = ObjectIdentity::from(
                 &marker_file
@@ -105,12 +103,7 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                 .map_err(|_| error("routine-production-launch-marker-sync-failed"))?;
 
             let path = child.join(LAUNCH_FILE_NAME);
-            let mut destination = OpenOptions::new()
-                .write(true)
-                .create_new(true)
-                .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
-                .mode(0o500)
-                .open(&path)
+            let mut destination = create_exclusive_at(&directory, LAUNCH_FILE_NAME, 0o500)
                 .map_err(|_| error("routine-production-launch-file-create-failed"))?;
             let program_identity = ObjectIdentity::from(
                 &destination
@@ -135,24 +128,20 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                 .sync_all()
                 .map_err(|_| error("routine-production-launch-sync-failed"))?;
             let staged_mode = source.identity_mode().unwrap_or(0o500) & !0o222;
-            fs::set_permissions(&path, fs::Permissions::from_mode(staged_mode))
+            destination
+                .set_permissions(fs::Permissions::from_mode(staged_mode))
                 .map_err(|_| error("routine-production-launch-file-mode-failed"))?;
             source.validate()?;
-            let executable = PinnedExecutable::open_bound_path(
+            let executable = PinnedExecutable::from_bound_file(
                 &path,
+                destination,
                 &source.sha256,
                 source.identity_length(),
-                Some(staged_mode),
+                staged_mode,
             )?;
-            executable.validate()?;
             let seal = child.join(LAUNCH_SEAL_NAME);
             let seal_bytes = format!("{}\n", source.sha256).into_bytes();
-            let mut seal_file = OpenOptions::new()
-                .write(true)
-                .create_new(true)
-                .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
-                .mode(0o400)
-                .open(&seal)
+            let mut seal_file = create_exclusive_at(&directory, LAUNCH_SEAL_NAME, 0o400)
                 .map_err(|_| error("routine-production-launch-seal-create-failed"))?;
             let seal_created_identity = ObjectIdentity::from(
                 &seal_file
@@ -188,8 +177,11 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
                     .metadata()
                     .map_err(|_| error("routine-production-launch-seal-stat-failed"))?,
             );
+            validate_directory_path(&child, directory_identity)?;
+            executable.validate_bound_at(&directory, LAUNCH_FILE_NAME)?;
             Ok(StagedProgram {
                 executable,
+                directory_file: directory,
                 directory: child.clone(),
                 marker: marker.clone(),
                 seal,

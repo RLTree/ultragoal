@@ -121,7 +121,10 @@ impl InventoryFinding {
             FindingSeverity::Warning
                 if matches!(
                     self.code.as_str(),
-                    "sole_current_authority_pending_migration" | "compatibility_route_retained"
+                    "sole_current_authority_pending_migration"
+                        | "compatibility_route_retained"
+                        | "candidate_component_not_active"
+                        | "projection_requires_canonical_reconciliation"
                 ) =>
             {
                 InventoryFindingDisposition::OpenMigrationObligation

@@ -16,12 +16,16 @@ pub(crate) struct BoundInputs {
     pub context_id: String,
     pub authority_catalog_id: String,
     pub authority_catalog_context_id: String,
+    pub candidate_id: String,
     pub inventory_findings: Vec<InventoryObservation>,
     pub capabilities: BTreeMap<String, bool>,
 }
 
 impl BoundInputs {
-    pub(crate) fn from_live(context: &LiveContext, catalog: &AuthorityCatalog) -> Self {
+    pub(crate) fn from_live(
+        context: &LiveContext,
+        catalog: &AuthorityCatalog,
+    ) -> Result<Self, super::product_state::StateError> {
         let mut inventory_findings = catalog
             .findings()
             .iter()
@@ -47,13 +51,14 @@ impl BoundInputs {
             .iter()
             .map(|tool| (tool.name.clone(), tool.available))
             .collect();
-        Self {
+        Ok(Self {
             context_id: context.context_id().to_owned(),
             authority_catalog_id: catalog.catalog_id().to_owned(),
             authority_catalog_context_id: catalog.context_id().to_owned(),
+            candidate_id: super::policy_authority::candidate_identity_id(context)?,
             inventory_findings,
             capabilities,
-        }
+        })
     }
 
     pub(crate) fn validate(&self) -> Result<(), super::product_state::StateError> {
@@ -85,6 +90,7 @@ impl BoundInputs {
         if !super::limits::valid_id(&self.context_id)
             || !super::limits::valid_id(&self.authority_catalog_id)
             || !super::limits::valid_id(&self.authority_catalog_context_id)
+            || !super::limits::valid_id(&self.candidate_id)
         {
             return Err(super::product_state::StateError::InvalidCatalog(
                 "invalid bound identity".to_owned(),

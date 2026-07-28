@@ -2,7 +2,7 @@
   "schema_version": "RootOrchestrationDecision-v1",
   "decision_id": "GPT56-ROUTING-RECONCILIATION-002",
   "guidance_source": {
-    "path": "/Users/terrynoblin/.codex/AGENTS.md",
+    "path": "<operator-home>/.codex/AGENTS.md",
     "sha256": "e6b2a6e4280b78b2ef320362a74a4428179c69f6837846562373cc72dfb1656c",
     "section": "GPT-5.6 Routing And Prompt Law"
   },

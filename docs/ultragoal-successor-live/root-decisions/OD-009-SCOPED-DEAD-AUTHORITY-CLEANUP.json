@@ -1,0 +1,70 @@
+{
+  "schema_version": "RootDecision-v1",
+  "decision_id": "OD-009",
+  "decision_name": "scoped_dead_authority_cleanup",
+  "decision_date": "2026-07-18",
+  "decision_owner": "human_repository_owner",
+  "authorization": "Tree explicitly approved the parent integrator's recommended OD-009 scope: both exact dead-code cohorts.",
+  "root_decision": "authorize_exact_scoped_physical_deletion",
+  "authorized_base": {
+    "commit": "ba04b09e9858c524dafeed3e27514eccc2e61354",
+    "tree": "6c5c46223b457dd412a1a2300a6d4b497e72fe95",
+    "required_status": "clean"
+  },
+  "parent_decision": {
+    "path": "docs/ultragoal-successor-live/root-decisions/OD-008-INTERNAL-LANE-READY-RETIREMENT.json",
+    "sha256": "41a727aa9ffcd3c6140a1bde3d88682dc72c5d35223b447ff5e4349766256639",
+    "preservation": "byte_identical_historical_context"
+  },
+  "authorized_cohorts": [
+    {
+      "cohort_id": "retired_lane_ready_authority",
+      "tracked_path_count": 14,
+      "path_inventory_sha256": "7ca9403244110fe18bd0b735c1452c33815dc42fbd73e1331914e2497f214862",
+      "path_content_aggregate_sha256": "943430e59840edf993e02981a9324e6422aeaf836d06a7a597577a62ee160a50",
+      "tracked_roots": [
+        "validator/src/claim_semantics/lane/",
+        "validator/src/claim_semantics/ready/mod.rs",
+        "validator/src/claim_semantics/ready/receipt.rs"
+      ],
+      "canonical_replacements": [
+        "PS-ORCHESTRATION",
+        "HCT-CLAIMS"
+      ],
+      "migration_action": "remove exact OD-008 route rows and the archive-only preservation reader after deletion"
+    },
+    {
+      "cohort_id": "orphaned_plugin_host_lifecycle_authority",
+      "tracked_path_count": 103,
+      "path_inventory_sha256": "661685ef7fd4969e925261f2bcba40202078c4c05bca3b4f55547039b50120f7",
+      "path_content_aggregate_sha256": "316e07a5c05c00272b5bc2a1e8de40da1ad4ca64ba3e9cd5f9aa24ad446a82c4",
+      "tracked_roots": [
+        "validator/src/plugin_product/host_lifecycle/",
+        "validator/tests/plugin_host_lifecycle_contract.rs",
+        "validator/tests/plugin_host_lifecycle_contract/",
+        "validator/tests/supported_host_lifecycle_adapter_contract.rs",
+        "validator/tests/supported_host_lifecycle_adapter_contract/",
+        "validator/tests/supported_host_plugin_transaction_contract.rs",
+        "validator/tests/supported_host_plugin_transaction_contract/",
+        "fixtures/plugin-host-lifecycle/"
+      ],
+      "canonical_replacement": "validator/src/distribution/host_effect/",
+      "migration_action": "remove duplicate test-only authority, stale lane ownership, and obsolete historical receipt witness code"
+    }
+  ],
+  "scope_rule": "Authorization applies only when both path inventories and both content aggregates match the authorized base. It does not authorize any other historical, legacy, generated, cache, receipt, or user file deletion.",
+  "ongoing_authority": "migration/authority-routes.json destructive_cleanup_authorized remains false; this is a consumed one-shot decision, not a reusable deletion capability.",
+  "historical_record_policy": "Existing contracts, work packages, acceptance records, WorkerResults, reviews, and root decisions remain byte-identical historical evidence unless they are current mutable projections explicitly named by this decision.",
+  "required_reconciliation": [
+    "remove live lane ownership for the deleted N08 authority",
+    "remove the fourteen obsolete OD-008 migration rows and archive-only reader",
+    "remove current package and fixture inventories that list deleted source",
+    "remove false-pass tests that depend on missing historical sources",
+    "preserve distribution::host_effect as the sole supported-host mutation authority",
+    "recompute current registry, backlog, completion, and root-freeze digest chains",
+    "prove no source, test target, fixture, live registry, or package inventory can select the deleted authorities"
+  ],
+  "rollback": "Git history preserves the exact authorized base. Reintroduction requires a new root decision, current authority analysis, and a non-duplicate production purpose.",
+  "claim_effect": "none",
+  "claim_ceiling": "source_and_migration_debt_closure_only; package, install, cache, marketplace, app-registry, discovery, runtime, Product Fitness, readiness, release, completion, and mastery remain withheld"
+}

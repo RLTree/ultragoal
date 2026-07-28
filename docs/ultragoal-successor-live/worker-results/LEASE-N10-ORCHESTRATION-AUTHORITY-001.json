@@ -5,7 +5,7 @@
   "candidate_identity": {
     "candidate_id": "sha256:11db919f94807b8118842ac87d544c95cef449be85c2a57ecd0c547db114143c",
     "context_id": "sha256:b25bd65ce8ba955e5f5ce914f5f2b5f5ed01d1f0c7168fc15b964040d7d13af2",
-    "repository_root": "/Users/terrynoblin/.codex/worktrees/57be/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/.codex/worktrees/57be/harness-ultragoal-plugin-proposal",
     "branch": "codex/n10-orchestration-authority-refresh",
     "base_commit": "d94a471f556b7f1aa7ab000fc285b53dcab08cca",
     "base_tree": "4c13fdbdcbab17ddeb86e45da0811a503ec985bd",

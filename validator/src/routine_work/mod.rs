@@ -18,6 +18,9 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
+#[cfg(test)]
+mod tests;
+
 pub(crate) use behavior::trusted_rust_source_execution_observed;
 pub(crate) use behavior::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
@@ -36,6 +39,7 @@ pub(crate) use error::{
 };
 pub use error::{RoutineError, RoutineErrorId};
 pub use local::LocalDirtyTree;
+pub(crate) use local::require_runtime_store_ignored;
 pub use path::RepoPath;
 pub use plan::{
     AffectedSet, CoverageDimensions, PlanMode, PlanRequest, PlannedCheck, RoutinePlan,
@@ -59,11 +63,21 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, ProductionExecutionControl,
+    PublicRoutineControl, RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
-    mediate_public_routine_execution, prepare_routine_execution,
-    validate_immutable_routine_program,
+    RoutineReservationPublication, RoutineTerminalOutcome, authenticate_public_routine_checkpoint,
+    bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution_with_control, prepare_routine_execution,
+    reconcile_public_routine_reservation, validate_immutable_routine_program,
+};
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::{RoutineCancellation, RoutineReuseInput};
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::{
+    mediate_public_routine_execution, mediate_public_routine_execution_with_reservation_publication,
 };
 
 #[cfg(all(test, target_vendor = "apple"))]
@@ -77,6 +91,6 @@ pub(crate) use runtime_adapter::{
 pub(crate) use authority::set_test_live_authority_hook;
 #[cfg(test)]
 pub(crate) use runtime_adapter::{
-    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
-    validate_output_confinement_after, validate_read_confinement_after_bind,
+    set_test_output_capture_hook, test_last_spawn_group_absent, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };

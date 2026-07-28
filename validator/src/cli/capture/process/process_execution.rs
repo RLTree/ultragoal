@@ -18,16 +18,60 @@ pub(crate) struct ProcessResult {
     pub stderr: CapturedOutput,
 }
 
-pub(crate) fn execute(
-    program: &PinnedProgram,
-    cwd: &PinnedDirectory,
-    environment: &PreparedEnvironment,
+type ProcessExecutor = for<'a> fn(
+    &'a PinnedProgram,
+    &'a PinnedDirectory,
+    &'a PreparedEnvironment,
+    Duration,
+    usize,
+    usize,
+    Option<&'a Arc<AtomicBool>>,
+    &'a SandboxPlan,
+) -> Result<ProcessResult, String>;
+
+pub(crate) const EXECUTE: ProcessExecutor = |program,
+                                             cwd,
+                                             environment,
+                                             timeout,
+                                             output_limit,
+                                             observed_output_limit,
+                                             interrupt,
+                                             sandbox| {
+    execute_request(ProcessExecution {
+        program,
+        cwd,
+        environment,
+        timeout,
+        output_limit,
+        observed_output_limit,
+        interrupt,
+        sandbox,
+    })
+};
+pub(crate) use EXECUTE as execute;
+
+struct ProcessExecution<'a> {
+    program: &'a PinnedProgram,
+    cwd: &'a PinnedDirectory,
+    environment: &'a PreparedEnvironment,
     timeout: Duration,
     output_limit: usize,
     observed_output_limit: usize,
-    interrupt: Option<&Arc<AtomicBool>>,
-    sandbox: &SandboxPlan,
-) -> Result<ProcessResult, String> {
+    interrupt: Option<&'a Arc<AtomicBool>>,
+    sandbox: &'a SandboxPlan,
+}
+
+fn execute_request(request: ProcessExecution<'_>) -> Result<ProcessResult, String> {
+    let ProcessExecution {
+        program,
+        cwd,
+        environment,
+        timeout,
+        output_limit,
+        observed_output_limit,
+        interrupt,
+        sandbox,
+    } = request;
     #[cfg(not(unix))]
     {
         let _ = (
@@ -74,6 +118,8 @@ pub(crate) fn execute(
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
         let cwd_fd = cwd.raw_fd();
+        // SAFETY: the closure runs only in the child after fork and before exec;
+        // `cwd_fd` is an owned pinned directory descriptor that remains open.
         unsafe {
             command.pre_exec(move || {
                 if libc::setpgid(0, 0) != 0 || libc::fchdir(cwd_fd) != 0 {
@@ -187,6 +233,8 @@ pub(crate) fn signal_group(pid: u32, signal: i32) -> Result<(), String> {
     if pid <= 1 {
         return Err("capture process-group cleanup refused unsafe pid".to_owned());
     }
+    // SAFETY: `-pid` is a validated negative process-group id and `signal` is
+    // supplied only by the fixed termination protocol.
     if unsafe { libc::kill(-pid, signal) } == 0
         || std::io::Error::last_os_error().raw_os_error() == Some(libc::ESRCH)
     {

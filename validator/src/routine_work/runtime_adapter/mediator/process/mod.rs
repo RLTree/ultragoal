@@ -1,55 +1,45 @@
 use sha2::{Digest, Sha256};
 #[cfg(test)]
-use std::cell::{Cell, RefCell};
+use std::cell::RefCell;
 use std::collections::BTreeMap;
-use std::fs::File;
-use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
-use std::process::ExitStatus;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-use std::thread::JoinHandle;
-use std::time::{Duration, Instant};
-
-#[cfg(unix)]
-use std::os::fd::AsRawFd;
-#[cfg(unix)]
-use std::os::unix::process::ExitStatusExt;
 
 use crate::routine_work::{
     CleanupEvidence, FailureEvidence, PanicEvidence, ProcessCustodyEvidence, RoutineError,
     RoutineErrorId,
 };
 
-use super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinement, RootAnchor};
+use super::filesystem::{OutputConfinement, PinnedExecutable, RootAnchor};
 use super::outcome::RoutineCancellation;
 
-#[path = "configuration.rs"]
-mod configuration;
 #[path = "custody_settlement.rs"]
 mod custody_settlement;
 #[cfg(target_os = "macos")]
-#[path = "darwin_child_custody.rs"]
-mod darwin_child_custody;
+#[path = "darwin_hooks.rs"]
+mod darwin_hooks;
+#[cfg(target_os = "macos")]
+#[path = "darwin_spawn.rs"]
+mod darwin_spawn;
 #[cfg(target_os = "macos")]
 #[path = "darwin_suspended_launch.rs"]
 mod darwin_suspended_launch;
-#[cfg(target_os = "macos")]
-#[path = "loaded_executable_identity.rs"]
-mod loaded_executable_identity;
+#[path = "execution.rs"]
+mod execution;
+#[path = "failure_injection.rs"]
+mod failure_injection;
+#[cfg(all(target_os = "macos", test))]
+#[path = "group_custody.rs"]
+mod group_custody;
 #[cfg(target_os = "macos")]
 #[path = "object_bound_launch.rs"]
 mod object_bound_launch;
-#[path = "observation_lifecycle.rs"]
-mod observation_lifecycle;
-#[path = "process_execution.rs"]
-mod process_execution;
-#[path = "process_group_observation.rs"]
-mod process_group_observation;
-#[path = "process_input_write.rs"]
-mod process_input_write;
-#[path = "process_output_drain.rs"]
-mod process_output_drain;
+#[path = "observation/digest.rs"]
+mod observation_digest;
+#[path = "observation/failure.rs"]
+mod observation_failure;
+#[cfg(target_os = "macos")]
+#[path = "sandbox_profile.rs"]
+mod sandbox_profile;
 #[path = "spawn_test_observation.rs"]
 mod spawn_test_observation;
 
@@ -78,7 +68,7 @@ pub(crate) fn set_test_loaded_object_hook(hook: impl FnOnce() + Send + 'static) 
     LOADED_OBJECT_HOOK.with(|slot| *slot.borrow_mut() = Some(Box::new(hook)));
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "macos"))]
 pub(crate) fn test_last_spawn_group_absent() -> Result<bool, RoutineError> {
     match test_last_spawn_group() {
         Some(group) => process_group_exists(group).map(|exists| !exists),
@@ -116,33 +106,31 @@ fn run_test_process_post_spawn_hook() {}
 #[cfg(not(test))]
 fn run_test_loaded_object_hook() {}
 
-pub(crate) use configuration::*;
 pub(in crate::routine_work) use custody_settlement::ObservedProcessCustody;
 pub(crate) use custody_settlement::take_process_custody_panic;
 #[cfg(target_os = "macos")]
-pub(crate) use darwin_child_custody::*;
-#[cfg(target_os = "macos")]
 pub(crate) use darwin_suspended_launch::*;
-#[cfg(target_os = "macos")]
-pub(crate) use loaded_executable_identity::*;
+pub(crate) use execution::*;
+pub(crate) use failure_injection::*;
+#[cfg(all(target_os = "macos", test))]
+pub(crate) use group_custody::*;
 #[cfg(target_os = "macos")]
 pub(crate) use object_bound_launch::*;
-pub(crate) use observation_lifecycle::*;
-pub(crate) use process_execution::*;
-pub(crate) use process_group_observation::*;
-pub(crate) use process_input_write::*;
-pub(crate) use process_output_drain::*;
+pub(crate) use observation_digest::*;
+pub(crate) use observation_failure::*;
+#[cfg(target_os = "macos")]
+pub(crate) use sandbox_profile::*;
 pub(crate) use spawn_test_observation::*;
 
 #[cfg(all(test, target_os = "macos"))]
 #[path = "custody_transition_tests.rs"]
 mod custody_transition_tests;
 #[cfg(test)]
-#[path = "process_object_binding_tests.rs"]
-mod process_object_binding_tests;
-#[cfg(test)]
-#[path = "process_termination_tests.rs"]
-mod process_termination_tests;
+#[path = "object_binding_tests.rs"]
+mod object_binding_tests;
 #[cfg(test)]
 #[path = "revalidation_tests.rs"]
 mod revalidation_tests;
+#[cfg(test)]
+#[path = "termination_tests.rs"]
+mod termination_tests;

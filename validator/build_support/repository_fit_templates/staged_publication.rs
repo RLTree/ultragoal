@@ -1,21 +1,78 @@
 use super::*;
 
 pub(crate) fn write_staged(path: &Path, bytes: &[u8]) -> Result<(), String> {
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent).map_err(|_| "staged parent creation failed".to_owned())?;
+    #[cfg(not(unix))]
+    {
+        let _ = (path, bytes);
+        return Err("staged publication requires descriptor-relative no-follow support".to_owned());
     }
-    let mut options = OpenOptions::new();
-    options.write(true).create(true).truncate(true);
-    let mut file = options
-        .open(path)
-        .map_err(|_| "staged source creation failed".to_owned())?;
+    #[cfg(unix)]
+    {
+        write_staged_unix(path, bytes)
+    }
+}
+
+#[cfg(unix)]
+fn write_staged_unix(path: &Path, bytes: &[u8]) -> Result<(), String> {
+    let (parent, name) = open_staged_parent(path)?;
+    let mut file = open_staged_leaf(
+        &parent,
+        &name,
+        0x0002 | CREATE_EXCLUSIVE_FLAGS | no_follow_nonblock_flags(),
+        0o600,
+    )
+    .map_err(|_| "staged source exclusive creation failed".to_owned())?;
+    let opened = file
+        .metadata()
+        .map_err(|_| "staged source metadata unavailable".to_owned())?;
+    if !opened.is_file() || opened.nlink() != 1 || opened.len() != 0 {
+        return Err("staged source is not a new single-link regular file".to_owned());
+    }
     file.write_all(bytes)
         .and_then(|()| file.sync_all())
         .map_err(|_| "staged source write failed".to_owned())?;
-    let staged = fs::read(path).map_err(|_| "staged source verification failed".to_owned())?;
+    file.seek(SeekFrom::Start(0))
+        .map_err(|_| "staged source rewind failed".to_owned())?;
+    let mut staged = Vec::with_capacity(bytes.len());
+    std::io::Read::by_ref(&mut file)
+        .take(bytes.len() as u64 + 1)
+        .read_to_end(&mut staged)
+        .map_err(|_| "staged source verification failed".to_owned())?;
     if staged != bytes {
         return Err("staged source bytes differ".to_owned());
     }
+    let mut published = open_staged_leaf(&parent, &name, 0x0000 | no_follow_nonblock_flags(), 0)
+        .map_err(|_| "staged source publication disappeared".to_owned())?;
+    let published_before = published
+        .metadata()
+        .map_err(|_| "published staged metadata unavailable".to_owned())?;
+    if !published_before.is_file()
+        || published_before.nlink() != 1
+        || published_before.len() != bytes.len() as u64
+        || published_before.permissions().mode() & 0o7777 != 0o600
+    {
+        return Err("published staged source is not the bounded private file".to_owned());
+    }
+    let mut published_bytes = Vec::with_capacity(bytes.len());
+    std::io::Read::by_ref(&mut published)
+        .take(bytes.len() as u64 + 1)
+        .read_to_end(&mut published_bytes)
+        .map_err(|_| "published staged source read failed".to_owned())?;
+    let published_after = published
+        .metadata()
+        .map_err(|_| "final published staged metadata unavailable".to_owned())?;
+    if published_bytes != bytes
+        || identity(&published_before) != identity(&published_after)
+        || identity(&published_after)
+            != identity(
+                &file
+                    .metadata()
+                    .map_err(|_| "final staged source metadata unavailable".to_owned())?,
+            )
+    {
+        return Err("staged source identity changed during publication".to_owned());
+    }
+    verify_staged_publication_path(path, &parent, &published_after)?;
     Ok(())
 }
 

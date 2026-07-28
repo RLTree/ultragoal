@@ -110,6 +110,14 @@ pub fn inspect_with_managed_proofs(
 }
 
 pub fn plan(inspection: &FitInspection, desired: &DesiredState) -> Result<FitPlan, FitError> {
+    plan_with_local_state(inspection, desired, None)
+}
+
+pub(crate) fn plan_with_local_state(
+    inspection: &FitInspection,
+    desired: &DesiredState,
+    local_state: Option<LocalStatePlan>,
+) -> Result<FitPlan, FitError> {
     if inspection.context_id != desired.context_id
         || inspection.candidate_id != desired.candidate_id
         || inspection.desired_state_sha256 != desired.state_sha256
@@ -171,17 +179,32 @@ pub fn plan(inspection: &FitInspection, desired: &DesiredState) -> Result<FitPla
             ObservedDisposition::Matching => {}
         }
     }
-    let plan_sha256 = plan_digest(inspection, desired, &checks, &mutations, &conflicts)?;
+    if let Some(local_state) = local_state.as_ref() {
+        checks.push(local_state.check());
+    }
+    let plan_sha256 = plan_digest(
+        inspection,
+        desired,
+        &checks,
+        &mutations,
+        &conflicts,
+        local_state.as_ref(),
+    )?;
+    let rollback_mutation_count = mutations.len()
+        + local_state
+            .as_ref()
+            .map_or(0, LocalStatePlan::mutation_count);
     Ok(FitPlan {
         context_id: desired.context_id.clone(),
         candidate_id: desired.candidate_id.clone(),
         root_binding: inspection.root_binding.clone(),
         checks,
         rollback: RollbackPlan {
-            mutation_count: mutations.len(),
+            mutation_count: rollback_mutation_count,
         },
         mutations,
         conflicts,
+        local_state,
         plan_sha256,
     })
 }
