@@ -55,13 +55,13 @@ jobs:
           run_lib_test() {
             local test_name="$1"
             assert_registered_once "$RUNNER_TEMP/ultragoal-lib-tests.txt" "$test_name"
-            cargo test -p ultragoal --lib --locked "$test_name" -- --exact --test-threads=1
+            cargo test -p ultragoal --lib --locked "$test_name" -- --exact --include-ignored --test-threads=1
           }
 
           run_observability_test() {
             local test_name="$1"
             assert_registered_once "$RUNNER_TEMP/observability-tests.txt" "$test_name"
-            cargo test -p ultragoal --test observability_contract --locked "$test_name" -- --exact --test-threads=1
+            cargo test -p ultragoal --test observability_contract --locked "$test_name" -- --exact --include-ignored --test-threads=1
           }
 
           run_lib_test "context::process::tests::deadline_kills_and_reaps_the_process_group"
