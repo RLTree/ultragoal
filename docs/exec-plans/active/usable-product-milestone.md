@@ -571,6 +571,10 @@ does not block lanes or cause reproof.
   process group after leader custody is lost, surfaces cleanup ambiguity, and
   retains private random test fixtures where identity-conditioned recursive
   deletion is unavailable.
+- Independent re-review of frozen commit `d8a8550d` approved closure of those
+  six scoped boundaries with no direct security regression. Its ceiling does
+  not establish broader 29-finding closure, product availability, release, or
+  completion; the fresh exact-head normal scan remains required.
 - The warning-denied library build, changed-behavior tests, generated-authority
   check, and all 121 standards-enforcement rows pass. `scripts/check .` reaches
   only its declared exit-4 narrow-helper ceiling. The broad parallel library
