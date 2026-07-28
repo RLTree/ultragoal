@@ -29,6 +29,13 @@ pub(super) fn create_exclusive_at(
     }
 }
 
+pub(super) fn create_bound_directory_at(_root: &Path, _name: &str) -> std::io::Result<File> {
+    Err(std::io::Error::new(
+        std::io::ErrorKind::Unsupported,
+        "identity-bound directory creation is unavailable on this platform",
+    ))
+}
+
 pub(super) fn validate_directory_path(
     child: &Path,
     expected: ObjectIdentity,

@@ -5,7 +5,7 @@ use serde_json::json;
 use std::collections::BTreeMap;
 
 #[test]
-fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
+fn mandatory_law_production_binding_withholds_repository_authored_red_proof() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "mandatory-law-production-edges",
     );
@@ -14,12 +14,10 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
         &json!({"resources":[]}),
     );
     write_specific_red_fixture(&root, "schema-valid-red", "schema-valid", "schema_dispatch");
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(
-            &root,
-            &production_law("schema-valid")
-        )
-        .is_empty()
+    expect_failure(
+        &root,
+        &production_law("schema-valid"),
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
     );
 
     write_json(

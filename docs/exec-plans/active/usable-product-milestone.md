@@ -561,6 +561,16 @@ does not block lanes or cause reproof.
   validation, bind affected filesystem sinks to opened objects, reject
   self-attested proof, redact current-tree private metadata, and lower
   path-only runtime identity to `self_bound=false`.
+- The first independent S0 falsification rejected candidate `b361280a` on six
+  residual boundaries: launch-directory creation, red-audit reads and circular
+  proof, post-reap process-group signaling plus hidden cleanup failure, scalar
+  private-key values, and pathname-recursive fixture cleanup. The follow-up
+  repair disables launch-directory staging without an identity-bound kernel
+  primitive, withholds repository-authored mandatory-law behavior proof,
+  rejects sensitive keys for every JSON value type, never signals a numeric
+  process group after leader custody is lost, surfaces cleanup ambiguity, and
+  retains private random test fixtures where identity-conditioned recursive
+  deletion is unavailable.
 - The warning-denied library build, changed-behavior tests, generated-authority
   check, and all 121 standards-enforcement rows pass. `scripts/check .` reaches
   only its declared exit-4 narrow-helper ceiling. The broad parallel library
@@ -607,6 +617,11 @@ does not block lanes or cause reproof.
   platform-backed binding to the running image. Path-only hashing may report
   an unbound identity or fail closed, but must not preserve the stronger claim
   for interface compatibility.
+- **2026-07-27 — unavailable custody stays unavailable:** production launch
+  staging and mandatory-law red-behavior coverage remain withheld when the
+  host cannot bind directory creation or sealed production observation to the
+  exact object. Product availability may decrease; security authority must not
+  be manufactured from a pathname or repository-authored packet.
 
 ## Outcomes and claim ceiling
 

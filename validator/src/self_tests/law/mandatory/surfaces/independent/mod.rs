@@ -197,7 +197,11 @@ fn independent_verification_rejects_pass_shaped_manual_receipts() {
             }]
         }),
     );
-    assert!(crate::audit::mandatory::law::surfaces::receipt_value_failures(&root, &law).is_empty());
+    expect_failure(
+        &root,
+        &law,
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
+    );
 
     std::fs::remove_dir_all(root).expect("cleanup mandatory independent receipt");
 }
@@ -213,9 +217,10 @@ fn independent_verification_is_targeted_not_universal() {
     );
     write_specific_red_fixture(&root, "schema-valid-red", "schema-valid", "schema_dispatch");
     let generic_law = production_law("schema-valid");
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(&root, &generic_law)
-            .is_empty()
+    expect_failure(
+        &root,
+        &generic_law,
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
     );
 
     let theater_without_manual = validator_theater_law();
@@ -233,9 +238,10 @@ fn independent_verification_is_targeted_not_universal() {
     );
     write_manual_verification(&root, "validator-theater-miswire-resistance");
     let theater_with_manual = with_independent_verification(validator_theater_law());
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(&root, &theater_with_manual)
-            .is_empty()
+    expect_failure(
+        &root,
+        &theater_with_manual,
+        "mandatory_law_specific_guard_missing_red_fixture:validator-theater-miswire-resistance:cli_pass_without_parent_source_runtime_verification",
     );
 
     std::fs::remove_dir_all(root).expect("cleanup mandatory independent targeted");

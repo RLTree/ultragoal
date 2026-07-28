@@ -1,7 +1,6 @@
 use super::bounded_capture::{Captured, MAX_CAPTURE_BYTES};
 use super::group_custody::{
-    drain_after_exit, group_exists, set_nonblocking, signal_group, terminate,
-    terminate_without_drain,
+    drain_after_exit, group_exists, set_nonblocking, terminate, terminate_without_drain,
 };
 use super::{ProbeOutput, probe};
 use crate::context::ContextError;
@@ -57,24 +56,36 @@ pub(super) fn run(
     let mut stdout = match child.stdout.take() {
         Some(stdout) => stdout,
         None => {
-            let _ = terminate_without_drain(&mut child, group);
-            return Err(probe(&label, "stdout pipe is unavailable"));
+            return Err(cleanup_result(
+                &label,
+                "stdout pipe is unavailable",
+                terminate_without_drain(&mut child, group),
+            ));
         }
     };
     let mut stderr = match child.stderr.take() {
         Some(stderr) => stderr,
         None => {
-            let _ = terminate_without_drain(&mut child, group);
-            return Err(probe(&label, "stderr pipe is unavailable"));
+            return Err(cleanup_result(
+                &label,
+                "stderr pipe is unavailable",
+                terminate_without_drain(&mut child, group),
+            ));
         }
     };
     if let Err(error) = set_nonblocking(&stdout) {
-        let _ = terminate_without_drain(&mut child, group);
-        return Err(probe(&label, error.to_string()));
+        return Err(cleanup_result(
+            &label,
+            &error.to_string(),
+            terminate_without_drain(&mut child, group),
+        ));
     }
     if let Err(error) = set_nonblocking(&stderr) {
-        let _ = terminate_without_drain(&mut child, group);
-        return Err(probe(&label, error.to_string()));
+        return Err(cleanup_result(
+            &label,
+            &error.to_string(),
+            terminate_without_drain(&mut child, group),
+        ));
     }
 
     let mut captured_stdout = Captured::new();
@@ -85,29 +96,35 @@ pub(super) fn run(
             .drain(&mut stdout)
             .and_then(|()| captured_stderr.drain(&mut stderr))
         {
-            let _ = terminate(&mut child, group, &mut stdout, &mut stderr);
-            return Err(probe(&label, error.to_string()));
+            return Err(cleanup_result(
+                &label,
+                &error.to_string(),
+                terminate(&mut child, group, &mut stdout, &mut stderr),
+            ));
         }
         if captured_stdout.overflow || captured_stderr.overflow {
-            let _ = terminate(&mut child, group, &mut stdout, &mut stderr);
-            return Err(output_overflow(&label));
+            return Err(cleanup_result(
+                &label,
+                &format!("output exceeded {MAX_CAPTURE_BYTES} bytes"),
+                terminate(&mut child, group, &mut stdout, &mut stderr),
+            ));
         }
         match child.try_wait() {
             Ok(Some(status)) => {
                 let descendants = group_exists(group);
                 if descendants {
-                    signal_group(group, libc::SIGKILL)
-                        .map_err(|error| probe(&label, error.to_string()))?;
+                    return Err(probe(
+                        &label,
+                        "descendant custody became ambiguous after leader exit; reconciliation required",
+                    ));
                 }
                 drain_after_exit(
                     &mut stdout,
                     &mut stderr,
                     &mut captured_stdout,
                     &mut captured_stderr,
-                );
-                if descendants {
-                    return Err(probe(&label, "descendant process survived its leader"));
-                }
+                )
+                .map_err(|error| probe(&label, error.to_string()))?;
                 if !captured_stdout.eof || !captured_stderr.eof {
                     return Err(probe(
                         &label,
@@ -123,15 +140,18 @@ pub(super) fn run(
                 std::thread::sleep(Duration::from_millis(2));
             }
             Ok(None) => {
-                let _ = terminate(&mut child, group, &mut stdout, &mut stderr);
-                return Err(probe(
+                return Err(cleanup_result(
                     &label,
-                    format!("timed out after {} ms", timeout.as_millis()),
+                    &format!("timed out after {} ms", timeout.as_millis()),
+                    terminate(&mut child, group, &mut stdout, &mut stderr),
                 ));
             }
             Err(error) => {
-                let _ = terminate(&mut child, group, &mut stdout, &mut stderr);
-                return Err(probe(&label, error.to_string()));
+                return Err(cleanup_result(
+                    &label,
+                    &error.to_string(),
+                    terminate(&mut child, group, &mut stdout, &mut stderr),
+                ));
             }
         }
     }
@@ -150,4 +170,14 @@ fn output_overflow(program: &str) -> ContextError {
         program,
         format!("output exceeded {MAX_CAPTURE_BYTES} bytes"),
     )
+}
+
+fn cleanup_result(program: &str, primary: &str, cleanup: std::io::Result<()>) -> ContextError {
+    match cleanup {
+        Ok(()) => probe(program, primary),
+        Err(error) => probe(
+            program,
+            format!("{primary}; cleanup failed: {error}; reconciliation required"),
+        ),
+    }
 }

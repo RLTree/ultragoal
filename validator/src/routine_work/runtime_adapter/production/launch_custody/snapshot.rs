@@ -8,13 +8,13 @@ use crate::routine_work::runtime_adapter::mediator::{
     ObjectIdentity, PinnedExecutable, StagedProgram,
 };
 #[cfg(unix)]
-use std::os::unix::fs::{DirBuilderExt, PermissionsExt};
+use std::os::unix::fs::PermissionsExt;
 
 #[cfg(unix)]
 #[path = "snapshot_bound_filesystem.rs"]
 mod bound_filesystem;
 #[cfg(unix)]
-use bound_filesystem::{create_exclusive_at, validate_directory_path};
+use bound_filesystem::{create_bound_directory_at, create_exclusive_at, validate_directory_path};
 
 use super::acquisition::{LaunchAcquisitionCustody, observe_directory_stat};
 use super::cleanup::EntryClaim;
@@ -56,18 +56,14 @@ pub(in crate::routine_work::runtime_adapter::production) fn stage_program(
     {
         source.validate()?;
         ensure_launch_root(root)?;
-        let child = root.join(format!("launch-{}", safe_token_name(binding.grant_id)));
-        let mut builder = fs::DirBuilder::new();
-        builder.mode(0o700);
-        builder
-            .create(&child)
-            .map_err(|_| error("routine-production-launch-directory-create-failed"))?;
+        let child_name = format!("launch-{}", safe_token_name(binding.grant_id));
+        let child = root.join(&child_name);
+        let held_directory = create_bound_directory_at(root, &child_name)
+            .map_err(|_| error("routine-production-launch-directory-binding-unavailable"))?;
         let mut custody = LaunchAcquisitionCustody::created(child);
+        custody.hold_directory(held_directory);
         let result = catch_unwind(AssertUnwindSafe(|| {
             let child = custody.child().to_path_buf();
-            let held_directory = File::open(&child)
-                .map_err(|_| error("routine-production-launch-directory-open-failed"))?;
-            custody.hold_directory(held_directory);
             let directory = custody.duplicate_directory()?;
             observe_directory_stat()?;
             let created_directory_identity = ObjectIdentity::from(

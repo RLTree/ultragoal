@@ -3,10 +3,6 @@ use std::path::{Path, PathBuf};
 
 pub struct TestDir {
     path: PathBuf,
-    #[cfg(unix)]
-    device: u64,
-    #[cfg(unix)]
-    inode: u64,
 }
 
 impl TestDir {
@@ -31,17 +27,6 @@ impl TestDir {
             metadata.is_dir() && !metadata.file_type().is_symlink(),
             "fixture custody must be a real directory"
         );
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::MetadataExt;
-
-            Self {
-                path,
-                device: metadata.dev(),
-                inode: metadata.ino(),
-            }
-        }
-        #[cfg(not(unix))]
         Self { path }
     }
 
@@ -56,15 +41,9 @@ impl TestDir {
 
 impl Drop for TestDir {
     fn drop(&mut self) {
-        let Ok(metadata) = fs::symlink_metadata(&self.path) else {
-            return;
-        };
-        if metadata.is_dir()
-            && !metadata.file_type().is_symlink()
-            && fixture_identity_matches(self, &metadata)
-        {
-            let _ = fs::remove_dir_all(&self.path);
-        }
+        // Linux and Darwin do not provide identity-conditioned recursive
+        // directory removal. Retain the random private fixture rather than
+        // risk deleting a peer-substituted path.
     }
 }
 
@@ -79,18 +58,6 @@ fn create_private_directory(path: &Path) -> std::io::Result<()> {
 #[cfg(not(unix))]
 fn create_private_directory(path: &Path) -> std::io::Result<()> {
     fs::create_dir(path)
-}
-
-#[cfg(unix)]
-fn fixture_identity_matches(dir: &TestDir, metadata: &fs::Metadata) -> bool {
-    use std::os::unix::fs::MetadataExt;
-
-    metadata.dev() == dir.device && metadata.ino() == dir.inode
-}
-
-#[cfg(not(unix))]
-fn fixture_identity_matches(_dir: &TestDir, _metadata: &fs::Metadata) -> bool {
-    true
 }
 
 fn safe_label(label: &str) -> String {
@@ -139,8 +106,8 @@ mod tests {
         let second_path = second.path().to_owned();
         drop(first);
         drop(second);
-        assert!(!first_path.exists());
-        assert!(!second_path.exists());
+        assert!(first_path.exists());
+        assert!(second_path.exists());
     }
 
     #[test]
@@ -158,7 +125,7 @@ mod tests {
             fs::read(path.join("outside-sentinel")).unwrap(),
             b"preserve"
         );
-        fs::remove_dir_all(path).unwrap();
-        fs::remove_dir_all(held).unwrap();
+        assert!(path.exists());
+        assert!(held.exists());
     }
 }

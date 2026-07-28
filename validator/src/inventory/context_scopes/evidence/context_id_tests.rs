@@ -43,6 +43,10 @@ fn nested_private_strings_fail_worker_record_validation() {
         json!({"nested": {"client_secret": "opaque-sensitive-canary"}}),
         json!({"nested": {"signing_private_key": "opaque-sensitive-canary"}}),
         json!({"nested": {"api_key": {"value": "opaque-sensitive-canary"}}}),
+        json!({"nested": {"api_key": 123456789}}),
+        json!({"nested": {"task_id": 12345}}),
+        json!({"nested": {"authorization": false}}),
+        json!({"nested": {"client_secret": null}}),
         json!({"nested": {"documentation_url": "https://operator:private@example.com/reference"}}),
         json!({"nested": {"sk-SECRET_KEY_CANARY": true}}),
     ] {

@@ -4,23 +4,17 @@ const PRIVATE_PATH_MARKERS: &str = "/users/|/home/|/root/|/tmp/|/private/|\\user
 const SECRET_PREFIXES: &str = "sk-|ghp_|gho_|github_pat_|xoxb-|xoxp-|akia";
 
 pub(super) fn safe_nested_strings(value: &Value, parent_key: Option<&str>) -> bool {
+    if parent_key.is_some_and(private_identifier_or_secret_key) {
+        return false;
+    }
     match value {
-        Value::String(text) => {
-            !private_path_or_secret(text)
-                && !parent_key.is_some_and(private_identifier_or_secret_key)
-        }
-        Value::Array(values) => {
-            !parent_key.is_some_and(private_identifier_or_secret_key)
-                && values
-                    .iter()
-                    .all(|value| safe_nested_strings(value, parent_key))
-        }
-        Value::Object(values) => {
-            !parent_key.is_some_and(private_identifier_or_secret_key)
-                && values.iter().all(|(key, value)| {
-                    !private_path_or_secret(key) && safe_nested_strings(value, Some(key))
-                })
-        }
+        Value::String(text) => !private_path_or_secret(text),
+        Value::Array(values) => values
+            .iter()
+            .all(|value| safe_nested_strings(value, parent_key)),
+        Value::Object(values) => values.iter().all(|(key, value)| {
+            !private_path_or_secret(key) && safe_nested_strings(value, Some(key))
+        }),
         _ => true,
     }
 }

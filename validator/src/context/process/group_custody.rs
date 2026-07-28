@@ -11,15 +11,16 @@ pub(super) fn drain_after_exit(
     stderr: &mut ChildStderr,
     captured_stdout: &mut Captured,
     captured_stderr: &mut Captured,
-) {
+) -> io::Result<()> {
     let deadline = Instant::now() + CLEANUP_BUDGET;
     while (!captured_stdout.eof || !captured_stderr.eof) && Instant::now() < deadline {
-        let _ = captured_stdout.drain(stdout);
-        let _ = captured_stderr.drain(stderr);
+        captured_stdout.drain(stdout)?;
+        captured_stderr.drain(stderr)?;
         if !captured_stdout.eof || !captured_stderr.eof {
             std::thread::sleep(Duration::from_millis(2));
         }
     }
+    Ok(())
 }
 
 pub(super) fn terminate(
@@ -30,14 +31,19 @@ pub(super) fn terminate(
 ) -> io::Result<()> {
     signal_group(group, libc::SIGKILL)?;
     let deadline = Instant::now() + CLEANUP_BUDGET;
+    let mut drain_failure = None;
     loop {
         let reaped = child.try_wait()?.is_some();
         let mut discard_stdout = Captured::new();
         let mut discard_stderr = Captured::new();
-        let _ = discard_stdout.drain(stdout);
-        let _ = discard_stderr.drain(stderr);
+        if let Err(error) = discard_stdout
+            .drain(stdout)
+            .and_then(|()| discard_stderr.drain(stderr))
+        {
+            drain_failure = Some(error);
+        }
         if reaped && !group_exists(group) {
-            return Ok(());
+            return drain_failure.map_or(Ok(()), Err);
         }
         if Instant::now() >= deadline {
             return Err(io::Error::other("process-group cleanup timed out"));

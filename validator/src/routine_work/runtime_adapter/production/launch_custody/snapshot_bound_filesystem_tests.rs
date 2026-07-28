@@ -1,7 +1,8 @@
-use super::create_exclusive_at;
+use super::{create_bound_directory_at, create_exclusive_at};
 use std::fs::{self, File};
 use std::io::Write;
 use std::os::unix::fs::symlink;
+use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[test]
@@ -34,4 +35,11 @@ fn launch_sink_stays_with_held_directory_after_path_substitution() {
     assert!(!outside.join("authority").exists());
     fs::remove_file(&named).expect("remove symlink");
     fs::remove_dir_all(root).expect("cleanup");
+}
+
+#[test]
+fn launch_directory_creation_fails_closed_without_identity_bound_kernel_primitive() {
+    let error = create_bound_directory_at(Path::new("/"), "launch")
+        .expect_err("unsupported identity-bound creation must fail closed");
+    assert_eq!(error.kind(), std::io::ErrorKind::Unsupported);
 }

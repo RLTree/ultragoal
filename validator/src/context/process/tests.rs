@@ -2,7 +2,7 @@ use super::*;
 use std::time::Instant;
 
 #[test]
-fn descendant_holding_output_pipe_is_killed_and_refused() {
+fn descendant_after_leader_exit_is_not_signaled_by_reused_group_identity() {
     let started = Instant::now();
     let result = run_bounded_allow_failure(
         Path::new("/bin/sh"),
@@ -15,7 +15,8 @@ fn descendant_holding_output_pipe_is_killed_and_refused() {
     assert!(matches!(
         result,
         Err(ContextError::Probe { message, .. })
-            if message.contains("descendant process survived")
+            if message.contains("custody became ambiguous")
+                && message.contains("reconciliation required")
     ));
 }
 
