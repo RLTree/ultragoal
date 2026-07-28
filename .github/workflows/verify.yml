@@ -1,0 +1,56 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  harness:
+    name: Harness checks
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Compile warning-denied library
+        run: cargo check -p ultragoal --lib --locked
+
+      - name: Run deterministic security boundaries
+        run: |
+          cargo test -p ultragoal --lib --locked context::process::tests -- --test-threads=1
+          cargo test -p ultragoal --lib --locked nested_private_strings_fail_worker_record_validation
+          cargo test -p ultragoal --lib --locked launch_directory_creation_fails_closed_without_identity_bound_kernel_primitive
+          cargo test -p ultragoal --lib --locked mandatory_law_production_binding_withholds_repository_authored_red_proof
+          cargo test -p ultragoal --lib --locked mandatory::surfaces::independent -- --test-threads=1
+          cargo test -p ultragoal --test observability_contract --locked fixture_custody -- --test-threads=1
+
+      - name: Check generated authority
+        run: scripts/project-generated-authority check
+
+      - name: Verify declared narrow-helper ceiling
+        shell: bash
+        run: |
+          set +e
+          output="$(scripts/check . 2>&1)"
+          status="$?"
+          set -e
+          printf '%s\n' "$output"
+          if [[ "$status" -ne 4 ]]; then
+            echo "expected scripts/check . exit 4, observed $status" >&2
+            exit 1
+          fi
+          grep -F "agent standards projection current: 0 changed outputs" <<<"$output"
+          grep -F "generated surface authority current" <<<"$output"
+          grep -F "python source laws pass: 28 typed sources" <<<"$output"
+          grep -F "agent standards enforcement ok: 121 rows" <<<"$output"
+          grep -F "CLI_LEGACY_ROUTE_GUIDANCE" <<<"$output"

@@ -626,6 +626,12 @@ does not block lanes or cause reproof.
   host cannot bind directory creation or sealed production observation to the
   exact object. Product availability may decrease; security authority must not
   be manufactured from a pathname or repository-authored packet.
+- **2026-07-27 — PR verification is claim-neutral:** the authorized GitHub
+  pull request adds a minimal read-only workflow pinned to immutable action
+  revisions. It proves warning-denied library compilation, deterministic
+  changed-boundary tests, generated authority, and the exact declared
+  `scripts/check .` exit-4 narrow-helper ceiling; it must not relabel that
+  ceiling as a passing product, readiness, release, or completion check.
 
 ## Outcomes and claim ceiling
 
