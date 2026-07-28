@@ -5,12 +5,18 @@ const SCHEMA_REF: &str = "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CON
 const STATUS: &str = "run_scoped_evidence_only";
 const NO_CLAIM: &str = "This worker does not claim readiness, release, or completion.";
 const HISTORICAL_CONTENT_SET_DIGEST: &str =
-    "e8f0d2008f9ec866dbd5dc0f9ab0d54116026a2bd92cc4603bb65e92f95d197f";
+    "7d52270a8ad78838267bdf109743a4d3e353049ffa88d4ae5afe018fd1e86933";
 const MAX_FILES: usize = 256;
 const MAX_HISTORICAL_FILES: usize = 16;
 const MAX_FILE_BYTES: u64 = 2 * 1024 * 1024;
 const MAX_TOTAL_BYTES: u64 = 64 * 1024 * 1024;
 const MAX_ARRAY_ITEMS: usize = 4096;
+
+mod privacy;
+
+#[cfg(test)]
+#[path = "context_id_tests.rs"]
+mod tests;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -139,7 +145,13 @@ fn valid_record(bytes: &[u8], file_name: &str) -> bool {
     if !crate::inventory::plugin_manifest_json::unique_keys(bytes) {
         return false;
     }
-    let Ok(value) = serde_json::from_slice::<WorkerResult>(bytes) else {
+    let Ok(raw) = serde_json::from_slice::<Value>(bytes) else {
+        return false;
+    };
+    if !privacy::safe_nested_strings(&raw, None) {
+        return false;
+    }
+    let Ok(value) = serde_json::from_value::<WorkerResult>(raw) else {
         return false;
     };
     let expected_lease = file_name.strip_suffix(".json").unwrap_or_default();

@@ -1,7 +1,22 @@
 use super::test_fixture::{Fixture, empty_digest, git, path_digest};
-use super::validate;
-use serde_json::json;
+use super::validate as validate_with_reads;
+use crate::context::{BuildRequest, LiveContext};
+use crate::inventory::types::InventoryError;
+use serde_json::{Value, json};
 use std::fs;
+use std::os::unix::fs::PermissionsExt;
+use std::path::Path;
+
+fn validate(
+    records: &[Value],
+    registry: &Value,
+    base: (&str, &str),
+    root: &Path,
+) -> Result<(), InventoryError> {
+    let context = LiveContext::build(BuildRequest::new(root)).unwrap();
+    let reads = context.begin_read_session().unwrap();
+    validate_with_reads(&reads, records, registry, base, root)
+}
 
 #[test]
 fn disjoint_exact_p0_worktrees_are_accepted() {
@@ -13,6 +28,35 @@ fn disjoint_exact_p0_worktrees_are_accepted() {
         &fixture.root,
     )
     .unwrap();
+}
+
+#[test]
+fn repository_fsmonitor_configuration_cannot_execute_during_validation() {
+    let fixture = Fixture::new();
+    let marker = fixture.root.parent().unwrap().join("fsmonitor-marker");
+    let monitor = fixture.root.parent().unwrap().join("fsmonitor");
+    fs::write(
+        &monitor,
+        format!(
+            "#!/bin/sh\nprintf invoked > '{}'\nprintf '\\n'\n",
+            marker.display()
+        ),
+    )
+    .unwrap();
+    fs::set_permissions(&monitor, fs::Permissions::from_mode(0o700)).unwrap();
+    git(
+        &fixture.root,
+        &["config", "core.fsmonitor", monitor.to_str().unwrap()],
+    );
+
+    validate(
+        &fixture.records(),
+        &fixture.registry(),
+        fixture.base(),
+        &fixture.root,
+    )
+    .unwrap();
+    assert!(!marker.exists());
 }
 
 #[test]

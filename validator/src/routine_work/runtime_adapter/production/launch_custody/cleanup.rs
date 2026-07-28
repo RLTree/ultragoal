@@ -149,6 +149,15 @@ fn rename_exclusive(_parent: &fs::File, _from: &[u8], _to: &[u8]) -> Result<(), 
 pub(in crate::routine_work::runtime_adapter::production) fn cleanup_staged(
     staged: &StagedProgram,
 ) -> Result<(), RoutineError> {
+    if ObjectIdentity::from(
+        &staged
+            .directory_file
+            .metadata()
+            .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
+    ) != staged.directory_identity
+    {
+        return Err(error("routine-production-launch-directory-mismatch"));
+    }
     cleanup_partial_stage(
         &staged.directory,
         staged.directory_identity,

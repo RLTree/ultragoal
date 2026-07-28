@@ -35,7 +35,7 @@ impl InstallEffects for MemoryInstall {
 
 #[cfg(unix)]
 #[test]
-fn confined_install_authority_issues_installed_and_runtime_surfaces() {
+fn confined_install_authority_cannot_substitute_for_runtime_effect_authority() {
     let (fixture, package, installed, executable, host, binding) =
         runtime_fixture("install-authority-positive");
     let mut install_effects = ScopedInstall::new(fixture.confined());
@@ -60,10 +60,9 @@ fn confined_install_authority_issues_installed_and_runtime_surfaces() {
         timeout: Duration::from_secs(10),
     })
     .unwrap();
-    let (_, runtime_surface) = plan.execute_bound().unwrap();
     assert_eq!(
-        runtime_surface.surface(),
-        crate::distribution::IdentitySurface::Runtime
+        plan.execute_bound().unwrap_err().id(),
+        ErrorId::CapabilityMismatch
     );
 }
 

@@ -467,7 +467,7 @@
         "scripts/agent_standards_validation/command.py"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "f7f6cc8cece512c7f00130bd965e4b266cc4e6650bd8e1dc49e3cfccc4c065ee"
+      "output_sha256": "6ab3219116347e81a2f771a5da5878aa0c7200941199ead3de6baa1cb0ebd745"
     },
     {
       "disposition": "source_projection",
@@ -477,7 +477,7 @@
         "scripts/agent_standards_validation/contracts.py"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "51ec5ad27085c770a97d12b73edd43ecadc89ddbd95276e4331f3b5c6a5b55e7"
+      "output_sha256": "ce4a553a7f15242b5325bc88e0e6b1e3410d9ee2f3f3c769b1ba02e943994df1"
     },
     {
       "disposition": "source_projection",

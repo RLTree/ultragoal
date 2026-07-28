@@ -11,7 +11,7 @@ use std::os::unix::fs::MetadataExt;
 
 const CONTEXT_ID: &str = "predecessor-contract-2026-07";
 const CONTEXT_ROOT: &str = "docs/ultragoal-contract-2026-07";
-const CONTENT_SET_DIGEST: &str = "73271242afceda73d9ec73f9b2ba3c72026cdcbc0dfed3372f991585434115c6";
+const CONTENT_SET_DIGEST: &str = "4239c6d91d07120e877d540a0465dc955be7982c8e9f1880e77956fcc5d02334";
 const STATUS: &str = "replaced_historical_context";
 const REPLACEMENT: &str = "harness-ultragoal-successor-contract-v2";
 const MAX_FILES: usize = 32;

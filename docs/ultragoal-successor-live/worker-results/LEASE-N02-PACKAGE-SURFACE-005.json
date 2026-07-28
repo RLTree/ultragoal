@@ -3,7 +3,7 @@
   "lease_id": "LEASE-N02-PACKAGE-SURFACE-005",
   "context_id": "sha256:23d3e43e7dc823b81607fd44b5b1545db86c97c6ac395421692ef357dfc9beac",
   "candidate_identity": {
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
     "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",

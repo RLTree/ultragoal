@@ -5,8 +5,9 @@ pub fn canonical_runtime_help_json() -> String {
     )
 }
 
+#[cfg(test)]
 fn validate_envelope(bytes: &[u8]) -> Result<(), DistributionError> {
-    let actual: serde_json::Value = json::parse(bytes, 64 * 1024)?;
+    let actual: serde_json::Value = crate::distribution::json::parse(bytes, 64 * 1024)?;
     let expected: serde_json::Value = serde_json::from_str(&canonical_runtime_help_json())
         .map_err(|_| error(DistributionErrorId::ProvenanceMismatch))?;
     if actual != expected {

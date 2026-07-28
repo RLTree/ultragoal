@@ -3,7 +3,7 @@
   "lease_id": "LEASE-N04-DISTRIBUTION-NODE-003",
   "context_id": "sha256:c3369ea8e54b7f9faf465bdd65637e2915faddbb3585bcc4d30515493beb05db",
   "candidate_identity": {
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
     "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",

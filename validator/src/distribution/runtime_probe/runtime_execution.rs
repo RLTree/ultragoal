@@ -5,75 +5,46 @@ pub fn execute_runtime_probe(
         install.revalidate(&plan.binding)?;
     }
     plan.executable.revalidate()?;
-    let execution_copy = plan.executable.execution_copy()?;
-    let result = execute_runtime_probe_copy(
-        plan,
-        execution_copy.path(),
-        execution_copy.working_directory(),
-    );
-    let cleanup = execution_copy.remove();
-    cleanup?;
-    result
+    refuse_unconfined_runtime_execution(&plan.executable.path)
 }
 
-fn execute_runtime_probe_copy(
-    plan: &RuntimeProbePlan,
-    executable_path: &Path,
-    working_directory: &Path,
+fn refuse_unconfined_runtime_execution(
+    _executable_path: &Path,
 ) -> Result<RuntimeObservation, DistributionError> {
-    let mut command = if plan.executable.shell_script() {
-        let mut command = Command::new("/bin/sh");
-        command.arg(executable_path);
-        command
-    } else {
-        Command::new(executable_path)
-    };
-    command
-        .args(HELP_ARGUMENTS)
-        .env_clear()
-        .current_dir(working_directory)
-        .stdin(Stdio::null())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped());
-    let mut child = command
-        .spawn()
-        .map_err(|_| error(DistributionErrorId::EffectFailed))?;
-    let deadline = Instant::now() + plan.timeout;
-    let status = loop {
-        match child.try_wait() {
-            Ok(Some(status)) => break status,
-            Ok(None) if Instant::now() < deadline => std::thread::sleep(Duration::from_millis(5)),
-            Ok(None) => {
-                let _ = child.kill();
-                let _ = child.wait();
-                return Err(error(DistributionErrorId::EffectFailed));
-            }
-            Err(_) => {
-                terminate_child(&mut child);
-                return Err(error(DistributionErrorId::EffectFailed));
-            }
-        }
-    };
-    let stdout = read_output(child.stdout.take())?;
-    let stderr = read_output(child.stderr.take())?;
-    if !status.success() {
-        return Err(error(DistributionErrorId::EffectFailed));
-    }
-    validate_envelope(&stdout)?;
-    plan.executable.revalidate()?;
-    if let Some(install) = &plan.install {
-        install.revalidate(&plan.binding)?;
-    }
-    let mut output = stdout;
-    output.extend_from_slice(&stderr);
-    Ok(RuntimeObservation::executed(
-        &plan.binding,
-        plan.executable_sha256.clone(),
-        sha256(&output),
-    ))
+    Err(error(DistributionErrorId::CapabilityMismatch))
 }
 
-fn terminate_child(child: &mut std::process::Child) {
-    let _ = child.kill();
-    let _ = child.wait();
+#[cfg(test)]
+mod runtime_execution_tests {
+    use super::*;
+    use std::fs;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
+
+    #[test]
+    fn package_program_is_not_executed_without_a_confined_effect_authority() {
+        let root = std::env::temp_dir().join(format!(
+            "hul-refused-runtime-probe-{}-{}",
+            std::process::id(),
+            NEXT_ROOT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir(&root).expect("test root");
+        let marker = root.join("marker");
+        let executable = root.join("runtime");
+        fs::write(
+            &executable,
+            format!("#!/bin/sh\nprintf invoked > '{}'\n", marker.display()),
+        )
+        .expect("test runtime");
+
+        assert_eq!(
+            refuse_unconfined_runtime_execution(&executable)
+                .expect_err("ambient runtime execution must fail closed")
+                .id(),
+            DistributionErrorId::CapabilityMismatch
+        );
+        assert!(!marker.exists());
+        fs::remove_dir_all(root).expect("test cleanup");
+    }
 }

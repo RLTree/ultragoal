@@ -1,3 +1,4 @@
+use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -13,6 +14,7 @@ pub(super) fn is_record(record: &Value) -> bool {
 }
 
 pub(super) fn validate(
+    reads: &ReadSession,
     records: &[Value],
     registry: &Value,
     base: (&str, &str),
@@ -56,7 +58,7 @@ pub(super) fn validate(
         unique(record, "lease_id", &mut lease_ids)?;
         unique(record, "branch", &mut branches)?;
         unique(record, "worktree", &mut worktrees)?;
-        super::worktree_identity::validate(root, registry, record, base)?;
+        super::worktree_identity::validate(reads, root, registry, record, base)?;
         let diagnostic = strings(
             record.get("diagnostic_paths"),
             "P0 diagnostic paths are missing",

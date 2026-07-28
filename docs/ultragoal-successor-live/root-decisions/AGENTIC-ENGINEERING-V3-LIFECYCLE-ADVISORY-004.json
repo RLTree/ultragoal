@@ -40,14 +40,14 @@
   "source_materials": {
     "plugin": "agentic-engineering",
     "plugin_version": "3.0.0",
-    "source_path": "/Users/terrynoblin/Downloads/agentic-engineering-codex-plugin-v3/plugins/agentic-engineering",
-    "installed_cache_path": "/Users/terrynoblin/.codex/plugins/cache/agentic-engineering-local/agentic-engineering/3.0.0",
+    "source_path": "<operator-home>/Downloads/agentic-engineering-codex-plugin-v3/plugins/agentic-engineering",
+    "installed_cache_path": "<operator-home>/.codex/plugins/cache/agentic-engineering-local/agentic-engineering/3.0.0",
     "file_manifest_sha256": "sha256:6ec22b411d1fd9723857a3e68a5a48efc03ac00a9893990e4634151bb03893a6",
     "plugin_manifest_sha256": "sha256:4b1854abc1998e596a1142910caac3666643c5bd30faf4bba1e9a20ef8292f8a",
     "license": "MIT",
     "license_sha256": "sha256:ae75bf203e2ab0beee262faf37a0e0f07c23c3255877dc679f3c18dcc153c8b8",
     "source_and_installed_manifest_bytes_equal": true,
-    "upgrade_materials_path": "/Users/terrynoblin/Downloads/ultragoal-agentic-engineering-v3-upgrade-materials",
+    "upgrade_materials_path": "<operator-home>/Downloads/ultragoal-agentic-engineering-v3-upgrade-materials",
     "upgrade_file_manifest_sha256": "sha256:74b6847acaa740797aa87d19967bc2e1e71ed534b3654592e9960e48171d0b06",
     "confidence_boundary": "The upstream 97.5 score is calibrated structural judgment. Live GPT-5.6 comparison, Rust compilation, and representative product field use were not executed by the upstream package and cannot support an UltraGoal product claim.",
     "adoption_effect": "None. Full normative integration proceeds; the missing upstream observations constrain only same-surface product claims and the later UltraGoal implementation and journey verification."

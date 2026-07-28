@@ -4,13 +4,23 @@ use super::contracts::{
 use super::{emitter, filesystem, packet_parser};
 use std::collections::BTreeSet;
 
+#[cfg(test)]
 pub(crate) fn render(
     request: RedCatalogProjectionRequest<'_>,
+) -> Result<RedCatalogProjection, RedCatalogError> {
+    let filesystem = filesystem::RedCatalogFilesystem::open(request.root)?;
+    let projection = render_from(&filesystem)?;
+    filesystem.validate()?;
+    Ok(projection)
+}
+
+fn render_from(
+    filesystem: &filesystem::RedCatalogFilesystem,
 ) -> Result<RedCatalogProjection, RedCatalogError> {
     let mut ids = BTreeSet::new();
     let mut paths = BTreeSet::new();
     let mut rows = Vec::new();
-    for source in filesystem::packet_sources(request.root)? {
+    for source in filesystem.packet_sources()? {
         let packet = packet_parser::packet(&source.bytes, &source.relative)?;
         let expected_path = format!("fixtures/red/{}.json", packet.id);
         if !ids.insert(packet.id.clone()) {
@@ -50,8 +60,10 @@ pub(crate) fn check(
     request: RedCatalogProjectionRequest<'_>,
 ) -> Result<RedCatalogProjection, RedCatalogError> {
     let root = request.root;
-    let projection = render(RedCatalogProjectionRequest { root })?;
-    let current = filesystem::catalog_bytes(root)?;
+    let filesystem = filesystem::RedCatalogFilesystem::open(root)?;
+    let projection = render_from(&filesystem)?;
+    let current = filesystem.catalog_bytes()?;
+    filesystem.validate()?;
     if current != projection.bytes {
         return Err(RedCatalogError::new("red_catalog_projection_drift", None));
     }

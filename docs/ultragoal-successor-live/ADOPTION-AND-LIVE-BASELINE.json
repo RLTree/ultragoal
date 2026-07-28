@@ -27,7 +27,7 @@
   },
   "pre_adoption_live_repository": {
     "observed_at": "2026-07-10T05:04:57Z",
-    "root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "master",
     "head_commit": "125b717f9a5a5480e04452b1c9e5c487de7cb3c7",
     "head_tree": "bfc907544597541b1c2e3e7082413528b006455e",
@@ -170,7 +170,7 @@
       "claim_limit": "pre-adoption source identity only"
     },
     "installed_plugin": {
-      "path": "/Users/terrynoblin/.codex/plugins/harness-ultragoal",
+      "path": "<operator-home>/.codex/plugins/harness-ultragoal",
       "version": "0.0.11",
       "enabled": true,
       "package_identity": "sha256:94f73e5d6f0f44a4f8e1b5fd8aeafcf0b3470670fe79c81390b3e445efc27724",

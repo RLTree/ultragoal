@@ -5,7 +5,7 @@
   "candidate_identity": {
     "candidate_id": "sha256:1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
     "context_id": "sha256:1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "artifact_set_sha256": "1b7ce62f111eb90a6c534c476a9759727472f8d5cbe6e17e1a2fb19f3f922ef5",
     "artifact_set_formula": "Sort artifacts by path. For each artifact concatenate path, one TAB byte, sha256 without the sha256: prefix, and one LF byte; SHA-256 the concatenation.",
     "parent_worker_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N03-CLI-STATE-NODE-004.json",

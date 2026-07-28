@@ -6,7 +6,7 @@
     "candidate_id": "sha256:6d78431a7478b4b6d0d777601e26ed043cad9d9d6a6e77a86fd21d42e2684924",
     "context_id": "sha256:9c15167973386cacc72f2b2abdfd7424e01ab237ba49ee60542e82e7892b516e",
     "context_formula": "SHA-256 of MIGRATION-HOST-PRODUCTION-101|worker|base HEAD|candidate_id.",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "root_branch": "codex/successor-contract-v2-live-product",
     "freeze_base_head_commit": "860c803d736f7928e1ba5d45b5650513fcbf75eb",
     "freeze_base_head_tree": "07b8bb10fefd16574db487e7abeadaad7a142560",

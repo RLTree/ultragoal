@@ -24,7 +24,7 @@ pub(super) fn project_with_limit(
         return RuntimeSession::new(context, None).dispatch(invocation);
     }
 
-    let Some(runtime) = capture_runtime_identity() else {
+    let Some(runtime) = capture_runtime_path_identity() else {
         return projection_failure();
     };
     let machine = serde_json::to_vec(&json!({
@@ -69,7 +69,7 @@ pub(super) fn project_with_limit(
     }
 }
 
-fn capture_runtime_identity() -> Option<serde_json::Value> {
+fn capture_runtime_path_identity() -> Option<serde_json::Value> {
     let path = std::env::current_exe().ok()?.canonicalize().ok()?;
     let identity = executable_identity(&path)?;
     let rebound = std::env::current_exe().ok()?.canonicalize().ok()?;
@@ -84,7 +84,7 @@ fn capture_runtime_identity() -> Option<serde_json::Value> {
         "version": env!("CARGO_PKG_VERSION"),
         "executable_sha256": identity.sha256,
         "executable_byte_length": identity.byte_length,
-        "self_bound": true,
+        "self_bound": false,
     }))
 }
 
@@ -161,7 +161,7 @@ fn root_id(context_id: &str, role: &str, absolute_root: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::root_id;
+    use super::{capture_runtime_path_identity, root_id};
 
     #[test]
     fn root_ids_are_context_and_role_bound_without_path_echo() {
@@ -175,5 +175,16 @@ mod tests {
         assert_ne!(repository, worktree);
         assert_ne!(repository, other_context);
         assert!(!repository.contains(path));
+    }
+
+    #[test]
+    fn path_occupant_identity_never_self_attests_the_running_image() {
+        let runtime = capture_runtime_path_identity().expect("capture current executable path");
+        assert_eq!(runtime["self_bound"], false);
+        assert!(
+            runtime["executable_sha256"]
+                .as_str()
+                .is_some_and(|digest| digest.starts_with("sha256:"))
+        );
     }
 }

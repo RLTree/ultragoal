@@ -46,6 +46,10 @@ release-readiness claims.
 - L1–L4: blocked on B0 and the exact `BASE-0` / `IFACE-0` freeze.
 - I0 single root fan-in: blocked on every required lane being accepted,
   classified `no_change`, or explicitly blocked.
+- S0 security remediation: active against the sealed exact-revision normal
+  scan `a6857d95-8473-4832-ba9a-4cdf74c435fa` at `efdb0ac802b`. Repairs are
+  limited to the 29 candidate-bound findings and shared root causes; they do
+  not revive deleted legacy modules or raise a product claim.
 - J0 same-surface product journey: blocked on I0 and Tree gate D1.
 - Release: outside the current milestone and blocked on Tree gate D2.
 
@@ -514,6 +518,10 @@ does not block lanes or cause reproof.
   Agentic advisory addendum is recorded, while the broader milestone baseline
   remains active.
 - [ ] Launch only lanes classified `change_required` or `partial_change`.
+- [~] S0: repair and independently falsify the 29 sealed Codex Security
+  findings (7 high, 13 medium, 9 low), then run a fresh exact-head closure
+  scan. Filesystem, subprocess, evidence-authority, privacy, and runtime
+  identity repairs remain candidate-bound and claim-neutral.
 - [ ] I0: merge or waive each required lane once and freeze `CANDIDATE-0`.
 - [ ] D1: obtain Tree's exact representative-use authority.
 - [ ] J0: run the product journey and decide `CL-USABLE-LOOP`.
@@ -539,6 +547,26 @@ does not block lanes or cause reproof.
   standards projection is current. The stale v2 projection is a named
   compatibility blocker; this planning pass does not refresh it or treat that
   refresh as product progress.
+- The sealed S0 scan covered all 5,047 committed files with zero unresolved
+  rows. It found repeated path-only check/use gaps, direct ambient Git and
+  repository-Python execution, self-attested proof boundaries, durable private
+  host metadata, and a public runtime projection that measured the
+  `current_exe` path occupant rather than the running image.
+- The exact built CLI reproduced two boundary failures: a nominally read-only
+  strict check executed repository-owned Python and wrote outside its target,
+  and a suspended process whose executable path was replaced reported the
+  replacement bytes with `self_bound=true`.
+- S0 repairs now route Git through the captured capability with bounded
+  process-group custody, remove repository-Python execution from strict
+  validation, bind affected filesystem sinks to opened objects, reject
+  self-attested proof, redact current-tree private metadata, and lower
+  path-only runtime identity to `self_bound=false`.
+- The warning-denied library build, changed-behavior tests, generated-authority
+  check, and all 121 standards-enforcement rows pass. `scripts/check .` reaches
+  only its declared exit-4 narrow-helper ceiling. The broad parallel library
+  suite remains an invalid aggregate oracle: two unchanged-base runs produced
+  different failure counts because shared fixtures and global test hooks
+  interfere. Candidate deltas are therefore rerun individually.
 
 ## Decision log
 
@@ -565,6 +593,20 @@ does not block lanes or cause reproof.
 - **2026-07-27 — bounded delivery authority:** Tree authorized private remote,
   pull-request, merge, local publication, and post-publication evaluation work
   for this repair. Claims remain limited to evidence from each exact surface.
+- **2026-07-27 — security repair boundary:** consume only the 29 findings from
+  sealed scan `a6857d95-8473-4832-ba9a-4cdf74c435fa`; prefer shared typed
+  owners for repeated root causes, require independent focused falsification,
+  and prove closure with a new exact-head normal scan before publication.
+- **2026-07-27 — privacy overrides byte preservation:** frozen compatibility
+  records that contain an operator username, home/worktree path, or private
+  task/session identity are redacted in the current tree. Only their exact
+  non-authoritative compatibility digests may be recomputed; their historical
+  semantics and authority ceiling remain frozen. Git history cannot be
+  redacted by this local repair and therefore remains private.
+- **2026-07-27 — honest runtime identity:** `self_bound=true` requires a
+  platform-backed binding to the running image. Path-only hashing may report
+  an unbound identity or fail closed, but must not preserve the stronger claim
+  for interface compatibility.
 
 ## Outcomes and claim ceiling
 

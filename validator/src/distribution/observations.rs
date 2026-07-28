@@ -72,20 +72,4 @@ impl RuntimeObservation {
             output_sha256: None,
         })
     }
-
-    pub(crate) fn executed(
-        binding: &JourneyBinding,
-        executable_sha256: String,
-        output_sha256: String,
-    ) -> Self {
-        Self {
-            context_id: binding.package().source().context_id().into(),
-            candidate_id: binding.package().source().candidate_id().into(),
-            verdict: LayerVerdict::Verified,
-            runtime_verdict: RuntimeVerdict::Executed,
-            binding_sha256: Some(binding.binding_sha256().into()),
-            executable_sha256: Some(executable_sha256),
-            output_sha256: Some(output_sha256),
-        }
-    }
 }

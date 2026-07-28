@@ -47,6 +47,7 @@ pub(crate) fn same_candidate_pass_failures(
     expected_operation: &str,
 ) -> Vec<String> {
     let mut out = surface_value_failures(value);
+    out.push("cli_control_plane_receipt_independent_authority_unavailable".to_string());
     let candidate = value
         .get("candidate_digest")
         .and_then(Value::as_str)
@@ -178,4 +179,72 @@ fn blocked_claims_contain(value: &Value, claim: &str) -> bool {
         .get("blocked_claim_classes")
         .and_then(Value::as_array)
         .is_some_and(|claims| claims.iter().any(|item| item.as_str() == Some(claim)))
+}
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn repository_receipt_cannot_mint_pass_authority() {
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+        let receipt = json!({
+            "schema": "harness-ultragoal.cli-control-plane-receipt.v1",
+            "issuer": {"tool": "ultragoal", "self_law_state": "self_hosted"},
+            "operation": "update_goal_eligibility",
+            "candidate_digest": candidate,
+            "status": "pass",
+            "claim_ceiling": "supports_update_goal_eligibility",
+            "blocked_claim_classes": [],
+            "failure": null,
+            "evidence_graph": {
+                "evaluation_mode": "production_dereferenced",
+                "candidate_digest": candidate,
+                "operation": "update_goal_eligibility",
+                "operation_failures": [],
+                "items": []
+            }
+        });
+        let failures =
+            super::same_candidate_pass_failures(&receipt, &candidate, "update_goal_eligibility");
+        assert!(
+            failures.contains(
+                &"cli_control_plane_receipt_independent_authority_unavailable".to_string()
+            ),
+            "{failures:?}"
+        );
+    }
+
+    #[test]
+    fn evidence_failure_can_still_preserve_a_fail_closed_ceiling() {
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+        let receipt = json!({
+            "schema": "harness-ultragoal.cli-control-plane-receipt.v1",
+            "issuer": {"tool": "ultragoal", "self_law_state": "transition_only"},
+            "operation": "registry_probe",
+            "candidate_digest": candidate,
+            "status": "fail",
+            "claim_ceiling": "withheld_or_blocked",
+            "blocked_claim_classes": [
+                "completion",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "update_goal_eligibility"
+            ],
+            "failure": {
+                "id": "registry_probe_evidence_not_satisfied",
+                "law_id": "cli-control-plane-authority"
+            },
+            "evidence_graph": {
+                "evaluation_mode": "production_dereferenced",
+                "candidate_digest": candidate,
+                "operation": "registry_probe",
+                "operation_failures": [{"id": "registry unavailable"}],
+                "items": [{"label": "registry_exposure"}]
+            }
+        });
+        let failures =
+            super::same_candidate_fail_closed_failures(&receipt, &candidate, "registry_probe");
+        assert!(failures.is_empty(), "{failures:?}");
+    }
 }

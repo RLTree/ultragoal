@@ -22,6 +22,45 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
         .is_empty()
     );
 
+    write_json(
+        &root.join("fixtures/red/schema-valid-red.json"),
+        &json!({
+            "schema": "harness-ultragoal.red-packet.v1",
+            "id": "schema-valid-red",
+            "expected_failure": {
+                "check_id": "schema-valid",
+                "error": "mandatory_law_specific_guard_not_enforced:schema-valid:schema_dispatch"
+            },
+            "base_fixture_path":
+                "fixtures/mandatory-law-surfaces/valid/schema-valid.json",
+            "json_patch": [{
+                "op": "replace",
+                "path": "/law_specific/unrelated_guard",
+                "value": false
+            }],
+            "materialization": {
+                "expected_validation_layer": "package",
+                "first_failure_must_match_expected": true,
+                "post_patch_schema_valid": true
+            },
+            "preconditions": [{
+                "exists": true,
+                "path": "/law_specific/unrelated_guard"
+            }],
+            "postconditions": [{
+                "expectation":
+                    "mandatory_law_specific_guard_not_enforced:schema-valid:schema_dispatch",
+                "path": "/law_specific/unrelated_guard"
+            }]
+        }),
+    );
+    expect_failure(
+        &root,
+        &production_law("schema-valid"),
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
+    );
+    write_specific_red_fixture(&root, "schema-valid-red", "schema-valid", "schema_dispatch");
+
     let mut wrong_valid = production_law("schema-valid");
     wrong_valid["valid_fixture_path"] = json!("fixtures/valid/schema-valid.json");
     expect_failure(
@@ -105,12 +144,10 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
             }
         }),
     );
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(
-            &root,
-            &production_error_bound
-        )
-        .is_empty()
+    expect_failure(
+        &root,
+        &production_error_bound,
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_valid_production_error",
     );
 
     let law = production_law("schema-valid");

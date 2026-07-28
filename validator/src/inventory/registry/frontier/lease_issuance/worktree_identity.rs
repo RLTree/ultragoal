@@ -1,10 +1,11 @@
+use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
 use std::fs;
 use std::path::Path;
-use std::process::Command;
 
 pub(super) fn validate(
+    reads: &ReadSession,
     root: &Path,
     registry: &Value,
     record: &Value,
@@ -23,7 +24,7 @@ pub(super) fn validate(
     if !worktree.starts_with(&worktree_root) {
         return Err(invalid("active lease worktree is outside its root"));
     }
-    let inventory = git(root, &["worktree", "list", "--porcelain"])?;
+    let inventory = git(reads, root, &["worktree", "list", "--porcelain"])?;
     let entry = inventory
         .split("\n\n")
         .find(|entry| {
@@ -42,10 +43,11 @@ pub(super) fn validate(
             "active lease worktree identity differs from its lease",
         ));
     }
-    if git(&worktree, &["rev-parse", "HEAD^{tree}"])? != base.1 {
+    if git(reads, &worktree, &["rev-parse", "HEAD^{tree}"])? != base.1 {
         return Err(invalid("active lease worktree tree differs from its lease"));
     }
     if !git(
+        reads,
         &worktree,
         &["status", "--porcelain", "--untracked-files=all"],
     )?
@@ -60,19 +62,8 @@ fn field<'a>(entry: &'a str, prefix: &str) -> Option<&'a str> {
     entry.lines().find_map(|line| line.strip_prefix(prefix))
 }
 
-fn git(root: &Path, arguments: &[&str]) -> Result<String, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(arguments)
-        .output()
-        .map_err(|_| invalid("cannot inspect active lease worktree identity"))?;
-    if !output.status.success() {
-        return Err(invalid("cannot inspect active lease worktree identity"));
-    }
-    String::from_utf8(output.stdout)
-        .map(|value| value.trim().to_owned())
-        .map_err(|_| invalid("active lease worktree identity is not UTF-8"))
+fn git(reads: &ReadSession, root: &Path, arguments: &[&str]) -> Result<String, InventoryError> {
+    super::super::git_query::text(reads, root, arguments, "active lease worktree identity")
 }
 
 fn text<'a>(record: &'a Value, field: &str, message: &str) -> Result<&'a str, InventoryError> {

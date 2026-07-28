@@ -1,15 +1,11 @@
-const OUTPUT_LIMIT: usize = 1024 * 1024;
 const EXECUTABLE_LIMIT: usize = 256 * 1024 * 1024;
 const SUPPORTED_INSTALL_TARGET: &str = "plugins/harness-ultragoal.hugpkg";
-const HELP_ARGUMENTS: [&str; 2] = ["--json", "--help"];
 
 #[derive(Clone, Debug)]
 pub struct RuntimeProbePlan {
     binding: JourneyBinding,
     install: Option<CurrentInstallAuthority>,
     executable: PinnedRuntimeExecutable,
-    executable_sha256: String,
-    timeout: Duration,
 }
 
 pub struct InstalledPackageRuntimeProbeRequest<'a, Effects> {
@@ -115,8 +111,6 @@ impl RuntimeProbePlan {
             binding,
             install: Some(install),
             executable,
-            executable_sha256,
-            timeout,
         })
     }
 
@@ -154,8 +148,6 @@ impl RuntimeProbePlan {
             binding,
             install: None,
             executable,
-            executable_sha256,
-            timeout,
         })
     }
 

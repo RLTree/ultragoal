@@ -4,7 +4,7 @@
   "context_id": "ROUTINE-DURABLE-ADMISSION-095",
   "candidate_identity": {
     "result_status": "frozen_candidate_pending_independent_review",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "frozen_candidate_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
     "frozen_candidate_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",

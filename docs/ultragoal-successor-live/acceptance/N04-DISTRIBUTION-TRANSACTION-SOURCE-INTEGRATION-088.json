@@ -90,7 +90,7 @@
   "teardown": {
     "thread_id": "019f5fa2-0bc3-7a50-9c2f-c377d88c60e4",
     "thread_archived": true,
-    "worktree_removed": "/Users/terrynoblin/.codex/worktrees/45df/harness-ultragoal-plugin-proposal",
+    "worktree_removed": "<operator-home>/.codex/worktrees/45df/harness-ultragoal-plugin-proposal",
     "unique_uncommitted_state_before_removal": false
   },
   "invalidation_rule": "Any change to the integrated distribution, package, plugin distribution adapter, supported host executor, receipt, or named focused-contract bytes reopens this acceptance at the affected boundary.",

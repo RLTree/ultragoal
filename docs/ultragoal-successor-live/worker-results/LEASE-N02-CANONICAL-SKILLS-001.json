@@ -138,17 +138,17 @@
   ],
   "commands_and_tests": [
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/init_skill.py <each canonical skill> --path skills --interface display_name=... --interface short_description=... --interface default_prompt=...",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/init_skill.py <each canonical skill> --path skills --interface display_name=... --interface short_description=... --interface default_prompt=...",
       "result": "pass",
       "summary": "Eight new instruction-only skill skeletons and interface files created; no resource directories or examples created."
     },
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py skills/<each canonical skill> --interface display_name=... --interface short_description=... --interface default_prompt='Use $harness-ultragoal:<skill> ...'",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py skills/<each canonical skill> --interface display_name=... --interface short_description=... --interface default_prompt='Use $harness-ultragoal:<skill> ...'",
       "result": "pass",
       "summary": "Eight fully qualified interface files regenerated successfully."
     },
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each canonical skill>",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each canonical skill>",
       "result": "pass",
       "summary": "8 of 8 returned Skill is valid."
     },

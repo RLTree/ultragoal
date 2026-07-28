@@ -43,7 +43,7 @@ pub(crate) fn public_context_uses_opaque_root_ids_and_is_recursively_zero_write(
     }
     assert!(value["roots"].get("repository_root").is_none());
     assert!(value["roots"].get("worktree_root").is_none());
-    assert_eq!(value["runtime"]["self_bound"], true);
+    assert_eq!(value["runtime"]["self_bound"], false);
     assert_eq!(value["runtime"]["version"], env!("CARGO_PKG_VERSION"));
     assert!(
         value["runtime"]["executable_sha256"]

@@ -31,7 +31,6 @@ impl PinnedRuntimeExecutable {
     fn open(path: &Path) -> Result<Self, DistributionError> {
         #[cfg(unix)]
         {
-            use std::os::fd::AsRawFd;
             use std::os::unix::fs::OpenOptionsExt;
 
             let canonical = path
@@ -44,7 +43,6 @@ impl PinnedRuntimeExecutable {
             let file = options
                 .open(&canonical)
                 .map_err(|_| error(DistributionErrorId::UnsafeObject))?;
-            clear_close_on_exec(file.as_raw_fd())?;
             let (identity, sha256, shell_script) = capture_runtime_executable(&file, &canonical)?;
             Ok(Self {
                 path: canonical,
@@ -65,10 +63,6 @@ impl PinnedRuntimeExecutable {
         &self.sha256
     }
 
-    fn shell_script(&self) -> bool {
-        self.shell_script
-    }
-
     fn revalidate(&self) -> Result<(), DistributionError> {
         #[cfg(unix)]
         {
@@ -87,20 +81,6 @@ impl PinnedRuntimeExecutable {
             Err(error(DistributionErrorId::CapabilityMismatch))
         }
     }
-}
-
-#[cfg(unix)]
-fn clear_close_on_exec(fd: std::os::fd::RawFd) -> Result<(), DistributionError> {
-    // SAFETY: `fd` is borrowed from an open File and F_GETFD has no pointer arguments.
-    let flags = unsafe { libc::fcntl(fd, libc::F_GETFD) };
-    if flags < 0 {
-        return Err(error(DistributionErrorId::UnsafeObject));
-    }
-    // SAFETY: `fd` is borrowed from an open File and the flag value is valid for F_SETFD.
-    if unsafe { libc::fcntl(fd, libc::F_SETFD, flags & !libc::FD_CLOEXEC) } < 0 {
-        return Err(error(DistributionErrorId::UnsafeObject));
-    }
-    Ok(())
 }
 
 #[cfg(unix)]
