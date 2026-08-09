@@ -4,13 +4,26 @@
 **Intended repository path:** replace `docs/exec-plans/active/usable-product-milestone.md` atomically
 **Operation:** do not keep the old plan active or create another plan, lane registry, completion manifest, research-law graph, or receipt ledger
 **Research lock:** 2026-08-08, America/Los_Angeles
-**Observed active candidate:** `codex/successor-contract-v2-live-product@7e46169749611b3fa335700bfaf2105ae471bc48`; HEAD tree `ecf1ad39424b67fb4eed557176020aecb3b6946c`; re-resolve before any implementation
-**Observed repository-control gap:** local `main` is absent; `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` exists, `origin/HEAD` points to `origin/main@eb51ba4d6`, and this checkout has no `.github/workflows/verify.yml`; GitHub settings and current workflow authority remain unverified
+**Observed active candidate:** `codex/successor-contract-v2-live-product@cbdc0bdd275e5988a2dbf3e219823c11ccab3796`; HEAD tree `ae3e210bc97ebde058628ad54a054fd7806688f1`; re-resolve after every integration or commit
+**Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` is 641 commits ahead and contains the only verification workflow; the current branch diverges from `master` at `5dae7dd24490b1a37bacb48b40694a840067fbe7`, with 2 current-branch commits and 12 `master` commits to reconcile; no branch protection, required check, ruleset, or current-branch workflow result exists
 **Current claim ceiling:** research, repository inspection, and executable plan only
 
-## Local rebaseline recorded before handoff installation (2026-08-09)
+## Current root-conductor rebaseline (2026-08-09)
 
-- Candidate: branch `codex/successor-contract-v2-live-product`, HEAD `7e46169749611b3fa335700bfaf2105ae471bc48`, HEAD tree `ecf1ad39424b67fb4eed557176020aecb3b6946c`.
+- Durable goal: `active` for “Complete the sole active Harness UltraGoal ExecPlan through CL-USABLE-LOOP on one exact integrated candidate, preserving unrelated state and obeying every Tree approval boundary”; no token budget is set.
+- Candidate custody: branch `codex/successor-contract-v2-live-product`, HEAD `cbdc0bdd275e5988a2dbf3e219823c11ccab3796`, HEAD tree `ae3e210bc97ebde058628ad54a054fd7806688f1`, exactly aligned with `origin/codex/successor-contract-v2-live-product` at observation time.
+- Repository-control truth: authenticated GitHub and `git ls-remote` both report default `main@eb51ba4d6ea8844197e855d42fa239ef898be47d` and `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce`; `main` is an ancestor of `master` and is 641 commits behind.
+- Integration truth: `master...HEAD` has merge base `5dae7dd24490b1a37bacb48b40694a840067fbe7`; `master` has 12 unique commits and HEAD has 2 unique commits. A read-only `git merge-tree` reports 12 conflicts, all in root/standards/plan documents; the four protected distribution paths do not overlap the `master` delta.
+- CI truth: `.github/workflows/verify.yml` exists on `master` only. It runs for pull requests and for pushes to `main`, not `master`. GitHub retains one historical active workflow registration and one successful PR run on `codex/plugin-eval-repair-integration@666145252`, but the current candidate has no workflow run, check run, or commit status.
+- Protection truth: `main`, `master`, and the current branch are unprotected; no required status checks or repository/inherited rulesets apply.
+- Protected unrelated state: four modified `validator/src/distribution/**` files plus `.ultragoal-e2e-unrelated-state.txt` remain outside plan ownership. Their combined tracked binary-diff digest is `ef30d9dbe465af5ea3df8084c6aef5db9c63310ac5d92c78d80e759f380cc0ef`; the untracked file digest is `0777519bda010fe1d51a89ae095d9da5e61d2482a51732125a3ffd141189076d`.
+- Foundation custody: the three landed foundation files are byte-identical to their named handoff sources; no current-source card, generated projection, or historical research artifact was refreshed.
+- Authority hold: changing the GitHub default branch, branch protection, required checks, rulesets, or any other remote setting requires Terry’s explicit approval. No remote mutation has occurred.
+- CLI hold: this root conductor has not invoked the UltraGoal CLI. Prior handoff command observations below bind the preceding candidate only and must be rerun after the exact product candidate is integrated.
+
+## Prior handoff rebaseline (superseded candidate observation)
+
+- Candidate at that observation: branch `codex/successor-contract-v2-live-product`, HEAD `7e46169749611b3fa335700bfaf2105ae471bc48`, HEAD tree `ecf1ad39424b67fb4eed557176020aecb3b6946c`.
 - Working tree: dirty before this handoff; four modified `validator/src/distribution/**` files and untracked `.ultragoal-e2e-unrelated-state.txt` are pre-existing and excluded from plan ownership.
 - Foundation inputs installed from `/Users/terrynoblin/Downloads/research-foundations-third-pass`: `current-2026-08-08.md` (sha256 `01eae0a275d223f76bfd81ffb4d8b9fc1510675dd107dfa2a3f65667f8544b98`), `register.csv` (sha256 `39c054831f0913a4301e25ebca58afa939facfb06c6f903a4aecbe2111a8d8c1`), and header-only `decision-log.csv` (sha256 `74d0f70963d24eea519cca98f4a7e011a8062bfc3885e2f3408914fa35fc4569`).
 - `cargo fmt --all -- --check`: blocked by existing formatting drift across unrelated Rust files; no formatter run was authorized.
@@ -20,7 +33,7 @@
 - `target/debug/ultragoal --json --help`, `inspect capabilities`, and `inspect context`: passed read-only; the context reports this dirty candidate and `inspect capabilities` reports host discovery unavailable without an authorized package root.
 - No GitHub branch/default/protection/workflow state was changed or verified; no external target repository, install, package, remote, or release effect was performed.
 
-These observations are planning evidence only. They do not raise the claim ceiling above research, repository inspection, and executable plan.
+These prior observations are provenance only after the candidate changed. They do not raise the current claim ceiling above research, repository inspection, and executable plan.
 
 ## 1. Purpose and observable user outcome
 
@@ -114,7 +127,7 @@ Do not commit:
 
 ## 5. Progress
 
-- [ ] U0 restore branch/CI truth and establish the current foundation owner (foundation owner installed; branch/CI authority still pending).
+- [ ] U0 restore branch/CI truth and establish the current foundation owner (foundation owner and fresh control observations complete; Terry selected bounded `master`-based candidate integration; candidate construction plus Tree-authorized default/protection repair pending).
 - [ ] U1 run the current installed operator loop before governance redesign.
 - [ ] U2 repair only observed blocking product boundaries.
 - [ ] U3 replace the research-authority model and simplify active instructions.
@@ -122,6 +135,49 @@ Do not commit:
 - [ ] U5 evaluate current versus reduced instructions on byte-identical source.
 - [ ] U6 verify exact Agentic coexistence and rerun the external loop.
 - [ ] U7 decide `CL-USABLE-LOOP`, retire bounded obsolete surfaces, and stop.
+
+## Surprises and discoveries
+
+- The verification workflow is not missing repository-wide: it exists on `master`, but not on stale default `main` or the current branch. GitHub’s retained workflow registration therefore cannot substitute for current-branch CI.
+- The plan branch is not the current product line by ancestry. It contains the landed plan/foundation commits while `master` contains 12 product/security/CI commits; one root integration is required before U1 can bind an exact current candidate.
+- A read-only merge analysis confines textual conflicts to 12 root, standards, product-contract, and active-plan files. The protected dirty distribution paths are disjoint from the incoming `master` delta.
+
+## Decision log
+
+- The committed `docs/exec-plans/active/usable-product-milestone.md` is the sole executable ExecPlan. The downloaded `ultragoal-EXECPLAN-v4.md` remains handoff/provenance only; its stale candidate and workflow assumptions will not overwrite the landed adaptations.
+- Preserve the five unrelated working-tree changes by digest and path. Do not format, stage, commit, overwrite, or use them as candidate inputs.
+- Hold UltraGoal CLI invocation until this fresh U0 custody/control refinement is durable. Afterward, invoke only the exact current grammar on the integrated candidate.
+- D0 was a no-safe-default integration choice. Terry selected Option B, the bounded `master`-based candidate. Keep the dirty root checkout fixed; select the bounded candidate’s merge/rebase/cherry-pick/patch topology only after exact ancestry/conflict simulation.
+- Keep the GitHub default/protection mutation at HOLD until Terry explicitly authorizes the exact remote effects.
+
+### D0 candidate-integration options
+
+| Option | What it does | Benefit | Cost and risk | Reversibility |
+|---|---|---|---|---|
+| A — characterize current HEAD first | Keep the root at `cbdc0bdd2` and run only safe source/read-only U1 characterization before deciding integration. | Zero branch/history movement and immediate evidence about the landed plan candidate. | The product bytes are 12 `master` commits behind; product results may be invalidated by later integration and cannot represent the current product line. | High; discard ephemeral output and leave the branch unchanged. |
+| B — bounded `master`-based candidate | In a separately authorized bounded path based on `master@30c4a19c`, integrate the landed active plan and foundations, then verify one exact candidate while the dirty root remains untouched. Merge, rebase, cherry-pick, or patch topology remains unselected until that bounded candidate’s ancestry/conflict analysis is reviewed. | Starts from the current product/CI line, isolates protected dirt, and limits reconciliation primarily to the active plan/foundation surface. | Requires explicit authority to create the path and later select a history topology; root fan-in and final branch custody must be stated before promotion. | High until promotion; delete the bounded path after preserving an accepted commit. |
+| C — integrate `master` into this dirty root | Merge `master` into the current branch and resolve the 12 predicted document conflicts in place. | Preserves this branch as the candidate and imports all product/CI commits in one ancestry join. | Highest custody and conflict risk; it operates beside protected user dirt and creates a broad root-doc reconciliation before U1. | Medium before commit via merge abort, but the dirty-root recovery burden is materially higher. |
+
+Recommendation: **Option B**. It best preserves unrelated state and binds U1 to the current product line. Option A remains legal for source characterization that does not claim current-product integration; Option C should be reserved for an explicit preference to keep this root branch as the integration site.
+
+Tree decision: **Option B selected**. This authorizes constructing the clean bounded candidate from exact `master` while leaving the root and its protected dirt untouched. It does not authorize GitHub/default/protection mutation, real host installation, target-repository writes, publication, release, or promotion of the bounded branch.
+
+## Validation and acceptance state
+
+- Fresh U0 read-only commands: branch/commit/tree/status, remote heads, ancestry counts, merge base, workflow contents/triggers, workflow/check/status queries, branch protection, rulesets, and read-only merge conflict analysis.
+- U0 disposition: `HOLD`. Foundation authority and current control truth pass; one integrated local candidate and remote default/CI authority do not yet pass.
+- Current maximum statement: exact local/GitHub control observation and executable plan refinement only. No source, package, install, discovery, runtime, recovery, product-journey, or release claim is supported yet.
+
+## Idempotence, recovery, and cleanup
+
+- All U0 probes were read-only except this active-plan update. Repeating them is safe and should change plan state only when an observed fact changes.
+- No integration command is authorized yet. If Terry later authorizes an in-place integration and it threatens a protected dirty path or creates an unexpected conflict outside the 12 predicted documents, abort before resolving or staging and rebaseline custody.
+- No temporary repository artifact, receipt, lane registry, completion manifest, or research projection was created. Read-only merge analysis may have written an unreachable Git tree object only; normal Git garbage collection owns it.
+
+## Outcome state
+
+- `CL-USABLE-LOOP`: undecided.
+- Current transition: construct and verify D0 Option B from exact `master`, with topology chosen only from bounded ancestry/conflict evidence. GitHub default/protection changes remain a separate authority HOLD. Safe source characterization may continue, but it cannot raise the integrated-product claim ceiling until the bounded candidate is frozen.
 
 ---
 
@@ -133,7 +189,7 @@ Do not commit:
 git status --short --branch
 git branch --show-current
 git rev-parse HEAD^{commit} HEAD^{tree}
-git rev-list --left-right --count main...master
+git rev-list --left-right --count refs/remotes/origin/main...refs/remotes/origin/master
 ```
 
 Through GitHub, re-read:
