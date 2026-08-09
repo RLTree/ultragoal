@@ -1,430 +1,758 @@
-# Usable Product Milestone — Strict Lane Delivery Contract
+# Harness UltraGoal — Foundation Reset, Current Product Loop, and Anti-Theater ExecPlan
 
-This is the only active Harness Ultragoal ExecPlan. It implements
-`GOAL_CONTRACT.md` and is the delivery state record for `CL-USABLE-LOOP`.
+**Repository:** `RLTree/ultragoal`
+**Intended repository path:** replace `docs/exec-plans/active/usable-product-milestone.md` atomically
+**Operation:** do not keep the old plan active or create another plan, lane registry, completion manifest, research-law graph, or receipt ledger
+**Research lock:** 2026-08-08, America/Los_Angeles
+**Observed active candidate:** `codex/successor-contract-v2-live-product@7e46169749611b3fa335700bfaf2105ae471bc48`; HEAD tree `ecf1ad39424b67fb4eed557176020aecb3b6946c`; re-resolve before any implementation
+**Observed repository-control gap:** local `main` is absent; `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` exists, `origin/HEAD` points to `origin/main@eb51ba4d6`, and this checkout has no `.github/workflows/verify.yml`; GitHub settings and current workflow authority remain unverified
+**Current claim ceiling:** research, repository inspection, and executable plan only
 
-## Purpose and observable outcome
+## Local rebaseline recorded before handoff installation (2026-08-09)
 
-Deliver one exact candidate that an authorized repository operator can
-package, install, discover, enter through the Harness front door, fit to a
-representative dirty repository, use for affected work, diagnose on a
-representative failure, recover or refuse safely, and use again without stale
-custody, hidden writes, unrelated-state loss, or a governance loop.
+- Candidate: branch `codex/successor-contract-v2-live-product`, HEAD `7e46169749611b3fa335700bfaf2105ae471bc48`, HEAD tree `ecf1ad39424b67fb4eed557176020aecb3b6946c`.
+- Working tree: dirty before this handoff; four modified `validator/src/distribution/**` files and untracked `.ultragoal-e2e-unrelated-state.txt` are pre-existing and excluded from plan ownership.
+- Foundation inputs installed from `/Users/terrynoblin/Downloads/research-foundations-third-pass`: `current-2026-08-08.md` (sha256 `01eae0a275d223f76bfd81ffb4d8b9fc1510675dd107dfa2a3f65667f8544b98`), `register.csv` (sha256 `39c054831f0913a4301e25ebca58afa939facfb06c6f903a4aecbe2111a8d8c1`), and header-only `decision-log.csv` (sha256 `74d0f70963d24eea519cca98f4a7e011a8062bfc3885e2f3408914fa35fc4569`).
+- `cargo fmt --all -- --check`: blocked by existing formatting drift across unrelated Rust files; no formatter run was authorized.
+- `cargo check -p ultragoal --lib --locked`: passed.
+- `cargo build -p ultragoal --bin ultragoal --locked`: passed.
+- `cargo test -p ultragoal --tests --locked -- --list`: blocked during test compilation by existing fixture/API mismatches (including `observability_fixture_scratch`, `public_api_witness`, and routine host checkpoint symbols).
+- `target/debug/ultragoal --json --help`, `inspect capabilities`, and `inspect context`: passed read-only; the context reports this dirty candidate and `inspect capabilities` reports host discovery unavailable without an authorized package root.
+- No GitHub branch/default/protection/workflow state was changed or verified; no external target repository, install, package, remote, or release effect was performed.
 
-The first value event is a useful verified repository result whose execution,
-failure, recovery, preservation, and remaining limits the operator understands.
+These observations are planning evidence only. They do not raise the claim ceiling above research, repository inspection, and executable plan.
 
-This reconciliation authorizes planning and contract documentation only. It
-does not authorize product code, package mutation, dependency changes, builds,
-runtime effects, installation, target-repository writes, remotes,
-publication, deployment, credentials, release, or destructive retirement.
+## 1. Purpose and observable user outcome
 
-## Current status
+Deliver one exact UltraGoal candidate that allows an authorized operator to:
 
-- Clean successor architecture input: complete at
-  `5dae7dd24490b1a37bacb48b40694a840067fbe7`.
-- Original finite reset and strict decomposition: complete on the source line
-  at `d25e689db61a5d406d457456a2285fb8e68285b1`.
-- Prior combined reconciliation: inspected at
-  `0aad076b84ae1dbcdd44ece6df04a6a87f6ed95f`; its product bytes and rewritten
-  amendment history were not copied.
-- Successor-line planning reconciliation: complete in the current plan commit.
-- Product-delivery program: active at the planning stage.
-- B0 current-behavior baseline and shared-interface freeze: ready, not started.
-- L1–L4: blocked on B0 and exact `BASE-0` / `IFACE-0`.
-- I0 root fan-in: blocked on required lane dispositions.
-- J0 product journey: blocked on I0 and Tree gate D1.
-- Release: outside the goal and blocked on a later Tree gate D2.
+1. build the current plugin and Rust CLI;
+2. observe the exact candidate through supported installation/discovery;
+3. inspect and fit one representative repository without changing unrelated state;
+4. run useful dirty-tree affected work;
+5. encounter a representative failure;
+6. receive a causal diagnosis and one legal next action;
+7. recover or refuse safely;
+8. repeat useful work without stale reuse or hidden writes; and
+9. understand what ran, what did not, why, and what remains.
 
-The dirty project checkout was inspected read-only. Its four modified validator
-files and unrelated untracked state are excluded from the base, plan diff, and
-future lane authority.
+The repository must reach this result without requiring:
 
-Historical v2 plans, lane/backlog/completion projections, acceptance packets,
-receipts, and mandatory-law projections are frozen compatibility inputs. Do
-not refresh them.
+- the full research/source-law graph;
+- recursive root manuals;
+- per-command or per-lane receipts;
+- source-card refresh;
+- broad reviewer panels;
+- several state projections; or
+- a governance cleanup program before the first current-source loop.
 
-## Dependency and status graph
+The first value event is:
 
-Every node includes its status and cause so the graph remains readable without
-color. L1–L4 have no edges between them: they consume one frozen root base and
-join only at I0.
+> On the current exact candidate, an external evaluator observes useful repository work, preservation, diagnosis, recovery and repeat use—or identifies the first product blocker—without treating UltraGoal’s own receipts or prose as the final oracle.
 
-```mermaid
-flowchart LR
-    M0["M0 Product-delivery program<br/>ACTIVE: planning stage"]:::active
-    S0["S0 Successor repairs<br/>COMPLETE: 5dae7dd2"]:::complete
-    R0["R0 Finite reset source<br/>COMPLETE: d25e689d"]:::complete
-    R1["R1 Successor-line contract reconciliation<br/>COMPLETE: current plan commit"]:::complete
-    B0["B0 Baseline + interface freeze<br/>READY / NOT STARTED"]:::ready
-    D0{"D0 Tree decision<br/>TREE NEEDED only if B0 finds no-safe-default value, scope, risk, or interface choice"}:::tree
-
-    subgraph PAR["Strictly independent lanes — same BASE-0, no peer merges"]
-      direction TB
-      L1["L1 Operator entry<br/>BLOCKED: needs B0 + IFACE-0"]:::blocked
-      L2["L2 Repository safety<br/>BLOCKED: needs B0 + IFACE-0"]:::blocked
-      L3["L3 Package + host identity<br/>BLOCKED: needs B0 + IFACE-0"]:::blocked
-      L4["L4 Journey oracle<br/>BLOCKED: needs B0 + IFACE-0"]:::blocked
-    end
-
-    I0["I0 SINGLE ROOT FAN-IN<br/>BLOCKED: lane dispositions unavailable"]:::blocked
-    D1{"D1 Tree approval<br/>TREE NEEDED: select repository + authorize exact install/write scope"}:::tree
-    J0["J0 Same-surface useful-loop journey<br/>BLOCKED: needs I0 + D1"]:::blocked
-    U0["U0 Decide CL-USABLE-LOOP<br/>BLOCKED: needs J0 outcome"]:::blocked
-    D2{"D2 Tree direction<br/>TREE NEEDED: stop, second journey, or separate release contract"}:::tree
-    G5["G5 Release-grade evidence<br/>BLOCKED: outside goal and unauthorized"]:::blocked
-
-    M0 --> S0
-    M0 --> R0
-    S0 --> R1
-    R0 --> R1
-    R1 --> B0
-    B0 --> L1
-    B0 --> L2
-    B0 --> L3
-    B0 --> L4
-    B0 -. "no safe default" .-> D0
-    D0 -. "decision returns to B0" .-> B0
-    L4 -- "slot 1" --> I0
-    L1 -- "slot 2" --> I0
-    L2 -- "slot 3" --> I0
-    L3 -- "slot 4" --> I0
-    I0 --> J0
-    D1 --> J0
-    J0 --> U0 --> D2 --> G5
-
-    classDef complete fill:#D1FAE5,stroke:#047857,color:#064E3B,stroke-width:2px;
-    classDef active fill:#FEF3C7,stroke:#B45309,color:#78350F,stroke-width:3px;
-    classDef ready fill:#DBEAFE,stroke:#1D4ED8,color:#1E3A8A,stroke-width:2px;
-    classDef blocked fill:#FEE2E2,stroke:#B91C1C,color:#7F1D1D,stroke-width:2px;
-    classDef tree fill:#F3E8FF,stroke:#7E22CE,color:#581C87,stroke-width:2px;
-```
-
-### Legend
-
-| Color | Status | Meaning |
-| --- | --- | --- |
-| Green | `COMPLETE` | Accepted input or planning work exists at the named commit |
-| Amber | `ACTIVE` | The current bounded program consumes planning attention/budget |
-| Blue | `READY / NOT STARTED` | Dependencies are satisfied and work may legally begin |
-| Red | `BLOCKED` | Work cannot begin; the node states the exact cause |
-| Purple | `TREE NEEDED` | Authority, value, scope, or risk has no agent-safe default |
-
-## Context and architectural reconciliation
-
-Harness Ultragoal has two delivery surfaces:
-
-- the Codex plugin front door, skills, agents, package metadata, installation
-  material, and host visibility; and
-- the typed Rust CLI for repository fit, routine work, diagnosis, recovery,
-  distribution, orchestration, evaluation, migration, and proof.
-
-The clean successor already contains valuable product repairs. B0 begins from
-current source rather than old receipts and must respect these owners:
-
-- `repository_fit/` owns confined fit and preservation policies;
-- `routine_work/` owns dirty-tree execution and one private custody/recovery
-  leaf;
-- `distribution/` owns package and runtime identity mechanics;
-- `plugin_product/agent_discovery/` owns local discovery observation;
-- `plugin_product/lifecycle/` owns plugin lifecycle and host custody;
-- `plugin_product/distribution_adapter/` owns package-to-install adaptation;
-- `engineering_advisory/` owns proposal-only verification, review, repair, and
-  selection projections used by state;
-- `plugin_product/skill_catalog/` owns exact Agentic profile/gateway
-  validation; and
-- `cli/successor/` plus `cli/successor_public/` own public grammar and dispatch.
-
-The other source line proposed additional shared advisory-pack, public-context,
-and unfitted-diagnosis product changes. This planning reconciliation preserves
-their intent but imports no implementation. B0 must classify them against
-`CL-USABLE-LOOP`. If needed, they remain root-owned shared work at I0; if not,
-they are not allowed to expand the milestone.
-
-The selected topology is one read-only baseline, zero to four independent
-write lanes, one root fan-in, one authorized representative journey, and an
-optional later release decision. More lanes would split shared decisions and
-increase handoffs; one broad lane would hide four genuinely disjoint domains.
-
-## Authoritative state and lane lifecycle
-
-This plan is the delivery state record. Do not create a parallel lane registry,
-verification backlog, completion manifest, review packet graph, or receipt
-ledger for this milestone.
-
-Root alone moves a lane through:
+## 2. Stage architecture
 
 ```text
-defined
-→ ready
-→ active
-→ accepted | no_change | blocked | cancelled
-→ merged | waived
+U0 repository and foundation authority
+  ↓
+U1 current-source installed-loop baseline
+  ↓ if product-blocked
+U2 one coupled blocker repair
+  ↓ loop passes
+U3 replace research authority and reduce active instruction path
+  ↓
+U4 split product/governance/release checks and add only needed runtime state
+  ↓
+U5 byte-identical instruction/context A/B
+  ↓
+U6 exact Agentic coexistence + final external loop
+  ↓
+U7 decide CL-USABLE-LOOP, bounded retirement, stop
 ```
 
-Workers report facts and request root changes. They cannot change lane state,
-shared interfaces, claim meaning, risk acceptance, integration, waiver, or
-claim ceiling.
+No later prose reduction, check split, or coexistence pass can substitute for a failed U1/U2 product loop.
 
-## B0 fan-out contract
+## 3. Program invariants
 
-B0 is a root-owned, read-only characterization. It does not run the retired
-UltraGoal governance loop.
+1. **Product before governance.** The first source edit after U1 addresses the first observed operator-loop blocker.
+2. **One current foundation owner.** `docs/foundations/current-2026-08-08.md` and a compact register own current external source status. The old source-to-law machinery becomes historical compatibility input.
+3. **Research does not mint authority.** A source changes one named decision or changes nothing. It does not automatically create laws, schemas, fixtures, receipts, setup outputs, package obligations, or blockers.
+4. **One current state owner per state class.** Program state lives in the active plan; operation state lives in runtime; Git owns reproducible history. Do not mirror state in registries, manifests, receipts and backlogs.
+5. **One implementation path by default.** Parallel lanes require proven semantic/write independence, no peer-unmerged dependency, local oracles and reserved root integration capacity.
+6. **Evaluator owns product proof.** UltraGoal may emit typed facts but cannot self-certify `CL-USABLE-LOOP`.
+7. **Reads and routine work are zero-authority-write.** Read, inspect, plan, diagnose, next-action, routine checks, drafts and no-ops create no tracked receipt or governance files.
+8. **Transition-only retention.** Persist only cross-process recovery, an irreproducible external observation, an authorization transition, exact distribution artifacts, or the compact milestone result.
+9. **Vocabulary is not deletion evidence.** Keep a receipt-/law-/proof-named test if its actual oracle detects forgery, path escape, stale identity, custody loss, interruption or unsafe cleanup.
+10. **Final state before process.** Required/prohibited user outcomes and target preservation outrank receipt count, reviewer agreement, stage trace and source coverage.
+11. **Two similar failures require a changed hypothesis or stop.** More policy, more agents, more reviews, or more artifacts is not a repair by itself.
+12. **Stop after the bounded milestone.** A second target, broader autonomy, UI, release, crate split, telemetry platform or general scheduler requires a new owner decision.
 
-B0 records in this plan:
+## 4. Allowed durable artifacts
 
-- `BASE-0`: exact implementation base commit and tree;
-- `IFACE-0`: public requests, responses, effect classes, shared types, journey
-  steps, advisory bindings, and forbidden substitutions workers consume;
-- current plugin/package/public CLI identity;
-- each lane disposition: `no_change`, `partial_change`, `change_required`, or
-  `blocked`;
-- exact owned and root/shared paths after source inspection;
-- focused local oracle for each required lane; and
-- any D0 choice with no safe default.
+Commit only:
 
-All launched lanes start from the same `BASE-0` and consume only `IFACE-0`.
-No lane reads or imports peer unmerged work. A changed interface field cancels
-only declared consumers.
+- current product source, tests and canonical configuration;
+- `docs/foundations/current-2026-08-08.md`;
+- `docs/foundations/register.csv`;
+- a foundation decision log row when a material decision must survive sessions;
+- this single active plan;
+- one small held-out product/context oracle needed for regression; and
+- one compact final milestone decision if another process consumes it.
 
-Candidate B0 commands, subject to current repository truth:
+Do not commit:
 
-```text
+- per-command or per-lane receipts;
+- ready/validator/reviewer packets;
+- copied transcripts;
+- source snapshots refreshed for currentness alone;
+- article-to-law projections;
+- context inventories or prose-dedup reports;
+- routine coverage reports;
+- a new reader/writer registry;
+- one proof file per claim; or
+- an archive of removed policy.
+
+## 5. Progress
+
+- [ ] U0 restore branch/CI truth and establish the current foundation owner (foundation owner installed; branch/CI authority still pending).
+- [ ] U1 run the current installed operator loop before governance redesign.
+- [ ] U2 repair only observed blocking product boundaries.
+- [ ] U3 replace the research-authority model and simplify active instructions.
+- [ ] U4 separate product, governance and release checks; add only needed runtime state.
+- [ ] U5 evaluate current versus reduced instructions on byte-identical source.
+- [ ] U6 verify exact Agentic coexistence and rerun the external loop.
+- [ ] U7 decide `CL-USABLE-LOOP`, retire bounded obsolete surfaces, and stop.
+
+---
+
+# U0 — Repository and foundation authority
+
+## U0.1 Rebaseline repository control
+
+```bash
 git status --short --branch
+git branch --show-current
 git rev-parse HEAD^{commit} HEAD^{tree}
-cargo check -p ultragoal --offline
-cargo test -p ultragoal --test repository_fit_live_journeys_contract --offline
-cargo test -p ultragoal --test routine_public_production_contract --offline
-cargo test -p ultragoal --test distribution_contract --offline
-cargo test -p ultragoal --test plugin_agent_discovery_contract --offline
+git rev-list --left-right --count main...master
 ```
 
-A missing selector or unavailable tool is a B0 finding, not permission to run
-a broad suite or generate replacement receipts.
+Through GitHub, re-read:
 
-### B0 advisory/shared-interface questions
+- default branch;
+- `main` and `master` heads;
+- workflow push/PR triggers;
+- required checks;
+- rulesets/branch protection; and
+- latest current-branch workflow results.
 
-B0 must distinguish current architecture from unintegrated proposal:
+Do not trust the observed 641-commit relation if it changed.
 
-1. Does the existing `engineering_advisory` plus `skill_catalog` binding make
-   the Harness front door usable without a new pack-set type?
-2. Is candidate substitution or missing optional advice already typed and
-   fail-closed on the public path used by the milestone?
-3. Does `HarnessPublicContext-v1` disclose enough candidate identity without
-   exposing paths, or is a revalidated redacted executable identity required?
-4. When `next` or `diagnose` lacks fitted state, does it causally return the
-   safe read-only repository-fit action rather than manufacturing state?
+## U0.2 Lowest-churn branch repair
 
-Answers are `no_change`, `change_required`, `outside_milestone`, or `blocked`.
-A required shared change stays at I0 and inherits T3 only for the consequential
-boundary it actually touches.
+1. Set current `master` as GitHub default.
+2. Locate the current verification workflow before changing its push trigger; this checkout currently has no `.github/workflows/verify.yml`, so do not invent or edit a replacement during U0.2.
+3. Require the current verification check on `master` where controls permit.
+4. Update current automation/docs that assume `main`.
+5. Leave stale `main` untouched until U7.
+6. Treat rename/delete as a later separate operation.
 
-## Exclusive ownership map
+Do not combine branch repair with history rewrite, crate work, licensing, release or governance cleanup.
 
-Read access does not confer write or decision authority. B0 replaces ambiguous
-globs with exact paths before launch.
+## U0.3 Install current foundation authority
 
-| Lane | Exclusive semantic authority | Exclusive write paths | Forbidden/root-owned surfaces | Local oracle | Tier | Fan-in |
-| --- | --- | --- | --- | --- | --- | --- |
-| L1 Operator entry | Front-door routing, operator wording, effect disclosure, next-action legibility within `IFACE-0` | `skills/**`, `docs/plugin-resource-map.md`, `docs/install-and-visibility.md` | Plugin manifest, root docs, parser/dispatch, schemas, dependencies, other lanes | Fresh-context route comprehension plus focused skill/reference checks | T1 | slot 2 |
-| L2 Repository safety | Fit, dirty-tree routine execution, preservation, interruption, custody, recovery, safe refusal within `IFACE-0` | `validator/src/repository_fit/**`, `validator/src/routine_work/**`, matching `validator/tests/repository_fit_*`, `validator/tests/routine_*` | Public grammar, distribution, plugin lifecycle/discovery, schemas, dependencies, generated authority, other lanes | Focused fit/routine success, failure, preservation, interruption, replay, and recovery tests | T1; T3 only for touched consequential boundaries | slot 3 |
-| L3 Package and host identity | Source/package/install/discovery/runtime identity, lifecycle, host custody, effect refusal within `IFACE-0` | `validator/src/distribution/**`, `validator/src/plugin_product/agent_discovery/**`, `validator/src/plugin_product/lifecycle/**`, `validator/src/plugin_product/distribution_adapter/**`, `install/**`, matching tests | Plugin manifest, root inventory, dependencies, shared schemas, public grammar, other lanes | Package/identity checks plus relevant negative effect, rollback, recovery, race tests | T1; T3 only for touched install/host/effect boundaries | slot 4 |
-| L4 Journey oracle | Defect-detecting oracle for the frozen journey; no product-value or interface decisions | `fixtures/product-delivery/**`, `validator/tests/product_delivery/**`, `docs/product-specs/usable-product-outcome.md` | Existing implementation, schemas, manifests, dependencies, public grammar, acceptance decisions, other lanes | Red-before-green or equivalent reversal showing detection of missing preservation, diagnosis, recovery, or useful outcome | T1 | slot 1 |
-| I0 Root fan-in | Shared public architecture/contracts, advisory binding, dependencies, migrations, effects, integration, claim ceiling | Plugin manifest, root docs, dependency/lock files, schemas, migrations, generated authority, shared CLI parser/dispatch, `validator/src/engineering_advisory/**`, `validator/src/plugin_product/skill_catalog/**`, root-only wiring | Rewriting accepted lane history or absorbing lane-local defects | Ownership/ancestry audit, deterministic fan-in, shared wiring, integrated checks, candidate freeze | T2 plus inherited T3 | single point |
-| J0 Product journey | Observation and claim decision only | No source writes; only Tree-authorized install and target effects | Code repair, publication, credentials, deployment, release, scope expansion | Exact installed candidate completes representative journey | T4 | after I0 |
-
-## Lane independence and return contract
-
-A lane is launchable only when it can finish from `BASE-0` and consumed
-`IFACE-0` fields, has disjoint write paths and semantic authority, runs its
-oracle without peer work, can be omitted without corrupting peers, and exposes
-an auditable diff from the base.
-
-Each launch contract binds lane id/owner, base commit/tree, consumed interface
-fields, owned/forbidden paths, objective/non-goals, permitted effects, oracle,
-proof tier, model/reasoning, budget, two-attempt repair limit, cancellation
-lineage, and stop conditions.
-
-The lane returns one message, not a receipt:
-
-- disposition: `accepted_candidate`, `no_change`, or `blocked`;
-- lane, branch, worktree, base/head commits and trees;
-- exact owned diff;
-- consumed interface/dependency identities;
-- focused commands, exit codes, and outcomes;
-- required failure-path or T3 evidence;
-- requested root changes not made;
-- residual risk and local ceiling; and
-- worktree state plus teardown disposition.
-
-It is ineligible for fan-in if ancestry fails, it has a peer merge, ownership
-escapes, semantic decisions overlap, the oracle is untrustworthy, required T3
-review is missing, unexplained dirt remains, or proof binds another candidate.
-
-## Proof binding and relevant invalidation
-
-T1/T2 normally use the exact commit, this plan, and concise handoff. Every
-accepted proof states candidate commit/tree, surface, maximum claim, consumed
-authority/dependencies, oracle/command, relevant environment, invalidation,
-and deletion boundary.
-
-| Evidence | Invalidates when | Does not invalidate when |
-| --- | --- | --- |
-| B0 / `IFACE-0` | Frozen public/shared field, effect class, journey step, or forbidden substitution changes; current behavior contradicts it | Unrelated docs, branch rename, elapsed time |
-| L1 T1 | L1 bytes, consumed interface, host/skill contract, or oracle changes | Independent L2/L3/L4 bytes |
-| L2 T1/T3 | L2 bytes, consumed fit/routine authority, relevant custody environment, or oracle changes; contradictory observation appears | L1 wording, independent packaging, unrelated docs |
-| L3 T1/T3 | L3 bytes, package inputs, install/host authority, supported-host/effect environment, or oracle changes; contradictory observation appears | L1 wording, independent repository behavior, unrelated docs |
-| L4 T1 | Oracle bytes, journey acceptance, public observable interface, or anti-substitution rule changes | Implementation bytes the oracle is designed to evaluate |
-| I0 T2 | Integrated commit/tree, consumed dependency/toolchain, shared wiring, accepted lane head, or integrated oracle changes | Branch movement preserving commit/tree, age |
-| J0 T4 | Installed bytes, host/runtime, target precondition, Tree authority, journey oracle, or contradictory same-surface observation changes | Unconsumed source/docs |
-| T5 | Release candidate, distribution/signing/registry, policy, migration/rollback input, or approval changes | Unrelated post-candidate work |
-
-Only declared consumers rerun. Stale evidence loses authority; it does not
-trigger broad regeneration or reopen unrelated lanes.
-
-## Single root fan-in
-
-I0 is the only merge and semantic integration point.
-
-Entry conditions:
-
-- `BASE-0` / `IFACE-0` are current;
-- each required lane is `accepted`, `no_change`, or `blocked`;
-- correctness-critical blockage blocks J0; there is no quorum;
-- accepted lanes have clean commit-bound envelopes; and
-- root has capacity for fan-in, shared wiring, integrated checks, and one
-  correction cycle.
-
-Deterministic order:
-
-1. L4 journey oracle.
-2. L1 operator entry.
-3. L2 repository safety.
-4. L3 package and host identity.
-5. Root-only shared/advisory/public wiring, manifests, schemas, dependencies,
-   migrations, and generated product projections.
-
-For each accepted lane, root verifies ancestor relationship, absence of peer
-merges, and owned diff. A conflict, ownership escape, or interface mismatch
-rejects the result; root does not splice a plausible patch.
-
-After merge slots, root audits duplicate semantic work, resolves shared
-requests, applies root-only wiring, runs the smallest checks for consumed
-surfaces, reruns only inherited T3 evidence whose inputs changed, freezes
-`CANDIDATE-0` commit/tree, classifies every lane `merged`, `waived`, or
-`blocked`, and closes/cancels worktrees after preserving unique recovery state.
-
-## Tree gates, repair, and stop conditions
-
-| Gate | Trigger | Tree decision | Current status | If absent |
-| --- | --- | --- | --- | --- |
-| D0 Conditional behavior/interface | B0 finds no-safe-default value, scope, risk, or shared-interface choice | Select behavior or narrow goal | Not currently required | Only affected consumers block |
-| D1 Representative use | Before J0 | Choose repository and authorize exact local install/write scope | Needed | No target effect or milestone decision |
-| D2 Post-milestone | After J0 | Stop, run materially different journey, or authorize separate release contract | Not due | Stop at bounded milestone |
-| D3 External/destructive | Only if separately proposed | Authorize publication, marketplace, credentials, deployment, or destructive retirement | Not authorized by this plan | Effect remains forbidden |
-
-Each lane has two repair attempts. Attempt two names a new causal hypothesis,
-changed variable, or stronger oracle. Otherwise return `blocked`.
-
-Stop the affected boundary for ownership escape; interface/semantic conflict;
-missing authority; secret/private-data/path risk; ambiguous post-effect or
-custody state; untrustworthy oracle; unavailable required T3 review; two failed
-attempts without new evidence; budget exhaustion; coordination cost exceeding
-saved time; or a product/scope/risk decision without a safe default.
-
-Cancellation propagates only through declared dependencies. Root never resets,
-stashes, rebases, or repairs dirty lane work from another worktree.
-
-## Model, cost, validation, and retention
-
-| Work | Default route | Escalation |
-| --- | --- | --- |
-| B0 deterministic characterization | Terra / medium | Sol for unresolved cross-boundary disposition |
-| L1 and L4 ordinary work | Terra / medium | Sol only for a genuinely ambiguous interface/oracle |
-| L2 and L3 ordinary work | Terra / medium | One focused Sol falsifier for a current T3 boundary |
-| I0 shared decisions and fan-in | Sol / high or xhigh | Ultra only with two ready independent packages and reserved fan-in |
-| J0 observation | Sol independent observer | No route substitutes for Tree authority or same-surface evidence |
-
-Track wall time, token cost, duplicated investigation, integration defects, and
-cancellation waste. Retain multi-lane delivery only when it beats a strong
-single-lane baseline on elapsed time or proof quality without more semantic
-defects.
-
-Ordinary output is ephemeral. Persist only the final milestone outcome, an
-irreproducible install/host observation needed for it, security/custody/recovery
-state needed to resume, or an unreconstructable cross-process handoff. Each
-item has finite dependencies, invalidation, retention, deletion, and one owner.
-
-Planning reconciliation validation:
+Create:
 
 ```text
-git diff --check
-find docs/exec-plans/active -maxdepth 1 -type f
-rg -n "classDef (complete|active|ready|blocked|tree)" \
-  docs/exec-plans/active/usable-product-milestone.md
-scripts/check .
+docs/foundations/current-2026-08-08.md
+docs/foundations/register.csv
+docs/foundations/decision-log.csv
 ```
 
-The repository-wide check may expose a legacy/generated projection outside the
-authorized planning path. Record that exact gap; do not refresh unrelated v2
-evidence or product/package templates in this reconciliation.
+Use the supplied UltraGoal foundation file and the shared register filtered to `ultragoal` and `both`.
 
-### Known compatibility blockers
+The file must state:
 
-| Blocker | Owner | Cause | Required finite follow-up | Claim impact |
-| --- | --- | --- | --- | --- |
-| `P-TEMPLATE-PROJECTION` | I0 root | Canonical planning standards changed while `templates/**` is a product/package surface excluded by this reconciliation | At B0, identify whether the milestone's supported install path consumes these templates. If yes, I0 regenerates only the declared projections once and reruns the projector; if no, record them as frozen v2 compatibility inputs | `scripts/project-agent-standards check` and therefore `scripts/check .` cannot support source-completeness, package, or repository-completion claims; the planning-contract claim is unaffected |
-| `P-AMENDMENT-VALIDATOR` | I0 root | `validator/src/contract_amendment/validation.rs` accepts only `strengthens`/`clarifies` rows with the old fourteen exact claims, while approved `AMEND-006` is a schema-valid scope reset to `CL-USABLE-LOOP` | If B0 finds a current product reader, I0 updates that one validator/reader contract and focused fixtures to accept the approved append-only scope change; otherwise the legacy reader remains outside the milestone | Runtime amendment validation and any claim consuming it are blocked; Tree's planning authority and the planning-only reconciliation are not promoted into runtime proof |
+- current source statuses and exact claims;
+- version-sensitive guidance;
+- claim ceilings;
+- obsolete/historical material disposition;
+- review triggers; and
+- source-to-decision-delta policy.
 
-Neither blocker authorizes package or validator changes today. Each reopens
-only if B0 demonstrates that the current milestone consumes its named surface.
+## U0.4 Freeze the old research authority graph
 
-## Progress
+Mark the following as frozen historical/compatibility inputs, not current authority:
 
-- [x] Inspect source reset/refinement and clean successor architecture.
-- [x] Exclude dirty checkout state and preserve successor product changes.
-- [x] Reconcile to one append-only finite goal and one active plan.
-- [x] Define color-coded status graph and legend.
-- [x] Define four independent exclusive-ownership lanes and one fan-in.
-- [x] Define proof tiers, relevant-dependency invalidation, retention, model
-  routing, budgets, stop conditions, and Tree gates.
-- [ ] B0: characterize current behavior and freeze `BASE-0` / `IFACE-0`.
-- [ ] Launch only `partial_change` or `change_required` lanes.
-- [ ] I0: merge/waive each required lane once and freeze `CANDIDATE-0`.
-- [ ] D1: obtain exact representative-use authority.
-- [ ] J0: run the journey and decide `CL-USABLE-LOOP`.
+- `docs/research-source-registry.json`;
+- `docs/research-source-cards.json`;
+- `docs/research-article-to-law-trace.json`;
+- `docs/source-obligation-matrix.md`;
+- historical source snapshots;
+- contract-specific research registries/reviews;
+- research-derived generated enforcement projections.
 
-## Surprises, decisions, and outcomes
+Do not delete them yet. Do not refresh them. Exclude them from default context and current product claims. Reader migration occurs in U3/U7.
 
-Surprises:
+## U0 acceptance
 
-- The restored worktree was detached at the reset commit while the committed
-  successor head lived in a separate dirty checkout.
-- `0aad076b` was already a broad merge of reset/refinement and successor
-  product work, but copying it would import product bytes and rewrite an
-  append-only amendment chain.
-- The successor amendment log had advanced through `AMEND-005`, reusing ids
-  that the old reset line had rewritten.
-- Existing successor architecture already has an `engineering_advisory`
-  authority projection; the other line's `plugin_product::engineering_advisory`
-  and `AgenticPackSet-v1` are proposals relative to this clean base, not
-  current product facts.
+- default browsing/clone/CI authority points at current code;
+- current foundation files exist;
+- old research machinery cannot schedule work or block U1;
+- no source-card or generated projection was refreshed;
+- no branch backup or foundation receipt was created; and
+- current candidate commit/tree is recorded directly in this plan.
 
-Decisions:
+---
 
-- Branch from committed `5dae7dd2`; never merge or absorb dirty checkout state.
-- Port only current planning/contract/graph intent, not product/package/runtime
-  changes.
-- Preserve `AMEND-001`–`AMEND-005` and append one approved `AMEND-006`.
-- Keep advisory/public-context/unfitted-diagnosis questions in B0 and root I0;
-  they cannot create a fifth overlapping worker lane or expand the milestone.
-- Use L4, L1, L2, L3, then root wiring as the only fan-in order.
+# U1 — Current-source installed-loop baseline
 
-Outcome and claim ceiling:
+## U1 purpose
 
-This planning reconciliation is accepted when the authorized diff is
-planning-only, one active plan remains, amendment and document digests match,
-the graph/ownership checks pass, and the worktree is committed cleanly.
+Determine what already works and identify the first real product blocker. Do not rewrite root instructions, standards, lane templates, generated authority, source-law machinery, or observability architecture before this baseline unless they literally prevent execution.
 
-It does not establish source correctness, package/install/discovery/runtime
-identity, Product Fitness, `CL-USABLE-LOOP`, readiness, release, or completion.
+## U1 build and focused source checks
+
+```bash
+cargo fmt --all -- --check
+cargo check -p ultragoal --lib --locked
+cargo build -p ultragoal --bin ultragoal --locked
+cargo test -p ultragoal --tests --locked -- --list
+```
+
+Select the smallest current tests covering:
+
+- public CLI grammar;
+- repository fit;
+- routine dirty-tree work;
+- findings/diagnosis/next action;
+- distribution identity; and
+- interruption/recovery.
+
+Do not run the complete governance/release suite merely because it exists.
+
+## U1 external target
+
+Create one disposable local Git repository outside UltraGoal with:
+
+- one tracked source file;
+- one intentionally modified tracked file;
+- one untracked file;
+- one passing affected check;
+- one deterministic failing check or source condition;
+- one recoverable repair; and
+- no credentials, network or external service.
+
+The external evaluator captures before/after:
+
+```text
+recursive paths and hashes
+file types and modes
+Git status
+branch and HEAD
+symlink/root identity
+mtime only where behavior depends on it
+```
+
+## U1 actual command grammar
+
+Use the built binary’s current help and capability output:
+
+```bash
+target/debug/ultragoal --json --help
+target/debug/ultragoal --json inspect capabilities
+target/debug/ultragoal --json inspect context
+```
+
+Exercise only current exposed routes for:
+
+1. fit inspect;
+2. fit plan;
+3. accepted apply in the disposable target;
+4. fit verify;
+5. routine affected work;
+6. deterministic failure;
+7. findings and diagnosis;
+8. one legal next action;
+9. repair or safe refusal; and
+10. unchanged repeat use.
+
+If the grammar differs, update this plan. Do not invent compatibility commands or an equivalence receipt.
+
+## U1 external oracle
+
+Pass only when the evaluator observes:
+
+- zero unrelated tracked/untracked loss;
+- read-only routes make zero hidden writes;
+- mutations remain inside accepted target/effect scope;
+- useful work executes or returns an honest typed blocker;
+- executed and reused work are distinct;
+- diagnosis identifies a causal boundary and exact rerun/next action;
+- interruption/failure leaves understandable recoverable state;
+- unchanged repeat use avoids needless re-execution; and
+- no tracked routine receipt/governance artifact appears.
+
+Classify each step:
+
+```text
+passes_currently
+partial
+blocked_by_product
+blocked_by_environment_or_authority
+```
+
+Record the baseline in this plan and the external run index, not a repository receipt.
+
+If the evaluator cannot discriminate, repair the evaluator before source code.
+
+---
+
+# U2 — One coupled blocker repair
+
+**Conditional:** execute only for a material `partial` or `blocked_by_product` U1 result.
+
+## U2 topology
+
+Use one branch/worktree and implementation owner by default. A second lane is legal only when current source proves:
+
+- disjoint semantic authority;
+- disjoint write paths;
+- no peer-unmerged dependency;
+- local independent oracles; and
+- reserved root fan-in capacity.
+
+Worktree isolation alone is not independence.
+
+## U2 repair loop
+
+For each blocker:
+
+1. preserve the failing external fixture;
+2. state one causal hypothesis;
+3. demonstrate a red test, mutation, reversal, or failing external oracle;
+4. make the smallest root-cause change;
+5. run the narrow source check;
+6. rerun the affected external endpoint; and
+7. inspect unrelated target state.
+
+Attempt two must change the hypothesis, variable or oracle. Otherwise stop and report `blocked`.
+
+Do not edit root governance documents unless the fix changes a real public contract.
+
+## U2 acceptance
+
+- the original U1 blocker is retired by same-surface evidence;
+- unrelated state remains preserved;
+- no historical receipt is refreshed;
+- no second state owner is created; and
+- the exact candidate is frozen for U3/U5.
+
+---
+
+# U3 — Replace research authority and reduce active instruction path
+
+**Begin only after the current product loop passes or is honestly environment/authority blocked.**
+
+## U3.1 Rewrite research standards
+
+Replace `agent-standards/11-research-improvement-and-quality-gates.md` with:
+
+```text
+new source/observation
+→ classify authority and freshness
+→ identify exact active decision
+→ identify one canonical owner
+→ choose no_change/update/replace/retire
+→ prefer code/test/tool/schema for deterministic behavior
+→ add prose only for noninferable semantics
+→ record one compact decision delta if it must survive sessions
+```
+
+Remove requirements that every research source map through:
+
+- law IDs;
+- standards rows;
+- obligation matrices;
+- schemas;
+- red/green fixtures;
+- receipts;
+- package/setup outputs;
+- final-packet blockers; or
+- update-goal blockers.
+
+Regenerate/remove its template copy only after confirming the template reader.
+
+## U3.2 Root instruction ownership
+
+### `AGENTS.md`
+
+Keep only:
+
+- instruction precedence and untrusted-content handling;
+- current goal/active-plan pointers;
+- preserve unrelated work;
+- safe local implementation versus approval boundary;
+- simple/direct versus planned/complex work;
+- load one relevant module/domain doc;
+- risk-proportionate checks and final-state verification;
+- stop/replan rule; and
+- concise final outcome/check/risk fields.
+
+Remove `validation_artifacts/` from default reading.
+
+### `AGENT_STANDARDS.md`
+
+Keep one task-to-module index and instruction to load only relevant modules. Remove its second-manual rule set, reviewer policy and completion schema.
+
+### `GOAL_CONTRACT.md`
+
+Keep:
+
+- authority and superseded history;
+- user, job, product/mission outcome;
+- `CL-USABLE-LOOP` journey;
+- non-goals;
+- protected invariants;
+- human decisions; and
+- current claim ceiling.
+
+Move current status to the active plan, architecture ownership to `ARCHITECTURE.md`, planning/proof/evidence/stopping to `PLANS.md`, and model routing to versioned measured configuration.
+
+### `PLANS.md`
+
+Keep one milestone/plan, ownership, proportional validation, evidence economy, budgets, recovery and stopping. Replace model names with:
+
+> Use the least costly supported configuration that passes the representative task-class evaluation; parallelize only genuinely independent work with reserved integration capacity.
+
+## U3.3 Domain modules
+
+For each module touched by a representative U5 route:
+
+1. remove rules already owned elsewhere or enforced mechanically;
+2. retain domain-specific noninferable semantics;
+3. remove version/session history;
+4. replace long examples with one discriminative example only when measured;
+5. link to source/config instead of copying evolving enumerations; and
+6. remove default durable-artifact requirements.
+
+Specific mandatory repairs:
+
+- Module 01: remove universal 100–200/250-line rules and repeated naming taxonomies.
+- Module 06: replace standards promotion ladder with repeated/material failure → earliest controllable layer → no-change/update/replace/retire.
+- Module 07: retain proof-surface separation but remove routine receipt requirements and copied thresholds.
+- Module 11: source-to-decision lifecycle only.
+
+## U3.4 Minimal lane template
+
+Replace `templates/LANE_EXECPLAN.md` with:
+
+```markdown
+# Lane: <outcome>
+
+- base commit/tree:
+- outcome and acceptance:
+- owned paths:
+- forbidden/shared paths:
+- consumed dependencies/interfaces:
+- local oracle:
+- effect ceiling:
+- repair budget and stop:
+
+## Work
+
+## Result
+
+- head commit/tree:
+- changed paths:
+- commands and outcomes:
+- blocker or requested root change:
+- worktree state:
+```
+
+Remove ready/validator receipts, registry rows, universal browser/cache/port fields, four-persona review, refreshed anchors, goal-binding receipt paths, completion-manifest JSON and durable paths for reproducible checks.
+
+## U3 acceptance
+
+- each stable rule has one owner;
+- root routers route rather than restate manuals;
+- current product route excludes historical/generated/evidence roots by default;
+- no source automatically creates an enforcement graph;
+- routine lane work requires no receipts; and
+- no task-success claim is made until U5.
+
+---
+
+# U4 — Product/governance/release checks and explicit runtime state
+
+## U4.1 Split check ownership
+
+Create or expose three clear entry points:
+
+```text
+check-product
+    compile
+    CLI grammar
+    fit preservation
+    routine work/reuse
+    diagnosis/next action
+    distribution identity
+    essential path/custody/fault cases
+
+check-governance
+    current standards/generated compatibility
+    only when their owning inputs change
+
+check-release
+    product checks plus authorized package/install/release evidence
+```
+
+Keep `scripts/check` as a compatibility wrapper if current callers require it, but do not make governance projection a prerequisite for focused product work.
+
+## U4.2 Test classification
+
+Retain tests whose actual oracle detects:
+
+- wrong root or target;
+- path/symlink escape;
+- stale candidate or dependency identity;
+- hidden writes;
+- forged/pass-shaped evidence;
+- unsafe cleanup;
+- interruption/cancellation/custody loss;
+- duplicate or ambiguous effects;
+- privacy/secret leakage; or
+- failure to recover.
+
+Demote or remove tests whose only assertion is that a correctly shaped receipt/projection exists and no current product/compatibility reader consumes it.
+
+## U4.3 Runtime state
+
+Use Ledger’s principle only where current behavior shows stale-state/repetition defects. A compact runtime view may track:
+
+```text
+current candidate/target
+observed inputs and their validity
+modifications/effects
+attempted commands and still-valid outcomes
+in-flight/ambiguous effects
+next legal action
+```
+
+Do not create another repository ledger unless cross-process recovery requires it. Affected observations become stale after state changes; unrelated observations remain usable.
+
+## U4 acceptance
+
+- focused product work does not regenerate governance artifacts;
+- check names and claim ceilings are explicit;
+- product checks are sufficient to run U5/U6;
+- current operation state has one owner; and
+- ordinary checks leave no tracked authority files.
+
+---
+
+# U5 — Byte-identical instruction/context A/B
+
+## U5 conditions
+
+On the same exact source candidate:
+
+1. direct source/tests with no repository instruction route;
+2. current transitive UltraGoal route;
+3. reduced U3 route; and
+4. reduced route plus exact relevant specialist.
+
+Use held-out tasks covering:
+
+- focused Rust defect;
+- CLI grammar change;
+- dirty-tree preservation;
+- causal diagnosis;
+- package/distribution identity;
+- symlink/path security;
+- interrupted recovery;
+- stale observation after an edit;
+- docs-only correction;
+- no-change investigation;
+- gateway selection; and
+- frozen-governance compatibility conflict.
+
+## U5 controls
+
+Hold constant:
+
+- source commit/tree;
+- task prompt and fixtures;
+- model/reasoning/tools/sandbox/approval policy;
+- time/token budget;
+- evaluator and hidden tests.
+
+## U5 endpoints
+
+Primary:
+
+```text
+all required final-state outcomes
+AND no prohibited outcomes
+AND correct candidate/target
+```
+
+Secondary:
+
+- authority/preservation adherence;
+- false completion;
+- files/context loaded;
+- unused reads;
+- time to first relevant edit;
+- tool calls;
+- repeated unchanged actions;
+- human interventions;
+- wall time and no-cache/billed cost separately.
+
+## U5 decision
+
+Adopt the reduced route only if:
+
+- strict success is noninferior within a predeclared margin;
+- no known security, authority, preservation or recovery regression occurs;
+- median active context decreases;
+- unused traversal decreases; and
+- the reduction does not hide the same text in automatically loaded material.
+
+A failed task triggers mechanism triage. Do not restore broad prose from one anecdote without a future holdout.
+
+---
+
+# U6 — Exact Agentic coexistence and final external loop
+
+## U6 Agentic boundary
+
+Bind UltraGoal to one exact compatible Agentic package set:
+
+```text
+package-set version
+package names/versions
+manifest and aggregate digests
+enabled skill identities
+one required base package
+optional companions
+implicit gateway = UltraGoal
+proposal_only = true
+claim_effect = none
+```
+
+Verify:
+
+- exactly one implicit gateway;
+- explicit fully qualified Agentic selection;
+- stale/wrong digest rejection;
+- typed unavailable result for missing optional adviser;
+- no inference from source/cache/history;
+- no Agentic effect, approval, lifecycle or claim authority; and
+- clean uninstall without stale rediscovery.
+
+## U6 final product loop
+
+On exact package/install/runtime identities, rerun the U1 journey with:
+
+- preserved dirty target state;
+- deterministic failure and recovery;
+- evaluator-owned snapshots/capture;
+- one optional Agentic adviser available; and
+- one missing-adviser condition.
+
+The product must remain legal and useful when advice is unavailable.
+
+## U6 mutation suite
+
+The evaluator must reject:
+
+- internal tests pass but installed path absent;
+- source/package/install mismatch;
+- stale reuse after an affected change;
+- read route writes state;
+- pass-shaped receipt without operation;
+- many receipts instead of required outcome;
+- unrelated work loss;
+- wrong-root cleanup;
+- recovery without custody;
+- adviser substitution;
+- Agentic advice raises an UltraGoal claim; and
+- a second implicit gateway.
+
+---
+
+# U7 — Milestone decision, retirement, and stop
+
+## U7 decision states
+
+```text
+pass         exact candidate passes required journey/invariants
+fail         external evaluator demonstrates product defect
+blocked      required authority/environment unavailable
+inconclusive evaluator cannot discriminate claim
+```
+
+A pass supports `CL-USABLE-LOOP` only in the tested envelope. It does not establish release, universal repository support, repeated adoption, daily-driver status, or field Product Fitness.
+
+## U7 bounded retirement
+
+Use current-reader analysis to remove only superseded surfaces with no current consumer:
+
+- old source registry/cards/article-to-law trace/obligation matrix;
+- obsolete generated research projections;
+- duplicate standards template;
+- receipt-only tests/writers with no real invariant;
+- frozen contract research graphs with no compatibility reader;
+- duplicate root policy; and
+- temporary context/dedup analysis.
+
+Use Git history rather than an in-tree archive.
+
+Do not remove:
+
+- path/identity/effect/recovery security tests;
+- migration fixtures with current readers;
+- exact package/protocol compatibility inputs; or
+- product-loop regression fixtures.
+
+## U7 completion
+
+Complete when:
+
+- one current branch and CI authority exists;
+- one current foundation owner exists;
+- research sources no longer auto-generate law/receipt graphs;
+- current product loop passes or is honestly classified;
+- root context reduction is measured, not assumed;
+- product/governance/release checks have distinct owners;
+- routine work creates no authoritative files;
+- Agentic coexistence remains explicit and claim-neutral;
+- the external evaluator decides `CL-USABLE-LOOP`; and
+- the repository stops rather than beginning another governance cycle.
+
+## Owner decisions with no safe default
+
+Ask only for:
+
+- branch setting/ruleset authorization;
+- representative target and exact install/write scope;
+- credentials/external host use;
+- publication/release;
+- licensing resolution;
+- a second representative journey; or
+- destructive deletion with ambiguous readers.
+
+## Confidence
+
+| Proposition | Confidence |
+|---|---:|
+| Branch/CI authority must be repaired first | 100% |
+| Current source must be run before broad policy cleanup | 99% |
+| The source-to-law-to-receipt graph should cease being current authority | 100% |
+| Real path/identity/effect/recovery controls must remain | 100% |
+| The root instruction path is over-composed | 100% |
+| The lane template creates routine receipt theater | 100% |
+| Product, governance and release checks should be separated | 98% |
+| Explicit runtime state is preferable to repeated status prose where needed | 97% |
+| Exact optimal context/runtime topology can be known without U5/U6 | below 10% |
+| This is the strongest defensible next implementation sequence | 98% |
