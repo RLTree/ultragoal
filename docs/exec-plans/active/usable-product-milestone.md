@@ -4,7 +4,7 @@
 **Intended repository path:** replace `docs/exec-plans/active/usable-product-milestone.md` atomically
 **Operation:** do not keep the old plan active or create another plan, lane registry, completion manifest, research-law graph, or receipt ledger
 **Research lock:** 2026-08-08, America/Los_Angeles
-**Observed active candidate:** branch `codex/usable-loop-master-candidate`; committed HEAD `5640de128899e92f807d5a12f4e9ccd88ab55337`, tree `ee5159526756f29beba1963548a3892c86672267`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus plan/foundation custody and the U2 guidance repair; U3 is an uncommitted integrated change and must be frozen to a new exact commit/tree before later-stage claims
+**Observed active candidate:** branch `codex/usable-loop-master-candidate`; committed HEAD `da923659908ab1978ec602da1a984a511cb55650`, tree `6c9d3b75a689dec166dab1fdc065cd62d3bc6af9`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus plan/foundation custody, the U2 guidance repair, and the frozen U3 current-authority separation; re-resolve after every later commit
 **Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; the bounded candidate contains the `master` verification workflow, but it still triggers pushes only to `main`; no branch protection, required check, ruleset, or current-candidate workflow result exists
 **Current claim ceiling:** research, repository inspection, and executable plan only
 
@@ -17,7 +17,7 @@
 - Integrated plan candidate before this state update: `390a76bb0829b37914c8bd0fb184f606ad331051`, tree `6a8a48e2c1e3f52b05842f3f4d40e5a6c0023ffc`; `master` is its direct ancestor and it is two commits ahead.
 - Foundation digests remain `01eae0a275d223f76bfd81ffb4d8b9fc1510675dd107dfa2a3f65667f8544b98`, `39c054831f0913a4301e25ebca58afa939facfb06c6f903a4aecbe2111a8d8c1`, and `74d0f70963d24eea519cca98f4a7e011a8062bfc3885e2f3408914fa35fc4569`.
 - The dirty root checkout remains on `codex/successor-contract-v2-live-product`; its four modified distribution files and untracked sentinel remain unchanged at the protected digests recorded below.
-- U3 integration is currently uncommitted in the bounded worktree. The unrelated formatter-shaped distribution duplicates were removed from this candidate only after their bytes were matched to Terry's root changes. No protected distribution path or sentinel is present in the candidate diff.
+- U3 authority separation is frozen at `da923659908ab1978ec602da1a984a511cb55650`, tree `6c9d3b75a689dec166dab1fdc065cd62d3bc6af9`. The unrelated formatter-shaped distribution duplicates were removed from this candidate only after their bytes were matched to Terry's root changes. No protected distribution path or sentinel entered the commit, and the bounded worktree was clean immediately after it.
 
 ## U1 current-product baseline (2026-08-09)
 
@@ -33,7 +33,7 @@
 
 - U2 repair is committed at `5640de128899e92f807d5a12f4e9ccd88ab55337`: shipped repository-fit guidance and its current reader now require the exact unchanged plan projection in a current-user-owned absolute regular file and use `plan.plan_sha256` as the acceptance identity. Focused repository-fit and source-contract oracles pass.
 - An experimental explicit `--state-root` route was independently security-falsified and then fully removed before integration. Alternate roots could fork target effect/recovery authority; ancestor replacement and extended ACLs were not bounded; and generated rerun/next instructions could drop the selected authority binding. No state-root files or grammar changes remain. A future implementation requires one target-derived durable domain binding and lock plus descriptor-chain and ACL validation, or a deliberate retirement of ambient effectful compatibility.
-- U3 is in progress. Root routers/contracts/modules/templates, research-to-law current fan-in, retained compatibility classification, and current inception/state ownership are integrated locally. Public state, fit plan/apply, routine, observe, and diagnosis contexts no longer bind the adopted-handoff identity; explicit package, inventory, and migration routes retain named compatibility contexts. Current Product Success semantics no longer execute AMEND/v2 history prose. Minimal current-only fixtures withhold historical/generated/evidence authority inputs, and retained predecessor bytes cannot alter current authority. Authority-separation acceptance now awaits final independent falsification and exact candidate freeze.
+- U3 authority separation passed independent falsification and is frozen. Root routers/contracts/modules/templates, research-to-law current fan-in, retained compatibility classification, and current inception/state ownership are integrated. Public state, fit plan/apply, routine, observe, and diagnosis contexts no longer bind the adopted-handoff identity; explicit package, inventory, and migration routes retain named compatibility contexts. Current Product Success semantics no longer execute AMEND/v2 history prose. Minimal current-only fixtures withhold historical/generated/evidence authority inputs, and retained predecessor bytes cannot alter current authority.
 - Ordinary routine operation still reads and writes `validation_artifacts/observability/spool` as behavior state. This is not a historical authority input, but it conflicts with `ARCHITECTURE.md`'s evidence/behavior separation and keeps literal U3 evidence-root acceptance conditional until U4 moves local events under the existing host routine-state owner.
 
 ## D0 input root rebaseline (2026-08-09)
@@ -158,7 +158,7 @@ Do not commit:
 - [ ] U0 restore branch/CI truth and establish the current foundation owner (clean `master`-based candidate, foundation owner, and fresh control observations complete; Tree-authorized default/protection repair pending).
 - [x] U1 classify the current operator loop: read-only fit passes; effectful journey is honestly authority-blocked; one operator-facing plan-path partial enters U2.
 - [x] U2 repair only observed blocking product boundaries.
-- [ ] U3 replace the research-authority model and simplify active instructions (authority separation integrated locally; independent recheck and clean freeze pending; evidence-root runtime location closes in U4).
+- [ ] U3 replace the research-authority model and simplify active instructions (authority separation independently passed and is frozen at `da9236599`; literal evidence-root runtime-location acceptance closes in U4).
 - [ ] U4 separate product, governance and release checks; add only needed runtime state.
 - [ ] U5 evaluate current versus reduced instructions on byte-identical source.
 - [ ] U6 verify exact Agentic coexistence and rerun the external loop.
@@ -209,7 +209,7 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 - U0 disposition: `HOLD`. Foundation authority, current control truth, and one clean local `master`-based candidate pass; remote default/CI authority does not yet pass.
 - U1 disposition: `PARTIAL / AUTHORITY HOLD`. Current-source build and read-only fit inspect/plan pass with evaluator-observed zero target delta. Broad integration-test listing is source-blocked; the plan-path guidance is product-partial; apply/routine and downstream recovery remain authority-blocked.
 - U2 disposition: `PASS` at the shipped guidance/source-contract surface on committed candidate `5640de128899e92f807d5a12f4e9ccd88ab55337`; no higher product surface is implied.
-- U3 disposition: `HOLD` pending final independent source-reader recheck and exact candidate freeze. Current authority separation is locally implemented; literal evidence-root-location acceptance remains conditional on the U4 runtime-state repair.
+- U3 disposition: `PASS` for independently falsified current-authority separation at `da9236599`; `CONDITIONAL HOLD` for the literal evidence-root-location clause until the U4 runtime-state repair. No higher product claim follows.
 - Current maximum statement: exact source build, read-only CLI/disposable-target fit-plan behavior, and focused U2/U3 source tests. No package, install, discovery, effectful runtime, recovery, complete product-journey, or release claim is supported yet.
 
 ## Idempotence, recovery, and cleanup
@@ -222,7 +222,7 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 ## Outcome state
 
 - `CL-USABLE-LOOP`: undecided.
-- Current transition: complete the final U3 falsification, freeze the clean authority-separation commit/tree, then split product/governance/release checks and move target evidence behavior under the current host-state owner in U4. Keep the real host-state effect, GitHub default/protection mutation, real install, and representative non-disposable target write on explicit authority HOLD.
+- Current transition: on frozen U3 candidate `da9236599`, split product/governance/release checks and move target evidence behavior under the current host-state owner in U4. Keep the real host-state effect, GitHub default/protection mutation, real install, and representative non-disposable target write on explicit authority HOLD.
 
 ---
 
