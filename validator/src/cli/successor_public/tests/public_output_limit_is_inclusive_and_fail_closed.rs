@@ -143,3 +143,47 @@ pub(crate) fn fit_apply_fails_closed_without_existing_host_state_root() {
     assert_eq!(repo.status(), before_status);
     fs::remove_file(plan_path).unwrap();
 }
+
+#[test]
+pub(crate) fn fit_apply_rejects_a_plan_bound_to_the_retained_compatibility_context() {
+    let repo = Repository::new("fit-stale-compatibility-plan");
+    let ParseOutcome::Invocation(plan_invocation) = parse_args(["--json", "fit", "plan"]).unwrap()
+    else {
+        panic!("expected fit plan invocation")
+    };
+    let compatibility = compatibility_workspace_context(&repo.root).unwrap();
+    let plan = super::super::fit::plan(&compatibility, &plan_invocation).render(OutputMode::Json);
+    assert_eq!(plan.exit_code, 0);
+    let plan_value: serde_json::Value = serde_json::from_slice(&plan.stdout).unwrap();
+    let plan_sha256 = plan_value["plan"]["plan_sha256"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let plan_path = repo.root.with_extension("compatibility-fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
+
+    let ParseOutcome::Invocation(apply_invocation) = parse_args([
+        "--json",
+        "fit",
+        "apply",
+        "--plan",
+        plan_path.to_str().unwrap(),
+        "--accept-plan",
+        &plan_sha256,
+    ])
+    .unwrap() else {
+        panic!("expected fit apply invocation")
+    };
+    let arguments = super::super::fit::apply_arguments(&apply_invocation).unwrap();
+    let current = current_workspace_context(&repo.root).unwrap();
+    let outcome = match super::super::fit::prepare_apply_with_arguments(&current, arguments) {
+        Ok(_) => panic!("compatibility-bound plan must be stale for the current context"),
+        Err(outcome) => outcome.render(OutputMode::Json),
+    };
+
+    assert_eq!(outcome.exit_code, 1);
+    assert!(outcome.stdout.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&outcome.stderr).unwrap();
+    assert_eq!(value["diagnostic_id"], "successor_runtime_stale_context");
+    fs::remove_file(plan_path).unwrap();
+}

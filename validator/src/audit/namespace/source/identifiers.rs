@@ -1,4 +1,4 @@
-use crate::audit::source_governance::rust_syntax::{analyze, RustSyntaxRequest};
+use crate::audit::source_governance::rust_syntax::{RustSyntaxRequest, analyze};
 use crate::audit::source_governance::{GovernedInventory, GovernedSource};
 #[cfg(test)]
 use std::collections::BTreeSet;

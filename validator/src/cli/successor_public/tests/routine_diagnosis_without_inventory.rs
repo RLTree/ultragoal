@@ -85,7 +85,7 @@ fn routine_next_projects_when_adopted_state_is_unavailable() {
     let ParseOutcome::Invocation(invocation) = parse_args(["--json", "next"]).unwrap() else {
         panic!("expected invocation")
     };
-    let context = read_context(&repo.root).unwrap();
+    let context = current_read_context(&repo.root).unwrap();
     let streams = super::super::diagnose::next_routine_or(
         &repo.root,
         &context,
@@ -135,6 +135,7 @@ fn public_diagnose_requires_repository_fit_when_no_routine_surface_exists() {
 #[test]
 fn explicit_target_diagnosis_uses_the_confined_child_binding() {
     let repo = Repository::new("routine-diagnosis-child");
+    ignore_nested_target(&repo.root, "child");
     let child = repo.add_nested_repository("child");
     install_routine(&child, 2);
     let home = empty_home("routine-diagnosis-child");
@@ -152,7 +153,7 @@ fn explicit_target_diagnosis_uses_the_confined_child_binding() {
     let child_context = super::super::routine::current_diagnosis_binding(
         &repo.root,
         Some("child"),
-        &read_context(&repo.root).unwrap(),
+        &current_read_context(&repo.root).unwrap(),
     )
     .unwrap()
     .unwrap();
@@ -170,6 +171,7 @@ fn explicit_target_diagnosis_uses_the_confined_child_binding() {
 #[test]
 fn explicit_target_diagnosis_rejects_a_substituted_directory_without_writes_or_path_echo() {
     let repo = Repository::new("routine-diagnosis-substituted-target");
+    ignore_nested_target(&repo.root, "child");
     let child = repo.add_nested_repository("child");
     let substituted = repo.root.join("substituted");
     std::os::unix::fs::symlink(&child, &substituted).unwrap();
@@ -190,6 +192,16 @@ fn explicit_target_diagnosis_rejects_a_substituted_directory_without_writes_or_p
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
     fs::remove_dir_all(home).unwrap();
+}
+
+fn ignore_nested_target(root: &Path, target: &str) {
+    fs::write(
+        root.join(".gitignore"),
+        format!("validation_artifacts/\n{target}/\n"),
+    )
+    .unwrap();
+    git(root, &["add", ".gitignore"]);
+    git(root, &["commit", "-qm", "ignore nested target"]);
 }
 
 fn install_routine(root: &Path, value: u8) {

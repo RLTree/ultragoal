@@ -6,6 +6,7 @@
 mod adopted;
 mod adopted_claims;
 mod adopted_journey;
+#[cfg(test)]
 mod adopted_registry;
 mod catalog;
 mod ceiling;
@@ -35,7 +36,9 @@ mod state_error;
 #[cfg(test)]
 mod tests;
 
-pub(crate) use adopted::{derive_adopted, stage_root_claims};
+#[cfg(test)]
+pub(crate) use adopted::derive_adopted;
+pub(crate) use adopted::{derive_current, stage_root_claims};
 pub use catalog::{
     ActionDefinition, ActionKind, ActionPriorityClass, CapabilityRequirement, ClaimSpec,
     CommandBinding, DependencyActionCatalog, DependencyActionSpec, DependencyFact,

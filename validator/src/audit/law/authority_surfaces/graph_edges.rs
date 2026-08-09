@@ -30,7 +30,7 @@ pub(super) fn require_trace_paths(
     trace: &Value,
     out: &mut Vec<(String, String)>,
 ) {
-    for row in trace_entries(trace) {
+    for row in trace_entries(trace).filter(|row| !retained_trace_row(row)) {
         let law = text(row, "law_id").unwrap_or("<missing-law-id>");
         if let Some(rel) = row
             .get("source_artifact")
@@ -62,6 +62,12 @@ pub(super) fn require_trace_paths(
         require_text(row, law, "validator_check_id", out);
         require_text(row, law, "claim_ceiling_impact", out);
     }
+}
+
+fn retained_trace_row(row: &Value) -> bool {
+    row.get("obligation_id")
+        .and_then(Value::as_str)
+        .is_some_and(crate::contract_check_ids::is_retained_compatibility_id)
 }
 
 fn require_red_fixtures(

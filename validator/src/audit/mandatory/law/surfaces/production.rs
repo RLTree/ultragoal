@@ -43,6 +43,15 @@ pub(super) fn current_check_failures(
         .get("validator_check_id")
         .and_then(Value::as_str)
         .unwrap_or("");
+    if crate::contract_check_ids::is_retained_compatibility_id(check_id) {
+        return if crate::contract_check_ids::is_retained_compatibility_id(law) {
+            Vec::new()
+        } else {
+            vec![format!(
+                "mandatory_law_current_check_retained_compatibility:{law}:{check_id}"
+            )]
+        };
+    }
     if !crate::contract_check_ids::CHECK_IDS.contains(&check_id) {
         return Vec::new();
     }

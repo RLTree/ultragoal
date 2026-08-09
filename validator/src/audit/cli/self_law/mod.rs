@@ -27,10 +27,7 @@ pub(crate) fn check(
             format!("schema_catalog:{failure}"),
         );
     }
-    let check_ids = crate::contract_check_ids::CHECK_IDS
-        .iter()
-        .map(|id| (*id).to_string())
-        .collect::<Vec<_>>();
+    let check_ids = current_check_ids();
     let package = crate::audit::package::checks::checks_with_scheduler(
         request.root,
         &store,
@@ -58,6 +55,15 @@ pub(crate) fn check(
         push(&mut failures, CLAIM_ID, failure);
     }
     Ok(stable_response(failures))
+}
+
+fn current_check_ids() -> Vec<String> {
+    crate::contract_check_ids::CHECK_IDS
+        .iter()
+        .copied()
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
+        .map(str::to_string)
+        .collect()
 }
 
 fn stable_response(failures: BTreeMap<String, Vec<String>>) -> CliSelfLawCheckResponse {

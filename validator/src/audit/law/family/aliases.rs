@@ -32,7 +32,7 @@ const TIGHTENING_FIELDS: &[&str] = &[
     "same_law_id_enforcement_required_across_all_surfaces",
 ];
 
-pub(crate) fn failures(root: &Path) -> Vec<String> {
+pub(crate) fn compatibility_failures(root: &Path) -> Vec<String> {
     let value = match crate::json_boundary::read_json(&root.join(PATH)) {
         Ok(value) => value,
         Err(err) => return vec![format!("{PATH}: {err}")],

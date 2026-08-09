@@ -1,10 +1,15 @@
+#![allow(dead_code)] // frozen brief validation helpers
+
 use super::model::{
-    BriefV1, BriefV2, CandidateBinding, ContractFacts, EvidenceClass, InceptionClaimCeiling,
-    OperatorKind,
+    BriefV1, BriefV2, CandidateBinding, EvidenceClass, InceptionClaimCeiling, OperatorKind,
+    RetainedCompatibilityFacts,
 };
 use std::collections::BTreeSet;
 
-pub(crate) fn validate_v1(brief: &BriefV1, facts: &ContractFacts) -> Result<(), &'static str> {
+pub(crate) fn validate_v1(
+    brief: &BriefV1,
+    facts: &RetainedCompatibilityFacts,
+) -> Result<(), &'static str> {
     if brief.product_success_contract_id != facts.product_contract_id
         || !unique_known(&brief.claim_ids, &facts.claim_ids)
     {
@@ -27,7 +32,7 @@ pub(crate) fn validate_v1(brief: &BriefV1, facts: &ContractFacts) -> Result<(), 
 
 pub(crate) fn validate_v2(
     brief: &BriefV2,
-    facts: &ContractFacts,
+    facts: &RetainedCompatibilityFacts,
     candidate: &CandidateBinding,
 ) -> Result<(), &'static str> {
     if brief.product_success_contract_id != facts.product_contract_id
@@ -213,7 +218,7 @@ fn unique_ids<'a>(values: impl Iterator<Item = &'a str>) -> bool {
     !values.is_empty() && values.iter().collect::<BTreeSet<_>>().len() == values.len()
 }
 
-fn known_surface(surface: &str, facts: &ContractFacts) -> bool {
+fn known_surface(surface: &str, facts: &RetainedCompatibilityFacts) -> bool {
     facts.surface_ids.iter().any(|known| known == surface)
 }
 

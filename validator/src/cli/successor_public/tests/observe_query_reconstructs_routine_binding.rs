@@ -24,7 +24,7 @@ fn observe_query_reconstructs_the_current_routine_binding() {
     git(&repo.root, &["add", "config", "src/lib.rs"]);
     git(&repo.root, &["commit", "-qm", "add routine configuration"]);
 
-    let read_context = read_context(&repo.root).unwrap();
+    let read_context = current_read_context(&repo.root).unwrap();
     let routine_context =
         super::super::routine::current_observability_context(&repo.root, None, &read_context)
             .unwrap()
@@ -70,6 +70,13 @@ fn observe_query_reconstructs_the_current_routine_binding() {
 #[test]
 fn observe_query_reconstructs_a_confined_child_routine_binding() {
     let repo = Repository::new("observe-child-routine-binding");
+    fs::write(
+        repo.root.join(".gitignore"),
+        b"validation_artifacts/\nchild/\n",
+    )
+    .unwrap();
+    git(&repo.root, &["add", ".gitignore"]);
+    git(&repo.root, &["commit", "-qm", "ignore nested target"]);
     let child = repo.add_nested_repository("child");
     fs::create_dir_all(child.join("config")).unwrap();
     fs::create_dir_all(child.join("src")).unwrap();
@@ -90,7 +97,7 @@ fn observe_query_reconstructs_a_confined_child_routine_binding() {
         &["commit", "-qm", "add child routine configuration"],
     );
 
-    let read_context = read_context(&repo.root).unwrap();
+    let read_context = current_read_context(&repo.root).unwrap();
     let binding = super::super::routine::current_observability_context(
         &repo.root,
         Some("child"),

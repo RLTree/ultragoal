@@ -63,3 +63,38 @@ fn catalog_refs_accept_empty_schema_surface_when_manifest_unreadable() {
     assert!(errors.is_empty(), "{errors:?}");
     std::fs::remove_dir_all(root).expect("cleanup empty schema catalog");
 }
+
+#[test]
+fn retained_research_schemas_are_not_current_catalog_obligations() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "schema-catalog-retained-research",
+    );
+    std::fs::create_dir_all(root.join("schemas")).expect("schemas dir");
+    for name in [
+        "research-article-to-law-trace.schema.json",
+        "research-source-cards.schema.json",
+        "research-source-registry.schema.json",
+    ] {
+        std::fs::write(
+            root.join("schemas").join(name),
+            b"retained compatibility bytes",
+        )
+        .expect("retained schema");
+    }
+    std::fs::write(
+        root.join("plugin-manifest-draft.json"),
+        serde_json::to_vec(&json!({
+            "schemas":[
+                "schemas/research-article-to-law-trace.schema.json",
+                "schemas/research-source-cards.schema.json",
+                "schemas/research-source-registry.schema.json"
+            ]
+        }))
+        .expect("manifest json"),
+    )
+    .expect("manifest");
+
+    let errors = crate::schema_catalog::catalog_refs::catalog_completeness_errors(&root, &[]);
+    assert!(errors.is_empty(), "{errors:?}");
+    std::fs::remove_dir_all(root).expect("cleanup retained research catalog");
+}

@@ -267,18 +267,6 @@
       "path": "schemas/red-packet.schema.json"
     },
     {
-      "id": "https://harness-ultragoal.local/schemas/research-article-to-law-trace.schema.json",
-      "path": "schemas/research-article-to-law-trace.schema.json"
-    },
-    {
-      "id": "https://harness-ultragoal.local/schemas/research-source-cards.schema.json",
-      "path": "schemas/research-source-cards.schema.json"
-    },
-    {
-      "id": "https://harness-ultragoal.local/schemas/research-source-registry.schema.json",
-      "path": "schemas/research-source-registry.schema.json"
-    },
-    {
       "id": "https://harness-ultragoal.local/schemas/restartable-execplan-receipt.schema.json",
       "path": "schemas/restartable-execplan-receipt.schema.json"
     },

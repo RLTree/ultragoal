@@ -45,11 +45,13 @@ pub(crate) fn authority_graph_failures(inputs: AuthorityGraphInputs<'_>) -> Vec<
     let standards_ids = ids(inputs.standards, "rows", "id");
     let audit_ids = audit_row_ids(inputs.standards_audit);
     let mut out = Vec::new();
-    for row in inputs.mandatory
+    for row in inputs
+        .mandatory
         .get("laws")
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
+        .filter(|row| !retained_row(row, "law_id"))
     {
         let law = text(row, "law_id").unwrap_or("<missing-law-id>");
         require_text(row, law, "validator_check_id", &mut out);
@@ -89,7 +91,12 @@ pub(crate) fn authority_graph_failures(inputs: AuthorityGraphInputs<'_>) -> Vec<
             );
         }
         super::graph_edges::require_mandatory_law_paths(
-            inputs.root, inputs.inventory, law, row, inputs.red_ids, &mut out,
+            inputs.root,
+            inputs.inventory,
+            law,
+            row,
+            inputs.red_ids,
+            &mut out,
         );
     }
     super::graph_edges::require_trace_paths(inputs.root, inputs.inventory, inputs.trace, &mut out);
@@ -137,8 +144,15 @@ fn ids(value: &Value, array_key: &str, id_key: &str) -> BTreeSet<String> {
         .into_iter()
         .flatten()
         .filter_map(|row| row.get(id_key).and_then(Value::as_str))
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
         .map(str::to_string)
         .collect()
+}
+
+fn retained_row(row: &Value, id_key: &str) -> bool {
+    row.get(id_key)
+        .and_then(Value::as_str)
+        .is_some_and(crate::contract_check_ids::is_retained_compatibility_id)
 }
 
 fn audit_row_ids(text: &str) -> BTreeSet<String> {
@@ -157,4 +171,61 @@ fn text<'a>(row: &'a Value, field: &str) -> Option<&'a str> {
 
 fn push(out: &mut Vec<(String, String)>, detail: String) {
     out.push((CHECK_ID.to_string(), detail));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{AuthorityGraphInputs, authority_graph_failures};
+    use serde_json::json;
+    use std::collections::BTreeSet;
+    use std::path::Path;
+
+    #[test]
+    fn current_graph_ignores_retained_rows_but_rejects_an_ordinary_malformed_row() {
+        let mandatory = json!({"laws":[
+            {"law_id":"research-source-authority-article-to-law-integration"},
+            {"law_id":"source-card-freshness-ceiling"},
+            {"law_id":"ordinary-current-row"}
+        ]});
+        let obligations = json!({"obligations":[
+            {"id":"research-source-authority-article-to-law-integration"},
+            {"id":"source-card-freshness-ceiling"}
+        ]});
+        let trace = json!({"entries":[
+            {"obligation_id":"research-source-authority-article-to-law-integration"},
+            {"obligation_id":"source-card-freshness-ceiling"}
+        ]});
+        let standards = json!({"rows":[
+            {"id":"research-source-authority-article-to-law-integration"},
+            {"id":"source-card-freshness-ceiling"}
+        ]});
+        let empty = BTreeSet::new();
+        let failures = authority_graph_failures(AuthorityGraphInputs {
+            root: Path::new("retained-compatibility-test-root"),
+            inventory: &empty,
+            mandatory: &mandatory,
+            obligations: &obligations,
+            trace: &trace,
+            standards: &standards,
+            standards_audit: "",
+            red_ids: &empty,
+        });
+        for retained in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(
+                failures
+                    .iter()
+                    .all(|(_, failure)| !failure.contains(retained)),
+                "{retained}: {failures:?}"
+            );
+        }
+        assert!(
+            failures
+                .iter()
+                .any(|(_, failure)| failure.contains("law=ordinary-current-row")),
+            "{failures:?}"
+        );
+    }
 }

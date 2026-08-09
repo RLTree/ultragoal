@@ -4,20 +4,18 @@ use super::{ContextError, ReadSession, query_git};
 use sha2::{Digest, Sha256};
 use std::ffi::{OsStr, OsString};
 use std::fs;
-use std::path::{Component, Path, PathBuf};
+use std::path::{Component, PathBuf};
 
 #[cfg(unix)]
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
 
-const BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
 const MAX_UNTRACKED_BYTES: u64 = 16 * 1024 * 1024;
 
-/// Derives the current worktree identity for a Product Success Brief subject.
-/// The brief is intentionally omitted so it can bind the work it describes
-/// without creating a hash fixed point; every other tracked or untracked byte
-/// remains identity-bearing.
+/// Derives the current worktree identity for current-product inspection.
+/// No retained brief is omitted: frozen compatibility material cannot affect
+/// current ranking, so every tracked or untracked byte remains identity-bearing.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) struct SubjectIdentity {
     pub(crate) digest: String,
@@ -30,7 +28,7 @@ pub(crate) fn identity(reads: &ReadSession) -> Result<SubjectIdentity, ContextEr
     add_framed(&mut hasher, b"ProductInceptionSubject-v1");
     let mut status = Vec::new();
     for (index, arguments) in [
-        ["ls-files", "-s", "-z", "--", ".", exclude()].as_slice(),
+        ["ls-files", "-s", "-z", "--", "."].as_slice(),
         [
             "diff",
             "--binary",
@@ -38,7 +36,6 @@ pub(crate) fn identity(reads: &ReadSession) -> Result<SubjectIdentity, ContextEr
             "--no-textconv",
             "--",
             ".",
-            exclude(),
         ]
         .as_slice(),
         [
@@ -48,7 +45,6 @@ pub(crate) fn identity(reads: &ReadSession) -> Result<SubjectIdentity, ContextEr
             "--untracked-files=all",
             "--",
             ".",
-            exclude(),
         ]
         .as_slice(),
     ]
@@ -71,10 +67,6 @@ pub(crate) fn identity(reads: &ReadSession) -> Result<SubjectIdentity, ContextEr
     })
 }
 
-fn exclude() -> &'static str {
-    ":(exclude)PRODUCT_SUCCESS_BRIEF.json"
-}
-
 fn untracked_paths(reads: &ReadSession) -> Result<Vec<PathBuf>, ContextError> {
     let listing = query_git(
         reads,
@@ -85,7 +77,6 @@ fn untracked_paths(reads: &ReadSession) -> Result<Vec<PathBuf>, ContextError> {
             "-z",
             "--",
             ".",
-            exclude(),
         ]
         .as_slice(),
     )?;
@@ -100,16 +91,14 @@ fn untracked_paths(reads: &ReadSession) -> Result<Vec<PathBuf>, ContextError> {
 
 fn checked_relative(bytes: &[u8]) -> Result<PathBuf, ContextError> {
     let path = path_from_bytes(bytes.to_vec());
-    if path == Path::new(BRIEF_PATH)
-        || path.components().any(|component| {
-            matches!(
-                component,
-                Component::ParentDir | Component::RootDir | Component::Prefix(_)
-            )
-        })
-    {
+    if path.components().any(|component| {
+        matches!(
+            component,
+            Component::ParentDir | Component::RootDir | Component::Prefix(_)
+        )
+    }) {
         return Err(ContextError::PathDenied(
-            "Git returned an invalid Product Inception path".to_owned(),
+            "Git returned an invalid current-product path".to_owned(),
         ));
     }
     Ok(path)

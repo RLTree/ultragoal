@@ -1,7 +1,7 @@
 use super::fixture::*;
 use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::inventory::{
-    InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256,
+    ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256, InventoryBuilder,
 };
 use crate::state::catalog::{DependencyFact, DependencyStatus, FactAuthority};
 use crate::state::derive_adopted;

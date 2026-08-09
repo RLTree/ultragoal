@@ -18,7 +18,6 @@ use crate::cli::successor::{
     CheckProfile, EffectClass, OptionName, ParsedInvocation, ParsedValue, SuccessorCommand,
 };
 use crate::context::{BuildRequest, LiveContext, ToolCapability};
-use crate::inventory::{ADOPTED_HANDOFF_DIGEST_CONFIG_KEY, ADOPTED_HANDOFF_MANIFEST_SHA256};
 use crate::routine_work::{
     AdoptedRoutineNode, BoundCatalogInvocation, CatalogAdoption, CatalogSelectionRequest,
     ImpactGraph, LocalDirtyTree, PlanRequest, PreparedRoutineExecution, ProductionExecutionControl,

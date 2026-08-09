@@ -48,7 +48,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
+      "output_sha256": "4a477077d25699597e56d607eeab2dc61bc9752831bcfc9bc31299ce0a6d6d02"
     },
     {
       "disposition": "source_projection",
@@ -71,7 +71,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
+      "output_sha256": "067828c677e01484a29b3259008117eff9039fa00e3507ef35f6e3129149c995"
     },
     {
       "disposition": "source_projection",
@@ -94,7 +94,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
+      "output_sha256": "4fd56bab0d7122d38376813d06c1bc1cadde4d5d054d1490968b96bba41966b8"
     },
     {
       "disposition": "retained_context",
@@ -109,17 +109,15 @@
       "physical_deletion_authorized": false
     },
     {
-      "disposition": "adopted_schema_contract",
+      "disposition": "retained_context",
       "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
       "sha256": "0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
-      "schema": "schemas/product-success-contract.schema.json",
-      "schema_sha256": "6027f3385d5ecaace7fa0e45237bc7433bf560aa3c81a43b48c0b700df10f4f5",
-      "source_contract": "GOAL_CONTRACT.md",
-      "source_contract_sha256": "6488e75196f28582adac4ea6079ce0878a6ad7059b720eaea68b08b780874b7a",
-      "amendment_log": "AMENDMENTS.jsonl",
-      "amendment_id": "AMEND-005",
-      "amendment_hash": "39f51d83b90508087e45459f81add8094c2c455fb669e9bbd5885b3909d5338d",
-      "claim_ceiling": "contract_authority_only"
+      "reason": "Retained predecessor product-contract example; the current GOAL_CONTRACT.md and active ExecPlan own product intent and milestone state.",
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
+      "preserve": true,
+      "physical_deletion_authorized": false
     },
     {
       "disposition": "retained_context",
@@ -218,7 +216,7 @@
         "AGENTS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "360b0308f8a133992d52f1d96fb6cce96d28f30dc5c64e5cbf7394c5d6b5f147"
+      "output_sha256": "fb4d921dc2ac0bf33d70068fb5a979547054e6f4766f8cb094c186817957ecb3"
     },
     {
       "disposition": "source_projection",
@@ -228,7 +226,7 @@
         "AGENT_STANDARDS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "b8108bd876a08efe2ae4a595914e22d7e56f0f4be98362a4b3b735b24306ac40"
+      "output_sha256": "ea3e3c16e2d86c7041635688dab83c3a632eb4826db88694df08032ceeb9e56b"
     },
     {
       "disposition": "source_projection",
@@ -238,7 +236,7 @@
         "PLANS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "77c3507ed83a0f4e66ea660ef8ca8d2d2a039bb23c6868144f3ac632e70def31"
+      "output_sha256": "df60ec372e47f990904c6f42548dbb3a7d4e4dae1148f5ccef6120a094c4752c"
     },
     {
       "disposition": "source_projection",
@@ -248,7 +246,7 @@
         "PRODUCT_SUCCESS_CONTRACT.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "1c9f0c81572251ec10962766967c8cb061e3c1a1ecf701cdf248a6740359f606"
+      "output_sha256": "e6b6ee890351e39320d1b135ec93d06fd7e974c4dda1057a760e8dfafe5649a1"
     },
     {
       "disposition": "source_projection",
@@ -258,7 +256,7 @@
         "agent-standards/01-namespace-and-progressive-disclosure.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "ec880b24c2bb992ff0844c5229dce011c494df4bb63c58b1032ff6815b8c232d"
+      "output_sha256": "063b15e765369c2a7631993fd5ac63c84499e97865de15788352a36dd5ff72ff"
     },
     {
       "disposition": "source_projection",
@@ -308,7 +306,7 @@
         "agent-standards/06-standards-gardening.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "c0507744c1dfb64f2b8cc66b1840a937270331e98334892f94a806acb50342b2"
+      "output_sha256": "3bc5e11d0ab4031b9520f72901330b4c0006a160297884896848846c8b68e7d5"
     },
     {
       "disposition": "source_projection",
@@ -318,7 +316,7 @@
         "agent-standards/07-cli-authority-and-proof-surfaces.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "9bd6f9e8fd952019b030d637f998cd14bce87ac74ca81a3d8256cd48cbc62f3d"
+      "output_sha256": "3a9efca969dd99daf02fbd8f2ef7d09edf85ce3c8250d6abb6596114cd8d6817"
     },
     {
       "disposition": "source_projection",
@@ -358,7 +356,7 @@
         "agent-standards/11-research-improvement-and-quality-gates.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "6ba353aa18c619c01143e3d239c1f7fac651bdd419706ac035f906376d5d7cd1"
+      "output_sha256": "0c08c77d7a952bbd549d7a993af74ce74fdda0e1632afa139f1ac1348ae3005d"
     },
     {
       "disposition": "source_projection",
@@ -401,7 +399,7 @@
         "agent-standards/audit/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "2619e9bc3a8b37bc9a90117062d8cc497313731455f86c4e3b6b2e8f3706a717"
+      "output_sha256": "4a477077d25699597e56d607eeab2dc61bc9752831bcfc9bc31299ce0a6d6d02"
     },
     {
       "disposition": "source_projection",
@@ -424,7 +422,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "ccb23e2d88509463f6a8b3028af099561913d74e1628c9ba83ebe4d7472119bb"
+      "output_sha256": "067828c677e01484a29b3259008117eff9039fa00e3507ef35f6e3129149c995"
     },
     {
       "disposition": "source_projection",
@@ -447,7 +445,7 @@
         "agent-standards/policy/validation-feedback.json"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "d424ab8ce18daad2dafc8f0b3e1a79bfce4bc756d64bd59ce665f89dd9cb3527"
+      "output_sha256": "4fd56bab0d7122d38376813d06c1bc1cadde4d5d054d1490968b96bba41966b8"
     },
     {
       "disposition": "source_projection",

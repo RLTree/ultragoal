@@ -6,6 +6,15 @@ pub(crate) fn inventory_findings(
     output: &mut Vec<Finding>,
     fatal: &mut Vec<String>,
 ) {
+    reduce_inventory_findings(inputs, catalog, output, fatal);
+}
+
+fn reduce_inventory_findings(
+    inputs: &BoundInputs,
+    catalog: &DependencyActionCatalog,
+    output: &mut Vec<Finding>,
+    fatal: &mut Vec<String>,
+) {
     for observation in &inputs.inventory_findings {
         let policies = catalog
             .spec()

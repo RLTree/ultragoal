@@ -12,6 +12,7 @@ pub struct RoutineFindingBinding {
 }
 
 impl RoutineFindingBinding {
+    #[allow(dead_code)] // current routine target bindings are deliberately withheld
     pub(crate) fn from_findings(findings: &[Finding]) -> Option<Self> {
         let [finding] = findings else {
             return None;

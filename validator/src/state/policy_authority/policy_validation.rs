@@ -8,6 +8,17 @@ pub(crate) struct PolicyAuthority {
     claim_registry_id: String,
     authority_id: String,
     accepted_catalog: DependencyActionCatalog,
+    inventory_coverage: InventoryCoverage,
+}
+
+/// Current goal authority binds the exact catalog identity but does not let
+/// retained compatibility findings reduce a current claim or mint actions.
+/// Adopted-v2 compatibility issuance remains exact-coverage by default.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub(crate) enum InventoryCoverage {
+    Exact,
+    CurrentAuthority,
 }
 
 impl PolicyAuthority {
@@ -22,6 +33,7 @@ impl PolicyAuthority {
         .map_err(|_| StateError::InvalidCatalog("verification-mode-root-seal-failed".to_owned()))
     }
 
+    #[allow(dead_code)] // frozen v2 compatibility issuer, never current product authority
     pub(crate) fn from_adopted_claim_registry(
         claim_registry_id: impl Into<String>,
         adopted_claims: Vec<ClaimSpec>,
@@ -47,21 +59,55 @@ impl PolicyAuthority {
             claim_registry_id,
             authority_id,
             accepted_catalog,
+            inventory_coverage: InventoryCoverage::Exact,
         })
     }
 
-    pub(crate) fn issue(
+    pub(crate) fn from_current_authority(
+        authority_digest: impl Into<String>,
+        claims: Vec<ClaimSpec>,
+        accepted_spec: DependencyActionSpec,
+    ) -> Result<Self, StateError> {
+        let authority_digest = authority_digest.into();
+        if !super::super::catalog::valid_sha256(&authority_digest) {
+            return invalid("policy-current-authority-identity-invalid");
+        }
+        if !accepted_spec.inventory_policies.is_empty() {
+            return invalid("policy-current-authority-contains-inventory-coverage");
+        }
+        let claims = super::super::catalog::canonical_claims(claims)?;
+        let accepted_catalog = DependencyActionCatalog::from_untrusted_spec(accepted_spec)?;
+        if accepted_catalog.spec().claims != claims {
+            return invalid("policy-claim-set-mismatch");
+        }
+        let authority_id = super::super::catalog::policy_digest(&(
+            "PolicyAuthority-current-v1",
+            &authority_digest,
+            &claims,
+            accepted_catalog.spec_id(),
+        ))?;
+        Ok(Self {
+            claim_registry_id: authority_digest,
+            authority_id,
+            accepted_catalog,
+            inventory_coverage: InventoryCoverage::CurrentAuthority,
+        })
+    }
+
+    pub(crate) fn issue<C: super::super::snapshot::StateAuthorityCatalog + ?Sized>(
         &self,
         context: &LiveContext,
-        authority_catalog: &AuthorityCatalog,
+        authority_catalog: &C,
     ) -> Result<DependencyActionCatalog, StateError> {
         self.issue_with_verification_mode(context, authority_catalog, None)
     }
 
-    pub(crate) fn issue_with_verification_mode(
+    pub(crate) fn issue_with_verification_mode<
+        C: super::super::snapshot::StateAuthorityCatalog + ?Sized,
+    >(
         &self,
         context: &LiveContext,
-        authority_catalog: &AuthorityCatalog,
+        authority_catalog: &C,
         proposed_mode: Option<(
             String,
             crate::engineering_advisory::VerificationModeProposal,
@@ -70,9 +116,10 @@ impl PolicyAuthority {
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         let candidate_id = candidate_identity_id(context)?;
         let observed_codes = authority_catalog
-            .findings()
+            .inventory_findings()
             .iter()
             .map(|finding| finding.code.clone())
             .collect();
@@ -87,6 +134,7 @@ impl PolicyAuthority {
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         verify_live(&catalog, context, authority_catalog)?;
         Ok(catalog)
     }
@@ -120,7 +168,9 @@ impl PolicyAuthority {
             authority_catalog_id,
             authority_catalog_context_id,
         )?;
-        verify_inventory_coverage(accepted_catalog.spec(), observed_codes)?;
+        if self.inventory_coverage == InventoryCoverage::Exact {
+            verify_inventory_coverage(accepted_catalog.spec(), observed_codes)?;
+        }
         let permit = PolicyPermit::issue(
             &self.authority_id,
             &self.claim_registry_id,
@@ -128,6 +178,7 @@ impl PolicyAuthority {
             authority_catalog_id,
             candidate_id,
             accepted_catalog.spec_id(),
+            self.inventory_coverage,
         )?;
         accepted_catalog.authorize(permit)
     }
@@ -211,5 +262,6 @@ pub(crate) struct PolicyPermit {
     pub(crate) authority_catalog_id: String,
     pub(crate) candidate_id: String,
     pub(crate) spec_id: String,
+    pub(crate) inventory_coverage: InventoryCoverage,
     pub(crate) permit_id: String,
 }

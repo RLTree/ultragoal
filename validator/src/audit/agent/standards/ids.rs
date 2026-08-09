@@ -95,7 +95,6 @@ pub(crate) const REQUIRED_IDS: &[&str] = &[
     "skill-catalog-context-budget-omission-warning",
     "skill-local-reference-closure",
     "skill-progressive-disclosure-metadata",
-    "source-card-freshness-ceiling",
     "source-installed-cache-alignment",
     "source-obligation-parity-anti-bundling",
     "stable-identifier-normalization-collision",
@@ -119,3 +118,14 @@ pub(crate) const REQUIRED_IDS: &[&str] = &[
     "workspace-command-confinement-lifecycle-cleanup",
     "worktree-lane-owner-cost-policy",
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::REQUIRED_IDS;
+
+    #[test]
+    fn retained_compatibility_rows_are_not_current_requirements() {
+        assert!(!REQUIRED_IDS.contains(&"source-card-freshness-ceiling"));
+        assert!(!REQUIRED_IDS.contains(&"research-source-authority-article-to-law-integration"));
+    }
+}

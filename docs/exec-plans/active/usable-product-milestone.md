@@ -4,7 +4,7 @@
 **Intended repository path:** replace `docs/exec-plans/active/usable-product-milestone.md` atomically
 **Operation:** do not keep the old plan active or create another plan, lane registry, completion manifest, research-law graph, or receipt ledger
 **Research lock:** 2026-08-08, America/Los_Angeles
-**Observed active candidate:** product baseline `codex/usable-loop-master-candidate@937815a3364fc5fe76d94a038f9f3cd0fdec1f5c`; tree `4cafe73b51cba0a6f9c3800f7da23ad82bd1f348`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus plan/foundation custody commits; re-resolve after every integration or commit
+**Observed active candidate:** branch `codex/usable-loop-master-candidate`; committed HEAD `5640de128899e92f807d5a12f4e9ccd88ab55337`, tree `ee5159526756f29beba1963548a3892c86672267`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus plan/foundation custody and the U2 guidance repair; U3 is an uncommitted integrated change and must be frozen to a new exact commit/tree before later-stage claims
 **Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; the bounded candidate contains the `master` verification workflow, but it still triggers pushes only to `main`; no branch protection, required check, ruleset, or current-candidate workflow result exists
 **Current claim ceiling:** research, repository inspection, and executable plan only
 
@@ -16,7 +16,8 @@
 - Integration topology: read-only cherry-pick simulation showed only the active plan conflicts; the three foundation files were clean. The bounded branch therefore applies the two plan/foundation-only commits in order, resolving the first active-plan conflict in favor of the landed plan. No product source or protected root path changed in those commits.
 - Integrated plan candidate before this state update: `390a76bb0829b37914c8bd0fb184f606ad331051`, tree `6a8a48e2c1e3f52b05842f3f4d40e5a6c0023ffc`; `master` is its direct ancestor and it is two commits ahead.
 - Foundation digests remain `01eae0a275d223f76bfd81ffb4d8b9fc1510675dd107dfa2a3f65667f8544b98`, `39c054831f0913a4301e25ebca58afa939facfb06c6f903a4aecbe2111a8d8c1`, and `74d0f70963d24eea519cca98f4a7e011a8062bfc3885e2f3408914fa35fc4569`.
-- The bounded worktree is clean. The dirty root checkout remains on `codex/successor-contract-v2-live-product`; its four modified distribution files and untracked sentinel were neither copied nor moved.
+- The dirty root checkout remains on `codex/successor-contract-v2-live-product`; its four modified distribution files and untracked sentinel remain unchanged at the protected digests recorded below.
+- U3 integration is currently uncommitted in the bounded worktree. The unrelated formatter-shaped distribution duplicates were removed from this candidate only after their bytes were matched to Terry's root changes. No protected distribution path or sentinel is present in the candidate diff.
 
 ## U1 current-product baseline (2026-08-09)
 
@@ -27,6 +28,13 @@
 - The emitted `RepositoryFitPlan-v1` has accepted identity `sha256:7dc37c88d57c1a0f92372f631f7f033fe2e639127bbe11ca20ed8d8473c97fb1`, zero conflicts, 73 declared target mutations, and one declared `.gitignore` update. The evaluator-owned plan is outside the target and no apply was attempted.
 - Authority classification: public fit apply and routine derive authority only from the process `HOME` and persist beneath `$HOME/.codex/state`; no supported CLI state-root selector exists. Writing Terry's real host state is not authorized, and repurposing `HOME`/`CODEX_HOME` is prohibited by the conductor environment. Accepted apply, routine execution/reuse, failure, diagnosis, and recovery are therefore `blocked_by_environment_or_authority`, not silently substituted with a test-only adapter.
 - First material product partial: the shipped repository-fit skill tells an operator to pass a relative plan path, while the parser requires an absolute host path. This is `partial` and enters U2; it is independent of the host-effect authorization hold.
+
+## U2/U3 current implementation state (2026-08-09)
+
+- U2 repair is committed at `5640de128899e92f807d5a12f4e9ccd88ab55337`: shipped repository-fit guidance and its current reader now require the exact unchanged plan projection in a current-user-owned absolute regular file and use `plan.plan_sha256` as the acceptance identity. Focused repository-fit and source-contract oracles pass.
+- An experimental explicit `--state-root` route was independently security-falsified and then fully removed before integration. Alternate roots could fork target effect/recovery authority; ancestor replacement and extended ACLs were not bounded; and generated rerun/next instructions could drop the selected authority binding. No state-root files or grammar changes remain. A future implementation requires one target-derived durable domain binding and lock plus descriptor-chain and ACL validation, or a deliberate retirement of ambient effectful compatibility.
+- U3 is in progress. Root routers/contracts/modules/templates, research-to-law current fan-in, retained compatibility classification, and current inception/state ownership are integrated locally. Public state, fit plan/apply, routine, observe, and diagnosis contexts no longer bind the adopted-handoff identity; explicit package, inventory, and migration routes retain named compatibility contexts. Current Product Success semantics no longer execute AMEND/v2 history prose. Minimal current-only fixtures withhold historical/generated/evidence authority inputs, and retained predecessor bytes cannot alter current authority. Authority-separation acceptance now awaits final independent falsification and exact candidate freeze.
+- Ordinary routine operation still reads and writes `validation_artifacts/observability/spool` as behavior state. This is not a historical authority input, but it conflicts with `ARCHITECTURE.md`'s evidence/behavior separation and keeps literal U3 evidence-root acceptance conditional until U4 moves local events under the existing host routine-state owner.
 
 ## D0 input root rebaseline (2026-08-09)
 
@@ -149,8 +157,8 @@ Do not commit:
 
 - [ ] U0 restore branch/CI truth and establish the current foundation owner (clean `master`-based candidate, foundation owner, and fresh control observations complete; Tree-authorized default/protection repair pending).
 - [x] U1 classify the current operator loop: read-only fit passes; effectful journey is honestly authority-blocked; one operator-facing plan-path partial enters U2.
-- [ ] U2 repair only observed blocking product boundaries.
-- [ ] U3 replace the research-authority model and simplify active instructions.
+- [x] U2 repair only observed blocking product boundaries.
+- [ ] U3 replace the research-authority model and simplify active instructions (authority separation integrated locally; independent recheck and clean freeze pending; evidence-root runtime location closes in U4).
 - [ ] U4 separate product, governance and release checks; add only needed runtime state.
 - [ ] U5 evaluate current versus reduced instructions on byte-identical source.
 - [ ] U6 verify exact Agentic coexistence and rerun the external loop.
@@ -165,6 +173,9 @@ Do not commit:
 - The current binary exposes no explicit disposable authority-root argument. Fit and routine both consume ambient `HOME`; crossing from read-only planning to effect would write canonical host state even when the target itself is disposable.
 - The external fit planner is deterministic and zero-write on the representative dirty target, but the shipped skill's relative plan-path example cannot satisfy the parser's absolute-host-path contract.
 - The broad `--tests -- --list` gate currently fails at integration-test crate wiring before a complete test inventory can be listed; focused product checks must be repaired or selected without treating source presence as proof.
+- A first explicit-state-root implementation would have created parallel effect/recovery domains for one target and did not close ancestor/ACL or authority-preserving rerun boundaries. Removing it was the smallest safe repair; the host-state effect remains an explicit authority hold rather than an implementation claim.
+- A U3 formatting pass touched four protected distribution paths inside the bounded worktree. Their exact diff matched Terry's still-preserved root changes; all bounded-worktree copies were then restored to the candidate base and are absent from the current diff.
+- The first broad `cargo test -p ultragoal --lib --locked` run completed with 1,567 passed, 219 failed, and 1 ignored. Serial classification separated current-route fixture drift from frozen compatibility and shared-fixture failures: current state/inception/fit/routine/observe/diagnosis routes now pass focused tests; a stale generated-surface v2 test fixture was repaired to the current v3 registry projection; explicit migration verification honestly reports three retained compatibility errors; the remaining broad-suite cleanup belongs to U4 check classification rather than U3 authority semantics.
 
 ## Decision log
 
@@ -176,6 +187,9 @@ Do not commit:
 - Keep the GitHub default/protection mutation at HOLD until Terry explicitly authorizes the exact remote effects.
 - Treat U1 apply/routine as `blocked_by_environment_or_authority` until an exact real-host state effect is approved or a supported explicit disposable authority-root product contract is implemented and same-surface tested. Do not repurpose `HOME` or call a test-only adapter as an equivalence.
 - Use the absolute-plan guidance contradiction as U2's first product repair. It is the earliest observed operator-facing product partial that can be fixed without broadening host authority.
+- Withhold the experimental explicit-state-root grammar. It is not required by U4, and source-level convenience does not justify a second unresolved effect/recovery authority domain. Preserve the real-host effect approval boundary until either Terry authorizes that exact scope or a separately approved, descriptor-bound single-domain design is implemented and same-surface falsified.
+- Treat the four distribution deltas in the bounded worktree as unrelated formatter contamination, not product input. Exclude them from every commit and validation candidate; remove only the bounded-worktree copies after exact comparison confirms the canonical dirty-root bytes remain unchanged.
+- Treat `validation_artifacts/observability/spool` as a U4 operation-state ownership defect, not as current authority. Do not route ordinary observe/diagnose commands back through the retained context to preserve it. Move current local events under the existing routine host-state owner with read-only no-bootstrap semantics, and keep any legacy target spool frozen unless a reader-specific migration is proven.
 
 ### D0 candidate-integration options
 
@@ -194,19 +208,21 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 - Fresh U0 read-only commands: branch/commit/tree/status, remote heads, ancestry counts, merge base, workflow contents/triggers, workflow/check/status queries, branch protection, rulesets, and read-only merge conflict analysis.
 - U0 disposition: `HOLD`. Foundation authority, current control truth, and one clean local `master`-based candidate pass; remote default/CI authority does not yet pass.
 - U1 disposition: `PARTIAL / AUTHORITY HOLD`. Current-source build and read-only fit inspect/plan pass with evaluator-observed zero target delta. Broad integration-test listing is source-blocked; the plan-path guidance is product-partial; apply/routine and downstream recovery remain authority-blocked.
-- Current maximum statement: exact source build plus read-only CLI and disposable-target fit-plan behavior. No package, install, discovery, effectful runtime, recovery, complete product-journey, or release claim is supported yet.
+- U2 disposition: `PASS` at the shipped guidance/source-contract surface on committed candidate `5640de128899e92f807d5a12f4e9ccd88ab55337`; no higher product surface is implied.
+- U3 disposition: `HOLD` pending final independent source-reader recheck and exact candidate freeze. Current authority separation is locally implemented; literal evidence-root-location acceptance remains conditional on the U4 runtime-state repair.
+- Current maximum statement: exact source build, read-only CLI/disposable-target fit-plan behavior, and focused U2/U3 source tests. No package, install, discovery, effectful runtime, recovery, complete product-journey, or release claim is supported yet.
 
 ## Idempotence, recovery, and cleanup
 
 - All U0 probes were read-only except this active-plan update. Repeating them is safe and should change plan state only when an observed fact changes.
 - The authorized bounded integration completed without touching the dirty root. No in-place root integration is authorized. If a later promotion threatens a protected path or creates an unexpected conflict, stop before resolving or staging and rebaseline custody.
-- No temporary repository artifact, receipt, lane registry, completion manifest, or research projection was created. Read-only merge analysis may have written an unreachable Git tree object only; normal Git garbage collection owns it.
+- No temporary repository artifact, receipt, lane registry, completion manifest, or research projection was created. Current enforcement/generated-authority projections were regenerated only as a consequence of changing their canonical current U3 inputs. Read-only merge analysis may have written an unreachable Git tree object only; normal Git garbage collection owns it.
 - U1 retained only evaluator-owned files under the mode-`0700` disposable `/private/tmp/ultragoal-u1-fixture.cjIQ2R` container. The target fixture remains unchanged from its intentional dirty/untracked baseline. Preserve it through U2 same-surface rerun; remove it at final cleanup.
 
 ## Outcome state
 
 - `CL-USABLE-LOOP`: undecided.
-- Current transition: repair the absolute-plan operator guidance as U2's smallest product change and rerun its exact grammar/source oracle. In parallel, keep the real host-state effect, GitHub default/protection mutation, real install, and representative non-disposable target write on explicit authority HOLD.
+- Current transition: complete the final U3 falsification, freeze the clean authority-separation commit/tree, then split product/governance/release checks and move target evidence behavior under the current host-state owner in U4. Keep the real host-state effect, GitHub default/protection mutation, real install, and representative non-disposable target write on explicit authority HOLD.
 
 ---
 

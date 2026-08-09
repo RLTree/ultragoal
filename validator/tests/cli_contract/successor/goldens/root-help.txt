@@ -7,6 +7,10 @@ Commands:
       Summarize live context, findings, capabilities, and claim ceilings.
   inspect context  [read]
       Inspect candidate-bound live context.
+  inspect orchestration  [read]
+      Inspect the current canonical orchestration frontier without authority exposure.
+  inspect inception  [read]
+      Inspect current goal, Product Success Contract, and sole active ExecPlan authority without writes.
   inspect inventory  [read]
       Inspect semantic components and authority conflicts.
   inspect capabilities  [read] [--package-root <value>]

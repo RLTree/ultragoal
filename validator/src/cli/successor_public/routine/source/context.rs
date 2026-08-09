@@ -96,10 +96,6 @@ pub(crate) fn discovery_context(target: &Path) -> Result<LiveContext, PublicFail
         BuildRequest::new(target)
             .expect_worktree_root(target)
             .with_effect(EffectClass::Read)
-            .bind_non_secret_configuration(
-                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-                ADOPTED_HANDOFF_MANIFEST_SHA256,
-            )
             .select_input(target.join(MANIFEST_PATH)),
     )
     .map_err(|_| PublicFailure::Context)
@@ -112,10 +108,6 @@ pub(crate) fn execution_context(
     let mut request = BuildRequest::new(target)
         .expect_worktree_root(target)
         .with_effect(EffectClass::Read)
-        .bind_non_secret_configuration(
-            ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-            ADOPTED_HANDOFF_MANIFEST_SHA256,
-        )
         .bind_non_secret_configuration(SOURCE_CONFIG_KEY, manifest.source_id());
     for path in manifest.selected_paths() {
         request = request.select_input(target.join(path));
@@ -128,4 +120,111 @@ pub(crate) fn execution_context(
         };
     }
     LiveContext::build(request).map_err(|_| PublicFailure::Context)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::inventory::ADOPTED_HANDOFF_DIGEST_CONFIG_KEY;
+    use std::process::Command;
+
+    #[test]
+    fn routine_contexts_ignore_removed_legacy_authority_inputs() {
+        let root = minimal_repository("current-routine-context");
+        fs::create_dir_all(root.join("config")).unwrap();
+        fs::create_dir_all(root.join("src")).unwrap();
+        fs::write(
+            root.join("config/routine-public.json"),
+            include_bytes!("../../../../../../templates/config/routine-public.json"),
+        )
+        .unwrap();
+        fs::write(
+            root.join("config/routines.json"),
+            include_bytes!("../../../../../../templates/config/routines.json"),
+        )
+        .unwrap();
+        fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 1 }\n").unwrap();
+        git(&root, &["add", "-A"]);
+        git(&root, &["commit", "-qm", "install current routine"]);
+
+        let discovery = match discovery_context(&root) {
+            Ok(context) => context,
+            Err(_) => panic!("current routine discovery context must build"),
+        };
+        assert!(discovery.configuration().public_values.is_empty());
+        assert_eq!(
+            discovery
+                .selected_inputs()
+                .iter()
+                .map(|input| input.relative_path.as_str())
+                .collect::<Vec<_>>(),
+            [MANIFEST_PATH]
+        );
+
+        let manifest = manifest::load(&discovery, &root).unwrap();
+        let execution = match execution_context(&root, &manifest) {
+            Ok(context) => context,
+            Err(_) => panic!("current routine execution context must build"),
+        };
+        assert_eq!(execution.configuration().public_values.len(), 1);
+        assert_eq!(
+            execution
+                .configuration()
+                .public_values
+                .get(SOURCE_CONFIG_KEY),
+            Some(&manifest.source_id())
+        );
+        assert!(
+            !execution
+                .configuration()
+                .public_values
+                .contains_key(ADOPTED_HANDOFF_DIGEST_CONFIG_KEY)
+        );
+        assert_eq!(
+            execution
+                .selected_inputs()
+                .iter()
+                .map(|input| input.relative_path.as_str())
+                .collect::<Vec<_>>(),
+            manifest
+                .selected_paths()
+                .iter()
+                .map(|path| path.to_str().unwrap())
+                .collect::<Vec<_>>()
+        );
+        assert!(
+            execution
+                .capabilities()
+                .tool(manifest::ROUTINE_RUNNER)
+                .is_some()
+        );
+        assert!(!root.join("docs").exists());
+        assert!(!root.join("migration").exists());
+        assert!(!root.join("validation_artifacts").exists());
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    fn minimal_repository(label: &str) -> PathBuf {
+        let root = std::env::temp_dir().join(format!(
+            "ultragoal-current-routine-{label}-{}",
+            std::process::id()
+        ));
+        let _ = fs::remove_dir_all(&root);
+        fs::create_dir_all(&root).unwrap();
+        let root = fs::canonicalize(root).unwrap();
+        git(&root, &["init", "-q"]);
+        git(&root, &["config", "user.email", "current@example.invalid"]);
+        git(&root, &["config", "user.name", "Current Routine"]);
+        root
+    }
+
+    fn git(root: &Path, arguments: &[&str]) {
+        let output = Command::new("git")
+            .args(arguments)
+            .env("GIT_OPTIONAL_LOCKS", "0")
+            .current_dir(root)
+            .output()
+            .unwrap();
+        assert!(output.status.success(), "git {arguments:?}: {output:?}");
+    }
 }

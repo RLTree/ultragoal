@@ -15,6 +15,31 @@ mod session;
 mod source;
 mod supported;
 
+/// Read-only source-integrity capture used by the current product authority.
+///
+/// The current-state path needs only the source catalog identity and a
+/// revalidation boundary; it must not acquire a host-discovery transaction or
+/// any retained inventory authority.
+pub(crate) struct CurrentSourceCapture(source::SourceAgentCatalog);
+
+impl CurrentSourceCapture {
+    pub(crate) fn catalog_sha256(&self) -> &str {
+        self.0.catalog_sha256()
+    }
+
+    pub(crate) fn revalidate(&self) -> Result<(), error::AgentDiscoveryError> {
+        self.0.revalidate()
+    }
+}
+
+pub(crate) fn capture_current_source(
+    root: &std::path::Path,
+    candidate_id: &str,
+    session_id: &str,
+) -> Result<CurrentSourceCapture, error::AgentDiscoveryError> {
+    source::SourceAgentCatalog::capture(root, candidate_id, session_id).map(CurrentSourceCapture)
+}
+
 #[cfg(test)]
 #[path = "tests/mod.rs"]
 mod tests;

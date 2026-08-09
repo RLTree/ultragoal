@@ -1098,20 +1098,6 @@
       ]
     },
     {
-      "id": "research-source-authority-article-to-law-integration",
-      "source_law": "mandatory law: Research Source Authority And Article To Law Integration",
-      "required_behavior": "Research source authority and article-to-law integration must be enforced through source cards, source digests, canonical law ids, standards rows, source obligations, foundational trace entries, schemas, validator checks, red and green fixtures, receipts, package inventory, setup/retrofit outputs, claim guards, final-packet fields, and update_goal blockers.",
-      "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/audit/research/mod.rs",
-      "owner_lane": "root",
-      "claim_ids_affected": "completion, review, package, readiness, release, update_goal",
-      "current_status": "active",
-      "blocker_or_repair_action": "Run source audit research-source-authority-article-to-law-integration; research_backed_claims_withheld_without_current_article_to_law_trace.",
-      "required_execplan_refs": [
-        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
-      ]
-    },
-    {
       "id": "restartable-execplans",
       "source_law": "source obligation: Restartable Execplans",
       "required_behavior": "Restartable Execplans must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
@@ -1360,20 +1346,6 @@
       "claim_ids_affected": "completion, review, package, readiness, release",
       "current_status": "active",
       "blocker_or_repair_action": "Run mandatory-law surface validation; skill_claims_withheld_without_progressive_disclosure_receipt.",
-      "required_execplan_refs": [
-        "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
-      ]
-    },
-    {
-      "id": "source-card-freshness-ceiling",
-      "source_law": "source obligation: Source Card Freshness Ceiling",
-      "required_behavior": "Source Card Freshness Ceiling must be enforced as a same-law source-obligation surface with mandatory-law receipt, standards row, trace entry, validator check enum, red fixture, valid fixture or receipt, and claim-ceiling guard.",
-      "enforcement_status": "mechanized",
-      "gate_or_fixture_path": "validator/src/audit/mandatory/law/surfaces/mod.rs",
-      "owner_lane": "root",
-      "claim_ids_affected": "completion, review, package, readiness, release",
-      "current_status": "active",
-      "blocker_or_repair_action": "Run mandatory-law surface validation; current_source_full_compliance_readiness_release_claims_withheld_by_unrefreshed_source_cards.",
       "required_execplan_refs": [
         "harness-ultragoal-plans-and-orchestrator-automation-hardening.md"
       ]

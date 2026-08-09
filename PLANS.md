@@ -1,149 +1,78 @@
-# ExecPlan Law
+# ExecPlan Rules
 
-`PLANS.md` defines stable planning rules. Current project state belongs in one
-self-contained file under `docs/exec-plans/active/`.
+Current program state belongs in one self-contained file under
+`docs/exec-plans/active/`. Stable planning rules belong here.
 
-## One milestone, one active plan
+## One milestone and one plan
 
-Each goal has one observable product milestone and one active ExecPlan. A plan
-must name:
+Each goal has one observable milestone and one active ExecPlan. The plan names:
 
-- user outcome and non-goals;
-- current facts, assumptions, and claim ceiling;
-- exact owned and shared surfaces;
+- user outcome, acceptance conditions, and non-goals;
+- current candidate, facts, assumptions, and claim ceiling;
+- owned, shared, and forbidden surfaces;
 - dependency order and one integration owner;
-- finite gates and proof tier;
-- commands or oracles that distinguish correct from incorrect behavior;
-- cost, repair, stop, recovery, and teardown rules; and
-- Tree decisions that have no safe default.
+- concrete commands or oracles that distinguish success from failure;
+- approval, cost, repair, recovery, stop, and cleanup boundaries; and
+- decisions with no safe default.
 
-Overlapping active plans are an orchestration defect. Resolve or delete the
-superseded plan before implementation. Git retains history; the active tree
-does not keep backup plans.
+Keep Progress, Surprises, Decisions, Validation, Recovery, and Outcome current
+enough that another operator can resume without chat or a parallel registry.
 
-## Progress and restartability
+## Ownership and parallel work
 
-The active plan is the current state record. It keeps these sections current:
+Use one implementation path for coupled work. Parallelize only when current
+source proves disjoint semantic authority and write paths, no unmerged peer
+dependency, a local independent oracle, and reserved root fan-in capacity.
 
-- Purpose and observable outcome
-- Progress
-- Surprises and discoveries
-- Decision log
-- Context and orientation
-- Lane map and dependency graph
-- Concrete steps
-- Validation and acceptance
-- Idempotence and recovery
-- Artifacts and retention
-- Outcomes and retrospective
+Each worker gets one exact base commit/tree, exclusive owned paths, forbidden
+and shared paths, consumed interfaces, an effect ceiling, local oracle, repair
+budget, stop condition, and concise handoff. Root owns shared public grammar,
+schemas, dependency files, migrations, effect authority, integration, and
+final acceptance.
 
-A future agent must be able to resume from the plan without chat, a stale
-registry, or a receipt wall.
+## Proportional validation
 
-## Parallelism and exclusive ownership
+Use the lowest tier that can falsify the current claim:
 
-Use one lane for coupled work. Use parallel lanes only when:
+- context/source inspection for a local hypothesis;
+- focused changed-behavior and failure-path checks for an implementation;
+- integrated checks on one exact candidate for fan-in;
+- adversarial boundary tests and focused independent review for security,
+  authority, custody, recovery, or external effects;
+- same-surface package/install/runtime/journey evidence for a product claim;
+- release evidence only after explicit release authority.
 
-1. each lane can make progress without another lane's uncommitted state;
-2. owned paths and semantic decisions do not overlap;
-3. shared interfaces are frozen before fan-out;
-4. every lane has a local oracle, budget, stop condition, and one concise
-   handoff; and
-5. one root owner has reserved integration and verification capacity.
-
-The root owns shared schemas, dependency files, public grammar and application
-programming interfaces (APIs), migrations, effect authority, claim promotion,
-and final acceptance. Workers request shared changes in their handoff.
-
-Every launched lane binds:
-
-- one exact root-frozen base commit and tree;
-- the exact shared-interface fields it consumes;
-- exclusive path and semantic ownership;
-- forbidden and root-owned surfaces;
-- a local oracle and proof tier;
-- relevant dependency identities;
-- a repair budget, cancellation lineage, and stop condition; and
-- one commit-bound return envelope.
-
-Lanes never consume, merge, cherry-pick, or coordinate through another lane's
-unintegrated work. If a shared interface changes, root cancels only its declared
-consumers and issues a new version. A worker may request a shared change but
-cannot implement or approve it.
-
-Root alone moves a lane through `defined`, `ready`, `active`, `accepted`,
-`no_change`, `blocked`, `cancelled`, `merged`, or `waived`. A lane is
-ineligible for fan-in if its head is not descended from the frozen base, its
-diff escapes ownership, it contains a peer merge, its oracle is missing, or its
-proof is bound to a different candidate or dependency.
-
-Fan-in happens once, in a declared deterministic order. The integrator
-classifies missing or failed lanes, checks commit ancestry and ownership,
-rejects conflicts or peer merges, resolves shared requests against current
-authority, applies root-only wiring, runs integrated checks, freezes one
-candidate, and closes or cancels every lane. A merged patch or worker summary
-is not integration proof.
-
-## Finite verification modes
-
-Select the lowest tier that can falsify the current claim:
-
-- **T0 context / micro:** provenance and explicit currentness limit only.
-- **T1 lane commit / standard:** exact base/head commit and tree, exclusive
-  owned diff, focused changed-behavior checks, and clean handoff.
-- **T2 integrated candidate / standard:** deterministic fan-in, shared wiring,
-  integrated checks, and exact candidate freeze.
-- **T3 consequential boundary / elevated:** explicit failure model, relevant
-  negative or fault evidence, recovery/rollback where touched, and one
-  independent focused review.
-- **T4 product milestone / critical for authorized effects:** exact installed
-  candidate plus representative same-surface journey and concise
-  quality-in-use outcome.
-- **T5 release / critical:** fresh release-candidate identity, distribution,
-  install, discovery, runtime, security, migration, rollback, and human
-  approval.
-
-Do not run release or completion gates on ordinary work. Do not rerun a review
-against byte-identical authority solely to seek another result.
+A zero exit code, source coverage, package bytes, install success, reviewer
+agreement, or receipt cannot substitute for a different surface.
 
 ## Evidence economy
 
-Persist evidence only for a named current claim, cross-process custody,
+Keep reproducible build, test, and diagnostic output ephemeral. Persist only
+the smallest artifact required by a current claim, cross-process custody,
 irreproducible observation, recovery need, or explicitly authorized release.
-Everything else stays in command output, ignored worktree state, or the commit
-history.
+Retained evidence names its owner, candidate/environment, consumed inputs,
+oracle, claim ceiling, invalidation trigger, and deletion boundary.
 
-Retained evidence declares owner, claim, exact candidate or environment,
-proof surface, maximum claim, consumed authority/dependency set, oracle,
-invalidation trigger, and deletion boundary. T1 and T2 use the commit, plan
-entry, and concise handoff rather than a new durable receipt unless the
-observation is irreproducible or crosses a custody boundary.
+Evidence becomes stale only when a declared dependency changes or contradictory
+same-surface evidence appears. Staleness lowers the claim; it does not trigger
+unrelated regeneration.
 
-Evidence invalidates when its candidate commit/tree or a declared consumed
-authority/dependency changes, its relevant environment identity changes, its
-stated freshness window expires, or current same-surface evidence contradicts
-it. Rerun only proofs that declare the changed dependency. Unrelated lanes,
-unconsumed docs, branch movement preserving the exact commit/tree, and age
-alone do not force regeneration.
+## Configuration and budgets
 
-Stale evidence loses authority but does not block unrelated work. Delete
-superseded reproducible evidence at integration or teardown after confirming no
-unique recovery value remains.
+Use the least costly supported configuration that passes the representative task-class evaluation; parallelize only genuinely independent work with reserved integration capacity.
 
-## Model and cost routing
+Every uncertain repair has a bounded hypothesis and oracle. After two similar
+failures, change the hypothesis, variable, or oracle. Stop when the budget is
+exhausted, coordination costs exceed the likely benefit, the next action needs
+new authority, or continuing would broaden the milestone.
 
-Use Luna for narrow deterministic work, Terra for ordinary engineering, and
-Sol for ambiguous or high-risk judgment. Use Ultra only for genuinely
-independent streams with disjoint ownership and an explicit root fan-in.
+## Recovery and stopping
 
-Every lane has a budget. After two failed repair attempts, budget exhaustion,
-or evidence that coordination costs more than the saved time, stop and
-replan. Increase reasoning or orchestration only for a named risk that the
-lower route failed to retire.
+Before a risky transition, record exact custody and how to resume, roll back,
+or clean up. Never use destructive recovery against an ambiguous root or
+unowned state. A blocker records its exact condition, evidence, claim impact,
+and next authorized transition.
 
-## Completion
-
-Lane completion means its owned change and local oracle are ready for fan-in.
-Goal completion means the single milestone passes its declared gate on the
-exact integrated candidate. Release, repeated-use, daily-driver, and product
-success claims require their own later authority and evidence.
+Goal completion means the single milestone passes on the exact integrated
+candidate. Release, a second representative journey, broader autonomy, or a
+new product cycle requires a new user decision.

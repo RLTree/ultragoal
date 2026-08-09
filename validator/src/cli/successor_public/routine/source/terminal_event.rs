@@ -2,7 +2,6 @@ use super::super::super::super::local_store::{RoutineTerminalEvent, append_routi
 use super::*;
 use crate::routine_work::DirtySnapshot;
 use crate::state::RoutineFindingBinding;
-use crate::{inventory::InventoryBuilder, state::derive_adopted};
 
 pub(super) fn mark_post_effect_ambiguity(
     state: &HostState,
@@ -76,10 +75,11 @@ pub(super) fn join(
         .map_err(PublicFailure::Host)
 }
 
-pub(super) fn capture_finding_binding(context: &LiveContext) -> Option<RoutineFindingBinding> {
-    let inventory = InventoryBuilder::new(context).build().ok()?;
-    let state = derive_adopted(context, &inventory).ok()?;
-    RoutineFindingBinding::from_findings(state.findings())
+pub(super) fn capture_finding_binding(_context: &LiveContext) -> Option<RoutineFindingBinding> {
+    // A routine context is the representative target repository, not the
+    // UltraGoal source root. Do not substitute a target inventory for current
+    // product authority; the optional pre-effect product binding is withheld.
+    None
 }
 
 pub(super) fn mediation_context<'a>(

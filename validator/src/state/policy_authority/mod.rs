@@ -1,7 +1,6 @@
 use super::catalog::{ClaimSpec, DependencyActionCatalog, DependencyActionSpec};
 use super::product_state::StateError;
 use crate::context::LiveContext;
-use crate::inventory::AuthorityCatalog;
 use serde::Serialize;
 use std::collections::BTreeSet;
 

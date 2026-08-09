@@ -1,20 +1,21 @@
-use super::model::{BriefV2, CandidateBinding, ContractFacts};
+use super::model::{BriefV2, CandidateBinding, RetainedCompatibilityFacts};
 use super::normalize;
 use super::parser::{ParsedBrief, parse};
 use super::reader::{confined, regular_file};
 use super::validation::validate_v2;
-use crate::context::EffectClass;
+use crate::context::{BuildRequest, EffectClass, LiveContext};
 use crate::state::{ActionDefinition, ActionKind, AuthorityRequirement};
 use serde_json::json;
 use std::fs;
 use std::path::Path;
+use std::process::Command;
 
 fn digest(ch: char) -> String {
     format!("sha256:{}", ch.to_string().repeat(64))
 }
 
-fn facts() -> ContractFacts {
-    ContractFacts {
+fn facts() -> RetainedCompatibilityFacts {
+    RetainedCompatibilityFacts {
         product_contract_id: "PSC-1".to_owned(),
         contract_version: "2.3.0".to_owned(),
         contract_digest: digest('a'),
@@ -146,12 +147,6 @@ fn historical_starting_candidate_does_not_stale_an_expected_dirty_journey() {
 }
 
 #[test]
-fn product_success_contract_facts_require_version_2_3_0() {
-    assert!(super::reader::product_contract_version_supported("2.3.0"));
-    assert!(!super::reader::product_contract_version_supported("2.2.0"));
-}
-
-#[test]
 fn semantic_validation_rejects_noncontiguous_truth_loop() {
     let mut value = brief();
     value.first_truth_loop.positive_path[0].order = 2;
@@ -242,4 +237,84 @@ fn confined_reader_rejects_escape_symlink_and_hard_linked_input() {
 fn projection_inputs_never_include_private_root_text() {
     let value = serde_json::to_string(&brief()).unwrap();
     assert!(!value.contains(Path::new("/private").to_string_lossy().as_ref()));
+}
+
+#[test]
+fn current_authority_is_digest_bound_and_has_no_retained_brief_fallback() {
+    let root = std::env::temp_dir().join(format!(
+        "ultragoal-current-authority-{}",
+        std::process::id()
+    ));
+    let _ = fs::remove_dir_all(&root);
+    fs::create_dir_all(root.join("docs/exec-plans/active")).unwrap();
+    let goal = "This contract is the current product-goal authority\n\
+         The sole executable state owner is\n\
+         `docs/exec-plans/active/usable-product-milestone.md`.\n\
+         ## `CL-USABLE-LOOP`\nThe external evaluator decides.\n";
+    fs::write(root.join("GOAL_CONTRACT.md"), &goal).unwrap();
+    let product = "This document is the current product-success authority\n\
+         Harness Ultragoal has one current product claim: `CL-USABLE-LOOP`.\n";
+    fs::write(root.join("PRODUCT_SUCCESS_CONTRACT.md"), &product).unwrap();
+    let plan = root.join("docs/exec-plans/active/usable-product-milestone.md");
+    fs::write(
+        &plan,
+        "# Harness UltraGoal current plan\n`CL-USABLE-LOOP`\nThe external evaluator decides.\n",
+    )
+    .unwrap();
+    git(&root, &["init", "-q"]);
+    git(&root, &["config", "user.email", "current@example.invalid"]);
+    git(&root, &["config", "user.name", "Current Authority"]);
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "authority"]);
+    let context = current_context(&root);
+    let original = super::current_authority_digest(&context).unwrap();
+
+    fs::create_dir_all(root.join("examples/generated")).unwrap();
+    fs::write(
+        root.join("examples/generated/PRODUCT_SUCCESS_CONTRACT.json"),
+        b"retained predecessor bytes",
+    )
+    .unwrap();
+    assert_eq!(
+        super::current_authority_digest(&current_context(&root)).unwrap(),
+        original,
+        "retained predecessor bytes cannot affect current authority"
+    );
+
+    fs::write(
+        root.join("PRODUCT_SUCCESS_CONTRACT.md"),
+        format!("{product}\nHarness Ultragoal has one current product claim: `CL-USABLE-LOOP`.\n"),
+    )
+    .unwrap();
+    assert!(super::current_authority_digest(&current_context(&root)).is_err());
+    fs::write(root.join("PRODUCT_SUCCESS_CONTRACT.md"), &product).unwrap();
+
+    fs::write(
+        root.join("GOAL_CONTRACT.md"),
+        format!("{goal}\nThe sole executable state owner is\n`docs/exec-plans/active/usable-product-milestone.md`.\n"),
+    )
+    .unwrap();
+    assert!(super::current_authority_digest(&current_context(&root)).is_err());
+    fs::write(root.join("GOAL_CONTRACT.md"), &goal).unwrap();
+
+    fs::write(root.join("docs/exec-plans/active/second.md"), b"not active").unwrap();
+    assert!(super::current_authority_digest(&current_context(&root)).is_err());
+    fs::remove_file(root.join("docs/exec-plans/active/second.md")).unwrap();
+
+    fs::remove_file(&plan).unwrap();
+    assert!(super::current_authority_digest(&current_context(&root)).is_err());
+    fs::remove_dir_all(root).unwrap();
+}
+
+fn current_context(root: &Path) -> LiveContext {
+    LiveContext::build(BuildRequest::new(root).with_effect(EffectClass::Read)).unwrap()
+}
+
+fn git(root: &Path, args: &[&str]) {
+    let output = Command::new("git")
+        .args(args)
+        .current_dir(root)
+        .output()
+        .unwrap();
+    assert!(output.status.success(), "git {args:?} failed: {output:?}");
 }

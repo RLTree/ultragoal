@@ -1,6 +1,7 @@
 use super::repository_fixture::{Repository, tree};
 use super::{
-    MAX_PUBLIC_OUTPUT, execute_invocation, execute_invocation_with_home, parse_public,
+    MAX_PUBLIC_OUTPUT, compatibility_workspace_context, current_read_context,
+    current_workspace_context, execute_invocation, execute_invocation_with_home, parse_public,
     public_output_allowed, read_context,
 };
 use crate::cli::successor::{OutputMode, ParseOutcome, ParsedInvocation, parse_args};
@@ -10,6 +11,7 @@ use std::path::Path;
 
 #[path = "accepted_observe_query_reads_current_local_events_without_writes.rs"]
 mod accepted_observe_query_reads_current_local_events_without_writes;
+mod current_authority;
 mod evaluation;
 mod evaluation_run;
 #[path = "fit_apply_runs_the_public_production_route_and_retires_recovery_state.rs"]

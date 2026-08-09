@@ -27,10 +27,13 @@ discovery, or runtime identity from the prompt or source tree.
 
 Select `inspect inception` only when the current `ultragoal --json --help`
 catalog exposes that exact read-only route; the capabilities projection reports
-tool authority, not command availability. The route reads the repository-root
-`PRODUCT_SUCCESS_BRIEF.json` without writing it; a missing brief returns the
-typed fields still owed. Historical v1 briefs are readable context only, while
-a valid v2 brief is eligible for evidence-led ranking.
+tool authority, not command availability. The route reads only the current
+`GOAL_CONTRACT.md`, `PRODUCT_SUCCESS_CONTRACT.md`, and sole active ExecPlan
+without writing. A missing, ambiguous, or unsafe current owner returns an
+actionable fail-closed diagnostic; it never falls back to a historical brief,
+ranking, or compatibility input. A successful projection reports current
+authority for `CL-USABLE-LOOP` with ranking ineligible and the journey claim
+still withheld pending same-surface evaluator evidence.
 
 ## Select exactly one route
 

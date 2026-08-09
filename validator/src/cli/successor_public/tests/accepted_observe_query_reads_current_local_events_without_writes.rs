@@ -5,7 +5,7 @@ pub(crate) fn accepted_observe_query_reads_current_local_events_without_writes()
     let repo = Repository::new("observe-query");
     let spool = repo.root.join("validation_artifacts/observability/spool");
     fs::create_dir_all(&spool).unwrap();
-    let context = read_context(&repo.root).unwrap();
+    let context = current_read_context(&repo.root).unwrap();
     let store = EventStore::for_context(
         super::super::observe::store_path(&repo.root, &context, "successor-runtime").unwrap(),
         &context,
@@ -163,30 +163,25 @@ pub(crate) fn unavailable_export_route_fails_before_repository_access_or_effect(
 }
 
 #[test]
-pub(crate) fn live_inventory_and_state_reads_are_zero_write() {
+pub(crate) fn incomplete_compatibility_inventory_refuses_without_writes() {
     let repo = Repository::new("reads");
     fs::write(repo.root.join("dirty-canary"), b"dirty\n").unwrap();
     let before_tree = tree(&repo.root);
     let before_status = repo.status();
 
-    for args in [
-        &["--json", "inspect", "inventory"][..],
-        &["--json", "inspect"][..],
-        &["--json", "next"][..],
-    ] {
-        let ParseOutcome::Invocation(invocation) = parse_args(args.iter().copied()).unwrap() else {
-            panic!("expected invocation")
-        };
-        let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
-        assert!(matches!(streams.exit_code, 0 | 1 | 3));
-        assert!(streams.stderr.is_empty());
-        let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
-        assert!(
-            value["schema_version"]
-                .as_str()
-                .is_some_and(|schema| schema.ends_with("-v1"))
-        );
-    }
+    let ParseOutcome::Invocation(invocation) =
+        parse_args(["--json", "inspect", "inventory"]).unwrap()
+    else {
+        panic!("expected invocation")
+    };
+    let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
+    assert_eq!(streams.exit_code, 4);
+    assert!(streams.stdout.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stderr).unwrap();
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_inventory_unavailable"
+    );
 
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);

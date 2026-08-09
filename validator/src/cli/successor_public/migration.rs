@@ -60,8 +60,8 @@ pub(super) fn verify(context: &LiveContext, invocation: &ParsedInvocation) -> Ru
         catalog_id: verification.catalog_id(),
         authority_error_codes: verification.authority_error_codes(),
         plan,
-        verification_scope: "current inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface",
-        claim_ceiling: "exact current-source migration inventory and plan closure verified read-only; migration effects, retirement, package, install, runtime, readiness, and release claims remain withheld",
+        verification_scope: "explicit compatibility inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface",
+        claim_ceiling: "exact compatibility-source migration inventory and plan closure observed read-only; migration effects, retirement, package, install, runtime, readiness, and release claims remain withheld",
     };
     match serde_json::to_vec(&outcome) {
         Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(

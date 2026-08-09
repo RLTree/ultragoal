@@ -1,89 +1,49 @@
 # Goal Contract
 
-## Objective
+## Authority and superseded history
 
-State the objective in observable terms.
+Name this contract's authority, the prior contract or process it supersedes,
+and any frozen compatibility inputs that remain readable but cannot schedule
+work or raise a claim.
 
-## Claim Ceiling
+Name the sole active ExecPlan. Keep current program status there, architecture
+in `ARCHITECTURE.md`, and planning/evidence/recovery rules in `PLANS.md`.
 
-The claim ceiling is typed. Keep this block aligned with `schemas/schema-authority-primitives.schema.json#/$defs/claimCeilingEntry`.
+## User, job, and outcome
 
-```json
-[
-  {
-    "claim_id": "CLAIM-001",
-    "status": "contract_only",
-    "claim_surface": "static",
-    "effect": "blocked",
-    "evidence_ids": ["EV-001"],
-    "source_manifest_path": "COMPLETION_MANIFEST.json"
-  }
-]
-```
+- **User:**
+- **Job:**
+- **Product outcome:**
+- **Mission outcome:**
 
-## Required Claim IDs
+## Observable journey
 
-- `CLAIM-001`: ...
+List the smallest end-to-end sequence that an external evaluator can observe.
+Bind it to one exact candidate, target, effect scope, and acceptance oracle.
 
-## Contract Bundle
+## Non-goals
 
-- `GOAL_CONTRACT.md`
-- `LANE_REGISTRY.json`
-- `VERIFICATION_BACKLOG.json`
-- `COMPLETION_MANIFEST.json`
-- `AMENDMENTS.jsonl`
-- `RED_FIXTURES.json`
-- lane ExecPlans
+List outcomes this contract does not authorize or prove.
 
-## Generated Evidence, Not Authority
+## Protected invariants
 
-- validator receipts
-- ready-for-merge receipts
-- red fixture reports
+- authorize before consequential effects;
+- parse untrusted input before behavior;
+- preserve unrelated work and root/target custody;
+- separate source, package, install, discovery, runtime, journey, and release;
+- fail closed on ambiguous identity, effect, or recovery; and
+- prevent generated artifacts, agents, reviewers, or model output from minting
+  root authority or raising a claim ceiling.
 
-## Artifact Retention And GC
+## Human decisions
 
-- Generated, rebuildable, duplicated, superseded, cache-like, and stale runtime
-  artifacts are deletion-first.
-- Archiving is an exception only for protected proof, active release/review
-  evidence, irreproducible raw evidence not yet distilled into a receipt,
-  legal/security retention, or explicit user-approved retention.
-- Cleanup claims require `ultragoal gc plan`, `dry-run`, `apply`, and `verify`
-  receipts where cleanup is performed.
-- GC proof is separate from GC validation: schema validity, fixture pass, dry-run
-  output, or command pass text cannot prove the current workspace was cleaned.
-- GC proof must include classified inputs, protected set, plan digest, deletion
-  receipt, archive exceptions, reclaimed-byte accounting, remaining-byte summary,
-  post-delete verification, and active-claim preservation.
+List decisions with no safe default: external or destructive effects,
+credentials, production targets, publication/release, ambiguous retirement,
+and material scope expansion.
 
-## Hashes
+## Claim ceiling
 
-- `contract_bundle_hash`: TBD
-- `required_claim_ids_hash`: TBD
-
-## Goal Tool Binding
-
-Use `schemas/goal-binding.schema.json`.
-
-- status:
-- goal id:
-- contract path:
-- get_goal receipt path and digest:
-- create_goal receipt path and digest:
-- gap reason if unavailable or blocked:
-
-## Completion Requirements
-
-- all required claims classified;
-- positive claims backed by acceptable evidence;
-- verification backlog closed or claim ceiling reduced;
-- deletion-first GC obligations satisfied or claim ceiling reduced;
-- no stale worktrees/sessions;
-- validator schema and semantic checks pass; red fixtures fail for the intended reasons;
-- final report written.
-
-## Amendments
-
-Authoritative amendments live only in `AMENDMENTS.jsonl` and validate against `schemas/contract-amendment.schema.json`. This section may contain only the current amendment-log digest or a generated summary.
-
-- latest_amendment_log_digest: TBD
+Name the exact claim, required surface, supported envelope, prohibited
+substitutes, and honest pre-acceptance states such as `partial`,
+`blocked_by_product`, `blocked_by_environment_or_authority`, or
+`inconclusive`.

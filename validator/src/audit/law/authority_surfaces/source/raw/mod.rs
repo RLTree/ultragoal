@@ -7,7 +7,7 @@ mod projection_catalog;
 use classifiers::{
     typed_cli_command_boundary_text, typed_law_check_boundary_text, typed_path_boundary_text,
 };
-use markers::{raw_authority_markers, RawAuthorityMarker};
+use markers::{RawAuthorityMarker, raw_authority_markers};
 
 pub(super) fn failures_for_text(rel: &str, text: &str) -> Vec<String> {
     raw_authority_markers(text)

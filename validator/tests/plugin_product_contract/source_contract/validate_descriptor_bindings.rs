@@ -107,6 +107,26 @@ fn repository_fit_apply_guidance_matches_the_public_plan_contract() {
 }
 
 #[test]
+fn inception_guidance_routes_only_to_current_product_authority() {
+    let skill = read("skills/harness-ultragoal/SKILL.md");
+    for current_owner in [
+        "GOAL_CONTRACT.md",
+        "PRODUCT_SUCCESS_CONTRACT.md",
+        "sole active ExecPlan",
+        "CL-USABLE-LOOP",
+        "same-surface evaluator evidence",
+    ] {
+        assert!(
+            skill.contains(current_owner),
+            "missing current inception owner: {current_owner}"
+        );
+    }
+    for stale in ["PRODUCT_SUCCESS_BRIEF.json", "evidence-led ranking"] {
+        assert!(!skill.contains(stale), "stale inception guidance: {stale}");
+    }
+}
+
+#[test]
 fn exactly_eight_canonical_skills_have_valid_unique_identity() {
     let mut names = BTreeSet::new();
     for expected in SKILLS {
