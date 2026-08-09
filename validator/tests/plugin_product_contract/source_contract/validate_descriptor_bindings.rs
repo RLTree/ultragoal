@@ -93,6 +93,20 @@ fn canonical_source() -> String {
 }
 
 #[test]
+fn repository_fit_apply_guidance_matches_the_public_plan_contract() {
+    let skill = read("skills/repository-fit/SKILL.md");
+    let resource_map = read("docs/plugin-resource-map.md");
+
+    for source in [&skill, &resource_map] {
+        assert!(source.contains("absolute plan"));
+        assert!(source.contains("plan_sha256"));
+    }
+    for stale in ["<relative-plan-path>", "<plan-id>"] {
+        assert!(!skill.contains(stale), "stale fit apply guidance: {stale}");
+    }
+}
+
+#[test]
 fn exactly_eight_canonical_skills_have_valid_unique_identity() {
     let mut names = BTreeSet::new();
     for expected in SKILLS {

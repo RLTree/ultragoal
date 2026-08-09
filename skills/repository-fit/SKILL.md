@@ -55,11 +55,17 @@ clean install.
 Present the exact plan and effect boundary. Apply only after explicit
 acceptance of the unchanged plan and immediate live-context revalidation:
 
+Save the exact JSON projection emitted by `fit plan` to one absolute plan file
+outside the target repository. Keep its bytes unchanged apart from the single
+terminal line feed emitted by the CLI, and require a canonical, non-symlinked
+parent plus a current-user-owned, single-link regular file. Use the returned
+`plan.plan_sha256` as the acceptance value.
+
 ```text
 ultragoal --json fit apply \
   --target <relative-path> \
-  --plan <relative-plan-path> \
-  --accept-plan <plan-id>
+  --plan <absolute-plan-path> \
+  --accept-plan <plan_sha256>
 ```
 
 Treat apply as `WorkspaceWrite` confined to declared plan mutations. Preserve
