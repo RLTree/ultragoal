@@ -4,14 +4,24 @@
 **Intended repository path:** replace `docs/exec-plans/active/usable-product-milestone.md` atomically
 **Operation:** do not keep the old plan active or create another plan, lane registry, completion manifest, research-law graph, or receipt ledger
 **Research lock:** 2026-08-08, America/Los_Angeles
-**Observed active candidate:** `codex/successor-contract-v2-live-product@cbdc0bdd275e5988a2dbf3e219823c11ccab3796`; HEAD tree `ae3e210bc97ebde058628ad54a054fd7806688f1`; re-resolve after every integration or commit
-**Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` is 641 commits ahead and contains the only verification workflow; the current branch diverges from `master` at `5dae7dd24490b1a37bacb48b40694a840067fbe7`, with 2 current-branch commits and 12 `master` commits to reconcile; no branch protection, required check, ruleset, or current-branch workflow result exists
+**Observed active candidate:** `codex/usable-loop-master-candidate@390a76bb0829b37914c8bd0fb184f606ad331051`; HEAD tree `6a8a48e2c1e3f52b05842f3f4d40e5a6c0023ffc`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus two plan/foundation-only commits; re-resolve after every integration or commit
+**Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; the bounded candidate contains the `master` verification workflow, but it still triggers pushes only to `main`; no branch protection, required check, ruleset, or current-candidate workflow result exists
 **Current claim ceiling:** research, repository inspection, and executable plan only
 
-## Current root-conductor rebaseline (2026-08-09)
+## Selected bounded candidate custody (2026-08-09)
+
+- Tree decision: Terry selected the clean `master`-based bounded candidate.
+- Worktree: `/Users/terrynoblin/.codex/worktrees/usable-loop-master-candidate`; branch `codex/usable-loop-master-candidate`.
+- Base: exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce`, tree `8b08ff3251f8a472704020665a13fb1a8da384e8`.
+- Integration topology: read-only cherry-pick simulation showed only the active plan conflicts; the three foundation files were clean. The bounded branch therefore applies the two plan/foundation-only commits in order, resolving the first active-plan conflict in favor of the landed plan. No product source or protected root path changed in those commits.
+- Integrated plan candidate before this state update: `390a76bb0829b37914c8bd0fb184f606ad331051`, tree `6a8a48e2c1e3f52b05842f3f4d40e5a6c0023ffc`; `master` is its direct ancestor and it is two commits ahead.
+- Foundation digests remain `01eae0a275d223f76bfd81ffb4d8b9fc1510675dd107dfa2a3f65667f8544b98`, `39c054831f0913a4301e25ebca58afa939facfb06c6f903a4aecbe2111a8d8c1`, and `74d0f70963d24eea519cca98f4a7e011a8062bfc3885e2f3408914fa35fc4569`.
+- The bounded worktree is clean. The dirty root checkout remains on `codex/successor-contract-v2-live-product`; its four modified distribution files and untracked sentinel were neither copied nor moved.
+
+## D0 input root rebaseline (2026-08-09)
 
 - Durable goal: `active` for “Complete the sole active Harness UltraGoal ExecPlan through CL-USABLE-LOOP on one exact integrated candidate, preserving unrelated state and obeying every Tree approval boundary”; no token budget is set.
-- Candidate custody: branch `codex/successor-contract-v2-live-product`, HEAD `cbdc0bdd275e5988a2dbf3e219823c11ccab3796`, HEAD tree `ae3e210bc97ebde058628ad54a054fd7806688f1`, exactly aligned with `origin/codex/successor-contract-v2-live-product` at observation time.
+- Candidate custody at D0 input: branch `codex/successor-contract-v2-live-product`, HEAD `cbdc0bdd275e5988a2dbf3e219823c11ccab3796`, HEAD tree `ae3e210bc97ebde058628ad54a054fd7806688f1`, exactly aligned with `origin/codex/successor-contract-v2-live-product` at observation time.
 - Repository-control truth: authenticated GitHub and `git ls-remote` both report default `main@eb51ba4d6ea8844197e855d42fa239ef898be47d` and `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce`; `main` is an ancestor of `master` and is 641 commits behind.
 - Integration truth: `master...HEAD` has merge base `5dae7dd24490b1a37bacb48b40694a840067fbe7`; `master` has 12 unique commits and HEAD has 2 unique commits. A read-only `git merge-tree` reports 12 conflicts, all in root/standards/plan documents; the four protected distribution paths do not overlap the `master` delta.
 - CI truth: `.github/workflows/verify.yml` exists on `master` only. It runs for pull requests and for pushes to `main`, not `master`. GitHub retains one historical active workflow registration and one successful PR run on `codex/plugin-eval-repair-integration@666145252`, but the current candidate has no workflow run, check run, or commit status.
@@ -127,7 +137,7 @@ Do not commit:
 
 ## 5. Progress
 
-- [ ] U0 restore branch/CI truth and establish the current foundation owner (foundation owner and fresh control observations complete; Terry selected bounded `master`-based candidate integration; candidate construction plus Tree-authorized default/protection repair pending).
+- [ ] U0 restore branch/CI truth and establish the current foundation owner (clean `master`-based candidate, foundation owner, and fresh control observations complete; Tree-authorized default/protection repair pending).
 - [ ] U1 run the current installed operator loop before governance redesign.
 - [ ] U2 repair only observed blocking product boundaries.
 - [ ] U3 replace the research-authority model and simplify active instructions.
@@ -141,6 +151,7 @@ Do not commit:
 - The verification workflow is not missing repository-wide: it exists on `master`, but not on stale default `main` or the current branch. GitHub’s retained workflow registration therefore cannot substitute for current-branch CI.
 - The plan branch is not the current product line by ancestry. It contains the landed plan/foundation commits while `master` contains 12 product/security/CI commits; one root integration is required before U1 can bind an exact current candidate.
 - A read-only merge analysis confines textual conflicts to 12 root, standards, product-contract, and active-plan files. The protected dirty distribution paths are disjoint from the incoming `master` delta.
+- The selected bounded topology reduces that broad merge to two plan/foundation-only commits on exact `master`; its simulation exposed only one active-plan conflict and no product-source conflict.
 
 ## Decision log
 
@@ -148,6 +159,7 @@ Do not commit:
 - Preserve the five unrelated working-tree changes by digest and path. Do not format, stage, commit, overwrite, or use them as candidate inputs.
 - Hold UltraGoal CLI invocation until this fresh U0 custody/control refinement is durable. Afterward, invoke only the exact current grammar on the integrated candidate.
 - D0 was a no-safe-default integration choice. Terry selected Option B, the bounded `master`-based candidate. Keep the dirty root checkout fixed; select the bounded candidate’s merge/rebase/cherry-pick/patch topology only after exact ancestry/conflict simulation.
+- After simulation, the selected topology is the two plan/foundation-only commits on exact `master`; the first conflict is resolved to the landed plan, and the second U0 observation update applies directly. This choice is confined to the bounded branch and does not promote it or mutate remote authority.
 - Keep the GitHub default/protection mutation at HOLD until Terry explicitly authorizes the exact remote effects.
 
 ### D0 candidate-integration options
@@ -165,19 +177,19 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 ## Validation and acceptance state
 
 - Fresh U0 read-only commands: branch/commit/tree/status, remote heads, ancestry counts, merge base, workflow contents/triggers, workflow/check/status queries, branch protection, rulesets, and read-only merge conflict analysis.
-- U0 disposition: `HOLD`. Foundation authority and current control truth pass; one integrated local candidate and remote default/CI authority do not yet pass.
+- U0 disposition: `HOLD`. Foundation authority, current control truth, and one clean local `master`-based candidate pass; remote default/CI authority does not yet pass.
 - Current maximum statement: exact local/GitHub control observation and executable plan refinement only. No source, package, install, discovery, runtime, recovery, product-journey, or release claim is supported yet.
 
 ## Idempotence, recovery, and cleanup
 
 - All U0 probes were read-only except this active-plan update. Repeating them is safe and should change plan state only when an observed fact changes.
-- No integration command is authorized yet. If Terry later authorizes an in-place integration and it threatens a protected dirty path or creates an unexpected conflict outside the 12 predicted documents, abort before resolving or staging and rebaseline custody.
+- The authorized bounded integration completed without touching the dirty root. No in-place root integration is authorized. If a later promotion threatens a protected path or creates an unexpected conflict, stop before resolving or staging and rebaseline custody.
 - No temporary repository artifact, receipt, lane registry, completion manifest, or research projection was created. Read-only merge analysis may have written an unreachable Git tree object only; normal Git garbage collection owns it.
 
 ## Outcome state
 
 - `CL-USABLE-LOOP`: undecided.
-- Current transition: construct and verify D0 Option B from exact `master`, with topology chosen only from bounded ancestry/conflict evidence. GitHub default/protection changes remain a separate authority HOLD. Safe source characterization may continue, but it cannot raise the integrated-product claim ceiling until the bounded candidate is frozen.
+- Current transition: run safe source and CLI-grammar characterization on the clean bounded candidate, then begin U1 only within the plan’s local/disposable effect ceiling. GitHub default/protection changes remain a separate authority HOLD and no real host install or representative target write is authorized yet.
 
 ---
 
