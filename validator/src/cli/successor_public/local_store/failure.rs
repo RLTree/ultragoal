@@ -27,10 +27,6 @@ impl LocalStoreFailure {
         Self { stage, class }
     }
 
-    pub(super) fn open(error: &str) -> Self {
-        Self::classify(FailureStage::Open, error)
-    }
-
     pub(super) fn query(error: &str) -> Self {
         Self::classify(FailureStage::Query, error)
     }

@@ -65,7 +65,7 @@ icon = "tool"
 script = '''
 cd "${CODEX_WORKTREE_PATH:-$PWD}"
 /usr/bin/env -i CODEX_WORKTREE_PATH="${CODEX_WORKTREE_PATH:-$PWD}" PWD="$PWD" CODEX_HOST_CARGO_BIN="$HOME/.cargo/bin/cargo" PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin" /bin/bash .codex/setup-worktree-env.sh
-.codex-worktree/run-command sh -c 'scripts/check'
+.codex-worktree/run-command sh -c 'scripts/check-product'
 '''
 
 [[actions]]

@@ -105,7 +105,7 @@ pub(crate) fn execute_invocation_with_home(
             }
         }
         SuccessorCommand::Observe(crate::cli::successor::ObserveAction::Query) => {
-            observe::query_local(root, &context, &invocation)
+            observe::query_local(root, &context, &invocation, home)
         }
         SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Audit) => {
             evaluation::audit(&context, &invocation)
@@ -124,7 +124,7 @@ pub(crate) fn execute_invocation_with_home(
             diagnose::diagnose_routine(root, &context, &invocation, home)
         }
         SuccessorCommand::Diagnose => match crate::state::derive_current(&context) {
-            Ok(state) => diagnose::diagnose_local(root, &context, state, &invocation),
+            Ok(state) => diagnose::diagnose_local(root, &context, state, &invocation, home),
             Err(_) => diagnose::diagnose_routine_or(
                 root,
                 &context,

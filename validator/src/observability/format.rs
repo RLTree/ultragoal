@@ -46,7 +46,6 @@ pub(super) fn decode(bytes: &[u8], max_scan_rows: usize) -> Result<DecodedRows, 
         return Err("observe-store-corrupt:truncated-tail".to_owned());
     }
     let mut by_id = BTreeMap::<String, SemanticEvent>::new();
-    let mut physical_duplicate_count = 0_usize;
     for (index, line) in bytes[..bytes.len() - 1]
         .split(|byte| *byte == b'\n')
         .enumerate()
@@ -75,7 +74,11 @@ pub(super) fn decode(bytes: &[u8], max_scan_rows: usize) -> Result<DecodedRows, 
             return Err(format!("observe-store-corrupt:row-{row_number}-checksum"));
         }
         match by_id.get(row.event.event_id()) {
-            Some(existing) if existing == &row.event => physical_duplicate_count += 1,
+            Some(existing) if existing == &row.event => {
+                return Err(format!(
+                    "observe-store-corrupt:row-{row_number}-duplicate-event"
+                ));
+            }
             Some(_) => {
                 return Err(format!(
                     "observe-store-corrupt:row-{row_number}-conflicting-event-id"
@@ -86,7 +89,7 @@ pub(super) fn decode(bytes: &[u8], max_scan_rows: usize) -> Result<DecodedRows, 
             }
         }
     }
-    let physical_row_count = by_id.len() + physical_duplicate_count;
+    let physical_row_count = by_id.len();
     Ok(DecodedRows {
         events: by_id.into_values().collect(),
         physical_row_count,

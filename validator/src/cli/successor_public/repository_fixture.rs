@@ -31,6 +31,29 @@ impl Repository {
         Self { root }
     }
 
+    pub(super) fn new_with_current_authority(label: &str) -> Self {
+        let repository = Self::new(label);
+        let live = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .to_path_buf();
+        for relative in [
+            "GOAL_CONTRACT.md",
+            "PRODUCT_SUCCESS_CONTRACT.md",
+            "docs/exec-plans/active/usable-product-milestone.md",
+        ] {
+            let destination = repository.root.join(relative);
+            fs::create_dir_all(destination.parent().unwrap()).unwrap();
+            fs::copy(live.join(relative), destination).unwrap();
+        }
+        git(&repository.root, &["add", "-A"]);
+        git(
+            &repository.root,
+            &["commit", "-qm", "current authority inputs"],
+        );
+        repository
+    }
+
     pub(super) fn status(&self) -> Vec<u8> {
         let output = Command::new("git")
             .args(["status", "--porcelain=v1", "-z", "--untracked-files=all"])

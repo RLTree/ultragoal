@@ -1,32 +1,4 @@
 use crate::observability::SemanticEvent;
-use sha2::{Digest, Sha256};
-
-/// A terminal routine observation. It is diagnostic-only: it names neither a
-/// finding nor a claim and cannot change product-state authority.
-pub(in super::super::super) struct RoutineTerminalEvent<'a> {
-    pub(crate) event_id: &'a str,
-    pub(crate) continuation_id: &'a str,
-    pub(crate) terminal_ledger_head: &'a str,
-    pub(crate) observed_at_unix_ms: u64,
-    pub(crate) sequence: u64,
-    pub(crate) parent_event_id: Option<&'a str>,
-    pub(crate) status: &'a str,
-    pub(crate) transition: &'a str,
-    pub(crate) terminal_outcome: crate::routine_work::RoutineTerminalOutcome,
-    pub(crate) finding_binding: Option<&'a crate::state::RoutineFindingBinding>,
-}
-
-pub(in super::super::super) fn terminal_event_id(
-    continuation_id: &str,
-    terminal_ledger_head: &str,
-) -> String {
-    let mut digest = Sha256::new();
-    digest.update(b"routine-terminal-event-v1\0");
-    digest.update(continuation_id.as_bytes());
-    digest.update(b"\0");
-    digest.update(terminal_ledger_head.as_bytes());
-    format!("routine-terminal-{:x}", digest.finalize())
-}
 
 pub(in super::super::super) fn routine_observations_from_events(
     events: &[SemanticEvent],
@@ -69,7 +41,7 @@ pub(in super::super::super) fn routine_observations_from_events(
 
 #[cfg(test)]
 mod tests {
-    use super::{routine_observations_from_events, terminal_event_id};
+    use super::routine_observations_from_events;
     use crate::observability::{SemanticEvent, SemanticEventInput};
 
     fn event() -> SemanticEvent {
@@ -84,22 +56,6 @@ mod tests {
             outcome: "pass".to_owned(),
         })
         .unwrap()
-    }
-
-    #[test]
-    fn terminal_event_id_is_bound_only_to_continuation_and_terminal_head() {
-        assert_eq!(
-            terminal_event_id("routine-cont-a", "head-a"),
-            terminal_event_id("routine-cont-a", "head-a")
-        );
-        assert_ne!(
-            terminal_event_id("routine-cont-a", "head-a"),
-            terminal_event_id("routine-cont-b", "head-a")
-        );
-        assert_ne!(
-            terminal_event_id("routine-cont-a", "head-a"),
-            terminal_event_id("routine-cont-a", "head-b")
-        );
     }
 
     #[test]

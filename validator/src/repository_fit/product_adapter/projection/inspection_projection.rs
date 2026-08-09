@@ -182,7 +182,7 @@ pub(crate) struct FitInspectProjection {
     pub(crate) authority: TemplateAuthorityProjection,
     pub(crate) desired: DesiredProjection,
     pub(crate) inspection: InspectionProjection,
-    pub(crate) local_state: LocalStatePolicyProjection,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
     pub(crate) effect: String,
     pub(crate) claim_effect: String,
     pub(crate) support_limit: String,

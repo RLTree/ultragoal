@@ -10,7 +10,7 @@ mod host;
 mod manifest;
 mod outcome;
 
-use self::host::HostState;
+pub(crate) use self::host::{ContinuationCheckpoint, HostEventStore, HostFailure, HostState};
 use self::manifest::{LoadedManifest, MANIFEST_PATH};
 use self::outcome::PublicFailure;
 use crate::cli::successor::runtime::RuntimeOutcome;
@@ -24,8 +24,9 @@ use crate::routine_work::{
     PublicRoutineControl, RepoPath, RoutineAdapterSpec, RoutineInvocationSpec, RoutinePlan,
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation,
     bind_rust_source_syntax_invocation, load_production_catalog,
-    mediate_public_routine_execution_with_control, plan_routine, prepare_routine_execution,
-    reconcile_public_routine_reservation, validate_immutable_routine_program,
+    mediate_public_routine_execution_with_control, observe_public_routine_terminal_settlement,
+    plan_routine, prepare_routine_execution, reconcile_public_routine_reservation,
+    validate_immutable_routine_program,
 };
 use std::collections::BTreeSet;
 use std::fs;

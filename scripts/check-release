@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+
+if ! git diff --quiet || ! git diff --cached --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+  echo "candidate_not_clean: check-release requires one clean exact committed candidate before any release-surface action." >&2
+  exit 3
+fi
+
+if ! candidate="$(git rev-parse --verify HEAD^{commit})"; then
+  echo "candidate_unresolved: check-release requires a resolvable committed HEAD before any release-surface action." >&2
+  exit 3
+fi
+
+scripts/check-product "$root"
+
+echo "authority_required: check-release holds at clean committed candidate ${candidate}. It does not infer Terry approval from environment, command-line, or local state; no package listing, install, publication, deployment, host mutation, or remote mutation was attempted." >&2
+exit 3

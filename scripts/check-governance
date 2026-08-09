@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+
+echo "check-governance: current source-authority and standards projections only; not a product, package, install, runtime, journey, or release gate." >&2
+
+python3 scripts/project-agent-standards check "$root"
+python3 scripts/project-generated-authority check "$root"
+python3 scripts/check-python-source-laws "$root"
+python3 scripts/check-agent-standards "$root"

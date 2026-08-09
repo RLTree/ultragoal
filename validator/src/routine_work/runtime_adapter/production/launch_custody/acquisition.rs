@@ -94,44 +94,42 @@ pub(in crate::routine_work::runtime_adapter::production) fn fail_staged(
 }
 
 pub(super) struct LaunchAcquisitionCustody {
-    child: PathBuf,
-    directory: Option<File>,
-    directory_identity: Option<ObjectIdentity>,
+    root: PathBuf,
+    directory: File,
+    directory_identity: ObjectIdentity,
     entries: Vec<EntryClaim>,
 }
 
 impl LaunchAcquisitionCustody {
-    pub(super) fn created(child: PathBuf) -> Self {
+    pub(super) fn held(root: PathBuf, directory: File, directory_identity: ObjectIdentity) -> Self {
         Self {
-            child,
-            directory: None,
-            directory_identity: None,
+            root,
+            directory,
+            directory_identity,
             entries: Vec::new(),
         }
     }
 
-    pub(super) fn child(&self) -> &Path {
-        &self.child
-    }
-
-    pub(super) fn hold_directory(&mut self, directory: File) {
-        self.directory = Some(directory);
+    pub(super) fn root(&self) -> &Path {
+        &self.root
     }
 
     pub(super) fn duplicate_directory(&self) -> Result<File, RoutineError> {
         self.directory
-            .as_ref()
-            .ok_or_else(|| error("routine-production-launch-directory-custody-missing"))?
             .try_clone()
             .map_err(|_| error("routine-production-launch-directory-duplicate-failed"))
     }
 
-    pub(super) fn bind_directory(&mut self, identity: ObjectIdentity) {
-        self.directory_identity = Some(identity);
-    }
-
     pub(super) fn claim(&mut self, claim: EntryClaim) {
-        self.entries.push(claim);
+        if let Some(existing) = self
+            .entries
+            .iter_mut()
+            .find(|entry| entry.path == claim.path)
+        {
+            *existing = claim;
+        } else {
+            self.entries.push(claim);
+        }
     }
 
     pub(super) fn observe_cleanup(self) -> ObservedLaunchCleanup {
@@ -139,20 +137,12 @@ impl LaunchAcquisitionCustody {
             if refuse_cleanup() {
                 return Err(error("routine-production-launch-cleanup-injected-refusal"));
             }
-            let directory = match self.directory {
-                Some(directory) => directory,
-                None => File::open(&self.child)
-                    .map_err(|_| error("routine-production-launch-directory-open-failed"))?,
-            };
-            let identity = match self.directory_identity {
-                Some(identity) => identity,
-                None => ObjectIdentity::from(
-                    &directory
-                        .metadata()
-                        .map_err(|_| error("routine-production-launch-directory-stat-failed"))?,
-                ),
-            };
-            cleanup_partial_stage(&self.child, identity, &self.entries)
+            cleanup_partial_stage(
+                &self.root,
+                &self.directory,
+                self.directory_identity,
+                &self.entries,
+            )
         })
     }
 }

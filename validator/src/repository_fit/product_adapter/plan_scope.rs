@@ -20,7 +20,7 @@ pub(crate) enum FitPlanScope {
 
 impl FitPlanScope {
     pub(crate) const fn includes_local_state(self) -> bool {
-        matches!(self, Self::CompleteRepository | Self::LocalState)
+        matches!(self, Self::LocalState)
     }
 }
 
@@ -101,4 +101,17 @@ pub(super) fn rebuild_desired_for_scope(
         desired.files.clone(),
     )
     .map_err(kernel_error)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::FitPlanScope;
+
+    #[test]
+    fn complete_repository_does_not_admit_legacy_target_local_state() {
+        assert!(!FitPlanScope::default().includes_local_state());
+        assert!(!FitPlanScope::CompleteRepository.includes_local_state());
+        assert!(!FitPlanScope::RoutineConfiguration.includes_local_state());
+        assert!(FitPlanScope::LocalState.includes_local_state());
+    }
 }

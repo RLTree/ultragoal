@@ -116,11 +116,22 @@ fn foreign_output_is_preserved_and_fresh_process_recovery_refuses() {
             .contains("\"state\":\"failed\"")
     );
     let checkpoint: Value = serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap())
-        .expect("ambiguous checkpoint is not JSON");
-    assert_eq!(checkpoint["state"], "ambiguous");
-    assert_eq!(checkpoint["terminal_outcome"], "ambiguous");
+        .expect("terminal checkpoint is not JSON");
+    assert_eq!(checkpoint["state"], "terminal-event-joined");
+    assert_eq!(checkpoint["terminal_outcome"], "failed");
     assert_eq!(checkpoint["operation"], "terminal");
+    let event_leaf = fixture.event_leaf();
+    let event_before_recovery = fs::read(&event_leaf).unwrap();
+    let event: Value = serde_json::from_slice(&event_before_recovery).unwrap();
+    assert_eq!(event["event"]["outcome"], "fail");
+    assert_eq!(
+        event["event"]["public_attributes"]["routine_terminal_outcome"],
+        "failed"
+    );
 
+    let before_recovery_root = super::scenario::tree(&fixture.root);
+    let before_recovery_home = super::scenario::tree(&fixture.home);
+    let before_recovery_status = fixture.status();
     let recovered = fixture.run();
     assert_eq!(recovered.status.code(), Some(3), "{recovered:?}");
     assert!(recovered.stdout.is_empty(), "{recovered:?}");
@@ -130,5 +141,58 @@ fn foreign_output_is_preserved_and_fresh_process_recovery_refuses() {
         "the routine custody already has a terminal or pending record and no exact continuation was supplied"
     );
     assert_eq!(fs::read(&foreign).unwrap(), b"foreign-user-work");
+    assert_eq!(fs::read(&event_leaf).unwrap(), event_before_recovery);
+    assert_eq!(super::scenario::tree(&fixture.root), before_recovery_root);
+    assert_eq!(super::scenario::tree(&fixture.home), before_recovery_home);
+    assert_eq!(fixture.status(), before_recovery_status);
     fixture.teardown_after_assertions();
+}
+
+#[test]
+fn unsettled_reserved_attempt_is_not_projected_as_a_terminal_event() {
+    let mut fixture = Fixture::new(
+        "unsettled-reserved-no-terminal-projection",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let interrupted = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let checkpoint: Value =
+        serde_json::from_slice(&fs::read(fixture.checkpoint_path()).unwrap()).unwrap();
+    assert_eq!(checkpoint["state"], "reserved");
+    assert_eq!(checkpoint["terminal_outcome"], Value::Null);
+    assert_eq!(host_event_leaf_count(&fixture), 0);
+
+    let before_root = super::scenario::tree(&fixture.root);
+    let before_home = super::scenario::tree(&fixture.home);
+    let before_status = fixture.status();
+    let refused = fixture.run();
+    assert_eq!(refused.status.code(), Some(3), "{refused:?}");
+    assert!(refused.stdout.is_empty(), "{refused:?}");
+    assert_eq!(host_event_leaf_count(&fixture), 0);
+    assert_eq!(super::scenario::tree(&fixture.root), before_root);
+    assert_eq!(super::scenario::tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
+}
+
+fn host_event_leaf_count(fixture: &Fixture) -> usize {
+    fs::read_dir(fixture.state_root().join("adapter"))
+        .unwrap()
+        .filter_map(Result::ok)
+        .filter(|entry| {
+            entry
+                .file_name()
+                .to_str()
+                .is_some_and(|name| name.starts_with("routine-events-") && name.ends_with(".jsonl"))
+        })
+        .count()
 }

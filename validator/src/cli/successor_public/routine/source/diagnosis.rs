@@ -88,7 +88,7 @@ pub(crate) fn current_checkpoint(
     home: &Path,
     binding: &RoutineDiagnosisBinding,
 ) -> Result<Option<RoutineCheckpointProjection>, ()> {
-    let state = match HostState::open_existing(home) {
+    let state = match HostState::open_existing_for_target(home, binding.target()) {
         Ok(state) => state,
         Err(host::HostFailure::Unavailable) => return Ok(None),
         Err(_) => return Err(()),

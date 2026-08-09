@@ -40,6 +40,15 @@ pub(super) fn explain(
     query: &EventQuery,
     target_event_id: &str,
 ) -> Result<CausalExplanation, String> {
+    explain_validated(store, query, target_event_id, |_| Ok(()))
+}
+
+pub(super) fn explain_validated(
+    store: &EventStore,
+    query: &EventQuery,
+    target_event_id: &str,
+    validate: impl FnOnce(&[SemanticEvent]) -> Result<(), String>,
+) -> Result<CausalExplanation, String> {
     privacy::validate_identifier("target-event-id", target_event_id)?;
     if let Err(error) = store.validate_query_binding(query) {
         if error.starts_with("observe-binding-") {
@@ -54,6 +63,7 @@ pub(super) fn explain(
         }
         Err(error) => return Err(error),
     };
+    validate(&events)?;
     if events.is_empty() {
         return Ok(missing("observe-evidence-missing:store-empty", Vec::new()));
     }

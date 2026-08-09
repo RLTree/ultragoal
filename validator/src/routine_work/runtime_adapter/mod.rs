@@ -43,7 +43,8 @@ pub(in crate::routine_work) use production::{LaunchCleanupEvidence, ObservedLaun
 pub(crate) use production::{
     ProductionExecutionControl, PublicRoutineControl, RoutineCustodyCapability,
     RoutineReservationPublication, authenticate_public_routine_checkpoint,
-    mediate_public_routine_execution_with_control, reconcile_public_routine_reservation,
+    mediate_public_routine_execution_with_control, observe_public_routine_terminal_settlement,
+    reconcile_public_routine_reservation,
 };
 #[cfg(test)]
 pub(crate) use production::{

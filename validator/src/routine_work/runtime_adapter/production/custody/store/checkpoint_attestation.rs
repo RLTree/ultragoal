@@ -59,7 +59,11 @@ impl FileLedger {
             if allow_stale_head
                 && !matches!(
                     record.state,
-                    AttemptState::RolledBack | AttemptState::Complete
+                    AttemptState::RolledBack
+                        | AttemptState::Complete
+                        | AttemptState::Failed
+                        | AttemptState::Cancelled
+                        | AttemptState::Incomplete
                 )
             {
                 return Err(error("routine-production-checkpoint-alias-invalid"));
@@ -74,7 +78,7 @@ fn valid_continuation(value: &str) -> bool {
     value.strip_prefix("routine-cont-").is_some_and(valid)
 }
 
-fn continuation_for(record: &ProtocolRecord) -> String {
+pub(super) fn continuation_for(record: &ProtocolRecord) -> String {
     format!(
         "routine-cont-{}",
         crate::routine_work::digest::digest_of(&(

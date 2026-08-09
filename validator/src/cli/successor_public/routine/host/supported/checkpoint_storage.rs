@@ -8,6 +8,7 @@ use super::continuity_validation::{
     canonical_record_name, canonical_record_name_for_checkpoint, canonical_stage_name,
     checkpoint_matches_binding, validate_checkpoint, validate_checkpoint_shape,
 };
+use std::collections::BTreeSet;
 use std::io::Read;
 
 const MAX_CHECKPOINT_BYTES: u64 = 16 * 1024;
@@ -243,6 +244,44 @@ pub(crate) fn validate_continuation_directory(
         }
     }
     Ok(())
+}
+
+pub(in super::super) fn event_leaf_names(
+    adapter: &AnchoredDirectory,
+) -> Result<BTreeSet<String>, HostFailure> {
+    all_checkpoints(adapter)?
+        .iter()
+        .filter(|checkpoint| checkpoint.is_terminal() && checkpoint.has_current_event_authority())
+        .map(|checkpoint| {
+            super::super::host_state::event_leaf_name(
+                std::path::Path::new(checkpoint.target()),
+                checkpoint.context_id(),
+                checkpoint.candidate_id(),
+                "successor-runtime",
+            )
+        })
+        .collect()
+}
+
+pub(in super::super) fn all_checkpoints(
+    adapter: &AnchoredDirectory,
+) -> Result<Vec<ContinuationCheckpoint>, HostFailure> {
+    let mut checkpoints = Vec::new();
+    if adapter.stat(CONTINUITY_CHECKPOINT_NAME)?.is_some() {
+        let checkpoint = read_checkpoint_file(adapter, CONTINUITY_CHECKPOINT_NAME)?;
+        validate_checkpoint_shape(&checkpoint)?;
+        checkpoints.push(checkpoint);
+    }
+    if let Some(directory) = open_continuations(adapter, false)? {
+        for name in directory.entry_names()? {
+            validate_record_name(&name)?;
+            let checkpoint = read_checkpoint_file(&directory, &name)?;
+            validate_checkpoint_shape(&checkpoint)?;
+            checkpoints.push(checkpoint);
+        }
+        directory.verify()?;
+    }
+    Ok(checkpoints)
 }
 
 fn validate_record_name(name: &str) -> Result<(), HostFailure> {

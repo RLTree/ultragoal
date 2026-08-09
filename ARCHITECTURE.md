@@ -33,27 +33,32 @@ parse raw command arguments, mint root authority, or write public artifacts
 through an untyped convenience path. Tests exercise production entry points;
 test-only constructors cannot become a live authority route.
 
-Routine effect custody is one private production leaf. That leaf alone owns
-the durable store, non-clone attempt state, process lease and process-group
-identity, staged outputs, cleanup observation, terminal precommit, recovery,
-rollback, and atomic terminal publication. Mediators and output/process
+Routine effect custody is one private production leaf. The existing private
+routine `HostState` adapter alone owns the durable store, non-clone attempt
+state, process lease and process-group identity, staged outputs, cleanup
+observation, descriptor-bound semantic-event append/read, terminal precommit,
+recovery, rollback, and atomic terminal publication. Every routine event is
+bound to the exact candidate, target, context, and source, and terminal
+checkpoints are authenticated. Joined checkpoint projections are required;
+the pending-append crash window may be absent or present. Reads are strictly
+observational and never bootstrap missing state. Mediators and output/process
 adapters supply typed requests or observations only; no sibling or descendant
-may construct, clone, settle, release, recover, roll back, register, or reopen
-routine authority. Source-shape checks are secondary regression controls, not
-semantic authority proof.
+may construct, clone, settle, release, recover, roll back, register, reopen,
+or access raw event storage for routine authority. Source-shape checks are
+secondary regression controls, not semantic authority proof.
 
-Repository fit also carries one private semantic local-state policy for the
-runtime evidence path. It reconciles the required `validation_artifacts/`
-ignore rule inside an arbitrary user `.gitignore` while preserving unrelated
-bytes, newline shape, mode, and dirt. Inspection, planning, and verification
-remain zero-write; apply carries the policy as a prepared mutation through the
-existing confined compare-exchange, rollback, recovery, and revalidation
-transaction. `.gitignore` is not a template-managed file and no whole-file
-manifest authority is introduced. The public `fit plan --local-state` route
-binds that policy alone; it cannot create or update a template-managed path.
-Its production precondition is the descriptor-bound repository root and exact
-`.gitignore` target, not unrelated repository or Git-internal contents that
-the one-file effect never reads or follows.
+Complete-repository fit does not implicitly reconcile a
+`validation_artifacts/` ignore rule. Candidate evidence is never ordinary
+repository behavior. If the explicit `fit plan --local-state` compatibility
+route remains supported, it is a narrow one-file policy only: it may reconcile
+the named `.gitignore` rule while preserving unrelated bytes, newline shape,
+mode, and dirt, but it cannot create or update a template-managed path.
+Inspection, planning, and verification remain zero-write; an authorized apply
+carries that prepared mutation through the existing confined compare-exchange,
+rollback, recovery, and revalidation transaction. Its production precondition
+is the descriptor-bound repository root and exact `.gitignore` target, not
+unrelated repository or Git-internal contents that the one-file effect never
+reads or follows.
 
 Routine-configuration fit uses the same narrow-scope rule for its two canonical
 configuration targets. Their descriptor chains, root binding, scope, and exact
@@ -180,9 +185,13 @@ validation_artifacts/          candidate-bound evidence, never behavior
 - Replaced behavior: `migration/authority-routes.json` plus reader, writer,
   compatibility, and retirement tests.
 
-`scripts/check` is the repository-wide source/standards/coverage gate. The
-public `check strict` route has separate recursively read-only adapters for
-`cli-self-law-compliance` and the source-local
-`namespace-progressive-disclosure` law. A pass supports only the requested
-adapter's exact claim; none of these commands proves installation, runtime
+`scripts/check-product` is the source/product-boundary gate and
+`scripts/check-governance` checks governance projections only;
+`scripts/check` is their compatibility aggregate. `scripts/check-release`
+always stops at the authority boundary: it cannot perform an external,
+package, installation, host, publication, deployment, or release action
+without Tree approval. The public `check strict` route has separate,
+recursively read-only adapters for `cli-self-law-compliance` and the
+source-local `namespace-progressive-disclosure` law. A pass supports only
+the requested adapter's exact claim. No command proves installation, runtime
 activation, journey fitness, release, or completion by itself.

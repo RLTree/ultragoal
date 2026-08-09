@@ -5,9 +5,15 @@ use super::{
     public_output_allowed, read_context,
 };
 use crate::cli::successor::{OutputMode, ParseOutcome, ParsedInvocation, parse_args};
-use crate::observability::{EventStore, SemanticEvent};
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
+fn disposable_home(label: &str) -> PathBuf {
+    let home = std::env::temp_dir().join(format!("ultragoal-{label}-{}-home", std::process::id()));
+    let _ = fs::remove_dir_all(&home);
+    fs::create_dir_all(&home).unwrap();
+    fs::canonicalize(home).unwrap()
+}
 
 #[path = "accepted_observe_query_reads_current_local_events_without_writes.rs"]
 mod accepted_observe_query_reads_current_local_events_without_writes;
@@ -20,8 +26,6 @@ mod inspection;
 #[path = "local_state_fit_plan_is_public_and_confined.rs"]
 mod local_state_fit_plan_is_public_and_confined;
 mod migration_plan;
-#[path = "observe_query_reconstructs_routine_binding.rs"]
-mod observe_query_reconstructs_routine_binding;
 #[path = "public_output_limit_is_inclusive_and_fail_closed.rs"]
 mod public_output_limit_is_inclusive_and_fail_closed;
 #[path = "routine_configuration_fit_plan_is_public_and_confined.rs"]

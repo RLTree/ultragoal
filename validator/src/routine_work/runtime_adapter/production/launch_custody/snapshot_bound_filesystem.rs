@@ -29,13 +29,6 @@ pub(super) fn create_exclusive_at(
     }
 }
 
-pub(super) fn create_bound_directory_at(_root: &Path, _name: &str) -> std::io::Result<File> {
-    Err(std::io::Error::new(
-        std::io::ErrorKind::Unsupported,
-        "identity-bound directory creation is unavailable on this platform",
-    ))
-}
-
 pub(super) fn validate_directory_path(
     child: &Path,
     expected: ObjectIdentity,
@@ -44,7 +37,7 @@ pub(super) fn validate_directory_path(
         .map_err(|_| error("routine-production-launch-directory-replaced"))?;
     if metadata.file_type().is_symlink()
         || !metadata.is_dir()
-        || ObjectIdentity::from(&metadata) != expected
+        || !directory_binding_matches(expected, ObjectIdentity::from(&metadata))
     {
         return Err(error("routine-production-launch-directory-replaced"));
     }
@@ -53,12 +46,14 @@ pub(super) fn validate_directory_path(
         .custom_flags(libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC)
         .open(child)
         .map_err(|_| error("routine-production-launch-directory-replaced"))?;
-    if ObjectIdentity::from(
-        &directory
-            .metadata()
-            .map_err(|_| error("routine-production-launch-directory-replaced"))?,
-    ) != expected
-    {
+    if !directory_binding_matches(
+        expected,
+        ObjectIdentity::from(
+            &directory
+                .metadata()
+                .map_err(|_| error("routine-production-launch-directory-replaced"))?,
+        ),
+    ) {
         return Err(error("routine-production-launch-directory-replaced"));
     }
     Ok(())

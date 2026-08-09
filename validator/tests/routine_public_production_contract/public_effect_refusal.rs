@@ -195,7 +195,7 @@ fn assert_concurrent_loser_refusal(output: &Output) {
 }
 
 #[test]
-fn tool_path_substitution_refuses_before_state_or_spawn() {
+fn poisoned_path_cannot_replace_the_pinned_current_executable() {
     let mut fixture = dirty_fixture("tool-path-substitution", true);
     let probe_dir = fixture.container.join("process-probes");
     let marker = fixture.container.join("process-spawned");
@@ -213,9 +213,8 @@ fn tool_path_substitution_refuses_before_state_or_spawn() {
         fs::set_permissions(&probe, fs::Permissions::from_mode(0o700)).unwrap();
     }
     let before_status = fixture.status();
+    let source_before = fs::read(fixture.root.join("src/lib.rs")).unwrap();
     assert!(!marker.exists(), "fixture setup unexpectedly ran a probe");
-    let before_root = tree(&fixture.root);
-    let before_home = tree(&fixture.home);
 
     let mut command = fixture.base_command();
     let output = command
@@ -224,12 +223,26 @@ fn tool_path_substitution_refuses_before_state_or_spawn() {
         .output()
         .unwrap();
 
-    assert_public_refusal(&output);
+    assert_eq!(output.status.code(), Some(0), "{output:?}");
+    assert!(output.stderr.is_empty(), "{output:?}");
+    assert_eq!(Fixture::value(&output)["status"], "executed");
     assert!(
         !marker.exists(),
-        "public refusal spawned a substituted tool"
+        "pinned execution invoked a PATH-substituted tool"
     );
-    assert_fixture_unchanged(&fixture, &before_root, &before_home, &before_status);
-    assert_eq!(fs::read_dir(fixture.authority_root()).unwrap().count(), 0);
+    assert_eq!(
+        fs::read(fixture.root.join("src/lib.rs")).unwrap(),
+        source_before
+    );
+    assert_eq!(fixture.status(), before_status);
+    assert!(fixture.root.join("target/routine/compile").is_dir());
+    assert!(
+        String::from_utf8(
+            fs::read(fixture.authority_root().join("routine-authority.state")).unwrap(),
+        )
+        .unwrap()
+        .contains("\"state\":\"complete\"")
+    );
+    let _event_leaf = fixture.event_leaf();
     fixture.teardown_after_assertions();
 }

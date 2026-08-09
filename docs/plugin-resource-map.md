@@ -25,6 +25,15 @@ the root-owned migration registry retires them. They are not preferred product
 routes and must never be selected as a fallback when a canonical capability is
 missing.
 
+## Check routing
+
+| Need | Command | Ceiling |
+| --- | --- | --- |
+| Source-local UltraGoal product behavior | `scripts/check-product` | Compile and focused product-contract evidence only. |
+| Current standards and generated compatibility inputs | `scripts/check-governance` | Governance projection only. |
+| Existing callers that require both | `scripts/check` | Product plus governance; not a release gate. |
+| Release-surface verification | `scripts/check-release` | Holds at one clean committed candidate until Terry separately authorizes an exact release scope; it does not infer approval from an environment variable. |
+
 ## Deterministic selection
 
 Select the skill that owns the requested immediate outcome:

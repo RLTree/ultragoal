@@ -56,6 +56,7 @@ pub(super) fn diagnose_local(
     context: &LiveContext,
     mut state: ProductState,
     invocation: &ParsedInvocation,
+    home: Option<&Path>,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Diagnose || invocation.effect != EffectClass::Read {
         return invalid_invocation();
@@ -64,7 +65,8 @@ pub(super) fn diagnose_local(
         Ok(request) if request.target.is_none() => request,
         _ => return invalid_invocation(),
     };
-    let (routine_observations, routine_window) = read_routine_observations(root, context, &state);
+    let (routine_observations, routine_window) =
+        read_routine_observations(home, root, context, &state);
     state.attach_routine_observations(routine_observations, routine_window);
     let selected = match request.finding {
         Some(identifier) => match select_finding(&state, identifier) {
@@ -85,7 +87,7 @@ pub(super) fn diagnose_local(
         _ => return diagnosis_unavailable(),
     };
     let observability = match selected {
-        Some(finding) => causal::evaluate(root, context, finding),
+        Some(finding) => causal::evaluate(home, root, context, finding),
         None => causal::not_evaluated(),
     };
     let Value::Object(object) = &mut value else {
@@ -115,11 +117,12 @@ pub(super) fn diagnose_local(
 }
 
 fn read_routine_observations(
+    home: Option<&Path>,
     root: &Path,
     context: &LiveContext,
     state: &ProductState,
 ) -> (Vec<RoutineFindingObservation>, RoutineObservationWindow) {
-    let store = match LocalStore::open(root, context, RUNTIME_SOURCE_ID) {
+    let store = match LocalStore::open(home, root, context, RUNTIME_SOURCE_ID) {
         Ok(store) if store.status() == "available" => store,
         Ok(_) => return (Vec::new(), RoutineObservationWindow::Absent),
         Err(_) => return (Vec::new(), RoutineObservationWindow::Unavailable),

@@ -32,6 +32,8 @@ mod reservation_lifecycle;
 pub(super) mod reserved_reconciliation;
 #[path = "settle.rs"]
 mod settle;
+#[path = "settled_observation.rs"]
+mod settled_observation;
 #[path = "state_publication.rs"]
 mod state_publication;
 #[path = "store_open.rs"]

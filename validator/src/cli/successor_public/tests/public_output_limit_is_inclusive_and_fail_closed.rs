@@ -67,7 +67,7 @@ pub(crate) fn fit_read_routes_are_public_and_zero_write() {
         ("plan", "RepositoryFitPlan-v1"),
         ("verify", "RepositoryFitVerification-v1"),
     ] {
-        let repo = Repository::new(&format!("fit-{action}"));
+        let repo = Repository::new_with_current_authority(&format!("fit-{action}"));
         let before_tree = tree(&repo.root);
         let before_status = repo.status();
         let ParseOutcome::Invocation(invocation) = parse_args(["--json", "fit", action]).unwrap()
@@ -75,7 +75,10 @@ pub(crate) fn fit_read_routes_are_public_and_zero_write() {
             panic!("expected fit invocation")
         };
         let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
-        assert!(matches!(streams.exit_code, 0 | 1), "{action}");
+        assert!(
+            matches!(streams.exit_code, 0 | 1),
+            "{action}: {streams:?}"
+        );
         assert!(streams.stderr.is_empty(), "{action}");
         let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
         assert_eq!(value["schema_version"], schema, "{action}");
