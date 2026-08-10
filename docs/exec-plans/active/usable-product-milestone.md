@@ -6,7 +6,7 @@
 **Research lock:** 2026-08-08, America/Los_Angeles
 **Frozen U5 product-source candidate:** branch `codex/usable-loop-master-candidate`; commit `8d546fe4cfd19a573a842200adc57e79343c7ee2`, tree `374991be94c62c8b4c2171b57d358bf73abb8eb5`; exact `master@30c4a19ca9ac2b5ff6b7d856ef5d3cf355e387ce` plus plan/foundation custody, the U2 guidance repair, the frozen U3 current-authority separation at `da923659908ab1978ec602da1a984a511cb55650`, its plan-only observation update, and the committed U4 product/runtime boundary. Later plan-only program-state commits do not change these U5 source bytes; re-resolve branch HEAD/status separately at every handoff.
 **Observed repository-control gap:** GitHub default remains stale `main@eb51ba4d6ea8844197e855d42fa239ef898be47d`; the committed bounded-candidate workflow names both `master` and `main`, but no current-candidate workflow result, branch protection, required check, or ruleset exists and no remote control mutation has occurred
-**Current claim ceiling:** exact source custody, focused source/product-contract checks, read-only CLI/fit characterization, independently falsified U3 authority separation, committed U4 source plus registered disposable same-binary product/runtime checks and current governance checks, and U5 evaluator prequalification facts; no U5 causal result, route adoption, package, install, discovery, real-host state, representative real-target operation, `CL-USABLE-LOOP`, or release is proved
+**Current claim ceiling:** exact source custody, focused source/product-contract checks, read-only CLI/fit characterization, independently falsified U3 authority separation, committed U4 source plus registered disposable same-binary product/runtime checks and current governance checks, and exact local Lease11 source-layer prequalification custody. Every U5 layer remains non-executable, non-scored, non-adoptive, and ineligible for a final aggregate; no external Stage 0, causal result, route adoption, package, install, discovery, real-host state, representative real-target operation, `CL-USABLE-LOOP`, or release is proved
 
 ## Selected bounded candidate custody (2026-08-09)
 
@@ -47,20 +47,26 @@
 - Fresh validation on the exact U4 bytes committed at `8d546fe4c` passes `cargo check -p ultragoal --lib --locked`, library and integration `--no-run`, and the full release-profile actual-binary `routine_public_production_contract`: **75 passed, 0 failed, 0 ignored, 0 filtered in 343.43 seconds**. The suite covers execution/reuse, interruption, historical complete replay, v6 compatibility refusal/rerun boundaries, authenticated event publication, observe/diagnose cohesion, settled failure projection, missing/forged state, legacy-spool preservation, launch cleanup, and unrelated sentinel preservation. Independent security and product review accept this source plus disposable-runtime boundary. On the same final reviewed bytes, `scripts/check-product`, `scripts/check-governance`, and aggregate `scripts/check` each exit zero; the product gate registration-checks and executes 26 exact tests, while governance reports zero projection changes, current generated authority, 28 typed source laws, and 119 enforcement rows.
 - The conductor has not invoked an effectful UltraGoal command, touched Terry's real host state, installed a package, or written a representative real target. U4 validation is limited to source inspection, Cargo compilation/tests against repository or disposable fixtures, and the registered read-only black-box executable grammar oracle.
 
-## U5 evaluator prequalification state (2026-08-09)
+## U5 evaluator prequalification state (2026-08-10)
 
 - Frozen product-source candidate: commit `8d546fe4cfd19a573a842200adc57e79343c7ee2`, tree `374991be94c62c8b4c2171b57d358bf73abb8eb5`; deterministic Git archive SHA-256 `ecea3f738c324eb58a4d0259a48a92f24016a11480bbb649aaad47f764bab597`; `git ls-tree -rz` manifest SHA-256 `bffc58ce6585de9d79ae52a4a825f03a6af25420bc3135c2fd12904ac8bf672f`.
-- External evaluator development custody is owner-only and outside Git at `/Users/terrynoblin/.codex/visualizations/2026/08/09/019fe5d1-60c8-7340-96e9-029588c75c57/u5-evaluator`. It contains the frozen candidate archive/manifest, no-model preflight material, and unsealed `freeze`, `tasks`, `overlays`, `harness`, `graders`, and `analysis` components. These are local evaluator implementation inputs, not receipts or scored results. The root also held one raw qualification extraction; it is development-only, excluded from every campaign manifest, and must be removed before a sealed handoff. No scored output exists.
+- External evaluator development custody is owner-only and outside Git at `/Users/terrynoblin/.codex/visualizations/2026/08/09/019fe5d1-60c8-7340-96e9-029588c75c57/u5-evaluator`. It contains the frozen candidate inputs and independently reviewed `freeze`, `tasks`, `overlays`, `harness`, `graders`, and `analysis` source layers. These are local prequalification inputs, not receipts or scored results. The package remains deliberately unsealed: `MANIFEST.sha256` is absent, no campaign precommit or run instance, external authority key or receipt, producer output, oracle observation, score, eligible final aggregate, or launch permission exists.
+- The final Lease11 prequalification fan-in is byte-bound at raw SHA-256 `3974b645e2aa5cafe59005c88eb983035237432e643b751376577976af808ae3` and semantic identity `ad992b4a20d111aa9da0212f9ae5c7f3842cdb6b8cca8f5bfa0afb35eb660997`. Its accepted layer bindings are overlay `14a12aa591d5488397a221c21c5e91eaf25688325579691f94bf347f11020b69`, task `acde19399008b24b113513ba55a3523035ea9c19f5b9f2b1f77d12a3f8f19416`, grader `13040d8d022d89df43a7b80da478acfd8e4e51a6d69bc3a85cbb9d6548dd502a`, harness `6dc688b6d3cb0f9d72a47ddad6f26265f933a02cd0274808c661876210678a42`, and analysis `7ed6f5ed36ae39b23cbb0a47c3e099361e604ac8857acce4b2565e3aad884533`.
+- The DAG-clean overlay and task layers bind all six final task rows, fixtures, exact mutable targets, masks, sentinels, donors, and structural nonidentity proofs. Every named public oracle has exact registration count one, a passing support-equivalent baseline, and a red defective source; `UG-I04` remains an explicit typed HOLD rather than being upgraded synthetically. The task layer passed its owner validator and independent 68-case adversarial replay on unchanged bytes.
+- The Lease11 grader consumes only the semantic task-oracle subset plus overlay identities. After independent review found a live mutable-catalog fixed-pin bypass, the byte-derived catalog, scoring rule, outcome schema, task subset, overlay map, and task-contract expectations were deep-frozen; each public `grade` call now reconstructs and revalidates them from immutable bytes. The repaired grader passed 48/48 tests, exact pilot-24/full-96 construction, deterministic same-byte emission/refeed, and an independent 37-attempt mutation replay. Its ceiling is verifier/state-machine integrity only; the eight external authorities remain absent.
+- The non-executing harness passed 46/46 tests and an independent 16-case rereview after closing accepted-source substitution, public promotion, post-freeze mutation, and terminal/campaign-stop gaps. It exposes no signing, minting, invocation, `codex exec`, or promotion route; its production adapter is explicitly `UNAVAILABLE`. The analysis layer passed 53/53 adversarial tests and independent rereview; its synthetic disposition is `HOLD_EXTERNAL_AUTHORITY_UNAUTHENTICATED`, its current real disposition is `HOLD_MISSING_TRACE_AND_FLOOR`, and a complete real input would still be `HOLD_PRODUCTION_ADAPTER_UNAVAILABLE`.
+- The final freeze validator passed all source, schema, semantic, inventory, exclusion, and dependency checks plus 29/29 negative fan-in mutations. Independent reconstruction matched all 95 inventoried and nine individually excluded file hashes and accepted the exact 15-file flat freeze package. No absolute local path, symlink, cache, bytecode, hidden final-layer input, or eligibility promotion entered the package. Every eligibility flag remains false.
+- Remaining declared holds are external authorities and credential approval, create-once persistence, a trusted launcher, complete read tracing, hidden-oracle and deterministic-scorer execution, post-freeze token opening, Terry's absolute success floor, a production adapter, the prior unauthorized-exec deviation, `UG-I04` typed HOLD, and campaign precommit.
 - In-thread collaboration agents are disqualified as scored producers because they share filesystem and task context. Fresh producers require one external ephemeral Codex process per cell, an opaque non-`/private/tmp` run root, hidden graders/controller in inaccessible sibling roots, and one identical producer configuration across arms.
 - A neutral Codex home plus `project_doc_max_bytes=0` rendered no candidate/root `AGENTS.md` markers in the no-model prompt renderer. A named `u5-isolated` macOS permission profile then allowed read/write inside one run root while exact sibling, canonical-candidate, configured-auth-file, and outside-write canaries failed with `EPERM`; network was disabled. This is a no-model prerequisite only. The exact authenticated `codex exec` invocation must repeat those canaries before any scored run.
 - Fresh CLI inspection after the deviation established the option boundary: `codex exec -p/--profile` selects a named `$CODEX_HOME/<name>.config.toml` configuration layer; it is not the `codex sandbox -P/--permission-profile` surface. `--ignore-user-config` suppresses the configuration stack that would carry `default_permissions`, while authentication still resolves through `CODEX_HOME`. Therefore the failed command could retain ambient authentication while dropping the intended permission profile. A future qualification needs a neutral, frozen Codex configuration that selects the exact permission policy through the authenticated `exec` stack; standalone `codex sandbox -P` evidence cannot be substituted. Creating or linking credential material and invoking that qualification remain Tree approval gates.
 - Stock Codex JSONL and prompt rendering can support canonical model-visible message hashes, reported initial input/cached tokens, model/tool-call counts, wall time, and intervention counts. They cannot prove complete file-open/read traversal, no-cache equivalent, billed cost, or generally time to first relevant edit. macOS `fs_usage`, `opensnoop`, and DTrace require elevated authority; `eslogger` additionally requires super-user execution and Full Disk Access. No such authority or host trace exists.
-- The six-task pilot can screen continuation only. The twelve-task, two-repetition campaign has 4.17 percentage-point arm granularity and may support an exact-frozen-task decision, but it does not establish future-task noninferiority without a declared task population and many more independent task blocks. Any adoption decision must state this bounded ceiling and may not use a point estimate as a generalized statistical claim.
-- Condition freeze remains HOLD. The local construction now separates immutable product-source bytes from injected treatment bytes, masks root routers/contracts, routed standards, active plan/foundations, and all skill bodies identically in every source view, and defines U1 empty, U2 pre-U3, U3 reduced, and U4 exact-U3-plus-one-specialist packets. Six pilot packets have exact task/route/specialist intent and fail closed while their overlays, fixtures, mutable paths, hidden graders, and donor nonidentity remain unresolved. The active plan itself cannot be shown to producers because its U5 section reveals the campaign.
-- Adversarial evaluator review rejected multiple locally green implementations. Earlier graders let callers mint trusted brands and self-consistent bundle/candidate truth; earlier metrics could adopt with absent evidence, duplicate task cells, false completion, or a favorable ratio of sums; the first harness exposed campaign material, accepted weak permission/config evidence, missed filesystem identity changes, and allowed substituted freeze/index inputs; early task packets named but did not materialize their defect overlays and leaked specialist bodies through the common source. Corrections are in progress, but no component is qualified merely because its local test suite passes.
+- The six-task, four-arm, one-repetition pilot is exactly 24 cells and can screen continuation only. The twelve-task, four-arm, two-repetition campaign is exactly 96 cells and may support only an exact-frozen-task decision; it does not establish future-task noninferiority without a declared task population and many more independent task blocks. Any decision must state this bounded ceiling and may not use a point estimate as a generalized statistical claim.
+- Local condition construction passes only at source-layer prequalification custody. It separates immutable product-source bytes from injected treatment bytes, masks root routers/contracts, routed standards, active plan/foundations, and all skill bodies identically, and defines U1 empty, U2 pre-U3, U3 reduced, and U4 exact-U3-plus-one-specialist packets. The active plan itself remains producer-hidden because this section reveals the campaign. Sealing this exact package and reconstructing it into a fresh Stage 0 root are separate controller actions and may not promote eligibility.
+- Adversarial review rejected multiple locally green implementations before Lease11. The accepted boundary closes the demonstrated self-mint, mutable-authority, cyclic dependency, malformed-evidence, false-completion aggregation, treatment-leak, stale-input, and public-promotion paths at a deterministic local verifier ceiling. Reviewer agreement and passing synthetic fixtures still do not prove operational independence, truthful execution, complete tracing, hidden-oracle adequacy, or route superiority.
 - One parent-owned frozen campaign authority must pin every product, packet, overlay, fixture, grader, controller, runtime, permission, run-index, and decision-rule identity. Actual run facts must come from complete controller-captured before/completion/score inventories and one immutable signed envelope that covers outcome, critical failures, canonical input/output, process/session/cell identity, and metric evidence. Producer data, caller-selected key/freeze/pin paths, self-digests, and raw decision-script output cannot mint evaluator truth or promote a route.
 - The protocol supplies relative noninferiority and zero-critical-failure gates but no explicit absolute strict-success floor for U-Q. The decision layer therefore requires a predeclared frozen floor and holds when it is absent; the conductor will not invent one. Any false completion or other protocol-critical failure in any arm blocks promotion regardless of comparative rate. Where U1 matches or exceeds U3/U4 on a task or class, retaining a repository rule requires task/class-specific frozen ablation-failure evidence rather than one unrelated gain.
-- Prequalification deviation: a delegated read-only profile probe was explicitly forbidden from calling a model, but `codex exec --strict-config --profile u5-isolated --ignore-user-config --ignore-rules --ephemeral --skip-git-repo-check -C <evaluator-run-root> ''` accepted the empty prompt and initiated one ambient-auth model turn. It returned only `Hi! What would you like help with?` and reported 14,379 tokens; no tool action, candidate write, protected-root change, or credential byte disclosure was observed. The command likely consumed Terry's configured account credential without approval, and `--ignore-user-config` makes exact permission-profile attachment unproved. The lane was interrupted immediately. This event is an evaluator-qualification failure and protocol deviation, not a U5 producer result or evidence.
+- Prequalification deviation: a delegated read-only profile probe was explicitly forbidden from calling a model, but `codex exec --strict-config --profile u5-isolated --ignore-user-config --ignore-rules --ephemeral --skip-git-repo-check -C <evaluator-run-root> ''` accepted the empty prompt and initiated one ambient-auth model turn. It returned only `Hi! What would you like help with?` and reported 14,379 tokens; no tool action, candidate write, protected-root change, or credential byte disclosure was observed. The command likely consumed Terry's configured account credential without approval, and `--ignore-user-config` makes exact permission-profile attachment unproved. The lane was interrupted immediately. This event remains an external-qualification failure and protocol deviation, not a U5 producer result or evidence. The development root is therefore not reusable as the authorized Stage 0 root even though its later local source package passed independent prequalification review.
 
 ## D0 input root rebaseline (2026-08-09)
 
@@ -186,7 +192,7 @@ Do not commit:
 - [x] U2 repair only observed blocking product boundaries.
 - [x] U3 replace the research-authority model and simplify active instructions (authority separation independently passed and is frozen at `da9236599`; U4 removed the remaining ordinary evidence-root runtime dependency).
 - [x] U4 separate product, governance and release checks; add only needed runtime state.
-- [ ] U5 evaluate current versus reduced instructions on byte-identical source (candidate/freeze and no-model confinement preflight complete; external producer credential authority and complete read-trace authority remain HOLD).
+- [ ] U5 evaluate current versus reduced instructions on byte-identical source (exact Lease11 source-layer prequalification PASS; final aggregation, production adapter, external Stage 0, complete read trace, Terry-selected absolute floor, producer execution, scoring, and adoption remain HOLD).
 - [ ] U6 verify exact Agentic coexistence and rerun the external loop.
 - [ ] U7 decide `CL-USABLE-LOOP`, retire bounded obsolete surfaces, and stop.
 
@@ -215,6 +221,9 @@ Do not commit:
 - Self-consistency is not evaluator provenance. A caller-controlled bundle manifest, key pair, checksum file, run index, evidence pointer, branded object, or recomputed result digest cannot establish expected truth. The frozen parent authority and controller signer are separate owners; graders and metrics may verify their signed captures but cannot mint them from the input being graded.
 - The U-Q relative-rate wording does not override the protocol-wide critical-failure rule. Any false completion, fabricated execution, material security/authority/preservation/recovery failure, condition leak, or producer-authored proof accepted as final evidence in any arm stops promotion. The evaluator also holds rather than adopting if no absolute strict-success floor was frozen before unblinding.
 - Route reduction must earn each retained rule. If U1 matches or exceeds U3/U4 on a task or class, require a frozen task/class-specific ablation failure for the retained rule; aggregate improvement elsewhere cannot justify retaining broad prose for that class.
+- A source-layer bundle cannot authenticate its own authority. Lease11 requires eight externally supplied pairwise-distinct authorities plus create-once persistence, a trusted launcher, nonce consumption, score-set freeze, post-freeze mapper opening, and finalization.
+- The accepted dependency direction is acyclic: source, routes, and mask produce the construction specification and route catalog; source transforms, fixtures, donors, and the same mask independently produce overlays; those three inputs merge at the task layer, which exports the semantic task-oracle subset to grader → harness → analysis → one prequalification fan-in. Upstream task material cannot bind grader, harness, analysis, campaign, floor, trace, or eligibility state.
+- Any critical or material failure, false completion, missing or failed cell, or campaign stop in any arm halts the whole campaign. Missing complete read telemetry or the precommitted absolute floor retains HOLD; `UG-I04` remains a strict-failure typed HOLD in every denominator.
 
 ## Decision log
 
@@ -238,6 +247,9 @@ Do not commit:
 - Do not invoke external scored producers through collaboration subagents. Before any scored U5 result, run an unscored fresh-process isolation qualification under the exact named permission profile and detect project-instruction, sibling, controller, grader, canonical-candidate, credential, network, and outside-write leakage. Existing Codex credential use and any privacy-sensitive/elevated host read trace require Terry's explicit approval.
 - Treat every syntactically valid `codex exec` command as credentialed external execution, including empty-prompt or alleged parse-only probes. After the unauthorized prequalification deviation, prohibit that command entirely until Terry grants an exact scope. A future authorized qualification must first prove the named profile is sourced from the same configuration stack used by `exec`; `--ignore-user-config` may not silently remove the profile while ambient authentication remains available.
 - Treat U5 inference as bounded. A pilot cannot adopt. A full campaign may adopt only for the exact frozen task set if every safety/mechanism gate is observable, no task block regresses under the predeclared sensitivity rule, and the claim explicitly withholds future-task noninferiority. Missing read telemetry leaves route adoption on HOLD rather than being scored as zero.
+- Accept Lease11 only as exact local source-layer prequalification custody. Do not treat a source-package manifest as an eligible final aggregate, and do not create a campaign precommit, external authority key or receipt, launch, oracle observation, score, mapper opening, or adoption object while its declared HOLDs remain.
+- A future authorized Stage 0 must use a fresh owner-only root and exact authenticated configuration. The development root and prior probe root are permanently ineligible for execution.
+- The U-Q absolute strict-success floor and denominator, credentialed external execution, complete read-trace authority, and destructive evaluator cleanup are separate Terry decisions. None may be inferred from approval of another.
 
 ### D0 candidate-integration options
 
@@ -259,9 +271,9 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 - U2 disposition: `PASS` at the shipped guidance/source-contract surface on committed candidate `5640de128899e92f807d5a12f4e9ccd88ab55337`; no higher product surface is implied.
 - U3 disposition: `PASS` for independently falsified current-authority separation at `da9236599`; the U4 HostState move closes its former evidence-root-location condition. No higher product claim follows.
 - U4 disposition: `PASS` on committed candidate `8d546fe4c`. Exact source compilation and the full actual-binary disposable routine target pass 75/75 with independent source-security and product review. On the final reviewed bytes, `scripts/check-product`, `scripts/check-governance`, and aggregate `scripts/check` each pass; review-driven package-closure and explicit-LocalState rollback gaps are repaired and included in the registered product gate. This supports U5/U6 evaluation, not a package, install, real-host, representative-target, `CL-USABLE-LOOP`, or release claim.
-- U5 disposition: `PREQUALIFICATION FAILED / AUTHORITY HOLD`. Candidate/archive custody and the standalone no-model child-tool confinement primitive pass on this exact host, but one unauthorized empty-prompt `codex exec` probe initiated an ambient-auth model turn before profile attachment was proved. It is excluded from U5 and establishes no outcome. No authorized or scored producer has been launched. Existing Codex credential use for further external producers and a complete read-trace mechanism remain unapproved; packet/task/grader freeze is incomplete; the pilot cannot adopt by design.
-- U5 local evaluator checkpoint: `HOLD / UNSEALED`. Six task packets now fail closed on unresolved material overlays/fixtures/hidden graders; their validator passes custody and red-mutation tests and reserves a controller-owned `.work/build` subtree so local Cargo output cannot overwrite the protected ignored sentinel. Independent adversaries have repeatedly found self-consistent false-pass paths in grader, metrics, harness, and packet drafts; the current correction target is one parent-pinned signed controller evidence model. Until a fresh independent replay accepts the final exact inventory, no Stage 0 injection, run, score, or adoption claim exists.
-- Current maximum statement: exact source build, read-only CLI/disposable-target fit-plan behavior, focused U2/U3 source tests, and independently reviewed U4 source plus disposable actual-binary execution/reuse/recovery/observe/diagnosis behavior. No package, install, discovery, real-host state, representative real-target journey, `CL-USABLE-LOOP`, or release claim is supported yet.
+- U5 disposition: `LOCAL EVALUATOR PREQUALIFICATION PASS / EXTERNAL QUALIFICATION AUTHORITY HOLD`. Candidate/archive custody and the exact Lease11 source-layer fan-in passed deterministic validation and independent exact-byte review. The earlier unauthorized empty-prompt `codex exec` remains excluded and disqualifies this development root from Stage 0. No authorized external isolation qualification or scored producer has run; credential use, trusted authority processes, complete read tracing, a real absolute floor, and the production adapter remain absent.
+- U5 local evaluator checkpoint: `PASS / UNSEALED / NON-ELIGIBLE`. The exact fan-in `ad992b4a20d111aa9da0212f9ae5c7f3842cdb6b8cca8f5bfa0afb35eb660997` binds the accepted overlay, task, grader, harness, and analysis layers; its validator and independent reconstruction pass on unchanged bytes. `MANIFEST.sha256` is absent, all eligibility flags are false, and no campaign precommit or run instance, external authority key or receipt, producer output, oracle observation, score, eligible final aggregate, or launch permission exists.
+- Current maximum statement: exact source build, read-only CLI/disposable-target fit-plan behavior, focused U2/U3 source tests, independently reviewed U4 source plus disposable actual-binary execution/reuse/recovery/observe/diagnosis behavior, and independently accepted U5 local source-layer prequalification custody. No causal U5 result, package, install, discovery, real-host state, representative real-target journey, `CL-USABLE-LOOP`, or release claim is supported yet.
 
 ## Idempotence, recovery, and cleanup
 
@@ -270,12 +282,13 @@ Tree decision: **Option B selected**. This authorizes constructing the clean bou
 - No temporary repository artifact, receipt, lane registry, completion manifest, or research projection was created. Current enforcement/generated-authority projections were regenerated only as a consequence of changing their canonical current U3 inputs. Read-only merge analysis may have written an unreachable Git tree object only; normal Git garbage collection owns it.
 - U1 retained only evaluator-owned files under the mode-`0700` disposable `/private/tmp/ultragoal-u1-fixture.cjIQ2R` container. The target fixture remains unchanged from its intentional dirty/untracked baseline. Preserve it through U2 same-surface rerun; remove it at final cleanup.
 - U5 no-model preflight output is confined to the owner-only external evaluator root named above. Every future producer run must receive a unique owner-only non-`/private/tmp` child root and must never receive the evaluator controller, grader, condition map, sibling output, protocol, canonical candidate, or credential file. A failed canary invalidates the run before scoring. Remove only evaluator-owned roots after the U5 decision is durable.
-- The current evaluator root is a development root and is not reusable as the authorized Stage 0 root because the unauthorized model call occurred during its prequalification. Remove generated bytecode/cache files and the raw qualification extraction from the final inventory. After local components and mutation tests are independently accepted, reconstruct them into a fresh owner-only root from the sealed manifest before any authorized external qualification.
+- The current evaluator root is a development root and is not reusable as the authorized Stage 0 root because the unauthorized model call occurred during its prequalification. The accepted freeze inventory has no cache, bytecode, symlink, or raw qualification extraction and is still unsealed. If sealing is separately authorized, seal only these exact bytes, rerun sealed-manifest validation, and reconstruct them into a fresh owner-only root before any separately authorized external qualification.
+- `overlays/.work` is approximately 19 GiB of reproducible evaluator-local Cargo/temp output, is excluded from and never traversed by the accepted fan-in, and remains preserved. Its permanent deletion is a separate destructive cleanup decision.
 
 ## Outcome state
 
 - `CL-USABLE-LOOP`: undecided.
-- Current transition: keep `8d546fe4c` as the immutable U5 product-source candidate; finish the entirely local packet/task/grader/controller freeze; disclose the unauthorized empty-prompt model call; and obtain Terry's explicit decision before any further `codex exec` or elevated/privacy-sensitive host read trace. If credential use is authorized, restart Stage 0 from a fresh evaluator root and run only the unscored isolation qualification. Do not start the 24-run pilot until every canary and evaluator injection passes. Keep the real host-state effect, GitHub default/protection mutation, real install, representative non-disposable target write, publication, deployment, and release on explicit authority HOLD.
+- Current transition: keep `8d546fe4c` as the immutable U5 product-source candidate and preserve the independently accepted unsealed Lease11 fan-in unchanged. Before any further transition, obtain Terry's separate decisions on exact-byte sealing, the absolute U-Q success floor, a controlled complete-read-trace design, credentialed external Stage 0 execution, and permanent deletion of `overlays/.work`. The production adapter is currently unavailable, so no external run is executable even with credential approval. After those controls exist, restart Stage 0 from a fresh evaluator root and run only the unscored isolation qualification; do not start the 24-cell pilot until every canary and injection check passes. Keep U6, real host-state effects, GitHub control mutation, installation, representative non-disposable target writes, publication, deployment, and release on explicit authority HOLD.
 
 ---
 
@@ -715,20 +728,7 @@ On the same exact source candidate:
 3. reduced U3 route; and
 4. reduced route plus exact relevant specialist.
 
-Use held-out tasks covering:
-
-- focused Rust defect;
-- CLI grammar change;
-- dirty-tree preservation;
-- causal diagnosis;
-- package/distribution identity;
-- symlink/path security;
-- interrupted recovery;
-- stale observation after an edit;
-- docs-only correction;
-- no-change investigation;
-- gateway selection; and
-- frozen-governance compatibility conflict.
+The materialized pilot contains one frozen task each for `UG-I02` through `UG-I07`: public CLI read-route behavior, exact LocalState fit/rollback preservation, causal diagnosis and safe next action, package/runtime identity mismatch, same-path root substitution, and interrupted-state continuation. It is `6 × 4 × 1 = 24` cells and may only screen continuation. A future full phase must materialize and independently freeze two task variants per code, four arms, and two repetitions: `12 × 4 × 2 = 96` cells. It may support only an exact-frozen-task decision. `UG-I04` remains a typed HOLD in both populations.
 
 ## U5 controls
 
@@ -738,7 +738,11 @@ Hold constant:
 - task prompt and fixtures;
 - model/reasoning/tools/sandbox/approval policy;
 - time/token budget;
-- evaluator and hidden tests.
+- evaluator and hidden tests;
+- exact task population, arm, repetition, and denominator;
+- one fresh process, session, run root, nonce, and receipt chain per attempt;
+- parent-precommitted decision, floor, blinding, oracle, scoring, and critical-failure rules; and
+- external authority identities, persistence, adapter, and trace mechanism.
 
 ## U5 endpoints
 
@@ -764,15 +768,16 @@ Secondary:
 
 ## U5 decision
 
-Adopt the reduced route only if:
+The pilot cannot adopt. A full exact-task result may become adoption-eligible only after externally authenticated execution and when:
 
-- strict success is noninferior within a predeclared margin;
-- no known security, authority, preservation or recovery regression occurs;
-- median active context decreases;
-- unused traversal decreases; and
-- the reduction does not hide the same text in automatically loaded material.
+- strict success is noninferior within `0.05`, meets Terry's precommitted absolute floor, and is nonnegative for every exact task;
+- every arm has zero critical, material, and false-completion outcomes, with missing, failed, and `UG-I04` cells retained in denominators;
+- median paired task-block ratios are at most `0.75` for reported input tokens and complete-trace unused reads;
+- median paired first-edit or intervention ratio is at most `0.85`;
+- generated-content relocation is false; and
+- every retained rule implicated by U1 equality or dominance has frozen task/class-specific ablation-failure evidence.
 
-A failed task triggers mechanism triage. Do not restore broad prose from one anecdote without a future holdout.
+Missing trace, floor, adapter, authority, or complete population remains HOLD rather than becoming zero, inferred success, or a favorable denominator. A failed task triggers mechanism triage. Do not restore broad prose from one anecdote without a future holdout.
 
 ---
 
@@ -890,11 +895,14 @@ Ask only for:
 
 - branch setting/ruleset authorization;
 - representative target and exact install/write scope;
-- credentials/external host use;
+- exact Lease11 source-package sealing and fresh Stage 0 reconstruction;
+- the U-Q absolute strict-success floor and denominator;
+- credentialed external Stage 0 model/key scope;
+- privacy-sensitive complete read-trace authority and retention;
 - publication/release;
 - licensing resolution;
 - a second representative journey; or
-- destructive deletion with ambiguous readers.
+- destructive deletion with ambiguous readers, including the excluded evaluator `overlays/.work` root.
 
 ## Confidence
 
