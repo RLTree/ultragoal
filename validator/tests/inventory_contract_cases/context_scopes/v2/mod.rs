@@ -43,7 +43,7 @@ fn live_registry() -> Value {
 
 fn worker_result(lease_id: &str) -> Value {
     json!({
-        "worker": "/root/test-worker",
+        "worker": "test-worker",
         "lease_id": lease_id,
         "context_id": "sha256:test-context",
         "candidate_identity": {},

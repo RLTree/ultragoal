@@ -42,6 +42,7 @@ pub(super) fn load_declared_dependency_identities(
     load_dependency_identities(bytes, StagingMode::Declared, None)
 }
 
+#[allow(dead_code)] // Retained only for explicit frozen-v2 compatibility tests.
 pub(super) fn load_root_dependency_identities(
     bytes: &[u8],
     context: &LiveContext,

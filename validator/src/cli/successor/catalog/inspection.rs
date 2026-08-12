@@ -28,7 +28,7 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Inspect(InspectTarget::Inception),
         Some("inception"),
         EffectClass::Read,
-        "Inspect the current Product Success Brief and first truth loop without writes.",
+        "Inspect current goal, Product Success Contract, and sole active ExecPlan authority without writes.",
         &[],
     ),
     descriptor(

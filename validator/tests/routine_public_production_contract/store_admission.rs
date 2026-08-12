@@ -1,9 +1,8 @@
 use super::scenario::{Fixture, pass_node, prefix_route};
-use serde_json::Value;
 use std::fs;
 
 #[test]
-fn ignoring_only_the_retired_probe_refuses_before_effect_or_journal_creation() {
+fn retired_probe_ignore_rule_is_compatibility_only_and_host_event_remains_owner_only() {
     let mut fixture = Fixture::new(
         "probe-only-observability-ignore",
         &[pass_node("compile", &[])],
@@ -18,18 +17,12 @@ fn ignoring_only_the_retired_probe_refuses_before_effect_or_journal_creation() {
     .unwrap();
     let before_status = fixture.status();
 
-    let refused = fixture.run();
+    let executed = fixture.run();
 
-    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
-    assert!(refused.stdout.is_empty(), "{refused:?}");
-    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
-    assert_eq!(
-        value["cause"],
-        "routine-runtime-observability-store-not-ignored"
-    );
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert_eq!(Fixture::value(&executed)["status"], "executed");
     assert_eq!(fixture.status(), before_status);
-    assert!(!fixture.root.join("target/routine").exists());
-    assert!(!fixture.checkpoint_path().exists());
+    let _host_event = fixture.event_leaf();
     assert!(
         !fixture
             .root

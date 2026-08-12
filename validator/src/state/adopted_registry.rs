@@ -1,3 +1,5 @@
+#![allow(dead_code)] // frozen v2 registry compatibility validation
+
 use super::adopted_claims::AdoptedClaimRegistry;
 use super::product_state::StateError;
 use serde::Deserialize;

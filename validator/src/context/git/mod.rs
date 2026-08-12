@@ -6,8 +6,7 @@ use super::process::{run_bounded, run_bounded_allow_failure};
 use super::read_session::ReadSession;
 use sha2::{Digest, Sha256};
 use std::ffi::{OsStr, OsString};
-use std::fs::{self, File};
-use std::io::Read;
+use std::fs;
 use std::path::{Component, Path, PathBuf};
 use std::time::Duration;
 
@@ -17,6 +16,8 @@ use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::os::unix::fs::PermissionsExt;
 
 const GIT_TIMEOUT: Duration = Duration::from_secs(15);
+
+pub(super) mod untracked_file;
 
 fn git_args(arguments: &[&str]) -> Vec<OsString> {
     [
@@ -149,33 +150,32 @@ fn text(value: Option<Vec<u8>>, field: &str) -> Result<Option<String>, ContextEr
         .transpose()
 }
 
-fn add_file(hasher: &mut Sha256, path: &Path, relative: &[u8]) -> Result<(), ContextError> {
-    let metadata = fs::symlink_metadata(path).map_err(|error| io_error(path, error))?;
-    add_framed(hasher, relative);
+fn add_file(
+    hasher: &mut Sha256,
+    root: &Path,
+    relative: &Path,
+    relative_bytes: &[u8],
+) -> Result<(), ContextError> {
+    let path = root.join(relative);
+    let metadata = fs::symlink_metadata(&path).map_err(|error| io_error(&path, error))?;
+    add_framed(hasher, relative_bytes);
     #[cfg(unix)]
     hasher.update(metadata.permissions().mode().to_be_bytes());
     #[cfg(not(unix))]
     hasher.update([metadata.permissions().readonly() as u8]);
     if metadata.file_type().is_symlink() {
         hasher.update(b"symlink");
-        let target = fs::read_link(path).map_err(|error| io_error(path, error))?;
+        let target = fs::read_link(&path).map_err(|error| io_error(&path, error))?;
         add_framed(hasher, &os_bytes(target.as_os_str()));
     } else if metadata.is_file() {
         hasher.update(b"file");
         hasher.update(metadata.len().to_be_bytes());
-        let mut file = File::open(path).map_err(|error| io_error(path, error))?;
-        let mut buffer = [0_u8; 16 * 1024];
-        loop {
-            let read = file
-                .read(&mut buffer)
-                .map_err(|error| io_error(path, error))?;
-            if read == 0 {
-                break;
-            }
-            hasher.update(&buffer[..read]);
-        }
+        untracked_file::hash(hasher, root, relative, &metadata)?;
     } else {
-        hasher.update(b"special");
+        return Err(ContextError::PathDenied(format!(
+            "untracked special file rejected: {}",
+            path.display()
+        )));
     }
     Ok(())
 }
@@ -195,7 +195,7 @@ fn untracked_digest(git: &Path, root: &Path) -> Result<String, ContextError> {
     let mut hasher = Sha256::new();
     for bytes in paths {
         let relative = checked_relative(&bytes)?;
-        add_file(&mut hasher, &root.join(relative), &bytes)?;
+        add_file(&mut hasher, root, &relative, &bytes)?;
     }
     Ok(format!("{:x}", hasher.finalize()))
 }

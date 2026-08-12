@@ -500,7 +500,7 @@
         {
           "pointer": "/scope/scratch_uris",
           "value": [
-            "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
+            "<operator-home>/Projects/harness-ultragoal-plugin-proposal"
           ]
         }
       ]
@@ -594,7 +594,7 @@
       "mutations": [
         {
           "pointer": "/scope/artifact_paths/0/path",
-          "value": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/Cargo.lock"
+          "value": "<operator-home>/Projects/harness-ultragoal-plugin-proposal/Cargo.lock"
         }
       ]
     },

@@ -7,12 +7,12 @@ pub(crate) fn positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_i
     let inspection = assert_zero_write(&fixture, || inspect_target(&context).unwrap());
     let record = assert_zero_write(&fixture, || plan_target(&context).unwrap());
     assert_eq!(inspection.classification(), "fresh");
-    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len() + 1);
+    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len());
 
     let request = fixture.request(&context);
     let outcome = apply_once(&fixture, &context, request, "positive-fresh");
     assert_eq!(outcome.status(), "applied");
-    assert_eq!(outcome.mutation_count(), CANONICAL_TEMPLATES.len() + 1);
+    assert_eq!(outcome.mutation_count(), CANONICAL_TEMPLATES.len());
     for row in CANONICAL_TEMPLATES {
         let path = fixture.root.join(row.target_path);
         assert_eq!(fs::read(&path).unwrap(), row.bytes);
@@ -22,20 +22,10 @@ pub(crate) fn positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_i
         );
     }
 
-    fs::remove_file(fixture.root.join(".gitignore")).unwrap();
-    let local_only_context = fixture.context();
-    let local_only_record =
-        assert_zero_write(&fixture, || plan_target(&local_only_context).unwrap());
-    assert_eq!(local_only_record.mutation_count(), 1);
-    let local_only = fixture.request(&local_only_context);
-    let local_only_outcome = apply_once(
-        &fixture,
-        &local_only_context,
-        local_only,
-        "positive-local-state-only",
+    assert!(
+        !fixture.root.join(".gitignore").exists(),
+        "the current complete-repository scope cannot recreate legacy target operation state"
     );
-    assert_eq!(local_only_outcome.status(), "applied");
-    assert_eq!(local_only_outcome.mutation_count(), 1);
 
     let repeated_context = fixture.context();
     let repeated_record = assert_zero_write(&fixture, || plan_target(&repeated_context).unwrap());
@@ -71,7 +61,7 @@ pub(crate) fn positive_supported_host_partial_retrofit_preserves_dirty_user_stat
     let inspection = assert_zero_write(&fixture, || inspect_target(&context).unwrap());
     let record = assert_zero_write(&fixture, || plan_target(&context).unwrap());
     assert_eq!(inspection.classification(), "partial");
-    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len());
+    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len() - 1);
     let request = fixture.request(&context);
     let outcome = apply_once(&fixture, &context, request, "positive-partial-dirty");
     assert_eq!(outcome.status(), "applied");

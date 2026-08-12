@@ -1,6 +1,6 @@
 ---
 name: prove
-description: "Plan and execute strict proof for one named Harness Ultragoal claim. Use for dependency-closed validation, current evidence binding, false-pass controls, negative cases, independent reconciliation, exact claim ceilings, or falsifying readiness and completion assertions."
+description: "Plan and execute strict proof for one named Harness Ultragoal claim. Use when dependency-closed validation, current evidence binding, false-pass controls, negative cases, reconciliation, exact claim ceilings, or falsifying readiness assertions are needed."
 ---
 
 # Prove

@@ -1,8 +1,8 @@
 //! Public operation bindings admit only exact supported command and effect pairs.
 
 use super::*;
-use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
 use crate::cli::successor::OutputMode;
+use crate::cli::successor::command_contract::{EvalAction, MigrateAction, PackageAction};
 
 fn invocation(command: SuccessorCommand, effect: EffectClass) -> ParsedInvocation {
     ParsedInvocation {

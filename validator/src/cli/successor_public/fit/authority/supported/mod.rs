@@ -1,10 +1,10 @@
-use super::{production_outcome, HostFailure};
+use super::{HostFailure, production_outcome};
 use crate::cli::successor::runtime::RuntimeOutcome;
 use crate::context::LiveContext;
 use crate::repository_fit::{
-    digest, execute_prepared_apply, prepare_recovery_intent, recover_prepared_apply, valid_digest,
     FitAdapterError, PreparedFitApply, RepositoryFitApplyNonce, RepositoryFitAuthorityStore,
-    RepositoryFitProductionOutcome, RepositoryFitTrustedClock,
+    RepositoryFitProductionOutcome, RepositoryFitTrustedClock, digest, execute_prepared_apply,
+    prepare_recovery_intent, recover_prepared_apply, valid_digest,
 };
 use serde::{Deserialize, Serialize};
 use std::ffi::CString;

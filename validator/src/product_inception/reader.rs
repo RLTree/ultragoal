@@ -1,61 +1,48 @@
 use super::InceptionError;
-use super::model::{CandidateBinding, ContractFacts};
+use super::model::{CandidateBinding, CurrentAuthorityFacts};
 use crate::context::{LiveContext, ReadSession, inception_subject_identity};
 use crate::digest;
-use crate::inventory::{AuthorityCatalog, InventoryBuilder};
-use serde_json::Value;
-use std::collections::BTreeSet;
+use sha2::{Digest, Sha256};
 use std::fs;
-use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 
-pub(crate) const BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
-const PRODUCT_CONTRACT_PATH: &str = "examples/generated/PRODUCT_SUCCESS_CONTRACT.json";
-const CLAIM_REGISTRY_PATH: &str =
-    "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json";
-const SURFACE_CATALOG_PATH: &str =
-    "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json";
-const GENERATED_AUTHORITY_PATH: &str = "migration/generated-surface-authority.json";
-const PRODUCT_SUCCESS_CONTRACT_VERSION: &str = "2.3.0";
-const MAX_BRIEF_BYTES: u64 = 1024 * 1024;
-const MAX_CONTRACT_BYTES: u64 = 16 * 1024 * 1024;
+pub(crate) const GOAL_CONTRACT_PATH: &str = "GOAL_CONTRACT.md";
+pub(crate) const PRODUCT_SUCCESS_CONTRACT_PATH: &str = "PRODUCT_SUCCESS_CONTRACT.md";
+pub(crate) const ACTIVE_PLAN_PATH: &str = "docs/exec-plans/active/usable-product-milestone.md";
+const CLAIM_ID: &str = "CL-USABLE-LOOP";
+const MAX_AUTHORITY_BYTES: u64 = 16 * 1024 * 1024;
+
 pub(crate) struct ReadResult {
-    pub(crate) catalog: AuthorityCatalog,
-    pub(crate) facts: ContractFacts,
+    pub(crate) facts: CurrentAuthorityFacts,
     pub(crate) candidate: CandidateBinding,
-    pub(crate) brief: Option<Vec<u8>>,
 }
+
 pub(crate) fn read(context: &LiveContext) -> Result<ReadResult, InceptionError> {
     context.revalidate().map_err(InceptionError::context)?;
-    let catalog = InventoryBuilder::new(context)
-        .build()
-        .map_err(|_| InceptionError::CatalogUnavailable)?;
-    read_with_catalog(context, catalog)
-}
-pub(crate) fn read_with_catalog(
-    context: &LiveContext,
-    catalog: AuthorityCatalog,
-) -> Result<ReadResult, InceptionError> {
     let reads = context
         .begin_read_session()
         .map_err(InceptionError::context)?;
     let root = reads.root().to_path_buf();
-    let contract = read_required(&reads, &root, PRODUCT_CONTRACT_PATH, MAX_CONTRACT_BYTES)?;
-    let generated = read_required(&reads, &root, GENERATED_AUTHORITY_PATH, MAX_CONTRACT_BYTES)?;
-    let claims = read_required(&reads, &root, CLAIM_REGISTRY_PATH, MAX_CONTRACT_BYTES)?;
-    let surfaces = read_required(&reads, &root, SURFACE_CATALOG_PATH, MAX_CONTRACT_BYTES)?;
-    let facts = facts(&catalog, &contract, &generated, &claims, &surfaces)?;
-    let brief = read_optional(&reads, &root, BRIEF_PATH, MAX_BRIEF_BYTES)?;
+    let facts = current_authority_facts(&reads, &root)?;
+    let candidate = candidate(context, &reads)?;
     reads.revalidate().map_err(InceptionError::context)?;
     context.revalidate().map_err(InceptionError::context)?;
-    let candidate = candidate(context, &reads)?;
-    Ok(ReadResult {
-        catalog,
-        facts,
-        candidate,
-        brief,
-    })
+    Ok(ReadResult { facts, candidate })
 }
+
+/// Returns a digest over the three current authority owners.  This is the only
+/// authority identity admitted to current product state; retained v2 material
+/// is verified elsewhere as compatibility context and never reaches this path.
+pub(crate) fn current_authority_digest(context: &LiveContext) -> Result<String, InceptionError> {
+    let reads = context
+        .begin_read_session()
+        .map_err(InceptionError::context)?;
+    let facts = current_authority_facts(&reads, reads.root())?;
+    reads.revalidate().map_err(InceptionError::context)?;
+    context.revalidate().map_err(InceptionError::context)?;
+    Ok(facts.authority_digest)
+}
+
 fn candidate(
     context: &LiveContext,
     reads: &ReadSession,
@@ -71,116 +58,109 @@ fn candidate(
         repository_digest: digest::bytes(context.roots().repository_root.as_bytes()),
     })
 }
-fn facts(
-    catalog: &AuthorityCatalog,
-    contract: &[u8],
-    generated: &[u8],
-    claims: &[u8],
-    surfaces: &[u8],
-) -> Result<ContractFacts, InceptionError> {
-    let contract_value = parse_json(contract, "contract_json_invalid")?;
-    let generated_value = parse_json(generated, "generated_contract_authority_invalid")?;
-    let claim_value = parse_json(claims, "claim_registry_invalid")?;
-    let surface_value = parse_json(surfaces, "surface_catalog_invalid")?;
-    let product_contract_id = text(&contract_value, "product_success_contract_id")?;
-    let contract_version = text(&contract_value, "contract_version")?;
-    if !product_contract_version_supported(&contract_version) {
-        return Err(InceptionError::ContractBindingInvalid);
-    }
-    let authority_contract_id = text(&claim_value, "contract_id")?;
-    let contract_claim_ids = string_array(&contract_value, "claim_ids")?;
-    let claim_ids = rows(&claim_value, "claims")?
-        .iter()
-        .map(|row| text(row, "claim_id"))
-        .collect::<Result<Vec<_>, _>>()?;
-    let surface_contract_id = text(&surface_value, "contract_id")?;
-    let surface_ids = rows(&surface_value, "surfaces")?
-        .iter()
-        .map(|row| text(row, "surface_id"))
-        .collect::<Result<Vec<_>, _>>()?;
-    if authority_contract_id != catalog.contract_id()
-        || surface_contract_id != authority_contract_id
-        || !same_set(&contract_claim_ids, &claim_ids)
-        || !unique(&contract_claim_ids)
-        || !unique(&claim_ids)
-        || !unique(&surface_ids)
-    {
-        return Err(InceptionError::ContractBindingInvalid);
-    }
-    let expected_contract_digest = generated_surface_digest(&generated_value)?;
-    let contract_digest = digest::bytes(contract);
-    if contract_digest != expected_contract_digest
-        || !catalog_has_digest(catalog, GENERATED_AUTHORITY_PATH, &digest::bytes(generated))
-        || !catalog_has_digest(catalog, CLAIM_REGISTRY_PATH, &digest::bytes(claims))
-        || !catalog_has_digest(catalog, SURFACE_CATALOG_PATH, &digest::bytes(surfaces))
-    {
-        return Err(InceptionError::ContractBindingInvalid);
-    }
-    Ok(ContractFacts {
-        product_contract_id,
-        contract_version,
-        contract_digest,
-        authority_contract_id,
-        claim_registry_digest: digest::bytes(claims),
-        claim_ids,
-        public_surface_catalog_digest: digest::bytes(surfaces),
-        surface_ids,
+
+fn current_authority_facts(
+    reads: &ReadSession,
+    root: &Path,
+) -> Result<CurrentAuthorityFacts, InceptionError> {
+    let goal = read_required(reads, root, GOAL_CONTRACT_PATH)?;
+    let product = read_required(reads, root, PRODUCT_SUCCESS_CONTRACT_PATH)?;
+    require_sole_active_plan(root)?;
+    let plan = read_required(reads, root, ACTIVE_PLAN_PATH)?;
+    validate_current_authority(&goal, &product, &plan)?;
+    let goal_contract_digest = digest::bytes(&goal);
+    let product_success_contract_digest = digest::bytes(&product);
+    let active_plan_digest = digest::bytes(&plan);
+    Ok(CurrentAuthorityFacts {
+        claim_id: CLAIM_ID.to_owned(),
+        authority_digest: framed_digest([
+            (GOAL_CONTRACT_PATH, goal_contract_digest.as_str()),
+            (
+                PRODUCT_SUCCESS_CONTRACT_PATH,
+                product_success_contract_digest.as_str(),
+            ),
+            (ACTIVE_PLAN_PATH, active_plan_digest.as_str()),
+        ]),
+        goal_contract_digest,
+        product_success_contract_digest,
+        active_plan_digest,
     })
 }
-pub(super) fn product_contract_version_supported(version: &str) -> bool {
-    version == PRODUCT_SUCCESS_CONTRACT_VERSION
+
+fn validate_current_authority(
+    goal: &[u8],
+    product: &[u8],
+    plan: &[u8],
+) -> Result<(), InceptionError> {
+    let goal = std::str::from_utf8(goal).map_err(|_| InceptionError::ContractBindingInvalid)?;
+    let product =
+        std::str::from_utf8(product).map_err(|_| InceptionError::ContractBindingInvalid)?;
+    let plan = std::str::from_utf8(plan).map_err(|_| InceptionError::ContractBindingInvalid)?;
+    let goal_plan_owner = format!("The sole executable state owner is\n`{ACTIVE_PLAN_PATH}`.");
+    let current_claim = "Harness Ultragoal has one current product claim: `CL-USABLE-LOOP`.";
+    if !goal.contains("This contract is the current product-goal authority")
+        || occurrences(goal, &goal_plan_owner) != 1
+        || occurrences(goal, "## `CL-USABLE-LOOP`") != 1
+        || !goal.contains("The external evaluator")
+        || !product.contains("This document is the current product-success authority")
+        || occurrences(product, current_claim) != 1
+        || !plan.starts_with("# Harness UltraGoal")
+        || !plan.contains("`CL-USABLE-LOOP`")
+        || !plan.contains("The external evaluator")
+    {
+        return Err(InceptionError::ContractBindingInvalid);
+    }
+    Ok(())
 }
-fn generated_surface_digest(value: &Value) -> Result<String, InceptionError> {
-    let row = value
-        .get("surfaces")
-        .and_then(Value::as_array)
-        .and_then(|rows| {
-            rows.iter().find(|row| {
-                row.get("output").and_then(Value::as_str) == Some(PRODUCT_CONTRACT_PATH)
-            })
-        })
-        .ok_or(InceptionError::ContractBindingInvalid)?;
-    text(row, "sha256").map(|digest| format!("sha256:{digest}"))
+
+fn require_sole_active_plan(root: &Path) -> Result<(), InceptionError> {
+    let directory = root.join("docs/exec-plans/active");
+    let metadata = fs::symlink_metadata(&directory).map_err(|_| InceptionError::UnsafeInput)?;
+    if metadata.file_type().is_symlink() || !metadata.is_dir() {
+        return Err(InceptionError::UnsafeInput);
+    }
+    let mut entries = fs::read_dir(&directory)
+        .map_err(|_| InceptionError::UnsafeInput)?
+        .map(|entry| entry.map_err(|_| InceptionError::UnsafeInput))
+        .collect::<Result<Vec<_>, _>>()?;
+    if entries.len() != 1
+        || entries
+            .pop()
+            .is_none_or(|entry| entry.file_name() != "usable-product-milestone.md")
+    {
+        return Err(InceptionError::ContractBindingInvalid);
+    }
+    Ok(())
 }
-fn catalog_has_digest(catalog: &AuthorityCatalog, path: &str, digest: &str) -> bool {
-    let rows = catalog
-        .entries()
-        .iter()
-        .filter(|entry| entry.relative_path == path)
-        .collect::<Vec<_>>();
-    rows.len() == 1 && format!("sha256:{}", rows[0].digest_sha256) == digest
+
+fn occurrences(haystack: &str, needle: &str) -> usize {
+    haystack.match_indices(needle).count()
 }
+
+fn framed_digest<'a>(items: impl IntoIterator<Item = (&'a str, &'a str)>) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(b"UltraGoalCurrentProductAuthority-v1");
+    for (path, digest) in items {
+        hasher.update((path.len() as u64).to_be_bytes());
+        hasher.update(path.as_bytes());
+        hasher.update((digest.len() as u64).to_be_bytes());
+        hasher.update(digest.as_bytes());
+    }
+    format!("sha256:{:x}", hasher.finalize())
+}
+
 fn read_required(
     reads: &ReadSession,
     root: &Path,
     relative: &str,
-    maximum: u64,
 ) -> Result<Vec<u8>, InceptionError> {
     let path = confined(root, relative)?;
     regular_file(&path)?;
     reads
-        .read_bounded(&path, maximum)
+        .read_bounded(&path, MAX_AUTHORITY_BYTES)
         .map_err(|_| InceptionError::UnsafeInput)
 }
-fn read_optional(
-    reads: &ReadSession,
-    root: &Path,
-    relative: &str,
-    maximum: u64,
-) -> Result<Option<Vec<u8>>, InceptionError> {
-    let path = confined(root, relative)?;
-    match fs::symlink_metadata(&path) {
-        Ok(_) => {
-            regular_file(&path)?;
-            reads
-                .read_bounded(&path, maximum)
-                .map(Some)
-                .map_err(|_| InceptionError::UnsafeInput)
-        }
-        Err(error) if error.kind() == ErrorKind::NotFound => Ok(None),
-        Err(_) => Err(InceptionError::UnsafeInput),
-    }
-}
+
 pub(super) fn regular_file(path: &Path) -> Result<(), InceptionError> {
     let metadata = fs::symlink_metadata(path).map_err(|_| InceptionError::UnsafeInput)?;
     if !metadata.is_file() || metadata.file_type().is_symlink() || is_hard_linked(&metadata) {
@@ -188,15 +168,18 @@ pub(super) fn regular_file(path: &Path) -> Result<(), InceptionError> {
     }
     Ok(())
 }
+
 #[cfg(unix)]
 fn is_hard_linked(metadata: &fs::Metadata) -> bool {
     use std::os::unix::fs::MetadataExt;
     metadata.nlink() != 1
 }
+
 #[cfg(not(unix))]
 fn is_hard_linked(_metadata: &fs::Metadata) -> bool {
     false
 }
+
 pub(super) fn confined(root: &Path, relative: &str) -> Result<PathBuf, InceptionError> {
     let path = root.join(relative);
     if path.strip_prefix(root).is_err()
@@ -207,43 +190,4 @@ pub(super) fn confined(root: &Path, relative: &str) -> Result<PathBuf, Inception
         return Err(InceptionError::UnsafeInput);
     }
     Ok(path)
-}
-fn parse_json(bytes: &[u8], code: &'static str) -> Result<Value, InceptionError> {
-    serde_json::from_slice(bytes).map_err(|_| InceptionError::Code(code))
-}
-fn rows<'a>(value: &'a Value, key: &'static str) -> Result<&'a [Value], InceptionError> {
-    value
-        .get(key)
-        .and_then(Value::as_array)
-        .map(Vec::as_slice)
-        .ok_or(InceptionError::ContractBindingInvalid)
-}
-fn string_array(value: &Value, key: &'static str) -> Result<Vec<String>, InceptionError> {
-    value
-        .get(key)
-        .and_then(Value::as_array)
-        .ok_or(InceptionError::ContractBindingInvalid)?
-        .iter()
-        .map(|entry| {
-            entry
-                .as_str()
-                .filter(|value| !value.is_empty() && value.len() <= 512)
-                .map(ToOwned::to_owned)
-                .ok_or(InceptionError::ContractBindingInvalid)
-        })
-        .collect()
-}
-fn text(value: &Value, key: &'static str) -> Result<String, InceptionError> {
-    value
-        .get(key)
-        .and_then(Value::as_str)
-        .filter(|value| !value.is_empty() && value.len() <= 512)
-        .map(ToOwned::to_owned)
-        .ok_or(InceptionError::Code(key))
-}
-fn unique(values: &[String]) -> bool {
-    !values.is_empty() && values.iter().collect::<BTreeSet<_>>().len() == values.len()
-}
-fn same_set(left: &[String], right: &[String]) -> bool {
-    left.iter().collect::<BTreeSet<_>>() == right.iter().collect::<BTreeSet<_>>()
 }

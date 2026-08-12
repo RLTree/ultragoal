@@ -3,7 +3,7 @@
   "lease_id": "LEASE-N02-PACKAGE-READ-003",
   "context_id": "sha256:e8434482812c3321f9fa08e1307febdc66261e12b76c6458db0275fa11de93b1",
   "candidate_identity": {
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
     "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",
@@ -218,7 +218,7 @@
       "summary": "All native targets compile; unrelated existing warnings remain."
     },
     {
-      "command": "target/debug/ultragoal --root /Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal package digest",
+      "command": "target/debug/ultragoal --root <operator-home>/Projects/harness-ultragoal-plugin-proposal package digest",
       "result": "pass",
       "summary": "Returned sha256:84def2278734d3bb4123d93bfdcc2622395dc0905f31149d901610259ead5a82 with source_package_digest as the only supported claim; exact pre/post Git status bytes matched."
     },

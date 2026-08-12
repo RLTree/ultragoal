@@ -1,9 +1,8 @@
-use super::filesystem::{checked_file, checked_relative, checked_root, slash_path};
+use super::filesystem::{checked_relative, checked_root, read_stable, slash_path};
 use super::format::dep_info_tokens;
 use super::model::{BuildClosurePolicy, BuildInputKind, ClosureError, RequiredBuildInput};
 use std::collections::{BTreeMap, BTreeSet};
-use std::fs::{self, File};
-use std::io::Read;
+use std::fs;
 use std::path::Path;
 
 pub(super) const MAX_INPUTS: usize = 8_192;
@@ -42,21 +41,17 @@ impl BuildClosurePolicy {
                 return Err(ClosureError::DuplicateOrAlias);
             }
             let relative = checked_relative(dep_info)?;
-            let path = checked_file(&root, &relative)?;
-            let mut bytes = String::new();
-            File::open(path)
-                .and_then(|mut file| file.read_to_string(&mut bytes))
-                .map_err(|_| ClosureError::Unreadable)?;
+            let bytes = read_stable(&root, &relative, 64 * 1024 * 1024)?;
             inputs.insert(dep_info.clone(), BuildInputKind::DepInfo);
             for token in dep_info_tokens(&bytes)? {
                 let supplied = if token.is_absolute() {
                     token
                 } else {
-                    root.join(token)
+                    root.path().join(token)
                 };
                 let canonical = fs::canonicalize(&supplied).map_err(|_| ClosureError::Missing)?;
                 let source = canonical
-                    .strip_prefix(&root)
+                    .strip_prefix(root.path())
                     .map_err(|_| ClosureError::OutsideRoot)?;
                 let value = slash_path(source)?;
                 match inputs.get(&value) {

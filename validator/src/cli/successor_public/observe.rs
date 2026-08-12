@@ -1,5 +1,3 @@
-#[cfg(test)]
-pub(super) use super::local_store::store_path;
 use super::local_store::{
     LocalStore, LocalStoreFailure, local_policy, routine_observations_from_events,
 };
@@ -19,6 +17,7 @@ pub(super) fn query_local(
     root: &Path,
     read_context: &LiveContext,
     invocation: &ParsedInvocation,
+    home: Option<&Path>,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Observe(ObserveAction::Query)
         || invocation.effect != EffectClass::Read
@@ -48,7 +47,7 @@ pub(super) fn query_local(
             Ok(context) => context,
             Err(()) => return observability_unavailable(LocalStoreFailure::binding()),
         };
-    let (store_root, context) = routine_binding
+    let (store_target, context) = routine_binding
         .as_ref()
         .map_or((root, read_context), |binding| {
             (binding.target.as_path(), &binding.context)
@@ -77,7 +76,7 @@ pub(super) fn query_local(
             Err(_) => return invalid_invocation(),
         };
     }
-    let store = match LocalStore::open(store_root, context, SOURCE_ID) {
+    let store = match LocalStore::open(home, store_target, context, SOURCE_ID) {
         Ok(store) => store,
         Err(failure) => return observability_unavailable(failure),
     };

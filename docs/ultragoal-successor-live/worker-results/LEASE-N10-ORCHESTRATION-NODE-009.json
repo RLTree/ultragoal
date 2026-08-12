@@ -5,7 +5,7 @@
   "candidate_identity": {
     "candidate_id": "sha256:c61319d3b2475e1dab9a8ce687e6aac5140e3ccfcadabd6fe333a0547062ec2b",
     "context_id": "sha256:c61319d3b2475e1dab9a8ce687e6aac5140e3ccfcadabd6fe333a0547062ec2b",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "artifact_set_sha256": "sha256:c61319d3b2475e1dab9a8ce687e6aac5140e3ccfcadabd6fe333a0547062ec2b",
     "artifact_count_excluding_result": 35,
     "identity_method": "Byte-only identity. Sort current artifact rows by path; concatenate path, one TAB byte, SHA-256 without prefix, and one LF byte; SHA-256 the concatenation. No Git command, Git metadata, or Git-derived observation was used.",

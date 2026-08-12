@@ -9,7 +9,7 @@
     "candidate_id": "sha256:a852e518d0a9fa8a4594e182706f1376eca2b89ff247c238a7fbc95e590dc905",
     "context_id": "sha256:a852e518d0a9fa8a4594e182706f1376eca2b89ff247c238a7fbc95e590dc905",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal"
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal"
   },
   "base_state": {
     "adoption_status": "unaccepted",

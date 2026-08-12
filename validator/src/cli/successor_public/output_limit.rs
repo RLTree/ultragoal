@@ -74,9 +74,12 @@ pub(crate) fn execute_invocation_with_home(
     // plan route still performs only reads and issues no mutation permit.
     let context_result = match invocation.command {
         SuccessorCommand::Fit(FitAction::Plan | FitAction::Apply) => {
-            workspace_context(&context_root)
+            current_workspace_context(&context_root)
         }
-        _ => read_context(&context_root),
+        SuccessorCommand::Inspect(InspectTarget::Inventory) | SuccessorCommand::Migrate(_) => {
+            compatibility_read_context(&context_root)
+        }
+        _ => current_read_context(&context_root),
     };
     let context = match context_result {
         Ok(context) => context,
@@ -102,7 +105,7 @@ pub(crate) fn execute_invocation_with_home(
             }
         }
         SuccessorCommand::Observe(crate::cli::successor::ObserveAction::Query) => {
-            observe::query_local(root, &context, &invocation)
+            observe::query_local(root, &context, &invocation, home)
         }
         SuccessorCommand::Eval(crate::cli::successor::command_contract::EvalAction::Audit) => {
             evaluation::audit(&context, &invocation)
@@ -120,51 +123,30 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Diagnose if diagnose::requests_target(&invocation) => {
             diagnose::diagnose_routine(root, &context, &invocation, home)
         }
-        SuccessorCommand::Diagnose => match InventoryBuilder::new(&context).build() {
-            Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
-                Ok(state) => diagnose::diagnose_local(root, &context, state, &invocation),
-                Err(_) => diagnose::diagnose_routine_or(
-                    root,
-                    &context,
-                    &invocation,
-                    home,
-                    state_unavailable(),
-                ),
-            },
+        SuccessorCommand::Diagnose => match crate::state::derive_current(&context) {
+            Ok(state) => diagnose::diagnose_local(root, &context, state, &invocation, home),
             Err(_) => diagnose::diagnose_routine_or(
                 root,
                 &context,
                 &invocation,
                 home,
-                inventory_unavailable(),
+                fit::repository_fit_required(&context, &invocation),
             ),
         },
         SuccessorCommand::Inspect(
             InspectTarget::Summary | InspectTarget::Findings | InspectTarget::Claims,
-        ) => match InventoryBuilder::new(&context).build() {
-            Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
-                Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
-                Err(_) => state_unavailable(),
-            },
-            Err(_) => inventory_unavailable(),
+        ) => match crate::state::derive_current(&context) {
+            Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
+            Err(_) => state_unavailable(),
         },
-        SuccessorCommand::Next => match InventoryBuilder::new(&context).build() {
-            Ok(inventory) => match crate::state::derive_adopted(&context, &inventory) {
-                Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
-                Err(_) => diagnose::next_routine_or(
-                    root,
-                    &context,
-                    &invocation,
-                    home,
-                    state_unavailable(),
-                ),
-            },
+        SuccessorCommand::Next => match crate::state::derive_current(&context) {
+            Ok(state) => RuntimeSession::new(&context, Some(&state)).dispatch(&invocation),
             Err(_) => diagnose::next_routine_or(
                 root,
                 &context,
                 &invocation,
                 home,
-                inventory_unavailable(),
+                fit::repository_fit_required(&context, &invocation),
             ),
         },
         _ => crate::cli::successor::runtime::unavailable(&invocation),

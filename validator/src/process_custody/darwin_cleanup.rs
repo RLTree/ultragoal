@@ -6,41 +6,69 @@ pub(crate) fn cleanup_process(
     group: libc::pid_t,
     reaped: bool,
 ) -> io::Result<()> {
-    let mut child_reaped = reaped;
+    if reaped {
+        return group_exists(group)
+            .then(|| {
+                io::Error::other(
+                    "darwin descendant cleanup refused after leader identity was reaped",
+                )
+            })
+            .map_or(Ok(()), Err);
+    }
+    require_live_leader(reaped)?;
     let mut failure = None;
-    if !child_reaped {
-        if let Err(error) = signal_group(group, libc::SIGTERM) {
-            failure = Some(error);
+    if let Err(error) = signal_group(group, libc::SIGTERM) {
+        failure = Some(error);
+    }
+    let child_reaped = match wait_child_bounded(pid, Duration::from_millis(100)) {
+        Ok(reaped) => reaped,
+        Err(error) => {
+            failure.get_or_insert(error);
+            false
         }
-        child_reaped = match wait_child_bounded(pid, Duration::from_millis(100)) {
-            Ok(reaped) => reaped,
-            Err(error) => {
-                failure.get_or_insert(error);
-                false
-            }
-        };
+    };
+    if child_reaped {
+        if group_exists(group) {
+            failure.get_or_insert_with(|| {
+                io::Error::other(
+                    "darwin descendant cleanup refused after leader identity was reaped",
+                )
+            });
+        }
+        return failure.map_or(Ok(()), Err);
     }
     if group_exists(group) {
+        require_live_leader(child_reaped)?;
         if let Err(error) = signal_group(group, libc::SIGKILL) {
             failure.get_or_insert(error);
         }
     }
-    if !child_reaped {
-        child_reaped = match wait_child_bounded(pid, Duration::from_millis(500)) {
-            Ok(reaped) => reaped,
-            Err(error) => {
-                failure.get_or_insert(error);
-                false
-            }
-        };
-    }
+    let child_reaped = match wait_child_bounded(pid, Duration::from_millis(500)) {
+        Ok(reaped) => reaped,
+        Err(error) => {
+            failure.get_or_insert(error);
+            false
+        }
+    };
     if !child_reaped {
         return Err(io::Error::other("darwin child reap timed out"));
     }
-    if let Err(error) = wait_group_absent(group) {
-        failure.get_or_insert(error);
+    if group_exists(group) {
+        failure.get_or_insert_with(|| {
+            io::Error::other("darwin descendant cleanup incomplete after leader reap")
+        });
     }
     failure.map_or(Ok(()), Err)
+}
+
+fn require_live_leader(reaped: bool) -> io::Result<()> {
+    if reaped {
+        Err(io::Error::other(
+            "darwin group signal refused without live leader identity",
+        ))
+    } else {
+        Ok(())
+    }
 }
 
 pub(crate) fn group_exists(group: libc::pid_t) -> bool {
@@ -60,15 +88,18 @@ pub(crate) fn signal_group(group: libc::pid_t, signal: i32) -> io::Result<()> {
     }
 }
 
+#[cfg(test)]
 pub(crate) fn wait_group_absent(group: libc::pid_t) -> io::Result<()> {
-    let deadline = Instant::now() + Duration::from_secs(1);
+    let deadline = Instant::now() + Duration::from_millis(500);
     while Instant::now() < deadline {
         if !group_exists(group) {
             return Ok(());
         }
         std::thread::sleep(Duration::from_millis(2));
     }
-    Err(io::Error::other("darwin descendant cleanup incomplete"))
+    Err(io::Error::other(
+        "darwin descendant cleanup did not become absent",
+    ))
 }
 
 fn wait_child_bounded(pid: libc::pid_t, budget: Duration) -> io::Result<bool> {
@@ -93,4 +124,16 @@ fn wait_child_bounded(pid: libc::pid_t, budget: Duration) -> io::Result<bool> {
         std::thread::sleep(Duration::from_millis(2));
     }
     Ok(false)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::require_live_leader;
+
+    #[test]
+    fn numeric_group_signal_requires_a_live_leader_identity() {
+        require_live_leader(false).expect("live leader anchors process group identity");
+        let error = require_live_leader(true).expect_err("reaped leader must close signaling");
+        assert!(error.to_string().contains("without live leader identity"));
+    }
 }

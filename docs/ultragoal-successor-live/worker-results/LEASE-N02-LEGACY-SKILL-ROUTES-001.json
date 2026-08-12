@@ -143,7 +143,7 @@
   ],
   "commands_and_tests": [
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each legacy alias>, then final fallback rerun with /Users/terrynoblin/.codex/skills/assets/samples/skill-creator/scripts/quick_validate.py after the system path disappeared",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each legacy alias>, then final fallback rerun with <operator-home>/.codex/skills/assets/samples/skill-creator/scripts/quick_validate.py after the system path disappeared",
       "result": "pass",
       "summary": "The selected current validator returned Skill is valid for 14 of 14 before its host-local path disappeared; the inspected local fallback validator returned Skill is valid for 14 of 14 on the final frozen SKILL.md bytes."
     },

@@ -1,5 +1,5 @@
 use super::super::super::launch_custody::{
-    LaunchBinding, fail_staged, observe_staged_cleanup, stage_program,
+    LaunchBinding, LaunchRoot, fail_staged, observe_staged_cleanup, stage_program,
 };
 use super::super::super::production_mediation::error;
 use super::super::super::reservation_failure::{CapturedCleanup, finish_execution};
@@ -11,7 +11,7 @@ use std::panic::{AssertUnwindSafe, catch_unwind};
 
 pub(super) fn execute_intent(
     owner: &ReservationOwner,
-    launch_root: &Path,
+    launch_root: &LaunchRoot,
     intent: &mediator::IntentExecutionRequest,
 ) -> Result<mediator::ProcessObservation, RoutineError> {
     let staged = stage_program(
@@ -19,6 +19,7 @@ pub(super) fn execute_intent(
         LaunchBinding {
             grant_id: owner.failure_binding().grant_id,
             recovery_marker: owner.failure_binding().recovery_marker,
+            intent_id: intent.intent_id(),
         },
         intent.program(),
     )?;

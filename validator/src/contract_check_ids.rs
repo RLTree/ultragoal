@@ -152,3 +152,37 @@ pub const CHECK_IDS: &[&str] = &[
     "worktree-lane-owner-cost-policy",
     "worktree-teardown",
 ];
+
+pub(crate) fn is_retained_compatibility_id(id: &str) -> bool {
+    matches!(
+        id,
+        "research-source-authority-article-to-law-integration" | "source-card-freshness-ceiling"
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{CHECK_IDS, is_retained_compatibility_id};
+
+    #[test]
+    fn retained_compatibility_id_match_is_exact() {
+        for id in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(is_retained_compatibility_id(id), "{id}");
+            assert!(
+                CHECK_IDS.contains(&id),
+                "compatibility vocabulary lost {id}"
+            );
+        }
+        for id in [
+            "source-card-freshness",
+            "source-card-freshness-ceiling-extra",
+            "research-source-authority",
+            "",
+        ] {
+            assert!(!is_retained_compatibility_id(id), "{id}");
+        }
+    }
+}

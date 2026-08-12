@@ -142,6 +142,7 @@ pub(crate) struct PinnedExecutable {
 /// the private directory after mediation has determined its outcome.
 pub(crate) struct StagedProgram {
     pub(crate) executable: PinnedExecutable,
+    pub(crate) directory_file: File,
     pub(crate) directory: PathBuf,
     pub(crate) marker: PathBuf,
     pub(crate) seal: PathBuf,

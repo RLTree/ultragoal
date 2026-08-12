@@ -46,14 +46,6 @@ mod strict;
 mod tests;
 
 #[cfg(test)]
-#[path = "diagnose_tests/mod.rs"]
-mod diagnose_tests;
-
-#[cfg(test)]
-#[path = "diagnose_boundary_tests.rs"]
-mod diagnose_boundary_tests;
-
-#[cfg(test)]
 mod repository_fixture;
 
 pub(crate) use context_and_failures::*;

@@ -19,6 +19,7 @@ pub(super) struct SchedulerNodes {
     pub(super) active_worktree_lanes: BTreeSet<String>,
 }
 
+mod git_query;
 pub(crate) mod inspection;
 
 pub(super) fn load(reads: &ReadSession, root: &Path) -> Result<Frontier, InventoryError> {

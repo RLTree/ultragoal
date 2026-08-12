@@ -25,6 +25,15 @@ the root-owned migration registry retires them. They are not preferred product
 routes and must never be selected as a fallback when a canonical capability is
 missing.
 
+## Check routing
+
+| Need | Command | Ceiling |
+| --- | --- | --- |
+| Source-local UltraGoal product behavior | `scripts/check-product` | Compile and focused product-contract evidence only. |
+| Current standards and generated compatibility inputs | `scripts/check-governance` | Governance projection only. |
+| Existing callers that require both | `scripts/check` | Product plus governance; not a release gate. |
+| Release-surface verification | `scripts/check-release` | Holds at one clean committed candidate until Terry separately authorizes an exact release scope; it does not infer approval from an environment variable. |
+
 ## Deterministic selection
 
 Select the skill that owns the requested immediate outcome:
@@ -140,9 +149,13 @@ authority boundary and cannot disable mandatory guards.
 
 1. Enter through `harness-ultragoal` and select `repository-fit`.
 2. Run `fit inspect` and `fit plan` without writes.
-3. Present every mutation, preservation rule, conflict, rollback, and effect.
-4. Run `fit apply` only after acceptance of the unchanged current plan.
-5. Run `fit verify`, then route actual routine work to `routine-work`.
+3. Save the unchanged plan projection to a current-user-owned absolute regular
+   file under a canonical, non-symlinked parent, and retain its
+   `plan.plan_sha256`.
+4. Present every mutation, preservation rule, conflict, rollback, and effect.
+5. Run `fit apply` with that absolute plan path and accepted `plan_sha256` only
+   after acceptance of the unchanged current plan.
+6. Run `fit verify`, then route actual routine work to `routine-work`.
 
 ### Partial retrofit or conflicting authority
 

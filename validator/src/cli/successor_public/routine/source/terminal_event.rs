@@ -1,8 +1,7 @@
-use super::super::super::super::local_store::{RoutineTerminalEvent, append_routine_terminal};
+use super::super::super::super::local_store::append_routine_terminal;
 use super::*;
 use crate::routine_work::DirtySnapshot;
 use crate::state::RoutineFindingBinding;
-use crate::{inventory::InventoryBuilder, state::derive_adopted};
 
 pub(super) fn mark_post_effect_ambiguity(
     state: &HostState,
@@ -49,37 +48,30 @@ pub(super) fn join(
     binding: &crate::routine_work::RoutineBinding,
     checkpoint: &host::ContinuationCheckpoint,
 ) -> Result<(), PublicFailure> {
-    if !checkpoint.is_terminal() || checkpoint.state() == "terminal-event-joined" {
+    if !checkpoint.is_terminal() {
         return Ok(());
     };
+    if checkpoint.state() == "terminal-event-joined" {
+        return state
+            .verify_joined_terminal_event(target, context, checkpoint)
+            .map_err(PublicFailure::Host);
+    }
     state
         .authenticate_checkpoint(target, checkpoint, false)
         .map_err(PublicFailure::Host)?;
-    let event = RoutineTerminalEvent {
-        event_id: checkpoint.event_id(),
-        continuation_id: checkpoint.continuation(),
-        terminal_ledger_head: checkpoint.ledger_head(),
-        observed_at_unix_ms: checkpoint.event_observed_at_unix_ms(),
-        sequence: checkpoint.event_sequence(),
-        parent_event_id: checkpoint.event_parent_id(),
-        status: checkpoint.event_status(),
-        transition: checkpoint.event_transition(),
-        terminal_outcome: checkpoint
-            .terminal_outcome()
-            .ok_or(PublicFailure::PersistenceAfterEffect)?,
-        finding_binding: checkpoint.finding_binding(),
-    };
-    append_routine_terminal(target, context, binding, event)
+    let _ = binding;
+    append_routine_terminal(state, target, context, checkpoint)
         .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
     state
-        .mark_event_joined(checkpoint)
+        .mark_event_joined(target, context, checkpoint)
         .map_err(PublicFailure::Host)
 }
 
-pub(super) fn capture_finding_binding(context: &LiveContext) -> Option<RoutineFindingBinding> {
-    let inventory = InventoryBuilder::new(context).build().ok()?;
-    let state = derive_adopted(context, &inventory).ok()?;
-    RoutineFindingBinding::from_findings(state.findings())
+pub(super) fn capture_finding_binding(_context: &LiveContext) -> Option<RoutineFindingBinding> {
+    // A routine context is the representative target repository, not the
+    // UltraGoal source root. Do not substitute a target inventory for current
+    // product authority; the optional pre-effect product binding is withheld.
+    None
 }
 
 pub(super) fn mediation_context<'a>(

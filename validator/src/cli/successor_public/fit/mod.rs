@@ -4,7 +4,7 @@
 //! persists restart authority in preprovisioned owner-only host state, and then
 //! enters the sealed repository-fit production kernel.
 
-use crate::cli::successor::runtime::{Diagnostic, DiagnosticId, RuntimeOutcome};
+use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId, RuntimeOutcome};
 use crate::cli::successor::{
     EffectClass, ExitClass, FitAction, OptionName, ParsedInvocation, ParsedValue, SuccessorCommand,
 };

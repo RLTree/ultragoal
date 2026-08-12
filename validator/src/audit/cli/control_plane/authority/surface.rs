@@ -72,6 +72,7 @@ fn same_candidate_pass_failures(
     operation: SurfaceOperation,
 ) -> Vec<String> {
     let mut out = surface_failures(value, operation, expected_candidate);
+    out.push("package_surface_audit_independent_observation_unavailable".to_string());
     if value.get("status").and_then(Value::as_str) != Some("pass") {
         out.push("package_surface_audit_status_not_pass".to_string());
     }
@@ -167,5 +168,65 @@ mod tests {
                 .any(|failure| failure.starts_with("package_surface_audit_schema:")),
             "{failures:?}"
         );
+    }
+
+    #[test]
+    fn copied_digests_cannot_prove_a_package_surface() {
+        let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+        let receipt = json!({
+            "schema": "harness-ultragoal.package-surface-audit-receipt.v1",
+            "operation": "install_audit",
+            "candidate_digest": candidate,
+            "status": "pass",
+            "claim_ceiling": "surface_package_digest_aligned",
+            "same_candidate": true,
+            "source": {"package_digest": candidate},
+            "target": {
+                "expected_package_digest": candidate,
+                "package_digest": candidate,
+                "surface": "installed_plugin"
+            }
+        });
+        let failures =
+            super::receipt_failures(&root, &receipt, &candidate, SurfaceOperation::InstallAudit);
+        assert!(
+            failures
+                .contains(&"package_surface_audit_independent_observation_unavailable".to_string()),
+            "{failures:?}"
+        );
+    }
+
+    #[test]
+    fn unavailable_surface_can_still_preserve_a_fail_closed_ceiling() {
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+        let receipt = json!({
+            "schema": "harness-ultragoal.package-surface-audit-receipt.v1",
+            "operation": "install_audit",
+            "candidate_digest": candidate,
+            "status": "fail",
+            "claim_ceiling": "withheld_or_blocked",
+            "same_candidate": false,
+            "failures": ["surface was not independently observed"],
+            "blocked_claim_classes": [
+                "install_cache_parity",
+                "package_readiness",
+                "review_readiness",
+                "release_readiness",
+                "completion",
+                "update_goal_eligibility"
+            ],
+            "source": {"package_digest": candidate},
+            "target": {
+                "expected_package_digest": candidate,
+                "surface": "installed_plugin"
+            }
+        });
+        let failures = super::same_candidate_pass_or_fail_closed_failures(
+            &receipt,
+            &candidate,
+            SurfaceOperation::InstallAudit,
+        );
+        assert!(failures.is_empty(), "{failures:?}");
     }
 }

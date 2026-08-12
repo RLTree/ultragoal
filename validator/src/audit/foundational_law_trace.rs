@@ -17,7 +17,10 @@ pub fn value_failures(root: &Path, matrix: &Value, trace: &Value) -> Vec<String>
     let entries = match trace_entries(trace) {
         Ok(entries) => entries,
         Err(failure) => return vec![failure],
-    };
+    }
+    .into_iter()
+    .filter(|row| !retained_trace_row(row))
+    .collect::<Vec<_>>();
     let context = trace_context(root, matrix);
     let mut out = Vec::new();
     out.extend(missing_required_failures(&entries, &context));
@@ -51,6 +54,7 @@ pub(crate) fn trace_context(root: &Path, matrix: &Value) -> TraceContext {
         checks: crate::audit::contract::CHECK_IDS
             .iter()
             .copied()
+            .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
             .collect::<BTreeSet<_>>(),
         red: red_fixture_ids(root),
     }
@@ -143,7 +147,9 @@ fn matrix_obligation_ids(matrix: &Value) -> BTreeSet<String> {
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
-        .filter_map(|row| row.get("id").and_then(Value::as_str).map(ToOwned::to_owned))
+        .filter_map(|row| row.get("id").and_then(Value::as_str))
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
+        .map(ToOwned::to_owned)
         .collect()
 }
 
@@ -154,7 +160,14 @@ fn standards_row_ids(root: &Path) -> BTreeSet<String> {
         .unwrap_or_default()
         .into_iter()
         .filter_map(|row| row.get("id").and_then(Value::as_str).map(ToOwned::to_owned))
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
         .collect()
+}
+
+fn retained_trace_row(row: &Value) -> bool {
+    row.get("obligation_id")
+        .and_then(Value::as_str)
+        .is_some_and(crate::contract_check_ids::is_retained_compatibility_id)
 }
 
 fn red_fixture_ids(root: &Path) -> BTreeSet<String> {
@@ -172,4 +185,44 @@ fn str_field(row: &Value, key: &str) -> String {
         .and_then(Value::as_str)
         .unwrap_or("")
         .to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::value_failures;
+    use serde_json::json;
+    use std::path::Path;
+
+    #[test]
+    fn current_trace_ignores_exact_retained_rows_but_rejects_an_ordinary_malformed_row() {
+        let matrix = json!({"obligations":[
+            {"id":"research-source-authority-article-to-law-integration"},
+            {"id":"source-card-freshness-ceiling"},
+            {"id":"ordinary-current-row"}
+        ]});
+        let trace = json!({"entries":[
+            {"obligation_id":"research-source-authority-article-to-law-integration"},
+            {"obligation_id":"source-card-freshness-ceiling"},
+            {"obligation_id":"ordinary-current-row"}
+        ]});
+        let failures = value_failures(
+            Path::new("retained-compatibility-test-root"),
+            &matrix,
+            &trace,
+        );
+        for retained in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(
+                failures.iter().all(|failure| !failure.contains(retained)),
+                "{retained}: {failures:?}"
+            );
+        }
+        assert!(
+            failures
+                .contains(&"foundational_law_trace_source_stale:ordinary-current-row".to_string()),
+            "{failures:?}"
+        );
+    }
 }

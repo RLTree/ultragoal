@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+#[allow(dead_code)] // frozen v1 compatibility input
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct BriefV1 {
@@ -16,6 +17,7 @@ pub(crate) struct BriefV1 {
     pub(crate) claim_ceiling: String,
 }
 
+#[allow(dead_code)] // frozen v2 compatibility input
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct BriefV2 {
@@ -40,6 +42,7 @@ pub(crate) struct BriefV2 {
     pub(crate) claim_ceiling: InceptionClaimCeiling,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Operator {
@@ -47,6 +50,7 @@ pub(crate) struct Operator {
     pub(crate) actor_reference: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum OperatorKind {
@@ -55,6 +59,7 @@ pub(crate) enum OperatorKind {
     AgentWithHumanSupervision,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct RealWork {
@@ -66,6 +71,7 @@ pub(crate) struct RealWork {
     pub(crate) expected_useful_outcome: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub(crate) enum DirtyStateExpectation {
@@ -74,6 +80,7 @@ pub(crate) enum DirtyStateExpectation {
     Either,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct PublicEntrySurface {
@@ -82,6 +89,7 @@ pub(crate) struct PublicEntrySurface {
     pub(crate) forbidden_bypasses: Vec<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct ProtectedInvariant {
@@ -92,6 +100,7 @@ pub(crate) struct ProtectedInvariant {
     pub(crate) disposition: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct TruthLoop {
@@ -103,6 +112,7 @@ pub(crate) struct TruthLoop {
     pub(crate) repeat_use_expectation: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Transition {
@@ -119,6 +129,7 @@ pub(crate) struct Transition {
     pub(crate) evidence_class: EvidenceClass,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct FailureControl {
@@ -129,6 +140,7 @@ pub(crate) struct FailureControl {
     pub(crate) preservation: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct DepthTrigger {
@@ -142,6 +154,7 @@ pub(crate) struct DepthTrigger {
     pub(crate) invalidation_condition: String,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum DepthTriggerKind {
@@ -151,6 +164,7 @@ pub(crate) enum DepthTriggerKind {
     BoundedExperiment,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum EvidenceClass {
@@ -166,6 +180,7 @@ pub(crate) enum EvidenceClass {
     RepeatedHumanUse,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum InceptionEffect {
@@ -176,6 +191,7 @@ pub(crate) enum InceptionEffect {
     Destructive,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum InceptionClaimCeiling {
@@ -192,8 +208,11 @@ pub(crate) enum InceptionClaimCeiling {
     RepeatedHumanUseOnly,
 }
 
+/// Frozen v2 facts used only by compatibility parsers and their tests.
+/// They are deliberately not the source of any current product projection.
+#[allow(dead_code)] // frozen v2 compatibility facts
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) struct ContractFacts {
+pub(crate) struct RetainedCompatibilityFacts {
     pub(crate) product_contract_id: String,
     pub(crate) contract_version: String,
     pub(crate) contract_digest: String,
@@ -202,6 +221,15 @@ pub(crate) struct ContractFacts {
     pub(crate) claim_ids: Vec<String>,
     pub(crate) public_surface_catalog_digest: String,
     pub(crate) surface_ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct CurrentAuthorityFacts {
+    pub(crate) claim_id: String,
+    pub(crate) goal_contract_digest: String,
+    pub(crate) product_success_contract_digest: String,
+    pub(crate) active_plan_digest: String,
+    pub(crate) authority_digest: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -216,11 +244,10 @@ pub(crate) struct CandidateBinding {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub(crate) struct ContractBinding {
-    pub(crate) product_success_contract_id: String,
-    pub(crate) contract_version: String,
+pub(crate) struct CurrentAuthorityBinding {
+    pub(crate) claim_id: String,
+    pub(crate) goal_contract_digest: String,
     pub(crate) product_success_contract_digest: String,
-    pub(crate) authority_contract_id: String,
-    pub(crate) claim_registry_digest: String,
-    pub(crate) public_surface_catalog_digest: String,
+    pub(crate) active_plan_digest: String,
+    pub(crate) authority_digest: String,
 }

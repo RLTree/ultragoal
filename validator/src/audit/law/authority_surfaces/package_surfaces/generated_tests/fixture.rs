@@ -1,5 +1,5 @@
 use super::super::State;
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -16,6 +16,19 @@ fn root(label: &str) -> PathBuf {
     fs::create_dir_all(root.join("examples/generated")).expect("example output directory");
     fs::create_dir_all(root.join("inputs")).expect("input directory");
     fs::create_dir_all(root.join("migration")).expect("migration directory");
+    fs::create_dir_all(root.join("migration/generated-surface-authority"))
+        .expect("registry projection directory");
+    fs::create_dir_all(root.join("scripts")).expect("scripts directory");
+    fs::write(
+        root.join("scripts/project-generated-authority"),
+        b"generator",
+    )
+    .expect("registry projection generator");
+    fs::write(
+        root.join("migration/generated-surface-authority/test-shard.json"),
+        b"{}",
+    )
+    .expect("registry projection source");
     root
 }
 
@@ -42,8 +55,13 @@ fn write_registry(root: &Path, surfaces: Vec<Value>) {
     fs::write(
         root.join(REGISTRY),
         serde_json::to_vec(&json!({
-            "schema_version": "GeneratedSurfaceAuthority-v2",
+            "schema_version": "GeneratedSurfaceAuthority-v3",
             "contract_id": "harness-ultragoal-successor-contract-v2",
+            "registry_projection": {
+                "generator": "scripts/project-generated-authority",
+                "canonical_sources": ["migration/generated-surface-authority/test-shard.json"],
+                "regeneration_command": "scripts/project-generated-authority write"
+            },
             "surfaces": surfaces
         }))
         .expect("registry bytes"),
@@ -149,11 +167,9 @@ pub(super) fn assert_whole_batch_invalid(root: &Path) {
         "one fixed batch failure expected: {failures:?}"
     );
     assert_eq!(failures[0].0, "generated-disposition-batch");
-    assert!(
-        failures[0]
-            .1
-            .contains("failure_class=generated_disposition_batch_invalid")
-    );
+    assert!(failures[0]
+        .1
+        .contains("failure_class=generated_disposition_batch_invalid"));
     assert!(failures[0].1.contains("invalid_generated_path_count=2"));
     let document = serde_json::to_string(&failures).expect("failure document");
     assert!(!document.contains(SECRET), "secret escaped: {document}");

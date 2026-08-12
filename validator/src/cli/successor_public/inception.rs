@@ -14,24 +14,11 @@ pub(super) fn project(context: &LiveContext, invocation: &ParsedInvocation) -> R
     }
     match crate::product_inception::inspect(context) {
         Ok(projection) => match projection.to_json() {
-            Ok(machine) if public_output_allowed(machine.len()) => {
-                let missing =
-                    matches!(projection, crate::product_inception::Projection::Missing(_));
-                RuntimeOutcome::payload(
-                    if missing {
-                        ExitClass::ActionableFinding
-                    } else {
-                        ExitClass::Success
-                    },
-                    machine,
-                    if missing {
-                        "Product Success Brief inputs are required before evidence-led ranking"
-                    } else {
-                        "Product Success Brief inception projection is current"
-                    }
-                    .to_owned(),
-                )
-            }
+            Ok(machine) if public_output_allowed(machine.len()) => RuntimeOutcome::payload(
+                ExitClass::Success,
+                machine,
+                "Current product authority inception projection is current".to_owned(),
+            ),
             _ => failure(ExitClass::InternalFailure, DiagnosticId::ProjectionFailed),
         },
         Err(error) => failure_with_cause(
@@ -46,7 +33,7 @@ fn failure(class: ExitClass, id: DiagnosticId) -> RuntimeOutcome {
     failure_with_cause(
         class,
         id,
-        "the Product Success Brief inception input could not be projected safely",
+        "the current product authority inputs could not be projected safely",
     )
 }
 
@@ -58,11 +45,11 @@ fn failure_with_cause(class: ExitClass, id: DiagnosticId, cause: &'static str) -
             class,
             DiagnosticDetails {
                 cause,
-                affected_surface: "read-only Product Success Brief inception",
-                repair: "repair the canonical brief or its current authority bindings and retry",
+                affected_surface: "read-only current product authority inception",
+                repair: "restore exactly one safe current goal, Product Success Contract, and active ExecPlan owner, then retry",
                 effect: "read",
                 rerun: "ultragoal --json inspect inception",
-                ceiling: "evidence-led ranking and dependent product claims remain withheld",
+                ceiling: "current product authority inspection is withheld; CL-USABLE-LOOP remains withheld pending same-surface evaluator evidence",
             },
         ),
     )

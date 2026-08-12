@@ -12,11 +12,13 @@ pub(crate) struct ExpectedArtifactBinding<'a> {
     pub(crate) digest: &'a str,
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 pub(crate) struct ValidatedCurrentAmendment {
     amendment_id: String,
     amendment_hash: String,
 }
 
+#[cfg_attr(not(test), allow(dead_code))]
 impl ValidatedCurrentAmendment {
     pub(crate) fn amendment_id(&self) -> &str {
         &self.amendment_id

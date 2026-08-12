@@ -22,12 +22,66 @@ pub(super) fn execute(
     cancellation: &HostEffectCancellation,
     cwd: std::os::fd::RawFd,
 ) -> Result<CommandCapture, BackendFailure> {
+    execute_with_program(
+        executable,
+        capability,
+        command,
+        policy,
+        cancellation,
+        cwd,
+        "codex",
+    )
+}
+
+pub(super) fn execute_runtime(
+    executable: &SelectedCodexExecutable,
+    capability: &DescriptorExecutionCapability,
+    command: &HostCommand,
+    policy: &HostEffectExecutionPolicy,
+    cancellation: &HostEffectCancellation,
+    cwd: std::os::fd::RawFd,
+) -> Result<CommandCapture, BackendFailure> {
+    #[cfg(target_os = "macos")]
+    {
+        if capability.platform() != DescriptorExecutionPlatform::Darwin
+            || capability.primitive()
+                != DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode
+        {
+            return Err(BackendFailure::before_start(
+                HostEffectExecutorErrorId::UnsupportedPlatform,
+            ));
+        }
+        return darwin::execute_runtime(executable, command, policy, cancellation, cwd);
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+    execute_with_program(
+        executable,
+        capability,
+        command,
+        policy,
+        cancellation,
+        cwd,
+        "ultragoal",
+    )
+    }
+}
+
+fn execute_with_program(
+    executable: &SelectedCodexExecutable,
+    capability: &DescriptorExecutionCapability,
+    command: &HostCommand,
+    policy: &HostEffectExecutionPolicy,
+    cancellation: &HostEffectCancellation,
+    cwd: std::os::fd::RawFd,
+    expected_program: &str,
+) -> Result<CommandCapture, BackendFailure> {
     if cancellation.is_cancelled() {
         return Err(BackendFailure::before_start(
             HostEffectExecutorErrorId::Cancelled,
         ));
     }
-    if command.program() != "codex" || command.argv().is_empty() {
+    if command.program() != expected_program || command.argv().is_empty() {
         return Err(BackendFailure::before_start(
             HostEffectExecutorErrorId::ProcessSpawnFailed,
         ));

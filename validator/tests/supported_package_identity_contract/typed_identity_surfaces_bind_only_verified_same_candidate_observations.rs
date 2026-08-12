@@ -101,7 +101,10 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         },
     )
     .unwrap();
-    let (_, runtime) = runtime_plan.execute_bound().unwrap();
+    assert_eq!(
+        runtime_plan.execute_bound().unwrap_err().id(),
+        DistributionErrorId::CapabilityMismatch
+    );
 
     let surfaces = [
         SurfaceIdentity::from_verified_install(
@@ -113,7 +116,6 @@ fn typed_identity_surfaces_bind_only_verified_same_candidate_observations() {
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
         SurfaceIdentity::from_verified_app_registry(&app_registry, &binding).unwrap(),
-        runtime,
     ];
     assert_eq!(
         verify_bound_surface_chain(&surfaces, &binding)

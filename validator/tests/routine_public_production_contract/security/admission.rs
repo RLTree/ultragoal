@@ -100,6 +100,54 @@ fn writable_host_ancestry_refuses_without_effect() {
 }
 
 #[test]
+fn incomplete_existing_host_state_refuses_without_bootstrap_or_effect() {
+    let mut fixture = Fixture::new(
+        "incomplete-existing-host-state",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    for (path, mode) in [
+        (fixture.home.join(".codex"), 0o755),
+        (fixture.home.join(".codex/state"), 0o700),
+        (fixture.home.join(".codex/state/harness-ultragoal"), 0o700),
+        (fixture.state_root(), 0o700),
+        (fixture.authority_root(), 0o700),
+        (fixture.state_root().join("adapter"), 0o700),
+    ] {
+        fs::create_dir_all(&path).unwrap();
+        fs::set_permissions(path, fs::Permissions::from_mode(mode)).unwrap();
+    }
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+
+    let output = fixture.run();
+
+    assert_diagnostic(&output, "successor_runtime_authority_required", &fixture);
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    assert!(!fixture.root.join("target/routine/compile").exists());
+    assert!(!fixture.lock_path().exists());
+    assert!(
+        !fixture
+            .state_root()
+            .join(".routine-authority-launch")
+            .exists()
+    );
+    assert!(
+        fs::read_dir(fixture.state_root().join("adapter"))
+            .unwrap()
+            .next()
+            .is_none(),
+        "incomplete adapter must remain empty"
+    );
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn private_authority_mode_is_revalidated_before_effect() {
     let mut fixture = Fixture::new(
         "private-authority-mode",

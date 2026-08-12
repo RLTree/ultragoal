@@ -5,7 +5,7 @@ use serde_json::json;
 use std::collections::BTreeMap;
 
 #[test]
-fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
+fn mandatory_law_production_binding_withholds_repository_authored_red_proof() {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
         "mandatory-law-production-edges",
     );
@@ -14,13 +14,50 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
         &json!({"resources":[]}),
     );
     write_specific_red_fixture(&root, "schema-valid-red", "schema-valid", "schema_dispatch");
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(
-            &root,
-            &production_law("schema-valid")
-        )
-        .is_empty()
+    expect_failure(
+        &root,
+        &production_law("schema-valid"),
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
     );
+
+    write_json(
+        &root.join("fixtures/red/schema-valid-red.json"),
+        &json!({
+            "schema": "harness-ultragoal.red-packet.v1",
+            "id": "schema-valid-red",
+            "expected_failure": {
+                "check_id": "schema-valid",
+                "error": "mandatory_law_specific_guard_not_enforced:schema-valid:schema_dispatch"
+            },
+            "base_fixture_path":
+                "fixtures/mandatory-law-surfaces/valid/schema-valid.json",
+            "json_patch": [{
+                "op": "replace",
+                "path": "/law_specific/unrelated_guard",
+                "value": false
+            }],
+            "materialization": {
+                "expected_validation_layer": "package",
+                "first_failure_must_match_expected": true,
+                "post_patch_schema_valid": true
+            },
+            "preconditions": [{
+                "exists": true,
+                "path": "/law_specific/unrelated_guard"
+            }],
+            "postconditions": [{
+                "expectation":
+                    "mandatory_law_specific_guard_not_enforced:schema-valid:schema_dispatch",
+                "path": "/law_specific/unrelated_guard"
+            }]
+        }),
+    );
+    expect_failure(
+        &root,
+        &production_law("schema-valid"),
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_dispatch",
+    );
+    write_specific_red_fixture(&root, "schema-valid-red", "schema-valid", "schema_dispatch");
 
     let mut wrong_valid = production_law("schema-valid");
     wrong_valid["valid_fixture_path"] = json!("fixtures/valid/schema-valid.json");
@@ -105,12 +142,10 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
             }
         }),
     );
-    assert!(
-        crate::audit::mandatory::law::surfaces::receipt_value_failures(
-            &root,
-            &production_error_bound
-        )
-        .is_empty()
+    expect_failure(
+        &root,
+        &production_error_bound,
+        "mandatory_law_specific_guard_missing_red_fixture:schema-valid:schema_valid_production_error",
     );
 
     let law = production_law("schema-valid");
@@ -152,6 +187,48 @@ fn mandatory_law_production_binding_rejects_row_shape_substitutes() {
             .any(|failure| failure
                 == "mandatory_law_current_check_missing:schema-valid:schema-valid"),
         "{failures:?}"
+    );
+
+    let retained_id = "source-card-freshness-ceiling";
+    let mut retained_law = production_law(retained_id);
+    for key in [
+        "law_id",
+        "standards_row_id",
+        "source_obligation_id",
+        "foundational_trace_id",
+    ] {
+        retained_law[key] = json!(retained_id);
+    }
+    assert!(
+        crate::audit::mandatory::law::surfaces::current_check_failures_for_test(
+            &retained_law,
+            retained_id,
+            &BTreeMap::new(),
+        )
+        .is_empty()
+    );
+
+    let ordinary_bound_to_retained = production_law(retained_id);
+    assert_eq!(
+        crate::audit::mandatory::law::surfaces::current_check_failures_for_test(
+            &ordinary_bound_to_retained,
+            "schema-valid",
+            &BTreeMap::new(),
+        ),
+        vec![format!(
+            "mandatory_law_current_check_retained_compatibility:schema-valid:{retained_id}"
+        )]
+    );
+    let direct = crate::audit::mandatory::law::surfaces::receipt_value_failures_with_candidate(
+        &root,
+        &ordinary_bound_to_retained,
+        "sha256:test",
+    );
+    assert!(
+        direct
+            .iter()
+            .all(|failure| !failure.contains("mandatory_law_unknown_validator_check")),
+        "{direct:?}"
     );
     std::fs::remove_dir_all(root).expect("cleanup mandatory law production edges");
 }

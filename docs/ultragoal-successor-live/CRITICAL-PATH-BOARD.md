@@ -623,7 +623,7 @@ completion stay withheld. The next dependency-legal action is fresh-task
 discovery against the exact packaged candidate, not another host-lifecycle
 source lane.
 
-Live root: `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
+Live root: `<operator-home>/Projects/harness-ultragoal-plugin-proposal`
 
 Branch: `codex/successor-contract-v2-live-product`
 

@@ -7,24 +7,27 @@ use super::product_state::{
 use crate::context::EffectClass;
 use std::collections::BTreeSet;
 
-const REPAIR_ID: &str = "inspect-installed-daily-driver";
+const REPAIR_ID: &str = "inspect-current-usable-loop";
 
-pub(super) fn append_first_truth_loop_route(
+/// The first current action is intentionally read-only.  It starts the
+/// representative-repository journey but does not imply installation,
+/// daily-driver fitness, or a completed CL-USABLE-LOOP claim.
+pub(super) fn append_current_usable_loop_route(
     dependencies: &mut Vec<DependencyFact>,
     commands: &mut Vec<CommandBinding>,
     actions: &mut Vec<ActionDefinition>,
     reductions: &[CeilingReduction],
 ) {
     dependencies.push(DependencyFact {
-        dependency_id: "installed-daily-driver".to_owned(),
-        observation_id: "current-installed-daily-driver".to_owned(),
+        dependency_id: "current-usable-loop".to_owned(),
+        observation_id: "current-usable-loop-evaluator-observation".to_owned(),
         status: DependencyStatus::Missing,
         authority: FactAuthority::DirectProbe,
         scope: Scope {
-            surface: "installed-daily-driver".to_owned(),
+            surface: "representative-repository-journey".to_owned(),
             relative_path: None,
         },
-        cause: "the installed daily-driver journey has not yet observed its target repository"
+        cause: "the exact candidate has not completed the evaluator-owned representative repository journey"
             .to_owned(),
         repair: Some(repair()),
         ceiling_reductions: reductions.to_vec(),
@@ -40,7 +43,7 @@ pub(super) fn append_first_truth_loop_route(
         effect: EffectClass::Read,
     });
     actions.push(ActionDefinition {
-        action_id: "inspect-installed-daily-driver".to_owned(),
+        action_id: REPAIR_ID.to_owned(),
         priority: 1_000,
         kind: ActionKind::Command,
         repair_id: REPAIR_ID.to_owned(),
@@ -59,15 +62,15 @@ fn repair() -> Repair {
         repair_id: REPAIR_ID.to_owned(),
         target: RepairTarget {
             kind: RepairTargetKind::Dependency,
-            id: "installed-daily-driver".to_owned(),
+            id: "current-usable-loop".to_owned(),
         },
-        summary: "Inspect the target repository through the installed daily-driver route"
+        summary: "Inspect the representative repository through the current usable-loop route"
             .to_owned(),
         effect: EffectClass::Read,
         authority: AuthorityRequirement::Root,
         rerun_command_id: "fit-inspect".to_owned(),
         authority_decision: None,
-        invalidates_evidence: BTreeSet::from(["installed-daily-driver".to_owned()]),
+        invalidates_evidence: BTreeSet::from(["current-usable-loop".to_owned()]),
         projected_ceiling_after_reverification: Vec::new(),
     }
 }

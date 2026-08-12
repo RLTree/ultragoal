@@ -35,7 +35,7 @@ fn install_for_runtime(fixture: &JourneyFixture, package: &PackageSnapshot) -> I
 }
 
 #[test]
-fn fixed_help_execution_and_dormant_report_stay_separate_runtime_evidence() {
+fn unconfined_runtime_is_refused_and_dormant_report_stays_definition_only() {
     let fixture = JourneyFixture::new("runtime-stale");
     let package = fixture.build("package/runtime.hugpkg");
     let mut installed = install_for_runtime(&fixture, &package);
@@ -62,8 +62,8 @@ fn fixed_help_execution_and_dormant_report_stay_separate_runtime_evidence() {
     })
     .unwrap();
     assert_eq!(
-        execute_runtime_probe(&current).unwrap().runtime_verdict(),
-        RuntimeVerdict::Executed
+        execute_runtime_probe(&current).unwrap_err().id(),
+        ErrorId::CapabilityMismatch
     );
 
     let report_fixture = Fixture::complete("dormant-runtime");

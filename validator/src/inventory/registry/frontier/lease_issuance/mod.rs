@@ -39,7 +39,7 @@ pub(super) fn validate(
         .and_then(Value::as_array)
         .ok_or_else(|| invalid("scope mappings are missing"))?;
     reject_terminal_p0(records)?;
-    debt_worktree::validate(records, registry, base, root)?;
+    debt_worktree::validate(reads, records, registry, base, root)?;
     let scheduler_records = records
         .iter()
         .filter(|record| !debt_worktree::is_record(record))
@@ -53,7 +53,7 @@ pub(super) fn validate(
         {
             return Err(invalid("active lease base differs from source base"));
         }
-        worktree_identity::validate(root, registry, record, base)?;
+        worktree_identity::validate(reads, root, registry, record, base)?;
         let lane = find(lanes, "id", lane_id, "active lease names an unknown lane")?;
         exact_field(
             record,

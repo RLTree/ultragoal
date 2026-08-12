@@ -13,7 +13,7 @@ pub(super) fn execute(
             },
         )),
         operation_binding::PublicOperation::PackageVerify => {
-            Some(with_read_context(root, |context| {
+            Some(with_compatibility_read_context(root, |context| {
                 package_verify::execute(context, invocation)
             }))
         }
@@ -33,11 +33,11 @@ pub(super) fn execute(
     }
 }
 
-fn with_read_context(
+fn with_compatibility_read_context(
     root: &Path,
     execute: impl FnOnce(&LiveContext) -> RuntimeOutcome,
 ) -> RuntimeOutcome {
-    match read_context(root) {
+    match compatibility_read_context(root) {
         Ok(context) => execute(&context),
         Err(()) => context_unavailable(),
     }
@@ -47,7 +47,10 @@ fn with_package_contexts(
     root: &Path,
     execute: impl FnOnce(&LiveContext, &LiveContext) -> RuntimeOutcome,
 ) -> RuntimeOutcome {
-    match (read_context(root), workspace_context(root)) {
+    match (
+        compatibility_read_context(root),
+        compatibility_workspace_context(root),
+    ) {
         (Ok(source_context), Ok(output_context)) => execute(&source_context, &output_context),
         (Err(()), _) | (_, Err(())) => context_unavailable(),
     }
@@ -65,4 +68,32 @@ pub(super) fn package_archive_input_allowed(path: &str) -> bool {
         && name
             .bytes()
             .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-'))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::super::repository_fixture::Repository;
+    use super::*;
+
+    #[test]
+    fn package_source_and_output_contexts_retain_compatibility_binding() {
+        let repository = Repository::new("package-compatibility-context");
+        let mut observed = false;
+
+        let _ = with_package_contexts(&repository.root, |source, output| {
+            observed = true;
+            for context in [source, output] {
+                assert_eq!(
+                    context
+                        .configuration()
+                        .public_values
+                        .get(ADOPTED_HANDOFF_DIGEST_CONFIG_KEY),
+                    Some(&ADOPTED_HANDOFF_MANIFEST_SHA256.to_owned())
+                );
+            }
+            context_unavailable()
+        });
+
+        assert!(observed);
+    }
 }

@@ -16,4 +16,4 @@ pub(crate) use acquisition::{
     set_test_launch_cleanup_refusal, set_test_launch_panic_after_stat,
     set_test_launch_stat_failure_after,
 };
-pub(super) use snapshot::{LaunchBinding, launch_root, stage_program};
+pub(super) use snapshot::{LaunchBinding, LaunchRoot, launch_root, stage_program};

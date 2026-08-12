@@ -1,8 +1,5 @@
 use super::*;
-use crate::cli::successor_public::local_store::RUNTIME_SOURCE_ID;
-use crate::routine_work::{
-    DirtySnapshot, RoutineContinuationOutcome, require_runtime_store_ignored,
-};
+use crate::routine_work::{DirtySnapshot, RoutineContinuationOutcome};
 
 pub(super) struct HostContinuationRequest<'a> {
     pub(super) target: &'a Path,
@@ -30,9 +27,6 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         control,
         home,
     } = request;
-    require_runtime_store_ignored(plan.binding(), RUNTIME_SOURCE_ID)
-        .map_err(PublicFailure::Routine)?;
-
     let prepared = prepare(context, manifest, graph, snapshot, plan)?;
     let checkpoint_execution_id = prepared.checkpoint_execution_id().to_owned();
     let home = home.ok_or(PublicFailure::Host(host::HostFailure::Unavailable))?;
@@ -65,7 +59,10 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
             .authenticate_checkpoint(target, alias, true)
             .map_err(PublicFailure::Host)?;
     }
-    if let Some(checkpoint) = checkpoint.as_ref() {
+    if let Some(checkpoint) = checkpoint
+        .as_ref()
+        .filter(|checkpoint| !checkpoint.is_complete())
+    {
         state
             .authenticate_checkpoint(target, checkpoint, false)
             .map_err(PublicFailure::Host)?;
@@ -82,7 +79,9 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         if checkpoint.is_complete() {
             let recovery_prepared = prepare(context, manifest, graph, snapshot, plan)?;
             match reconcile_public_routine_reservation(
-                state.issue_custody_capability(),
+                state
+                    .issue_custody_capability()
+                    .map_err(PublicFailure::Host)?,
                 context,
                 plan,
                 recovery_prepared,
@@ -117,7 +116,9 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         } else if checkpoint.is_reserved() {
             let recovery_prepared = prepare(context, manifest, graph, snapshot, plan)?;
             match reconcile_public_routine_reservation(
-                state.issue_custody_capability(),
+                state
+                    .issue_custody_capability()
+                    .map_err(PublicFailure::Host)?,
                 context,
                 plan,
                 recovery_prepared,
@@ -297,7 +298,9 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         plan,
         prepared,
         ProductionExecutionControl::with_reservation_publication(
-            state.issue_custody_capability(),
+            state
+                .issue_custody_capability()
+                .map_err(PublicFailure::Host)?,
             control,
             &predecessor_continuations,
             &mut publish_reserved,
@@ -307,14 +310,75 @@ pub(super) fn run(request: HostContinuationRequest<'_>) -> Result<RuntimeOutcome
         Ok(result) => result,
         Err(error) => {
             if !reservation_publication_failed {
-                terminal_event::mark_post_effect_ambiguity(
-                    &state,
-                    target,
-                    context,
-                    plan,
-                    snapshot,
-                    &checkpoint_execution_id,
-                );
+                let reserved = match state.exact_checkpoint(checkpoint_binding, None) {
+                    Ok(Some(checkpoint))
+                        if checkpoint.is_reserved() && checkpoint.terminal_outcome().is_none() =>
+                    {
+                        checkpoint
+                    }
+                    _ => return Err(PublicFailure::Routine(error)),
+                };
+                let settlement =
+                    match prepare(context, manifest, graph, snapshot, plan).and_then(|prepared| {
+                        observe_public_routine_terminal_settlement(
+                            state
+                                .issue_custody_capability()
+                                .map_err(PublicFailure::Host)?,
+                            context,
+                            plan,
+                            prepared,
+                            reserved.attempt_grant(),
+                        )
+                        .map_err(PublicFailure::Routine)
+                    }) {
+                        Ok(settlement) => settlement,
+                        Err(_) => return Err(PublicFailure::Routine(error)),
+                    };
+                if settlement.continuation() != reserved.continuation()
+                    || settlement.recovery_marker() != reserved.recovery_marker()
+                    || settlement.predecessor_continuations()
+                        != reserved.predecessor_continuations()
+                    || settlement.attempt_grant() != reserved.attempt_grant()
+                {
+                    return Err(PublicFailure::Routine(error));
+                }
+                let terminal_outcome = settlement.terminal_outcome();
+                if state
+                    .authenticate_public_state(
+                        target,
+                        context.context_id(),
+                        plan.binding().candidate_id(),
+                        plan.plan_id(),
+                        snapshot.snapshot_id(),
+                        settlement.continuation(),
+                        settlement.recovery_marker(),
+                        settlement.predecessor_continuations(),
+                        settlement.attempt_grant(),
+                        settlement.authenticated_ledger_head(),
+                        "terminal-event-pending",
+                        Some(terminal_outcome.as_str()),
+                        false,
+                    )
+                    .is_err()
+                {
+                    return Err(PublicFailure::Routine(error));
+                }
+                state
+                    .record_terminal_checkpoint(host::TerminalCheckpoint {
+                        binding: checkpoint_binding,
+                        continuation: settlement.continuation(),
+                        attempt_grant: settlement.attempt_grant(),
+                        authenticated_ledger_head: settlement.authenticated_ledger_head(),
+                        finding_binding: reserved.finding_binding(),
+                        terminal_outcome,
+                    })
+                    .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
+                let persisted = state
+                    .exact_checkpoint(checkpoint_binding, Some(settlement.continuation()))
+                    .map_err(|_| PublicFailure::PersistenceAfterEffect)?
+                    .ok_or(PublicFailure::PersistenceAfterEffect)?;
+                terminal_event::join(target, context, &state, plan.binding(), &persisted)
+                    .map_err(|_| PublicFailure::PersistenceAfterEffect)?;
             }
             return Err(PublicFailure::Routine(error));
         }

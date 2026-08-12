@@ -1,12 +1,12 @@
 use super::scenario::{
-    contain_contender, git, pass_node, prefix_route, routine_command, run_bounded_contender, tree,
-    ContainedContender, Fixture,
+    ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route, routine_command,
+    run_bounded_contender, tree,
 };
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::fs;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
 #[test]
@@ -38,10 +38,12 @@ fn fixture_matrix_names_the_public_production_contract_without_claim_effect() {
             .len(),
         8
     );
-    assert!(value["installed_runtime_ceiling"]
-        .as_str()
-        .unwrap()
-        .contains("immutable installed ultragoal runtime"));
+    assert!(
+        value["installed_runtime_ceiling"]
+            .as_str()
+            .unwrap()
+            .contains("immutable installed ultragoal runtime")
+    );
 }
 #[test]
 fn clean_public_routine_is_a_zero_effect_noop() {
@@ -105,6 +107,197 @@ fn dirty_public_effect_executes_once_then_exact_repeat_reuses_without_mutation()
 }
 
 #[test]
+fn executed_routine_publishes_one_owner_only_event_and_observe_is_zero_write() {
+    let mut fixture = Fixture::new(
+        "host-event-observe",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    let evaluator_sentinel = fixture.home.join("evaluator-sentinel.txt");
+    fs::write(&evaluator_sentinel, b"evaluator-owned\n").unwrap();
+    let source_before = fs::read(fixture.root.join("src/lib.rs")).unwrap();
+    let status_before = fixture.status();
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert_eq!(Fixture::value(&executed)["status"], "executed");
+    assert_eq!(fs::read(&evaluator_sentinel).unwrap(), b"evaluator-owned\n");
+    assert_eq!(
+        fs::read(fixture.root.join("src/lib.rs")).unwrap(),
+        source_before
+    );
+    assert_eq!(fixture.status(), status_before);
+    let _event_leaf = fixture.event_leaf();
+    assert!(
+        !fixture
+            .root
+            .join("validation_artifacts/observability/spool")
+            .exists()
+    );
+    assert_eq!(
+        fs::read_dir(fixture.state_root().join(".routine-authority-launch"))
+            .unwrap()
+            .count(),
+        0,
+        "successful launch cleanup leaves the shared root empty"
+    );
+
+    assert_reused_without_effect(&fixture.run());
+    assert_eq!(fs::read(&evaluator_sentinel).unwrap(), b"evaluator-owned\n");
+    assert_eq!(
+        fs::read_dir(fixture.state_root().join(".routine-authority-launch"))
+            .unwrap()
+            .count(),
+        0
+    );
+
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    let observed = fixture.run_args(&[
+        "--json",
+        "observe",
+        "query",
+        "--filter",
+        "check.routine.terminal",
+    ]);
+    assert_eq!(observed.status.code(), Some(0), "{observed:?}");
+    assert!(observed.stderr.is_empty(), "{observed:?}");
+    let observed = Fixture::value(&observed);
+    assert_eq!(observed["schema_version"], "ObservabilityQuery-v1");
+    assert_eq!(observed["store_status"], "available");
+    assert_eq!(observed["event_count"], 1);
+    assert_eq!(observed["events"][0]["operation"], "check.routine.terminal");
+    assert_eq!(observed["claim_effect"], "none");
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    assert_eq!(fs::read(&evaluator_sentinel).unwrap(), b"evaluator-owned\n");
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn joined_checkpoint_without_its_event_refuses_repeat_without_recreation() {
+    let mut fixture = Fixture::new(
+        "joined-event-deleted",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    let event = fixture.event_leaf();
+    fs::remove_file(&event).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+
+    let refused = fixture.run();
+
+    assert_ne!(refused.status.code(), Some(0), "{refused:?}");
+    assert!(refused.stdout.is_empty(), "{refused:?}");
+    let diagnostic: Value = serde_json::from_slice(&refused.stderr).unwrap();
+    assert_eq!(
+        diagnostic["diagnostic_id"],
+        "successor_runtime_authority_required"
+    );
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    assert!(
+        !event.exists(),
+        "joined event must not be recreated by a read/reuse path"
+    );
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn forged_duplicate_terminal_row_is_refused_without_read_side_effects() {
+    let mut fixture = Fixture::new(
+        "host-event-forged-row",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        false,
+    );
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    let leaf = fixture.event_leaf();
+    let original = fs::read(&leaf).unwrap();
+    let mut duplicated = original.clone();
+    duplicated.extend_from_slice(&original);
+    fs::write(&leaf, duplicated).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+
+    let refused = fixture.run_args(&["--json", "observe", "query"]);
+
+    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
+    assert!(refused.stdout.is_empty(), "{refused:?}");
+    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_observability_unavailable"
+    );
+    assert!(!String::from_utf8_lossy(&refused.stderr).contains(fixture.root.to_str().unwrap()));
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn terminal_failure_event_and_routine_diagnosis_share_one_authenticated_cause() {
+    let mut fixture = Fixture::new(
+        "host-event-failure-diagnosis",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        false,
+        false,
+    );
+    fs::write(fixture.root.join("src/lib.rs"), b"pub fn broken(\n").unwrap();
+    let failed = fixture.run();
+    assert_eq!(failed.status.code(), Some(1), "{failed:?}");
+    let failed_value = Fixture::value(&failed);
+    assert_eq!(failed_value["status"], "incomplete");
+    assert_eq!(failed_value["nodes"][0]["disposition"], "failed");
+    let _event_leaf = fixture.event_leaf();
+
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    let observed = fixture.run_args(&[
+        "--json",
+        "observe",
+        "query",
+        "--filter",
+        "check.routine.terminal",
+    ]);
+    assert_eq!(observed.status.code(), Some(0), "{observed:?}");
+    let observed = Fixture::value(&observed);
+    assert_eq!(observed["event_count"], 1);
+    assert_eq!(observed["events"][0]["outcome"], "fail");
+    let diagnosis = fixture.run_args(&["--json", "diagnose"]);
+    assert_eq!(diagnosis.status.code(), Some(1), "{diagnosis:?}");
+    let diagnosis = Fixture::value(&diagnosis);
+    assert_eq!(diagnosis["schema_version"], "RoutineDiagnosis-v1");
+    assert_eq!(diagnosis["status"], "terminal_failure");
+    assert_eq!(diagnosis["checkpoint"]["terminal_outcome"], "failed");
+    assert_eq!(
+        diagnosis["checkpoint"]["event_id"],
+        observed["events"][0]["event_id"]
+    );
+    assert_eq!(diagnosis["claim_effect"], "none");
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn restored_source_bytes_with_a_replaced_read_identity_rerun_then_reuse() {
     let mut fixture = Fixture::new(
         "restored-source-identity-rerun",
@@ -153,7 +346,7 @@ fn legacy_complete_checkpoint_with_changed_execution_identity_reruns_then_reuses
     let first = fixture.run();
     assert_eq!(first.status.code(), Some(0), "{first:?}");
 
-    migrate_complete_checkpoint_to_v6(&fixture);
+    migrate_complete_checkpoint_to_v6(&fixture, true);
 
     let source = fixture.root.join("src/lib.rs");
     let replacement = fixture.container.join("legacy-restored-lib.rs");
@@ -170,7 +363,7 @@ fn legacy_complete_checkpoint_with_changed_execution_identity_reruns_then_reuses
 }
 
 #[test]
-fn legacy_complete_checkpoint_with_the_same_execution_identity_reuses() {
+fn legacy_complete_checkpoint_with_the_same_execution_identity_and_no_event_refuses() {
     let mut fixture = Fixture::new(
         "legacy-complete-exact-reuse",
         &[pass_node("compile", &[])],
@@ -180,13 +373,44 @@ fn legacy_complete_checkpoint_with_the_same_execution_identity_reuses() {
     );
     let first = fixture.run();
     assert_eq!(first.status.code(), Some(0), "{first:?}");
-    migrate_complete_checkpoint_to_v6(&fixture);
+    migrate_complete_checkpoint_to_v6(&fixture, true);
 
-    assert_reused_without_effect(&fixture.run());
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    assert_terminal_refusal(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
     fixture.teardown_after_assertions();
 }
 
-fn migrate_complete_checkpoint_to_v6(fixture: &Fixture) {
+#[test]
+fn compatibility_v6_checkpoint_with_a_retained_v7_event_leaf_refuses_pre_effect() {
+    let mut fixture = Fixture::new(
+        "legacy-complete-retained-current-event",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let first = fixture.run();
+    assert_eq!(first.status.code(), Some(0), "{first:?}");
+    migrate_complete_checkpoint_to_v6(&fixture, false);
+
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    let before_status = fixture.status();
+    assert_terminal_refusal(&fixture.run());
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    assert_eq!(fixture.status(), before_status);
+
+    fixture.teardown_after_assertions();
+}
+
+fn migrate_complete_checkpoint_to_v6(fixture: &Fixture, remove_event_leaf: bool) {
+    let event_leaf = remove_event_leaf.then(|| fixture.event_leaf());
     let checkpoint = fixture.checkpoint_path();
     let mut legacy: Value = serde_json::from_slice(&fs::read(&checkpoint).unwrap()).unwrap();
     legacy["schema_version"] = Value::String("RoutineContinuationCheckpoint-v6".to_owned());
@@ -201,6 +425,9 @@ fn migrate_complete_checkpoint_to_v6(fixture: &Fixture) {
         std::os::unix::fs::PermissionsExt::from_mode(0o600),
     )
     .unwrap();
+    if let Some(event_leaf) = event_leaf {
+        fs::remove_file(event_leaf).unwrap();
+    }
 }
 
 fn legacy_checkpoint_name(checkpoint: &Value) -> String {
@@ -494,19 +721,23 @@ fn public_output_creation_is_observed_only_after_the_durable_journal() {
     let state = fixture.authority_root().join("routine-authority.state");
     let stopped = Arc::new(AtomicBool::new(false));
     let watcher_stopped = Arc::clone(&stopped);
-    let watcher = std::thread::spawn(move || loop {
-        if scope.is_dir() {
-            let durable = fs::read(&state).map_err(|_| "output appeared before durable state")?;
-            let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
-            if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile") {
-                return Err("output appeared before its durable journal binding");
+    let watcher = std::thread::spawn(move || {
+        loop {
+            if scope.is_dir() {
+                let durable =
+                    fs::read(&state).map_err(|_| "output appeared before durable state")?;
+                let text = String::from_utf8(durable).map_err(|_| "durable state is not UTF-8")?;
+                if !text.contains("\"output_journal\"") || !text.contains("target/routine/compile")
+                {
+                    return Err("output appeared before its durable journal binding");
+                }
+                return Ok(());
             }
-            return Ok(());
+            if watcher_stopped.load(Ordering::Acquire) {
+                return Err("child exited without provisioning output");
+            }
+            std::thread::sleep(Duration::from_millis(2));
         }
-        if watcher_stopped.load(Ordering::Acquire) {
-            return Err("child exited without provisioning output");
-        }
-        std::thread::sleep(Duration::from_millis(2));
     });
     let mut command = fixture.base_command();
     command.args(["--json", "check", "routine"]);
@@ -566,7 +797,7 @@ fn terminal_failure_serializes_no_recovery_and_fresh_process_refuses_takeover() 
 }
 
 #[test]
-fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
+fn untracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse() {
     let mut fixture = Fixture::new(
         "missing-observability-ignore",
         &[pass_node("compile", &[])],
@@ -575,31 +806,28 @@ fn missing_validation_artifacts_ignore_fails_closed_before_the_first_effect() {
         true,
     );
     fs::write(fixture.root.join(".gitignore"), b"target/\n").unwrap();
-    let before_status = fixture.status();
-    let refused = fixture.run();
-    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
-    assert!(refused.stdout.is_empty(), "{refused:?}");
-    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
-    assert_eq!(
-        value["diagnostic_id"],
-        "successor_runtime_downstream_tool_unavailable"
-    );
-    assert_eq!(
-        value["cause"],
-        "routine-runtime-observability-store-not-ignored"
-    );
-    assert_eq!(fixture.status(), before_status);
-    assert!(!fixture.root.join("target/routine").exists());
-    assert!(!fixture.checkpoint_path().exists());
-    assert!(!fixture
+    let legacy = fixture
         .root
-        .join("validation_artifacts/observability/spool")
-        .exists());
+        .join("validation_artifacts/observability/spool/legacy.jsonl");
+    fs::create_dir_all(legacy.parent().unwrap()).unwrap();
+    fs::write(&legacy, b"untracked-legacy-store\n").unwrap();
+    let before_status = fixture.status();
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert_eq!(Fixture::value(&executed)["status"], "executed");
+    assert_reused_without_effect(&fixture.run());
+    assert_eq!(fixture.status(), before_status);
+    assert_eq!(fs::read(legacy).unwrap(), b"untracked-legacy-store\n");
+    assert_eq!(
+        fs::read(fixture.root.join(".gitignore")).unwrap(),
+        b"target/\n"
+    );
+    let _host_event = fixture.event_leaf();
     fixture.teardown_after_assertions();
 }
 
 #[test]
-fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
+fn tracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse() {
     let mut fixture = Fixture::new(
         "tracked-observability-store",
         &[pass_node("compile", &[])],
@@ -626,42 +854,20 @@ fn tracked_runtime_event_store_fails_closed_before_the_first_effect() {
     );
 
     let before_status = fixture.status();
-    let refused = fixture.run();
-    assert_eq!(refused.status.code(), Some(4), "{refused:?}");
-    assert!(refused.stdout.is_empty(), "{refused:?}");
-    let value: Value = serde_json::from_slice(&refused.stderr).unwrap();
-    assert_eq!(
-        value["cause"],
-        "routine-runtime-observability-store-not-ignored"
-    );
+    let executed = fixture.run();
+    assert_eq!(executed.status.code(), Some(0), "{executed:?}");
+    assert_eq!(Fixture::value(&executed)["status"], "executed");
+    assert_reused_without_effect(&fixture.run());
     assert_eq!(fixture.status(), before_status);
     assert_eq!(fs::read(store).unwrap(), b"tracked-runtime-store\n");
-    assert!(!fixture.checkpoint_path().exists());
-    assert!(!fixture.root.join("target/routine").exists());
+    let _host_event = fixture.event_leaf();
     fixture.teardown_after_assertions();
 }
 
 fn read_terminal_event(fixture: &Fixture) -> Value {
-    let path = terminal_event_path(&fixture.root);
+    let path = fixture.event_leaf();
     let text = fs::read_to_string(path).expect("terminal event was not appended");
     serde_json::from_str(text.trim()).expect("terminal event is not JSON")
-}
-
-fn terminal_event_path(root: &std::path::Path) -> std::path::PathBuf {
-    let spool = root.join("validation_artifacts/observability/spool");
-    let paths = fs::read_dir(spool)
-        .unwrap()
-        .map(|entry| entry.unwrap().path())
-        .filter(|path| {
-            path.file_name()
-                .and_then(|name| name.to_str())
-                .is_some_and(|name| {
-                    name.starts_with("successor-events-") && name.ends_with(".jsonl")
-                })
-        })
-        .collect::<Vec<_>>();
-    assert_eq!(paths.len(), 1, "fixture has one bound event journal");
-    paths.into_iter().next().unwrap()
 }
 
 #[test]

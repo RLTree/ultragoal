@@ -1,4 +1,4 @@
-use super::{CliSelfLawCheckError, CliSelfLawCheckRequest, check};
+use super::{CliSelfLawCheckError, CliSelfLawCheckRequest, check, current_check_ids};
 use std::path::Path;
 
 #[test]
@@ -44,6 +44,18 @@ fn zero_parallelism_is_a_closed_error() {
     let error = check(CliSelfLawCheckRequest::new(root, 0)).expect_err("zero jobs rejected");
     assert_eq!(error, CliSelfLawCheckError::InvalidParallelism);
     assert_eq!(error.id(), "cli_self_law_parallelism_invalid");
+}
+
+#[test]
+fn current_check_set_excludes_only_retained_compatibility_ids() {
+    let ids = current_check_ids();
+    for retained in [
+        "research-source-authority-article-to-law-integration",
+        "source-card-freshness-ceiling",
+    ] {
+        assert!(!ids.iter().any(|id| id == retained), "{retained}");
+    }
+    assert!(ids.iter().any(|id| id == "source-card-freshness"));
 }
 
 fn tree(root: &Path) -> Vec<(String, Vec<u8>)> {

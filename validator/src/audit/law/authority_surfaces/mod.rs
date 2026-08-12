@@ -17,9 +17,9 @@ mod source;
 mod surface_inventory;
 
 #[cfg(test)]
-pub(crate) use source::failures_for_sources_and_rows;
-#[cfg(test)]
 pub(crate) use source::BoundaryRow;
+#[cfg(test)]
+pub(crate) use source::failures_for_sources_and_rows;
 
 pub(crate) fn package_failures(root: &Path) -> Vec<(String, String)> {
     let manifest = crate::json_boundary::read_json(&root.join("plugin-manifest-draft.json"))

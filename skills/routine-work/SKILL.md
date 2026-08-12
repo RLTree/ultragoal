@@ -1,6 +1,6 @@
 ---
 name: routine-work
-description: "Run conservative affected validation while preserving dirty repository state. Use during normal development to select changed-impact checks, verify safe reuse, expand uncertain dependencies, report exact execution, or avoid unnecessary global and release work."
+description: "Run conservative affected validation while preserving dirty repository state. Use when normal development needs changed-impact checks, safe reuse, uncertain dependency expansion, exact execution reporting, or avoidance of unnecessary global and release work."
 ---
 
 # Routine Work

@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+
+export CARGO_TARGET_DIR="$root/target/ultragoal-product-check"
+export CARGO_PROFILE_RELEASE_DEBUG=0
+unset HUL_ROUTINE_IMMUTABLE_BINARY
+
+echo "check-product: source/package-local compile plus disposable same-binary product boundary tests; no install, real-host discovery, real-host state, representative repository journey, publication, deployment, release, or CL-USABLE-LOOP claim." >&2
+
+tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/ultragoal-check-product.XXXXXX")"
+trap 'rm -rf "$tmpdir"' EXIT
+
+assert_registered_once() {
+  local list_path="$1"
+  local test_name="$2"
+  local count
+  count="$(grep -Fxc -- "${test_name}: test" "$list_path" || true)"
+  if [[ "$count" -ne 1 ]]; then
+    echo "check-product registration failure: expected one registered test ${test_name}, observed ${count}" >&2
+    exit 2
+  fi
+}
+
+run_registered_tests() {
+  local target_kind="$1"
+  local target_name="$2"
+  shift 2
+  local list_path="$tmpdir/${target_kind}-${target_name}.list"
+  local target_args=()
+  if [[ "$target_kind" == "lib" ]]; then
+    target_args=(--lib)
+  else
+    target_args=(--test "$target_name")
+  fi
+  cargo test --release -p ultragoal "${target_args[@]}" --locked -- --list >"$list_path"
+  local test_name
+  for test_name in "$@"; do
+    assert_registered_once "$list_path" "$test_name"
+  done
+  for test_name in "$@"; do
+    cargo test --release -p ultragoal "${target_args[@]}" --locked "$test_name" -- --exact --include-ignored --test-threads=1
+  done
+}
+
+cargo check --release -p ultragoal --lib --locked
+cargo build --release -p ultragoal --bin ultragoal --locked
+
+# Public grammar/current-authority behavior and its fail-closed boundary.
+run_registered_tests lib lib \
+  "cli::successor_public::tests::current_authority::current_public_state_routes_use_only_current_authority_without_writes" \
+  "cli::successor_public::tests::current_authority::current_public_state_route_fails_closed_on_current_authority_tamper" \
+  "cli::successor_public::tests::public_output_limit_is_inclusive_and_fail_closed::fit_read_routes_are_public_and_zero_write" \
+  "cli::successor_public::tests::routine_diagnosis_without_inventory::explicit_target_diagnosis_rejects_a_substituted_directory_without_writes_or_path_echo" \
+  "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::absent_observe_store_is_empty_and_zero_write" \
+  "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::substituted_host_state_parent_fails_closed_without_path_echo" \
+  "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::legacy_target_spool_is_ignored_without_bootstrap_or_writes" \
+  "repository_fit::product_adapter::tests::live_journeys::positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_idempotent::positive_supported_host_partial_retrofit_preserves_dirty_user_state" \
+  "repository_fit::product_adapter::tests::live_journeys::positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_idempotent::positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_idempotent" \
+  "repository_fit::product_adapter::tests::live_journeys::positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_idempotent::mutation_failure_rolls_back_exactly_and_a_new_request_recovers" \
+  "repository_fit::product_adapter::tests::journeys::local_state_policy::local_state_rollback_restores_crlf_bytes_and_mode_then_fresh_explicit_request_applies" \
+  "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::exact_cleanup_preserves_unrelated_entries" \
+  "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::substituted_leaf_is_quarantined_and_preserved_without_deletion" \
+  "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::cleanup_recovers_original_absent_quarantine_present" \
+  "package::inventory::tests::current_package_manifest_lists_only_materializable_source_members"
+
+# Actual immutable UltraGoal binary journeys under a disposable target and
+# disposable HOME. The fixture binds CARGO_BIN_EXE_ultragoal and has no
+# current_exe, PATH, installed-binary, or early-return substitute.
+run_registered_tests test routine_public_production_contract \
+  "routine_public_production_contract::journeys::dirty_public_effect_executes_once_then_exact_repeat_reuses_without_mutation" \
+  "routine_public_production_contract::journeys::reservation_interruption_reconciles_once_through_the_public_continuation_route" \
+  "routine_public_production_contract::journeys::executed_routine_publishes_one_owner_only_event_and_observe_is_zero_write" \
+  "routine_public_production_contract::journeys::joined_checkpoint_without_its_event_refuses_repeat_without_recreation" \
+  "routine_public_production_contract::journeys::forged_duplicate_terminal_row_is_refused_without_read_side_effects" \
+  "routine_public_production_contract::journeys::terminal_failure_event_and_routine_diagnosis_share_one_authenticated_cause" \
+  "routine_public_production_contract::journeys::tracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse" \
+  "routine_public_production_contract::journeys::untracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse" \
+  "routine_public_production_contract::security::admission::incomplete_existing_host_state_refuses_without_bootstrap_or_effect"
+
+# Runnable binary grammar/catalog/help oracle, intentionally isolated from the
+# broken all-purpose cli_contract integration root.
+run_registered_tests test successor_grammar_contract \
+  "successor_grammar_catalog_and_help_are_runnable"
+
+# Supported package identity has its own no-write integration oracle.
+run_registered_tests test supported_package_identity_contract \
+  "independent_decoder_reinventories_without_writes_and_rejects_every_structural_substitution"

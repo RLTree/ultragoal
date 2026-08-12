@@ -1,200 +1,116 @@
 use super::StateEngine;
-use super::adopted_claims::{RootClaimStage, stage_root, stage_target};
-use super::adopted_registry::load_adopted_claims;
+use super::adopted_claims::{RootClaimStage, stage_current_authority};
 use super::catalog::{
-    ActionDefinition, ActionKind, ClaimSpec, CommandBinding, DependencyActionCatalog,
-    DependencyActionSpec, DependencyFact, DependencyStatus, FactAuthority, HostGoalObservation,
-    InventoryPolicy, RuntimeMetadata,
+    ClaimSpec, DependencyActionCatalog, DependencyActionSpec, HostGoalObservation, RuntimeMetadata,
 };
 use super::policy_authority::PolicyAuthority;
-use super::product_state::{
-    AuthorityRequirement, CeilingReduction, ProductState, Repair, RepairTarget, RepairTargetKind,
-    Scope, StateError,
-};
-use crate::context::{EffectClass, LiveContext};
+use super::product_state::StateError;
+use super::snapshot::{CurrentAuthorityCatalog, StateAuthorityCatalog};
+use crate::context::LiveContext;
 use crate::inventory::AuthorityCatalog;
-use std::collections::BTreeSet;
 
-use super::adopted_journey::append_first_truth_loop_route;
+const CLAIM_ID: &str = "CL-USABLE-LOOP";
+const CLAIM_DIMENSION: &str = "tested-journey";
 
+/// Derives current product state from the sole live current-authority catalog.
+/// This route does not construct or consume a retained inventory catalog.
+pub(crate) fn derive_current(context: &LiveContext) -> Result<super::ProductState, StateError> {
+    let authority_catalog = CurrentAuthorityCatalog::capture(context)?;
+    let policy = issue_current(context, &authority_catalog)?;
+    StateEngine::derive_with_catalog(context, &authority_catalog, &policy)
+}
+
+fn issue_current(
+    context: &LiveContext,
+    authority_catalog: &CurrentAuthorityCatalog,
+) -> Result<DependencyActionCatalog, StateError> {
+    let authority_digest = crate::product_inception::current_authority_digest(context)
+        .map_err(|_| StateError::InvalidCatalog("current-product-authority-invalid".to_owned()))?;
+    let claims = current_claims();
+    let spec = live_spec(context, authority_catalog, &claims);
+    PolicyAuthority::from_current_authority(authority_digest, claims, spec)?
+        .issue(context, authority_catalog)
+}
+
+/// Frozen compatibility-only state derivation kept for retained fixture tests.
+/// Production current routes must call `derive_current` above.
+#[cfg(test)]
 pub(crate) fn derive_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
-) -> Result<ProductState, StateError> {
+) -> Result<super::ProductState, StateError> {
     let policy = issue_adopted(context, authority_catalog)?;
     StateEngine::derive(context, authority_catalog, &policy)
 }
 
+/// Issues the sole current product claim from the current goal, product
+/// contract, and active ExecPlan.  The retained v2 registry is not read here.
+#[cfg(test)]
 pub(crate) fn issue_adopted(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
 ) -> Result<DependencyActionCatalog, StateError> {
-    let loaded = load_adopted_claims()?;
-    let claim_registry_id = loaded.claim_registry_sha256.clone();
-    let staged = stage_target(
-        context,
-        authority_catalog,
-        &loaded.registry,
-        loaded.claim_registry_sha256.clone(),
-        loaded.contract_manifest_sha256,
-        loaded.handoff_sha256,
-    )?;
-    let claims = loaded
-        .registry
-        .claims
-        .into_iter()
-        .map(|claim| ClaimSpec {
-            claim_id: claim.claim_id,
-            maximum_dimensions: vec![claim.allowed_ceiling_on_pass],
-        })
-        .collect::<Vec<_>>();
-    let spec = live_spec(context, authority_catalog, &claims, staged.stage_id()?);
-    PolicyAuthority::from_adopted_claim_registry(claim_registry_id, claims, spec)?
+    let authority_digest = crate::product_inception::current_authority_digest(context)
+        .map_err(|_| StateError::InvalidCatalog("current-product-authority-invalid".to_owned()))?;
+    let claims = current_claims();
+    let spec = live_spec(context, authority_catalog, &claims);
+    PolicyAuthority::from_current_authority(authority_digest, claims, spec)?
         .issue(context, authority_catalog)
 }
 
+/// The strict compatibility adapter receives a withheld stage. It cannot
+/// project a current product claim and has no route through the frozen v2
+/// claim registry.
 pub(crate) fn stage_root_claims(
     context: &LiveContext,
     authority_catalog: &AuthorityCatalog,
 ) -> Result<RootClaimStage, StateError> {
-    let loaded = load_adopted_claims()?;
-    stage_root(
-        context,
-        authority_catalog,
-        &loaded.registry,
-        loaded.claim_registry_sha256,
-        loaded.contract_manifest_sha256,
-        loaded.handoff_sha256,
-    )
+    let authority_digest = crate::product_inception::current_authority_digest(context)
+        .map_err(|_| StateError::InvalidCatalog("current-product-authority-invalid".to_owned()))?;
+    stage_current_authority(context, authority_catalog, authority_digest)
 }
 
-fn live_spec(
+fn current_claims() -> Vec<ClaimSpec> {
+    vec![ClaimSpec {
+        claim_id: CLAIM_ID.to_owned(),
+        maximum_dimensions: vec![CLAIM_DIMENSION.to_owned()],
+    }]
+}
+
+fn live_spec<C: StateAuthorityCatalog + ?Sized>(
     context: &LiveContext,
-    authority_catalog: &AuthorityCatalog,
+    authority_catalog: &C,
     claims: &[ClaimSpec],
-    staged_reconciliation_id: &str,
 ) -> DependencyActionSpec {
-    let reductions = all_reductions(claims);
-    let codes = authority_catalog
-        .findings()
-        .iter()
-        .map(|finding| finding.code.clone())
-        .collect::<BTreeSet<_>>();
-    let inventory_policies = codes
-        .iter()
-        .map(|code| inventory_policy(code, &reductions))
-        .collect();
-    let mut actions = codes
-        .iter()
-        .enumerate()
-        .map(|(index, code)| ActionDefinition {
-            action_id: format!("plan-inventory-{code}"),
-            priority: index as u32 + 100,
-            kind: ActionKind::Command,
-            repair_id: format!("repair-inventory-{code}"),
-            requires_dependencies: Vec::new(),
-            required_capabilities: Vec::new(),
-            effect: EffectClass::Read,
-            authority: AuthorityRequirement::Root,
-            command_id: Some("migrate-plan".to_owned()),
-            authority_request: None,
-            evidence_led: None,
-        })
-        .collect::<Vec<_>>();
-    let mut dependencies = vec![DependencyFact {
-        dependency_id: "reconciliation-kernel".to_owned(),
-        observation_id: staged_reconciliation_id.to_owned(),
-        status: DependencyStatus::Missing,
-        authority: FactAuthority::DirectProbe,
-        scope: Scope {
-            surface: "claim-graph".to_owned(),
-            relative_path: None,
-        },
-        cause: "canonical claim reconciliation is not yet supplied".to_owned(),
-        repair: Some(repair(
-            "repair-reconciliation-kernel",
-            RepairTargetKind::Dependency,
-            "reconciliation-kernel",
-            "Implement the canonical reconciliation kernel",
-        )),
-        ceiling_reductions: reductions.clone(),
+    let reductions = super::CeilingReduction {
+        claim_id: CLAIM_ID.to_owned(),
+        dimensions: std::collections::BTreeSet::from([CLAIM_DIMENSION.to_owned()]),
+    };
+    let mut dependencies = Vec::new();
+    let mut commands = vec![super::CommandBinding {
+        command_id: "inspect-json".to_owned(),
+        argv: vec![
+            "ultragoal".to_owned(),
+            "--json".to_owned(),
+            "inspect".to_owned(),
+        ],
+        effect: crate::context::EffectClass::Read,
     }];
-    let mut commands = vec![
-        CommandBinding {
-            command_id: "inspect-inception".to_owned(),
-            argv: vec![
-                "ultragoal".to_owned(),
-                "--json".to_owned(),
-                "inspect".to_owned(),
-                "inception".to_owned(),
-            ],
-            effect: EffectClass::Read,
-        },
-        CommandBinding {
-            command_id: "inspect-json".to_owned(),
-            argv: vec![
-                "ultragoal".to_owned(),
-                "--json".to_owned(),
-                "inspect".to_owned(),
-            ],
-            effect: EffectClass::Read,
-        },
-        CommandBinding {
-            command_id: "migrate-plan".to_owned(),
-            argv: vec![
-                "ultragoal".to_owned(),
-                "--json".to_owned(),
-                "migrate".to_owned(),
-                "plan".to_owned(),
-            ],
-            effect: EffectClass::Read,
-        },
-    ];
-    append_first_truth_loop_route(&mut dependencies, &mut commands, &mut actions, &reductions);
-    let inception =
-        crate::product_inception::bind_actions(context, authority_catalog, &mut actions, &codes);
-    if matches!(
-        inception,
-        crate::product_inception::RankingDisposition::InceptionRequired
-    ) {
-        dependencies.push(DependencyFact {
-            dependency_id: "product-inception".to_owned(),
-            observation_id: context.context_id().to_owned(),
-            status: DependencyStatus::Missing,
-            authority: FactAuthority::DirectProbe,
-            scope: Scope {
-                surface: "product-success-brief".to_owned(),
-                relative_path: Some("PRODUCT_SUCCESS_BRIEF.json".to_owned()),
-            },
-            cause: "a current valid Product Success Brief v2 is required".to_owned(),
-            repair: Some(repair(
-                "repair-product-inception",
-                RepairTargetKind::Dependency,
-                "product-inception",
-                "Inspect and repair the current Product Success Brief",
-            )),
-            ceiling_reductions: reductions.clone(),
-        });
-        actions.push(ActionDefinition {
-            action_id: "inspect-product-inception".to_owned(),
-            priority: 1,
-            kind: ActionKind::Command,
-            repair_id: "repair-product-inception".to_owned(),
-            requires_dependencies: Vec::new(),
-            required_capabilities: Vec::new(),
-            effect: EffectClass::Read,
-            authority: AuthorityRequirement::Root,
-            command_id: Some("inspect-inception".to_owned()),
-            authority_request: None,
-            evidence_led: None,
-        });
-    }
+    let mut actions = Vec::new();
+    super::adopted_journey::append_current_usable_loop_route(
+        &mut dependencies,
+        &mut commands,
+        &mut actions,
+        &[reductions],
+    );
     DependencyActionSpec {
         expected_context_id: context.context_id().to_owned(),
         expected_authority_catalog_id: authority_catalog.catalog_id().to_owned(),
         claims: claims.to_vec(),
         dependencies,
-        inventory_policies,
+        // Current authority binds the catalog identity but intentionally does
+        // not turn retained compatibility findings into claim impacts/actions.
+        inventory_policies: Vec::new(),
         capability_requirements: Vec::new(),
         runtime_metadata: RuntimeMetadata::default(),
         runtime_requirements: Vec::new(),
@@ -202,45 +118,4 @@ fn live_spec(
         actions,
         host_goal: HostGoalObservation::default(),
     }
-}
-
-fn inventory_policy(code: &str, reductions: &[CeilingReduction]) -> InventoryPolicy {
-    InventoryPolicy {
-        code: code.to_owned(),
-        scope_surface: "source-authority".to_owned(),
-        repair: repair(
-            &format!("repair-inventory-{code}"),
-            RepairTargetKind::Source,
-            "source-authority",
-            &format!("Plan the canonical migration for inventory finding {code}"),
-        ),
-        ceiling_reductions: reductions.to_vec(),
-    }
-}
-
-fn repair(id: &str, kind: RepairTargetKind, target: &str, summary: &str) -> Repair {
-    Repair {
-        repair_id: id.to_owned(),
-        target: RepairTarget {
-            kind,
-            id: target.to_owned(),
-        },
-        summary: summary.to_owned(),
-        effect: EffectClass::Read,
-        authority: AuthorityRequirement::Root,
-        rerun_command_id: "inspect-json".to_owned(),
-        authority_decision: None,
-        invalidates_evidence: BTreeSet::from(["state-policy".to_owned()]),
-        projected_ceiling_after_reverification: Vec::new(),
-    }
-}
-
-fn all_reductions(claims: &[ClaimSpec]) -> Vec<CeilingReduction> {
-    claims
-        .iter()
-        .map(|claim| CeilingReduction {
-            claim_id: claim.claim_id.clone(),
-            dimensions: claim.maximum_dimensions.iter().cloned().collect(),
-        })
-        .collect()
 }

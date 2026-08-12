@@ -16,8 +16,12 @@ pub(crate) fn failures(flow: &PluginCohesionManifest) -> Vec<String> {
         .iter()
         .cloned()
         .collect::<BTreeSet<_>>();
-    for check in crate::audit::contract::CHECK_IDS {
-        if !declared.contains(*check) {
+    for check in crate::audit::contract::CHECK_IDS
+        .iter()
+        .copied()
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
+    {
+        if !declared.contains(check) {
             out.push(format!("plugin_flow_validator_check_missing:{check}"));
         }
     }
@@ -60,4 +64,39 @@ fn flow_receipt_failures(
         }
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::failures_from_value;
+    use serde_json::json;
+
+    #[test]
+    fn current_flow_excludes_retained_checks_and_keeps_source_card_freshness() {
+        let failures = failures_from_value(&json!({
+            "validator_checks":["source-card-freshness"],
+            "edges":[],
+            "flows":[]
+        }));
+        for retained in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(
+                !failures.contains(&format!("plugin_flow_validator_check_missing:{retained}")),
+                "{retained}: {failures:?}"
+            );
+        }
+        assert!(
+            !failures
+                .contains(&"plugin_flow_validator_check_missing:source-card-freshness".to_string()),
+            "{failures:?}"
+        );
+        assert!(
+            failures.contains(
+                &"plugin_flow_validator_check_missing:agent-standards-enforcement".to_string()
+            ),
+            "{failures:?}"
+        );
+    }
 }

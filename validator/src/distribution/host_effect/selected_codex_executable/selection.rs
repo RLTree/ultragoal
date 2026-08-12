@@ -50,6 +50,10 @@ impl SelectedCodexExecutable {
         }
     }
 
+    pub(super) fn pin_path(path: &Path) -> Result<Self, HostEffectLedgerError> {
+        Self::pin(path)
+    }
+
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     pub(super) fn launch_file(&self) -> &File {
         self.launch.file()
@@ -59,6 +63,10 @@ impl SelectedCodexExecutable {
         &self,
     ) -> Result<String, HostEffectLedgerError> {
         self.identity.binding_sha256()
+    }
+
+    pub(in crate::distribution::host_effect) fn content_sha256(&self) -> &str {
+        &self.identity.content_sha256
     }
 
     #[cfg(test)]
@@ -136,6 +144,29 @@ impl SelectedCodexExecutable {
         })?;
         super::execution::execute(self, capability, command, policy, cancellation, cwd)
     }
+
+    pub(in crate::distribution::host_effect) fn execute_runtime(
+        &self,
+        capability: &super::super::lifecycle::DescriptorExecutionCapability,
+        command: &super::super::super::HostCommand,
+        policy: &super::super::executor::HostEffectExecutionPolicy,
+        cancellation: &super::super::executor::HostEffectCancellation,
+        cwd: std::os::fd::RawFd,
+    ) -> Result<super::super::executor::CommandCapture, super::super::executor::BackendFailure>
+    {
+        self.revalidate().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
+        #[cfg(target_os = "macos")]
+        self.revalidate_launch().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
+        super::execution::execute_runtime(self, capability, command, policy, cancellation, cwd)
+    }
 }
 
 pub(super) fn resolve_from_path(
@@ -152,6 +183,12 @@ pub(super) fn resolve_from_path(
         }
     }
     Err(ledger_io())
+}
+
+pub(super) fn pin_path(
+    path: &Path,
+) -> Result<SelectedCodexExecutable, HostEffectLedgerError> {
+    SelectedCodexExecutable::pin_path(path)
 }
 
 #[cfg(unix)]

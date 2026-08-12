@@ -32,6 +32,7 @@ pub(crate) fn canonical_claims(mut claims: Vec<ClaimSpec>) -> Result<Vec<ClaimSp
     Ok(claims)
 }
 
+#[allow(dead_code)] // consumed only by the frozen compatibility issuer
 pub(crate) fn validate_inventory_impacts(policies: &[InventoryPolicy]) -> Result<(), StateError> {
     let mut codes = BTreeSet::new();
     for policy in policies {

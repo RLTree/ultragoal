@@ -58,14 +58,6 @@ fn package_check_tasks(
         task({
             let root = Arc::clone(&root);
             move |out| {
-                out.entry("research-source-authority-article-to-law-integration".to_string())
-                    .or_default()
-                    .extend(crate::audit::research::failures(root.as_path()));
-            }
-        }),
-        task({
-            let root = Arc::clone(&root);
-            move |out| {
                 out.entry("harness-improvement-loop-trace-feedback-eval-codex-handoff".to_string())
                     .or_default()
                     .extend(crate::audit::improvement_loop::package_failures(

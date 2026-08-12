@@ -53,33 +53,48 @@ fn migration_plan_rejects_noncanonical_registry_argument_before_projection() {
     let outcome = execute_invocation(root, invocation);
     assert_eq!(outcome.exit_class, ExitClass::InvalidInvocation);
     assert!(outcome.machine_payload.is_none());
-    assert!(!outcome
-        .render(crate::cli::successor::OutputMode::Json)
-        .stderr
-        .windows("migration/other.json".len())
-        .any(|window| window == b"migration/other.json"));
+    assert!(
+        !outcome
+            .render(crate::cli::successor::OutputMode::Json)
+            .stderr
+            .windows("migration/other.json".len())
+            .any(|window| window == b"migration/other.json")
+    );
 }
 
 #[test]
-fn migration_verify_is_public_read_only_and_bound_to_the_current_authority_catalog() {
+fn migration_verify_is_public_read_only_and_reports_compatibility_inventory_errors() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
     let before_tree = strict::zero_write_guard::capture(root).unwrap();
     let before = git_status(root);
     let outcome = execute_invocation(root, invocation(&["--json", "migrate", "verify"]));
-    assert_eq!(outcome.exit_class, ExitClass::Success);
     let projection: serde_json::Value =
         serde_json::from_slice(outcome.machine_payload.as_ref().unwrap()).unwrap();
+    assert_eq!(
+        outcome.exit_class,
+        ExitClass::ActionableFinding,
+        "unexpected verification projection: {projection}"
+    );
     assert_eq!(
         projection["schema_version"],
         "ProductMigrationVerification-v1"
     );
-    assert!(projection["catalog_id"]
-        .as_str()
-        .is_some_and(|value| value.starts_with("sha256:")));
-    assert_eq!(projection["authority_error_codes"], serde_json::json!([]));
+    assert!(
+        projection["catalog_id"]
+            .as_str()
+            .is_some_and(|value| value.starts_with("sha256:"))
+    );
+    assert_eq!(
+        projection["authority_error_codes"],
+        serde_json::json!([
+            "non_authoritative_context_verification_failed",
+            "parallel_authority",
+            "unrouted_legacy_authority"
+        ])
+    );
     assert_eq!(
         projection["verification_scope"],
-        "current inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface"
+        "explicit compatibility inventory error findings and exact read-only migration-plan closure; broad duplicate reader, writer, public-route, and generated-output absence requires the retirement authority surface"
     );
     assert_eq!(
         projection["plan"]["schema_version"],

@@ -1,45 +1,12 @@
+use super::InceptionError;
 use super::model::{DepthTriggerKind, InceptionEffect};
-use super::parser::ParsedBrief;
-use super::{InceptionError, normalize, parser, reader, validation};
-use crate::context::{EffectClass, LiveContext};
-use crate::inventory::AuthorityCatalog;
+use crate::context::EffectClass;
 use crate::state::{ActionDefinition, ActionPriorityClass, EvidenceLedActionBinding};
 use std::collections::BTreeSet;
 
 pub(crate) enum RankingDisposition {
     Active,
-    MissingBrief,
     InceptionRequired,
-}
-
-pub(crate) fn bind_actions(
-    context: &LiveContext,
-    catalog: &AuthorityCatalog,
-    actions: &mut [ActionDefinition],
-    current_findings: &BTreeSet<String>,
-) -> RankingDisposition {
-    bind(context, catalog, actions, current_findings)
-        .unwrap_or(RankingDisposition::InceptionRequired)
-}
-
-fn bind(
-    context: &LiveContext,
-    catalog: &AuthorityCatalog,
-    actions: &mut [ActionDefinition],
-    current_findings: &BTreeSet<String>,
-) -> Result<RankingDisposition, InceptionError> {
-    let input = reader::read_with_catalog(context, catalog.clone())?;
-    let Some(bytes) = input.brief else {
-        return Ok(RankingDisposition::MissingBrief);
-    };
-    let ParsedBrief::EvidenceLed(mut brief) = parser::parse(&bytes)? else {
-        return Ok(RankingDisposition::InceptionRequired);
-    };
-    normalize::v2(&mut brief);
-    validation::validate_v2(&brief, &input.facts, &input.candidate)
-        .map_err(InceptionError::Code)?;
-    let brief_digest = crate::digest::bytes(&bytes);
-    bind_validated(&brief, &brief_digest, actions, current_findings)
 }
 
 pub(super) fn bind_validated(

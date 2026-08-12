@@ -6,6 +6,7 @@ pub(crate) fn provision_host_state(home: &Path) {
         ".codex/state/harness-ultragoal/routine-public",
         ".codex/state/harness-ultragoal/routine-public/authority",
         ".codex/state/harness-ultragoal/routine-public/adapter",
+        ".codex/state/harness-ultragoal/routine-public/.routine-authority-launch",
     ];
     for (component, mode) in [(".codex", 0o755), (".codex/state", 0o700)] {
         let path = home.join(component);

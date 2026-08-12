@@ -18,6 +18,7 @@ pub(crate) mod plugin;
 pub(crate) mod product;
 pub(crate) mod promptfoo;
 pub(crate) mod red;
+#[cfg(test)]
 pub(crate) mod research;
 pub(crate) mod review_record;
 pub(crate) mod rust;

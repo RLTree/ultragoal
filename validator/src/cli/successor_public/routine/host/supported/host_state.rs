@@ -1,4 +1,6 @@
 use super::*;
+use sha2::{Digest, Sha256};
+use std::os::unix::ffi::OsStrExt;
 
 impl HostState {
     pub(crate) fn open_existing(home: &Path) -> Result<Self, HostFailure> {
@@ -10,15 +12,17 @@ impl HostState {
         open_existing_state(home_directory, state)
     }
 
+    pub(crate) fn open_existing_for_target(
+        home: &Path,
+        target: &Path,
+    ) -> Result<Self, HostFailure> {
+        validate_target(home, target)?;
+        Self::open_existing(home)
+    }
+
     pub(crate) fn open_or_bootstrap(home: &Path, target: &Path) -> Result<Self, HostFailure> {
         let home_directory = open_home(home)?;
-        if !target.is_absolute()
-            || fs::canonicalize(target).map_err(|_| HostFailure::Invalid)? != target
-            || target.starts_with(home.join(STATE_COMPONENTS.join("/")))
-            || home.join(STATE_COMPONENTS.join("/")).starts_with(target)
-        {
-            return Err(HostFailure::Invalid);
-        }
+        validate_target(home, target)?;
         let base = open_base(&home_directory)?;
         match base.open_child(STATE_COMPONENTS[3]) {
             Ok(state) => open_existing_state(home_directory, state),
@@ -32,6 +36,7 @@ impl HostState {
         state: AnchoredDirectory,
         authority: AnchoredDirectory,
         adapter: AnchoredDirectory,
+        launch: AnchoredDirectory,
         lock: File,
         initialize_marker: bool,
     ) -> Result<Self, HostFailure> {
@@ -41,6 +46,7 @@ impl HostState {
             state,
             authority,
             adapter,
+            launch,
             lock,
             lock_identity,
         };
@@ -53,18 +59,12 @@ impl HostState {
         self.state.verify()?;
         self.authority.verify()?;
         self.adapter.verify()?;
+        self.launch.verify()?;
         require_entries(
             &self.state,
             &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
         )?;
-        require_entries(
-            &self.adapter,
-            &[
-                LOCK_NAME,
-                CONTINUITY_CHECKPOINT_NAME,
-                CONTINUITY_DIRECTORY_NAME,
-            ],
-        )?;
+        require_adapter_entries(&self.adapter)?;
         match self.adapter.open_child(CONTINUITY_DIRECTORY_NAME) {
             Ok(continuations) => continuity::validate_continuation_directory(&continuations)?,
             Err(HostFailure::Unavailable) => {}
@@ -78,6 +78,173 @@ impl HostState {
         }
         Ok(())
     }
+
+    pub(crate) fn open_event_store(
+        &self,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        source_id: &str,
+        create: bool,
+    ) -> Result<Option<HostEventStore>, HostFailure> {
+        validate_target(&self.home.path, target)?;
+        self.verify()?;
+        let leaf = event_leaf_name(target, context_id, candidate_id, source_id)?;
+        let (file, created) = if create {
+            self.adapter.open_or_create_regular(&leaf, 0o600)?
+        } else {
+            match self.adapter.stat(&leaf)? {
+                None => return Ok(None),
+                Some(_) => (
+                    self.adapter.open_regular(&leaf, libc::O_RDONLY, 0o600)?,
+                    false,
+                ),
+            }
+        };
+        let identity = super::identity(&file.metadata().map_err(|_| HostFailure::Invalid)?);
+        if self.adapter.stat(&leaf)? != Some(identity) {
+            return Err(HostFailure::Invalid);
+        }
+        // SAFETY: geteuid has no preconditions and only reads the process credential.
+        let owner = unsafe { libc::geteuid() };
+        let store = crate::observability::EventStore::open_descriptor_bound(
+            self.adapter
+                .file
+                .try_clone()
+                .map_err(|_| HostFailure::Invalid)?,
+            &leaf,
+            &file,
+            owner,
+            0o600,
+            context_id,
+            candidate_id,
+            source_id,
+        )
+        .map_err(|_| HostFailure::Invalid)?;
+        if created {
+            self.adapter
+                .file
+                .sync_all()
+                .map_err(|_| HostFailure::Invalid)?;
+        }
+        self.verify()?;
+        Ok(Some(HostEventStore {
+            store,
+            leaf,
+            identity,
+        }))
+    }
+
+    pub(crate) fn verify_event_store(&self, store: &HostEventStore) -> Result<(), HostFailure> {
+        self.verify()?;
+        let file = self
+            .adapter
+            .open_regular(&store.leaf, libc::O_RDONLY, 0o600)?;
+        if super::identity(&file.metadata().map_err(|_| HostFailure::Invalid)?) != store.identity
+            || self.adapter.stat(&store.leaf)? != Some(store.identity)
+        {
+            return Err(HostFailure::Invalid);
+        }
+        Ok(())
+    }
+
+    pub(crate) fn event_store_absent(
+        &self,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        source_id: &str,
+    ) -> Result<bool, HostFailure> {
+        self.verify()?;
+        let leaf = event_leaf_name(target, context_id, candidate_id, source_id)?;
+        Ok(self.adapter.stat(&leaf)?.is_none())
+    }
+
+    pub(crate) fn event_checkpoints(
+        &self,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        source_id: &str,
+    ) -> Result<Vec<continuity::ContinuationCheckpoint>, HostFailure> {
+        if source_id != "successor-runtime" {
+            return Err(HostFailure::Invalid);
+        }
+        let expected_leaf = event_leaf_name(target, context_id, candidate_id, source_id)?;
+        let checkpoints = continuity::all_checkpoints(&self.adapter)?
+            .into_iter()
+            .filter(|checkpoint| {
+                checkpoint.is_terminal()
+                    && checkpoint.has_current_event_authority()
+                    && checkpoint.target() == target.to_str().unwrap_or_default()
+                    && checkpoint.context_id() == context_id
+                    && checkpoint.candidate_id() == candidate_id
+                    && event_leaf_name(
+                        target,
+                        checkpoint.context_id(),
+                        checkpoint.candidate_id(),
+                        source_id,
+                    )
+                    .as_deref()
+                        == Ok(expected_leaf.as_str())
+            })
+            .collect();
+        Ok(checkpoints)
+    }
+
+    pub(crate) fn all_event_checkpoints(
+        &self,
+    ) -> Result<Vec<continuity::ContinuationCheckpoint>, HostFailure> {
+        Ok(continuity::all_checkpoints(&self.adapter)?
+            .into_iter()
+            .filter(|checkpoint| {
+                checkpoint.is_terminal() && checkpoint.has_current_event_authority()
+            })
+            .collect())
+    }
+}
+
+fn validate_target(home: &Path, target: &Path) -> Result<(), HostFailure> {
+    let state_root = home.join(STATE_COMPONENTS.join("/"));
+    if !target.is_absolute()
+        || fs::canonicalize(target).map_err(|_| HostFailure::Invalid)? != target
+        || target.starts_with(&state_root)
+        || state_root.starts_with(target)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
+}
+
+pub(super) fn event_leaf_name(
+    target: &Path,
+    context_id: &str,
+    candidate_id: &str,
+    source_id: &str,
+) -> Result<String, HostFailure> {
+    let binding =
+        crate::observability::EventStore::binding_leaf_name(context_id, candidate_id, source_id)
+            .map_err(|_| HostFailure::Invalid)?;
+    let mut digest = Sha256::new();
+    for value in [target.as_os_str().as_bytes(), binding.as_bytes()] {
+        digest.update((value.len() as u64).to_be_bytes());
+        digest.update(value);
+    }
+    Ok(format!(
+        "{EVENT_FILE_PREFIX}{:x}{EVENT_FILE_SUFFIX}",
+        digest.finalize()
+    ))
+}
+
+fn validate_event_leaf_name(name: &str) -> Result<(), HostFailure> {
+    let digest = name
+        .strip_prefix(EVENT_FILE_PREFIX)
+        .and_then(|value| value.strip_suffix(EVENT_FILE_SUFFIX))
+        .ok_or(HostFailure::Invalid)?;
+    if digest.len() != 64 || !digest.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
 }
 
 fn open_home(home: &Path) -> Result<AnchoredDirectory, HostFailure> {
@@ -110,16 +277,11 @@ fn open_existing_state(
     )?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
-    require_entries(
-        &adapter,
-        &[
-            LOCK_NAME,
-            CONTINUITY_CHECKPOINT_NAME,
-            CONTINUITY_DIRECTORY_NAME,
-        ],
-    )?;
+    let launch = state.open_child(LAUNCH_DIRECTORY)?;
+    require_entries(&launch, &[])?;
+    require_adapter_entries(&adapter)?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
-    HostState::from_locked(home, state, authority, adapter, lock, false)
+    HostState::from_locked(home, state, authority, adapter, launch, lock, false)
 }
 
 fn bootstrap_new_state(
@@ -138,19 +300,28 @@ fn bootstrap_stage(
     base: &AnchoredDirectory,
 ) -> Result<HostState, HostFailure> {
     let (state, _) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
-    require_entries(&state, &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY])?;
+    require_entries(
+        &state,
+        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+    )?;
     let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
     require_entries(&adapter, &[LOCK_NAME])?;
     let (lock, _) = adapter.open_or_create_regular(LOCK_NAME, 0o600)?;
     let (lock, lock_identity) = acquire_locked_marker(lock, true)?;
-    require_entries(&state, &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY])?;
+    require_entries(
+        &state,
+        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+    )?;
     let (authority, _) = state.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
     require_entries(&authority, &[])?;
+    let (launch, _) = state.open_or_create_owned_child(LAUNCH_DIRECTORY)?;
+    require_entries(&launch, &[])?;
     let staged = HostState {
         home: home.duplicate()?,
         state,
         authority,
         adapter,
+        launch,
         lock,
         lock_identity,
     };
@@ -171,6 +342,27 @@ fn require_entries(directory: &AnchoredDirectory, allowed: &[&str]) -> Result<()
     } else {
         Err(HostFailure::Invalid)
     }
+}
+
+fn require_adapter_entries(adapter: &AnchoredDirectory) -> Result<(), HostFailure> {
+    let allowed_events = continuity::event_leaf_names(adapter)?;
+    for name in adapter.entry_names()? {
+        if [
+            LOCK_NAME,
+            CONTINUITY_CHECKPOINT_NAME,
+            CONTINUITY_DIRECTORY_NAME,
+        ]
+        .contains(&name.as_str())
+        {
+            continue;
+        }
+        validate_event_leaf_name(&name)?;
+        if !allowed_events.contains(&name) {
+            return Err(HostFailure::Invalid);
+        }
+        adapter.open_regular(&name, libc::O_RDONLY, 0o600)?;
+    }
+    Ok(())
 }
 
 fn read_lock_marker(lock: &File) -> Result<Vec<u8>, HostFailure> {

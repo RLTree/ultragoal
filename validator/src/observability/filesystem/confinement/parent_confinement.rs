@@ -5,6 +5,7 @@ use super::*;
 pub(crate) struct VerifiedParent {
     pub(crate) ancestors: Vec<BoundDirectory>,
     pub(crate) name: CString,
+    pub(crate) required_owner_mode: Option<(u32, u32)>,
 }
 
 #[cfg(not(unix))]
@@ -93,7 +94,32 @@ pub(crate) fn open_verified_parent(path: &Path) -> Result<VerifiedParent, String
             "observe-store-path-denied: current directory substitution detected".to_owned(),
         );
     }
-    Ok(VerifiedParent { ancestors, name })
+    Ok(VerifiedParent {
+        ancestors,
+        name,
+        required_owner_mode: None,
+    })
+}
+
+#[cfg(unix)]
+pub(crate) fn verified_parent_from_descriptor(
+    directory: File,
+    name: &str,
+    owner: u32,
+    mode: u32,
+) -> Result<VerifiedParent, String> {
+    let name = CString::new(name)
+        .map_err(|_| "observe-store-path-denied: file name is required".to_owned())?;
+    let identity = directory_identity(&directory)?;
+    Ok(VerifiedParent {
+        ancestors: vec![BoundDirectory {
+            directory,
+            identity,
+            name_from_parent: None,
+        }],
+        name,
+        required_owner_mode: Some((owner, mode)),
+    })
 }
 
 #[cfg(unix)]
@@ -188,6 +214,12 @@ pub(crate) fn validate_file(
         .metadata()
         .map_err(|error| io_code("metadata", error))?;
     validate_metadata(&opened)?;
+    if parent
+        .required_owner_mode
+        .is_some_and(|(owner, mode)| opened.uid() != owner || opened.mode() & 0o7777 != mode)
+    {
+        return Err("observe-store-path-denied: owner or mode rejected".to_owned());
+    }
     let current = inspect_leaf(parent)?
         .ok_or_else(|| "observe-store-path-denied: path substitution detected".to_owned())?;
     let opened_identity = identity(&opened);

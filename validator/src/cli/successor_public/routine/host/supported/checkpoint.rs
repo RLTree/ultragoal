@@ -65,6 +65,10 @@ impl ContinuationCheckpoint {
         !self.execution_id.is_empty()
     }
 
+    pub(crate) fn has_current_event_authority(&self) -> bool {
+        self.schema_version == "RoutineContinuationCheckpoint-v7" && self.has_execution_id()
+    }
+
     pub(crate) fn ledger_head(&self) -> &str {
         &self.authenticated_ledger_head
     }

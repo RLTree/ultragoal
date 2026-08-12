@@ -3,14 +3,26 @@ use super::*;
 pub struct StateEngine;
 
 impl StateEngine {
+    /// Public compatibility entrypoint for explicit retained inventory users.
+    /// Current product state uses `derive_with_catalog` with its typed source
+    /// authority catalog instead.
     pub fn derive(
         context: &LiveContext,
         authority_catalog: &AuthorityCatalog,
         dependency_actions: &DependencyActionCatalog,
     ) -> Result<ProductState, StateError> {
+        Self::derive_with_catalog(context, authority_catalog, dependency_actions)
+    }
+
+    pub(crate) fn derive_with_catalog<C: super::super::snapshot::StateAuthorityCatalog + ?Sized>(
+        context: &LiveContext,
+        authority_catalog: &C,
+        dependency_actions: &DependencyActionCatalog,
+    ) -> Result<ProductState, StateError> {
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         policy_authority::verify_live(dependency_actions, context, authority_catalog)?;
         let state = derive_bound(
             BoundInputs::from_live(context, authority_catalog)?,
@@ -19,6 +31,7 @@ impl StateEngine {
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         policy_authority::verify_live(dependency_actions, context, authority_catalog)?;
         Ok(state)
     }

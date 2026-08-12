@@ -145,6 +145,63 @@ impl RoutineReservationPublication {
     }
 }
 
+/// Read-only projection of one exact private terminal settlement. The private
+/// ledger remains the authority; this value carries only the fields required
+/// to reconcile its already-published host checkpoint.
+#[derive(Debug, Eq, PartialEq)]
+pub(crate) struct RoutineTerminalSettlementProjection {
+    continuation: String,
+    recovery_marker: String,
+    predecessor_continuations: Vec<String>,
+    attempt_grant: String,
+    authenticated_ledger_head: String,
+    terminal_outcome: super::mediator::RoutineTerminalOutcome,
+}
+
+impl RoutineTerminalSettlementProjection {
+    pub(in crate::routine_work::runtime_adapter::production) fn new(
+        continuation: String,
+        recovery_marker: String,
+        predecessor_continuations: Vec<String>,
+        attempt_grant: String,
+        authenticated_ledger_head: String,
+        terminal_outcome: super::mediator::RoutineTerminalOutcome,
+    ) -> Self {
+        Self {
+            continuation,
+            recovery_marker,
+            predecessor_continuations,
+            attempt_grant,
+            authenticated_ledger_head,
+            terminal_outcome,
+        }
+    }
+
+    pub(crate) fn continuation(&self) -> &str {
+        &self.continuation
+    }
+
+    pub(crate) fn recovery_marker(&self) -> &str {
+        &self.recovery_marker
+    }
+
+    pub(crate) fn predecessor_continuations(&self) -> &[String] {
+        &self.predecessor_continuations
+    }
+
+    pub(crate) fn attempt_grant(&self) -> &str {
+        &self.attempt_grant
+    }
+
+    pub(crate) fn authenticated_ledger_head(&self) -> &str {
+        &self.authenticated_ledger_head
+    }
+
+    pub(crate) fn terminal_outcome(&self) -> super::mediator::RoutineTerminalOutcome {
+        self.terminal_outcome
+    }
+}
+
 /// Canonical public production entry. Issuer construction, reservation,
 /// recovery lookup, and raw settlement stay inside this leaf.
 #[cfg(test)]
@@ -248,6 +305,23 @@ pub(crate) fn reconcile_public_routine_reservation(
     custody::reconcile_reserved_effect(custody, &request, attempt_grant, expected_head)
 }
 
+pub(crate) fn observe_public_routine_terminal_settlement(
+    custody: RoutineCustodyCapability,
+    context: &LiveContext,
+    plan: &RoutinePlan,
+    prepared: PreparedRoutineExecution,
+    attempt_grant: &str,
+) -> Result<RoutineTerminalSettlementProjection, RoutineError> {
+    let PreparedRoutineExecution::Effect(request) = prepared else {
+        return Err(error(
+            "routine-production-settlement-observation-effect-required",
+        ));
+    };
+    preflight_production_request(context, plan, &request)?;
+    let binding = production_mediation::authority_binding(&request)?;
+    custody::observe_terminal_settlement(custody, &binding, attempt_grant)
+}
+
 /// Authenticates a public host checkpoint against the private HMAC ledger.
 ///
 /// The host checkpoint is intentionally only a projection.  This read-only
@@ -256,8 +330,9 @@ pub(crate) fn reconcile_public_routine_reservation(
 /// the host projection.  `allow_stale_head` is reserved for a one-shot
 /// continuation alias: the private attempt and binding still must match, but
 /// its old projection head may have been superseded by the handoff attempt.
-/// A completed terminal checkpoint may also replay after an independently
-/// bound attempt advances the shared ledger; it cannot advance custody.
+/// A settled terminal checkpoint may also replay after an independently
+/// bound attempt advances the shared ledger; this read-only attestation cannot
+/// advance custody. Ambiguous attempts are never admitted by the stale path.
 pub(crate) fn authenticate_public_routine_checkpoint(
     custody: RoutineCustodyCapability,
     target: &Path,

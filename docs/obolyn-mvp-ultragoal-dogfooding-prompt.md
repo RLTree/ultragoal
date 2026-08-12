@@ -81,7 +81,7 @@ evidence-grounded. Correct turns findings into enforced supersession rather
 than comments. The graph supplies lineage and blast radius. Agents prepare and
 execute bounded work but own neither project truth nor scientific acceptance.
 
-Use `/Users/terrynoblin/Projects/done-definition-workspace` as read-only product
+Use `<operator-home>/Projects/done-definition-workspace` as read-only product
 authority. Start with:
 
 - `product-direction/README.md`

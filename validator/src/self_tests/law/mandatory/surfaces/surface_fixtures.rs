@@ -51,6 +51,28 @@ pub(super) fn validator_theater_law() -> Value {
 }
 
 pub(super) fn write_specific_red_fixture(root: &Path, id: &str, law: &str, field: &str) {
+    let mut base = production_law(law);
+    for key in [
+        "law_id",
+        "standards_row_id",
+        "source_obligation_id",
+        "foundational_trace_id",
+    ] {
+        base[key] = json!(law);
+    }
+    base["valid_fixture_path"] = json!(format!("fixtures/mandatory-law-surfaces/valid/{law}.json"));
+    base["red_fixture_ids"] = json!([id]);
+    base["law_specific"] = Value::Object(serde_json::Map::from_iter([(
+        field.to_string(),
+        Value::Bool(true),
+    )]));
+    write_json(
+        &root
+            .join("fixtures/mandatory-law-surfaces/valid")
+            .join(format!("{law}.json")),
+        &base,
+    );
+    let expected = format!("mandatory_law_specific_guard_not_enforced:{law}:{field}");
     write_json(
         &root.join("fixtures/red").join(format!("{id}.json")),
         &json!({
@@ -58,8 +80,28 @@ pub(super) fn write_specific_red_fixture(root: &Path, id: &str, law: &str, field
             "id": id,
             "expected_failure": {
                 "check_id": law,
-                "error": format!("mandatory_law_specific_guard_not_enforced:{law}:{field}")
-            }
+                "error": expected
+            },
+            "base_fixture_path":
+                format!("fixtures/mandatory-law-surfaces/valid/{law}.json"),
+            "json_patch": [{
+                "op": "replace",
+                "path": format!("/law_specific/{field}"),
+                "value": false
+            }],
+            "materialization": {
+                "expected_validation_layer": "package",
+                "first_failure_must_match_expected": true,
+                "post_patch_schema_valid": true
+            },
+            "preconditions": [{
+                "exists": true,
+                "path": format!("/law_specific/{field}")
+            }],
+            "postconditions": [{
+                "expectation": expected,
+                "path": format!("/law_specific/{field}")
+            }]
         }),
     );
 }

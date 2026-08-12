@@ -3,7 +3,6 @@ use crate::inventory::types::InventoryError;
 use crate::package::inventory::{inventory_paths, package_digest_excluded};
 use serde_json::Value;
 use std::path::Path;
-use std::process::Command;
 
 pub(super) const RECEIPT: &str = "validation_artifacts/worker-results/N11-EVAL-RESEARCH.json";
 
@@ -37,21 +36,25 @@ fn unissued(record: &Value) -> Result<(), InventoryError> {
 }
 
 fn verified(reads: &ReadSession, root: &Path, record: &Value) -> Result<(), InventoryError> {
-    verify(root, record)?;
+    verify(reads, root, record)?;
     reads
         .revalidate()
         .map_err(|_| invalid("lease handoff validation became stale"))
 }
 
-pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> {
+pub(super) fn verify(
+    reads: &ReadSession,
+    root: &Path,
+    record: &Value,
+) -> Result<(), InventoryError> {
     let source = handoff(record)?;
     let base = text(record.get("base_commit"), "lease source base is missing")?;
-    if git(root, &["rev-parse", &format!("{source}^{{tree}}")])?
+    if git(reads, root, &["rev-parse", &format!("{source}^{{tree}}")])?
         != text(
             record.pointer("/handoff/tree"),
             "lease handoff tree is missing",
         )?
-        || git(root, &["rev-parse", &format!("{source}^")])? != base
+        || git(reads, root, &["rev-parse", &format!("{source}^")])? != base
     {
         return Err(invalid("lease source handoff is not adjacent to its base"));
     }
@@ -77,9 +80,12 @@ pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> 
         ));
     }
     let child_commit = text(child.get("commit"), "lease receipt child commit is missing")?;
-    if git(root, &["rev-parse", &format!("{child_commit}^{{tree}}")])?
-        != text(child.get("tree"), "lease receipt child tree is missing")?
-        || git(root, &["rev-parse", &format!("{child_commit}^")])?
+    if git(
+        reads,
+        root,
+        &["rev-parse", &format!("{child_commit}^{{tree}}")],
+    )? != text(child.get("tree"), "lease receipt child tree is missing")?
+        || git(reads, root, &["rev-parse", &format!("{child_commit}^")])?
             != text(
                 child.get("parent_commit"),
                 "lease receipt parent commit is missing",
@@ -88,7 +94,7 @@ pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> 
             child.get("parent_commit"),
             "lease receipt parent commit is missing",
         )? != source
-        || git(root, &["rev-parse", &format!("{source}^{{tree}}")])?
+        || git(reads, root, &["rev-parse", &format!("{source}^{{tree}}")])?
             != text(
                 child.get("parent_tree"),
                 "lease receipt parent tree is missing",
@@ -99,6 +105,7 @@ pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> 
         ));
     }
     let child_paths = git(
+        reads,
         root,
         &[
             "diff",
@@ -108,20 +115,38 @@ pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> 
             child_commit,
         ],
     )?;
-    if child_paths.lines().collect::<Vec<_>>() != [RECEIPT]
-        || !git_exists(root, &format!("{child_commit}:{RECEIPT}"))?
-    {
+    if child_paths.lines().collect::<Vec<_>>() != [RECEIPT] {
         return Err(invalid(
             "lease receipt child does not contain exactly one receipt path",
         ));
     }
-    let source_paths = git(root, &["diff", "--name-only", "--no-renames", base, source])?;
-    if source_paths.lines().any(|path| path == RECEIPT)
-        || git_exists(root, &format!("{source}:{RECEIPT}"))?
-    {
+    let child_receipt = git(
+        reads,
+        root,
+        &["ls-tree", "--name-only", child_commit, "--", RECEIPT],
+    )?;
+    if child_receipt != RECEIPT {
+        return Err(invalid(
+            "lease receipt child does not contain exactly one receipt path",
+        ));
+    }
+    let source_paths = git(
+        reads,
+        root,
+        &["diff", "--name-only", "--no-renames", base, source],
+    )?;
+    if source_paths.lines().any(|path| path == RECEIPT) {
         return Err(invalid("lease source handoff contains its receipt child"));
     }
-    package_excluded(root, source)?;
+    let source_receipt = git(
+        reads,
+        root,
+        &["ls-tree", "--name-only", source, "--", RECEIPT],
+    )?;
+    if !source_receipt.is_empty() {
+        return Err(invalid("lease source handoff contains its receipt child"));
+    }
+    package_excluded(reads, root, source)?;
     if record.get("ready_receipt").and_then(Value::as_str) != Some(RECEIPT) {
         return Err(invalid(
             "lease ready receipt does not name its sole receipt child",
@@ -130,13 +155,14 @@ pub(super) fn verify(root: &Path, record: &Value) -> Result<(), InventoryError> 
     Ok(())
 }
 
-fn package_excluded(root: &Path, source: &str) -> Result<(), InventoryError> {
+fn package_excluded(reads: &ReadSession, root: &Path, source: &str) -> Result<(), InventoryError> {
     if !package_digest_excluded(RECEIPT) {
         return Err(invalid(
             "lease receipt child is not excluded from package authority",
         ));
     }
     let bytes = git(
+        reads,
         root,
         &["show", &format!("{source}:plugin-manifest-draft.json")],
     )?;
@@ -161,28 +187,8 @@ fn handoff(record: &Value) -> Result<&str, InventoryError> {
     )
 }
 
-fn git(root: &Path, args: &[&str]) -> Result<String, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(args)
-        .output()
-        .map_err(|_| invalid("cannot inspect lease handoff Git identity"))?;
-    if !output.status.success() {
-        return Err(invalid("cannot inspect lease handoff Git identity"));
-    }
-    String::from_utf8(output.stdout)
-        .map(|value| value.trim().to_owned())
-        .map_err(|_| invalid("lease handoff Git identity is not UTF-8"))
-}
-fn git_exists(root: &Path, spec: &str) -> Result<bool, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(["cat-file", "-e", spec])
-        .output()
-        .map_err(|_| invalid("cannot inspect lease receipt child"))?;
-    Ok(output.status.success())
+fn git(reads: &ReadSession, root: &Path, args: &[&str]) -> Result<String, InventoryError> {
+    super::git_query::text(reads, root, args, "lease handoff Git identity")
 }
 fn text<'a>(value: Option<&'a Value>, message: &str) -> Result<&'a str, InventoryError> {
     value

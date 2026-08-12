@@ -11,6 +11,8 @@ pub(crate) const CONTINUITY_DIRECTORY_NAME: &str = "continuations";
 pub(crate) const LOCK_MARKER: &[u8] = b"routine-public-lock-v1\n";
 pub(crate) const BOOTSTRAP_STAGE: &str = ".routine-public-bootstrap";
 pub(crate) const LAUNCH_DIRECTORY: &str = ".routine-authority-launch";
+pub(crate) const EVENT_FILE_PREFIX: &str = "routine-events-";
+pub(crate) const EVENT_FILE_SUFFIX: &str = ".jsonl";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum DirectorySecurity {
@@ -45,8 +47,15 @@ pub(crate) struct HostState {
     pub(crate) state: AnchoredDirectory,
     pub(crate) authority: AnchoredDirectory,
     pub(crate) adapter: AnchoredDirectory,
+    pub(crate) launch: AnchoredDirectory,
     pub(crate) lock: File,
     pub(crate) lock_identity: Identity,
+}
+
+pub(crate) struct HostEventStore {
+    pub(crate) store: crate::observability::EventStore,
+    pub(crate) leaf: String,
+    pub(crate) identity: Identity,
 }
 
 pub(crate) struct ProcessLock(pub(crate) File);

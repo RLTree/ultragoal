@@ -1,17 +1,15 @@
 # Product Success Contract
 
-This is the product-success authority derived from `GOAL_CONTRACT.md`.
-`AMEND-006` establishes the successor-line finite milestone and strict
-lane/proof contract. The predecessor JSON under `examples/generated/` is
-frozen v2 context and cannot raise a current claim.
+This document is the current product-success authority for the goal authority
+in `GOAL_CONTRACT.md`.
 
 Harness Ultragoal has one current product claim: `CL-USABLE-LOOP`. It means an
 authorized operator can use the exact installed candidate on a representative
 repository to fit safely, run useful dirty-tree work, diagnose a failure,
 recover, and repeat useful work while unrelated state remains intact.
 
-This planning reset does not prove product success. Source checks, package
-bytes, install success, host discovery, receipts, reviewer agreement, or one
-green command cannot substitute for the T4 same-surface milestone journey.
-Release, repeated use, daily-driver status, and public availability remain
-separate later decisions.
+Product success is not claimed by this planning reset. Source checks, package
+bytes, install success, host discovery, receipts, reviewer agreement, or a
+single green command cannot substitute for the full same-surface milestone
+journey. Release, repeated use, daily-driver status, and public availability
+remain separate later decisions.

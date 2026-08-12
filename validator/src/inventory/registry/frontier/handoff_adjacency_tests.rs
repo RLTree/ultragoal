@@ -1,4 +1,5 @@
 use super::handoff_adjacency::{RECEIPT, verify};
+use crate::context::{BuildRequest, LiveContext};
 use serde_json::json;
 use std::fs;
 use std::path::PathBuf;
@@ -22,11 +23,13 @@ fn receipt_child_requires_exact_adjacency_and_package_exclusion() {
     let child = git(&root, &["rev-parse", "HEAD"]);
     let child_tree = git(&root, &["rev-parse", "HEAD^{tree}"]);
     let record = json!({"status":"ready","base_commit":base,"handoff":{"status":"verified","commit":source,"tree":source_tree},"receipt_child":{"status":"verified","path":RECEIPT,"commit":child,"tree":child_tree,"parent_commit":source,"parent_tree":source_tree,"source_commit":source,"source_tree":source_tree},"ready_receipt":RECEIPT});
-    verify(&root, &record).unwrap();
+    let context = LiveContext::build(BuildRequest::new(&root)).unwrap();
+    let reads = context.begin_read_session().unwrap();
+    verify(&reads, &root, &record).unwrap();
     let mut forged = record;
     forged["receipt_child"]["parent_commit"] = forged["base_commit"].clone();
     assert!(
-        verify(&root, &forged)
+        verify(&reads, &root, &forged)
             .unwrap_err()
             .to_string()
             .contains("not adjacent")
@@ -51,8 +54,10 @@ fn inherited_receipt_path_is_not_a_valid_source_handoff() {
     let child = git(&root, &["rev-parse", "HEAD"]);
     let child_tree = git(&root, &["rev-parse", "HEAD^{tree}"]);
     let record = json!({"status":"ready","base_commit":base,"handoff":{"status":"verified","commit":source,"tree":source_tree},"receipt_child":{"status":"verified","path":RECEIPT,"commit":child,"tree":child_tree,"parent_commit":source,"parent_tree":source_tree,"source_commit":source,"source_tree":source_tree},"ready_receipt":RECEIPT});
+    let context = LiveContext::build(BuildRequest::new(&root)).unwrap();
+    let reads = context.begin_read_session().unwrap();
     assert!(
-        verify(&root, &record)
+        verify(&reads, &root, &record)
             .unwrap_err()
             .to_string()
             .contains("contains its receipt child")
@@ -62,7 +67,8 @@ fn inherited_receipt_path_is_not_a_valid_source_handoff() {
 
 fn fixture() -> PathBuf {
     let root = std::env::temp_dir().join(format!(
-        "ultragoal-handoff-{}",
+        "ultragoal-handoff-{}-{}",
+        std::process::id(),
         NEXT.fetch_add(1, Ordering::Relaxed)
     ));
     fs::create_dir_all(&root).unwrap();

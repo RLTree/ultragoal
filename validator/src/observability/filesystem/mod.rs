@@ -26,7 +26,7 @@ use confinement::unsupported_platform;
 #[cfg(unix)]
 use confinement::{
     created_leaf_recovery_required, identity, inspect_leaf, open_leaf, open_verified_parent,
-    validate_file, validate_metadata,
+    validate_file, validate_metadata, verified_parent_from_descriptor,
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -46,6 +46,23 @@ pub(super) fn bind_parent(path: &Path) -> Result<VerifiedParent, String> {
     #[cfg(unix)]
     {
         open_verified_parent(path)
+    }
+}
+
+pub(super) fn bind_descriptor_parent(
+    directory: File,
+    leaf: &str,
+    owner: u32,
+    mode: u32,
+) -> Result<VerifiedParent, String> {
+    #[cfg(not(unix))]
+    {
+        let _ = (directory, leaf, owner, mode);
+        return Err(unsupported_platform());
+    }
+    #[cfg(unix)]
+    {
+        verified_parent_from_descriptor(directory, leaf, owner, mode)
     }
 }
 

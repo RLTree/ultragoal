@@ -2,8 +2,8 @@
 
 use crate::cli::successor::command_contract::{EvalAction, MigrateAction};
 use crate::cli::successor::{
-    catalog, CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction,
-    ParsedInvocation, SuccessorCommand,
+    CheckProfile, EffectClass, FitAction, Group, InspectTarget, ObserveAction, ParsedInvocation,
+    SuccessorCommand, catalog,
 };
 use std::collections::BTreeSet;
 

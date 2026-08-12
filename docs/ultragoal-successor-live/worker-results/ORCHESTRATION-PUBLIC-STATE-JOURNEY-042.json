@@ -165,28 +165,28 @@
   ],
   "commands_and_tests": [
     {
-      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_state_journey_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "command": "HUL_REPO_ROOT=<operator-home>/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_state_journey_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
       "status": "pass-21-of-21",
       "run_id": "3c0ac425-992f-415a-a27c-90f3bfdaa573"
     },
     {
-      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "command": "HUL_REPO_ROOT=<operator-home>/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
       "status": "pass-21-of-21-with-one-leaky-signal",
       "run_id": "2aff2160-bd89-46f8-a8c5-4e665cb48fbb",
       "result": "All 21 passed; the blocker planning control was marked leaky and immediately rechecked alone."
     },
     {
-      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract -E 'test(plan_query::blocker_plan_replans_ordinary_work_but_scopes_external_stops)' --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "command": "HUL_REPO_ROOT=<operator-home>/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_product_contract -E 'test(plan_query::blocker_plan_replans_ordinary_work_but_scopes_external_stops)' --build-jobs 16 --test-threads 16 --no-fail-fast",
       "status": "pass-1-of-1-no-leak",
       "run_id": "22d3f44c-05dc-4eaf-8e33-ffc4af5f8f53"
     },
     {
-      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
+      "command": "HUL_REPO_ROOT=<operator-home>/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo nextest run --manifest-path validator/Cargo.toml --locked --offline --test orchestration_contract --build-jobs 16 --test-threads 16 --no-fail-fast",
       "status": "pass-163-of-163-no-leak",
       "run_id": "09b2122e-7105-427f-bb82-980438195037"
     },
     {
-      "command": "HUL_REPO_ROOT=/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
+      "command": "HUL_REPO_ROOT=<operator-home>/Projects/harness-ultragoal-plugin-proposal CARGO_TARGET_DIR=/tmp/hul-orchestration-state-042-r2 CARGO_BUILD_JOBS=16 CARGO_INCREMENTAL=0 RUSTFLAGS=-Awarnings cargo check --manifest-path validator/Cargo.toml --locked --offline --lib --jobs 16",
       "status": "pass"
     },
     {

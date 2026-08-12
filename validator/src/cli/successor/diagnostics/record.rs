@@ -14,6 +14,7 @@ pub(crate) enum DiagnosticId {
     StateContextMismatch,
     FindingNotPresent,
     ProjectionFailed,
+    RepositoryFitRequired,
     DownstreamToolUnavailable,
     AuthorityRequired,
 }
@@ -31,6 +32,7 @@ impl DiagnosticId {
             Self::StateContextMismatch => "successor_runtime_state_context_mismatch",
             Self::FindingNotPresent => "successor_runtime_finding_not_present",
             Self::ProjectionFailed => "successor_runtime_projection_failed",
+            Self::RepositoryFitRequired => "repository_fit_required",
             Self::DownstreamToolUnavailable => "successor_runtime_downstream_tool_unavailable",
             Self::AuthorityRequired => "successor_runtime_authority_required",
         }

@@ -55,6 +55,14 @@ pub(super) fn authenticate_public_checkpoint(
     )
 }
 
+pub(super) fn observe_terminal_settlement(
+    custody: RoutineCustodyCapability,
+    binding: &AuthorityBinding,
+    attempt_grant: &str,
+) -> Result<super::RoutineTerminalSettlementProjection, RoutineError> {
+    DurableCustody::observe_terminal_settlement(&custody, binding, attempt_grant)
+}
+
 #[cfg(test)]
 pub(super) fn issue_test_custody(authority_root: &Path) -> RoutineCustodyCapability {
     RoutineCustodyCapability::issue_for_test(authority_root)

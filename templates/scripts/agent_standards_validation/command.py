@@ -105,33 +105,30 @@ def validate_audits(
             continue
         if not valid_digest(audit.evidence_digest):
             raise ValueError(f"{audit.standard_id}: invalid pass evidence digest")
-        evidence = evidence_path(root, audit.evidence_path)
-        actual = "sha256:" + hashlib.sha256(regular_bytes(evidence)).hexdigest()
+        actual = "sha256:" + hashlib.sha256(evidence_bytes(root, audit.evidence_path)).hexdigest()
         if actual != audit.evidence_digest:
             raise ValueError(f"{audit.standard_id}: pass evidence digest mismatch")
 
 
-def evidence_path(root: Path, relative: str) -> Path:
+def evidence_bytes(root: Path, relative: str) -> bytes:
     candidate = confined(root, relative)
-    if candidate.is_file() and not candidate.is_symlink():
-        return candidate
-    if relative.startswith("scripts/"):
-        projected = confined(root, f"templates/{relative}")
-        if projected.is_file() and not projected.is_symlink():
-            return projected
-    raise ValueError(f"evidence path missing or not regular: {relative}")
+    try:
+        return regular_bytes(candidate)
+    except FileNotFoundError:
+        if relative.startswith("scripts/"):
+            projected = confined(root, f"templates/{relative}")
+            try:
+                return regular_bytes(projected)
+            except FileNotFoundError:
+                pass
+        raise ValueError(f"evidence path missing or not regular: {relative}") from None
 
 
 def confined(root: Path, relative: str) -> Path:
     path = Path(relative)
     if path.is_absolute() or any(part in {"", ".", ".."} for part in path.parts):
         raise ValueError(f"unconfined evidence path: {relative}")
-    candidate = root.joinpath(path)
-    try:
-        candidate.parent.resolve().relative_to(root)
-    except ValueError as error:
-        raise ValueError(f"evidence parent escapes root: {relative}") from error
-    return candidate
+    return root.joinpath(path)
 
 
 def valid_digest(value: str) -> bool:

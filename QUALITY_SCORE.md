@@ -1,19 +1,20 @@
 # QUALITY_SCORE
 
-Use this scorecard for agent-authored work. Scores come from current
-observations on the named surface, not artifact volume or reviewer confidence.
+Use this deterministic scorecard for agent-authored work. Final reports may
+summarize the categories, but the score comes from current observations on the
+named surface, not vibes or artifact volume.
 
 | Category | Pass signal |
 | --- | --- |
 | Boundaries/types | Untrusted inputs parse before action; boundary checks pass. |
-| Tests/coverage | Focused tests pass; any coverage claim has current measurement. |
+| Tests/coverage | The repo's test and coverage gates pass or name blockers. |
 | Code shape | Namespace, architecture, and size checks pass. |
 | Security | Security hygiene passes or a blocker names the risk. |
-| Latency/efficiency | Timing proof or a performance blocker is recorded when material. |
-| Observability | Claim-relevant diagnostics or observations are named; unused channels are not manufactured. |
-| Product cohesion | Journey, same-surface evidence, and attention exceptions are joined for product claims. |
-| Docs/architecture fit | Agent docs route correctly and the active ExecPlan is current. |
-| Evidence economy | Proof matches the claim and has finite invalidation/deletion rules. |
-| Residual gaps | Gaps are explicit blockers or debt, never hidden. |
+| Latency/efficiency | Timing proof or performance blocker is recorded. |
+| Observability | Claim-relevant diagnostics, logs, metrics, traces, evals, or screenshots are named; unused channels are not manufactured. |
+| Product cohesion | User journey, UI/runtime evidence, and human-attention exceptions are joined. |
+| Docs/architecture fit | Agent docs route correctly and active ExecPlans are current. |
+| Evidence economy | Proof matches the current claim; ordinary output stays ephemeral and retained evidence has a finite invalidation/deletion rule. |
+| Residual gaps | Gaps are listed as blockers or tech debt, never hidden. |
 
-No category passes on “looks good” or probabilistic review alone.
+No category can pass on "looks good" or probabilistic review alone.

@@ -1,62 +1,102 @@
-# Review and Completion
+# Review And Completion
 
-## Falsification law
+## Falsification Law
 
-Review tests a current claim against likely counterexamples. It is not a
+Review tests the current claim against likely counterexamples. It is not a
 recurring ceremony.
 
 - Current candidate bytes and same-surface observations outrank prose.
-- Source, package, install, host discovery, runtime, recovery, journey,
-  release, and quality in use are separate surfaces.
+- Source, package, install, host discovery, runtime, recovery, release, and
+  quality-in-use are separate proof surfaces. A pass on one cannot close
+  another.
 - Missing evidence blocks only the claim that consumes it. Historical,
-  detached, superseded, or unrelated evidence drift does not restart delivery.
-- Check repeated ids, digests, paths, generated outputs, and schema values only
-  when the current change or claim consumes them.
-- Rerun the focused current gate when feasible. Label supplied-only evidence.
-- Negative fixtures pin the intended failure class.
+  detached, superseded, or unrelated evidence drift is context or cleanup, not
+  a reason to restart delivery.
+- Check repeated identifiers, digests, paths, required lists, generated
+  artifacts, and schema enums only when the current change or claim consumes
+  them.
+- Rerun the current focused gate when feasible. Supplied-only evidence must be
+  labeled supplied-only.
+- Negative fixtures pin the failure class they are intended to prove.
 - One exhaustive pass over the named invariant returns all demonstrated
-  siblings in scope. Stop only when continuation is unsafe, destructive, or
-  outside authority.
-- Review reopens only when relevant candidate bytes, consumed authority or
-  dependencies, or the claim surface changes, or current observation
-  contradicts it.
-- Approval names checked surfaces and every unsupported material claim.
+  sibling defects in scope. Stop only when continuing is unsafe, destructive,
+  or outside the contract.
+- A fresh review is eligible only after relevant candidate bytes, consumed
+  authority, consumed dependencies, or the claim surface changed, or current
+  observation contradicted the previous decision.
+- When an unchanged candidate has survived the named falsification, close the
+  loop. Speculative hardening becomes backlog or residual risk; it does not
+  trigger another round.
+- Approval names the proof surfaces checked and every material claim still
+  unsupported.
 
-## Proportional independent review
+## Proportional Independent Review
 
-| Work or claim | Independent review |
+Choose the smallest independent review that fits the current risk:
+
+| Work or claim | Required independent review |
 | --- | --- |
-| Ordinary implementation confined to an owned lane | None by default; root inspects diff and focused checks at fan-in |
-| Security, authority, custody, concurrency, recovery, migration, install/host, or external-effect boundary | One fresh focused falsifier for the touched boundary |
-| Current product milestone | Product/Simplicity same-surface journey review plus any boundary falsifier required by the candidate |
-| Release-grade or repository-wide completion spanning all four lenses | Full four-lens team once against one unchanged candidate |
+| Ordinary implementation confined to an owned lane | None by default; root inspects the diff and focused checks at fan-in |
+| Security, authority, custody, concurrency, recovery, migration, or external-effect boundary | One fresh focused falsifier for the touched boundary |
+| Current product milestone | Product/Simplicity review of the same-surface journey plus any boundary falsifier made necessary by the candidate |
+| Release-grade or repository-wide completion claim spanning contract, orchestration, security, and product | The full four-lens team, once, against one unchanged candidate |
 
-The four lenses are Contract and Claim, Orchestration and Recovery, Security
-Trust Boundary, and Product and Simplicity.
+The four canonical lenses remain:
 
-Do not require all four for ordinary lanes, planning-only docs, focused repair,
-or a claim that does not span all four. Do not rerun review because unrelated
-receipts aged or historical plans asked for another round.
+1. Contract and Claim.
+2. Orchestration and Recovery.
+3. Security Trust Boundary.
+4. Product and Simplicity.
 
-Before review bind exact candidate/diff, current claim, specific failure model
-or journey, cheapest credible oracle, and claim ceiling. Persist no separate
-review receipt unless a current claim, irreproducible observation,
-cross-process custody, recovery need, or authorized release consumes it.
+Do not require all four for ordinary lanes, documentation-only planning,
+focused bug repair, or a claim that does not span all four. Do not rerun a
+review because unrelated receipts aged or because a historical plan requested
+another round.
 
-## Completion and claim ceilings
+Before review, bind:
+
+- the exact candidate and diff;
+- the current claim;
+- the specific failure model or user journey;
+- the minimum oracle that can falsify it;
+- the claim ceiling.
+
+Reviewer tools, model, reasoning, or registry exposure are recorded only when a
+current claim depends on them. Tool registration is not product proof.
+
+For bounded invariant review, use the lowest sufficient standard-tier route.
+Persist no separate review receipt unless a current claim, cross-process
+handoff, irreproducible observation, or recovery need consumes it. One
+exhaustive pass with no material finding closes the loop.
+
+## Completion And Claim Ceiling Law
 
 Do not say complete, ready, done, fixed, passing, or production-ready without
 fresh named evidence from the same surface.
 
 Completion means the current contract's acceptance checks passed for the exact
 candidate. Missing evidence, blocked approval, dirty owned work, stale consumed
-authority, or unavailable same-surface proof lowers the affected claim; it
-does not reopen unrelated claims.
+authority, or unavailable same-surface proof lowers the affected claim. It does
+not automatically reopen unrelated claims.
 
-Useful output on one representative real task can close the bounded product
-milestone. It does not prove repeated use, daily-driver fitness, public
-availability, release readiness, or repository-wide completion.
+Final packets, archives, review targets, transaction finalization, and
+update-goal eligibility fail closed when they are current product surfaces and
+their consumed evidence is stale, forged, unavailable, circular, or bound to a
+different candidate. They are not mandatory artifacts for ordinary
+implementation.
 
-For non-trivial work, final reports state outcome and ceiling, exact
-verification and result, residual blockers, and security/performance
-implications or `N/A`. Do not manufacture an artifact merely to link it.
+Production-use proof is required before production-ready claims. Useful output
+on one representative real task may close a bounded product milestone; it does
+not prove repeated use, daily-driver fitness, or release readiness.
+
+## Completion Report Contract
+
+For non-trivial work, final reports state:
+
+- outcome and claim ceiling;
+- exact verification and outcome;
+- residual blockers or unsupported surfaces;
+- security or performance implications when relevant.
+
+Write `N/A` when a section truly does not apply. Do not manufacture an artifact
+solely so the report can link to it.

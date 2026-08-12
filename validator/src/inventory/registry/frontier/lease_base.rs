@@ -2,7 +2,6 @@ use crate::context::ReadSession;
 use crate::inventory::types::InventoryError;
 use serde_json::Value;
 use std::path::Path;
-use std::process::Command;
 
 pub(super) fn observed(registry: &Value) -> Result<(&str, &str), InventoryError> {
     gate_base(registry, true)
@@ -65,7 +64,7 @@ pub(super) fn validate_git(
     root: &Path,
     base: (&str, &str),
 ) -> Result<(), InventoryError> {
-    let tree = git(root, &["rev-parse", &format!("{}^{{tree}}", base.0)])?;
+    let tree = git(reads, root, &["rev-parse", &format!("{}^{{tree}}", base.0)])?;
     if tree != base.1 {
         return Err(invalid("observed source base has the wrong Git tree"));
     }
@@ -75,42 +74,23 @@ pub(super) fn validate_git(
         .head_commit
         .as_deref()
         .ok_or_else(|| invalid("current authority commit is unavailable"))?;
-    let committed = git(root, &["show", &format!("{head}:LANE_REGISTRY.json")])?;
+    let committed = git(
+        reads,
+        root,
+        &["show", &format!("{head}:LANE_REGISTRY.json")],
+    )?;
     let committed_registry: Value = serde_json::from_str(&committed)
         .map_err(|_| invalid("committed lane registry is malformed"))?;
     if base != gate_base(&committed_registry, false)? {
         return Err(invalid("lease source base is not the root-issued base"));
     }
-    let status = Command::new("git")
-        .args([
-            "-C",
-            root.to_string_lossy().as_ref(),
-            "merge-base",
-            "--is-ancestor",
-            base.0,
-            head,
-        ])
-        .status()
-        .map_err(|error| invalid(&format!("cannot validate lease base ancestry: {error}")))?;
-    if !status.success() {
-        return Err(invalid("source base is not a current authority ancestor"));
-    }
+    git(reads, root, &["merge-base", "--is-ancestor", base.0, head])
+        .map_err(|_| invalid("source base is not a current authority ancestor"))?;
     Ok(())
 }
 
-fn git(root: &Path, args: &[&str]) -> Result<String, InventoryError> {
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(args)
-        .output()
-        .map_err(|error| invalid(&format!("cannot inspect lease Git identity: {error}")))?;
-    if !output.status.success() {
-        return Err(invalid("cannot inspect lease Git identity"));
-    }
-    String::from_utf8(output.stdout)
-        .map(|value| value.trim().to_owned())
-        .map_err(|_| invalid("lease Git identity is not UTF-8"))
+fn git(reads: &ReadSession, root: &Path, args: &[&str]) -> Result<String, InventoryError> {
+    super::git_query::text(reads, root, args, "lease Git identity")
 }
 
 fn text<'a>(value: &'a Value, field: &str, message: &str) -> Result<&'a str, InventoryError> {

@@ -1,6 +1,6 @@
 ---
 name: improve-and-maintain
-description: "Evaluate and maintain Harness Ultragoal without creating duplicate authority. Use for task and scorer audits, paired behavior evaluation, failure harvesting, current primary-source research, improvement candidates, compatibility routing, migration verification, or approved retirement."
+description: "Evaluate and maintain Harness Ultragoal without creating duplicate authority. Use when task or scorer audits, paired behavior evaluation, failure harvesting, primary-source research, improvement candidates, compatibility routing, migration verification, or approved retirement are needed."
 ---
 
 # Improve And Maintain

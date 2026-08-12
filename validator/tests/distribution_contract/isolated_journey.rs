@@ -2,9 +2,9 @@ use crate::distribution::{
     CacheExpectation, Capability, CodexPlugin, DistributionErrorId, ExpectedPrior, ExpectedTree,
     HostCapabilityDeclaration, HostCapabilityState, IdentitySurface, InstallPlan, InstallScope,
     InstalledPackageRuntimeProbeRequest, JourneyBinding, MarketplaceScope, RuntimeProbePlan,
-    RuntimeVerdict, ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace,
-    install, materialize_package, observe_codex_marketplace, observe_discovery_file,
-    observe_registry_file, plan_codex_marketplace, publish_cache_file, publish_discovery_file,
+    ScopedFile, ScopedInstall, ScopedTree, SurfaceIdentity, apply_marketplace, install,
+    materialize_package, observe_codex_marketplace, observe_discovery_file, observe_registry_file,
+    plan_codex_marketplace, publish_cache_file, publish_discovery_file,
     publish_installed_runtime_probe, publish_registry_file, reconcile_cache_file,
     verify_bound_surface_chain,
 };
@@ -152,13 +152,15 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         })
         .unwrap();
     let before_runtime = fixture.tree();
-    let (runtime, runtime_surface) = runtime_plan.execute_bound().unwrap();
-    assert_eq!(runtime.runtime_verdict(), RuntimeVerdict::Executed);
-    assert!(runtime.is_current_execution());
+    assert_eq!(
+        runtime_plan.execute_bound().unwrap_err().id(),
+        DistributionErrorId::CapabilityMismatch,
+        "package bytes cannot execute without confined effect authority"
+    );
     assert_eq!(
         fixture.tree(),
         before_runtime,
-        "subprocess probe is zero-write in scope"
+        "refused runtime probe is zero-write in scope"
     );
 
     let observed_surfaces = [
@@ -171,7 +173,6 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
         SurfaceIdentity::from_verified_cache(&cache, &binding).unwrap(),
         SurfaceIdentity::from_verified_marketplace(&marketplace, &binding).unwrap(),
         SurfaceIdentity::from_verified_app_registry(&app, &binding).unwrap(),
-        runtime_surface,
     ];
     assert_eq!(
         observed_surfaces.each_ref().map(|row| row.surface()),
@@ -180,7 +181,6 @@ fn clean_isolated_package_marketplace_install_discovery_runtime_journey() {
             IdentitySurface::Cache,
             IdentitySurface::Marketplace,
             IdentitySurface::AppRegistry,
-            IdentitySurface::Runtime,
         ]
     );
     assert_eq!(

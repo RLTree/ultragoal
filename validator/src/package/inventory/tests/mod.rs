@@ -29,6 +29,28 @@ fn current_package_manifest_lists_only_materializable_source_members() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("validator crate has repository root parent");
+    let manifest: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(root.join("plugin-manifest-draft.json")).expect("read current manifest"),
+    )
+    .expect("parse current manifest");
+    let resources = manifest
+        .get("resources")
+        .and_then(serde_json::Value::as_array)
+        .expect("current manifest resources");
+    for required in [
+        "GOAL_CONTRACT.md",
+        "PRODUCT_SUCCESS_CONTRACT.md",
+        "docs/exec-plans/active/usable-product-milestone.md",
+    ] {
+        assert_eq!(
+            resources
+                .iter()
+                .filter(|resource| resource.as_str() == Some(required))
+                .count(),
+            1,
+            "current authority input must appear exactly once in package resources: {required}"
+        );
+    }
     assert!(
         super::package_digest(root).is_ok(),
         "current package manifest must not retain deleted source members"

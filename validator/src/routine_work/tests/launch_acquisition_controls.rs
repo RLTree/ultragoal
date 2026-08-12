@@ -9,6 +9,24 @@ use super::routine_work::{
 };
 
 #[test]
+fn descriptor_bound_launch_stages_and_cleans_the_shared_root() {
+    if isolate_fixture_test(
+        "launch_acquisition_controls::descriptor_bound_launch_stages_and_cleans_the_shared_root",
+    ) {
+        return;
+    }
+    let mut fixture = RoutinePlanFixture::new("launch-descriptor-success");
+    prepare_authority(&fixture);
+
+    let _mediation = execute(&fixture).expect("descriptor-bound launch succeeds");
+
+    assert_launch_root_entries(&fixture, 0);
+    let state = authority_state(&fixture);
+    assert!(state.contains("\"state\":\"complete\""), "{state}");
+    fixture.finish();
+}
+
+#[test]
 fn directory_stat_failures_carry_exact_launch_cleanup() {
     if isolate_fixture_test(
         "launch_acquisition_controls::directory_stat_failures_carry_exact_launch_cleanup",
@@ -79,7 +97,7 @@ fn output_rollback_cannot_substitute_for_launch_cleanup() {
         error.cause(),
         "routine-production-launch-directory-stat-failed"
     );
-    assert_launch_root_entries(&fixture, 1);
+    assert_launch_root_entries(&fixture, 0);
     let state = authority_state(&fixture);
     assert!(state.contains("\"state\":\"reserved\""), "{state}");
     assert!(
@@ -93,8 +111,7 @@ fn output_rollback_cannot_substitute_for_launch_cleanup() {
         retry.cause(),
         "routine-production-session-continuity-required"
     );
-    assert_launch_root_entries(&fixture, 1);
-    remove_owned_empty_launch(&fixture);
+    assert_launch_root_entries(&fixture, 0);
     fixture.finish();
 }
 
@@ -134,13 +151,4 @@ fn assert_launch_root_entries(fixture: &RoutinePlanFixture, expected: usize) {
         fs::read_dir(launch_root(fixture)).unwrap().count(),
         expected
     );
-}
-
-fn remove_owned_empty_launch(fixture: &RoutinePlanFixture) {
-    let entries = fs::read_dir(launch_root(fixture))
-        .unwrap()
-        .collect::<Result<Vec<_>, _>>()
-        .unwrap();
-    assert_eq!(entries.len(), 1);
-    fs::remove_dir(entries[0].path()).unwrap();
 }

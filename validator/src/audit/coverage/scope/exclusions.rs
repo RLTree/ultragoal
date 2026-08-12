@@ -21,6 +21,18 @@ pub(crate) fn failures(value: &Value) -> Vec<String> {
             out.push("coverage_repo_owned_code_excluded".to_string());
         }
     }
+    for pattern in value
+        .pointer("/source_discovery_rules/ignore")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+    {
+        let protected = pattern.strip_suffix("/**").unwrap_or(pattern);
+        if repo_owned_path(protected) {
+            out.push("coverage_repo_owned_code_ignored".to_string());
+        }
+    }
     out
 }
 
@@ -33,7 +45,36 @@ fn str_field(value: &Value, key: &str) -> String {
 }
 
 fn repo_owned_path(path: &str) -> bool {
-    ["src/", "scripts/", "validator/", "schemas/", "templates/"]
+    ["src", "scripts", "validator", "schemas", "templates"]
         .iter()
-        .any(|prefix| path.starts_with(prefix))
+        .any(|root| path == *root || path.starts_with(&format!("{root}/")))
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn ignore_rules_cannot_hide_owned_source() {
+        for pattern in ["validator/**", "scripts/check", "templates/**"] {
+            let failures = super::failures(&json!({
+                "source_discovery_rules": {"ignore": [pattern]}
+            }));
+            assert!(
+                failures.contains(&"coverage_repo_owned_code_ignored".to_string()),
+                "{pattern}: {failures:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn local_state_ignore_rules_remain_allowed() {
+        let failures = super::failures(&json!({
+            "source_discovery_rules": {"ignore": ["target/**", ".codex-worktree/**"]}
+        }));
+        assert!(
+            !failures.contains(&"coverage_repo_owned_code_ignored".to_string()),
+            "{failures:?}"
+        );
+    }
 }

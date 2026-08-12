@@ -32,23 +32,18 @@ fn plans_failures(text: &str) -> Vec<String> {
     let mut out = required_contains(
         text,
         &[
-            ("plans_stable_law_banner_missing", "stable ExecPlan law"),
+            ("plans_milestone_missing", "one observable milestone"),
+            ("plans_active_owner_missing", "one active ExecPlan"),
+            ("plans_state_routing_missing", "docs/exec-plans/active/"),
+            ("plans_ownership_missing", "## Ownership and parallel work"),
+            ("plans_validation_missing", "## Proportional validation"),
+            ("plans_evidence_missing", "## Evidence economy"),
+            ("plans_budget_missing", "## Configuration and budgets"),
+            ("plans_recovery_missing", "## Recovery and stopping"),
             (
-                "plans_project_ledger_warning_missing",
-                "not the project plan ledger",
+                "plans_configuration_rule_missing",
+                "Use the least costly supported configuration that passes the representative task-class evaluation",
             ),
-            ("plans_state_routing_missing", "docs/exec-plans/active/*"),
-            (
-                "plans_required_heading_missing",
-                "## Non-Negotiable Requirements",
-            ),
-            ("plans_required_heading_missing", "## Required Sections"),
-            ("plans_required_heading_missing", "## Lane Extension"),
-            (
-                "plans_required_heading_missing",
-                "## Orchestrator Responsibilities",
-            ),
-            ("plans_required_heading_missing", "## Lane Ready Message"),
         ],
     );
     let lower = text.to_lowercase();
@@ -67,6 +62,27 @@ fn plans_failures(text: &str) -> Vec<String> {
         }
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::plans_failures;
+
+    #[test]
+    fn current_plans_document_owns_only_stable_minimal_rules() {
+        assert_eq!(
+            plans_failures(include_str!("../../../PLANS.md")),
+            Vec::<String>::new()
+        );
+    }
+
+    #[test]
+    fn project_state_and_missing_minimal_ownership_fail_closed() {
+        let failures = plans_failures("## Active project state\ncurrent phase: implementation\n");
+        assert!(failures.contains(&"plans_contains_project_state".to_owned()));
+        assert!(failures.contains(&"plans_ownership_missing".to_owned()));
+        assert!(failures.contains(&"plans_evidence_missing".to_owned()));
+    }
 }
 
 fn automation_failures(toml: &str, prompt: &str, activation: bool) -> Vec<String> {

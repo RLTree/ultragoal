@@ -110,7 +110,7 @@
   ],
   "commands_and_tests": [
     {
-      "command": "python3 /Users/terrynoblin/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each canonical skill>",
+      "command": "python3 <operator-home>/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<each canonical skill>",
       "result": "pass",
       "summary": "8 of 8 returned Skill is valid after the correction."
     },

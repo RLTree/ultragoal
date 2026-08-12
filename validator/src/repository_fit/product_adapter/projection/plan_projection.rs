@@ -58,7 +58,7 @@ pub(crate) struct FitVerificationProjection {
     pub(crate) target: TargetProjection,
     pub(crate) authority: TemplateAuthorityProjection,
     pub(crate) desired: DesiredProjection,
-    pub(crate) local_state: LocalStatePolicyProjection,
+    pub(crate) local_state: Option<LocalStatePolicyProjection>,
     pub(crate) root_binding: String,
     pub(crate) inspection_sha256: String,
     pub(crate) matched_files: usize,

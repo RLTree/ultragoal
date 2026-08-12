@@ -1,3 +1,5 @@
+#![allow(dead_code)] // frozen brief normalization helpers
+
 use super::model::{BriefV1, BriefV2};
 
 pub(crate) fn v1(brief: &mut BriefV1) {

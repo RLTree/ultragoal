@@ -1,11 +1,7 @@
 use crate::context::{BuildRequest, EffectClass, LiveContext};
-use crate::inventory::{
-    behavioral_role, InventoryBuilder, ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-    ADOPTED_HANDOFF_MANIFEST_SHA256,
-};
-use crate::state::adopted::{derive_adopted, issue_adopted};
+use crate::inventory::behavioral_role;
 use crate::state::adopted_registry::{load_claims_for_test, validate_registry_for_test};
-use crate::state::{NextActionKind, ProductGoalState, StateError};
+use crate::state::{NextActionKind, ProductGoalState, StateError, derive_current};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
@@ -85,7 +81,7 @@ fn semantic_claim_graph_mutations_fail_closed() {
 }
 
 #[test]
-fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
+fn current_catalog_binds_one_current_claim_without_legacy_actions() {
     let live = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()
@@ -97,94 +93,71 @@ fn live_issuer_covers_exact_inventory_codes_and_cannot_grant_completion() {
     ));
     let _ = fs::remove_dir_all(&root);
     fs::create_dir_all(&root).unwrap();
-    fs::write(root.join("tracked.txt"), b"tracked\n").unwrap();
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "state@example.invalid"]);
     git(&root, &["config", "user.name", "Adopted State"]);
-    copy_authority_inputs(&live, &root);
+    copy_current_authority_inputs(&live, &root);
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "fixture"]);
-    let context = LiveContext::build(
-        BuildRequest::new(&root)
-            .with_effect(EffectClass::Read)
-            .bind_non_secret_configuration(
-                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-                ADOPTED_HANDOFF_MANIFEST_SHA256,
-            ),
-    )
-    .unwrap();
-    let inventory = InventoryBuilder::new(&context).build().unwrap();
-    let behavioral_entries = inventory
-        .entries()
-        .iter()
-        .filter(|entry| entry.stable_id.starts_with("BEHAVIORAL-ROLE:"))
-        .collect::<Vec<_>>();
-    assert_eq!(behavioral_entries.len(), 10);
-    let package_input = behavioral_entries
-        .iter()
-        .find(|entry| entry.kind == "package-input-descriptor")
-        .unwrap();
-    let installed_manifest = inventory
-        .entries()
-        .iter()
-        .find(|entry| entry.stable_id == "PLUGIN-MANIFEST")
-        .unwrap();
-    assert_eq!(package_input.references, [".codex-plugin/plugin.json"]);
-    assert_eq!(
-        package_input.input_provenance,
-        [format!(
-            "canonical-target:.codex-plugin/plugin.json#sha256:{}",
-            installed_manifest.digest_sha256
-        )]
-    );
-
-    let policy = issue_adopted(&context, &inventory).unwrap();
-    assert_ne!(policy.catalog_id(), inventory.catalog_id());
-    let state = derive_adopted(&context, &inventory).unwrap();
+    let context =
+        LiveContext::build(BuildRequest::new(&root).with_effect(EffectClass::Read)).unwrap();
+    let state = derive_current(&context).unwrap();
     assert_eq!(state.product_goal(), ProductGoalState::Operating);
     assert_eq!(state.next_action().kind, NextActionKind::Command);
     assert_eq!(state.next_action().effect, EffectClass::Read);
+    assert_eq!(state.next_action().action_id, "inspect-current-usable-loop");
     assert_eq!(
         state.next_action().command_id.as_deref(),
-        Some("migrate-plan")
+        Some("fit-inspect")
     );
     assert!(state.findings().iter().any(|finding| {
         finding.code == "dependency-missing"
-            && finding.dependency_ids.contains("reconciliation-kernel")
+            && finding.dependency_ids.contains("current-usable-loop")
     }));
-    let completion = state
-        .claim_ceilings()
-        .iter()
-        .find(|ceiling| ceiling.claim_id() == "CL-COMPLETION")
-        .unwrap();
-    assert!(completion.dimensions().is_empty());
+    assert_eq!(state.claim_ceilings().len(), 1);
+    let usable_loop = &state.claim_ceilings()[0];
+    assert_eq!(usable_loop.claim_id(), "CL-USABLE-LOOP");
+    assert!(usable_loop.dimensions().is_empty());
     assert_eq!(
         state
             .claim_ceilings()
             .iter()
-            .filter(|ceiling| !ceiling.dimensions().is_empty())
+            .filter(|ceiling| ceiling.claim_id() != "CL-USABLE-LOOP")
             .count(),
         0
     );
-    fs::remove_file(root.join("plugin-manifest-draft.json")).unwrap();
-    let missing_context = LiveContext::build(
-        BuildRequest::new(&root)
-            .with_effect(EffectClass::Read)
-            .bind_non_secret_configuration(
-                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
-                ADOPTED_HANDOFF_MANIFEST_SHA256,
-            ),
-    )
-    .unwrap();
-    let missing = InventoryBuilder::new(&missing_context).build().unwrap();
-    assert!(missing.findings().iter().any(|finding| {
-        finding.code == "missing_behavioral_role_surface"
-            && finding.relative_path.as_deref() == Some("plugin-manifest-draft.json")
-    }));
     fs::remove_dir_all(root).unwrap();
 }
 
+fn copy_current_authority_inputs(live: &Path, root: &Path) {
+    for relative in [
+        "GOAL_CONTRACT.md",
+        "PRODUCT_SUCCESS_CONTRACT.md",
+        "docs/exec-plans/active/usable-product-milestone.md",
+        ".codex-plugin/plugin.json",
+    ] {
+        let destination = root.join(relative);
+        fs::create_dir_all(destination.parent().unwrap()).unwrap();
+        fs::copy(live.join(relative), destination).unwrap();
+    }
+    let agents = root.join(".codex/agents");
+    fs::create_dir_all(&agents).unwrap();
+    for entry in fs::read_dir(live.join(".codex/agents")).unwrap() {
+        let entry = entry.unwrap();
+        fs::copy(entry.path(), agents.join(entry.file_name())).unwrap();
+    }
+}
+
 pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
+    for relative in [
+        "GOAL_CONTRACT.md",
+        "PRODUCT_SUCCESS_CONTRACT.md",
+        "docs/exec-plans/active/usable-product-milestone.md",
+    ] {
+        let destination = root.join(relative);
+        fs::create_dir_all(destination.parent().unwrap_or(root)).unwrap();
+        fs::copy(live.join(relative), destination).unwrap();
+    }
     let advisory_decision = Path::new(
         "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json",
     );
@@ -200,6 +173,9 @@ pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
         .unwrap()
     {
         let relative = Path::new(reference["path"].as_str().unwrap());
+        if !live.join(relative).is_file() {
+            continue;
+        }
         let destination = root.join(relative);
         fs::create_dir_all(destination.parent().unwrap()).unwrap();
         fs::copy(live.join(relative), destination).unwrap();
@@ -236,9 +212,9 @@ pub(super) fn copy_authority_inputs(live: &Path, root: &Path) {
     }
     super::generated_inputs::copy_generated_inputs(live, root);
     fs::create_dir_all(root.join(".codex-plugin")).unwrap();
-    fs::write(
+    fs::copy(
+        live.join(".codex-plugin/plugin.json"),
         root.join(".codex-plugin/plugin.json"),
-        br#"{"name":"harness-ultragoal","version":"0.0.0-test"}"#,
     )
     .unwrap();
     for binding in behavioral_role::bindings() {

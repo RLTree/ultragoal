@@ -111,6 +111,7 @@ fn budget_limits(class: &str) -> Option<(u64, u64)> {
 
 pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &str) -> Vec<String> {
     let mut out = surface_value_failures(value);
+    out.push("cli_performance_receipt_independent_execution_unavailable".to_string());
     let candidate = value
         .pointer("/digests/candidate")
         .and_then(Value::as_str)
@@ -174,4 +175,26 @@ pub(crate) fn same_candidate_pass_failures(value: &Value, expected_candidate: &s
         Some(expected_candidate),
     ));
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn repository_telemetry_cannot_prove_execution() {
+        let candidate = crate::self_tests::boundaries::workspace_fixtures::sha('a');
+        let failures = super::same_candidate_pass_failures(
+            &json!({
+                "status": "pass",
+                "digests": {"candidate": candidate}
+            }),
+            &candidate,
+        );
+        assert!(
+            failures
+                .contains(&"cli_performance_receipt_independent_execution_unavailable".to_string()),
+            "{failures:?}"
+        );
+    }
 }

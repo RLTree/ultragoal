@@ -17,6 +17,27 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Durable
     child: RefCell<Option<ChildLease>>,
 }
 impl DurableCustody {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn observe_terminal_settlement(
+        custody: &RoutineCustodyCapability,
+        binding: &AuthorityBinding,
+        attempt_grant: &str,
+    ) -> Result<
+        crate::routine_work::runtime_adapter::production::RoutineTerminalSettlementProjection,
+        RoutineError,
+    > {
+        let root = custody.authority_root();
+        #[cfg(target_vendor = "apple")]
+        {
+            let (inner, mut head) = supported::authentication::FileLedger::open_existing(root)?;
+            inner.observe_terminal_settlement(&mut head, binding, attempt_grant)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (custody, binding, attempt_grant);
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(in crate::routine_work::runtime_adapter::production::custody) fn authenticate_public_checkpoint(
         custody: &RoutineCustodyCapability,
         target: &Path,

@@ -1,6 +1,6 @@
 ---
 name: product-journey-review
-description: "Falsify Harness Ultragoal journeys from independent operator perspectives. Use for fresh-user, fresh-agent, maintainer, security, recovery, usability, acquisition-through-completion, wrong-surface, stale-proof, or quality-in-use review."
+description: "Falsify Harness Ultragoal journeys from independent operator perspectives. Use when fresh-user, fresh-agent, maintainer, security, recovery, usability, wrong-surface, stale-proof, or quality-in-use review is needed."
 ---
 
 # Product Journey Review

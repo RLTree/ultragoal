@@ -1,3 +1,5 @@
+#![allow(dead_code)] // frozen brief parser; not reachable from current authority
+
 use super::model::{BriefV1, BriefV2};
 use serde_json::Value;
 

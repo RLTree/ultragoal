@@ -40,6 +40,12 @@ fn resolve_from_path(
         .map_err(|_| error(DistributionErrorId::ObjectUnavailable))
 }
 
+pub(crate) fn pin_runtime_executable(
+    path: &std::path::Path,
+) -> Result<SelectedCodexExecutable, DistributionError> {
+    selection::pin_path(path).map_err(|_| error(DistributionErrorId::ObjectUnavailable))
+}
+
 #[cfg(all(test, unix))]
 mod selected_tests;
 

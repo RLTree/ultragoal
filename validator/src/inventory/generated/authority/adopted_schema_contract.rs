@@ -1,6 +1,6 @@
 use crate::context::ReadSession;
 use crate::contract_amendment::{
-    validate_current, CurrentAmendmentBinding, ExpectedArtifactBinding,
+    CurrentAmendmentBinding, ExpectedArtifactBinding, validate_current,
 };
 use crate::generated_authority::{RepositoryPath, Sha256Digest};
 use crate::inventory::digest::file_identity_regular;
@@ -15,8 +15,7 @@ const ZERO_RECEIPT: &str =
 const PREVIOUS_CONTRACT_HASH: &str =
     "sha256:20dadce2e50ef92fa4f19614f8fc70ae472ad32064561fca2208ca213cf0685b";
 const PRODUCT_BRIEF_PATH: &str = "PRODUCT_SUCCESS_BRIEF.json";
-const ADVISORY_DECISION_PATH: &str =
-    "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
+const ADVISORY_DECISION_PATH: &str = "docs/ultragoal-successor-live/root-decisions/AGENTIC-ENGINEERING-V3-LIFECYCLE-ADVISORY-004.json";
 
 pub(super) struct Binding<'a> {
     pub(super) output: &'a RepositoryPath,

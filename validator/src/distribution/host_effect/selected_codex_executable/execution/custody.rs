@@ -40,6 +40,21 @@ pub(super) fn execute(
     session::ChildSession::new(spawned).run_guarded(policy, cancellation)
 }
 
+pub(super) fn execute_runtime(
+    path: &Path,
+    command: &HostCommand,
+    policy: &HostEffectExecutionPolicy,
+    cancellation: &HostEffectCancellation,
+    cwd: RawFd,
+) -> Result<CommandCapture, DarwinFailure> {
+    if cancellation.is_cancelled() {
+        return Err(before_start(HostEffectExecutorErrorId::Cancelled));
+    }
+    let spawned = spawn::spawn_runtime(path, command, cwd)
+        .map_err(|_| before_start(HostEffectExecutorErrorId::ProcessSpawnFailed))?;
+    session::ChildSession::new(spawned).run_guarded(policy, cancellation)
+}
+
 fn before_start(id: HostEffectExecutorErrorId) -> DarwinFailure {
     DarwinFailure {
         id,

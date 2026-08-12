@@ -33,6 +33,12 @@ impl HostEffectExecutionPolicy {
         Self::from_bound_environment(timeout_ms, &environment)
     }
 
+    pub(in crate::distribution::host_effect) fn strict_runtime(
+        timeout_ms: u64,
+    ) -> Result<Self, HostEffectExecutorFailure> {
+        Self::from_bound_environment(timeout_ms, &[])
+    }
+
     fn from_bound_environment(
         timeout_ms: u64,
         environment: &[(String, String)],

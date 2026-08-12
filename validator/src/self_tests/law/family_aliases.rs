@@ -126,7 +126,7 @@ fn hu_family_aliases_fail_unknown_and_unmapped_canonical_laws() {
 fn hu_family_aliases_package_entrypoint_and_shape_edges_fail_closed() {
     let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
     assert_eq!(
-        crate::audit::law::family::aliases::failures(&root),
+        crate::audit::law::family::aliases::compatibility_failures(&root),
         Vec::<String>::new()
     );
 
@@ -198,4 +198,33 @@ fn hu_family_aliases_package_entrypoint_and_shape_edges_fail_closed() {
         &failures(&non_string),
         "law_family_aliases_non_string_canonical_id"
     ));
+}
+
+#[test]
+fn frozen_family_aliases_are_explicit_compatibility_only_not_a_current_source_gate() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(
+        "family-aliases-compatibility-only",
+    );
+    std::fs::create_dir_all(root.join("docs")).expect("docs");
+    std::fs::write(
+        root.join("docs/source-obligation-matrix.json"),
+        b"{\"obligations\":[]}\n",
+    )
+    .expect("source obligations");
+
+    let current = crate::audit::source_obligations::failures(&root);
+    assert!(
+        current
+            .iter()
+            .all(|failure| !failure.contains("law-family-aliases")),
+        "{current:?}"
+    );
+    let compatibility = crate::audit::law::family::aliases::compatibility_failures(&root);
+    assert!(
+        compatibility
+            .iter()
+            .any(|failure| failure.contains("docs/law-family-aliases.json")),
+        "{compatibility:?}"
+    );
+    std::fs::remove_dir_all(root).expect("cleanup compatibility-only aliases");
 }
