@@ -5,19 +5,31 @@ pub fn execute_runtime_probe(
         install.revalidate(&plan.binding)?;
     }
     plan.executable.revalidate()?;
-    refuse_unconfined_runtime_execution(&plan.executable.path)
-}
-
-fn refuse_unconfined_runtime_execution(
-    _executable_path: &Path,
-) -> Result<RuntimeObservation, DistributionError> {
-    Err(error(DistributionErrorId::CapabilityMismatch))
+    let (stdout, stderr) = crate::distribution::host_effect::execute_runtime_help(
+        &plan.executable.path,
+        plan.timeout,
+        plan.executable.sha256(),
+    )?;
+    validate_envelope(&stdout)?;
+    plan.executable.revalidate()?;
+    if let Some(install) = &plan.install {
+        install.revalidate(&plan.binding)?;
+    }
+    let mut output = stdout;
+    output.extend_from_slice(&stderr);
+    Ok(RuntimeObservation::executed(
+        &plan.binding,
+        plan.executable.sha256().to_owned(),
+        sha256(&output),
+    ))
 }
 
 #[cfg(test)]
 mod runtime_execution_tests {
     use super::*;
     use std::fs;
+    #[cfg(unix)]
+    use std::os::unix::fs::PermissionsExt;
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT_ROOT: AtomicU64 = AtomicU64::new(0);
@@ -37,12 +49,20 @@ mod runtime_execution_tests {
             format!("#!/bin/sh\nprintf invoked > '{}'\n", marker.display()),
         )
         .expect("test runtime");
+        #[cfg(unix)]
+        fs::set_permissions(&executable, fs::Permissions::from_mode(0o755))
+            .expect("runtime executable mode");
 
+        assert!(!marker.exists());
         assert_eq!(
-            refuse_unconfined_runtime_execution(&executable)
-                .expect_err("ambient runtime execution must fail closed")
-                .id(),
-            DistributionErrorId::CapabilityMismatch
+            crate::distribution::host_effect::execute_runtime_help(
+                &executable,
+                Duration::from_secs(10),
+                "sha256:invalid",
+            )
+            .expect_err("unbound runtime must fail closed")
+            .id(),
+            DistributionErrorId::ProvenanceMismatch
         );
         assert!(!marker.exists());
         fs::remove_dir_all(root).expect("test cleanup");

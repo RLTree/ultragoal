@@ -12,15 +12,32 @@ pub(super) struct Spawned {
 }
 
 pub(super) fn spawn(path: &Path, command: &HostCommand, cwd: RawFd) -> Result<Spawned, ()> {
-    let cwd = duplicate_cwd(cwd)?;
     let arguments = sandbox::arguments(path, command)?;
-    let mut argv = pointers(&arguments);
     let environment = command
         .environment()
         .iter()
         .map(|(key, value)| CString::new(format!("{key}={value}")))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|_| ())?;
+    spawn_with_arguments(arguments, environment, cwd)
+}
+
+pub(super) fn spawn_runtime(
+    path: &Path,
+    command: &HostCommand,
+    cwd: RawFd,
+) -> Result<Spawned, ()> {
+    let arguments = sandbox::runtime_arguments(path, command)?;
+    spawn_with_arguments(arguments, Vec::new(), cwd)
+}
+
+fn spawn_with_arguments(
+    arguments: Vec<CString>,
+    environment: Vec<CString>,
+    cwd: RawFd,
+) -> Result<Spawned, ()> {
+    let cwd = duplicate_cwd(cwd)?;
+    let mut argv = pointers(&arguments);
     let mut envp = pointers(&environment);
     let mut pipes = Pipes::new().map_err(|_| ())?;
     let actions = FileActions::new(cwd.as_raw_fd(), &pipes)?;

@@ -6,6 +6,7 @@ pub struct RuntimeProbePlan {
     binding: JourneyBinding,
     install: Option<CurrentInstallAuthority>,
     executable: PinnedRuntimeExecutable,
+    timeout: Duration,
 }
 
 pub struct InstalledPackageRuntimeProbeRequest<'a, Effects> {
@@ -111,6 +112,7 @@ impl RuntimeProbePlan {
             binding,
             install: Some(install),
             executable,
+            timeout,
         })
     }
 
@@ -148,6 +150,7 @@ impl RuntimeProbePlan {
             binding,
             install: None,
             executable,
+            timeout,
         })
     }
 

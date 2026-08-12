@@ -42,3 +42,15 @@ pub(super) fn arguments(path: &Path, command: &HostCommand) -> Result<Vec<CStrin
     }
     Ok(arguments)
 }
+
+pub(super) fn runtime_arguments(path: &Path, command: &HostCommand) -> Result<Vec<CString>, ()> {
+    let mut arguments = Vec::with_capacity(command.argv().len() + 4);
+    arguments.push(CString::new(SANDBOX_EXECUTABLE).map_err(|_| ())?);
+    arguments.push(CString::new("-p").map_err(|_| ())?);
+    arguments.push(CString::new(SANDBOX_PROFILE).map_err(|_| ())?);
+    arguments.push(CString::new(path.as_os_str().as_bytes()).map_err(|_| ())?);
+    for argument in command.argv() {
+        arguments.push(CString::new(argument.as_bytes()).map_err(|_| ())?);
+    }
+    Ok(arguments)
+}
