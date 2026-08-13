@@ -827,6 +827,33 @@ fn untracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse
 }
 
 #[test]
+fn settled_history_survives_removal_of_its_target_before_a_new_journey() {
+    let mut fixture = Fixture::new(
+        "settled-history-missing-target",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let completed = fixture.run();
+    assert_eq!(completed.status.code(), Some(0), "{completed:?}");
+    assert_eq!(Fixture::value(&completed)["status"], "executed");
+
+    let relocated = fixture.container.join("relocated-repo");
+    fs::rename(&fixture.root, &relocated).unwrap();
+    assert!(!fixture.root.exists());
+    let relocated = fs::canonicalize(relocated).unwrap();
+    fs::remove_dir_all(relocated.join("target")).unwrap();
+    let mut command = routine_command(&relocated, &fixture.home, fixture.binary_path());
+    command.args(["--json", "check", "routine"]);
+    let next = command.output().unwrap();
+    assert_eq!(next.status.code(), Some(0), "{next:?}");
+    assert_eq!(Fixture::value(&next)["status"], "executed");
+
+    fixture.teardown_after_assertions();
+}
+
+#[test]
 fn tracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse() {
     let mut fixture = Fixture::new(
         "tracked-observability-store",

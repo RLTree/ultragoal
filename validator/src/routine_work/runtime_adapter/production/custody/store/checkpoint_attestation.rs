@@ -19,9 +19,7 @@ impl FileLedger {
         terminal_outcome: Option<&str>,
         allow_stale_head: bool,
     ) -> Result<(), RoutineError> {
-        if !target.is_absolute()
-            || target.to_str().is_none()
-            || std::fs::canonicalize(target).ok().as_deref() != Some(target)
+        if !admissible_target(target, state, terminal_outcome, allow_stale_head)
             || !valid(context_id)
             || !valid(candidate_id)
             || !valid(plan_id)
@@ -71,6 +69,88 @@ impl FileLedger {
             Ok(((), false))
         })?
         .into_result()
+    }
+}
+
+fn admissible_target(
+    target: &Path,
+    state: &str,
+    terminal_outcome: Option<&str>,
+    allow_stale_head: bool,
+) -> bool {
+    if !target.is_absolute() || target.to_str().is_none() {
+        return false;
+    }
+    if std::fs::canonicalize(target).ok().as_deref() == Some(target) {
+        return true;
+    }
+    let settled_history = allow_stale_head
+        && matches!(state, "terminal-event-pending" | "terminal-event-joined")
+        && matches!(
+            terminal_outcome,
+            Some("complete" | "failed" | "cancelled" | "incomplete")
+        );
+    settled_history && missing_target_has_canonical_ancestry(target)
+}
+
+fn missing_target_has_canonical_ancestry(target: &Path) -> bool {
+    if target.components().any(|component| {
+        !matches!(
+            component,
+            std::path::Component::RootDir | std::path::Component::Normal(_)
+        )
+    }) || !matches!(
+        std::fs::symlink_metadata(target),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound
+    ) {
+        return false;
+    }
+    let mut ancestor = target.parent();
+    while let Some(path) = ancestor {
+        match std::fs::symlink_metadata(path) {
+            Ok(metadata) => {
+                return metadata.is_dir()
+                    && std::fs::canonicalize(path).ok().as_deref() == Some(path);
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                ancestor = path.parent();
+            }
+            Err(_) => return false,
+        }
+    }
+    false
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{admissible_target, missing_target_has_canonical_ancestry};
+    use std::path::Path;
+
+    #[test]
+    fn only_settled_stale_history_may_reference_a_missing_canonical_target() {
+        let target = Path::new("/private/tmp/ultragoal-settled-history-missing-target");
+        assert!(missing_target_has_canonical_ancestry(target));
+        assert!(admissible_target(
+            target,
+            "terminal-event-joined",
+            Some("complete"),
+            true,
+        ));
+        assert!(!admissible_target(
+            target,
+            "terminal-event-joined",
+            Some("complete"),
+            false,
+        ));
+        assert!(!admissible_target(
+            target,
+            "ambiguous",
+            Some("ambiguous"),
+            true,
+        ));
+        assert!(!missing_target_has_canonical_ancestry(Path::new(
+            "/private/tmp/../tmp/ultragoal-settled-history-missing-target",
+        )));
     }
 }
 
