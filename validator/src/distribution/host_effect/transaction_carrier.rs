@@ -118,10 +118,43 @@ pub(super) fn resolve_host_lifecycle_outcome(
             HostLifecycleTransactionOutcome::Completed(result) => return Ok(result),
             HostLifecycleTransactionOutcome::FinalizedFailure(cause) => return Err(cause),
             HostLifecycleTransactionOutcome::RecoveryRequired(carrier) => {
-                last_recovery_cause = Some(carrier.cause.message());
+                remember_recovery_cause(&mut last_recovery_cause, carrier.cause);
                 carrier.reobserve_and_resolve()
             }
         };
     }
-    Err(last_recovery_cause.unwrap_or("host lifecycle recovery remained unresolved"))
+    Err(exhausted_recovery_message(last_recovery_cause))
+}
+
+fn remember_recovery_cause(
+    last_recovery_cause: &mut Option<&'static str>,
+    cause: HostLifecycleRecoveryCause,
+) {
+    *last_recovery_cause = Some(cause.message());
+}
+
+fn exhausted_recovery_message(last_recovery_cause: Option<&'static str>) -> &'static str {
+    last_recovery_cause.unwrap_or("host lifecycle recovery remained unresolved")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{HostLifecycleRecoveryCause, exhausted_recovery_message, remember_recovery_cause};
+
+    #[test]
+    fn exhausted_reobservation_preserves_terminal_recovery_cause() {
+        let mut last_recovery_cause = None;
+        remember_recovery_cause(
+            &mut last_recovery_cause,
+            HostLifecycleRecoveryCause::Observation("sentinel terminal recovery cause"),
+        );
+        assert_eq!(
+            exhausted_recovery_message(last_recovery_cause),
+            "sentinel terminal recovery cause"
+        );
+        assert_eq!(
+            exhausted_recovery_message(None),
+            "host lifecycle recovery remained unresolved"
+        );
+    }
 }
