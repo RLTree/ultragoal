@@ -112,14 +112,16 @@ include!("transaction_carrier_reobservation.rs");
 pub(super) fn resolve_host_lifecycle_outcome(
     mut outcome: HostLifecycleTransactionOutcome,
 ) -> Result<super::transaction::HostLifecycleTransactionResult, &'static str> {
+    let mut last_recovery_cause = None;
     for _ in 0..MAX_REOBSERVATION_ATTEMPTS {
         outcome = match outcome {
             HostLifecycleTransactionOutcome::Completed(result) => return Ok(result),
             HostLifecycleTransactionOutcome::FinalizedFailure(cause) => return Err(cause),
             HostLifecycleTransactionOutcome::RecoveryRequired(carrier) => {
+                last_recovery_cause = Some(carrier.cause.message());
                 carrier.reobserve_and_resolve()
             }
         };
     }
-    Err("host lifecycle recovery remained unresolved")
+    Err(last_recovery_cause.unwrap_or("host lifecycle recovery remained unresolved"))
 }
