@@ -110,6 +110,7 @@ impl SupportedHostFixture {
             &self.cache,
             &self.global,
             &self.project,
+            digest(b"fixture-host-plugin-registry-observation"),
         )
     }
 

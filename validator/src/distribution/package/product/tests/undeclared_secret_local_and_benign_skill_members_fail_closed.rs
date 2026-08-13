@@ -30,7 +30,7 @@ fn undeclared_secret_local_and_benign_skill_members_fail_closed() {
 }
 
 #[test]
-fn missing_or_unsafe_canonical_agent_member_fails_closed() {
+fn missing_or_unsafe_canonical_skill_agent_metadata_fails_closed() {
     let missing = Repo::new("supported-package-product-missing-agent");
     fs::remove_file(missing.root.join("skills/prove/agents/openai.yaml"))
         .expect("remove canonical agent");
@@ -43,15 +43,155 @@ fn missing_or_unsafe_canonical_agent_member_fails_closed() {
     );
 
     let linked = Repo::new("supported-package-product-linked-agent");
+    let context = linked.context();
     fs::hard_link(
         linked.root.join("skills/prove/agents/openai.yaml"),
         linked.root.join("skills/prove/agents/duplicate.yaml"),
     )
     .expect("hard-linked agent");
-    let context = linked.context();
-    assert_eq!(
+    assert!(matches!(
         capture_product_package(&context, &catalog(&context))
             .expect_err("hard-linked canonical agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable | ProductionPackageErrorId::ContextUnavailable
+    ));
+}
+
+#[test]
+fn root_agent_membership_rejects_missing_unknown_case_colliding_and_unsafe_members() {
+    use std::os::unix::ffi::OsStrExt;
+
+    let canonical = crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path;
+
+    let missing = Repo::new("supported-package-product-missing-root-agent");
+    fs::remove_file(missing.root.join(canonical)).expect("remove root agent");
+    let context = missing.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("missing root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+
+    let unknown = Repo::new("supported-package-product-unknown-root-agent");
+    fs::write(
+        unknown.root.join(".codex/agents/undeclared.toml"),
+        "name = \"undeclared\"\n",
+    )
+    .expect("unknown root agent");
+    let context = unknown.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("unknown root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+
+    let case_colliding = Repo::new("supported-package-product-case-root-agent");
+    fs::rename(
+        case_colliding.root.join(canonical),
+        case_colliding
+            .root
+            .join(".codex/agents/Claim-Falsifier.toml"),
+    )
+    .expect("case-colliding root agent");
+    let context = case_colliding.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("case-colliding root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+
+    let linked = Repo::new("supported-package-product-hard-linked-root-agent");
+    let context = linked.context();
+    fs::hard_link(
+        linked.root.join(canonical),
+        linked.root.join("agent-link-alias"),
+    )
+    .expect("hard-link root agent");
+    assert!(matches!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("hard-linked root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable | ProductionPackageErrorId::ContextUnavailable
+    ));
+
+    let symlinked = Repo::new("supported-package-product-symlinked-root-agent");
+    let context = symlinked.context();
+    fs::remove_file(symlinked.root.join(canonical)).expect("remove root agent for symlink");
+    symlink(
+        symlinked
+            .root
+            .join(crate::agent_roles::CANONICAL_AGENT_ROLES[1].manifest_path),
+        symlinked.root.join(canonical),
+    )
+    .expect("symlink root agent");
+    assert!(matches!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("symlinked root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable | ProductionPackageErrorId::ContextUnavailable
+    ));
+
+    let special = Repo::new("supported-package-product-special-root-agent");
+    let context = special.context();
+    fs::remove_file(special.root.join(canonical)).expect("remove root agent for special file");
+    let special_path = special.root.join(canonical);
+    let encoded = std::ffi::CString::new(special_path.as_os_str().as_bytes())
+        .expect("special root agent path");
+    assert_eq!(unsafe { libc::mkfifo(encoded.as_ptr(), 0o600) }, 0);
+    assert!(matches!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("special root agent accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable | ProductionPackageErrorId::ContextUnavailable
+    ));
+}
+
+#[test]
+fn root_agent_paths_cannot_be_laundered_through_resources_or_mismatched_names() {
+    let laundered = Repo::new("supported-package-product-laundered-root-agents");
+    let draft_path = laundered.root.join("plugin-manifest-draft.json");
+    let mut draft: serde_json::Value =
+        serde_json::from_slice(&fs::read(&draft_path).expect("read draft manifest"))
+            .expect("parse draft manifest");
+    draft["agents"] = json!([]);
+    let resources = draft["resources"].as_array_mut().expect("draft resources");
+    resources.extend(
+        crate::agent_roles::CANONICAL_AGENT_ROLES
+            .iter()
+            .map(|role| json!(role.manifest_path)),
+    );
+    fs::write(
+        &draft_path,
+        serde_json::to_vec(&draft).expect("encode laundered manifest"),
+    )
+    .expect("write laundered manifest");
+    let context = laundered.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("resource-laundered root agents accepted")
+            .id(),
+        ProductionPackageErrorId::SourceUnavailable
+    );
+
+    let mismatched = Repo::new("supported-package-product-mismatched-root-agent-name");
+    let draft_path = mismatched.root.join("plugin-manifest-draft.json");
+    let mut draft: serde_json::Value =
+        serde_json::from_slice(&fs::read(&draft_path).expect("read draft manifest"))
+            .expect("parse draft manifest");
+    draft["agents"][0]["name"] = json!(crate::agent_roles::CANONICAL_AGENT_ROLES[1].name);
+    draft["agents"][1]["name"] = json!(crate::agent_roles::CANONICAL_AGENT_ROLES[0].name);
+    fs::write(
+        &draft_path,
+        serde_json::to_vec(&draft).expect("encode mismatched manifest"),
+    )
+    .expect("write mismatched manifest");
+    let context = mismatched.context();
+    assert_eq!(
+        capture_product_package(&context, &catalog(&context))
+            .expect_err("mismatched root agent names accepted")
             .id(),
         ProductionPackageErrorId::SourceUnavailable
     );

@@ -17,7 +17,7 @@ pub(crate) use anchored::{
     ReaddirTestFault, reset_test_io_counts, set_test_readdir_fault, test_io_counts,
     test_readdir_fault_triggered,
 };
-pub(crate) use descriptor::parse_descriptor;
+pub(crate) use descriptor::{parse_descriptor, parse_global_descriptor};
 #[cfg(not(unix))]
 pub(crate) use unsupported::{AnchoredDirectory, AnchoredRoot, SecureFile};
 

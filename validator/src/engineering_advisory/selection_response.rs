@@ -1,9 +1,12 @@
 use super::{
-    ADVISORY_SELECTION_NO_CLAIM, AdvisoryLens, AdvisorySelectionDisposition,
-    AdvisorySelectionRequest, EngineeringAdvisorySelection,
+    ADVISORY_SELECTION_NO_CLAIM, ADVISORY_SELECTION_SCHEMA, AdvisoryLens,
+    AdvisorySelectionDisposition, AdvisorySelectionRequest, EngineeringAdvisorySelection,
 };
 use crate::digest;
+use crate::plugin_product::engineering_advisory::qualify_skill;
 use std::collections::BTreeSet;
+
+const SELECTION_IDENTITY_DOMAIN: &str = "EngineeringAdvisorySelectionIdentity-v2";
 
 pub(super) struct SelectionDetails {
     pub(super) primary_lens: Option<AdvisoryLens>,
@@ -20,24 +23,33 @@ pub(super) fn selection(
     disposition: AdvisorySelectionDisposition,
     details: SelectionDetails,
 ) -> EngineeringAdvisorySelection {
-    let selection_id = digest::bytes(
-        &serde_json::to_vec(&(
-            &input_fingerprint,
-            disposition,
-            details.primary_lens,
-            &details.supporting_lenses,
-        ))
-        .expect("selection identity serializes"),
-    );
-    EngineeringAdvisorySelection {
-        schema_version: "EngineeringAdvisorySelection-v1".to_owned(),
-        selection_id,
+    let qualified_primary_skill = details
+        .primary_lens
+        .and_then(|lens| qualify_skill(lens.skill_name()));
+    let qualified_supporting_skills = details
+        .supporting_lenses
+        .iter()
+        .filter_map(|lens| qualify_skill(lens.skill_name()))
+        .collect::<Vec<_>>();
+    let agentic_candidate = request
+        .profile
+        .as_ref()
+        .map(|profile| profile.candidate_binding.clone());
+    let mut selection = EngineeringAdvisorySelection {
+        schema_version: ADVISORY_SELECTION_SCHEMA.to_owned(),
+        selection_id: String::new(),
         input_fingerprint,
         candidate_id: request.candidate_id.clone(),
         context_id: request.context_id.clone(),
+        pack_set_digest: request.pack_set_digest.clone(),
+        profile_digest: request.profile_digest.clone(),
+        selector_version: request.selector_version.clone(),
+        agentic_candidate,
         disposition,
         primary_lens: details.primary_lens,
+        qualified_primary_skill,
         supporting_lenses: details.supporting_lenses,
+        qualified_supporting_skills,
         activation_reasons: details.activation_reasons,
         assumptions: BTreeSet::from(["advisory output is proposal-only".to_owned()]),
         missing_inputs: details.missing_inputs,
@@ -62,7 +74,18 @@ pub(super) fn selection(
         plain_language_next_action: details.plain_language_next_action.to_owned(),
         claim_ceiling: "proposal_only_no_claim".to_owned(),
         no_claim_statement: ADVISORY_SELECTION_NO_CLAIM.to_owned(),
-    }
+    };
+    selection.selection_id = selection_identity(&selection);
+    selection
+}
+
+pub(super) fn selection_identity(selection: &EngineeringAdvisorySelection) -> String {
+    let mut canonical = selection.clone();
+    canonical.selection_id.clear();
+    digest::bytes(
+        &serde_json::to_vec(&(SELECTION_IDENTITY_DOMAIN, canonical))
+            .expect("selection identity serializes"),
+    )
 }
 
 pub(super) fn fingerprint(request: &AdvisorySelectionRequest) -> String {

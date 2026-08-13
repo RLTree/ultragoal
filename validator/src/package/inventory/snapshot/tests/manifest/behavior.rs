@@ -1,5 +1,85 @@
 use super::{PackageCapture, PackageEntryKind, PackageSnapshot, Repo, status, write_manifest};
 use std::fs;
+use std::os::unix::fs::PermissionsExt;
+
+#[test]
+fn manifest_declared_root_agents_are_exact_snapshot_members() {
+    let repo = Repo::new("package-snapshot-root-agents");
+    fs::create_dir_all(repo.root.join(".codex/agents")).expect("root agents");
+    fs::create_dir_all(repo.root.join(".agents/plugins")).expect("marketplace directory");
+    fs::create_dir_all(repo.root.join("runtime")).expect("runtime directory");
+    fs::write(repo.root.join(".agents/plugins/marketplace.json"), "{}\n")
+        .expect("marketplace catalog");
+    let runtime_probe = repo.root.join("runtime/runtime-probe-bin");
+    fs::write(&runtime_probe, "probe\n").expect("runtime probe");
+    fs::set_permissions(&runtime_probe, fs::Permissions::from_mode(0o755))
+        .expect("runtime probe mode");
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        fs::write(
+            repo.root.join(role.manifest_path),
+            format!("name = {:?}\n", role.name),
+        )
+        .expect("root agent");
+    }
+    let agents = crate::agent_roles::CANONICAL_AGENT_ROLES
+        .iter()
+        .map(|role| {
+            serde_json::json!({
+                "name": role.name,
+                "path": role.manifest_path
+            })
+        })
+        .collect::<Vec<_>>();
+    fs::write(
+        repo.root.join("plugin-manifest-draft.json"),
+        serde_json::to_vec(&serde_json::json!({
+            "name": "snapshot-test",
+            "version": "0.0.0",
+            "status": "test",
+            "purpose": "test",
+            "skills": [],
+            "agents": agents,
+            "schemas": [],
+            "fixtures": [],
+            "authorable_templates": [],
+            "generated_examples": [],
+            "resources": [
+                ".agents/plugins/marketplace.json",
+                "plugin-manifest-draft.json",
+                "resource.txt"
+            ],
+            "schema_catalog": "schemas/catalog.json",
+            "optional_connectors": [],
+            "non_goals": []
+        }))
+        .expect("agent manifest JSON"),
+    )
+    .expect("agent manifest");
+
+    let snapshot = PackageCapture::begin(&repo.context())
+        .expect("snapshot capture")
+        .finish()
+        .expect("snapshot finish");
+    let mut expected = vec![
+        ".agents/plugins/marketplace.json".to_owned(),
+        ".codex-plugin/plugin.json".to_owned(),
+        "runtime/runtime-probe-bin".to_owned(),
+    ];
+    expected.extend(
+        crate::agent_roles::CANONICAL_AGENT_ROLES
+            .iter()
+            .map(|role| role.manifest_path.to_owned()),
+    );
+    expected.sort();
+    assert_eq!(snapshot.packaged_paths(), expected);
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        assert_eq!(snapshot.unix_mode(role.manifest_path), Some(0o644));
+        assert_eq!(
+            snapshot.bytes(role.manifest_path),
+            Some(format!("name = {:?}\n", role.name).as_bytes())
+        );
+    }
+}
 
 #[test]
 fn snapshot_is_context_bound_and_deterministic() {

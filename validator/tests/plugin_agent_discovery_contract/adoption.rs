@@ -1,4 +1,5 @@
 use super::super::AgentDiscoveryErrorId;
+use super::super::HostPluginRegistryObservation;
 use super::super::local_authority::{AgentRepositoryAdoptionRequest, adopt_agent_repository};
 use super::authority_fixtures::{CANDIDATE, SESSION, TempRepo, canonical_names};
 use std::fs;
@@ -20,7 +21,9 @@ fn typed_repository_adoption_uses_one_explicit_authority_set() {
     let adoption = adopt_agent_repository(AgentRepositoryAdoptionRequest {
         source_root: &source.root,
         package_root: source.root.clone(),
-        installed_root: installed,
+        host_registry_observation: HostPluginRegistryObservation::fixture(
+            &installed, &home, "0.0.11",
+        ),
         cache_family_root: cache_family,
         global_root: home,
         project_root: project,
@@ -54,7 +57,9 @@ fn duplicate_package_and_project_authority_fails_closed() {
     let result = adopt_agent_repository(AgentRepositoryAdoptionRequest {
         source_root: &source.root,
         package_root: source.root.clone(),
-        installed_root: installed,
+        host_registry_observation: HostPluginRegistryObservation::fixture(
+            &installed, &home, "0.0.11",
+        ),
         cache_family_root: cache_family,
         global_root: home,
         project_root: source.root.clone(),

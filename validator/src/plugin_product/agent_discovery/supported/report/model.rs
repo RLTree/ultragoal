@@ -6,7 +6,6 @@ use serde::Serialize;
 pub enum SupportedAgentAuthorityFindingKind {
     MissingCanonical,
     ExtraAuthority,
-    LegacyAuthority,
     NormalizedCollision,
     SandboxPolicyMissing,
     WriteCapableSandbox,

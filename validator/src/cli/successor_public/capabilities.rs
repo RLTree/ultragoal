@@ -3,15 +3,35 @@ use crate::agent_roles::CANONICAL_AGENT_ROLES;
 use crate::cli::successor::command_contract::HostPath;
 use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
-    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
+    AgentDiscoveryErrorId, AgentRepositoryAdoption, AgentRepositoryAdoptionRequest,
+    HostPluginRegistryObservation, adopt_agent_repository, capture_current_source,
+    parse_host_plugin_registry_observation,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
+use std::ffi::OsString;
+use std::time::Duration;
+
+const HOST_OBSERVATION_TIMEOUT: Duration = Duration::from_secs(30);
 
 pub(super) fn project(
     context: &LiveContext,
     invocation: &ParsedInvocation,
     home: Option<&Path>,
+) -> RuntimeOutcome {
+    project_with_registry_observer(context, invocation, home, |expected_plugin_version| {
+        observe_host_registry(context, expected_plugin_version)
+    })
+}
+
+fn project_with_registry_observer(
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+    observe_registry: impl FnMut(
+        &str,
+    )
+        -> Result<HostPluginRegistryObservation, RegistryObservationFailure>,
 ) -> RuntimeOutcome {
     if invocation.command != SuccessorCommand::Inspect(InspectTarget::Capabilities)
         || invocation.effect != EffectClass::Read
@@ -34,11 +54,31 @@ pub(super) fn project(
     let Ok(package_root) = package_root(invocation) else {
         return RuntimeSession::new(context, None).dispatch(invocation);
     };
-    let authority = authority_projection(context, home, package_root, &candidate_id, &session_id);
+    let authority = authority_projection_with_observer(
+        context,
+        home,
+        package_root,
+        &candidate_id,
+        &session_id,
+        observe_registry,
+    );
     if context.revalidate().is_err() {
         return RuntimeSession::new(context, None).dispatch(invocation);
     }
     render(context, authority)
+}
+
+#[cfg(test)]
+pub(super) fn project_with_test_registry_observer(
+    context: &LiveContext,
+    invocation: &ParsedInvocation,
+    home: Option<&Path>,
+    observe_registry: impl FnMut(
+        &str,
+    )
+        -> Result<HostPluginRegistryObservation, RegistryObservationFailure>,
+) -> RuntimeOutcome {
+    project_with_registry_observer(context, invocation, home, observe_registry)
 }
 
 fn package_root(invocation: &ParsedInvocation) -> Result<Option<&Path>, ()> {
@@ -60,12 +100,18 @@ fn package_root(invocation: &ParsedInvocation) -> Result<Option<&Path>, ()> {
     }
 }
 
-fn authority_projection(
+fn authority_projection_with_observer(
     context: &LiveContext,
     home: Option<&Path>,
     package_root: Option<&Path>,
     candidate_id: &str,
     session_id: &str,
+    mut observe_registry: impl FnMut(
+        &str,
+    ) -> Result<
+        HostPluginRegistryObservation,
+        RegistryObservationFailure,
+    >,
 ) -> Value {
     let project_root = Path::new(&context.roots().worktree_root);
     let binding = binding_projection(
@@ -82,10 +128,28 @@ fn authority_projection(
     let Some(home) = home.filter(|path| HostPath::is_valid_path(path)) else {
         return authority_status("unavailable", "home-unavailable", binding, None);
     };
+    let source = match capture_current_source(package_root, candidate_id, session_id) {
+        Ok(source) => source,
+        Err(error) => {
+            return authority_status("blocked", error.id().code(), binding, None);
+        }
+    };
+    let first_registry = match observe_registry(source.plugin_version()) {
+        Ok(observation) => observation,
+        Err(RegistryObservationFailure::Unavailable(code)) => {
+            return authority_status("unavailable", code, binding, None);
+        }
+        Err(RegistryObservationFailure::Blocked(id)) => {
+            return authority_status("blocked", id.code(), binding, None);
+        }
+    };
+    if source.revalidate().is_err() || context.revalidate().is_err() {
+        return authority_status("blocked", "observation-changed", binding, None);
+    }
     let request = AgentRepositoryAdoptionRequest {
         source_root: package_root,
         package_root: package_root.to_path_buf(),
-        installed_root: home.join(".codex/plugins/harness-ultragoal"),
+        host_registry_observation: first_registry.clone(),
         cache_family_root: home
             .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal"),
         global_root: home.to_path_buf(),
@@ -94,12 +158,95 @@ fn authority_projection(
         session_id,
     };
     match adopt_agent_repository(request) {
-        Ok(observation) => authority_status("verified", "verified", binding, Some(&observation)),
+        Ok(observation) => {
+            if source.revalidate().is_err() || context.revalidate().is_err() {
+                return authority_status("blocked", "observation-changed", binding, None);
+            }
+            match observe_registry(source.plugin_version()) {
+                Ok(second_registry) if second_registry == first_registry => {
+                    authority_status("verified", "verified", binding, Some(&observation))
+                }
+                Ok(_) => authority_status("blocked", "observation-changed", binding, None),
+                Err(_) => authority_status("blocked", "observation-changed", binding, None),
+            }
+        }
         Err(error) if error.id().code() == "observation-unavailable" => {
             authority_status("unavailable", error.id().code(), binding, None)
         }
         Err(error) => authority_status("blocked", error.id().code(), binding, None),
     }
+}
+
+pub(super) enum RegistryObservationFailure {
+    Unavailable(&'static str),
+    Blocked(AgentDiscoveryErrorId),
+}
+
+fn observe_host_registry(
+    context: &LiveContext,
+    expected_plugin_version: &str,
+) -> Result<HostPluginRegistryObservation, RegistryObservationFailure> {
+    let codex = context
+        .capabilities()
+        .tool("codex")
+        .filter(|tool| tool.available)
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    let executable = codex
+        .executable
+        .as_deref()
+        .map(Path::new)
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    let executable_sha256 = codex
+        .executable_sha256
+        .as_deref()
+        .filter(|value| {
+            value.len() == 64
+                && value
+                    .bytes()
+                    .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
+        })
+        .map(|value| format!("sha256:{value}"))
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    context.revalidate().map_err(|_| {
+        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
+    })?;
+    let marketplace_json = run_codex_observation(
+        executable,
+        &["plugin", "marketplace", "list", "--json"],
+        context.worktree_root(),
+    )?;
+    let plugin_json = run_codex_observation(
+        executable,
+        &["plugin", "list", "--json"],
+        context.worktree_root(),
+    )?;
+    context.revalidate().map_err(|_| {
+        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
+    })?;
+    parse_host_plugin_registry_observation(
+        &plugin_json,
+        &marketplace_json,
+        expected_plugin_version,
+        executable,
+        &executable_sha256,
+    )
+    .map_err(|error| RegistryObservationFailure::Blocked(error.id()))
+}
+
+fn run_codex_observation(
+    executable: &Path,
+    arguments: &[&str],
+    current_dir: &Path,
+) -> Result<Vec<u8>, RegistryObservationFailure> {
+    let arguments = arguments.iter().map(OsString::from).collect::<Vec<_>>();
+    let output = crate::context::run_bounded(
+        executable,
+        &arguments,
+        current_dir,
+        HOST_OBSERVATION_TIMEOUT,
+    )
+    .map_err(|_| RegistryObservationFailure::Unavailable("codex-observation-unavailable"))?;
+    Ok(output.stdout)
 }
 
 fn binding_projection(
@@ -136,6 +283,7 @@ fn authority_status(
         "binding": binding,
         "source_catalog_sha256": observation.map(AgentRepositoryAdoption::source_catalog_sha256),
         "binding_sha256": observation.map(AgentRepositoryAdoption::binding_sha256),
+        "host_registry_observation_sha256": observation.map(AgentRepositoryAdoption::host_registry_observation_sha256),
         "fresh_session_observed": observation.map(AgentRepositoryAdoption::fresh_session_observed),
         "route_eligible": observation.map(AgentRepositoryAdoption::route_eligible),
         "roles": roles,

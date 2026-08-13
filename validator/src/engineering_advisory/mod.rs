@@ -30,7 +30,8 @@ mod selection_tests;
 mod tests;
 
 pub use adoption::{
-    ADVISORY_ADOPTION_NO_CLAIM, AdvisoryAdoptionDisposition, EngineeringAdvisoryAdoption,
+    ADVISORY_ADOPTION_NO_CLAIM, ADVISORY_ADOPTION_PROPOSAL_DOMAIN, ADVISORY_ADOPTION_SCHEMA,
+    AdvisoryAdoptionDisposition, EngineeringAdvisoryAdoption, EngineeringAdvisoryAdoptionBinding,
 };
 pub use error::AdvisoryError;
 pub use repair::{
@@ -43,6 +44,7 @@ pub use review::{
 };
 pub use selection::{ADVISORY_SELECTION_NO_CLAIM, select_advisory};
 pub use selection_model::{
+    ADVISORY_SELECTION_REQUEST_SCHEMA, ADVISORY_SELECTION_SCHEMA, ADVISORY_SELECTOR_VERSION,
     AdvisoryLens, AdvisoryOutcomeClass, AdvisorySelectionDisposition, AdvisorySelectionRequest,
     EngineeringAdvisorySelection,
 };

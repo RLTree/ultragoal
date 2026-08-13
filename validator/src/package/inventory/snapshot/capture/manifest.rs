@@ -1,4 +1,5 @@
 use super::*;
+use crate::agent_roles::CANONICAL_AGENT_ROLES;
 use crate::package::inventory::{
     DraftPackageManifest, package_digest_excluded, package_path_syntax_error, payload,
 };
@@ -106,6 +107,8 @@ pub(super) fn capture_supported_package_paths(
         return Err("package snapshot skill roots are not unique".to_string());
     }
 
+    let agent_paths = declared_agent_paths(manifest)?;
+
     let mut required = BTreeSet::from([
         supported_manifest.to_string(),
         runtime_probe.to_string(),
@@ -115,6 +118,7 @@ pub(super) fn capture_supported_package_paths(
         required.insert(format!("{root}/SKILL.md"));
         required.insert(format!("{root}/agents/openai.yaml"));
     }
+    required.extend(agent_paths.iter().cloned());
 
     let mut packaged = vec![supported_manifest.to_string()];
     for (path, kind) in tree {
@@ -138,6 +142,23 @@ pub(super) fn capture_supported_package_paths(
             | PackageEntryKind::Symlink
             | PackageEntryKind::Special => {
                 return Err("package snapshot skill subtree is unsafe".to_string());
+            }
+        }
+    }
+    for (path, kind) in tree {
+        if !supported_agent_member(path, &agent_paths)? {
+            continue;
+        }
+        match kind {
+            PackageEntryKind::Regular { single_link: true } => {
+                source.read(path, anchored::MAX_RESOURCE_BYTES)?;
+                packaged.push(path.clone());
+            }
+            PackageEntryKind::Directory
+            | PackageEntryKind::Regular { single_link: false }
+            | PackageEntryKind::Symlink
+            | PackageEntryKind::Special => {
+                return Err("package snapshot agent member is unsafe".to_string());
             }
         }
     }
@@ -177,6 +198,189 @@ pub(super) fn capture_supported_package_paths(
         return Err("package snapshot canonical package member is missing".to_string());
     }
     Ok(packaged)
+}
+
+fn declared_agent_paths(manifest: &DraftPackageManifest) -> Result<Vec<String>, String> {
+    let agents = manifest.agents();
+    if agents.is_empty() {
+        return Ok(Vec::new());
+    }
+    let canonical = CANONICAL_AGENT_ROLES
+        .iter()
+        .map(|role| (role.name, role.manifest_path))
+        .collect::<BTreeSet<_>>();
+    let declared = agents
+        .iter()
+        .map(|agent| (agent.name(), agent.path()))
+        .collect::<BTreeSet<_>>();
+    if agents.len() != CANONICAL_AGENT_ROLES.len()
+        || declared.len() != agents.len()
+        || declared != canonical
+    {
+        return Err("package snapshot manifest agent declarations do not match".to_string());
+    }
+    Ok(canonical
+        .into_iter()
+        .map(|(_, path)| path.to_owned())
+        .collect())
+}
+
+fn supported_agent_member(path: &str, declared: &[String]) -> Result<bool, String> {
+    const ROOT: &str = ".codex/agents";
+    let folded = path.to_ascii_lowercase();
+    if folded == ROOT {
+        if path != ROOT {
+            return Err("package snapshot agent subtree has a case collision".to_string());
+        }
+        return Ok(false);
+    }
+    if !folded.starts_with(".codex/agents/") {
+        return Ok(false);
+    }
+    if !path.starts_with(".codex/agents/")
+        || declared
+            .iter()
+            .any(|candidate| candidate.eq_ignore_ascii_case(path) && candidate != path)
+    {
+        return Err("package snapshot agent subtree has a case collision".to_string());
+    }
+    if !declared.iter().any(|candidate| candidate == path) {
+        return Err("package snapshot agent subtree contains an unknown member".to_string());
+    }
+    Ok(true)
+}
+
+#[cfg(test)]
+mod agent_member_tests {
+    use super::*;
+
+    fn declared() -> Vec<String> {
+        CANONICAL_AGENT_ROLES
+            .iter()
+            .map(|role| role.manifest_path.to_owned())
+            .collect()
+    }
+
+    fn manifest(agents: serde_json::Value, resources: serde_json::Value) -> DraftPackageManifest {
+        parse_manifest(agents, resources).expect("draft manifest")
+    }
+
+    fn parse_manifest(
+        agents: serde_json::Value,
+        resources: serde_json::Value,
+    ) -> Result<DraftPackageManifest, String> {
+        DraftPackageManifest::parse(
+            &serde_json::to_vec(&serde_json::json!({
+                "name": "snapshot-test",
+                "version": "0.0.0",
+                "status": "test",
+                "purpose": "test",
+                "skills": [],
+                "agents": agents,
+                "schemas": [],
+                "fixtures": [],
+                "authorable_templates": [],
+                "generated_examples": [],
+                "resources": resources,
+                "schema_catalog": "schemas/catalog.json",
+                "optional_connectors": [],
+                "non_goals": []
+            }))
+            .expect("manifest JSON"),
+        )
+    }
+
+    fn canonical_agents() -> serde_json::Value {
+        serde_json::Value::Array(
+            CANONICAL_AGENT_ROLES
+                .iter()
+                .map(|role| {
+                    serde_json::json!({
+                        "name": role.name,
+                        "path": role.manifest_path
+                    })
+                })
+                .collect(),
+        )
+    }
+
+    #[test]
+    fn declarations_allow_empty_or_exact_unordered_canonical_pair_sets() {
+        let generic = manifest(serde_json::json!([]), serde_json::json!([]));
+        assert_eq!(declared_agent_paths(&generic), Ok(Vec::new()));
+
+        let canonical = manifest(canonical_agents(), serde_json::json!([]));
+        assert_eq!(declared_agent_paths(&canonical), Ok(declared()));
+
+        let laundered = manifest(
+            serde_json::json!([]),
+            serde_json::Value::Array(
+                CANONICAL_AGENT_ROLES
+                    .iter()
+                    .map(|role| serde_json::json!(role.manifest_path))
+                    .collect(),
+            ),
+        );
+        let declarations = declared_agent_paths(&laundered).expect("generic declarations");
+        assert!(declarations.is_empty());
+        assert!(
+            supported_agent_member(CANONICAL_AGENT_ROLES[0].manifest_path, &declarations).is_err()
+        );
+
+        let mut mismatched = canonical_agents();
+        mismatched[0]["name"] = serde_json::json!(CANONICAL_AGENT_ROLES[1].name);
+        mismatched[1]["name"] = serde_json::json!(CANONICAL_AGENT_ROLES[0].name);
+        let mismatched = manifest(mismatched, serde_json::json!([]));
+        assert!(declared_agent_paths(&mismatched).is_err());
+
+        let mut reordered = canonical_agents();
+        reordered.as_array_mut().expect("agent rows").swap(0, 1);
+        let reordered = manifest(reordered, serde_json::json!([]));
+        assert_eq!(declared_agent_paths(&reordered), Ok(declared()));
+
+        let mut duplicate = canonical_agents();
+        duplicate[1] = duplicate[0].clone();
+        assert!(parse_manifest(duplicate, serde_json::json!([])).is_err());
+    }
+
+    #[test]
+    fn canonical_agent_members_are_exact_and_case_collision_safe() {
+        let declared = declared();
+        assert_eq!(
+            supported_agent_member(CANONICAL_AGENT_ROLES[0].manifest_path, &declared),
+            Ok(true)
+        );
+        assert_eq!(
+            supported_agent_member(".codex/agents", &declared),
+            Ok(false)
+        );
+        assert!(supported_agent_member(".codex/Agents", &declared).is_err());
+        assert!(supported_agent_member(".codex/agents/Claim-Falsifier.toml", &declared).is_err());
+        assert!(supported_agent_member(".codex/agents/undeclared.toml", &declared).is_err());
+        assert_eq!(
+            supported_agent_member("skills/prove/SKILL.md", &declared),
+            Ok(false)
+        );
+    }
+
+    #[test]
+    fn only_regular_single_link_agent_members_are_safe() {
+        for kind in [
+            PackageEntryKind::Directory,
+            PackageEntryKind::Regular { single_link: false },
+            PackageEntryKind::Symlink,
+            PackageEntryKind::Special,
+        ] {
+            assert!(unsafe_agent_member(kind));
+        }
+        assert!(!unsafe_agent_member(PackageEntryKind::Regular {
+            single_link: true
+        }));
+    }
+
+    fn unsafe_agent_member(kind: PackageEntryKind) -> bool {
+        !matches!(kind, PackageEntryKind::Regular { single_link: true })
+    }
 }
 
 pub(in super::super) fn supported_skill_root<'a>(

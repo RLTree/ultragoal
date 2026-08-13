@@ -1,6 +1,7 @@
 use super::selection_response::{SelectionDetails, fingerprint, selection};
 use super::selection_validation::{
     available_skill_names, binding_is_stale, identity_is_well_formed, missing_inputs,
+    qualified_skill_name,
 };
 use super::{
     AdvisoryLens, AdvisoryOutcomeClass, AdvisorySelectionDisposition, AdvisorySelectionRequest,
@@ -120,10 +121,9 @@ pub fn select_advisory(request: &AdvisorySelectionRequest) -> EngineeringAdvisor
         );
     };
     let primary = required[0];
-    if let Some(unavailable) = required
-        .iter()
-        .find(|lens| !available.contains(lens.skill_name()))
-    {
+    if let Some(unavailable) = required.iter().find(|lens| {
+        qualified_skill_name(lens.skill_name()).is_none_or(|skill| !available.contains(&skill))
+    }) {
         return selection(
             request,
             input_fingerprint,
@@ -146,7 +146,9 @@ pub fn select_advisory(request: &AdvisorySelectionRequest) -> EngineeringAdvisor
         .copied()
         .skip(1)
         .find(|lens| lens.owner_family() != primary.owner_family())
-        .filter(|lens| available.contains(lens.skill_name()))
+        .filter(|lens| {
+            qualified_skill_name(lens.skill_name()).is_some_and(|skill| available.contains(&skill))
+        })
         .into_iter()
         .collect::<Vec<_>>();
     selection(

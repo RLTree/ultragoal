@@ -79,6 +79,9 @@ pub(crate) fn execute_invocation_with_home(
         SuccessorCommand::Inspect(InspectTarget::Inventory) | SuccessorCommand::Migrate(_) => {
             compatibility_read_context(&context_root)
         }
+        SuccessorCommand::Inspect(InspectTarget::Capabilities) => {
+            current_capabilities_context(&context_root)
+        }
         _ => current_read_context(&context_root),
     };
     let context = match context_result {

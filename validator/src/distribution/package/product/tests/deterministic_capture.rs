@@ -11,7 +11,7 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
     assert_eq!(first.snapshot().archive(), second.snapshot().archive());
     assert_eq!(first.snapshot().inventory(), second.snapshot().inventory());
     assert_eq!(first.source_inventory(), second.source_inventory());
-    assert_eq!(first.snapshot().entries().len(), 19);
+    assert_eq!(first.snapshot().entries().len(), 25);
     assert_eq!(
         first
             .snapshot()
@@ -58,8 +58,18 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
             .iter()
             .filter(|entry| entry.role() == PackageRole::Agent)
             .count(),
-        8
+        14
     );
+    let decoded = archive::decode(first.snapshot().archive()).expect("decode verified archive");
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        let entry = decoded
+            .entries
+            .iter()
+            .find(|entry| entry.path() == role.manifest_path)
+            .expect("root agent archive member");
+        assert_eq!(entry.role(), PackageRole::Agent);
+        assert_eq!(entry.mode(), 0o644);
+    }
     verify_product_package(&first, &context, &catalog).expect("independent verify");
     assert_eq!(status(&repo.root), before);
     assert_eq!(source_tree(&repo.root), before_tree);
@@ -78,7 +88,7 @@ fn legacy_skill_source_is_not_active_package_membership() {
     let context = repo.context();
     let catalog = catalog(&context);
     let package = capture_product_package(&context, &catalog).expect("package");
-    assert_eq!(package.snapshot().entries().len(), 19);
+    assert_eq!(package.snapshot().entries().len(), 25);
     assert!(
         package
             .snapshot()

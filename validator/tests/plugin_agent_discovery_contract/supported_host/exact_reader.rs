@@ -84,7 +84,7 @@ fn repeated_supported_observations_are_deterministic_but_session_provenance_is_u
 }
 
 #[test]
-fn supported_reader_reports_all_legacy_and_policy_authority_without_suppression() {
+fn supported_reader_rejects_canonical_collision_while_tolerating_unrelated_harness_agent() {
     let repo = TempRepo::canonical();
     let source = repo.capture();
     let host = SupportedHostFixture::exact(&source);
@@ -106,14 +106,11 @@ fn supported_reader_reports_all_legacy_and_policy_authority_without_suppression(
         AgentDiscoveryErrorId::CollidingAuthorityActive
     );
     let findings = reader.report().findings().to_vec();
-    assert!(findings.iter().any(|finding| {
-        finding.kind() == SupportedAgentAuthorityFindingKind::LegacyAuthority
-            && finding.authority_name() == "harness_contract_claim_falsifier"
-    }));
-    assert!(findings.iter().any(|finding| {
-        finding.kind() == SupportedAgentAuthorityFindingKind::SandboxPolicyMissing
-            && finding.authority_name() == "harness_contract_claim_falsifier"
-    }));
+    assert!(
+        !findings
+            .iter()
+            .any(|finding| { finding.authority_name() == "harness_contract_claim_falsifier" })
+    );
     assert!(findings.iter().any(|finding| {
         finding.kind() == SupportedAgentAuthorityFindingKind::NormalizedCollision
             && finding.authority_name() == "claim_falsifier"
@@ -121,7 +118,7 @@ fn supported_reader_reports_all_legacy_and_policy_authority_without_suppression(
 }
 
 #[test]
-fn supported_reader_rejects_write_capable_unrelated_global_authority() {
+fn supported_reader_treats_unrelated_global_sandbox_as_non_authoritative_metadata() {
     let repo = TempRepo::canonical();
     let source = repo.capture();
     let host = SupportedHostFixture::exact(&source);
@@ -138,17 +135,11 @@ fn supported_reader_rejects_write_capable_unrelated_global_authority() {
     let result = session.verify(&mut reader);
     let report = reader.report();
 
-    assert_eq!(
-        result.unwrap_err().id(),
-        AgentDiscoveryErrorId::SandboxPolicyRejected
-    );
-    assert_eq!(report.effect_probe_count(), 0);
+    let eligibility = result.unwrap();
+    assert!(!eligibility.has_claim_effect());
+    assert_eq!(report.effect_probe_count(), 6);
     assert_eq!(report.write_operation_count(), 0);
-    assert!(report.findings().iter().any(|finding| {
-        finding.layer() == AgentAuthorityLayer::Global
-            && finding.kind() == SupportedAgentAuthorityFindingKind::WriteCapableSandbox
-            && finding.authority_name() == "unrelated-observer"
-    }));
+    assert!(report.findings().is_empty());
     assert_eq!(tree_snapshot(&repo.root), before_source);
     assert_eq!(tree_snapshot(&host.root), before_host);
 }

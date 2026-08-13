@@ -99,8 +99,8 @@ Missing or stale co-install exposure is an explicit unavailable-advice result,
 not permission to infer a lens from source or cache bytes.
 
 The existing eight-skill `ultragoal` co-install view is retained for its
-bounded current scope. The complete Agentic Engineering 3.0 skill set is
-reachable through three additional stage-scoped views:
+bounded current scope. The complete Agentic Engineering 4.0 four-pack skill
+set is reachable through three additional stage-scoped views:
 
 - core advisory for task framing, context, architecture, construction,
   orchestration, verification, security, and learning;
@@ -110,32 +110,40 @@ reachable through three additional stage-scoped views:
 - Rust systems advisory for architecture, runtime, durability, protocols,
   verification, and observability.
 
-The three stage views cover all thirty Agentic skills. Each view retains the
-external `harness-ultragoal` gateway, exact plugin and source identity,
-candidate binding, closed skill set, and measured discovery budget. The source
-projection rejects a substituted profile, candidate, configuration, source
-digest, skill set, or second implicit gateway; actual host configuration and
-fresh-session discovery remain separate proof surfaces. Agentic's gateway is
-explicit-only when co-installed. The current mapped source is Agentic
-Engineering `3.0.1`, whose `FILE-MANIFEST.sha256` is
-`sha256:b0cf70a7db8fe86964acac725ac1a97502edf9369a8b3e8ce23b676ac78260fe`.
-A full thirty-skill view is not loaded by
-default and must first demonstrate a safe combined context margin and no
-routing degradation.
+The three stage views cover all thirty Agentic skills. Each selected skill is
+fully qualified by its owning package. Every view binds the external
+`harness-ultragoal` gateway, stage-profile digest, exact four-package aggregate,
+all four per-package manifest identities, current Harness candidate, current
+configuration, all four independently recomputed package-source inventory
+digests, and closed skill set. A missing companion package, mutable same-version
+source substitution, legacy monolithic `3.0.1` profile, duplicate package,
+wrong digest, or second implicit gateway is unavailable rather than a fallback.
+The exact accepted package set is Agentic Engineering `4.0.0` from
+commit `3ebedbbf0967386057724ee166043ce5c39d6acf`, with aggregate
+`sha256:f1a4d45fe88e9c9b572609ff79630c9750fa04a552d8904db3858353b482caf7`.
+That source/cache identity is structural evidence only; actual host
+configuration and fresh-session discovery remain separate proof surfaces.
+Agentic's gateway is explicit-only when co-installed. A full thirty-skill view
+is not loaded by default and must first demonstrate a safe combined context
+margin and no routing degradation.
 
 Advice has no lease, permission, effect, evidence, review, or claim authority.
-The source selector consumes one exact candidate-bound profile and catalog
-projection, verifies their complete rendered skill set, and produces either a
-plain-language, proposal-only selection or a visible no-selection/fail-closed
-result. It does not persist an activation tracker: unchanged input suppresses
-reactivation, while changed candidate, context, configuration, lifecycle,
-evidence, assumption, risk, failure mechanism, profile, or active transition
-invalidates prior advice. A root-issued `EngineeringAdvisoryAdoption-v1` can
-then record reuse, extension, mapping as a projection, or rejection through an
-existing UltraGoal owner. It is candidate/context/proposal-digest bound and
-cannot create advisory effect, evidence, or claim authority. Public CLI
-routing, package, installation, discovery, runtime, and journey proof remain
-separate pending surfaces.
+`AgenticCoInstallProfile-v2` and `AdvisorySelectionRequest-v2` carry the changed
+wire contract; `EngineeringAdvisorySelector-v2` emits
+`EngineeringAdvisorySelection-v2`. The source selector consumes one exact
+candidate-bound profile and read-only, no-claim catalog projection, verifies
+their complete rendered skill set, and produces either a plain-language,
+proposal-only selection or a visible no-selection/fail-closed result. It does
+not persist an activation tracker: unchanged input suppresses reactivation,
+while changed candidate, context, configuration, lifecycle, evidence,
+assumption, risk, failure mechanism, package bytes, profile, or active
+transition invalidates prior advice. A root-issued
+`EngineeringAdvisoryAdoption-v2` can then record reuse, extension, mapping as a
+projection, or rejection through an existing UltraGoal owner. It validates the
+exact pack-set, profile, selector, candidate provenance, fully qualified routes,
+and selection identity; it cannot create advisory effect, evidence, or claim
+authority. Public CLI routing, package, installation, discovery, runtime, and
+journey proof remain separate pending surfaces.
 
 The ordinary response remains plain language. `inspect` may expose the
 activated disciplines and rationale, while advanced inspection may expose

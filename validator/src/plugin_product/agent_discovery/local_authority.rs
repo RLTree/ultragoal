@@ -1,4 +1,5 @@
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+use super::host_registry_observation::HostPluginRegistryObservation;
 use super::model::{AgentAuthorityLayer, CanonicalAgentObservation};
 use super::session::AgentDiscoverySession;
 use super::source::SourceAgentCatalog;
@@ -13,7 +14,7 @@ use std::path::{Path, PathBuf};
 pub(crate) struct AgentRepositoryAdoptionRequest<'a> {
     pub(crate) source_root: &'a Path,
     pub(crate) package_root: PathBuf,
-    pub(crate) installed_root: PathBuf,
+    pub(crate) host_registry_observation: HostPluginRegistryObservation,
     pub(crate) cache_family_root: PathBuf,
     pub(crate) global_root: PathBuf,
     pub(crate) project_root: PathBuf,
@@ -54,6 +55,7 @@ impl AgentRepositoryRoleObservation {
 pub(crate) struct AgentRepositoryAdoption {
     source_catalog_sha256: String,
     binding_sha256: String,
+    host_registry_observation_sha256: String,
     fresh_session_observed: bool,
     route_eligible: bool,
     roles: Vec<AgentRepositoryRoleObservation>,
@@ -65,6 +67,9 @@ impl AgentRepositoryAdoption {
     }
     pub(crate) fn binding_sha256(&self) -> &str {
         &self.binding_sha256
+    }
+    pub(crate) fn host_registry_observation_sha256(&self) -> &str {
+        &self.host_registry_observation_sha256
     }
     pub fn fresh_session_observed(&self) -> bool {
         self.fresh_session_observed
@@ -90,13 +95,20 @@ pub(crate) fn adopt_agent_repository(
         request.candidate_id,
         request.session_id,
     )?;
+    if request.host_registry_observation.plugin_version() != source.plugin_version() {
+        return Err(AgentDiscoveryError::new(
+            AgentDiscoveryErrorId::IdentityMismatch,
+        ));
+    }
+    let host_registry_observation_sha256 = request.host_registry_observation.sha256().to_owned();
     let session = AgentDiscoverySession::bind(source.clone())?;
     let roots = SupportedHostAgentRoots::new(
         request.package_root,
-        request.installed_root,
+        request.host_registry_observation.installed_root(),
         request.cache_family_root.join(source.plugin_version()),
         request.global_root,
         request.project_root,
+        request.host_registry_observation.sha256(),
     );
     let mut reader = SupportedHostAgentAuthorityReader::open(source.clone(), roots)?;
     let eligibility = session.verify(&mut reader)?;
@@ -116,6 +128,7 @@ pub(crate) fn adopt_agent_repository(
     Ok(AgentRepositoryAdoption {
         source_catalog_sha256: eligibility.source_catalog_sha256().to_owned(),
         binding_sha256: eligibility.binding_sha256().to_owned(),
+        host_registry_observation_sha256,
         fresh_session_observed: eligibility.new_session_observed(),
         route_eligible: eligibility.route_eligible(),
         roles,

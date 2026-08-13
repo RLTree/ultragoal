@@ -8,6 +8,7 @@ mod error;
 #[path = "host_filesystem_adapter/mod.rs"]
 mod filesystem;
 mod host;
+mod host_registry_observation;
 mod local_authority;
 mod model;
 mod protocol_codec;
@@ -30,6 +31,10 @@ impl CurrentSourceCapture {
     pub(crate) fn revalidate(&self) -> Result<(), error::AgentDiscoveryError> {
         self.0.revalidate()
     }
+
+    pub(crate) fn plugin_version(&self) -> &str {
+        self.0.plugin_version()
+    }
 }
 
 pub(crate) fn capture_current_source(
@@ -44,6 +49,10 @@ pub(crate) fn capture_current_source(
 #[path = "tests/mod.rs"]
 mod tests;
 
+pub(crate) use error::AgentDiscoveryErrorId;
+pub(crate) use host_registry_observation::{
+    HostPluginRegistryObservation, parse_host_plugin_registry_observation,
+};
 pub(crate) use local_authority::{
     AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };
@@ -55,7 +64,7 @@ pub(crate) use filesystem::{
 };
 
 #[cfg(test)]
-pub use error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+pub use error::AgentDiscoveryError;
 #[cfg(test)]
 pub use host::{
     HostAgentAuthorityReader, HostAgentAuthorityRequest, HostAgentAuthorityTransaction,

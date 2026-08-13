@@ -4,6 +4,8 @@ use crate::cli::successor::{
     EffectClass, InspectTarget, OptionArgument, OptionName, ParseErrorId, ParsedInvocation,
     ParsedValue, SuccessorCommand, render_help,
 };
+use crate::cli::successor_public::{capabilities, current_capabilities_context};
+use crate::plugin_product::agent_discovery::HostPluginRegistryObservation;
 use std::path::PathBuf;
 
 #[test]
@@ -18,9 +20,13 @@ pub(crate) fn capabilities_verify_distinct_authority_roots_without_writes() {
     let package_status = package.status();
     let project_status = project.status();
 
-    let streams =
-        execute_invocation_with_home(&project.root, invocation(Some(&package.root)), Some(&home))
-            .render(OutputMode::Json);
+    let streams = execute_with_registry(
+        &project.root,
+        invocation(Some(&package.root)),
+        Some(&home),
+        registry_observation(&package, &home),
+    )
+    .render(OutputMode::Json);
 
     assert_eq!(streams.exit_code, 0);
     assert!(streams.stderr.is_empty());
@@ -68,8 +74,13 @@ pub(crate) fn capabilities_block_aliased_authority_roots_without_writes() {
     let before_home_tree = tree(&home);
     let alias = repo.root.join(".");
 
-    let streams = execute_invocation_with_home(&repo.root, invocation(Some(&alias)), Some(&home))
-        .render(OutputMode::Json);
+    let streams = execute_with_registry(
+        &repo.root,
+        invocation(Some(&alias)),
+        Some(&home),
+        registry_observation(&repo, &home),
+    )
+    .render(OutputMode::Json);
 
     assert_eq!(streams.exit_code, 1);
     assert!(streams.stderr.is_empty());
@@ -92,6 +103,46 @@ pub(crate) fn capabilities_block_aliased_authority_roots_without_writes() {
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
     assert_eq!(tree(&home), before_home_tree);
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[test]
+fn capabilities_block_when_the_ending_registry_observation_is_lost() {
+    let package = Repository::new("capabilities-registry-loss-package");
+    let project = Repository::new("capabilities-registry-loss-project");
+    let home = project
+        .root
+        .with_extension("capabilities-registry-loss-home");
+    package.install_agent_authority(&home);
+    let observation = registry_observation(&package, &home);
+    let context = current_capabilities_context(&project.root).unwrap();
+    let mut observations = [
+        Ok(observation),
+        Err(capabilities::RegistryObservationFailure::Unavailable(
+            "codex-observation-unavailable",
+        )),
+    ]
+    .into_iter();
+
+    let streams = capabilities::project_with_test_registry_observer(
+        &context,
+        &invocation(Some(&package.root)),
+        Some(&home),
+        |_| {
+            observations
+                .next()
+                .expect("exactly two registry observations")
+        },
+    )
+    .render(OutputMode::Json);
+
+    assert_eq!(streams.exit_code, 1);
+    let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+    assert_eq!(value["agent_authority"]["status"], "blocked");
+    assert_eq!(
+        value["agent_authority"]["observation_code"],
+        "observation-changed"
+    );
     fs::remove_dir_all(home).unwrap();
 }
 
@@ -232,4 +283,27 @@ fn forged_invocation(path: PathBuf) -> ParsedInvocation {
             value: ParsedValue::HostPath(HostPath(path)),
         }],
     }
+}
+
+fn execute_with_registry(
+    root: &Path,
+    invocation: ParsedInvocation,
+    home: Option<&Path>,
+    observation: HostPluginRegistryObservation,
+) -> crate::cli::successor::runtime::RuntimeOutcome {
+    let context = current_capabilities_context(root).unwrap();
+    capabilities::project_with_test_registry_observer(&context, &invocation, home, |_| {
+        Ok(observation.clone())
+    })
+}
+
+fn registry_observation(package: &Repository, home: &Path) -> HostPluginRegistryObservation {
+    let manifest: serde_json::Value =
+        serde_json::from_slice(&fs::read(package.root.join(".codex-plugin/plugin.json")).unwrap())
+            .unwrap();
+    HostPluginRegistryObservation::fixture(
+        &home.join(".codex/plugins/harness-ultragoal"),
+        home,
+        manifest["version"].as_str().unwrap(),
+    )
 }

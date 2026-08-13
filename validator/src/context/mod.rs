@@ -48,5 +48,6 @@ pub use error::ContextError;
 pub(crate) use git::query as query_git;
 pub(crate) use inception_subject::identity as inception_subject_identity;
 pub(crate) use planned_write_conflict::planned_write_conflict_paths;
+pub(crate) use process::run_bounded;
 pub(crate) use read_session::ReadSession;
 pub use request::BuildRequest;

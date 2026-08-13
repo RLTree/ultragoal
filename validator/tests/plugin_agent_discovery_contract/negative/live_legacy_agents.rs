@@ -1,41 +1,3 @@
-const LIVE_LEGACY_AGENTS: [(&str, &str, &str); 7] = [
-    (
-        "harness_contract_claim_falsifier",
-        "custom-agents/harness-contract-claim-falsifier.toml",
-        "name = \"harness_contract_claim_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_material_review_scope_gatekeeper",
-        "custom-agents/harness-material-review-scope-gatekeeper.toml",
-        "name = \"harness_material_review_scope_gatekeeper\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_orchestration_recovery_falsifier",
-        "custom-agents/harness-orchestration-recovery-falsifier.toml",
-        "name = \"harness_orchestration_recovery_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_product_simplicity_falsifier",
-        "custom-agents/harness-product-simplicity-falsifier.toml",
-        "name = \"harness_product_simplicity_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_repo_initializer",
-        "custom-agents/harness-repo-initializer.toml",
-        "name = \"harness_repo_initializer\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_retrofit_planner",
-        "custom-agents/harness-retrofit-planner.toml",
-        "name = \"harness_retrofit_planner\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-    (
-        "harness_security_trust_boundary_falsifier",
-        "custom-agents/harness-security-trust-boundary-falsifier.toml",
-        "name = \"harness_security_trust_boundary_falsifier\"\ndescription = \"retired\"\ndeveloper_instructions = \"retired authority\"\n",
-    ),
-];
-
 fn verify_with(
     configure: impl FnOnce(&mut super::authority_fixtures::FixtureTransaction) + 'static,
 ) -> AgentDiscoveryErrorId {
@@ -85,62 +47,39 @@ fn missing_extra_and_duplicate_canonical_authority_fail_closed() {
 }
 
 #[test]
-fn active_legacy_and_normalized_global_collisions_are_distinct_blockers() {
-    assert_eq!(
-        verify_with(|transaction| {
-            transaction.add_global_agent("harness-contract-claim-falsifier", Some("read-only"));
-        }),
-        AgentDiscoveryErrorId::LegacyAuthorityActive
-    );
+fn canonical_and_closed_wrapper_global_collisions_are_blockers() {
     assert_eq!(
         verify_with(|transaction| {
             transaction.add_global_agent("claim_falsifier", Some("read-only"));
         }),
         AgentDiscoveryErrorId::CollidingAuthorityActive
     );
-}
-
-#[test]
-fn every_live_underscore_legacy_identifier_blocks_independently_with_exact_bytes() {
-    for (name, path, bytes) in LIVE_LEGACY_AGENTS {
-        let label = name;
-        let name = name.to_owned();
-        let path = path.to_owned();
-        let bytes = bytes.to_owned();
+    for alias in ["harness", "ultragoal", "harness-ultragoal"] {
+        let alias = alias.to_owned();
         assert_eq!(
             verify_with(move |transaction| {
-                transaction.add_global_agent_bytes(&name, &path, bytes);
+                transaction.add_global_agent(&alias, None);
             }),
-            AgentDiscoveryErrorId::LegacyAuthorityActive,
-            "legacy authority unexpectedly escaped classification: {label}"
+            AgentDiscoveryErrorId::CollidingAuthorityActive
         );
     }
 }
 
 #[test]
-fn removing_additional_hyphenated_roles_cannot_hide_remaining_underscore_legacy_authority() {
-    assert_eq!(
-        verify_with(|transaction| {
-            transaction.add_global_agent("harness-cost-benefit-reviewer", None);
-            transaction.add_global_agent("harness-log-scout", None);
-            for (name, path, bytes) in LIVE_LEGACY_AGENTS {
-                transaction.add_global_agent_bytes(name, path, bytes);
-            }
-            transaction.remove_global_agent("harness-cost-benefit-reviewer");
-            transaction.remove_global_agent("harness-log-scout");
-        }),
-        AgentDiscoveryErrorId::LegacyAuthorityActive
-    );
+fn unrelated_harness_agents_and_global_sandbox_values_are_collision_only() {
+    let repo = TempRepo::canonical();
+    let source = repo.capture();
+    let session = AgentDiscoverySession::bind(source.clone()).unwrap();
+    let mut reader = FixtureReader::exact(&source);
+    reader.configure(|transaction| {
+        transaction.add_global_agent("harness-cost-benefit-reviewer", None);
+        transaction.add_global_agent("harness-log-scout", Some("workspace-write"));
+    });
+    assert!(session.verify(&mut reader).is_ok());
 }
 
 #[test]
-fn omitted_sandbox_and_write_capable_effect_observations_block_eligibility() {
-    assert_eq!(
-        verify_with(|transaction| {
-            transaction.add_global_agent("unrelated-observer", None);
-        }),
-        AgentDiscoveryErrorId::ObservationConflict
-    );
+fn forged_non_global_effect_observation_still_blocks_eligibility() {
     assert_eq!(
         verify_with(|transaction| transaction.forge_effect = true),
         AgentDiscoveryErrorId::SandboxPolicyRejected
@@ -148,7 +87,7 @@ fn omitted_sandbox_and_write_capable_effect_observations_block_eligibility() {
 }
 
 #[test]
-fn write_capable_unrelated_global_authority_cannot_produce_eligibility() {
+fn write_capable_unrelated_global_authority_cannot_grant_plugin_authority() {
     let repo = TempRepo::canonical();
     let source = repo.capture();
     let session = AgentDiscoverySession::bind(source.clone()).unwrap();
@@ -159,11 +98,10 @@ fn write_capable_unrelated_global_authority_cannot_produce_eligibility() {
 
     let result = session.verify(&mut reader);
 
-    assert_eq!(
-        result.unwrap_err().id(),
-        AgentDiscoveryErrorId::SandboxPolicyRejected
-    );
-    assert_eq!(reader.transaction().probes, 0);
+    let report = result.unwrap();
+    assert!(report.route_eligible());
+    assert!(!report.has_claim_effect());
+    assert_eq!(reader.transaction().probes, 6);
 }
 
 #[test]

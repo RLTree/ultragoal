@@ -50,6 +50,14 @@ fn packaged_entries(
             }
         }
     }
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        if !entries
+            .iter()
+            .any(|entry| entry.path == role.manifest_path && entry.role == PackageRole::Agent)
+        {
+            return Err(failure(ProductionPackageErrorId::MembershipMismatch));
+        }
+    }
     if let Some(payload) = cli_payload {
         entries.push(PackageEntry {
             path: CLI_RUNTIME_ENTRY.to_owned(),
@@ -78,6 +86,9 @@ fn package_role(path: &str, mode: u32) -> Result<PackageRole, ProductionPackageE
     } else if CANONICAL_SKILLS
         .iter()
         .any(|name| path == format!("skills/{name}/agents/openai.yaml"))
+        || crate::agent_roles::CANONICAL_AGENT_ROLES
+            .iter()
+            .any(|role| path == role.manifest_path)
     {
         PackageRole::Agent
     } else {

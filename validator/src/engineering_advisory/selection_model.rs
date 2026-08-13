@@ -1,6 +1,11 @@
+use crate::plugin_product::engineering_advisory::AgenticCandidateBinding;
 use crate::plugin_product::skill_catalog::{AgenticCoInstallProfile, SkillCatalogProjection};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
+
+pub const ADVISORY_SELECTION_REQUEST_SCHEMA: &str = "AdvisorySelectionRequest-v2";
+pub const ADVISORY_SELECTOR_VERSION: &str = "EngineeringAdvisorySelector-v2";
+pub const ADVISORY_SELECTION_SCHEMA: &str = "EngineeringAdvisorySelection-v2";
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -60,6 +65,7 @@ pub enum AdvisorySelectionDisposition {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct AdvisorySelectionRequest {
+    pub schema_version: String,
     pub candidate_id: String,
     pub context_id: String,
     pub product_state_id: String,
@@ -79,8 +85,7 @@ pub struct AdvisorySelectionRequest {
     pub recovery_ambiguities: BTreeSet<String>,
     pub product_fitness_gaps: BTreeSet<String>,
     pub activation_signals: BTreeSet<AdvisoryLens>,
-    pub plugin_version: String,
-    pub plugin_digest: String,
+    pub pack_set_digest: String,
     pub profile_digest: String,
     pub selector_version: String,
     pub profile: Option<AgenticCoInstallProfile>,
@@ -96,9 +101,15 @@ pub struct EngineeringAdvisorySelection {
     pub input_fingerprint: String,
     pub candidate_id: String,
     pub context_id: String,
+    pub pack_set_digest: String,
+    pub profile_digest: String,
+    pub selector_version: String,
+    pub agentic_candidate: Option<AgenticCandidateBinding>,
     pub disposition: AdvisorySelectionDisposition,
     pub primary_lens: Option<AdvisoryLens>,
+    pub qualified_primary_skill: Option<String>,
     pub supporting_lenses: Vec<AdvisoryLens>,
+    pub qualified_supporting_skills: Vec<String>,
     pub activation_reasons: Vec<String>,
     pub assumptions: BTreeSet<String>,
     pub missing_inputs: BTreeSet<String>,

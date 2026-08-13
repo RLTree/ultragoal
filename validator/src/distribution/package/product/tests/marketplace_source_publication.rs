@@ -21,6 +21,21 @@ fn marketplace_source_is_exact_and_detects_post_publication_substitution() {
     assert_eq!(publication.candidate_id(), artifact.candidate_id());
     assert_eq!(publication.catalog_id(), artifact.catalog_id());
     assert_eq!(publication.relative_path(), "plugins/harness-ultragoal");
+    let materialized = tree
+        .inspect(MARKETPLACE_SOURCE_ENTRIES, MARKETPLACE_SOURCE_BYTES)
+        .expect("inspect marketplace source")
+        .expect("materialized marketplace source");
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        let entry = materialized
+            .iter()
+            .find(|entry| entry.path() == role.manifest_path)
+            .expect("root agent marketplace member");
+        assert_eq!(entry.mode(), 0o644);
+        assert_eq!(
+            entry.bytes(),
+            fs::read(repo.root.join(role.manifest_path)).expect("source root agent")
+        );
+    }
     artifact
         .verify_marketplace_source(&context, &catalog, &tree)
         .expect("verified marketplace source");

@@ -55,6 +55,7 @@ impl Repo {
     fn new(label: &str) -> Self {
         let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
         fs::create_dir_all(root.join(".codex-plugin")).expect("plugin manifest directory");
+        fs::create_dir_all(root.join(".codex/agents")).expect("root agent directory");
         fs::create_dir_all(root.join(".agents/plugins")).expect("marketplace catalog directory");
         fs::create_dir_all(root.join("schemas")).expect("schema directory");
         fs::create_dir_all(root.join("runtime")).expect("runtime directory");
@@ -71,6 +72,13 @@ impl Repo {
                 format!("interface:\n  display_name: {name}\n"),
             )
             .expect("skill metadata");
+        }
+        for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+            fs::write(
+                root.join(role.manifest_path),
+                format!("name = {:?}\n", role.name),
+            )
+            .expect("root agent manifest");
         }
         write_draft(&root, SUPPORTED_VERSION);
         let status = Command::new("git")
@@ -164,10 +172,19 @@ fn write_draft(root: &Path, version: &str) {
             })
         })
         .collect::<Vec<_>>();
+    let agents = crate::agent_roles::CANONICAL_AGENT_ROLES
+        .iter()
+        .map(|role| {
+            json!({
+                "name": role.name,
+                "path": role.manifest_path
+            })
+        })
+        .collect::<Vec<_>>();
     fs::write(
         root.join("plugin-manifest-draft.json"),
         serde_json::to_vec(&json!({
-            "agents": [],
+            "agents": agents,
             "authorable_templates": [],
             "fixtures": [],
             "generated_examples": [],

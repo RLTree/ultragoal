@@ -1,10 +1,9 @@
-use super::AdvisorySelectionRequest;
-use crate::plugin_product::skill_catalog::{
-    AGENTIC_PLUGIN, AGENTIC_PLUGIN_VERSION, HARNESS_PLUGIN, coinstall_profile,
+use super::{
+    ADVISORY_SELECTION_REQUEST_SCHEMA, ADVISORY_SELECTOR_VERSION, AdvisorySelectionRequest,
 };
+use crate::plugin_product::engineering_advisory::{exact_agentic_candidate_binding, qualify_skill};
+use crate::plugin_product::skill_catalog::{CatalogEffect, HARNESS_PLUGIN, coinstall_profile};
 use std::collections::BTreeSet;
-
-pub(super) const SELECTOR_VERSION: &str = "EngineeringAdvisorySelector-v1";
 
 pub(super) fn identity_is_well_formed(request: &AdvisorySelectionRequest) -> bool {
     [
@@ -12,7 +11,7 @@ pub(super) fn identity_is_well_formed(request: &AdvisorySelectionRequest) -> boo
         &request.context_id,
         &request.product_state_id,
         &request.config_digest,
-        &request.plugin_digest,
+        &request.pack_set_digest,
         &request.profile_digest,
     ]
     .into_iter()
@@ -25,15 +24,17 @@ pub(super) fn identity_is_well_formed(request: &AdvisorySelectionRequest) -> boo
 
 pub(super) fn binding_is_stale(request: &AdvisorySelectionRequest) -> bool {
     request.profile.as_ref().is_some_and(|profile| {
-        profile.profile.candidate_id != request.candidate_id
-            || profile.profile.config_digest != request.config_digest
+        profile.candidate_id != request.candidate_id
+            || profile.config_digest != request.config_digest
     }) || request.catalog.as_ref().is_some_and(|catalog| {
         catalog.candidate_id != request.candidate_id
             || catalog.config_digest != request.config_digest
     })
 }
 
-pub(super) fn available_skill_names(request: &AdvisorySelectionRequest) -> Option<BTreeSet<&str>> {
+pub(super) fn available_skill_names(
+    request: &AdvisorySelectionRequest,
+) -> Option<BTreeSet<String>> {
     let profile = request.profile.as_ref()?;
     let catalog = request.catalog.as_ref()?;
     let expected = coinstall_profile(
@@ -43,41 +44,93 @@ pub(super) fn available_skill_names(request: &AdvisorySelectionRequest) -> Optio
     );
     let one_harness_gateway = catalog.implicit_gateways.len() == 1
         && catalog.implicit_gateways.first().map(String::as_str) == Some(HARNESS_PLUGIN);
+    let expected_pack_names = profile
+        .pack_set
+        .packs
+        .iter()
+        .map(|pack| pack.name.as_str())
+        .collect::<BTreeSet<_>>();
     let rendered_agentic_skills = catalog
         .skills
         .iter()
-        .filter(|skill| skill.plugin == AGENTIC_PLUGIN && !skill.allow_implicit_invocation)
-        .map(|skill| skill.name.as_str())
+        .filter(|skill| {
+            expected_pack_names.contains(skill.plugin.as_str()) && !skill.allow_implicit_invocation
+        })
+        .map(|skill| format!("{}:{}", skill.plugin, skill.name))
         .collect::<BTreeSet<_>>();
+    let rendered_agentic_skill_count = catalog
+        .skills
+        .iter()
+        .filter(|skill| expected_pack_names.contains(skill.plugin.as_str()))
+        .count();
     let expected_agentic_skills = profile
-        .profile
         .selected_skills
         .iter()
-        .map(String::as_str)
+        .cloned()
         .collect::<BTreeSet<_>>();
+    let exact_binding = exact_agentic_candidate_binding();
+    let observed_pack_identities = catalog
+        .plugins
+        .iter()
+        .filter(|plugin| expected_pack_names.contains(plugin.plugin.as_str()))
+        .map(|plugin| (plugin.plugin.as_str(), plugin))
+        .collect::<std::collections::BTreeMap<_, _>>();
+    let observed_pack_identity_count = catalog
+        .plugins
+        .iter()
+        .filter(|plugin| expected_pack_names.contains(plugin.plugin.as_str()))
+        .count();
+    let unexpected_agentic_identity = catalog.plugins.iter().any(|plugin| {
+        plugin.plugin.starts_with("agentic-engineering")
+            && !expected_pack_names.contains(plugin.plugin.as_str())
+    });
+    let rendered_identity_mismatch = catalog.skills.iter().any(|skill| {
+        if !expected_pack_names.contains(skill.plugin.as_str()) {
+            return skill.plugin.starts_with("agentic-engineering");
+        }
+        profile
+            .pack_set
+            .packs
+            .iter()
+            .find(|pack| pack.name == skill.plugin)
+            .is_none_or(|pack| skill.version != pack.version)
+    });
     if profile != &expected
-        || request.plugin_version != AGENTIC_PLUGIN_VERSION
-        || request.plugin_digest != profile.profile.plugin_digest
-        || request.profile_digest != profile.profile.digest
-        || request.selector_version != SELECTOR_VERSION
+        || profile.pack_set.validate_against(&exact_binding).is_err()
+        || request.pack_set_digest != profile.pack_set.aggregate_digest
+        || request.profile_digest != profile.source_profile_digest
+        || request.schema_version != ADVISORY_SELECTION_REQUEST_SCHEMA
+        || request.selector_version != ADVISORY_SELECTOR_VERSION
         || catalog.candidate_id != request.candidate_id
         || catalog.config_digest != request.config_digest
-        || catalog
-            .profile
-            .as_ref()
-            .map(|identity| identity.digest.as_str())
-            != Some(profile.profile.digest.as_str())
+        || catalog.profile.is_some()
+        || catalog.effect != CatalogEffect::Read
+        || catalog.claim_effect
         || !one_harness_gateway
-        || !catalog.plugins.iter().any(|plugin| {
-            plugin.plugin == AGENTIC_PLUGIN
-                && plugin.version == request.plugin_version
-                && plugin.plugin_digest == request.plugin_digest
+        || unexpected_agentic_identity
+        || rendered_identity_mismatch
+        || observed_pack_identity_count != profile.pack_set.packs.len()
+        || observed_pack_identities.len() != profile.pack_set.packs.len()
+        || rendered_agentic_skill_count != expected_agentic_skills.len()
+        || profile.pack_set.packs.iter().any(|pack| {
+            observed_pack_identities
+                .get(pack.name.as_str())
+                .is_none_or(|plugin| {
+                    plugin.version != pack.version
+                        || plugin.plugin_digest != pack.manifest_digest
+                        || profile.candidate_binding.package_digests.get(&pack.name)
+                            != Some(&plugin.package_digest)
+                })
         })
         || rendered_agentic_skills != expected_agentic_skills
     {
         return None;
     }
     Some(rendered_agentic_skills)
+}
+
+pub(super) fn qualified_skill_name(skill: &str) -> Option<String> {
+    qualify_skill(skill)
 }
 
 pub(super) fn missing_inputs(request: &AdvisorySelectionRequest) -> BTreeSet<String> {
@@ -93,8 +146,11 @@ pub(super) fn missing_inputs(request: &AdvisorySelectionRequest) -> BTreeSet<Str
             missing.insert(field.to_owned());
         }
     }
-    if request.selector_version != SELECTOR_VERSION {
+    if request.selector_version != ADVISORY_SELECTOR_VERSION {
         missing.insert("selector_version".to_owned());
+    }
+    if request.schema_version != ADVISORY_SELECTION_REQUEST_SCHEMA {
+        missing.insert("request_schema_version".to_owned());
     }
     missing
 }
