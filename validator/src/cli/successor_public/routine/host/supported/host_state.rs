@@ -50,11 +50,22 @@ impl HostState {
             lock,
             lock_identity,
         };
-        state.verify()?;
+        state.verify_structure()?;
         Ok(state)
     }
 
     pub(crate) fn verify(&self) -> Result<(), HostFailure> {
+        self.verify_structure()?;
+        require_adapter_entries(&self.adapter)?;
+        match self.adapter.open_child(CONTINUITY_DIRECTORY_NAME) {
+            Ok(continuations) => continuity::validate_continuation_directory(&continuations)?,
+            Err(HostFailure::Unavailable) => {}
+            Err(error) => return Err(error),
+        }
+        Ok(())
+    }
+
+    pub(crate) fn verify_structure(&self) -> Result<(), HostFailure> {
         self.home.verify()?;
         self.state.verify()?;
         self.authority.verify()?;
@@ -62,14 +73,15 @@ impl HostState {
         self.launch.verify()?;
         require_entries(
             &self.state,
-            &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+            &[
+                AUTHORITY_DIRECTORY,
+                ADAPTER_DIRECTORY,
+                LAUNCH_DIRECTORY,
+                STATE_FORMAT_NAME,
+            ],
         )?;
-        require_adapter_entries(&self.adapter)?;
-        match self.adapter.open_child(CONTINUITY_DIRECTORY_NAME) {
-            Ok(continuations) => continuity::validate_continuation_directory(&continuations)?,
-            Err(HostFailure::Unavailable) => {}
-            Err(error) => return Err(error),
-        }
+        verify_state_format(&self.state)?;
+        require_adapter_shape(&self.adapter)?;
         let metadata = self.lock.metadata().map_err(|_| HostFailure::Invalid)?;
         if identity(&metadata) != self.lock_identity
             || self.adapter.stat(LOCK_NAME)? != Some(self.lock_identity)
@@ -88,7 +100,11 @@ impl HostState {
         create: bool,
     ) -> Result<Option<HostEventStore>, HostFailure> {
         validate_target(&self.home.path, target)?;
-        self.verify()?;
+        if create {
+            self.verify()?;
+        } else {
+            self.verify_structure()?;
+        }
         let leaf = event_leaf_name(target, context_id, candidate_id, source_id)?;
         let (file, created) = if create {
             self.adapter.open_or_create_regular(&leaf, 0o600)?
@@ -127,7 +143,11 @@ impl HostState {
                 .sync_all()
                 .map_err(|_| HostFailure::Invalid)?;
         }
-        self.verify()?;
+        if create {
+            self.verify()?;
+        } else {
+            self.verify_structure()?;
+        }
         Ok(Some(HostEventStore {
             store,
             leaf,
@@ -136,7 +156,7 @@ impl HostState {
     }
 
     pub(crate) fn verify_event_store(&self, store: &HostEventStore) -> Result<(), HostFailure> {
-        self.verify()?;
+        self.verify_structure()?;
         let file = self
             .adapter
             .open_regular(&store.leaf, libc::O_RDONLY, 0o600)?;
@@ -155,7 +175,7 @@ impl HostState {
         candidate_id: &str,
         source_id: &str,
     ) -> Result<bool, HostFailure> {
-        self.verify()?;
+        self.verify_structure()?;
         let leaf = event_leaf_name(target, context_id, candidate_id, source_id)?;
         Ok(self.adapter.stat(&leaf)?.is_none())
     }
@@ -236,7 +256,7 @@ pub(super) fn event_leaf_name(
     ))
 }
 
-fn validate_event_leaf_name(name: &str) -> Result<(), HostFailure> {
+pub(super) fn validate_event_leaf_name(name: &str) -> Result<(), HostFailure> {
     let digest = name
         .strip_prefix(EVENT_FILE_PREFIX)
         .and_then(|value| value.strip_suffix(EVENT_FILE_SUFFIX))
@@ -247,7 +267,7 @@ fn validate_event_leaf_name(name: &str) -> Result<(), HostFailure> {
     Ok(())
 }
 
-fn open_home(home: &Path) -> Result<AnchoredDirectory, HostFailure> {
+pub(super) fn open_home(home: &Path) -> Result<AnchoredDirectory, HostFailure> {
     if !home.is_absolute() || fs::canonicalize(home).map_err(|_| HostFailure::Unavailable)? != home
     {
         return Err(HostFailure::Invalid);
@@ -267,19 +287,25 @@ fn open_base(home: &AnchoredDirectory) -> Result<AnchoredDirectory, HostFailure>
     Ok(authority)
 }
 
-fn open_existing_state(
+pub(super) fn open_existing_state(
     home: AnchoredDirectory,
     state: AnchoredDirectory,
 ) -> Result<HostState, HostFailure> {
     require_entries(
         &state,
-        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+        &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+        ],
     )?;
+    verify_state_format(&state)?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
     let launch = state.open_child(LAUNCH_DIRECTORY)?;
     require_entries(&launch, &[])?;
-    require_adapter_entries(&adapter)?;
+    require_adapter_shape(&adapter)?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
     HostState::from_locked(home, state, authority, adapter, launch, lock, false)
 }
@@ -302,15 +328,34 @@ fn bootstrap_stage(
     let (state, _) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
     require_entries(
         &state,
-        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+        &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+        ],
     )?;
     let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
+    let (mut format, created) = state.open_or_create_regular(STATE_FORMAT_NAME, 0o600)?;
+    if !created {
+        return Err(HostFailure::Invalid);
+    }
+    use std::io::Write;
+    format
+        .write_all(STATE_FORMAT_BYTES)
+        .map_err(|_| HostFailure::Invalid)?;
+    format.sync_all().map_err(|_| HostFailure::Invalid)?;
     require_entries(&adapter, &[LOCK_NAME])?;
     let (lock, _) = adapter.open_or_create_regular(LOCK_NAME, 0o600)?;
     let (lock, lock_identity) = acquire_locked_marker(lock, true)?;
     require_entries(
         &state,
-        &[AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY],
+        &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+        ],
     )?;
     let (authority, _) = state.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
     require_entries(&authority, &[])?;
@@ -344,7 +389,7 @@ fn require_entries(directory: &AnchoredDirectory, allowed: &[&str]) -> Result<()
     }
 }
 
-fn require_adapter_entries(adapter: &AnchoredDirectory) -> Result<(), HostFailure> {
+pub(super) fn require_adapter_entries(adapter: &AnchoredDirectory) -> Result<(), HostFailure> {
     let allowed_events = continuity::event_leaf_names(adapter)?;
     for name in adapter.entry_names()? {
         if [
@@ -365,7 +410,37 @@ fn require_adapter_entries(adapter: &AnchoredDirectory) -> Result<(), HostFailur
     Ok(())
 }
 
-fn read_lock_marker(lock: &File) -> Result<Vec<u8>, HostFailure> {
+fn require_adapter_shape(adapter: &AnchoredDirectory) -> Result<(), HostFailure> {
+    for name in adapter.entry_names()? {
+        if [
+            LOCK_NAME,
+            CONTINUITY_CHECKPOINT_NAME,
+            CONTINUITY_DIRECTORY_NAME,
+        ]
+        .contains(&name.as_str())
+        {
+            continue;
+        }
+        validate_event_leaf_name(&name)?;
+        adapter.open_regular(&name, libc::O_RDONLY, 0o600)?;
+    }
+    Ok(())
+}
+
+fn verify_state_format(state: &AnchoredDirectory) -> Result<(), HostFailure> {
+    let file = state.open_regular(STATE_FORMAT_NAME, libc::O_RDONLY, 0o600)?;
+    let mut bytes = Vec::new();
+    use std::io::Read;
+    file.take((STATE_FORMAT_BYTES.len() + 1) as u64)
+        .read_to_end(&mut bytes)
+        .map_err(|_| HostFailure::Invalid)?;
+    if bytes != STATE_FORMAT_BYTES {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
+}
+
+pub(super) fn read_lock_marker(lock: &File) -> Result<Vec<u8>, HostFailure> {
     let mut marker = lock.try_clone().map_err(|_| HostFailure::Invalid)?;
     marker
         .seek(SeekFrom::Start(0))

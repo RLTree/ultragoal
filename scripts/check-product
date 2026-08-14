@@ -64,6 +64,11 @@ run_registered_tests lib lib \
   "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::exact_cleanup_preserves_unrelated_entries" \
   "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::substituted_leaf_is_quarantined_and_preserved_without_deletion" \
   "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::cleanup_recovers_original_absent_quarantine_present" \
+  "routine_work::behavior::refusal::tests::only_the_closed_refusal_shape_maps_to_a_public_failure_code" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::causal_relation_requires_a_strict_generation_and_explicit_predecessor" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::closed_relation_classifier_distinguishes_equivalence_order_and_conflict" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::quarantine_plan_is_exact_deterministic_and_never_minted_for_conflict" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::same_inode_content_rewrite_invalidates_the_observed_inventory" \
   "package::inventory::tests::current_package_manifest_lists_only_materializable_source_members"
 
 # Actual immutable UltraGoal binary journeys under a disposable target and
@@ -76,6 +81,15 @@ run_registered_tests test routine_public_production_contract \
   "routine_public_production_contract::journeys::joined_checkpoint_without_its_event_refuses_repeat_without_recreation" \
   "routine_public_production_contract::journeys::forged_duplicate_terminal_row_is_refused_without_read_side_effects" \
   "routine_public_production_contract::journeys::terminal_failure_event_and_routine_diagnosis_share_one_authenticated_cause" \
+  "routine_public_production_contract::journeys::diagnosis_is_binding_scoped_while_mutation_remains_globally_strict" \
+  "routine_public_production_contract::journeys::routine_host_state_rejects_unknown_format_before_effect" \
+  "routine_public_production_contract::journeys::format_absent_canonical_state_is_a_zero_write_migration_candidate" \
+  "routine_public_production_contract::journeys::malformed_mixed_singleton_and_canonical_history_is_unsafe_and_preserved" \
+  "routine_public_production_contract::journeys::authenticated_equivalent_mixed_history_is_classified_and_preserved" \
+  "routine_public_production_contract::journeys::mixed_history_with_a_missing_required_event_is_unsafe_and_preserved" \
+  "routine_public_production_contract::journeys::unknown_format_is_a_typed_read_only_hold" \
+  "routine_public_production_contract::journeys::unsafe_legacy_entry_is_not_promoted_to_a_migration_candidate" \
+  "routine_public_production_contract::journeys::active_legacy_writer_returns_a_preserve_and_retry_hold" \
   "routine_public_production_contract::journeys::tracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse" \
   "routine_public_production_contract::journeys::untracked_legacy_target_spool_is_ignored_and_preserved_by_execution_and_reuse" \
   "routine_public_production_contract::security::admission::incomplete_existing_host_state_refuses_without_bootstrap_or_effect"

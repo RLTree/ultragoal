@@ -41,11 +41,28 @@ recovery, rollback, and atomic terminal publication. Every routine event is
 bound to the exact candidate, target, context, and source, and terminal
 checkpoints are authenticated. Joined checkpoint projections are required;
 the pending-append crash window may be absent or present. Reads are strictly
-observational and never bootstrap missing state. Mediators and output/process
-adapters supply typed requests or observations only; no sibling or descendant
+observational and never bootstrap missing state. The owner pins an exact host
+state format before interpreting descendants. Diagnosis reads derive and
+verify only the selected canonical compartment plus common structure;
+mutations and explicit audits retain whole-state validation, so stale sibling
+history cannot veto diagnosis while inconsistent shared state cannot authorize
+a write. A behavior child may return only the closed refusal envelope; the
+mediator maps its fixed reason vocabulary to public failure codes and treats
+unknown, malformed, or signaled failures generically. Mediators and
+output/process adapters supply typed requests or observations only; no sibling or descendant
 may construct, clone, settle, release, recover, roll back, register, reopen,
 or access raw event storage for routine authority. Source-shape checks are
 secondary regression controls, not semantic authority proof.
+
+Legacy HostState inspection may construct a read-only
+`RoutineStateQuarantinePlan-v1` only while holding the legacy adapter lock and
+only from an authenticated single, equivalent, or strictly ordered history.
+The plan binds the complete descriptor inventory and specifies whole-owner
+quarantine followed by a fresh v8 bootstrap; it never rewrites selected legacy
+records in place. Conflicting, unsafe, unauthenticated, or changing history
+cannot mint a plan. Planning authorizes no rename, quarantine, bootstrap,
+migration, deletion, recovery, or claim, and no apply route exists in this
+source slice.
 
 Complete-repository fit does not implicitly reconcile a
 `validation_artifacts/` ignore rule. Candidate evidence is never ordinary

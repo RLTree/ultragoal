@@ -90,7 +90,13 @@ pub(crate) fn current_checkpoint(
 ) -> Result<Option<RoutineCheckpointProjection>, ()> {
     let state = match HostState::open_existing_for_target(home, binding.target()) {
         Ok(state) => state,
-        Err(host::HostFailure::Unavailable) => return Ok(None),
+        Err(host::HostFailure::Unavailable) => {
+            return match HostState::assess_migration_admission(home) {
+                Ok(Some(_)) => Err(()),
+                Ok(None) => Ok(None),
+                Err(_) => Err(()),
+            };
+        }
         Err(_) => return Err(()),
     };
     let execution_id = prepare(
@@ -104,7 +110,7 @@ pub(crate) fn current_checkpoint(
     .checkpoint_execution_id()
     .to_owned();
     let checkpoint = state
-        .exact_checkpoint(
+        .exact_checkpoint_scoped(
             host::CheckpointBinding::new(
                 binding.target(),
                 binding.context().context_id(),
@@ -118,10 +124,10 @@ pub(crate) fn current_checkpoint(
         .map_err(|_| ())?;
     if let Some(checkpoint) = checkpoint.as_ref() {
         state
-            .authenticate_checkpoint(binding.target(), checkpoint, false)
+            .authenticate_checkpoint_for_history(binding.target(), checkpoint)
             .map_err(|_| ())?;
     }
-    if state.verify().is_err() || binding.context().revalidate().is_err() {
+    if state.verify_read_scope().is_err() || binding.context().revalidate().is_err() {
         return Err(());
     }
     Ok(checkpoint.map(|checkpoint| RoutineCheckpointProjection {
@@ -136,4 +142,10 @@ pub(crate) fn current_checkpoint(
             .finding_binding()
             .map(|binding| binding.finding_id.clone()),
     }))
+}
+
+pub(crate) fn current_migration_admission(
+    home: &Path,
+) -> Result<Option<RoutineStateMigrationAdmission>, ()> {
+    HostState::assess_migration_admission(home).map_err(|_| ())
 }

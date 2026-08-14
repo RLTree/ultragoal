@@ -1,6 +1,7 @@
 //! Closed routine behaviors whose result is derived from trusted observations.
 
 mod child_capability;
+mod refusal;
 mod rust_source_frame;
 mod rust_source_syntax;
 mod sandbox_activation;
@@ -8,6 +9,7 @@ mod sandbox_activation;
 pub(crate) use child_capability::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
 };
+pub(crate) use refusal::{refusal_json, trusted_refusal_failure_code};
 pub use rust_source_frame::{RustSourceFrameInput, encode_rust_source_syntax_frame};
 pub(crate) use rust_source_syntax::trusted_rust_source_execution_observed;
 pub use rust_source_syntax::{

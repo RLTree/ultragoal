@@ -27,6 +27,15 @@ pub(crate) fn provision_host_state(home: &Path) {
         .unwrap();
     file.write_all(b"routine-public-lock-v1\n").unwrap();
     file.sync_all().unwrap();
+    let format = home.join(".codex/state/harness-ultragoal/routine-public/routine-state-format");
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .mode(0o600)
+        .open(&format)
+        .unwrap();
+    file.write_all(b"routine-host-state-v8\n").unwrap();
+    file.sync_all().unwrap();
 }
 
 pub(crate) fn set_mode(path: &Path, mode: u32) {

@@ -37,6 +37,10 @@ pub(crate) struct ContinuationCheckpoint {
 }
 
 impl ContinuationCheckpoint {
+    pub(crate) fn generation(&self) -> u64 {
+        self.generation
+    }
+
     pub(crate) fn target(&self) -> &str {
         &self.target
     }

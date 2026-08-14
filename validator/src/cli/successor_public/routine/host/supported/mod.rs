@@ -11,6 +11,8 @@ mod continuity;
 mod directory_entries;
 #[path = "host_state.rs"]
 mod host_state;
+#[path = "migration_admission.rs"]
+mod migration_admission;
 #[path = "state_components.rs"]
 mod state_components;
 #[path = "validate_name.rs"]
@@ -18,5 +20,6 @@ mod validate_name;
 
 pub(crate) use anchored_directory::write_lock_marker;
 pub(crate) use continuity::{ContinuationCheckpoint, ContinuationResolution};
+pub(crate) use migration_admission::assess_migration_admission;
 pub(crate) use state_components::*;
 pub(crate) use validate_name::*;

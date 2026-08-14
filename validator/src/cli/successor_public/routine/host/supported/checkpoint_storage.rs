@@ -43,6 +43,17 @@ impl HostState {
         )
     }
 
+    pub(crate) fn exact_checkpoint_scoped(
+        &self,
+        binding: CheckpointBinding<'_>,
+        continuation: Option<&str>,
+    ) -> Result<Option<ContinuationCheckpoint>, HostFailure> {
+        if let Some(stored) = read_canonical_exact(&self.adapter, binding, continuation)? {
+            return Ok(Some(stored.checkpoint));
+        }
+        read_legacy(&self.adapter, binding, continuation)
+    }
+
     pub(crate) fn resolve_checkpoint(
         &self,
         binding: CheckpointBinding<'_>,
@@ -230,6 +241,31 @@ fn read_canonical(
     directory.verify()?;
     Ok(primary
         .filter(|stored| continuation.is_none_or(|value| stored.checkpoint.continuation == value)))
+}
+
+fn read_canonical_exact(
+    adapter: &AnchoredDirectory,
+    binding: CheckpointBinding<'_>,
+    continuation: Option<&str>,
+) -> Result<Option<StoredCheckpoint>, HostFailure> {
+    let Some(directory) = open_continuations(adapter, false)? else {
+        return Ok(None);
+    };
+    let name = canonical_record_name(binding);
+    if directory.stat(&name)?.is_none() {
+        return Ok(None);
+    }
+    let checkpoint = read_checkpoint_file(&directory, &name)?;
+    validate_checkpoint(&checkpoint, binding, None)?;
+    if checkpoint_location(&name, &checkpoint)? != CheckpointLocation::Canonical
+        || continuation.is_some_and(|value| checkpoint.continuation != value)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(Some(StoredCheckpoint {
+        checkpoint,
+        location: CheckpointLocation::Canonical,
+    }))
 }
 
 pub(crate) fn validate_continuation_directory(

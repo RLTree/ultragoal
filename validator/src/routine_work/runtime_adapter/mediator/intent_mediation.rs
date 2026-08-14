@@ -167,7 +167,12 @@ impl IntentExecutionRequest {
             ProcessTermination::CleanupFailed => {
                 return Err(mediator_error("mediator-process-cleanup-failed"));
             }
-            ProcessTermination::Exited(_) | ProcessTermination::Signaled(_) => {
+            ProcessTermination::Exited(_) => Some((
+                RoutineNodeDisposition::Failed,
+                crate::routine_work::trusted_refusal_failure_code(&observation.stdout)
+                    .unwrap_or("MEDIATOR-CHECK-FAILED"),
+            )),
+            ProcessTermination::Signaled(_) => {
                 Some((RoutineNodeDisposition::Failed, "MEDIATOR-CHECK-FAILED"))
             }
         };

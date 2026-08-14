@@ -21,7 +21,6 @@ mod snapshot;
 #[cfg(test)]
 mod tests;
 
-pub(crate) use behavior::trusted_rust_source_execution_observed;
 pub(crate) use behavior::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
     activate_and_read_frame, frame_sandboxed_input,
@@ -30,6 +29,9 @@ pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
     evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
+};
+pub(crate) use behavior::{
+    refusal_json, trusted_refusal_failure_code, trusted_rust_source_execution_observed,
 };
 pub use binding::{BoundTool, RoutineBinding};
 pub(crate) use error::{

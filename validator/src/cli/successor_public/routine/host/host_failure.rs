@@ -19,6 +19,33 @@ pub(crate) struct HostState {
     pub(crate) inner: supported::HostState,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineStateMigrationAdmission {
+    pub(crate) status: &'static str,
+    pub(crate) format_status: &'static str,
+    pub(crate) legacy_singleton_count: usize,
+    pub(crate) canonical_continuation_count: usize,
+    pub(crate) event_journal_count: usize,
+    pub(crate) history_relation: &'static str,
+    pub(crate) next_action: &'static str,
+    pub(crate) quarantine_plan: Option<RoutineStateQuarantinePlan>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineStateQuarantinePlan {
+    pub(crate) plan_id: String,
+    pub(crate) source_inventory_sha256: String,
+    pub(crate) history_relation: &'static str,
+    pub(crate) authoritative_history: &'static str,
+    pub(crate) source_owner: &'static str,
+    pub(crate) quarantine_owner: String,
+    pub(crate) target_format: &'static str,
+    pub(crate) strategy: &'static str,
+    pub(crate) apply_capability: &'static str,
+    pub(crate) operations: Vec<&'static str>,
+    pub(crate) rollback: &'static str,
+}
+
 pub(crate) struct HostEventStore {
     #[cfg(target_vendor = "apple")]
     inner: supported::HostEventStore,
@@ -84,17 +111,29 @@ impl HostEventStore {
 }
 
 impl HostState {
+    pub(crate) fn assess_migration_admission(
+        home: &Path,
+    ) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::assess_migration_admission(home)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = home;
+            Err(HostFailure::Unsupported)
+        }
+    }
+
     pub(crate) fn open_existing_for_target(
         home: &Path,
         target: &Path,
     ) -> Result<Self, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            let state = Self {
+            Ok(Self {
                 inner: supported::HostState::open_existing_for_target(home, target)?,
-            };
-            state.verify_event_authority()?;
-            Ok(state)
+            })
         }
         #[cfg(not(target_vendor = "apple"))]
         {
@@ -304,6 +343,7 @@ impl HostState {
             let state = Self {
                 inner: supported::HostState::open_or_bootstrap(home, target)?,
             };
+            state.inner.verify()?;
             state.verify_event_authority()?;
             Ok(state)
         }
@@ -339,6 +379,17 @@ impl HostState {
         }
     }
 
+    pub(crate) fn verify_read_scope(&self) -> Result<(), HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.verify_structure()
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
     pub(crate) fn authenticate_checkpoint(
         &self,
         target: &Path,
@@ -367,7 +418,7 @@ impl HostState {
         )
     }
 
-    fn authenticate_checkpoint_for_history(
+    pub(crate) fn authenticate_checkpoint_for_history(
         &self,
         target: &Path,
         checkpoint: &supported::ContinuationCheckpoint,
@@ -489,6 +540,22 @@ impl HostState {
         #[cfg(target_vendor = "apple")]
         {
             self.inner.exact_checkpoint(binding, continuation)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (binding, continuation);
+            unreachable!("unsupported host state cannot be constructed")
+        }
+    }
+
+    pub(crate) fn exact_checkpoint_scoped(
+        &self,
+        binding: CheckpointBinding<'_>,
+        continuation: Option<&str>,
+    ) -> Result<Option<supported::ContinuationCheckpoint>, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            self.inner.exact_checkpoint_scoped(binding, continuation)
         }
         #[cfg(not(target_vendor = "apple"))]
         {
@@ -630,27 +697,47 @@ fn terminal_semantic_event(
     context: &crate::context::LiveContext,
     checkpoint: &supported::ContinuationCheckpoint,
 ) -> Result<crate::observability::SemanticEvent, HostFailure> {
+    if context.context_id() != checkpoint.context_id()
+        || crate::observability::SemanticEvent::for_context(
+            context,
+            "successor-runtime",
+            "migration-context-check",
+            0,
+            0,
+            "check.routine.terminal",
+            "unknown",
+        )
+        .map_err(|_| HostFailure::Invalid)?
+        .candidate_id()
+            != checkpoint.candidate_id()
+    {
+        return Err(HostFailure::Invalid);
+    }
+    terminal_semantic_event_from_checkpoint(target, checkpoint)
+}
+
+pub(crate) fn terminal_semantic_event_from_checkpoint(
+    target: &Path,
+    checkpoint: &supported::ContinuationCheckpoint,
+) -> Result<crate::observability::SemanticEvent, HostFailure> {
     if !checkpoint.is_terminal()
         || !checkpoint.has_current_event_authority()
         || checkpoint.target() != target.to_str().ok_or(HostFailure::Invalid)?
     {
         return Err(HostFailure::Invalid);
     }
-    let mut event = crate::observability::SemanticEvent::for_context(
-        context,
-        "successor-runtime",
-        checkpoint.event_id(),
-        checkpoint.event_observed_at_unix_ms(),
-        checkpoint.event_sequence(),
-        "check.routine.terminal",
-        checkpoint.event_status(),
-    )
-    .map_err(|_| HostFailure::Invalid)?;
-    if event.context_id() != checkpoint.context_id()
-        || event.candidate_id() != checkpoint.candidate_id()
-    {
-        return Err(HostFailure::Invalid);
-    }
+    let mut event =
+        crate::observability::SemanticEvent::new(crate::observability::SemanticEventInput {
+            context_id: checkpoint.context_id().to_owned(),
+            candidate_id: checkpoint.candidate_id().to_owned(),
+            source_id: "successor-runtime".to_owned(),
+            event_id: checkpoint.event_id().to_owned(),
+            observed_at_unix_ms: checkpoint.event_observed_at_unix_ms(),
+            sequence: checkpoint.event_sequence(),
+            operation: "check.routine.terminal".to_owned(),
+            outcome: checkpoint.event_status().to_owned(),
+        })
+        .map_err(|_| HostFailure::Invalid)?;
     if let Some(parent_event_id) = checkpoint.event_parent_id() {
         event
             .set_parent(parent_event_id)

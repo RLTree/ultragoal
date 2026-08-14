@@ -4,6 +4,8 @@ pub(crate) const STATE_COMPONENTS: &[&str] =
     &[".codex", "state", "harness-ultragoal", "routine-public"];
 pub(crate) const AUTHORITY_DIRECTORY: &str = "authority";
 pub(crate) const ADAPTER_DIRECTORY: &str = "adapter";
+pub(crate) const STATE_FORMAT_NAME: &str = "routine-state-format";
+pub(crate) const STATE_FORMAT_BYTES: &[u8] = b"routine-host-state-v8\n";
 pub(crate) const LOCK_NAME: &str = "adapter.lock";
 pub(crate) const CONTINUITY_CHECKPOINT_NAME: &str = "routine-continuation.json";
 pub(crate) const CONTINUITY_CHECKPOINT_STAGE_NAME: &str = ".routine-continuation.next";

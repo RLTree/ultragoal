@@ -4,6 +4,25 @@ use std::io::Read;
 const MAGIC: &[u8] = b"HUL-RoutineSandbox-v1\0";
 const MAX_PROFILE_BYTES: usize = 1024 * 1024;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum SandboxedInputFailure {
+    Protocol,
+    Profile,
+    Activation,
+    Frame,
+}
+
+impl SandboxedInputFailure {
+    pub(crate) fn code(self) -> &'static str {
+        match self {
+            Self::Protocol => "sandbox_input_protocol_invalid",
+            Self::Profile => "sandbox_profile_invalid",
+            Self::Activation => "sandbox_activation_unavailable",
+            Self::Frame => "behavior_frame_invalid",
+        }
+    }
+}
+
 pub(crate) fn frame_sandboxed_input(
     profile: &str,
     framed_input: Vec<u8>,
@@ -23,31 +42,37 @@ pub(crate) fn frame_sandboxed_input(
 pub(crate) fn activate_and_read_frame(
     mut input: impl Read,
     max_frame_bytes: u64,
-) -> Result<Vec<u8>, ()> {
+) -> Result<Vec<u8>, SandboxedInputFailure> {
     let mut magic = vec![0_u8; MAGIC.len()];
-    input.read_exact(&mut magic).map_err(|_| ())?;
+    input
+        .read_exact(&mut magic)
+        .map_err(|_| SandboxedInputFailure::Protocol)?;
     if magic != MAGIC {
-        return Err(());
+        return Err(SandboxedInputFailure::Protocol);
     }
     let mut encoded_length = [0_u8; 4];
-    input.read_exact(&mut encoded_length).map_err(|_| ())?;
+    input
+        .read_exact(&mut encoded_length)
+        .map_err(|_| SandboxedInputFailure::Protocol)?;
     let profile_length = u32::from_be_bytes(encoded_length) as usize;
     if profile_length == 0 || profile_length > MAX_PROFILE_BYTES {
-        return Err(());
+        return Err(SandboxedInputFailure::Profile);
     }
     let mut profile = vec![0_u8; profile_length];
-    input.read_exact(&mut profile).map_err(|_| ())?;
-    let profile = CString::new(profile).map_err(|_| ())?;
-    activate(&profile)?;
+    input
+        .read_exact(&mut profile)
+        .map_err(|_| SandboxedInputFailure::Profile)?;
+    let profile = CString::new(profile).map_err(|_| SandboxedInputFailure::Profile)?;
+    activate(&profile).map_err(|_| SandboxedInputFailure::Activation)?;
 
     let mut frame = Vec::new();
     input
         .take(max_frame_bytes + 1)
         .read_to_end(&mut frame)
-        .map_err(|_| ())?;
+        .map_err(|_| SandboxedInputFailure::Frame)?;
     (frame.len() as u64 <= max_frame_bytes)
         .then_some(frame)
-        .ok_or(())
+        .ok_or(SandboxedInputFailure::Frame)
 }
 
 #[cfg(target_os = "macos")]

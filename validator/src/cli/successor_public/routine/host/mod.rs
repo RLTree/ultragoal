@@ -49,6 +49,24 @@ impl HostCustodyIssuance {
         ))
     }
 
+    fn from_legacy_directories(
+        authority: &supported::AnchoredDirectory,
+        launch: &supported::AnchoredDirectory,
+    ) -> Result<Self, HostFailure> {
+        Ok(Self::new(
+            authority.path.clone(),
+            HostLaunchIssuance {
+                path: launch.path.clone(),
+                file: launch.file.try_clone().map_err(|_| HostFailure::Invalid)?,
+                device: launch.identity.device,
+                inode: launch.identity.inode,
+                owner: launch.identity.owner,
+                mode: launch.identity.mode,
+                links: launch.identity.links,
+            },
+        ))
+    }
+
     #[cfg(test)]
     pub(crate) fn for_test(authority_root: &Path) -> Self {
         use std::os::unix::fs::{DirBuilderExt, MetadataExt, OpenOptionsExt, PermissionsExt};

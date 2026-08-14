@@ -10,7 +10,9 @@ mod host;
 mod manifest;
 mod outcome;
 
-pub(crate) use self::host::{ContinuationCheckpoint, HostEventStore, HostFailure, HostState};
+pub(crate) use self::host::{
+    ContinuationCheckpoint, HostEventStore, HostFailure, HostState, RoutineStateMigrationAdmission,
+};
 use self::manifest::{LoadedManifest, MANIFEST_PATH};
 use self::outcome::PublicFailure;
 use crate::cli::successor::runtime::RuntimeOutcome;

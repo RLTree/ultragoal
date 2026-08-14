@@ -24,6 +24,12 @@ pub(super) fn diagnose(
     let checkpoint = match home {
         Some(home) => match super::super::routine::current_checkpoint(home, &binding) {
             Ok(checkpoint) => checkpoint,
+            Err(()) if request.finding.is_none() => {
+                return match super::super::routine::current_migration_admission(home) {
+                    Ok(Some(admission)) => migration_admission(read_context, admission),
+                    _ => super::diagnosis_unavailable(),
+                };
+            }
             Err(()) => return super::diagnosis_unavailable(),
         },
         None => return super::diagnosis_unavailable(),
@@ -71,6 +77,61 @@ pub(super) fn diagnose(
                 format!(
                     "routine diagnosis status={} effect_state={} claim_effect=none",
                     disposition.status, disposition.effect_state
+                ),
+            )
+        }
+        _ => super::diagnosis_unavailable(),
+    }
+}
+
+fn migration_admission(
+    read_context: &LiveContext,
+    admission: super::super::routine::RoutineStateMigrationAdmission,
+) -> RuntimeOutcome {
+    let machine = serde_json::to_vec(&json!({
+        "schema_version": "RoutineStateMigrationAdmission-v2",
+        "status": admission.status,
+        "format_status": admission.format_status,
+        "legacy_singleton_count": admission.legacy_singleton_count,
+        "canonical_continuation_count": admission.canonical_continuation_count,
+        "event_journal_count": admission.event_journal_count,
+        "history_relation": admission.history_relation,
+        "migration_effect": "none",
+        "migration_authorized": false,
+        "quarantine_plan": admission.quarantine_plan.as_ref().map(|plan| json!({
+            "schema_version": "RoutineStateQuarantinePlan-v1",
+            "plan_id": plan.plan_id,
+            "status": "review_required",
+            "source_inventory_sha256": plan.source_inventory_sha256,
+            "history_relation": plan.history_relation,
+            "authoritative_history": plan.authoritative_history,
+            "source_owner": plan.source_owner,
+            "quarantine_owner": plan.quarantine_owner,
+            "target_format": plan.target_format,
+            "strategy": plan.strategy,
+            "apply_capability": plan.apply_capability,
+            "operations": plan.operations,
+            "rollback": plan.rollback,
+            "precondition": "same locked parent and source inventory; no stale writer; quarantine destination absent",
+            "migration_effect": "none",
+            "migration_authorized": false,
+            "claim_effect": "none"
+        })),
+        "next_action": admission.next_action,
+        "claim_effect": "none",
+        "support_limit": "read-only legacy HostState admission and quarantine planning; no migration apply, quarantine effect, recovery, installed journey, or product claim"
+    }));
+    if read_context.revalidate().is_err() {
+        return super::stale_context();
+    }
+    match machine {
+        Ok(machine) if super::super::public_output_allowed(machine.len()) => {
+            RuntimeOutcome::payload(
+                ExitClass::ActionableFinding,
+                machine,
+                format!(
+                    "routine state migration admission status={} effect=none authorized=false",
+                    admission.status
                 ),
             )
         }

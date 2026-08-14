@@ -5,6 +5,8 @@ use super::scenario::{
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::fs;
+use std::os::fd::AsRawFd;
+use std::os::unix::fs::{OpenOptionsExt, symlink};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
@@ -294,6 +296,372 @@ fn terminal_failure_event_and_routine_diagnosis_share_one_authenticated_cause() 
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     assert_eq!(fixture.status(), before_status);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn diagnosis_is_binding_scoped_while_mutation_remains_globally_strict() {
+    let mut target = Fixture::new(
+        "binding-scoped-diagnosis-target",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        false,
+        false,
+    );
+    fs::write(target.root.join("src/lib.rs"), b"pub fn broken(\n").unwrap();
+    let failed = target.run();
+    assert_eq!(failed.status.code(), Some(1), "{failed:?}");
+    let target_event = target.event_leaf();
+
+    let mut sibling = Fixture::new(
+        "binding-scoped-diagnosis-sibling",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut sibling_run = routine_command(&sibling.root, &target.home, sibling.binary_path());
+    sibling_run.args(["--json", "check", "routine"]);
+    let sibling_run = sibling_run.output().unwrap();
+    assert_eq!(sibling_run.status.code(), Some(0), "{sibling_run:?}");
+    let before_stale_sibling = target.run_args(&["--json", "diagnose"]);
+    assert_eq!(
+        before_stale_sibling.status.code(),
+        Some(1),
+        "{before_stale_sibling:?}"
+    );
+
+    let adapter = target.state_root().join("adapter");
+    let sibling_event = fs::read_dir(&adapter)
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| {
+            path.file_name()
+                .and_then(|name| name.to_str())
+                .is_some_and(|name| name.starts_with("routine-events-") && name.ends_with(".jsonl"))
+        })
+        .find(|path| path != &target_event)
+        .expect("shared host state did not retain the sibling event binding");
+    let stale_sibling_event = adapter.join(format!("routine-events-{}.jsonl", "a".repeat(64)));
+    fs::rename(sibling_event, &stale_sibling_event).unwrap();
+
+    let before_root = tree(&target.root);
+    let diagnosis = target.run_args(&["--json", "diagnose"]);
+    assert_eq!(diagnosis.status.code(), Some(1), "{diagnosis:?}");
+    let diagnosis = Fixture::value(&diagnosis);
+    assert_eq!(diagnosis["schema_version"], "RoutineDiagnosis-v1");
+    assert_eq!(diagnosis["status"], "terminal_failure");
+    assert_eq!(diagnosis["checkpoint"]["terminal_outcome"], "failed");
+    assert_eq!(diagnosis["claim_effect"], "none");
+    assert_eq!(tree(&target.root), before_root);
+
+    let mutation = target.run();
+    assert_eq!(mutation.status.code(), Some(3), "{mutation:?}");
+    assert_eq!(tree(&target.root), before_root);
+
+    sibling.teardown_after_assertions();
+    target.teardown_after_assertions();
+}
+
+#[test]
+fn routine_host_state_rejects_unknown_format_before_effect() {
+    let mut fixture = Fixture::new(
+        "routine-state-format-fence",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::write(
+        fixture.state_root().join("routine-state-format"),
+        b"routine-host-state-v7\n",
+    )
+    .unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    let output = fixture.run();
+
+    assert_eq!(output.status.code(), Some(3), "{output:?}");
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn format_absent_canonical_state_is_a_zero_write_migration_candidate() {
+    let mut fixture = Fixture::new(
+        "legacy-migration-candidate",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["schema_version"], "RoutineStateMigrationAdmission-v2");
+    assert_eq!(value["status"], "migration_candidate_requires_approval");
+    assert_eq!(value["format_status"], "absent_legacy");
+    assert_eq!(value["legacy_singleton_count"], 0);
+    assert_eq!(value["canonical_continuation_count"], 0);
+    assert_eq!(value["event_journal_count"], 0);
+    assert_eq!(value["history_relation"], "single_history_only");
+    assert_eq!(value["migration_effect"], "none");
+    assert_eq!(value["migration_authorized"], false);
+    let plan = &value["quarantine_plan"];
+    assert_eq!(plan["schema_version"], "RoutineStateQuarantinePlan-v1");
+    assert_eq!(plan["status"], "review_required");
+    assert_eq!(plan["history_relation"], "single_history_only");
+    assert_eq!(
+        plan["strategy"],
+        "quarantine_entire_legacy_owner_then_bootstrap_v8"
+    );
+    assert_eq!(plan["migration_effect"], "none");
+    assert_eq!(plan["migration_authorized"], false);
+    assert_eq!(plan["apply_capability"], "not_implemented");
+    assert_eq!(plan["claim_effect"], "none");
+    assert_eq!(value["claim_effect"], "none");
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn malformed_mixed_singleton_and_canonical_history_is_unsafe_and_preserved() {
+    let mut fixture = Fixture::new(
+        "legacy-mixed-history",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    fs::create_dir(fixture.continuations_root()).unwrap();
+    fs::set_permissions(
+        fixture.continuations_root(),
+        std::os::unix::fs::PermissionsExt::from_mode(0o700),
+    )
+    .unwrap();
+    let canonical = fixture
+        .continuations_root()
+        .join(format!("routine-continuation-{}.json", "a".repeat(64)));
+    fs::write(&canonical, b"{}\n").unwrap();
+    fs::set_permissions(
+        &canonical,
+        std::os::unix::fs::PermissionsExt::from_mode(0o600),
+    )
+    .unwrap();
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::write(&singleton, b"{}\n").unwrap();
+    fs::set_permissions(
+        singleton,
+        std::os::unix::fs::PermissionsExt::from_mode(0o600),
+    )
+    .unwrap();
+    let before = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "unsafe_layout_preserve_and_hold");
+    assert_eq!(value["history_relation"], "unsafe_or_unauthenticated");
+    assert_eq!(value["migration_authorized"], false);
+    assert!(value["quarantine_plan"].is_null());
+    assert_eq!(tree(&fixture.home), before);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn authenticated_equivalent_mixed_history_is_classified_and_preserved() {
+    let mut fixture = Fixture::new(
+        "legacy-equivalent-mixed-history",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let completed = fixture.run();
+    assert!(
+        matches!(completed.status.code(), Some(0 | 1)),
+        "{completed:?}"
+    );
+    let canonical = fixture.checkpoint_path();
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&canonical, &singleton).unwrap();
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(
+        value["status"],
+        "history_relation_established_preserve_and_hold"
+    );
+    assert_eq!(value["history_relation"], "redundant_equivalent");
+    assert_eq!(value["legacy_singleton_count"], 1);
+    assert_eq!(value["canonical_continuation_count"], 1);
+    assert_eq!(value["event_journal_count"], 1);
+    assert_eq!(value["migration_effect"], "none");
+    assert_eq!(value["migration_authorized"], false);
+    let plan = &value["quarantine_plan"];
+    assert_eq!(plan["schema_version"], "RoutineStateQuarantinePlan-v1");
+    assert_eq!(plan["history_relation"], "redundant_equivalent");
+    assert_eq!(
+        plan["authoritative_history"],
+        "canonical_authenticated_history"
+    );
+    assert_eq!(plan["source_owner"], "routine-public");
+    assert!(
+        plan["quarantine_owner"]
+            .as_str()
+            .is_some_and(|value| value.starts_with("routine-public.quarantine-"))
+    );
+    assert_eq!(plan["operations"].as_array().map(Vec::len), Some(5));
+    assert_eq!(plan["migration_effect"], "none");
+    assert_eq!(plan["migration_authorized"], false);
+    assert_eq!(plan["apply_capability"], "not_implemented");
+    let repeated = fixture.run_args(&["--json", "diagnose"]);
+    assert_eq!(repeated.status.code(), Some(1), "{repeated:?}");
+    let repeated = Fixture::value(&repeated);
+    assert_eq!(repeated["quarantine_plan"]["plan_id"], plan["plan_id"]);
+    assert_eq!(
+        repeated["quarantine_plan"]["source_inventory_sha256"],
+        plan["source_inventory_sha256"]
+    );
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn mixed_history_with_a_missing_required_event_is_unsafe_and_preserved() {
+    let mut fixture = Fixture::new(
+        "legacy-mixed-history-missing-event",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let completed = fixture.run();
+    assert!(
+        matches!(completed.status.code(), Some(0 | 1)),
+        "{completed:?}"
+    );
+    let canonical = fixture.checkpoint_path();
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&canonical, &singleton).unwrap();
+    fs::remove_file(fixture.event_leaf()).unwrap();
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "unsafe_layout_preserve_and_hold");
+    assert_eq!(value["history_relation"], "unsafe_or_unauthenticated");
+    assert_eq!(value["migration_authorized"], false);
+    assert!(value["quarantine_plan"].is_null());
+    assert_eq!(tree(&fixture.home), before);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn unknown_format_is_a_typed_read_only_hold() {
+    let mut fixture = Fixture::new(
+        "legacy-unknown-format",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::write(
+        fixture.state_root().join("routine-state-format"),
+        b"routine-host-state-v7\n",
+    )
+    .unwrap();
+    let before = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "unknown_format_hold");
+    assert_eq!(value["format_status"], "unsupported");
+    assert_eq!(value["migration_authorized"], false);
+    assert_eq!(tree(&fixture.home), before);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn unsafe_legacy_entry_is_not_promoted_to_a_migration_candidate() {
+    let mut fixture = Fixture::new(
+        "legacy-unsafe-entry",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let outside = fixture.container.join("outside");
+    fs::write(&outside, b"outside\n").unwrap();
+    symlink(&outside, fixture.state_root().join("adapter/unsafe-entry")).unwrap();
+    let before = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "unsafe_layout_preserve_and_hold");
+    assert_eq!(value["migration_authorized"], false);
+    assert_eq!(tree(&fixture.home), before);
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn active_legacy_writer_returns_a_preserve_and_retry_hold() {
+    let mut fixture = Fixture::new(
+        "legacy-active-writer",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let lock = fs::OpenOptions::new()
+        .read(true)
+        .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW)
+        .open(fixture.lock_path())
+        .unwrap();
+    // SAFETY: the descriptor is owned by `lock` and the advisory lock is
+    // released when it is dropped at the end of this test.
+    assert_eq!(unsafe { libc::flock(lock.as_raw_fd(), libc::LOCK_EX) }, 0);
+    let before = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "stale_writer_preserve_and_retry");
+    assert_eq!(value["migration_authorized"], false);
+    assert_eq!(tree(&fixture.home), before);
+    drop(lock);
     fixture.teardown_after_assertions();
 }
 
