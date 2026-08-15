@@ -25,6 +25,11 @@ pub(crate) use authority::{
     RepositoryFitTrustedClock, execute_prepared_apply, prepare_recovery_intent,
     recover_prepared_apply,
 };
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use ledger::simulate_device_drift_for_test;
+pub(crate) use ledger::{
+    FileRepositoryFitLedger, RepositoryFitStoredLockIdentity, RepositoryFitStoredRootIdentity,
+};
 pub(crate) use plan_scope::FitPlanScope;
 pub(crate) use protocol::{
     OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, plan_target_for_scope,

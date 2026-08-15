@@ -50,9 +50,12 @@ pub(crate) use local_state::{
 };
 #[cfg(test)]
 pub(crate) use product_adapter::after_effect_before_terminal_for_test;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use product_adapter::simulate_device_drift_for_test;
 pub(crate) use product_adapter::{
-    AdapterErrorId, FitAdapterError, FitPlanScope, PreparedFitApply, RepositoryFitApplyNonce,
-    RepositoryFitAuthorityStore, RepositoryFitProductionOutcome, RepositoryFitTrustedClock,
+    AdapterErrorId, FileRepositoryFitLedger, FitAdapterError, FitPlanScope, PreparedFitApply,
+    RepositoryFitApplyNonce, RepositoryFitAuthorityStore, RepositoryFitProductionOutcome,
+    RepositoryFitStoredLockIdentity, RepositoryFitStoredRootIdentity, RepositoryFitTrustedClock,
     execute_prepared_apply, inspect_target, plan_target, plan_target_for_scope,
     prepare_apply_request, prepare_recovery_intent, recover_prepared_apply, verify_target,
 };

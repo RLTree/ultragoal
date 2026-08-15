@@ -11,7 +11,7 @@ use super::super::ledger::{
     FileRepositoryFitLedger, LedgerErrorId, RecoveryTargetRow, RecoveryTargetSpec,
     RepositoryFitLedgerState, ReservationDecision, ReservationRequest,
     before_atomic_publish_for_test, before_existing_open_for_test, before_lock_acquire_for_test,
-    canonical_recovery_intent_bytes,
+    canonical_recovery_intent_bytes, simulate_device_drift_for_test,
 };
 use super::super::root_permit::managed_ancestor_contract_for_ledger_test;
 use super::super::{
@@ -34,6 +34,8 @@ use std::time::{Duration, Instant};
 
 #[path = "abrupt_process_exit_after_effect_with_target_substitution_recovers_as_ambiguous.rs"]
 mod abrupt_process_exit_after_effect_with_target_substitution_recovers_as_ambiguous;
+#[path = "authenticated_device_drift_is_diagnosed_without_rewriting_history.rs"]
+mod authenticated_device_drift_is_diagnosed_without_rewriting_history;
 #[path = "authority_fixtures.rs"]
 mod authority_fixtures;
 #[path = "failed_terminal_validation_retains_recovery_authority_until_reconciled.rs"]

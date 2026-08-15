@@ -177,7 +177,7 @@ impl HostState {
     }
 }
 
-fn open_host_state_base(home: &Path) -> Result<Option<AnchoredDirectory>, HostFailure> {
+pub(super) fn open_host_state_base(home: &Path) -> Result<Option<AnchoredDirectory>, HostFailure> {
     if !home.is_absolute() {
         return Err(HostFailure::Invalid);
     }

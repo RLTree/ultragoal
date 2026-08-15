@@ -2,9 +2,9 @@ use super::{HostFailure, production_outcome};
 use crate::cli::successor::runtime::RuntimeOutcome;
 use crate::context::LiveContext;
 use crate::repository_fit::{
-    FitAdapterError, PreparedFitApply, RepositoryFitApplyNonce, RepositoryFitAuthorityStore,
-    RepositoryFitProductionOutcome, RepositoryFitTrustedClock, digest, execute_prepared_apply,
-    prepare_recovery_intent, recover_prepared_apply, valid_digest,
+    FileRepositoryFitLedger, FitAdapterError, PreparedFitApply, RepositoryFitApplyNonce,
+    RepositoryFitAuthorityStore, RepositoryFitProductionOutcome, RepositoryFitTrustedClock, digest,
+    execute_prepared_apply, prepare_recovery_intent, recover_prepared_apply, valid_digest,
 };
 use serde::{Deserialize, Serialize};
 use std::ffi::CString;
@@ -17,6 +17,8 @@ use std::path::{Path, PathBuf};
 
 #[path = "anchored_directory.rs"]
 mod anchored_directory;
+#[path = "migration_admission.rs"]
+mod migration_admission;
 #[path = "openat.rs"]
 mod openat;
 #[path = "pending_publication.rs"]
@@ -32,6 +34,7 @@ mod state_open;
 mod target_confinement;
 
 pub(crate) use anchored_directory::*;
+pub(crate) use migration_admission::*;
 pub(crate) use openat::*;
 pub(crate) use pending_publication::*;
 pub(crate) use process_lock::*;
