@@ -421,7 +421,7 @@ mod tests {
         let observation = parse_host_plugin_registry_observation(
             &fixture.plugin_json(),
             &fixture.marketplace_json(),
-            "0.0.35",
+            "0.0.36",
             &fixture.codex,
             &digest(b"selected-codex"),
         )
@@ -438,7 +438,7 @@ mod tests {
             json!([]),
             json!([exact.clone(), exact.clone()]),
             json!([merge(&exact, "enabled", json!(false))]),
-            json!([merge(&exact, "version", json!("0.0.34"))]),
+            json!([merge(&exact, "version", json!("0.0.35"))]),
             json!([merge(
                 &exact,
                 "source",
@@ -454,7 +454,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &bytes,
                     &fixture.marketplace_json(),
-                    "0.0.35",
+                    "0.0.36",
                     &fixture.codex,
                     &digest(b"selected-codex"),
                 )
@@ -478,7 +478,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &bytes,
-                    "0.0.35",
+                    "0.0.36",
                     &fixture.codex,
                     &digest(b"selected-codex"),
                 )
@@ -502,7 +502,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &fixture.marketplace_json(),
-                    "0.0.35",
+                    "0.0.36",
                     &alias,
                     &digest(b"selected-codex"),
                 )
@@ -569,10 +569,10 @@ mod tests {
                 serde_json::to_string(&fixture.plugin_row()).unwrap()
             ),
             format!(
-                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.35\",\"installed\":true,\"enabled\":false,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path}}}}}]}}"
+                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.36\",\"installed\":true,\"enabled\":false,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path}}}}}]}}"
             ),
             format!(
-                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.35\",\"installed\":true,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path},\"path\":{plugin_path}}}}}]}}"
+                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.36\",\"installed\":true,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path},\"path\":{plugin_path}}}}}]}}"
             ),
         ];
         for plugin_json in plugin_cases {
@@ -626,7 +626,7 @@ mod tests {
                 "pluginId": PLUGIN_ID,
                 "name": PLUGIN_NAME,
                 "marketplaceName": MARKETPLACE_NAME,
-                "version": "0.0.35",
+                "version": "0.0.36",
                 "installed": true,
                 "enabled": true,
                 "source": {"source":"local","path":self.plugin},
@@ -650,7 +650,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 &self.plugin_json(),
                 &self.marketplace_json(),
-                "0.0.35",
+                "0.0.36",
                 codex,
                 codex_sha256,
             )
@@ -665,7 +665,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 plugin_json,
                 marketplace_json,
-                "0.0.35",
+                "0.0.36",
                 &self.codex,
                 &digest(b"selected-codex"),
             )
