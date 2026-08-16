@@ -3,7 +3,8 @@ use super::super::command_contract::{
 };
 use super::options::{
     EXPORT_OPTIONS, INPUT_OUTPUT_RETAIN, OBSERVE_QUERY_OPTIONS, OUTPUT_OPTION,
-    PACKAGE_BUILD_OPTIONS, PACKAGE_VERIFY_OPTIONS, PUBLISH_OPTIONS, descriptor,
+    PACKAGE_BUILD_OPTIONS, PACKAGE_INSTALL_APPLY_OPTIONS, PACKAGE_INSTALL_PLAN_OPTIONS,
+    PACKAGE_VERIFY_OPTIONS, PUBLISH_OPTIONS, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -49,6 +50,20 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         EffectClass::WorkspaceWrite,
         "Exercise an isolated install and write a local verification artifact.",
         INPUT_OUTPUT_RETAIN,
+    ),
+    descriptor(
+        SuccessorCommand::Package(PackageAction::InstallPlan),
+        Some("install-plan"),
+        EffectClass::Read,
+        "Plan an exact personal-marketplace update without mutation.",
+        PACKAGE_INSTALL_PLAN_OPTIONS,
+    ),
+    descriptor(
+        SuccessorCommand::Package(PackageAction::InstallApply),
+        Some("install-apply"),
+        EffectClass::ExternalWrite,
+        "Apply only one explicitly accepted personal-marketplace lifecycle plan.",
+        PACKAGE_INSTALL_APPLY_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::Publish),

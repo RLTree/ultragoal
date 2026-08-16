@@ -11,13 +11,22 @@ pub(crate) fn public_router_adopts_only_live_successor_authority() {
     for args in [
         vec!["next"],
         vec!["--json", "inspect", "inventory"],
-        vec!["package", "build", "--output", "out.json"],
+        vec![
+            "package",
+            "build",
+            "--output",
+            "out.json",
+            "--cli",
+            "target/ultragoal/release/ultragoal",
+        ],
         vec![
             "--json",
             "package",
             "verify",
             "--input",
             "target/ultragoal/package.hugpkg",
+            "--cli",
+            "target/ultragoal/release/ultragoal",
         ],
         vec!["observe", "query"],
         vec![
@@ -75,10 +84,7 @@ pub(crate) fn fit_read_routes_are_public_and_zero_write() {
             panic!("expected fit invocation")
         };
         let streams = execute_invocation(&repo.root, invocation).render(OutputMode::Json);
-        assert!(
-            matches!(streams.exit_code, 0 | 1),
-            "{action}: {streams:?}"
-        );
+        assert!(matches!(streams.exit_code, 0 | 1), "{action}: {streams:?}");
         assert!(streams.stderr.is_empty(), "{action}");
         let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
         assert_eq!(value["schema_version"], schema, "{action}");

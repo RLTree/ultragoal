@@ -5,7 +5,7 @@ use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
     AgentDiscoveryErrorId, AgentRepositoryAdoption, AgentRepositoryAdoptionRequest,
     HostPluginRegistryObservation, adopt_agent_repository, capture_current_source,
-    parse_host_plugin_registry_observation,
+    parse_host_plugin_registry_observation, parse_unpinned_host_plugin_registry_observation,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -182,7 +182,7 @@ pub(super) enum RegistryObservationFailure {
     Blocked(AgentDiscoveryErrorId),
 }
 
-fn observe_host_registry(
+pub(super) fn observe_host_registry(
     context: &LiveContext,
     expected_plugin_version: &str,
 ) -> Result<HostPluginRegistryObservation, RegistryObservationFailure> {
@@ -227,6 +227,55 @@ fn observe_host_registry(
         &plugin_json,
         &marketplace_json,
         expected_plugin_version,
+        executable,
+        &executable_sha256,
+    )
+    .map_err(|error| RegistryObservationFailure::Blocked(error.id()))
+}
+
+pub(super) fn observe_unpinned_host_registry(
+    context: &LiveContext,
+) -> Result<HostPluginRegistryObservation, RegistryObservationFailure> {
+    let codex = context
+        .capabilities()
+        .tool("codex")
+        .filter(|tool| tool.available)
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    let executable = codex
+        .executable
+        .as_deref()
+        .map(Path::new)
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    let executable_sha256 = codex
+        .executable_sha256
+        .as_deref()
+        .filter(|value| {
+            value.len() == 64
+                && value
+                    .bytes()
+                    .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
+        })
+        .map(|value| format!("sha256:{value}"))
+        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
+    context.revalidate().map_err(|_| {
+        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
+    })?;
+    let marketplace_json = run_codex_observation(
+        executable,
+        &["plugin", "marketplace", "list", "--json"],
+        context.worktree_root(),
+    )?;
+    let plugin_json = run_codex_observation(
+        executable,
+        &["plugin", "list", "--json"],
+        context.worktree_root(),
+    )?;
+    context.revalidate().map_err(|_| {
+        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
+    })?;
+    parse_unpinned_host_plugin_registry_observation(
+        &plugin_json,
+        &marketplace_json,
         executable,
         &executable_sha256,
     )

@@ -4,6 +4,7 @@ pub(super) fn execute(
     root: &Path,
     invocation: &ParsedInvocation,
     operation: operation_binding::PublicOperation,
+    home: Option<&Path>,
 ) -> Option<RuntimeOutcome> {
     match operation {
         operation_binding::PublicOperation::PackageBuild => Some(with_package_contexts(
@@ -29,7 +30,30 @@ pub(super) fn execute(
                 package_install_test::execute(source_context, output_context, invocation)
             },
         )),
+        operation_binding::PublicOperation::PackageInstallPlan => {
+            Some(with_lifecycle_contexts(root, |source, observation| {
+                package_personal_install::plan(source, observation, invocation, home)
+            }))
+        }
+        operation_binding::PublicOperation::PackageInstallApply => {
+            Some(with_lifecycle_contexts(root, |source, observation| {
+                package_personal_install::apply(source, observation, invocation, home)
+            }))
+        }
         _ => None,
+    }
+}
+
+fn with_lifecycle_contexts(
+    root: &Path,
+    execute: impl FnOnce(&LiveContext, &LiveContext) -> RuntimeOutcome,
+) -> RuntimeOutcome {
+    match (
+        compatibility_read_context(root),
+        compatibility_capabilities_context(root),
+    ) {
+        (Ok(source), Ok(observation)) => execute(&source, &observation),
+        (Err(()), _) | (_, Err(())) => context_unavailable(),
     }
 }
 

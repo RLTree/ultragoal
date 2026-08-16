@@ -53,7 +53,7 @@ pub(crate) fn execute_invocation_with_home(
     if operation == super::operation_binding::PublicOperation::EvaluationRun {
         return evaluation::run(&invocation);
     }
-    if let Some(outcome) = package_dispatch::execute(root, &invocation, operation) {
+    if let Some(outcome) = package_dispatch::execute(root, &invocation, operation, home) {
         return outcome;
     }
     if invocation.effect != EffectClass::Read

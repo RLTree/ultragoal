@@ -17,7 +17,10 @@ mod platform {
     }
 }
 
-pub(super) fn read_immutable_plan(path: &Path, maximum: u64) -> Result<Vec<u8>, &'static str> {
+pub(in crate::cli::successor_public) fn read_immutable_plan(
+    path: &Path,
+    maximum: u64,
+) -> Result<Vec<u8>, &'static str> {
     platform::read_immutable_plan(path, maximum)
 }
 

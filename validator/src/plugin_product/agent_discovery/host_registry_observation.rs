@@ -28,6 +28,14 @@ impl HostPluginRegistryObservation {
         &self.installed_root
     }
 
+    pub(crate) fn marketplace_root(&self) -> &Path {
+        &self.marketplace_root
+    }
+
+    pub(crate) fn selected_codex_identity_sha256(&self) -> &str {
+        &self.selected_codex_identity_sha256
+    }
+
     pub(crate) fn sha256(&self) -> &str {
         &self.sha256
     }
@@ -70,6 +78,37 @@ pub(crate) fn parse_host_plugin_registry_observation(
     selected_codex_executable: &Path,
     selected_codex_identity_sha256: &str,
 ) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
+    parse_host_plugin_registry_observation_inner(
+        plugin_json,
+        marketplace_json,
+        Some(expected_plugin_version),
+        selected_codex_executable,
+        selected_codex_identity_sha256,
+    )
+}
+
+pub(crate) fn parse_unpinned_host_plugin_registry_observation(
+    plugin_json: &[u8],
+    marketplace_json: &[u8],
+    selected_codex_executable: &Path,
+    selected_codex_identity_sha256: &str,
+) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
+    parse_host_plugin_registry_observation_inner(
+        plugin_json,
+        marketplace_json,
+        None,
+        selected_codex_executable,
+        selected_codex_identity_sha256,
+    )
+}
+
+fn parse_host_plugin_registry_observation_inner(
+    plugin_json: &[u8],
+    marketplace_json: &[u8],
+    expected_plugin_version: Option<&str>,
+    selected_codex_executable: &Path,
+    selected_codex_identity_sha256: &str,
+) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
     if plugin_json.len() > MAX_REGISTRY_BYTES
         || marketplace_json.len() > MAX_REGISTRY_BYTES
         || !valid_sha256(selected_codex_identity_sha256)
@@ -84,10 +123,12 @@ pub(crate) fn parse_host_plugin_registry_observation(
     let (plugin_index, plugin) = exact_plugin_row(plugin_rows)?;
     let (marketplace_index, marketplace) = exact_marketplace_row(marketplace_rows)?;
 
-    if string(plugin, "pluginId") != Some(PLUGIN_ID)
+    let plugin_version = string(plugin, "version").ok_or_else(identity)?;
+    if crate::plugin_product::lifecycle::Version::parse(plugin_version).is_err()
+        || expected_plugin_version.is_some_and(|expected| expected != plugin_version)
+        || string(plugin, "pluginId") != Some(PLUGIN_ID)
         || string(plugin, "name") != Some(PLUGIN_NAME)
         || string(plugin, "marketplaceName") != Some(MARKETPLACE_NAME)
-        || string(plugin, "version") != Some(expected_plugin_version)
         || boolean(plugin, "installed") != Some(true)
         || boolean(plugin, "enabled") != Some(true)
     {
@@ -131,7 +172,7 @@ pub(crate) fn parse_host_plugin_registry_observation(
         selected_codex_identity_sha256: selected_codex_identity_sha256.to_owned(),
         installed_root,
         marketplace_root,
-        plugin_version: expected_plugin_version.to_owned(),
+        plugin_version: plugin_version.to_owned(),
         sha256,
     })
 }
@@ -428,6 +469,32 @@ mod tests {
         .unwrap();
         assert_eq!(observation.installed_root(), fixture.plugin.as_path());
         assert!(valid_sha256(observation.sha256()));
+    }
+
+    #[test]
+    fn unpinned_read_only_observation_seals_the_registry_version_without_selecting_it() {
+        let fixture = Fixture::new();
+        let observation = parse_unpinned_host_plugin_registry_observation(
+            &fixture.plugin_json(),
+            &fixture.marketplace_json(),
+            &fixture.codex,
+            &digest(b"selected-codex"),
+        )
+        .unwrap();
+        assert_eq!(observation.plugin_version(), "0.0.36");
+        let malformed = serde_json::to_vec(&json!({
+            "installed": [merge(&fixture.plugin_row(), "version", json!("latest"))]
+        }))
+        .unwrap();
+        assert!(
+            parse_unpinned_host_plugin_registry_observation(
+                &malformed,
+                &fixture.marketplace_json(),
+                &fixture.codex,
+                &digest(b"selected-codex"),
+            )
+            .is_err()
+        );
     }
 
     #[test]

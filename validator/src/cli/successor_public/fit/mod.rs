@@ -98,7 +98,7 @@ pub(crate) fn repository_fit_authority_migration_diagnosis(
 }
 
 mod authority;
-mod external_plan_file;
+pub(super) mod external_plan_file;
 #[path = "invocation_errors.rs"]
 mod invocation_errors;
 #[path = "plan_input_limit.rs"]

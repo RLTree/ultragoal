@@ -22,5 +22,7 @@ pub(crate) enum PublicOperation {
     PackageBuild,
     PackageVerify,
     PackageInstallTest,
+    PackageInstallPlan,
+    PackageInstallApply,
     PackageInventory,
 }

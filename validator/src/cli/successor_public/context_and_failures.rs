@@ -32,6 +32,19 @@ pub(crate) fn compatibility_read_context(root: &Path) -> Result<LiveContext, ()>
     .map_err(|_| ())
 }
 
+pub(crate) fn compatibility_capabilities_context(root: &Path) -> Result<LiveContext, ()> {
+    LiveContext::build(
+        BuildRequest::new(root)
+            .with_effect(EffectClass::Read)
+            .probe_tool("codex")
+            .bind_non_secret_configuration(
+                ADOPTED_HANDOFF_DIGEST_CONFIG_KEY,
+                ADOPTED_HANDOFF_MANIFEST_SHA256,
+            ),
+    )
+    .map_err(|_| ())
+}
+
 pub(crate) fn compatibility_workspace_context(root: &Path) -> Result<LiveContext, ()> {
     LiveContext::build(
         BuildRequest::new(root)
@@ -86,6 +99,7 @@ mod tests {
 
         for context in [
             compatibility_read_context(&repository.root).unwrap(),
+            compatibility_capabilities_context(&repository.root).unwrap(),
             compatibility_workspace_context(&repository.root).unwrap(),
         ] {
             assert_eq!(

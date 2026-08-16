@@ -36,6 +36,7 @@ mod package_cli_payload;
 mod package_dispatch;
 mod package_install_test;
 mod package_inventory;
+mod package_personal_install;
 mod package_verify;
 mod public_context;
 pub(crate) mod routine;

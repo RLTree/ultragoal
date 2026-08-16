@@ -45,6 +45,14 @@ pub(crate) fn capture_current_source(
     source::SourceAgentCatalog::capture(root, candidate_id, session_id).map(CurrentSourceCapture)
 }
 
+pub(crate) fn capture_installed_source_authority(
+    root: &std::path::Path,
+    candidate_id: &str,
+    session_id: &str,
+) -> Result<source::InstalledSourceAuthorityCapture, error::AgentDiscoveryError> {
+    source::InstalledSourceAuthorityCapture::capture(root, candidate_id, session_id)
+}
+
 #[cfg(test)]
 #[path = "tests/mod.rs"]
 mod tests;
@@ -52,6 +60,7 @@ mod tests;
 pub(crate) use error::AgentDiscoveryErrorId;
 pub(crate) use host_registry_observation::{
     HostPluginRegistryObservation, parse_host_plugin_registry_observation,
+    parse_unpinned_host_plugin_registry_observation,
 };
 pub(crate) use local_authority::{
     AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
