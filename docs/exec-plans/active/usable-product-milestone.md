@@ -112,7 +112,8 @@
 - The repository-fit quarantine transaction is frozen at source commit `e47242ce3bf08c9c4af1b881eab730b8450b99db`, tree `0ca9ead65a0dea3454fe8179c91bf34798c29805`. Terry's four protected distribution edits and untracked sentinel remain outside that commit and byte-identical at their recorded identities.
 - The next package candidate advances the three current version authorities and their package/registry/install-plan fixtures from 0.0.36 to 0.0.37. Installed 0.0.36 remains the explicit predecessor and wrong-version red; equal-version changed bytes are not eligible for a lifecycle update.
 - Version-correct product, privacy, and terms pages are prepared locally on unpublished policy branch `codex/harness-ultragoal-0.0.37-policy@08df02ce6bb2fba511cd927e270c12e84402a3f2`. The plugin manifest pins that exact commit. This local policy identity is source preparation only; policy availability remains HOLD until separately authorized publication and byte-current retrieval prove the three public URLs.
-- Package build, current-source verification, disposable install-test, and read-only installed-0.0.36-to-target-0.0.37 install planning must run from the final clean committed candidate. They may raise only source/build/archive/isolated-install/install-plan custody. No live marketplace, cache, registry, HostState, quarantine, repository target, publication, release, or completion effect is authorized in this slice.
+- A clean pre-final candidate passed package build, current-source verification, disposable install-test, and read-only installed-0.0.36-to-target-0.0.37 install planning. The plan observes exact installed marketplace/cache/runtime custody and returns `lifecycle_intent=monotonic-update`, `effect=none`, and `apply_status=hold-prior-installed-authority-adoption-not-implemented`. Because this plan update changes the source candidate, final package identities are rebuilt from the final clean commit and reported externally rather than embedded here.
+- Current disposition: `PASS / MONOTONIC 0.0.37 SOURCE, ARCHIVE, ISOLATED INSTALL, AND READ-ONLY INSTALL PLAN; HOLD / PUBLIC POLICY AVAILABILITY, REAL INSTALL, LIVE QUARANTINE, AND INSTALLED JOURNEY`. No live marketplace, cache, registry, HostState, quarantine, repository target, publication, release, or completion effect is authorized in this slice.
 
 ## U1 current-product baseline (2026-08-09)
 
@@ -314,7 +315,8 @@ Do not commit:
 - [x] Construct the deterministic read-only whole-owner quarantine plan from one authenticated migration relation; keep apply capability unavailable and every host effect unauthorized.
 - [x] Materialize the verified 0.0.36 marketplace tree, update through supported Codex registration, and prove immediate installed source/cache/runtime plus fresh skill-catalog population without an app restart.
 - [x] Implement and deterministically verify the repository-fit whole-owner quarantine apply boundary at the source and isolated-fixture ceiling; retain exact rollback until a fresh owner bootstraps. No live HostState changed.
-- [ ] Build a monotonic exact package candidate and, only under separately confirmed host-write authority, install it and rerun the installed target diagnosis/quarantine/apply/verify journey. Do not manually rewrite or delete legacy state.
+- [x] Build and verify a monotonic exact 0.0.37 package candidate, disposable install, and read-only installed-0.0.36-to-target-0.0.37 install plan without changing live host or target state.
+- [ ] Publish and byte-verify the pinned 0.0.37 policy pages and, only under separately confirmed host-write authority, install the exact package and rerun the installed target diagnosis/quarantine/apply/verify journey. Do not manually rewrite or delete legacy state.
 
 ## Surprises and discoveries
 
