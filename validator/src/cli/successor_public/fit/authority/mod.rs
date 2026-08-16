@@ -44,8 +44,13 @@ mod supported;
 
 #[path = "public_effect.rs"]
 mod public_effect;
+#[path = "quarantine_record.rs"]
+mod quarantine_record;
 
 pub(crate) use public_effect::*;
+pub(crate) use quarantine_record::*;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use supported::set_quarantine_failpoint_for_test;
 
 pub(crate) fn assess_migration_admission(
     home: &Path,

@@ -199,7 +199,7 @@ pub(crate) fn diagnose_reports_authenticated_device_drift_without_writes() {
     );
     assert_eq!(
         value["quarantine_plan"]["apply_capability"],
-        "not_implemented"
+        "fit_apply_exact_quarantine_plan"
     );
     assert_eq!(value["migration_effect"], "none");
     assert_eq!(value["migration_authorized"], false);

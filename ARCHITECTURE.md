@@ -61,8 +61,23 @@ The plan binds the complete descriptor inventory and specifies whole-owner
 quarantine followed by a fresh v8 bootstrap; it never rewrites selected legacy
 records in place. Conflicting, unsafe, unauthenticated, or changing history
 cannot mint a plan. Planning authorizes no rename, quarantine, bootstrap,
-migration, deletion, recovery, or claim, and no apply route exists in this
-source slice.
+migration, deletion, recovery, or claim. The only apply route is the separate
+exact-record boundary described below.
+
+Repository-fit authority device drift uses the existing `fit apply` effect
+boundary rather than a sibling migration writer. A complete closed diagnosis
+record and its exact accepted quarantine-plan identity are rederived under an
+exclusive advisory lock on the owner parent; every ordinary repository-fit
+apply or recovery holds the shared form of that same lock for its complete
+HostState lifetime. The transaction binds the parent identity and complete
+owner inventory, atomically moves the entire owner to an exclusive quarantine
+name, fsyncs and revalidates the parent and quarantined inventory, then creates
+a fresh authority without importing legacy bytes. Any failure before fresh
+bootstrap restores and fsyncs the exact owner; after bootstrap begins, failure
+retains both states and returns ambiguity for diagnosis. Quarantine persists
+until a same-surface installed journey passes. This source route does not
+authorize manual state edits, mutate the repository target, or prove an
+installed recovery journey.
 
 Complete-repository fit does not implicitly reconcile a
 `validation_artifacts/` ignore rule. Candidate evidence is never ordinary

@@ -28,6 +28,8 @@ mod local_state_fit_plan_is_public_and_confined;
 mod migration_plan;
 #[path = "public_output_limit_is_inclusive_and_fail_closed.rs"]
 mod public_output_limit_is_inclusive_and_fail_closed;
+#[path = "repository_fit_authority_quarantine_apply.rs"]
+mod repository_fit_authority_quarantine_apply;
 #[path = "routine_configuration_fit_plan_is_public_and_confined.rs"]
 mod routine_configuration_fit_plan_is_public_and_confined;
 #[path = "routine_diagnosis_without_inventory.rs"]

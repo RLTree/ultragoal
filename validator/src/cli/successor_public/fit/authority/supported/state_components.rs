@@ -148,4 +148,5 @@ pub(crate) struct HostState {
     pub(crate) pending_name: String,
     pub(crate) lock_name: String,
     pub(crate) _lock: ProcessLock,
+    pub(crate) _parent_lock: Option<ParentStateLock>,
 }

@@ -21,10 +21,14 @@ mod anchored_directory;
 mod migration_admission;
 #[path = "openat.rs"]
 mod openat;
+#[path = "parent_state_lock.rs"]
+mod parent_state_lock;
 #[path = "pending_publication.rs"]
 mod pending_publication;
 #[path = "process_lock.rs"]
 mod process_lock;
+#[path = "quarantine_apply.rs"]
+mod quarantine_apply;
 #[path = "state_components.rs"]
 mod state_components;
 #[path = "state_open.rs"]
@@ -36,6 +40,8 @@ mod target_confinement;
 pub(crate) use anchored_directory::*;
 pub(crate) use migration_admission::*;
 pub(crate) use openat::*;
+pub(crate) use parent_state_lock::*;
 pub(crate) use pending_publication::*;
 pub(crate) use process_lock::*;
+pub(crate) use quarantine_apply::*;
 pub(crate) use state_components::*;

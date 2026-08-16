@@ -98,6 +98,8 @@ pub(crate) fn repository_fit_authority_migration_diagnosis(
 }
 
 mod authority;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use authority::set_quarantine_failpoint_for_test;
 pub(super) mod external_plan_file;
 #[path = "invocation_errors.rs"]
 mod invocation_errors;

@@ -1,6 +1,45 @@
 use super::*;
 use crate::cli::successor::runtime::DiagnosticDetails;
 
+pub(crate) fn try_execute_quarantine(
+    context: &LiveContext,
+    plan_path: &Path,
+    accepted_plan: &str,
+    home: &Path,
+) -> Option<RuntimeOutcome> {
+    let bytes = match super::super::external_plan_file::read_immutable_plan(
+        plan_path,
+        super::super::MAX_PLAN_RECORD_BYTES,
+    ) {
+        Ok(bytes) => bytes,
+        Err(_) => return None,
+    };
+    let canonical = if bytes.ends_with(b"\n") && !bytes[..bytes.len() - 1].ends_with(b"\n") {
+        &bytes[..bytes.len() - 1]
+    } else {
+        bytes.as_slice()
+    };
+    let record = match classify_quarantine_record(canonical) {
+        QuarantineRecordClassification::Other => return None,
+        QuarantineRecordClassification::Invalid => {
+            return Some(host_failure(HostFailure::QuarantineInvalid));
+        }
+        QuarantineRecordClassification::Quarantine(record) => record,
+    };
+    #[cfg(target_vendor = "apple")]
+    {
+        Some(
+            supported::execute_quarantine(context, home, &record, accepted_plan)
+                .unwrap_or_else(host_failure),
+        )
+    }
+    #[cfg(not(target_vendor = "apple"))]
+    {
+        let _ = (context, home, record, accepted_plan);
+        Some(host_failure(HostFailure::Unsupported))
+    }
+}
+
 pub(crate) fn execute(
     context: &LiveContext,
     prepared: PreparedFitApply,
@@ -99,6 +138,8 @@ pub(crate) enum HostFailure {
     Random,
     Persistence,
     Cleanup,
+    QuarantineInvalid,
+    QuarantineStale,
 }
 
 pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
@@ -151,6 +192,22 @@ pub(crate) fn host_failure(failure: HostFailure) -> RuntimeOutcome {
             "preserve the target and host state, then rerun fit apply to enter exact recovery",
             "workspace_write_may_have_occurred",
             "repository-fit success and dependent claims remain withheld",
+        ),
+        HostFailure::QuarantineInvalid => (
+            ExitClass::InvalidInvocation,
+            DiagnosticId::UnexpectedArguments,
+            "the supplied repository-fit authority quarantine record is not the exact closed diagnosis projection",
+            "rerun diagnose, write its complete JSON projection to one owner-only regular file, and accept its exact plan_id",
+            "none",
+            "no host-state or target effect is authorized or performed",
+        ),
+        HostFailure::QuarantineStale => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::StaleContext,
+            "the accepted repository-fit authority quarantine plan no longer matches the complete authenticated owner",
+            "preserve the owner, rerun diagnose, and review the newly derived exact plan before retrying",
+            "none",
+            "no new host-state or target effect is authorized or performed",
         ),
     };
     RuntimeOutcome::failure(

@@ -10,15 +10,22 @@ const MAX_PENDING_ENTRIES: usize = 1024;
 pub(crate) fn assess_migration_admission(
     home: &Path,
 ) -> Result<Option<RepositoryFitAuthorityMigrationAdmission>, HostFailure> {
-    let Some(mut current) = open_host_state_base(home)? else {
+    let Some(current) = open_host_state_base(home)? else {
         return Ok(None);
     };
-    for component in FIT_STATE_COMPONENTS {
-        let Some(child) = current.open_child_optional(component, true)? else {
-            return Ok(None);
-        };
-        current = child;
-    }
+    let Some(parent) = current.open_child_optional(FIT_STATE_COMPONENTS[0], true)? else {
+        return Ok(None);
+    };
+    let Some(current) = parent.open_child_optional(FIT_STATE_COMPONENTS[1], true)? else {
+        return Ok(None);
+    };
+    assess_migration_admission_for_owner(current, parent.identity)
+}
+
+pub(super) fn assess_migration_admission_for_owner(
+    current: AnchoredDirectory,
+    parent_identity: FileIdentity,
+) -> Result<Option<RepositoryFitAuthorityMigrationAdmission>, HostFailure> {
     let Some(authority) = current.open_child_optional(AUTHORITY_DIRECTORY, true)? else {
         return Ok(None);
     };
@@ -40,6 +47,7 @@ pub(crate) fn assess_migration_admission(
     let source_inventory_sha256 = digest(
         &serde_json::to_vec(&(
             "repository-fit-authority-migration-source-inventory-v1",
+            directory_identity_row(parent_identity),
             identity_row(current.identity),
             identity_row(authority.identity),
             identity_row(pending.identity),
@@ -71,7 +79,7 @@ pub(crate) fn assess_migration_admission(
     } else {
         (
             "device_identity_changed",
-            "independently review the deterministic whole-owner quarantine plan before any host write",
+            "write this complete diagnosis projection to one owner-only regular file, then run ultragoal --json fit apply --plan <absolute-path> --accept-plan <plan_id>",
         )
     };
     Ok(Some(RepositoryFitAuthorityMigrationAdmission {
@@ -123,7 +131,7 @@ fn quarantine_plan(
         quarantine_owner: format!("repository-fit.quarantine.{}", &stem[..16]),
         target_format: "harness-ultragoal.repository-fit-authority-ledger.v3",
         strategy: "whole_owner_quarantine_then_fresh_bootstrap",
-        apply_capability: "not_implemented",
+        apply_capability: "fit_apply_exact_quarantine_plan",
         operations: vec![
             "revalidate_complete_source_inventory_under_exclusive_parent_custody",
             "quarantine_complete_repository_fit_owner_without_rewriting_history",
@@ -276,6 +284,16 @@ fn identity_row(identity: FileIdentity) -> (u64, u64, u32, u32, u64, u64, u32) {
         identity.mode,
         identity.links,
         identity.size,
+        identity.kind,
+    )
+}
+
+fn directory_identity_row(identity: FileIdentity) -> (u64, u64, u32, u32, u32) {
+    (
+        identity.device,
+        identity.inode,
+        identity.uid,
+        identity.mode,
         identity.kind,
     )
 }

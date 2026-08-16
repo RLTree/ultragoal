@@ -18,15 +18,16 @@ impl HostState {
         target: &Path,
         existing_pending_only: bool,
     ) -> Result<Option<Self>, HostFailure> {
-        let Some(mut current) = open_host_state_base(home)? else {
+        let Some(current) = open_host_state_base(home)? else {
             return Ok(None);
         };
-        for component in FIT_STATE_COMPONENTS {
-            let Some(child) = current.open_child_optional(component, true)? else {
-                return Ok(None);
-            };
-            current = child;
-        }
+        let Some(parent) = current.open_child_optional(FIT_STATE_COMPONENTS[0], true)? else {
+            return Ok(None);
+        };
+        let parent_lock = ParentStateLock::acquire_shared(&parent)?;
+        let Some(current) = parent.open_child_optional(FIT_STATE_COMPONENTS[1], true)? else {
+            return Ok(None);
+        };
         let authority = current.open_child_optional(AUTHORITY_DIRECTORY, true)?;
         let pending = current.open_child_optional(PENDING_DIRECTORY, true)?;
         let (Some(authority), Some(pending)) = (authority, pending) else {
@@ -38,20 +39,50 @@ impl HostState {
             pending,
             target,
             existing_pending_only,
+            Some(parent_lock),
         )
     }
 
     fn initialize(home: &Path, target: &Path) -> Result<Self, HostFailure> {
-        let Some(mut current) = open_host_state_base(home)? else {
+        let Some(current) = open_host_state_base(home)? else {
             return Err(HostFailure::Unavailable);
         };
         reject_target_overlap(&prospective_state_root(&current.path)?, target)?;
-        for component in FIT_STATE_COMPONENTS {
-            current = current.open_or_create_owned_child(component)?;
-        }
+        let parent = current.open_or_create_owned_child(FIT_STATE_COMPONENTS[0])?;
+        let parent_lock = ParentStateLock::acquire_shared(&parent)?;
+        let current = parent.open_or_create_owned_child(FIT_STATE_COMPONENTS[1])?;
         let authority = current.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
         let pending = current.open_or_create_owned_child(PENDING_DIRECTORY)?;
-        Self::assemble(current.path, authority, pending, target, false)?.ok_or(HostFailure::Invalid)
+        Self::assemble(
+            current.path,
+            authority,
+            pending,
+            target,
+            false,
+            Some(parent_lock),
+        )?
+        .ok_or(HostFailure::Invalid)
+    }
+
+    pub(crate) fn initialize_under_migration_lock(
+        home: &Path,
+        target: &Path,
+        expected_parent: &AnchoredDirectory,
+        migration_lock: &ParentStateLock,
+    ) -> Result<Self, HostFailure> {
+        migration_lock.verify(expected_parent)?;
+        let Some(base) = open_host_state_base(home)? else {
+            return Err(HostFailure::Unavailable);
+        };
+        let parent = base.open_child(FIT_STATE_COMPONENTS[0], true)?;
+        if !parent.identity.same_directory(expected_parent.identity) {
+            return Err(HostFailure::Invalid);
+        }
+        let current = parent.open_or_create_owned_child(FIT_STATE_COMPONENTS[1])?;
+        let authority = current.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
+        let pending = current.open_or_create_owned_child(PENDING_DIRECTORY)?;
+        Self::assemble(current.path, authority, pending, target, false, None)?
+            .ok_or(HostFailure::Invalid)
     }
 
     fn assemble(
@@ -60,6 +91,7 @@ impl HostState {
         pending: AnchoredDirectory,
         target: &Path,
         existing_pending_only: bool,
+        parent_lock: Option<ParentStateLock>,
     ) -> Result<Option<Self>, HostFailure> {
         let canonical_target = fs::canonicalize(target).map_err(|_| HostFailure::Invalid)?;
         reject_target_overlap(&state_root, &canonical_target)?;
@@ -114,11 +146,15 @@ impl HostState {
             pending_name,
             lock_name,
             _lock: lock,
+            _parent_lock: parent_lock,
         };
         state.verify()?;
         Ok(Some(state))
     }
     pub(crate) fn verify(&self) -> Result<(), HostFailure> {
+        if let Some(parent_lock) = &self._parent_lock {
+            parent_lock.verify_path()?;
+        }
         self.authority.verify(true)?;
         self.pending.verify(true)?;
         self._lock.verify(&self.pending, &self.lock_name)?;
