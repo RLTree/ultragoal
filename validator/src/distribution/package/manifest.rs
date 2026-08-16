@@ -199,7 +199,7 @@ mod tests {
             entry(
                 ".codex-plugin/plugin.json",
                 PackageRole::Manifest,
-                br#"{"name":"harness-ultragoal","version":"0.0.36","description":"valid","skills":"./skills/"}"#,
+                br#"{"name":"harness-ultragoal","version":"0.0.37","description":"valid","skills":"./skills/"}"#,
             ),
             entry(
                 "skills/harness-ultragoal/SKILL.md",
@@ -218,13 +218,13 @@ mod tests {
     #[test]
     fn canonical_root_agents_are_exact_non_subtree_agent_roots() {
         let entries = entries();
-        validate(&entries, "harness-ultragoal", "0.0.36").expect("canonical root agents");
+        validate(&entries, "harness-ultragoal", "0.0.37").expect("canonical root agents");
 
         let mut missing = entries.clone();
         missing.retain(|entry| {
             entry.path != crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path
         });
-        assert!(validate(&missing, "harness-ultragoal", "0.0.36").is_err());
+        assert!(validate(&missing, "harness-ultragoal", "0.0.37").is_err());
 
         let mut nested = entries.clone();
         nested.push(entry(
@@ -232,7 +232,7 @@ mod tests {
             PackageRole::Agent,
             b"unknown",
         ));
-        assert!(validate(&nested, "harness-ultragoal", "0.0.36").is_err());
+        assert!(validate(&nested, "harness-ultragoal", "0.0.37").is_err());
 
         let mut wrong_role = entries;
         wrong_role
@@ -240,6 +240,6 @@ mod tests {
             .find(|entry| entry.path == crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path)
             .expect("canonical agent")
             .role = PackageRole::Data;
-        assert!(validate(&wrong_role, "harness-ultragoal", "0.0.36").is_err());
+        assert!(validate(&wrong_role, "harness-ultragoal", "0.0.37").is_err());
     }
 }

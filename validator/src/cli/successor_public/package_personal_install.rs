@@ -520,7 +520,7 @@ mod tests {
     fn record() -> PersonalMarketplaceInstallPlan {
         let mut before = InstalledAuthority {
             schema_version: "HarnessObservedInstalledAuthority-v1".to_owned(),
-            plugin_version: "0.0.35".to_owned(),
+            plugin_version: "0.0.36".to_owned(),
             registry_observation_sha256: digest('a'),
             marketplace_source_relative_path_sha256: digest('0'),
             marketplace_source_catalog_sha256: digest('b'),
@@ -538,13 +538,13 @@ mod tests {
             effect: "none".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
             lifecycle_intent: "monotonic-update".to_owned(),
-            input: "target/ultragoal/package-0.0.36.hugpkg".to_owned(),
+            input: "target/ultragoal/package-0.0.37.hugpkg".to_owned(),
             cli: "target/ultragoal/release/ultragoal".to_owned(),
             before,
             target: TargetPackage {
                 candidate_id: digest('1'),
                 catalog_id: digest('2'),
-                version: "0.0.36".to_owned(),
+                version: "0.0.37".to_owned(),
                 source_tree_sha256: digest('3'),
                 archive_sha256: digest('4'),
                 inventory_sha256: digest('5'),
@@ -585,7 +585,7 @@ mod tests {
         authority.before.cache_catalog_sha256 = digest('9');
         assert!(validate_plan_identity(&authority).is_err());
         let mut target = original.clone();
-        target.target.version = "0.0.35".to_owned();
+        target.target.version = "0.0.36".to_owned();
         assert!(validate_plan_identity(&target).is_err());
         let mut sequence = original;
         sequence.required_effects.swap(0, 1);
@@ -614,7 +614,7 @@ mod tests {
             "package",
             "install-plan",
             "--input",
-            "target/ultragoal/package-0.0.36.hugpkg",
+            "target/ultragoal/package-0.0.37.hugpkg",
             "--cli",
             "target/ultragoal/release/ultragoal",
         ])
