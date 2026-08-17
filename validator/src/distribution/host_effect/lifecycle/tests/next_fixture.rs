@@ -163,7 +163,7 @@ fn lifecycle_custody_for(
     let authority = PackageAuthority {
         version: Version::parse(package.source().version()).unwrap(),
         package_sha256: package.archive_sha256().to_owned(),
-        inventory_sha256: package.tree_sha256().to_owned(),
+        inventory_sha256: package.source().accepted_inventory_sha256().to_owned(),
         candidate_id: package.source().candidate_id().to_owned(),
     };
     let lifecycle = crate::plugin_product::lifecycle::plan(
@@ -184,6 +184,7 @@ fn lifecycle_custody_for(
         lifecycle,
         HostLifecycleBinding::new(
             package.clone(),
+            None,
             command_plan.clone(),
             d('1'),
             d('2'),

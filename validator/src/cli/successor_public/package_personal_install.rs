@@ -1,13 +1,16 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    ReadOnlyWorkspace, capture_product_package, capture_product_package_with_cli,
-    verify_product_package,
+    ConfinedRoot, PackageIdentity, ReadOnlyWorkspace, ScopedTree, SourceIdentity,
+    capture_product_package, capture_product_package_with_cli, tree_sha256, verify_product_package,
 };
 use crate::plugin_product::agent_discovery::{
     HostPluginRegistryObservation, capture_installed_source_authority,
 };
-use crate::plugin_product::lifecycle::Version;
+use crate::plugin_product::lifecycle::{
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, LifecycleState, PackageAuthority,
+    PriorInstalledAuthority, Version,
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::path::Path;
@@ -23,6 +26,7 @@ struct InstalledAuthority {
     plugin_version: String,
     registry_observation_sha256: String,
     marketplace_source_relative_path_sha256: String,
+    marketplace_source_tree_sha256: String,
     marketplace_source_catalog_sha256: String,
     cache_catalog_sha256: String,
     marketplace_runtime_sha256: String,
@@ -35,6 +39,7 @@ struct InstalledAuthority {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 struct TargetPackage {
+    context_id: String,
     candidate_id: String,
     catalog_id: String,
     version: String,
@@ -137,7 +142,7 @@ pub(super) fn apply(
     };
     if record.plan_sha256 != accepted_plan
         || record.effect != "none"
-        || record.apply_status != "hold-prior-installed-authority-adoption-not-implemented"
+        || record.apply_status != "hold-atomic-materialization-transaction-not-implemented"
         || validate_plan_identity(&record).is_err()
     {
         return apply_failure("accepted plan identity or HOLD boundary was substituted");
@@ -158,18 +163,21 @@ pub(super) fn apply(
     {
         return apply_failure("installed or candidate authority changed after planning");
     }
+    if adopted_lifecycle_plan(&record).is_err() {
+        return apply_failure("typed prior installed authority adoption failed");
+    }
     RuntimeOutcome::failure(
         ExitClass::UnsupportedCapability,
         Diagnostic::new(
             DiagnosticId::DownstreamToolUnavailable,
             ExitClass::UnsupportedCapability,
             DiagnosticDetails {
-                cause: "the accepted exact plan is current, but the existing lifecycle executor cannot represent the observed prior installed authority without relabeling it as the target package",
+                cause: "the accepted exact plan and typed prior installed authority are current, but marketplace materialization is not yet one atomic lifecycle transaction",
                 affected_surface: "HCT-DISTRIBUTION personal marketplace install apply",
-                repair: "add a typed prior-installed-authority adoption record to the lifecycle state model, then bind materialization, Codex add, reconciliation, and rollback to that record",
+                repair: "bind exact marketplace tree materialization, Codex add, post-state reconciliation, and rollback to the admitted prior/target lifecycle record",
                 effect: "none",
                 rerun: "ultragoal --json package install-apply --plan <absolute-plan-path> --accept-plan <sha256>",
-                ceiling: "plan admission passed; marketplace, plugin registry, cache, runtime, and host installation remain unchanged",
+                ceiling: "plan and prior-authority adoption passed; marketplace, plugin registry, cache, runtime, and host installation remain unchanged",
             },
         ),
     )
@@ -218,6 +226,12 @@ fn build_plan(
         return Err("target package is not a monotonic installed-version successor");
     }
     let target = TargetPackage {
+        context_id: artifact
+            .snapshot()
+            .identity()
+            .source()
+            .context_id()
+            .to_owned(),
         candidate_id: artifact.candidate_id().to_owned(),
         catalog_id: artifact.catalog_id().to_owned(),
         version: target_version.to_owned(),
@@ -242,7 +256,7 @@ fn build_plan(
         "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
     ];
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v1",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2",
         effect: "none",
         marketplace: MARKETPLACE,
         lifecycle_intent: "monotonic-update",
@@ -250,7 +264,7 @@ fn build_plan(
         cli,
         before: &before,
         target: &target,
-        apply_status: "hold-prior-installed-authority-adoption-not-implemented",
+        apply_status: "hold-atomic-materialization-transaction-not-implemented",
         required_effects: &required_effects,
         required_reconciliation: &required_reconciliation,
         rollback: &rollback,
@@ -259,7 +273,7 @@ fn build_plan(
     let plan_sha256 = digest_json(&binding)?;
     drop(binding);
     let record = PersonalMarketplaceInstallPlan {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v1".to_owned(),
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2".to_owned(),
         plan_sha256,
         effect: "none".to_owned(),
         marketplace: MARKETPLACE.to_owned(),
@@ -268,7 +282,7 @@ fn build_plan(
         cli: cli.to_owned(),
         before,
         target,
-        apply_status: "hold-prior-installed-authority-adoption-not-implemented".to_owned(),
+        apply_status: "hold-atomic-materialization-transaction-not-implemented".to_owned(),
         required_effects,
         required_reconciliation,
         rollback,
@@ -337,6 +351,23 @@ fn installed_authority(
     cache
         .revalidate()
         .map_err(|_| "installed cache changed during capture")?;
+    let marketplace_source_root = registry
+        .installed_root()
+        .parent()
+        .and_then(Path::parent)
+        .filter(|root| root.starts_with(&canonical_home))
+        .ok_or("installed source has no confined marketplace source root")?;
+    let confined = ConfinedRoot::open(marketplace_source_root)
+        .map_err(|_| "installed marketplace source root is unavailable")?;
+    let source_tree = ScopedTree::new(confined, "plugins/harness-ultragoal")
+        .map_err(|_| "installed marketplace source tree is unavailable")?;
+    let marketplace_source_tree_sha256 = source_tree
+        .inspect(4096, PACKAGE_LIMIT)
+        .map_err(|_| "installed marketplace source tree could not be captured")?
+        .ok_or("installed marketplace source tree is unavailable")
+        .and_then(|tree| {
+            tree_sha256(&tree).map_err(|_| "installed marketplace source tree is invalid")
+        })?;
     let mut authority = InstalledAuthority {
         schema_version: "HarnessObservedInstalledAuthority-v1".to_owned(),
         plugin_version: registry.plugin_version().to_owned(),
@@ -344,6 +375,7 @@ fn installed_authority(
         marketplace_source_relative_path_sha256: digest_bytes(
             format!("personal-marketplace-source-v1\0{relative}").as_bytes(),
         ),
+        marketplace_source_tree_sha256,
         marketplace_source_catalog_sha256: source.catalog_sha256().to_owned(),
         cache_catalog_sha256: cache.catalog_sha256().to_owned(),
         marketplace_runtime_sha256: source_runtime,
@@ -365,6 +397,7 @@ fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, 
         plugin_version: &'a str,
         registry_observation_sha256: &'a str,
         marketplace_source_relative_path_sha256: &'a str,
+        marketplace_source_tree_sha256: &'a str,
         marketplace_source_catalog_sha256: &'a str,
         cache_catalog_sha256: &'a str,
         marketplace_runtime_sha256: &'a str,
@@ -377,6 +410,7 @@ fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, 
         plugin_version: &authority.plugin_version,
         registry_observation_sha256: &authority.registry_observation_sha256,
         marketplace_source_relative_path_sha256: &authority.marketplace_source_relative_path_sha256,
+        marketplace_source_tree_sha256: &authority.marketplace_source_tree_sha256,
         marketplace_source_catalog_sha256: &authority.marketplace_source_catalog_sha256,
         cache_catalog_sha256: &authority.cache_catalog_sha256,
         marketplace_runtime_sha256: &authority.marketplace_runtime_sha256,
@@ -386,8 +420,74 @@ fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, 
     })
 }
 
+fn adopted_lifecycle_plan(
+    record: &PersonalMarketplaceInstallPlan,
+) -> Result<
+    (
+        crate::plugin_product::lifecycle::LifecyclePlan,
+        PackageIdentity,
+        PriorInstalledAuthority,
+    ),
+    &'static str,
+> {
+    let prior_package_authority = PackageAuthority {
+        version: Version::parse(&record.before.plugin_version)
+            .map_err(|_| "prior installed version is invalid")?,
+        package_sha256: record.before.installed_authority_sha256.clone(),
+        inventory_sha256: record.before.marketplace_source_catalog_sha256.clone(),
+        candidate_id: record.before.registry_observation_sha256.clone(),
+    };
+    let prior = PriorInstalledAuthority::new(
+        prior_package_authority.clone(),
+        record.before.installed_authority_sha256.clone(),
+    )
+    .map_err(|_| "prior installed authority is invalid")?;
+    let target = PackageIdentity::new(
+        SourceIdentity::new(
+            record.target.context_id.clone(),
+            record.target.candidate_id.clone(),
+            "harness-ultragoal".to_owned(),
+            record.target.version.clone(),
+            record.target.catalog_id.clone(),
+            record.target.inventory_sha256.clone(),
+        )
+        .map_err(|_| "target source identity is invalid")?,
+        record.target.source_tree_sha256.clone(),
+        record.target.archive_sha256.clone(),
+    )
+    .map_err(|_| "target package identity is invalid")?;
+    let target_authority = PackageAuthority {
+        version: Version::parse(target.source().version())
+            .map_err(|_| "target package version is invalid")?,
+        package_sha256: target.archive_sha256().to_owned(),
+        inventory_sha256: target.source().accepted_inventory_sha256().to_owned(),
+        candidate_id: target.source().candidate_id().to_owned(),
+    };
+    let before = LifecycleState {
+        installed: Some(prior_package_authority.clone()),
+        cache: Some(prior_package_authority),
+        generation: 0,
+        recovery_required: false,
+    };
+    let lifecycle = crate::plugin_product::lifecycle::plan(
+        &before,
+        &LifecycleRequest {
+            intent: LifecycleIntent::MonotonicUpdate,
+            target: Some(target_authority),
+            prior_authority: None,
+            authorization: LifecycleAuthorization {
+                allow_host_write: true,
+                allow_downgrade: false,
+                expected_installed_sha256: Some(record.before.installed_authority_sha256.clone()),
+            },
+        },
+    )
+    .map_err(|_| "monotonic lifecycle adoption plan is invalid")?;
+    Ok((lifecycle, target, prior))
+}
+
 fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(), &'static str> {
-    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v1"
+    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v2"
         || record.marketplace != MARKETPLACE
         || record.lifecycle_intent != "monotonic-update"
         || record.before.installed_authority_sha256 != installed_authority_digest(&record.before)?
@@ -395,7 +495,7 @@ fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(),
         return Err("plan contract changed");
     }
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v1",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2",
         effect: &record.effect,
         marketplace: &record.marketplace,
         lifecycle_intent: &record.lifecycle_intent,
@@ -523,6 +623,7 @@ mod tests {
             plugin_version: "0.0.36".to_owned(),
             registry_observation_sha256: digest('a'),
             marketplace_source_relative_path_sha256: digest('0'),
+            marketplace_source_tree_sha256: digest('6'),
             marketplace_source_catalog_sha256: digest('b'),
             cache_catalog_sha256: digest('c'),
             marketplace_runtime_sha256: digest('d'),
@@ -533,7 +634,7 @@ mod tests {
         };
         before.installed_authority_sha256 = installed_authority_digest(&before).unwrap();
         let mut record = PersonalMarketplaceInstallPlan {
-            schema_version: "HarnessPersonalMarketplaceInstallPlan-v1".to_owned(),
+            schema_version: "HarnessPersonalMarketplaceInstallPlan-v2".to_owned(),
             plan_sha256: String::new(),
             effect: "none".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
@@ -542,6 +643,7 @@ mod tests {
             cli: "target/ultragoal/release/ultragoal".to_owned(),
             before,
             target: TargetPackage {
+                context_id: digest('0'),
                 candidate_id: digest('1'),
                 catalog_id: digest('2'),
                 version: "0.0.37".to_owned(),
@@ -549,7 +651,7 @@ mod tests {
                 archive_sha256: digest('4'),
                 inventory_sha256: digest('5'),
             },
-            apply_status: "hold-prior-installed-authority-adoption-not-implemented".to_owned(),
+            apply_status: "hold-atomic-materialization-transaction-not-implemented".to_owned(),
             required_effects: vec!["materialize".to_owned(), "install".to_owned()],
             required_reconciliation: vec!["registry".to_owned(), "cache".to_owned()],
             rollback: vec!["restore".to_owned()],
@@ -605,6 +707,33 @@ mod tests {
             installed_authority_digest(&relabeled).unwrap(),
             relabeled.installed_authority_sha256
         );
+    }
+
+    #[test]
+    fn accepted_plan_adopts_prior_authority_without_relabeling_it_as_target() {
+        let record = record();
+        let (lifecycle, target, prior) = adopted_lifecycle_plan(&record).unwrap();
+        assert_eq!(lifecycle.intent, LifecycleIntent::MonotonicUpdate);
+        assert_eq!(lifecycle.before.generation, 0);
+        assert_eq!(lifecycle.before.installed.as_ref(), Some(prior.authority()));
+        assert_eq!(lifecycle.rollback_state, lifecycle.before);
+        assert_eq!(
+            lifecycle
+                .expected_after
+                .installed
+                .as_ref()
+                .unwrap()
+                .package_sha256,
+            target.archive_sha256()
+        );
+        assert_ne!(prior.authority().package_sha256, target.archive_sha256());
+
+        let mut downgraded = record.clone();
+        downgraded.target.version = downgraded.before.plugin_version.clone();
+        assert!(adopted_lifecycle_plan(&downgraded).is_err());
+        let mut aliased = record;
+        aliased.target.archive_sha256 = aliased.before.installed_authority_sha256.clone();
+        assert!(adopted_lifecycle_plan(&aliased).is_err());
     }
 
     #[test]

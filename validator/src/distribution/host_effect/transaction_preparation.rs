@@ -13,7 +13,9 @@ use super::{
     HostEffectExecutionPolicy, SelectedCodexExecutable,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
-use crate::plugin_product::lifecycle::{HostLifecycleCustody, LifecycleIntent, LifecyclePlan};
+use crate::plugin_product::lifecycle::{
+    HostLifecycleCustody, LifecycleIntent, LifecyclePlan, PriorInstalledAuthority,
+};
 use std::path::Path;
 
 pub(super) struct PreparedHostEffectTransaction {
@@ -30,6 +32,7 @@ pub(super) struct PreparedHostEffectTransaction {
 pub(super) fn prepare_host_effect_transaction(
     plan: LifecyclePlan,
     package: PackageIdentity,
+    prior_authority: Option<PriorInstalledAuthority>,
     command_plan: super::HostCommandPlan,
     journey: JourneyBinding,
     host: HostCapabilityDeclaration,
@@ -64,6 +67,7 @@ pub(super) fn prepare_host_effect_transaction(
             .map_err(|_| "host command plan admission failed")?;
         let binding = crate::plugin_product::lifecycle::HostLifecycleBinding::new(
             package.clone(),
+            prior_authority,
             command_plan,
             scope.binding_sha256().map_err(|_| "scope binding failed")?,
             host.capability_sha256().to_owned(),
@@ -83,7 +87,7 @@ pub(super) fn prepare_host_effect_transaction(
         )
         .map_err(|_| "host target binding failed")?;
         let observation_target = target.clone();
-        let lifecycle = accepted_lifecycle(&custody, &package)?;
+        let lifecycle = accepted_lifecycle(&custody)?;
         let projection = custody.command_plan_projection();
         let environment = projection.environment().to_vec();
         let policy = transaction_policy::isolated_codex_policy(&environment)?;

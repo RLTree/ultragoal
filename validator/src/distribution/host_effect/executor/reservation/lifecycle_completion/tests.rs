@@ -6,7 +6,7 @@ use crate::distribution::{HostCommandPlan, PackageIdentity, SourceIdentity};
 use crate::plugin_product::lifecycle::{
     HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
     HostLifecycleObservedBundle, LifecycleAuthorization, LifecycleIntent, LifecycleRequest,
-    PackageAuthority, Version, plan,
+    PackageAuthority, PriorInstalledAuthority, Version, plan,
 };
 use std::fs;
 use std::path::PathBuf;
@@ -189,22 +189,25 @@ fn custody(seed: char) -> HostLifecycleCustody {
     let package = PackageIdentity::new(
         SourceIdentity::new(
             digest('1'),
-            digest('2'),
+            digest('d'),
             "harness-ultragoal".to_owned(),
             "1.0.1".to_owned(),
             digest('3'),
-            digest('4'),
+            digest('c'),
         )
         .unwrap(),
         digest('5'),
-        digest('6'),
+        digest(target_seed),
     )
     .unwrap();
+    let prior_authority =
+        PriorInstalledAuthority::new(authority(seed, "1.0.0"), digest('f')).unwrap();
     let command_plan = HostCommandPlan::personal_install(&package, "local-marketplace").unwrap();
     HostLifecycleCustody::take(
         lifecycle,
         HostLifecycleBinding::new(
             package,
+            Some(prior_authority),
             command_plan,
             digest('7'),
             digest('8'),

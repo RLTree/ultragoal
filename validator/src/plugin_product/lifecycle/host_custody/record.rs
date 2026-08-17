@@ -12,6 +12,8 @@ pub(crate) struct HostLifecycleRecord {
     effects: Vec<LifecycleEffect>,
     writes_host_state: bool,
     package: PackageIdentity,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    prior_authority: Option<PriorInstalledAuthority>,
     command_plan: HostCommandPlanRecord,
     scope_sha256: String,
     host_capability_sha256: String,
@@ -34,7 +36,9 @@ impl HostEffectExecutionBinding {
 
 impl HostLifecycleRecord {
     pub(crate) fn validate(&self) -> Result<(), LifecycleError> {
-        if self.schema_version != "HarnessPluginHostLifecycleRecord-v2"
+        let legacy = self.schema_version == "HarnessPluginHostLifecycleRecord-v2";
+        if (!legacy && self.schema_version != "HarnessPluginHostLifecycleRecord-v3")
+            || (legacy && self.prior_authority.is_some())
             || self.issuance_id == 0
             || self.effects.is_empty()
             || super::plan::record_writes_host_state(&self.effects) != self.writes_host_state
@@ -46,6 +50,10 @@ impl HostLifecycleRecord {
             || self.expected_observations.validate().is_err()
             || self.command_plan.validate().is_err()
             || self.command_plan.package != self.package
+            || self
+                .prior_authority
+                .as_ref()
+                .is_some_and(|prior| prior.validate().is_err())
         {
             return Err(LifecycleError::InvalidTransition);
         }
@@ -55,6 +63,31 @@ impl HostLifecycleRecord {
         self.before.validate()?;
         self.expected_after.validate()?;
         self.rollback_state.validate()?;
+        match self.intent {
+            LifecycleIntent::FreshInstall => {
+                if self.prior_authority.is_some()
+                    || !state_installed_matches(&self.expected_after, &self.package)?
+                {
+                    return Err(LifecycleError::InvalidTransition);
+                }
+            }
+            LifecycleIntent::MonotonicUpdate => {
+                if legacy {
+                    return Err(LifecycleError::MissingPriorAuthority);
+                }
+                let prior = self
+                    .prior_authority
+                    .as_ref()
+                    .ok_or(LifecycleError::MissingPriorAuthority)?;
+                if self.before.installed.as_ref() != Some(prior.authority())
+                    || self.rollback_state.installed.as_ref() != Some(prior.authority())
+                    || !state_installed_matches(&self.expected_after, &self.package)?
+                {
+                    return Err(LifecycleError::InvalidTransition);
+                }
+            }
+            _ => {}
+        }
         super::model::validate_digest(&self.authorization_sha256)?;
         if self.rollback_state != self.before
             || super::plan::plan_digest(
@@ -83,6 +116,10 @@ impl HostLifecycleRecord {
         &self.package
     }
 
+    pub(crate) fn prior_authority(&self) -> Option<&PriorInstalledAuthority> {
+        self.prior_authority.as_ref()
+    }
+
     pub(crate) fn command_plan_sha256(&self) -> &str {
         self.command_plan.plan_sha256()
     }
@@ -102,6 +139,21 @@ impl HostLifecycleRecord {
     pub(crate) const fn effect_cursor(&self) -> usize {
         self.effect_cursor
     }
+}
+
+fn state_installed_matches(
+    state: &LifecycleState,
+    package: &PackageIdentity,
+) -> Result<bool, LifecycleError> {
+    let authority = state
+        .installed
+        .as_ref()
+        .ok_or(LifecycleError::InvalidTransition)?;
+    let version = Version::parse(package.source().version())?;
+    Ok(authority.version == version
+        && authority.package_sha256 == package.archive_sha256()
+        && authority.inventory_sha256 == package.source().accepted_inventory_sha256()
+        && authority.candidate_id == package.source().candidate_id())
 }
 
 use sha2::{Digest, Sha256};

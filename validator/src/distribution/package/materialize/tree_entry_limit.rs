@@ -107,6 +107,28 @@ pub fn materialize_package(
     expected: &ExpectedTree,
     effects: &mut impl MaterializeEffects,
 ) -> Result<MaterializeTransaction, DistributionError> {
+    materialize_with_expected(plan, expected, false, effects)
+}
+
+pub(crate) fn replace_materialized_package(
+    plan: &PackagePlan,
+    expected_prior_sha256: &str,
+    effects: &mut impl MaterializeEffects,
+) -> Result<MaterializeTransaction, DistributionError> {
+    materialize_with_expected(
+        plan,
+        &ExpectedTree::ExactDigest(expected_prior_sha256.to_owned()),
+        true,
+        effects,
+    )
+}
+
+fn materialize_with_expected(
+    plan: &PackagePlan,
+    expected: &ExpectedTree,
+    allow_distinct_prior: bool,
+    effects: &mut impl MaterializeEffects,
+) -> Result<MaterializeTransaction, DistributionError> {
     validate_expected(expected)?;
     let previous = read(effects)?;
     let previous_sha256 = previous.as_deref().map(tree_sha256).transpose()?;
@@ -114,10 +136,12 @@ pub fn materialize_package(
         return Err(error(DistributionErrorId::InstallConflict));
     }
     if let ExpectedTree::ExactDigest(expected_sha256) = expected {
-        if expected_sha256 != plan.source_tree_sha256() {
+        if !allow_distinct_prior && expected_sha256 != plan.source_tree_sha256() {
             return Err(error(DistributionErrorId::InstallConflict));
         }
-        if previous_sha256.as_deref() == Some(expected_sha256.as_str()) {
+        if previous_sha256.as_deref() == Some(expected_sha256.as_str())
+            && (!allow_distinct_prior || expected_sha256 == plan.source_tree_sha256())
+        {
             return Ok(MaterializeTransaction {
                 installed_tree_sha256: plan.source_tree_sha256().to_owned(),
                 previous,

@@ -1,6 +1,6 @@
 use crate::plugin_product::lifecycle::{
-    plan, HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
-    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, PackageAuthority, Version,
+    HostLifecycleBinding, HostLifecycleCustody, HostLifecycleExpectedObservations,
+    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, PackageAuthority, Version, plan,
 };
 
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(0);
@@ -32,11 +32,7 @@ impl Fixture {
         create_mode(&project, 0o700);
         let executable_fixture = selected_test_fixture("executor-next", b"#!/bin/sh\nexit 0\n");
         Self {
-            roots: vec![
-                target_root.clone(),
-                ledger_root.clone(),
-                support_root,
-            ],
+            roots: vec![target_root.clone(), ledger_root.clone(), support_root],
             target_root,
             ledger_root,
             executable_fixture,
@@ -84,7 +80,7 @@ fn lifecycle_custody(fixture: &Fixture, command_plan: &HostCommandPlan) -> HostL
     let authority = PackageAuthority {
         version: Version::parse(package.source().version()).unwrap(),
         package_sha256: package.archive_sha256().to_owned(),
-        inventory_sha256: package.tree_sha256().to_owned(),
+        inventory_sha256: package.source().accepted_inventory_sha256().to_owned(),
         candidate_id: package.source().candidate_id().to_owned(),
     };
     let lifecycle = plan(
@@ -105,6 +101,7 @@ fn lifecycle_custody(fixture: &Fixture, command_plan: &HostCommandPlan) -> HostL
         lifecycle,
         HostLifecycleBinding::new(
             package,
+            None,
             command_plan.clone(),
             digest('1'),
             digest('2'),

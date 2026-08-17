@@ -12,12 +12,13 @@ use super::{
     SelectedCodexExecutable, SupportedHostEffectExecutor,
 };
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
-use crate::plugin_product::lifecycle::LifecyclePlan;
+use crate::plugin_product::lifecycle::{LifecyclePlan, PriorInstalledAuthority};
 use std::path::Path;
 
 pub(super) fn execute_read_only_transaction(
     plan: LifecyclePlan,
     package: PackageIdentity,
+    prior_authority: Option<PriorInstalledAuthority>,
     command_plan: super::HostCommandPlan,
     journey: JourneyBinding,
     host: HostCapabilityDeclaration,
@@ -40,6 +41,7 @@ pub(super) fn execute_read_only_transaction(
     } = prepare_host_effect_transaction(
         plan,
         package,
+        prior_authority,
         command_plan,
         journey,
         host,

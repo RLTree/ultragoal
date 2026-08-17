@@ -93,6 +93,35 @@ impl PackageAuthority {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct PriorInstalledAuthority {
+    authority: PackageAuthority,
+    observation_sha256: String,
+}
+
+impl PriorInstalledAuthority {
+    pub(crate) fn new(
+        authority: PackageAuthority,
+        observation_sha256: String,
+    ) -> Result<Self, LifecycleError> {
+        authority.validate()?;
+        validate_digest(&observation_sha256)?;
+        Ok(Self {
+            authority,
+            observation_sha256,
+        })
+    }
+
+    pub(crate) fn authority(&self) -> &PackageAuthority {
+        &self.authority
+    }
+
+    pub(crate) fn validate(&self) -> Result<(), LifecycleError> {
+        Self::new(self.authority.clone(), self.observation_sha256.clone()).map(|_| ())
+    }
+}
+
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct LifecycleState {

@@ -74,20 +74,20 @@ impl AcceptedHostEffect {
         let argv_sha256 = plan.argv_sha256().to_owned();
         let executable_identity_sha256 = executable.binding_sha256().map_err(|_| invalid())?;
         let expected_pre_state_sha256 = digest_json(&StateBinding {
-            schema: "harness-ultragoal.accepted-pre-state.v1",
+            schema: "harness-ultragoal.accepted-pre-state.v2",
             state: &lifecycle.before,
         })?;
         let expected_post_state_sha256 = digest_json(&StateBinding {
-            schema: "harness-ultragoal.accepted-post-state.v1",
+            schema: "harness-ultragoal.accepted-post-state.v2",
             state: &lifecycle.expected_after,
         })?;
         let rollback_policy_sha256 = digest_json(&RollbackBinding {
-            schema: "harness-ultragoal.accepted-rollback-policy.v1",
+            schema: "harness-ultragoal.accepted-rollback-policy.v2",
             rollback_state: &lifecycle.rollback_state,
             policy: lifecycle.rollback_policy,
         })?;
         let reconciliation_policy_sha256 = digest_json(&ReconciliationBinding {
-            schema: "harness-ultragoal.accepted-reconciliation-policy.v1",
+            schema: "harness-ultragoal.accepted-reconciliation-policy.v2",
             expected_after: &lifecycle.expected_after,
             policy: lifecycle.reconciliation_policy,
         })?;

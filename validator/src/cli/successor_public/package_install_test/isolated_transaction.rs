@@ -169,6 +169,7 @@ fn execute_bound(
     let result = crate::distribution::host_effect::execute_host_lifecycle_transaction(
         plan,
         package.clone(),
+        None,
         command_plan,
         binding.clone(),
         host.clone(),

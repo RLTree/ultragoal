@@ -1,5 +1,6 @@
 pub(crate) struct HostLifecycleBinding {
     package: PackageIdentity,
+    prior_authority: Option<PriorInstalledAuthority>,
     command_plan: HostCommandPlan,
     scope_sha256: String,
     host_capability_sha256: String,
@@ -9,6 +10,7 @@ pub(crate) struct HostLifecycleBinding {
 impl HostLifecycleBinding {
     pub(crate) fn new(
         package: PackageIdentity,
+        prior_authority: Option<PriorInstalledAuthority>,
         command_plan: HostCommandPlan,
         scope_sha256: String,
         host_capability_sha256: String,
@@ -17,6 +19,12 @@ impl HostLifecycleBinding {
         package
             .validate()
             .map_err(|_| LifecycleError::InvalidTransition)?;
+        if prior_authority
+            .as_ref()
+            .is_some_and(|prior| prior.validate().is_err())
+        {
+            return Err(LifecycleError::InvalidTransition);
+        }
         if package != *command_plan.package()
             || !is_digest(&scope_sha256)
             || !is_digest(&host_capability_sha256)
@@ -26,6 +34,7 @@ impl HostLifecycleBinding {
         }
         Ok(Self {
             package,
+            prior_authority,
             command_plan,
             scope_sha256,
             host_capability_sha256,

@@ -4,7 +4,7 @@ use super::transaction_effectful::execute_effectful_transaction;
 use super::transaction_observation::{HostLifecycleObservationInput, HostLifecycleSurfaceDigests};
 use super::transaction_read_only::execute_read_only_transaction;
 use crate::distribution::{HostCapabilityDeclaration, JourneyBinding, PackageIdentity};
-use crate::plugin_product::lifecycle::{LifecycleIntent, LifecyclePlan};
+use crate::plugin_product::lifecycle::{LifecycleIntent, LifecyclePlan, PriorInstalledAuthority};
 use std::path::Path;
 
 pub(crate) struct HostLifecycleTransactionResult {
@@ -14,6 +14,7 @@ pub(crate) struct HostLifecycleTransactionResult {
 pub(crate) fn execute_host_lifecycle_transaction(
     plan: LifecyclePlan,
     package: PackageIdentity,
+    prior_authority: Option<PriorInstalledAuthority>,
     command_plan: super::HostCommandPlan,
     journey: JourneyBinding,
     host: HostCapabilityDeclaration,
@@ -31,6 +32,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
         execute_read_only_transaction(
             plan,
             package,
+            prior_authority,
             command_plan,
             journey,
             host,
@@ -45,6 +47,7 @@ pub(crate) fn execute_host_lifecycle_transaction(
         execute_effectful_transaction(
             plan,
             package,
+            prior_authority,
             command_plan,
             journey,
             host,

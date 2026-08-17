@@ -36,6 +36,7 @@ pub(crate) use host_custody::{
 pub(crate) use host_custody::{HostLifecycleBinding, HostLifecycleExpectedObservations};
 #[cfg(test)]
 pub(crate) use model::LifecycleEffectAdapter;
+pub(crate) use model::PriorInstalledAuthority;
 #[cfg(test)]
 pub(crate) use model::RecoveryToken;
 pub use model::{

@@ -36,8 +36,19 @@ impl AcceptedLifecycleOperation {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct AcceptedHostState {
     generation: u64,
-    package: Option<PackageIdentity>,
+    package: Option<AcceptedPackageIdentity>,
     recovery_required: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[serde(
+    rename_all = "kebab-case",
+    tag = "authority_kind",
+    content = "authority"
+)]
+enum AcceptedPackageIdentity {
+    TargetPackage(PackageIdentity),
+    ObservedPrior(crate::plugin_product::lifecycle::PriorInstalledAuthority),
 }
 
 impl AcceptedHostState {
@@ -51,7 +62,20 @@ impl AcceptedHostState {
         }
         Ok(Self {
             generation,
-            package,
+            package: package.map(AcceptedPackageIdentity::TargetPackage),
+            recovery_required,
+        })
+    }
+
+    pub(in crate::distribution::host_effect) fn observed_prior(
+        generation: u64,
+        prior: crate::plugin_product::lifecycle::PriorInstalledAuthority,
+        recovery_required: bool,
+    ) -> Result<Self, SupportedHostLifecycleError> {
+        prior.validate().map_err(|_| invalid())?;
+        Ok(Self {
+            generation,
+            package: Some(AcceptedPackageIdentity::ObservedPrior(prior)),
             recovery_required,
         })
     }
@@ -117,7 +141,7 @@ impl AcceptedLifecyclePlan {
             reconciliation_policy: AcceptedReconciliationPolicy,
         }
         let plan_sha256 = digest_json(&Plan {
-            schema: "harness-ultragoal.accepted-host-lifecycle-plan.v1",
+            schema: "harness-ultragoal.accepted-host-lifecycle-plan.v2",
             operation,
             before: &before,
             expected_after: &expected_after,

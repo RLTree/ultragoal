@@ -1,5 +1,6 @@
 use super::model::{
     LifecycleEffect, LifecycleError, LifecycleIntent, LifecyclePlan, LifecycleState,
+    PriorInstalledAuthority, Version,
 };
 use super::plan::validate_plan;
 use crate::distribution::host_effect::HostEffectRecoveryHandoff;
@@ -41,28 +42,31 @@ impl HostLifecycleCustody {
             .projection()
             .map_err(|_| LifecycleError::InvalidTransition)?;
         let issuance_id = plan.authorization_seal.issuance_id()?;
+        let pre_effect_record = HostLifecycleRecord {
+            schema_version: "HarnessPluginHostLifecycleRecord-v3".to_owned(),
+            issuance_id,
+            plan_id: plan.plan_id.clone(),
+            intent: plan.intent,
+            before: plan.before.clone(),
+            expected_after: plan.expected_after.clone(),
+            authorization_sha256: plan.authorization_sha256.clone(),
+            rollback_state: plan.rollback_state.clone(),
+            effects: plan.effects.clone(),
+            writes_host_state: plan.writes_host_state,
+            package: binding.package,
+            prior_authority: binding.prior_authority,
+            command_plan: HostCommandPlanRecord::from_plan(&binding.command_plan),
+            scope_sha256: binding.scope_sha256,
+            host_capability_sha256: binding.host_capability_sha256,
+            command_cursor: 0,
+            effect_cursor: 0,
+            custody_phase: 0,
+            expected_observations: binding.expected_observations,
+        };
+        pre_effect_record.validate()?;
         plan.authorization_seal.transfer_to_host()?;
         Ok(Self {
-            pre_effect_record: HostLifecycleRecord {
-                schema_version: "HarnessPluginHostLifecycleRecord-v2".to_owned(),
-                issuance_id,
-                plan_id: plan.plan_id.clone(),
-                intent: plan.intent,
-                before: plan.before.clone(),
-                expected_after: plan.expected_after.clone(),
-                authorization_sha256: plan.authorization_sha256.clone(),
-                rollback_state: plan.rollback_state.clone(),
-                effects: plan.effects.clone(),
-                writes_host_state: plan.writes_host_state,
-                package: binding.package,
-                command_plan: HostCommandPlanRecord::from_plan(&binding.command_plan),
-                scope_sha256: binding.scope_sha256,
-                host_capability_sha256: binding.host_capability_sha256,
-                command_cursor: 0,
-                effect_cursor: 0,
-                custody_phase: 0,
-                expected_observations: binding.expected_observations,
-            },
+            pre_effect_record,
             plan,
             command_plan: Some(binding.command_plan),
             command_plan_projection,
