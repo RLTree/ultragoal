@@ -6,10 +6,7 @@ fn verify_artifact_against_source(
 ) -> Result<(), ProductionPackageError> {
     validate_context_catalog(context, catalog)?;
     let current_candidate = candidate_id(context)?;
-    if artifact.context_id != context.context_id()
-        || artifact.candidate_id != current_candidate
-        || artifact.catalog_id != catalog.catalog_id()
-    {
+    if artifact.candidate_id != current_candidate {
         return Err(failure(ProductionPackageErrorId::CatalogMismatch));
     }
 
@@ -28,12 +25,7 @@ fn verify_artifact_against_source(
         return Err(failure(ProductionPackageErrorId::InventoryMismatch));
     }
 
-    let fresh = build_artifact(
-        context,
-        catalog.catalog_id(),
-        source,
-        artifact.cli_payload.clone(),
-    )?;
+    let fresh = build_artifact(context, source, artifact.cli_payload.clone())?;
     if !same_artifact(artifact, &fresh) {
         return Err(failure(ProductionPackageErrorId::SourceUnavailable));
     }
@@ -75,7 +67,6 @@ fn validate_context_catalog(
 
 fn build_artifact(
     context: &LiveContext,
-    catalog_id: &str,
     source: &SourcePackageSnapshot,
     cli_payload: Option<CandidateCliPayload>,
 ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
@@ -94,22 +85,23 @@ fn build_artifact(
     {
         return Err(failure(ProductionPackageErrorId::CatalogMismatch));
     }
+    let package_source = package_source_binding(&candidate_id, &version, &source_entries)?;
     let source_tree_sha256 = entry_tree_sha256(&entries)
         .map_err(|_| failure(ProductionPackageErrorId::InventoryMismatch))?;
     let source_inventory = source_inventory(
-        context.context_id(),
+        &package_source.context_id,
         &candidate_id,
-        catalog_id,
+        &package_source.catalog_id,
         &version,
         &source_entries,
     )?;
     let plan = PackagePlan {
-        context_id: context.context_id().to_owned(),
+        context_id: package_source.context_id.clone(),
         candidate_id: candidate_id.clone(),
         plugin_id: PLUGIN_ID.to_owned(),
         version,
         source_date_epoch: 0,
-        catalog_id: catalog_id.to_owned(),
+        catalog_id: package_source.catalog_id.clone(),
         accepted_inventory_sha256: sha256(&source_inventory),
         source_tree_sha256,
         entries,
@@ -121,9 +113,9 @@ fn build_artifact(
     let binding = PackageArtifactBinding::issue(&snapshot)
         .map_err(|_| failure(ProductionPackageErrorId::ArchiveMismatch))?;
     Ok(ProductionPackageArtifact {
-        context_id: context.context_id().to_owned(),
+        context_id: package_source.context_id,
         candidate_id,
-        catalog_id: catalog_id.to_owned(),
+        catalog_id: package_source.catalog_id,
         source_snapshot_id: source.snapshot_id().to_owned(),
         source_inventory,
         cli_payload,

@@ -76,6 +76,37 @@ fn candidate_cli_payload_rejects_candidate_substitution() {
 }
 
 #[test]
+fn candidate_cli_byte_substitution_changes_the_durable_archive() {
+    let repo = Repo::new("candidate-cli-byte-substitution");
+    let context = repo.context();
+    let catalog = catalog(&context);
+    let source_artifact = capture_product_package(&context, &catalog).expect("source package");
+    let first_bytes = test_cli_bytes();
+    let mut second_bytes = first_bytes.clone();
+    second_bytes.push(0);
+    let first = capture_product_package_with_cli(
+        &context,
+        &catalog,
+        CandidateCliPayload::for_candidate(source_artifact.candidate_id(), first_bytes)
+            .expect("first CLI"),
+    )
+    .expect("first candidate package");
+    let second = capture_product_package_with_cli(
+        &context,
+        &catalog,
+        CandidateCliPayload::for_candidate(source_artifact.candidate_id(), second_bytes)
+            .expect("second CLI"),
+    )
+    .expect("second candidate package");
+
+    assert_ne!(first.snapshot().archive(), second.snapshot().archive());
+    assert_ne!(
+        first.snapshot().package_sha256(),
+        second.snapshot().package_sha256()
+    );
+}
+
+#[test]
 fn candidate_cli_materialization_refuses_substituted_output_without_overwrite() {
     let repo = Repo::new("candidate-cli-recovery");
     let context = repo.context();

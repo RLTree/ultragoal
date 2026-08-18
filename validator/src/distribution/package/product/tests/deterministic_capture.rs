@@ -76,6 +76,33 @@ fn independent_product_captures_are_byte_identical_and_reverified() {
 }
 
 #[test]
+fn durable_package_bytes_ignore_operation_context_drift_but_revalidate_each_context() {
+    let repo = Repo::new("supported-package-product-operation-context");
+    let first_context = repo.context();
+    let second_context = LiveContext::build(
+        BuildRequest::new(&repo.root)
+            .expect_repository_root(&repo.root)
+            .expect_worktree_root(&repo.root)
+            .bind_non_secret_configuration("profile", "second"),
+    )
+    .expect("second operation context");
+    assert_eq!(first_context.candidate(), second_context.candidate());
+    assert_ne!(first_context.context_id(), second_context.context_id());
+
+    let first_catalog = catalog(&first_context);
+    let second_catalog = catalog(&second_context);
+    let first = capture_product_package(&first_context, &first_catalog).expect("first package");
+    let second = capture_product_package(&second_context, &second_catalog).expect("second package");
+
+    assert_eq!(first.context_id(), second.context_id());
+    assert_eq!(first.catalog_id(), second.catalog_id());
+    assert_eq!(first.source_inventory(), second.source_inventory());
+    assert_eq!(first.snapshot().archive(), second.snapshot().archive());
+    verify_product_package(&first, &first_context, &first_catalog).expect("first revalidation");
+    verify_product_package(&second, &second_context, &second_catalog).expect("second revalidation");
+}
+
+#[test]
 fn legacy_skill_source_is_not_active_package_membership() {
     let repo = Repo::new("supported-package-product-legacy-excluded");
     fs::create_dir_all(repo.root.join("skills/legacy/agents")).expect("legacy metadata");

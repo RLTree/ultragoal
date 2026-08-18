@@ -318,10 +318,13 @@ Do not commit:
 - [x] Build and verify a monotonic exact 0.0.37 package candidate, disposable install, and read-only installed-0.0.36-to-target-0.0.37 install plan without changing live host or target state.
 - [x] Preserve the independently observed prior installed authority as a distinct typed lifecycle identity through custody, accepted before/rollback state, and current-plan apply admission without enabling an effect.
 - [x] Bind marketplace tree materialization, Codex registration, reconciliation, interruption recovery, idempotent replay, and exact rollback to the adopted prior/target lifecycle record in one isolated recoverable state machine; mixed or substituted surfaces remain non-success.
+- [x] Decouple durable package bytes from ambient operation-context drift: package identity now derives from the exact Git candidate, plugin/version, canonical source catalog, and CLI payload while each build/verify operation separately revalidates its live PATH/tool context. A real public build under PATH A verifies under PATH B; source or CLI substitution still changes or rejects the archive.
 - [ ] Implement the exclusive live personal-marketplace adapter by routing that state machine through the existing confined package writer and pinned Codex executor, then repeat the same interruption and rollback matrix without changing the real host.
 - [ ] Publish and byte-verify the pinned 0.0.37 policy pages and, only under separately confirmed host-write authority, install the exact package and rerun the installed target diagnosis/quarantine/apply/verify journey. Do not manually rewrite or delete legacy state.
 
 ## Surprises and discoveries
+
+- The unchanged clean 0.0.37 archive became unverifiable in a later process because `LiveContext-v1` correctly binds ambient PATH, while HUGPKG1 incorrectly serialized that ephemeral operation identity into durable package bytes. The repair keeps PATH/tool resolution in the per-operation guard and derives the archive's durable source context from source-owned candidate/catalog inputs. This removes a false package-drift result without allowing a changed CLI or source candidate to verify.
 
 - Historical D0 observation: the verification workflow was absent from the then-current plan branch. The successor merge now carries committed `.github/workflows/verify.yml` with pull-request and push-to-`master`/`main` triggers; no current-candidate workflow result, required-check attachment, branch protection, or ruleset evidence exists.
 - Historical D0 observation: the plan branch lagged `master` by 12 product/security/CI commits. Root integration completed at merge `793f29b14`; no source-ancestry integration remains pending.

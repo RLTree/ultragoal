@@ -73,7 +73,6 @@ fn failure(id: ProductionPackageErrorId) -> ProductionPackageError {
 
 pub struct ProductionPackageSession {
     context: LiveContext,
-    catalog_id: String,
     capture: PackageCapture,
 }
 
@@ -87,7 +86,6 @@ impl ProductionPackageSession {
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
         Ok(Self {
             context: context.clone(),
-            catalog_id: catalog.catalog_id().to_owned(),
             capture,
         })
     }
@@ -114,12 +112,7 @@ impl ProductionPackageSession {
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
-        let artifact = build_artifact(
-            &self.context,
-            &self.catalog_id,
-            source.as_ref(),
-            cli_payload,
-        )?;
+        let artifact = build_artifact(&self.context, source.as_ref(), cli_payload)?;
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
