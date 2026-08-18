@@ -3,6 +3,7 @@ mod manifest;
 mod manifest_bind;
 mod materialize;
 mod output;
+mod personal_marketplace_update;
 mod plan;
 mod snapshot;
 mod source;
@@ -18,6 +19,11 @@ pub use materialize::{
 pub use output::{
     PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact,
     reconcile_package_artifact, recover_package_artifact, rollback_package_artifact,
+};
+pub(crate) use personal_marketplace_update::{
+    PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateDisposition,
+    PersonalMarketplaceUpdateEffects, PersonalMarketplaceUpdateObservation,
+    execute_personal_marketplace_update,
 };
 pub use plan::{
     PackageEffects, PackageEntry, PackagePlan, PackageSnapshot, build_package, plan_package,

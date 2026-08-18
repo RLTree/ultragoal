@@ -1,8 +1,11 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    ConfinedRoot, PackageIdentity, ReadOnlyWorkspace, ScopedTree, SourceIdentity,
-    capture_product_package, capture_product_package_with_cli, tree_sha256, verify_product_package,
+    ConfinedRoot, PackageIdentity, PersonalMarketplaceUpdateAuthority,
+    PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateEffects,
+    PersonalMarketplaceUpdateObservation, ReadOnlyWorkspace, ScopedTree, SourceIdentity,
+    capture_product_package, capture_product_package_with_cli, execute_personal_marketplace_update,
+    tree_sha256, verify_product_package,
 };
 use crate::plugin_product::agent_discovery::{
     HostPluginRegistryObservation, capture_installed_source_authority,
@@ -142,7 +145,7 @@ pub(super) fn apply(
     };
     if record.plan_sha256 != accepted_plan
         || record.effect != "none"
-        || record.apply_status != "hold-atomic-materialization-transaction-not-implemented"
+        || record.apply_status != "hold-live-personal-marketplace-effect-adapter-not-implemented"
         || validate_plan_identity(&record).is_err()
     {
         return apply_failure("accepted plan identity or HOLD boundary was substituted");
@@ -163,8 +166,24 @@ pub(super) fn apply(
     {
         return apply_failure("installed or candidate authority changed after planning");
     }
-    if adopted_lifecycle_plan(&record).is_err() {
-        return apply_failure("typed prior installed authority adoption failed");
+    let (_, _, prior) = match adopted_lifecycle_plan(&record) {
+        Ok(adopted) => adopted,
+        Err(_) => return apply_failure("typed prior installed authority adoption failed"),
+    };
+    let authority = match PersonalMarketplaceUpdateAuthority::new(
+        record.plan_sha256.clone(),
+        prior,
+        record.before.marketplace_source_tree_sha256.clone(),
+        record.target.archive_sha256.clone(),
+        record.target.source_tree_sha256.clone(),
+    ) {
+        Ok(authority) => authority,
+        Err(_) => return apply_failure("atomic marketplace update authority is invalid"),
+    };
+    let mut unavailable = UnavailablePersonalMarketplaceUpdateEffects;
+    let report = execute_personal_marketplace_update(&authority, &mut unavailable);
+    if report.disposition != PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect {
+        return apply_failure("unavailable live adapter crossed the no-effect boundary");
     }
     RuntimeOutcome::failure(
         ExitClass::UnsupportedCapability,
@@ -172,12 +191,12 @@ pub(super) fn apply(
             DiagnosticId::DownstreamToolUnavailable,
             ExitClass::UnsupportedCapability,
             DiagnosticDetails {
-                cause: "the accepted exact plan and typed prior installed authority are current, but marketplace materialization is not yet one atomic lifecycle transaction",
+                cause: "the accepted exact plan, typed prior authority, and recoverable marketplace transaction are current, but no reviewed live personal-marketplace effect adapter is exposed",
                 affected_surface: "HCT-DISTRIBUTION personal marketplace install apply",
-                repair: "bind exact marketplace tree materialization, Codex add, post-state reconciliation, and rollback to the admitted prior/target lifecycle record",
+                repair: "implement the live adapter with one exclusive lease and the existing pinned Codex executor, then pass the same interruption and exact-rollback matrix",
                 effect: "none",
                 rerun: "ultragoal --json package install-apply --plan <absolute-plan-path> --accept-plan <sha256>",
-                ceiling: "plan and prior-authority adoption passed; marketplace, plugin registry, cache, runtime, and host installation remain unchanged",
+                ceiling: "plan, prior-authority adoption, and isolated recoverable transaction passed; marketplace, plugin registry, cache, runtime, and host installation remain unchanged",
             },
         ),
     )
@@ -256,7 +275,7 @@ fn build_plan(
         "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
     ];
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v3",
         effect: "none",
         marketplace: MARKETPLACE,
         lifecycle_intent: "monotonic-update",
@@ -264,7 +283,7 @@ fn build_plan(
         cli,
         before: &before,
         target: &target,
-        apply_status: "hold-atomic-materialization-transaction-not-implemented",
+        apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented",
         required_effects: &required_effects,
         required_reconciliation: &required_reconciliation,
         rollback: &rollback,
@@ -273,7 +292,7 @@ fn build_plan(
     let plan_sha256 = digest_json(&binding)?;
     drop(binding);
     let record = PersonalMarketplaceInstallPlan {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2".to_owned(),
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v3".to_owned(),
         plan_sha256,
         effect: "none".to_owned(),
         marketplace: MARKETPLACE.to_owned(),
@@ -282,7 +301,7 @@ fn build_plan(
         cli: cli.to_owned(),
         before,
         target,
-        apply_status: "hold-atomic-materialization-transaction-not-implemented".to_owned(),
+        apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented".to_owned(),
         required_effects,
         required_reconciliation,
         rollback,
@@ -487,7 +506,7 @@ fn adopted_lifecycle_plan(
 }
 
 fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(), &'static str> {
-    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v2"
+    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v3"
         || record.marketplace != MARKETPLACE
         || record.lifecycle_intent != "monotonic-update"
         || record.before.installed_authority_sha256 != installed_authority_digest(&record.before)?
@@ -495,7 +514,7 @@ fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(),
         return Err("plan contract changed");
     }
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v2",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v3",
         effect: &record.effect,
         marketplace: &record.marketplace,
         lifecycle_intent: &record.lifecycle_intent,
@@ -512,6 +531,45 @@ fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(),
     (record.plan_sha256 == digest_json(&binding)?)
         .then_some(())
         .ok_or("plan identity changed")
+}
+
+struct UnavailablePersonalMarketplaceUpdateEffects;
+
+impl PersonalMarketplaceUpdateEffects for UnavailablePersonalMarketplaceUpdateEffects {
+    fn observe(
+        &mut self,
+        _authority: &PersonalMarketplaceUpdateAuthority,
+    ) -> Result<PersonalMarketplaceUpdateObservation, &'static str> {
+        Ok(PersonalMarketplaceUpdateObservation::unavailable())
+    }
+
+    fn materialize_target(
+        &mut self,
+        _authority: &PersonalMarketplaceUpdateAuthority,
+    ) -> Result<(), &'static str> {
+        Err("live personal marketplace effect adapter unavailable")
+    }
+
+    fn install_target(
+        &mut self,
+        _authority: &PersonalMarketplaceUpdateAuthority,
+    ) -> Result<(), &'static str> {
+        Err("live personal marketplace effect adapter unavailable")
+    }
+
+    fn restore_prior_tree(
+        &mut self,
+        _authority: &PersonalMarketplaceUpdateAuthority,
+    ) -> Result<(), &'static str> {
+        Err("live personal marketplace effect adapter unavailable")
+    }
+
+    fn reinstall_prior(
+        &mut self,
+        _authority: &PersonalMarketplaceUpdateAuthority,
+    ) -> Result<(), &'static str> {
+        Err("live personal marketplace effect adapter unavailable")
+    }
 }
 
 fn plan_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
@@ -634,7 +692,7 @@ mod tests {
         };
         before.installed_authority_sha256 = installed_authority_digest(&before).unwrap();
         let mut record = PersonalMarketplaceInstallPlan {
-            schema_version: "HarnessPersonalMarketplaceInstallPlan-v2".to_owned(),
+            schema_version: "HarnessPersonalMarketplaceInstallPlan-v3".to_owned(),
             plan_sha256: String::new(),
             effect: "none".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
@@ -651,7 +709,8 @@ mod tests {
                 archive_sha256: digest('4'),
                 inventory_sha256: digest('5'),
             },
-            apply_status: "hold-atomic-materialization-transaction-not-implemented".to_owned(),
+            apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented"
+                .to_owned(),
             required_effects: vec!["materialize".to_owned(), "install".to_owned()],
             required_reconciliation: vec!["registry".to_owned(), "cache".to_owned()],
             rollback: vec!["restore".to_owned()],

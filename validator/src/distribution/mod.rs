@@ -79,6 +79,11 @@ pub use package::{
     reconcile_package_artifact, recover_package_artifact, rollback_materialization,
     rollback_package_artifact, tree_sha256, verify_package,
 };
+pub(crate) use package::{
+    PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateDisposition,
+    PersonalMarketplaceUpdateEffects, PersonalMarketplaceUpdateObservation,
+    execute_personal_marketplace_update,
+};
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
     RegistryObservations, observe_app_registry, observe_discovery, observe_discovery_file,
