@@ -64,27 +64,6 @@ impl HostState {
         .ok_or(HostFailure::Invalid)
     }
 
-    pub(crate) fn initialize_under_migration_lock(
-        home: &Path,
-        target: &Path,
-        expected_parent: &AnchoredDirectory,
-        migration_lock: &ParentStateLock,
-    ) -> Result<Self, HostFailure> {
-        migration_lock.verify(expected_parent)?;
-        let Some(base) = open_host_state_base(home)? else {
-            return Err(HostFailure::Unavailable);
-        };
-        let parent = base.open_child(FIT_STATE_COMPONENTS[0], true)?;
-        if !parent.identity.same_directory(expected_parent.identity) {
-            return Err(HostFailure::Invalid);
-        }
-        let current = parent.open_or_create_owned_child(FIT_STATE_COMPONENTS[1])?;
-        let authority = current.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
-        let pending = current.open_or_create_owned_child(PENDING_DIRECTORY)?;
-        Self::assemble(current.path, authority, pending, target, false, None)?
-            .ok_or(HostFailure::Invalid)
-    }
-
     fn assemble(
         state_root: PathBuf,
         authority: AnchoredDirectory,

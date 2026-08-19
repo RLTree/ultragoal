@@ -188,14 +188,6 @@ pub(crate) fn apply(
     let Some(home) = home else {
         return authority::host_state_unavailable();
     };
-    if let Some(outcome) = authority::try_execute_quarantine(
-        context,
-        arguments.plan_path,
-        arguments.accepted_plan,
-        home,
-    ) {
-        return outcome;
-    }
     match authority::recover_pending(context, home) {
         Ok(Some(outcome)) => return outcome,
         Ok(None) => {}

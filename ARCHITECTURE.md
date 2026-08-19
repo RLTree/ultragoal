@@ -64,20 +64,28 @@ cannot mint a plan. Planning authorizes no rename, quarantine, bootstrap,
 migration, deletion, recovery, or claim. The only apply route is the separate
 exact-record boundary described below.
 
-Repository-fit authority device drift uses the existing `fit apply` effect
-boundary rather than a sibling migration writer. A complete closed diagnosis
-record and its exact accepted quarantine-plan identity are rederived under an
-exclusive advisory lock on the owner parent; every ordinary repository-fit
-apply or recovery holds the shared form of that same lock for its complete
-HostState lifetime. The transaction binds the parent identity and complete
-owner inventory, atomically moves the entire owner to an exclusive quarantine
-name, fsyncs and revalidates the parent and quarantined inventory, then creates
-a fresh authority without importing legacy bytes. Any failure before fresh
-bootstrap restores and fsyncs the exact owner; after bootstrap begins, failure
-retains both states and returns ambiguity for diagnosis. Quarantine persists
-until a same-surface installed journey passes. This source route does not
-authorize manual state edits, mutate the repository target, or prove an
-installed recovery journey.
+Repository-fit authority uses device identity only while proving custody of
+objects opened during one operation. Durable ledger identity excludes the
+mount-session device number and binds the stable owner and lock attributes,
+authenticated event chain, generation, and head. New authority is written as
+`repository-fit-authority-ledger.v4`.
+
+The ledger reader accepts exact authenticated v4 bytes and one exact legacy v3
+compatibility shape. A legacy v3 read verifies the original device-bearing
+identity and HMAC but performs no write. The next accepted mutation emits v4,
+binds the predecessor envelope digest, and thereafter uses only the
+device-neutral durable identity. A durable inode or other stable-identity
+substitution still fails closed. The legacy-v3 encoder and device-renumbering
+helpers are test-only compatibility fixtures; they are not production readers,
+writers, diagnosis projections, or migration authority.
+
+The former repository-fit device-drift diagnosis, migration admission,
+quarantine plan, and whole-owner quarantine apply route are retired. No public
+command, compatibility route, migration-registry row, or production module can
+mint or consume them. Ordinary repository-fit parent locking, pending-state
+recovery, atomic publication, and same-operation descriptor custody remain.
+Routine `HostState` legacy inspection and quarantine are a separate state owner
+and remain unchanged.
 
 Complete-repository fit does not implicitly reconcile a
 `validation_artifacts/` ignore rule. Candidate evidence is never ordinary

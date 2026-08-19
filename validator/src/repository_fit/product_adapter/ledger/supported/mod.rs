@@ -18,10 +18,11 @@ use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
-#[path = "device_drift_plan.rs"]
-mod device_drift_plan;
 #[path = "effect_settlement.rs"]
 mod effect_settlement;
+#[cfg(test)]
+#[path = "legacy_v3_fixture.rs"]
+mod legacy_v3_fixture;
 #[path = "object_identity.rs"]
 mod object_identity;
 #[path = "process_lock.rs"]
@@ -39,7 +40,8 @@ mod store;
 #[path = "transition_validation.rs"]
 mod transition_validation;
 
-pub(crate) use device_drift_plan::*;
+#[cfg(test)]
+pub(crate) use legacy_v3_fixture::*;
 pub(crate) use object_identity::*;
 pub(crate) use record_authentication::*;
 pub(crate) use replay_detection::*;

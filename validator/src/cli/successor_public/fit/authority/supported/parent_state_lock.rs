@@ -11,10 +11,6 @@ impl ParentStateLock {
         Self::acquire(parent, libc::LOCK_SH | libc::LOCK_NB)
     }
 
-    pub(crate) fn acquire_exclusive(parent: &AnchoredDirectory) -> Result<Self, HostFailure> {
-        Self::acquire(parent, libc::LOCK_EX | libc::LOCK_NB)
-    }
-
     fn acquire(parent: &AnchoredDirectory, operation: libc::c_int) -> Result<Self, HostFailure> {
         parent.verify(true)?;
         let file = parent
@@ -24,7 +20,7 @@ impl ParentStateLock {
         // SAFETY: this value owns the cloned descriptor and releases only its
         // advisory lock in Drop. Directory locking creates no filesystem row.
         if unsafe { libc::flock(file.as_raw_fd(), operation) } != 0 {
-            return Err(HostFailure::QuarantineStale);
+            return Err(HostFailure::Unavailable);
         }
         let value = Self {
             file,

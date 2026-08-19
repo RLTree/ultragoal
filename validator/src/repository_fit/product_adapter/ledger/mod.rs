@@ -14,19 +14,21 @@ use super::{AdapterErrorId, FitAdapterError, adapter_error};
 #[path = "supported/mod.rs"]
 mod supported;
 
-#[path = "device_drift_plan.rs"]
-mod device_drift_plan;
 #[path = "effect_ownership.rs"]
 mod effect_ownership;
 #[path = "ledger_failure.rs"]
 mod ledger_failure;
+#[cfg(all(test, target_vendor = "apple"))]
+#[path = "legacy_v3_fixture.rs"]
+mod legacy_v3_fixture;
 #[path = "recovery_record.rs"]
 mod recovery_record;
 
-pub(crate) use device_drift_plan::*;
 #[cfg(test)]
 pub(crate) use effect_ownership::{
     before_atomic_publish_for_test, before_existing_open_for_test, before_lock_acquire_for_test,
 };
 pub(crate) use ledger_failure::*;
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use legacy_v3_fixture::*;
 pub(crate) use recovery_record::*;

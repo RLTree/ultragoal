@@ -33,6 +33,8 @@ pub(crate) fn initial_payload(
     root_identity: RootIdentity,
     lock_identity: FileIdentity,
 ) -> Result<SnapshotPayload, LedgerError> {
+    let root_identity = root_identity.durable();
+    let lock_identity = lock_identity.durable();
     let head_sha256 = digest(
         &serde_json::to_vec(&(
             INITIAL_HEAD_DOMAIN,
@@ -51,6 +53,8 @@ pub(crate) fn initial_payload(
         key_id: key_id.to_owned(),
         root_identity,
         lock_identity,
+        chain_origin_sha256: head_sha256.clone(),
+        predecessor_envelope_sha256: None,
         generation: 0,
         head_sha256,
         events: Vec::new(),

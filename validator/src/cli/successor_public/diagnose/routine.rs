@@ -18,43 +18,13 @@ pub(super) fn diagnose(
         read_context,
     ) {
         Ok(Some(binding)) => binding,
-        Ok(None) => {
-            if request.finding.is_none()
-                && let Some(diagnosis) =
-                    super::super::fit::repository_fit_authority_migration_diagnosis(
-                        read_context,
-                        home,
-                    )
-            {
-                return diagnosis;
-            }
-            return fallback.unwrap_or_else(super::super::inventory_unavailable);
-        }
-        Err(()) => {
-            if request.finding.is_none()
-                && let Some(diagnosis) =
-                    super::super::fit::repository_fit_authority_migration_diagnosis(
-                        read_context,
-                        home,
-                    )
-            {
-                return diagnosis;
-            }
-            return super::diagnosis_unavailable();
-        }
+        Ok(None) => return fallback.unwrap_or_else(super::super::inventory_unavailable),
+        Err(()) => return super::diagnosis_unavailable(),
     };
     let checkpoint = match home {
         Some(home) => match super::super::routine::current_checkpoint(home, &binding) {
             Ok(checkpoint) => checkpoint,
             Err(()) if request.finding.is_none() => {
-                if let Some(diagnosis) =
-                    super::super::fit::repository_fit_authority_migration_diagnosis(
-                        read_context,
-                        Some(home),
-                    )
-                {
-                    return diagnosis;
-                }
                 return match super::super::routine::current_migration_admission(home) {
                     Ok(Some(admission)) => migration_admission(read_context, admission),
                     _ => super::diagnosis_unavailable(),

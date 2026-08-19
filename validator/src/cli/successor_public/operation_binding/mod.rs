@@ -56,7 +56,6 @@ const FIT_APPLY: &[&str] = &[
     "Mutation",
     "Ownership",
     "RollbackPlan",
-    "RepositoryFitAuthorityQuarantinePlan",
 ];
 const FIT_VERIFY: &[&str] = &["LiveContext::build", "EffectClass", "FitVerification"];
 const ROUTINE: &[&str] = &[

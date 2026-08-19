@@ -5,11 +5,17 @@ use std::cell::RefCell;
 
 pub(crate) type HmacSha256 = Hmac<Sha256>;
 
-pub(crate) const LEDGER_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger.v3";
+pub(crate) const LEDGER_SCHEMA: &str = "harness-ultragoal.repository-fit-authority-ledger.v4";
 pub(crate) const ENVELOPE_SCHEMA: &str =
+    "harness-ultragoal.repository-fit-authority-ledger-envelope.v4";
+pub(crate) const LEGACY_LEDGER_SCHEMA: &str =
+    "harness-ultragoal.repository-fit-authority-ledger.v3";
+pub(crate) const LEGACY_ENVELOPE_SCHEMA: &str =
     "harness-ultragoal.repository-fit-authority-ledger-envelope.v3";
 pub(crate) const EVENT_DOMAIN: &str = "repository-fit-authority-ledger-event-v3";
-pub(crate) const INITIAL_HEAD_DOMAIN: &str = "repository-fit-authority-ledger-initial-head-v3";
+pub(crate) const INITIAL_HEAD_DOMAIN: &str = "repository-fit-authority-ledger-initial-head-v4";
+pub(crate) const LEGACY_INITIAL_HEAD_DOMAIN: &str =
+    "repository-fit-authority-ledger-initial-head-v3";
 pub(crate) const AUTHORITY_DOMAIN: &str = "repository-fit-production-authority-v3";
 pub(crate) const LOCK_MARKER: &[u8] = b"repository-fit-authority-lock-v3\n";
 pub(crate) const KEY_BYTES: usize = 32;
@@ -129,8 +135,30 @@ pub(crate) struct RootIdentity {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+pub(crate) struct DurableRootIdentity {
+    pub(crate) inode: u64,
+    pub(crate) uid: u32,
+    pub(crate) gid: u32,
+    pub(crate) mode: u32,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub(crate) struct FileIdentity {
     pub(crate) device: u64,
+    pub(crate) inode: u64,
+    pub(crate) links: u64,
+    pub(crate) uid: u32,
+    pub(crate) gid: u32,
+    pub(crate) mode: u32,
+    pub(crate) length: u64,
+    pub(crate) changed_seconds: i64,
+    pub(crate) changed_nanoseconds: i64,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct DurableFileIdentity {
     pub(crate) inode: u64,
     pub(crate) links: u64,
     pub(crate) uid: u32,
@@ -152,6 +180,30 @@ pub(crate) struct SnapshotEnvelope {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct SnapshotPayload {
+    pub(crate) schema_version: String,
+    pub(crate) store_id: String,
+    pub(crate) authority_id: String,
+    pub(crate) key_id: String,
+    pub(crate) root_identity: DurableRootIdentity,
+    pub(crate) lock_identity: DurableFileIdentity,
+    pub(crate) chain_origin_sha256: String,
+    pub(crate) predecessor_envelope_sha256: Option<String>,
+    pub(crate) generation: u64,
+    pub(crate) head_sha256: String,
+    pub(crate) events: Vec<LedgerEvent>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct LegacySnapshotEnvelopeV3 {
+    pub(crate) schema_version: String,
+    pub(crate) payload: LegacySnapshotPayloadV3,
+    pub(crate) hmac_sha256: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct LegacySnapshotPayloadV3 {
     pub(crate) schema_version: String,
     pub(crate) store_id: String,
     pub(crate) authority_id: String,

@@ -87,6 +87,32 @@ pub(crate) fn root_identity(metadata: &fs::Metadata) -> RootIdentity {
     }
 }
 
+impl RootIdentity {
+    pub(crate) const fn durable(self) -> DurableRootIdentity {
+        DurableRootIdentity {
+            inode: self.inode,
+            uid: self.uid,
+            gid: self.gid,
+            mode: self.mode,
+        }
+    }
+}
+
+impl FileIdentity {
+    pub(crate) const fn durable(self) -> DurableFileIdentity {
+        DurableFileIdentity {
+            inode: self.inode,
+            links: self.links,
+            uid: self.uid,
+            gid: self.gid,
+            mode: self.mode,
+            length: self.length,
+            changed_seconds: self.changed_seconds,
+            changed_nanoseconds: self.changed_nanoseconds,
+        }
+    }
+}
+
 pub(crate) fn file_identity(metadata: &fs::Metadata) -> FileIdentity {
     FileIdentity {
         device: metadata.dev(),

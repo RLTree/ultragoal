@@ -11,7 +11,8 @@ use super::super::ledger::{
     FileRepositoryFitLedger, LedgerErrorId, RecoveryTargetRow, RecoveryTargetSpec,
     RepositoryFitLedgerState, ReservationDecision, ReservationRequest,
     before_atomic_publish_for_test, before_existing_open_for_test, before_lock_acquire_for_test,
-    canonical_recovery_intent_bytes, simulate_device_drift_for_test,
+    canonical_recovery_intent_bytes, simulate_durable_identity_drift_for_test,
+    write_legacy_v3_device_number_for_test,
 };
 use super::super::root_permit::managed_ancestor_contract_for_ledger_test;
 use super::super::{
@@ -34,14 +35,14 @@ use std::time::{Duration, Instant};
 
 #[path = "abrupt_process_exit_after_effect_with_target_substitution_recovers_as_ambiguous.rs"]
 mod abrupt_process_exit_after_effect_with_target_substitution_recovers_as_ambiguous;
-#[path = "authenticated_device_drift_is_diagnosed_without_rewriting_history.rs"]
-mod authenticated_device_drift_is_diagnosed_without_rewriting_history;
 #[path = "authority_fixtures.rs"]
 mod authority_fixtures;
 #[path = "failed_terminal_validation_retains_recovery_authority_until_reconciled.rs"]
 mod failed_terminal_validation_retains_recovery_authority_until_reconciled;
 #[path = "inspect_plan_verify_and_verify_as_apply_are_recursively_zero_write.rs"]
 mod inspect_plan_verify_and_verify_as_apply_are_recursively_zero_write;
+#[path = "legacy_v3_device_renumbering_migrates_on_mutation.rs"]
+mod legacy_v3_device_renumbering_migrates_on_mutation;
 #[path = "live_effect_owner_holds_process_lock_through_mutation_and_terminal.rs"]
 mod live_effect_owner_holds_process_lock_through_mutation_and_terminal;
 #[path = "local_state_scope_revalidates_through_production_authority.rs"]
