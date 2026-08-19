@@ -1,6 +1,6 @@
 {
   "name": "harness-ultragoal",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Repository fit, routine work, diagnosis, proof, orchestration, evaluation, and migration through one Harness Ultragoal front door.",
   "author": {
     "name": "Terry Noblin"
@@ -24,9 +24,9 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/RLTree/plugin-policies/blob/08df02ce6bb2fba511cd927e270c12e84402a3f2/products/harness-ultragoal/0.0.37/product.md",
-    "privacyPolicyURL": "https://github.com/RLTree/plugin-policies/blob/08df02ce6bb2fba511cd927e270c12e84402a3f2/products/harness-ultragoal/0.0.37/privacy.md",
-    "termsOfServiceURL": "https://github.com/RLTree/plugin-policies/blob/08df02ce6bb2fba511cd927e270c12e84402a3f2/products/harness-ultragoal/0.0.37/terms.md",
+    "websiteURL": "https://github.com/RLTree/plugin-policies/blob/8e99ff73441b0d2445ba441883fcd99732a4b469/products/harness-ultragoal/0.0.38/product.md",
+    "privacyPolicyURL": "https://github.com/RLTree/plugin-policies/blob/8e99ff73441b0d2445ba441883fcd99732a4b469/products/harness-ultragoal/0.0.38/privacy.md",
+    "termsOfServiceURL": "https://github.com/RLTree/plugin-policies/blob/8e99ff73441b0d2445ba441883fcd99732a4b469/products/harness-ultragoal/0.0.38/terms.md",
     "defaultPrompt": [
       "Use $harness-ultragoal:harness-ultragoal to classify this request and route it to the smallest authoritative workflow."
     ]
