@@ -53,3 +53,7 @@ pub(crate) use state_publication::{
     set_test_publication_ambiguity_after, set_test_publication_refusal_after,
 };
 use transaction::PublicationContext;
+
+#[cfg(test)]
+#[path = "device_neutral_migration_tests.rs"]
+mod device_neutral_migration_tests;

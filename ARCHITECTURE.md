@@ -87,6 +87,29 @@ recovery, atomic publication, and same-operation descriptor custody remain.
 Routine `HostState` legacy inspection and quarantine are a separate state owner
 and remain unchanged.
 
+Routine production custody follows the same durable-identity rule. Device and
+inode remain paired for every descriptor/path comparison performed during one
+open operation, but `RoutineProductionCustodyStore-v5` persists only the stable
+inode, owner, mode, link, length, and change-time dimensions. Its reader accepts
+exact authenticated v5 bytes and one exact authenticated v4 predecessor. A v4
+read verifies the legacy HMAC and device-bearing authority identity, requires
+all durable dimensions to match the currently opened root and lock, and remains
+zero-write; the next accepted mutation publishes v5 and binds the exact v4
+envelope through the ordinary `previous_head_sha256` transition. Durable inode,
+HMAC, key, owner, mode, link, length, change-time, or payload substitution still
+fails closed. Device remains present in process, launch, output, and staged-file
+records where it identifies objects observed within the same operation.
+
+`RoutineNext-v1` is the stable navigation envelope, not a fixed action. Its
+action is derived from the exact authenticated current checkpoint: no record
+runs the current routine, a completed pending terminal event settles, a
+completed joined event reuses, and every reserved, reconciled, ambiguous, or
+failed state diagnoses before effect. Repository-fit guidance is available only
+when the routine source itself is absent. A present but unavailable, busy,
+invalid, unprojectable, or changing routine authority returns its causal typed
+HOLD and never falls back to repository fit. These read routes mint no recovery
+authority and carry no target-path fallback.
+
 Complete-repository fit does not implicitly reconcile a
 `validation_artifacts/` ignore rule. Candidate evidence is never ordinary
 repository behavior. If the explicit `fit plan --local-state` compatibility

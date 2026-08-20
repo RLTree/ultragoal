@@ -219,6 +219,70 @@ fn diagnosis_unavailable() -> RuntimeOutcome {
     )
 }
 
+fn routine_checkpoint_failure(
+    failure: super::routine::RoutineCheckpointFailure,
+    rerun: &'static str,
+) -> RuntimeOutcome {
+    let (id, class, cause, repair) = match failure {
+        super::routine::RoutineCheckpointFailure::Host(
+            super::routine::HostFailure::Unavailable,
+        ) => (
+            DiagnosticId::AuthorityRequired,
+            ExitClass::BlockedAuthority,
+            "the owner-only routine state authority is unavailable",
+            "install or repair the exact owner-only routine authority, then retry the same read request",
+        ),
+        super::routine::RoutineCheckpointFailure::Host(super::routine::HostFailure::Busy) => (
+            DiagnosticId::AuthorityRequired,
+            ExitClass::BlockedAuthority,
+            "the exact routine state authority is busy with another invocation",
+            "wait for the active invocation to settle, then retry the same read request",
+        ),
+        super::routine::RoutineCheckpointFailure::Host(super::routine::HostFailure::Invalid) => (
+            DiagnosticId::AuthorityRequired,
+            ExitClass::BlockedAuthority,
+            "the routine state authority is stale, malformed, substituted, or unsafe",
+            "preserve the authority bytes and repair or update the owning routine adapter before retrying",
+        ),
+        #[cfg(not(target_vendor = "apple"))]
+        super::routine::RoutineCheckpointFailure::Host(
+            super::routine::HostFailure::Unsupported,
+        ) => (
+            DiagnosticId::DownstreamToolUnavailable,
+            ExitClass::UnsupportedCapability,
+            "routine state projection is unavailable on this host",
+            "run the request on the supported Darwin host runtime",
+        ),
+        super::routine::RoutineCheckpointFailure::Projection => (
+            DiagnosticId::StateUnavailable,
+            ExitClass::UnsupportedCapability,
+            "the current routine checkpoint projection could not be derived",
+            "repair the current routine source projection and retry the same read request",
+        ),
+        super::routine::RoutineCheckpointFailure::StaleContext => (
+            DiagnosticId::StaleContext,
+            ExitClass::ActionableFinding,
+            "the live routine candidate changed while deriving the checkpoint",
+            "recompute current context and retry the same read request",
+        ),
+    };
+    RuntimeOutcome::failure(
+        class,
+        Diagnostic::new(
+            id,
+            class,
+            DiagnosticDetails {
+                cause,
+                affected_surface: "routine checkpoint navigation",
+                repair,
+                effect: "read",
+                rerun,
+                ceiling: "routine diagnosis and next-action claims remain withheld",
+            },
+        ),
+    )
+}
+
 fn stale_context() -> RuntimeOutcome {
     failure(
         DiagnosticId::StaleContext,

@@ -54,6 +54,8 @@ run_registered_tests lib lib \
   "cli::successor_public::tests::current_authority::current_public_state_route_fails_closed_on_current_authority_tamper" \
   "cli::successor_public::tests::public_output_limit_is_inclusive_and_fail_closed::fit_read_routes_are_public_and_zero_write" \
   "cli::successor_public::tests::routine_diagnosis_without_inventory::explicit_target_diagnosis_rejects_a_substituted_directory_without_writes_or_path_echo" \
+  "cli::successor_public::tests::routine_diagnosis_without_inventory::present_routine_with_invalid_authority_never_falls_back_to_repository_fit" \
+  "cli::successor_public::diagnose::routine_next_projection::tests::routine_next_action_is_derived_from_every_supported_checkpoint_state" \
   "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::absent_observe_store_is_empty_and_zero_write" \
   "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::substituted_host_state_parent_fails_closed_without_path_echo" \
   "cli::successor_public::tests::accepted_observe_query_reads_current_local_events_without_writes::legacy_target_spool_is_ignored_without_bootstrap_or_writes" \
@@ -69,6 +71,9 @@ run_registered_tests lib lib \
   "cli::successor_public::routine::host::supported::migration_admission::tests::closed_relation_classifier_distinguishes_equivalence_order_and_conflict" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::quarantine_plan_is_exact_deterministic_and_never_minted_for_conflict" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::same_inode_content_rewrite_invalidates_the_observed_inventory" \
+  "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::authenticated_v4_device_renumbering_migrates_on_first_mutation" \
+  "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::legacy_durable_inode_substitution_still_fails_closed" \
+  "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::legacy_hmac_tampering_still_fails_closed" \
   "package::inventory::tests::current_package_manifest_lists_only_materializable_source_members"
 
 # Actual immutable UltraGoal binary journeys under a disposable target and

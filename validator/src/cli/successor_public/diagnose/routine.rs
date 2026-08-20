@@ -23,14 +23,21 @@ pub(super) fn diagnose(
     };
     let checkpoint = match home {
         Some(home) => match super::super::routine::current_checkpoint(home, &binding) {
-            Ok(checkpoint) => checkpoint,
-            Err(()) if request.finding.is_none() => {
-                return match super::super::routine::current_migration_admission(home) {
-                    Ok(Some(admission)) => migration_admission(read_context, admission),
-                    _ => super::diagnosis_unavailable(),
-                };
+            Ok(super::super::routine::RoutineCheckpointRead::NoRecord) => None,
+            Ok(super::super::routine::RoutineCheckpointRead::Current(checkpoint)) => {
+                Some(checkpoint)
             }
-            Err(()) => return super::diagnosis_unavailable(),
+            Ok(super::super::routine::RoutineCheckpointRead::Migration(admission))
+                if request.finding.is_none() =>
+            {
+                return migration_admission(read_context, admission);
+            }
+            Ok(super::super::routine::RoutineCheckpointRead::Migration(_)) => {
+                return super::finding_not_present();
+            }
+            Err(failure) => {
+                return super::routine_checkpoint_failure(failure, "ultragoal --json diagnose");
+            }
         },
         None => return super::diagnosis_unavailable(),
     };
@@ -84,7 +91,7 @@ pub(super) fn diagnose(
     }
 }
 
-fn migration_admission(
+pub(super) fn migration_admission(
     read_context: &LiveContext,
     admission: super::super::routine::RoutineStateMigrationAdmission,
 ) -> RuntimeOutcome {

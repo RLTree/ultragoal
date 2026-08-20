@@ -19,6 +19,19 @@ pub(crate) struct RoutineCheckpointProjection {
     pub(crate) finding_id: Option<String>,
 }
 
+pub(crate) enum RoutineCheckpointRead {
+    NoRecord,
+    Current(RoutineCheckpointProjection),
+    Migration(RoutineStateMigrationAdmission),
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum RoutineCheckpointFailure {
+    Host(HostFailure),
+    Projection,
+    StaleContext,
+}
+
 impl RoutineDiagnosisBinding {
     pub(crate) fn target(&self) -> &Path {
         &self.target
@@ -87,17 +100,20 @@ pub(crate) fn current_diagnosis_binding(
 pub(crate) fn current_checkpoint(
     home: &Path,
     binding: &RoutineDiagnosisBinding,
-) -> Result<Option<RoutineCheckpointProjection>, ()> {
+) -> Result<RoutineCheckpointRead, RoutineCheckpointFailure> {
     let state = match HostState::open_existing_for_target(home, binding.target()) {
         Ok(state) => state,
-        Err(host::HostFailure::Unavailable) => {
+        Err(error @ (host::HostFailure::Unavailable | host::HostFailure::Invalid)) => {
             return match HostState::assess_migration_admission(home) {
-                Ok(Some(_)) => Err(()),
-                Ok(None) => Ok(None),
-                Err(_) => Err(()),
+                Ok(Some(admission)) => Ok(RoutineCheckpointRead::Migration(admission)),
+                Ok(None) if error == host::HostFailure::Unavailable => {
+                    Ok(RoutineCheckpointRead::NoRecord)
+                }
+                Ok(None) => Err(RoutineCheckpointFailure::Host(error)),
+                Err(migration_error) => Err(RoutineCheckpointFailure::Host(migration_error)),
             };
         }
-        Err(_) => return Err(()),
+        Err(error) => return Err(RoutineCheckpointFailure::Host(error)),
     };
     let execution_id = prepare(
         binding.context(),
@@ -106,7 +122,7 @@ pub(crate) fn current_checkpoint(
         binding.snapshot(),
         binding.plan(),
     )
-    .map_err(|_| ())?
+    .map_err(|_| RoutineCheckpointFailure::Projection)?
     .checkpoint_execution_id()
     .to_owned();
     let checkpoint = state
@@ -121,31 +137,32 @@ pub(crate) fn current_checkpoint(
             ),
             None,
         )
-        .map_err(|_| ())?;
+        .map_err(RoutineCheckpointFailure::Host)?;
     if let Some(checkpoint) = checkpoint.as_ref() {
         state
             .authenticate_checkpoint_for_history(binding.target(), checkpoint)
-            .map_err(|_| ())?;
+            .map_err(RoutineCheckpointFailure::Host)?;
     }
-    if state.verify_read_scope().is_err() || binding.context().revalidate().is_err() {
-        return Err(());
+    state
+        .verify_read_scope()
+        .map_err(RoutineCheckpointFailure::Host)?;
+    if binding.context().revalidate().is_err() {
+        return Err(RoutineCheckpointFailure::StaleContext);
     }
-    Ok(checkpoint.map(|checkpoint| RoutineCheckpointProjection {
-        state: checkpoint.state().to_owned(),
-        terminal_outcome: checkpoint
-            .terminal_outcome()
-            .map(|outcome| outcome.as_str().to_owned()),
-        event_id: checkpoint.event_id().to_owned(),
-        event_status: checkpoint.event_status().to_owned(),
-        event_transition: checkpoint.event_transition().to_owned(),
-        finding_id: checkpoint
-            .finding_binding()
-            .map(|binding| binding.finding_id.clone()),
-    }))
-}
-
-pub(crate) fn current_migration_admission(
-    home: &Path,
-) -> Result<Option<RoutineStateMigrationAdmission>, ()> {
-    HostState::assess_migration_admission(home).map_err(|_| ())
+    Ok(
+        checkpoint.map_or(RoutineCheckpointRead::NoRecord, |checkpoint| {
+            RoutineCheckpointRead::Current(RoutineCheckpointProjection {
+                state: checkpoint.state().to_owned(),
+                terminal_outcome: checkpoint
+                    .terminal_outcome()
+                    .map(|outcome| outcome.as_str().to_owned()),
+                event_id: checkpoint.event_id().to_owned(),
+                event_status: checkpoint.event_status().to_owned(),
+                event_transition: checkpoint.event_transition().to_owned(),
+                finding_id: checkpoint
+                    .finding_binding()
+                    .map(|binding| binding.finding_id.clone()),
+            })
+        }),
+    )
 }

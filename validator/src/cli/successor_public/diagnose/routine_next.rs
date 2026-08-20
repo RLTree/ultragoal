@@ -19,18 +19,28 @@ pub(super) fn project(
         return fallback;
     }
     let Some(home) = home else {
-        return fallback;
+        return super::diagnosis_unavailable();
     };
     let binding = match super::super::routine::current_diagnosis_binding(root, None, read_context) {
         Ok(Some(binding)) => binding,
-        Ok(None) | Err(()) => return fallback,
+        Ok(None) => return fallback,
+        Err(()) => return super::diagnosis_unavailable(),
     };
     let checkpoint = match super::super::routine::current_checkpoint(home, &binding) {
-        Ok(checkpoint) => checkpoint,
-        Err(()) => return fallback,
+        Ok(super::super::routine::RoutineCheckpointRead::NoRecord) => None,
+        Ok(super::super::routine::RoutineCheckpointRead::Current(checkpoint)) => Some(checkpoint),
+        Ok(super::super::routine::RoutineCheckpointRead::Migration(admission)) => {
+            return super::routine_projection::migration_admission(read_context, admission);
+        }
+        Err(failure) => {
+            return super::routine_checkpoint_failure(failure, "ultragoal --json next");
+        }
     };
     if read_context.revalidate().is_err() || binding.context().revalidate().is_err() {
-        return fallback;
+        return super::routine_checkpoint_failure(
+            super::super::routine::RoutineCheckpointFailure::StaleContext,
+            "ultragoal --json next",
+        );
     }
     let disposition = disposition(checkpoint.as_ref());
     let (action, command, effect) = action_for(checkpoint.as_ref());
@@ -66,7 +76,7 @@ pub(super) fn project(
                 ),
             )
         }
-        _ => fallback,
+        _ => super::diagnosis_unavailable(),
     }
 }
 
@@ -173,6 +183,53 @@ mod tests {
             action_for(Some(&checkpoint("reserved", None))).0,
             "diagnose_before_effect"
         );
+    }
+
+    #[test]
+    fn routine_next_action_is_derived_from_every_supported_checkpoint_state() {
+        let cases = [
+            (None, "run_current_routine", "workspace_write"),
+            (
+                Some(checkpoint("reserved", None)),
+                "diagnose_before_effect",
+                "read",
+            ),
+            (
+                Some(checkpoint("reconciled", None)),
+                "diagnose_before_effect",
+                "read",
+            ),
+            (
+                Some(checkpoint("ambiguous", Some("ambiguous"))),
+                "diagnose_before_effect",
+                "read",
+            ),
+            (
+                Some(checkpoint("terminal-event-pending", Some("complete"))),
+                "settle_current_routine",
+                "workspace_write",
+            ),
+            (
+                Some(checkpoint("terminal-event-joined", Some("complete"))),
+                "reuse_current_routine",
+                "workspace_write",
+            ),
+            (
+                Some(checkpoint("terminal-event-pending", Some("failed"))),
+                "diagnose_before_effect",
+                "read",
+            ),
+            (
+                Some(checkpoint("terminal-event-joined", Some("failed"))),
+                "diagnose_before_effect",
+                "read",
+            ),
+        ];
+        for (checkpoint, expected_action, expected_effect) in cases {
+            let (action, _, effect) = action_for(checkpoint.as_ref());
+            assert_eq!(action, expected_action);
+            assert_eq!(effect, expected_effect);
+        }
     }
 
     #[test]

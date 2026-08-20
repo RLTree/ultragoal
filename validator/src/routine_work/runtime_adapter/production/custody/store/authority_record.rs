@@ -1,6 +1,7 @@
 use super::*;
 
-pub(crate) const SCHEMA: &str = "RoutineProductionCustodyStore-v4";
+pub(crate) const SCHEMA: &str = "RoutineProductionCustodyStore-v5";
+pub(crate) const LEGACY_SCHEMA: &str = "RoutineProductionCustodyStore-v4";
 pub(crate) const KEY_NAME: &str = "routine-authority.key";
 pub(crate) const LOCK_NAME: &str = "routine-authority.lock";
 pub(crate) const STATE_NAME: &str = "routine-authority.state";

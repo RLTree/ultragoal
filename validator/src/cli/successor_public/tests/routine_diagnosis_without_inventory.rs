@@ -1,6 +1,9 @@
 use super::*;
 use std::process::Command;
 
+#[cfg(unix)]
+use std::os::unix::fs::PermissionsExt;
+
 #[test]
 fn public_diagnose_projects_routine_state_when_inventory_is_incomplete() {
     let repo = Repository::new("routine-diagnosis-partial-fit");
@@ -129,6 +132,56 @@ fn public_diagnose_requires_repository_fit_when_no_routine_surface_exists() {
     assert!(!output.contains(repo.root.to_str().unwrap()));
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[cfg(unix)]
+#[test]
+fn present_routine_with_invalid_authority_never_falls_back_to_repository_fit() {
+    let repo = Repository::new("routine-navigation-invalid-authority");
+    install_routine(&repo.root, 1);
+    let home = empty_home("routine-navigation-invalid-authority");
+    let harness = home.join(".codex/state/harness-ultragoal");
+    fs::create_dir_all(&harness).unwrap();
+    fs::set_permissions(&harness, fs::Permissions::from_mode(0o700)).unwrap();
+    fs::write(harness.join("routine-public"), b"not-a-directory\n").unwrap();
+    fs::set_permissions(
+        harness.join("routine-public"),
+        fs::Permissions::from_mode(0o600),
+    )
+    .unwrap();
+    let before_repo = tree(&repo.root);
+    let before_home = tree(&home);
+
+    for arguments in [
+        vec!["--json", "next"],
+        vec!["--json", "diagnose", "--target", "."],
+    ] {
+        let ParseOutcome::Invocation(invocation) = parse_args(arguments).unwrap() else {
+            panic!("expected invocation")
+        };
+        let streams = execute_invocation_with_home(&repo.root, invocation, Some(&home))
+            .render(OutputMode::Json);
+        let encoded = if streams.stderr.is_empty() {
+            streams.stdout
+        } else {
+            streams.stderr
+        };
+        let value: serde_json::Value = serde_json::from_slice(&encoded).unwrap();
+        assert_eq!(
+            value["diagnostic_id"],
+            "successor_runtime_authority_required"
+        );
+        assert_eq!(value["effect"], "read");
+        assert_ne!(value["diagnostic_id"], "repository_fit_required");
+        assert_ne!(
+            value["diagnostic_id"],
+            "successor_runtime_state_unavailable"
+        );
+    }
+
+    assert_eq!(tree(&repo.root), before_repo);
+    assert_eq!(tree(&home), before_home);
     fs::remove_dir_all(home).unwrap();
 }
 
