@@ -2,6 +2,7 @@ use super::scenario::{
     ContainedContender, Fixture, contain_contender, git, pass_node, prefix_route, routine_command,
     run_bounded_contender, tree,
 };
+use hmac::{Hmac, Mac};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::fs;
@@ -545,6 +546,216 @@ fn authenticated_equivalent_mixed_history_is_classified_and_preserved() {
     assert_eq!(tree(&fixture.root), before_root);
     assert_eq!(tree(&fixture.home), before_home);
     fixture.teardown_after_assertions();
+}
+
+#[test]
+fn authenticated_stale_reconciled_mixed_history_is_classified_and_preserved() {
+    let mut fixture = Fixture::new(
+        "legacy-stale-reconciled-mixed-history",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let interrupted = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let checkpoint_path = fixture.checkpoint_path();
+    let rolled_back_head = roll_back_test_reservation(&fixture);
+    rewrite_checkpoint_as_reconciled(&checkpoint_path, &rolled_back_head);
+
+    let mut independent = Fixture::new(
+        "legacy-stale-reconciled-ledger-advance",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut advance = routine_command(&independent.root, &fixture.home, independent.binary_path());
+    advance.args(["--json", "check", "routine"]);
+    let advance = advance.output().unwrap();
+    assert!(matches!(advance.status.code(), Some(0 | 1)), "{advance:?}");
+    assert!(matches!(
+        Fixture::value(&advance)["status"].as_str(),
+        Some("executed" | "incomplete")
+    ));
+    assert_ne!(test_authority_head(&fixture), rolled_back_head);
+
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&checkpoint_path, &singleton).unwrap();
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(
+        value["status"],
+        "history_relation_established_preserve_and_hold"
+    );
+    assert_eq!(value["history_relation"], "redundant_equivalent");
+    assert_eq!(value["legacy_singleton_count"], 1);
+    assert_eq!(value["canonical_continuation_count"], 2);
+    assert_eq!(value["event_journal_count"], 1);
+    assert_eq!(value["migration_effect"], "none");
+    assert_eq!(value["migration_authorized"], false);
+    assert_eq!(
+        value["quarantine_plan"]["apply_capability"],
+        "not_implemented"
+    );
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+
+    independent.teardown_after_assertions();
+    fixture.teardown_after_assertions();
+}
+
+#[test]
+fn caller_relabelled_reconciled_history_without_a_rolled_back_attempt_is_unsafe() {
+    let mut fixture = Fixture::new(
+        "legacy-reconciled-state-relabel",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let interrupted = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(interrupted.status.code(), Some(1), "{interrupted:?}");
+    let checkpoint_path = fixture.checkpoint_path();
+    let checkpoint: Value = serde_json::from_slice(&fs::read(&checkpoint_path).unwrap()).unwrap();
+    let reserved_head = checkpoint["authenticated_ledger_head"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    rewrite_checkpoint_as_reconciled(&checkpoint_path, &reserved_head);
+
+    let mut independent = Fixture::new(
+        "legacy-reconciled-state-relabel-ledger-advance",
+        &[pass_node("compile", &[])],
+        &[prefix_route("route-src", "src", &["compile"])],
+        true,
+        true,
+    );
+    let mut advance = routine_command(&independent.root, &fixture.home, independent.binary_path());
+    advance.args(["--json", "check", "routine"]);
+    let advance = advance.output().unwrap();
+    assert!(matches!(advance.status.code(), Some(0 | 1)), "{advance:?}");
+    assert_ne!(test_authority_head(&fixture), reserved_head);
+
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&checkpoint_path, singleton).unwrap();
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    let output = fixture.run_args(&["--json", "diagnose"]);
+
+    assert_eq!(output.status.code(), Some(1), "{output:?}");
+    let value = Fixture::value(&output);
+    assert_eq!(value["status"], "unsafe_layout_preserve_and_hold");
+    assert_eq!(value["history_relation"], "unsafe_or_unauthenticated");
+    assert_eq!(value["migration_authorized"], false);
+    assert!(value["quarantine_plan"].is_null());
+    assert_eq!(tree(&fixture.root), before_root);
+    assert_eq!(tree(&fixture.home), before_home);
+
+    independent.teardown_after_assertions();
+    fixture.teardown_after_assertions();
+}
+
+fn roll_back_test_reservation(fixture: &Fixture) -> String {
+    let state = fixture.authority_root().join("routine-authority.state");
+    let key = fs::read(fixture.authority_root().join("routine-authority.key")).unwrap();
+    let original = String::from_utf8(fs::read(&state).unwrap()).unwrap();
+    let original_envelope: Value = serde_json::from_str(&original).unwrap();
+    let generation = original_envelope["payload"]["generation"].as_u64().unwrap();
+    let last_tick = original_envelope["payload"]["last_tick"].as_u64().unwrap();
+    let previous_head = original_envelope["payload"]["previous_head_sha256"]
+        .as_str()
+        .unwrap();
+    let original_head = format!("sha256:{:x}", Sha256::digest(original.as_bytes()));
+    assert_eq!(original.matches("\"state\":\"reserved\"").count(), 1);
+    assert_eq!(
+        original
+            .matches(&format!("\"generation\":{generation}"))
+            .count(),
+        1
+    );
+    assert_eq!(
+        original
+            .matches(&format!("\"last_tick\":{last_tick}"))
+            .count(),
+        1
+    );
+    assert_eq!(original.matches(previous_head).count(), 1);
+    let mut rewritten = original
+        .replacen(
+            &format!("\"generation\":{generation}"),
+            &format!("\"generation\":{}", generation + 1),
+            1,
+        )
+        .replacen(previous_head, &original_head, 1)
+        .replacen(
+            &format!("\"last_tick\":{last_tick}"),
+            &format!("\"last_tick\":{}", last_tick + 1),
+            1,
+        )
+        .replacen("\"state\":\"reserved\"", "\"state\":\"rolled_back\"", 1);
+    let payload_prefix = "{\"payload\":";
+    let hmac_marker = ",\"hmac_sha256\":\"";
+    assert!(rewritten.starts_with(payload_prefix));
+    let hmac_marker_offset = rewritten.rfind(hmac_marker).unwrap();
+    let payload = &rewritten.as_bytes()[payload_prefix.len()..hmac_marker_offset];
+    let mut mac = Hmac::<Sha256>::new_from_slice(&key).unwrap();
+    mac.update(payload);
+    let next_hmac = format!("sha256:{:x}", mac.finalize().into_bytes());
+    let envelope: Value = serde_json::from_str(&rewritten).unwrap();
+    let prior_hmac = envelope["hmac_sha256"].as_str().unwrap();
+    rewritten = rewritten.replacen(prior_hmac, &next_hmac, 1);
+    fs::write(&state, rewritten.as_bytes()).unwrap();
+    format!("sha256:{:x}", Sha256::digest(rewritten.as_bytes()))
+}
+
+fn test_authority_head(fixture: &Fixture) -> String {
+    let state = fs::read(fixture.authority_root().join("routine-authority.state")).unwrap();
+    format!("sha256:{:x}", Sha256::digest(state))
+}
+
+fn rewrite_checkpoint_as_reconciled(path: &std::path::Path, authenticated_head: &str) {
+    let mut checkpoint: Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
+    let generation = checkpoint["generation"].as_u64().unwrap() + 1;
+    let continuation = checkpoint["continuation"].as_str().unwrap();
+    let mut event_id = Sha256::new();
+    event_id.update(b"routine-terminal-event-v1\0");
+    event_id.update(continuation.as_bytes());
+    event_id.update(b"\0");
+    event_id.update(authenticated_head.as_bytes());
+    checkpoint["generation"] = Value::from(generation);
+    checkpoint["authenticated_ledger_head"] = Value::from(authenticated_head);
+    checkpoint["state"] = Value::from("reconciled");
+    checkpoint["terminal_outcome"] = Value::Null;
+    checkpoint["event_id"] = Value::from(format!("routine-terminal-{:x}", event_id.finalize()));
+    checkpoint["event_sequence"] = Value::from(generation);
+    checkpoint["event_status"] = Value::from("blocked");
+    checkpoint["event_transition"] = Value::from("interrupted");
+    fs::write(path, serde_json::to_vec(&checkpoint).unwrap()).unwrap();
 }
 
 #[test]

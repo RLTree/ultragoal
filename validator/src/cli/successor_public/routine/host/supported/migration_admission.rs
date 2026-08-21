@@ -384,10 +384,15 @@ fn authenticate_legacy_checkpoint(
     if authenticate(false).is_ok() {
         return Ok(());
     }
-    if !checkpoint.is_terminal() || checkpoint.terminal_outcome().is_none() {
+    if !may_authenticate_stale_legacy_checkpoint(checkpoint) {
         return Err(HostFailure::Invalid);
     }
     authenticate(true)
+}
+
+fn may_authenticate_stale_legacy_checkpoint(checkpoint: &ContinuationCheckpoint) -> bool {
+    (checkpoint.state() == "reconciled" && checkpoint.terminal_outcome().is_none())
+        || (checkpoint.is_terminal() && checkpoint.terminal_outcome().is_some())
 }
 
 fn validate_terminal_event_history(
@@ -812,6 +817,36 @@ mod tests {
             classify_history_relation(&singleton, &[singleton.clone(), singleton.clone()]).unwrap(),
             HistoryRelation::ConflictingHistories
         );
+    }
+
+    #[test]
+    fn stale_legacy_authentication_is_closed_to_terminal_or_reconciled_history() {
+        let terminal = checkpoint(1, "routine-cont-sha256:terminal", &[]);
+        assert!(may_authenticate_stale_legacy_checkpoint(&terminal));
+
+        let mut reconciled = serde_json::to_value(&terminal).unwrap();
+        reconciled["state"] = serde_json::json!("reconciled");
+        reconciled["terminal_outcome"] = serde_json::Value::Null;
+        let reconciled: ContinuationCheckpoint = serde_json::from_value(reconciled).unwrap();
+        assert!(may_authenticate_stale_legacy_checkpoint(&reconciled));
+
+        for (state, outcome) in [
+            ("reserved", None),
+            ("ambiguous", Some("ambiguous")),
+            ("reconciled", Some("complete")),
+            ("terminal-event-joined", None),
+        ] {
+            let mut rejected = serde_json::to_value(&terminal).unwrap();
+            rejected["state"] = serde_json::json!(state);
+            rejected["terminal_outcome"] = outcome
+                .map(serde_json::Value::from)
+                .unwrap_or(serde_json::Value::Null);
+            let rejected: ContinuationCheckpoint = serde_json::from_value(rejected).unwrap();
+            assert!(
+                !may_authenticate_stale_legacy_checkpoint(&rejected),
+                "unexpected stale authentication allowance for {state}/{outcome:?}"
+            );
+        }
     }
 
     #[test]
