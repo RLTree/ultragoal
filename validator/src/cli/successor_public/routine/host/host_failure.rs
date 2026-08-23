@@ -28,7 +28,15 @@ pub(crate) struct RoutineStateMigrationAdmission {
     pub(crate) event_journal_count: usize,
     pub(crate) history_relation: &'static str,
     pub(crate) next_action: &'static str,
+    pub(crate) reserved_recovery: Option<RoutineReservedRecoveryAdmission>,
     pub(crate) quarantine_plan: Option<RoutineStateQuarantinePlan>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineReservedRecoveryAdmission {
+    pub(crate) status: &'static str,
+    pub(crate) owner_observation: &'static str,
+    pub(crate) effect_evidence: &'static str,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -113,14 +121,15 @@ impl HostEventStore {
 impl HostState {
     pub(crate) fn assess_migration_admission(
         home: &Path,
+        binding: CheckpointBinding<'_>,
     ) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
         #[cfg(target_vendor = "apple")]
         {
-            supported::assess_migration_admission(home)
+            supported::assess_migration_admission(home, binding)
         }
         #[cfg(not(target_vendor = "apple"))]
         {
-            let _ = home;
+            let _ = (home, binding);
             Err(HostFailure::Unsupported)
         }
     }

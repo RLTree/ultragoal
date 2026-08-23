@@ -72,7 +72,7 @@ impl FileLedger {
     }
 }
 
-fn admissible_target(
+pub(super) fn admissible_target(
     target: &Path,
     state: &str,
     terminal_outcome: Option<&str>,
@@ -154,7 +154,7 @@ mod tests {
     }
 }
 
-fn valid_continuation(value: &str) -> bool {
+pub(super) fn valid_continuation(value: &str) -> bool {
     value.strip_prefix("routine-cont-").is_some_and(valid)
 }
 

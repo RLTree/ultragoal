@@ -55,6 +55,34 @@ pub(super) fn authenticate_public_checkpoint(
     )
 }
 
+pub(super) fn assess_reserved_recovery(
+    custody: RoutineCustodyCapability,
+    target: &Path,
+    context_id: &str,
+    candidate_id: &str,
+    plan_id: &str,
+    snapshot_id: &str,
+    continuation: &str,
+    recovery_marker: &str,
+    predecessor_continuations: &[String],
+    attempt_grant: &str,
+    authenticated_ledger_head: &str,
+) -> Result<super::RoutineReservedRecoveryAssessment, RoutineError> {
+    DurableCustody::assess_reserved_recovery(
+        &custody,
+        target,
+        context_id,
+        candidate_id,
+        plan_id,
+        snapshot_id,
+        continuation,
+        recovery_marker,
+        predecessor_continuations,
+        attempt_grant,
+        authenticated_ledger_head,
+    )
+}
+
 pub(super) fn observe_terminal_settlement(
     custody: RoutineCustodyCapability,
     binding: &AuthorityBinding,

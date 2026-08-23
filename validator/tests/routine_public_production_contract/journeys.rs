@@ -406,7 +406,7 @@ fn format_absent_canonical_state_is_a_zero_write_migration_candidate() {
 
     assert_eq!(output.status.code(), Some(1), "{output:?}");
     let value = Fixture::value(&output);
-    assert_eq!(value["schema_version"], "RoutineStateMigrationAdmission-v2");
+    assert_eq!(value["schema_version"], "RoutineStateMigrationAdmission-v3");
     assert_eq!(value["status"], "migration_candidate_requires_approval");
     assert_eq!(value["format_status"], "absent_legacy");
     assert_eq!(value["legacy_singleton_count"], 0);
@@ -1651,12 +1651,22 @@ fn stale_reserved_binding_refuses_after_a_distinct_binding_advances_the_ledger()
         .as_str()
         .unwrap()
         .to_owned();
+    let reserved_checkpoint = fixture.checkpoint_path();
 
     let control = fixture.root.join("src/ledger-advance.rs");
     fs::write(&control, b"pub const LEDGER_ADVANCE: u8 = 1;\n").unwrap();
-    let advanced = fixture.run();
-    assert_eq!(advanced.status.code(), Some(0), "{advanced:?}");
-    assert_eq!(Fixture::value(&advanced)["status"], "executed");
+    let advanced = fixture.run_args(&[
+        "--json",
+        "check",
+        "routine",
+        "--interrupt-after",
+        "reservation",
+    ]);
+    assert_eq!(advanced.status.code(), Some(1), "{advanced:?}");
+    let advanced_value = Fixture::value(&advanced);
+    assert_eq!(advanced_value["status"], "interrupted-reservation");
+    assert_eq!(advanced_value["effect"], "none");
+    assert_ne!(advanced_value["continuation"], continuation);
 
     fs::remove_file(&control).unwrap();
     let stale = fixture.run_args(&[
@@ -1668,6 +1678,110 @@ fn stale_reserved_binding_refuses_after_a_distinct_binding_advances_the_ledger()
     ]);
     assert_eq!(stale.status.code(), Some(3), "{stale:?}");
     assert!(stale.stdout.is_empty(), "{stale:?}");
+
+    let singleton = fixture
+        .state_root()
+        .join("adapter/routine-continuation.json");
+    fs::copy(&reserved_checkpoint, &singleton).unwrap();
+    fs::remove_file(fixture.state_root().join("routine-state-format")).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+
+    for command in [&["--json", "diagnose"][..], &["--json", "next"][..]] {
+        let output = fixture.run_args(command);
+        assert_eq!(output.status.code(), Some(1), "{output:?}");
+        let value = Fixture::value(&output);
+        assert_eq!(value["schema_version"], "RoutineStateMigrationAdmission-v3");
+        assert_eq!(
+            value["status"], "stale_reserved_abandoned_candidate_preserve_and_hold",
+            "{output:?}"
+        );
+        assert_eq!(value["history_relation"], "redundant_equivalent");
+        assert_eq!(value["migration_effect"], "none");
+        assert_eq!(value["migration_authorized"], false);
+        assert!(value["quarantine_plan"].is_null());
+        let assessment = &value["reserved_recovery"];
+        assert_eq!(
+            assessment["schema_version"],
+            "RoutineReservedRecoveryAssessment-v1"
+        );
+        assert_eq!(
+            assessment["checkpoint_relation"],
+            "noncurrent_head_matching_private_attempt"
+        );
+        assert_eq!(
+            assessment["checkpoint_head_evidence"],
+            "noncurrent_value_only_historical_head_unproven"
+        );
+        assert_eq!(assessment["private_attempt_state"], "reserved");
+        assert_eq!(assessment["effect_evidence"], "pristine_no_effect_observed");
+        assert_eq!(
+            assessment["owner_observation"],
+            "owner_process_not_observed"
+        );
+        assert_eq!(assessment["recovery_effect"], "none");
+        assert_eq!(assessment["recovery_authorized"], false);
+        assert_eq!(assessment["claim_effect"], "none");
+        assert_eq!(tree(&fixture.root), before_root);
+        assert_eq!(tree(&fixture.home), before_home);
+    }
+
+    let unproven_head = format!("sha256:{}", "c".repeat(64));
+    let mut relabelled: Value =
+        serde_json::from_slice(&fs::read(&reserved_checkpoint).unwrap()).unwrap();
+    let mut event_id = Sha256::new();
+    event_id.update(b"routine-terminal-event-v1\0");
+    event_id.update(continuation.as_bytes());
+    event_id.update(b"\0");
+    event_id.update(unproven_head.as_bytes());
+    relabelled["authenticated_ledger_head"] = Value::from(unproven_head);
+    relabelled["event_id"] = Value::from(format!("routine-terminal-{:x}", event_id.finalize()));
+    let relabelled = serde_json::to_vec(&relabelled).unwrap();
+    fs::write(&reserved_checkpoint, &relabelled).unwrap();
+    fs::write(&singleton, &relabelled).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    for command in [&["--json", "diagnose"][..], &["--json", "next"][..]] {
+        let output = fixture.run_args(command);
+        assert_eq!(output.status.code(), Some(1), "{output:?}");
+        let value = Fixture::value(&output);
+        assert_eq!(
+            value["status"],
+            "stale_reserved_abandoned_candidate_preserve_and_hold"
+        );
+        assert_eq!(
+            value["reserved_recovery"]["checkpoint_head_evidence"],
+            "noncurrent_value_only_historical_head_unproven"
+        );
+        assert_eq!(value["reserved_recovery"]["recovery_effect"], "none");
+        assert_eq!(value["reserved_recovery"]["recovery_authorized"], false);
+        assert_eq!(tree(&fixture.root), before_root);
+        assert_eq!(tree(&fixture.home), before_home);
+    }
+
+    let mut semantically_equal = fs::read(&singleton).unwrap();
+    semantically_equal.extend_from_slice(b" \n");
+    fs::write(&singleton, semantically_equal).unwrap();
+    let before_root = tree(&fixture.root);
+    let before_home = tree(&fixture.home);
+    for command in [&["--json", "diagnose"][..], &["--json", "next"][..]] {
+        let output = fixture.run_args(command);
+        assert_eq!(output.status.code(), Some(1), "{output:?}");
+        let value = Fixture::value(&output);
+        assert_eq!(value["schema_version"], "RoutineStateMigrationAdmission-v3");
+        assert_eq!(
+            value["status"],
+            "history_relation_established_preserve_and_hold"
+        );
+        assert_eq!(value["history_relation"], "redundant_equivalent");
+        assert!(value["reserved_recovery"].is_null());
+        assert_eq!(value["migration_effect"], "none");
+        assert_eq!(value["migration_authorized"], false);
+        assert_eq!(value["quarantine_plan"]["migration_effect"], "none");
+        assert_eq!(value["quarantine_plan"]["migration_authorized"], false);
+        assert_eq!(tree(&fixture.root), before_root);
+        assert_eq!(tree(&fixture.home), before_home);
+    }
     fixture.teardown_after_assertions();
 }
 

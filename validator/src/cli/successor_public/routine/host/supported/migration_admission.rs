@@ -1,6 +1,6 @@
-use super::super::{RoutineStateMigrationAdmission, RoutineStateQuarantinePlan};
+use super::super::{CheckpointBinding, RoutineStateMigrationAdmission, RoutineStateQuarantinePlan};
 use super::*;
-use crate::routine_work::RoutineCustodyCapability;
+use crate::routine_work::{RoutineCustodyCapability, RoutineReservedRecoveryAssessment};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -22,6 +22,7 @@ struct InventoryEntry {
 
 pub(crate) fn assess_migration_admission(
     home: &Path,
+    binding: CheckpointBinding<'_>,
 ) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
     let home = host_state::open_home(home)?;
     let codex = match home.open_child(STATE_COMPONENTS[0]) {
@@ -48,7 +49,7 @@ pub(crate) fn assess_migration_admission(
     if state.stat(STATE_FORMAT_NAME)?.is_some() {
         return assess_versioned(home, state).map(Some);
     }
-    assess_format_absent(&harness, state).map(Some)
+    assess_format_absent(&harness, state, binding).map(Some)
 }
 
 fn assess_versioned(
@@ -73,6 +74,7 @@ fn assess_versioned(
             event_journal_count: 0,
             history_relation: "not_applicable",
             next_action: "preserve the store and use a source revision with an explicit reader for this format",
+            reserved_recovery: None,
             quarantine_plan: None,
         });
     }
@@ -87,6 +89,7 @@ fn assess_versioned(
                 event_journal_count: counts.2,
                 history_relation: "already_current",
                 next_action: "no migration is required",
+                reserved_recovery: None,
                 quarantine_plan: None,
             })
         }
@@ -98,6 +101,7 @@ fn assess_versioned(
 fn assess_format_absent(
     owner_parent: &AnchoredDirectory,
     state: AnchoredDirectory,
+    binding: CheckpointBinding<'_>,
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     if state.entry_names()?
         != [AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY]
@@ -141,7 +145,7 @@ fn assess_format_absent(
     let before = inventory(owner_parent, &state, &authority, &adapter, &launch)?;
     let (singleton_count, continuation_count, event_count) = counts(&adapter)?;
     if singleton_count == 1 && continuation_count > 0 {
-        let relation = match reconcile_mixed_history(&authority, &adapter, &launch) {
+        let relation = match reconcile_mixed_history(&authority, &adapter, &launch, binding) {
             Ok(value) => value,
             Err(_) => return Ok(unsafe_hold("absent")),
         };
@@ -173,6 +177,7 @@ fn assess_format_absent(
         event_journal_count: event_count,
         history_relation: "single_history_only",
         next_action: "independently review the deterministic reversible quarantine plan before any host write",
+        reserved_recovery: None,
         quarantine_plan: Some(quarantine_plan),
     })
 }
@@ -281,6 +286,11 @@ enum HistoryRelation {
     ConflictingHistories,
 }
 
+struct ReconciledHistory {
+    relation: HistoryRelation,
+    reserved: Option<RoutineReservedRecoveryAssessment>,
+}
+
 impl HistoryRelation {
     const fn as_str(self) -> &'static str {
         match self {
@@ -296,15 +306,59 @@ fn reconcile_mixed_history(
     authority: &AnchoredDirectory,
     adapter: &AnchoredDirectory,
     launch: &AnchoredDirectory,
-) -> Result<HistoryRelation, HostFailure> {
+    binding: CheckpointBinding<'_>,
+) -> Result<ReconciledHistory, HostFailure> {
     validate_legacy(adapter).map_err(|_| HostFailure::Invalid)?;
     let checkpoints = continuity::all_checkpoints(adapter)?;
     let singleton = checkpoints.first().ok_or(HostFailure::Invalid)?;
+    let mut reserved = None::<(&str, RoutineReservedRecoveryAssessment)>;
     for checkpoint in &checkpoints {
-        authenticate_legacy_checkpoint(authority, launch, checkpoint)?;
+        if let Some(assessment) = authenticate_legacy_checkpoint(authority, launch, checkpoint)?
+            && reserved_matches_relation_and_diagnosis(singleton, checkpoint, binding)
+        {
+            match reserved {
+                Some((grant, current))
+                    if grant != checkpoint.attempt_grant() || current != assessment =>
+                {
+                    return Err(HostFailure::Invalid);
+                }
+                Some(_) => {}
+                None => reserved = Some((checkpoint.attempt_grant(), assessment)),
+            }
+        }
     }
     validate_terminal_event_history(adapter, &checkpoints)?;
-    classify_history_relation(singleton, &checkpoints[1..])
+    let relation = classify_history_relation(singleton, &checkpoints[1..])?;
+    Ok(ReconciledHistory {
+        relation,
+        // A stale `Reserved` assessment is projected only when the singleton
+        // and canonical records are byte-equivalent duplicates. Ordered or
+        // conflicting histories retain their existing relation-specific HOLD
+        // instead of letting an older reservation obscure newer evidence.
+        reserved: (relation == HistoryRelation::RedundantEquivalent)
+            .then(|| reserved.map(|(_, assessment)| assessment))
+            .flatten(),
+    })
+}
+
+fn reserved_matches_relation_and_diagnosis(
+    singleton: &ContinuationCheckpoint,
+    checkpoint: &ContinuationCheckpoint,
+    binding: CheckpointBinding<'_>,
+) -> bool {
+    same_binding(singleton, checkpoint) && checkpoint_matches_diagnosis(checkpoint, binding)
+}
+
+fn checkpoint_matches_diagnosis(
+    checkpoint: &ContinuationCheckpoint,
+    binding: CheckpointBinding<'_>,
+) -> bool {
+    // The private record authenticates the historical context/candidate/plan/
+    // snapshot fields. Migration diagnosis must additionally confine that
+    // historical attempt to the repository the caller is diagnosing; current
+    // identities are expected to drift after a later binding advanced the
+    // ledger.
+    checkpoint.target() == binding.target().to_str().unwrap_or_default()
 }
 
 fn classify_history_relation(
@@ -357,7 +411,7 @@ fn authenticate_legacy_checkpoint(
     authority: &AnchoredDirectory,
     launch: &AnchoredDirectory,
     checkpoint: &ContinuationCheckpoint,
-) -> Result<(), HostFailure> {
+) -> Result<Option<RoutineReservedRecoveryAssessment>, HostFailure> {
     let authenticate = |allow_stale_head| {
         crate::routine_work::authenticate_public_routine_checkpoint(
             RoutineCustodyCapability::issue_from_host(
@@ -382,12 +436,31 @@ fn authenticate_legacy_checkpoint(
         .map_err(|_| HostFailure::Invalid)
     };
     if authenticate(false).is_ok() {
-        return Ok(());
+        return Ok(None);
+    }
+    if checkpoint.state() == "reserved" && checkpoint.terminal_outcome().is_none() {
+        return crate::routine_work::assess_public_routine_reserved_recovery(
+            RoutineCustodyCapability::issue_from_host(
+                super::super::HostCustodyIssuance::from_legacy_directories(authority, launch)?,
+            ),
+            Path::new(checkpoint.target()),
+            checkpoint.context_id(),
+            checkpoint.candidate_id(),
+            checkpoint.plan_id(),
+            checkpoint.snapshot_id(),
+            checkpoint.continuation(),
+            checkpoint.recovery_marker(),
+            checkpoint.predecessor_continuations(),
+            checkpoint.attempt_grant(),
+            checkpoint.ledger_head(),
+        )
+        .map(Some)
+        .map_err(|_| HostFailure::Invalid);
     }
     if !may_authenticate_stale_legacy_checkpoint(checkpoint) {
         return Err(HostFailure::Invalid);
     }
-    authenticate(true)
+    authenticate(true).map(|()| None)
 }
 
 fn may_authenticate_stale_legacy_checkpoint(checkpoint: &ContinuationCheckpoint) -> bool {
@@ -653,9 +726,27 @@ fn reconciled_hold(
     singleton: usize,
     canonical: usize,
     events: usize,
-    relation: HistoryRelation,
+    history: ReconciledHistory,
     inventory: &BTreeMap<String, InventoryEntry>,
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
+    let relation = history.relation;
+    if relation == HistoryRelation::RedundantEquivalent
+        && raw_duplicate_history(inventory)
+        && let Some(assessment) = history.reserved
+    {
+        let (reserved_recovery, next_action) = reserved_recovery_admission::admission(assessment);
+        return Ok(RoutineStateMigrationAdmission {
+            status: reserved_recovery.status,
+            format_status: "absent_legacy",
+            legacy_singleton_count: singleton,
+            canonical_continuation_count: canonical,
+            event_journal_count: events,
+            history_relation: relation.as_str(),
+            next_action,
+            reserved_recovery: Some(reserved_recovery),
+            quarantine_plan: None,
+        });
+    }
     let quarantine_plan = match relation {
         HistoryRelation::RedundantEquivalent
         | HistoryRelation::CanonicalStrictlySupersedes
@@ -683,8 +774,32 @@ fn reconciled_hold(
         } else {
             "preserve all bytes; resolve the conflicting authenticated histories without proposing a migration"
         },
+        reserved_recovery: None,
         quarantine_plan,
     })
+}
+
+fn raw_duplicate_history(inventory: &BTreeMap<String, InventoryEntry>) -> bool {
+    let Some(singleton) = inventory
+        .get(&format!("adapter/{CONTINUITY_CHECKPOINT_NAME}"))
+        .and_then(|entry| entry.content_sha256)
+    else {
+        return false;
+    };
+    let canonical = inventory
+        .iter()
+        .filter_map(|(path, entry)| {
+            (path.starts_with("adapter/continuations/routine-continuation-")
+                && path.ends_with(".json"))
+            .then_some(entry.content_sha256)
+            .flatten()
+        })
+        .collect::<Vec<_>>();
+    canonical
+        .iter()
+        .filter(|candidate| **candidate == singleton)
+        .count()
+        == 1
 }
 
 fn stale_writer_hold(format_status: &'static str) -> RoutineStateMigrationAdmission {
@@ -696,6 +811,7 @@ fn stale_writer_hold(format_status: &'static str) -> RoutineStateMigrationAdmiss
         event_journal_count: 0,
         history_relation: "stale_writer_retry",
         next_action: "preserve all bytes and retry diagnosis after the current writer releases the store lock",
+        reserved_recovery: None,
         quarantine_plan: None,
     }
 }
@@ -709,6 +825,7 @@ fn unsafe_hold(format_status: &'static str) -> RoutineStateMigrationAdmission {
         event_journal_count: 0,
         history_relation: "unsafe_or_unauthenticated",
         next_action: "preserve all bytes and inspect the unsupported or unsafe entry through a confined reader",
+        reserved_recovery: None,
         quarantine_plan: None,
     }
 }
@@ -776,6 +893,103 @@ mod tests {
             ),
             &prior
         ));
+    }
+
+    #[test]
+    fn diagnosis_binding_rejects_target_relabel_but_allows_historical_ids() {
+        let mut checkpoint = checkpoint(1, "routine-cont-sha256:binding", &[]);
+        let binding = CheckpointBinding::new(
+            Path::new("/private/tmp/target"),
+            "sha256:context",
+            "sha256:candidate",
+            "sha256:plan",
+            "sha256:snapshot",
+            "sha256:execution",
+        );
+        assert!(checkpoint_matches_diagnosis(&checkpoint, binding));
+
+        let mut relabelled = serde_json::to_value(&checkpoint).unwrap();
+        relabelled["target"] = serde_json::Value::from("/private/tmp/relabelled");
+        checkpoint = serde_json::from_value(relabelled).unwrap();
+        assert!(!checkpoint_matches_diagnosis(&checkpoint, binding));
+        let mut historical = serde_json::to_value(&checkpoint).unwrap();
+        historical["target"] = serde_json::Value::from("/private/tmp/target");
+        historical["context_id"] = serde_json::Value::from("sha256:historical-context");
+        checkpoint = serde_json::from_value(historical).unwrap();
+        assert!(checkpoint_matches_diagnosis(&checkpoint, binding));
+    }
+
+    #[test]
+    fn reserved_projection_cannot_borrow_an_unrelated_duplicate_relation() {
+        let singleton = checkpoint(1, "routine-cont-sha256:singleton", &[]);
+        let mut unrelated =
+            serde_json::to_value(checkpoint(1, "routine-cont-sha256:unrelated", &[])).unwrap();
+        unrelated["target"] = serde_json::Value::from("/private/tmp/other-target");
+        unrelated["context_id"] = serde_json::Value::from("sha256:other-context");
+        let unrelated: ContinuationCheckpoint = serde_json::from_value(unrelated).unwrap();
+        let other_binding = CheckpointBinding::new(
+            Path::new("/private/tmp/other-target"),
+            "sha256:other-context",
+            "sha256:candidate",
+            "sha256:plan",
+            "sha256:snapshot",
+            "sha256:execution",
+        );
+
+        assert!(checkpoint_matches_diagnosis(&unrelated, other_binding));
+        assert!(!reserved_matches_relation_and_diagnosis(
+            &singleton,
+            &unrelated,
+            other_binding,
+        ));
+    }
+
+    #[test]
+    fn reserved_projection_requires_one_raw_identical_duplicate() {
+        let identity = Identity {
+            device: 1,
+            inode: 2,
+            owner: 501,
+            mode: 0o100600,
+            links: 1,
+        };
+        let digest: [u8; 32] = Sha256::digest(b"same raw checkpoint").into();
+        let mut inventory = BTreeMap::from([
+            (
+                format!("adapter/{CONTINUITY_CHECKPOINT_NAME}"),
+                InventoryEntry {
+                    identity,
+                    content_sha256: Some(digest),
+                },
+            ),
+            (
+                "adapter/continuations/routine-continuation-a.json".to_owned(),
+                InventoryEntry {
+                    identity,
+                    content_sha256: Some(digest),
+                },
+            ),
+        ]);
+        assert!(raw_duplicate_history(&inventory));
+
+        inventory
+            .get_mut("adapter/continuations/routine-continuation-a.json")
+            .unwrap()
+            .content_sha256 = Some(Sha256::digest(b"semantic match, raw difference").into());
+        assert!(!raw_duplicate_history(&inventory));
+
+        inventory
+            .get_mut("adapter/continuations/routine-continuation-a.json")
+            .unwrap()
+            .content_sha256 = Some(digest);
+        inventory.insert(
+            "adapter/continuations/routine-continuation-b.json".to_owned(),
+            InventoryEntry {
+                identity,
+                content_sha256: Some(digest),
+            },
+        );
+        assert!(!raw_duplicate_history(&inventory));
     }
 
     #[test]
@@ -907,10 +1121,23 @@ mod tests {
         let rewritten = quarantine_plan(&observed, "redundant_equivalent").unwrap();
         assert_ne!(first.plan_id, rewritten.plan_id);
 
-        let held =
-            reconciled_hold(1, 1, 0, HistoryRelation::ConflictingHistories, &observed).unwrap();
+        let held = reconciled_hold(
+            1,
+            1,
+            0,
+            ReconciledHistory {
+                relation: HistoryRelation::ConflictingHistories,
+                reserved: Some(RoutineReservedRecoveryAssessment {
+                    owner: crate::routine_work::ReservedRecoveryOwnerObservation::NotObserved,
+                    effect: crate::routine_work::ReservedRecoveryEffectEvidence::PristineNoEffect,
+                }),
+            },
+            &observed,
+        )
+        .unwrap();
         assert!(held.quarantine_plan.is_none());
         assert_eq!(held.history_relation, "conflicting_histories_hold");
+        assert!(held.reserved_recovery.is_none());
     }
 
     #[test]

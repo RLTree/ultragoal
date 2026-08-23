@@ -30,6 +30,8 @@ mod output_journal_validation;
 mod reservation_lifecycle;
 #[path = "reserved_reconciliation.rs"]
 pub(super) mod reserved_reconciliation;
+#[path = "reserved_recovery_assessment.rs"]
+mod reserved_recovery_assessment;
 #[path = "settle.rs"]
 mod settle;
 #[path = "settled_observation.rs"]

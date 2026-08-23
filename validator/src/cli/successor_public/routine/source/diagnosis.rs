@@ -101,20 +101,6 @@ pub(crate) fn current_checkpoint(
     home: &Path,
     binding: &RoutineDiagnosisBinding,
 ) -> Result<RoutineCheckpointRead, RoutineCheckpointFailure> {
-    let state = match HostState::open_existing_for_target(home, binding.target()) {
-        Ok(state) => state,
-        Err(error @ (host::HostFailure::Unavailable | host::HostFailure::Invalid)) => {
-            return match HostState::assess_migration_admission(home) {
-                Ok(Some(admission)) => Ok(RoutineCheckpointRead::Migration(admission)),
-                Ok(None) if error == host::HostFailure::Unavailable => {
-                    Ok(RoutineCheckpointRead::NoRecord)
-                }
-                Ok(None) => Err(RoutineCheckpointFailure::Host(error)),
-                Err(migration_error) => Err(RoutineCheckpointFailure::Host(migration_error)),
-            };
-        }
-        Err(error) => return Err(RoutineCheckpointFailure::Host(error)),
-    };
     let execution_id = prepare(
         binding.context(),
         binding.manifest(),
@@ -125,18 +111,34 @@ pub(crate) fn current_checkpoint(
     .map_err(|_| RoutineCheckpointFailure::Projection)?
     .checkpoint_execution_id()
     .to_owned();
+    let checkpoint_binding = host::CheckpointBinding::new(
+        binding.target(),
+        binding.context().context_id(),
+        binding.plan().binding().candidate_id(),
+        binding.plan().plan_id(),
+        binding.snapshot().snapshot_id(),
+        &execution_id,
+    );
+    let state = match HostState::open_existing_for_target(home, binding.target()) {
+        Ok(state) => state,
+        Err(error @ (host::HostFailure::Unavailable | host::HostFailure::Invalid)) => {
+            let migration = HostState::assess_migration_admission(home, checkpoint_binding);
+            if binding.context().revalidate().is_err() {
+                return Err(RoutineCheckpointFailure::StaleContext);
+            }
+            return match migration {
+                Ok(Some(admission)) => Ok(RoutineCheckpointRead::Migration(admission)),
+                Ok(None) if error == host::HostFailure::Unavailable => {
+                    Ok(RoutineCheckpointRead::NoRecord)
+                }
+                Ok(None) => Err(RoutineCheckpointFailure::Host(error)),
+                Err(migration_error) => Err(RoutineCheckpointFailure::Host(migration_error)),
+            };
+        }
+        Err(error) => return Err(RoutineCheckpointFailure::Host(error)),
+    };
     let checkpoint = state
-        .exact_checkpoint_scoped(
-            host::CheckpointBinding::new(
-                binding.target(),
-                binding.context().context_id(),
-                binding.plan().binding().candidate_id(),
-                binding.plan().plan_id(),
-                binding.snapshot().snapshot_id(),
-                &execution_id,
-            ),
-            None,
-        )
+        .exact_checkpoint_scoped(checkpoint_binding, None)
         .map_err(RoutineCheckpointFailure::Host)?;
     if let Some(checkpoint) = checkpoint.as_ref() {
         state

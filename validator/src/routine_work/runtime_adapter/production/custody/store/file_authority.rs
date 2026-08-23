@@ -17,6 +17,59 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Durable
     child: RefCell<Option<ChildLease>>,
 }
 impl DurableCustody {
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn assess_reserved_recovery(
+        custody: &RoutineCustodyCapability,
+        target: &Path,
+        context_id: &str,
+        candidate_id: &str,
+        plan_id: &str,
+        snapshot_id: &str,
+        continuation: &str,
+        recovery_marker: &str,
+        predecessor_continuations: &[String],
+        attempt_grant: &str,
+        authenticated_ledger_head: &str,
+    ) -> Result<
+        crate::routine_work::runtime_adapter::production::RoutineReservedRecoveryAssessment,
+        RoutineError,
+    > {
+        let root = custody.authority_root();
+        #[cfg(target_vendor = "apple")]
+        {
+            let (inner, mut head) = supported::authentication::FileLedger::open_existing(root)?;
+            inner.assess_reserved_recovery(
+                &mut head,
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                predecessor_continuations,
+                attempt_grant,
+                authenticated_ledger_head,
+            )
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (
+                custody,
+                target,
+                context_id,
+                candidate_id,
+                plan_id,
+                snapshot_id,
+                continuation,
+                recovery_marker,
+                predecessor_continuations,
+                attempt_grant,
+                authenticated_ledger_head,
+            );
+            Err(error("routine-production-authority-host-unsupported"))
+        }
+    }
+
     pub(in crate::routine_work::runtime_adapter::production::custody) fn observe_terminal_settlement(
         custody: &RoutineCustodyCapability,
         binding: &AuthorityBinding,

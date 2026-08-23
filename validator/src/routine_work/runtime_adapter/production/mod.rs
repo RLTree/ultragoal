@@ -50,6 +50,25 @@ pub(crate) enum PublicRoutineControl {
     InterruptAfterReservation,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ReservedRecoveryOwnerObservation {
+    Active,
+    NotObserved,
+    Unavailable,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ReservedRecoveryEffectEvidence {
+    PristineNoEffect,
+    EffectOrAmbiguityPresent,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineReservedRecoveryAssessment {
+    pub(crate) owner: ReservedRecoveryOwnerObservation,
+    pub(crate) effect: ReservedRecoveryEffectEvidence,
+}
+
 type ReservationPublicationCallback<'a> = dyn for<'publication> FnMut(&'publication RoutineReservationPublication) -> Result<(), RoutineError>
     + 'a;
 
@@ -364,5 +383,36 @@ pub(crate) fn authenticate_public_routine_checkpoint(
         state,
         terminal_outcome,
         allow_stale_head,
+    )
+}
+
+/// Classifies one stale public `Reserved` checkpoint against the current
+/// private attempt without admitting it as settled history or authorizing a
+/// recovery transition.
+pub(crate) fn assess_public_routine_reserved_recovery(
+    custody: RoutineCustodyCapability,
+    target: &Path,
+    context_id: &str,
+    candidate_id: &str,
+    plan_id: &str,
+    snapshot_id: &str,
+    continuation: &str,
+    recovery_marker: &str,
+    predecessor_continuations: &[String],
+    attempt_grant: &str,
+    authenticated_ledger_head: &str,
+) -> Result<RoutineReservedRecoveryAssessment, RoutineError> {
+    custody::assess_reserved_recovery(
+        custody,
+        target,
+        context_id,
+        candidate_id,
+        plan_id,
+        snapshot_id,
+        continuation,
+        recovery_marker,
+        predecessor_continuations,
+        attempt_grant,
+        authenticated_ledger_head,
     )
 }

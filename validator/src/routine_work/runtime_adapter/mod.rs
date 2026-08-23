@@ -41,10 +41,11 @@ pub(crate) use mediator::{
 };
 pub(in crate::routine_work) use production::{LaunchCleanupEvidence, ObservedLaunchCleanup};
 pub(crate) use production::{
-    ProductionExecutionControl, PublicRoutineControl, RoutineCustodyCapability,
-    RoutineReservationPublication, authenticate_public_routine_checkpoint,
-    mediate_public_routine_execution_with_control, observe_public_routine_terminal_settlement,
-    reconcile_public_routine_reservation,
+    ProductionExecutionControl, PublicRoutineControl, ReservedRecoveryEffectEvidence,
+    ReservedRecoveryOwnerObservation, RoutineCustodyCapability, RoutineReservationPublication,
+    RoutineReservedRecoveryAssessment, assess_public_routine_reserved_recovery,
+    authenticate_public_routine_checkpoint, mediate_public_routine_execution_with_control,
+    observe_public_routine_terminal_settlement, reconcile_public_routine_reservation,
 };
 #[cfg(test)]
 pub(crate) use production::{

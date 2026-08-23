@@ -96,7 +96,7 @@ pub(super) fn migration_admission(
     admission: super::super::routine::RoutineStateMigrationAdmission,
 ) -> RuntimeOutcome {
     let machine = serde_json::to_vec(&json!({
-        "schema_version": "RoutineStateMigrationAdmission-v2",
+        "schema_version": "RoutineStateMigrationAdmission-v3",
         "status": admission.status,
         "format_status": admission.format_status,
         "legacy_singleton_count": admission.legacy_singleton_count,
@@ -105,6 +105,18 @@ pub(super) fn migration_admission(
         "history_relation": admission.history_relation,
         "migration_effect": "none",
         "migration_authorized": false,
+        "reserved_recovery": admission.reserved_recovery.as_ref().map(|assessment| json!({
+            "schema_version": "RoutineReservedRecoveryAssessment-v1",
+            "status": assessment.status,
+            "checkpoint_relation": "noncurrent_head_matching_private_attempt",
+            "checkpoint_head_evidence": "noncurrent_value_only_historical_head_unproven",
+            "private_attempt_state": "reserved",
+            "effect_evidence": assessment.effect_evidence,
+            "owner_observation": assessment.owner_observation,
+            "recovery_effect": "none",
+            "recovery_authorized": false,
+            "claim_effect": "none"
+        })),
         "quarantine_plan": admission.quarantine_plan.as_ref().map(|plan| json!({
             "schema_version": "RoutineStateQuarantinePlan-v1",
             "plan_id": plan.plan_id,
@@ -126,7 +138,7 @@ pub(super) fn migration_admission(
         })),
         "next_action": admission.next_action,
         "claim_effect": "none",
-        "support_limit": "read-only legacy HostState admission and quarantine planning; no migration apply, quarantine effect, recovery, installed journey, or product claim"
+        "support_limit": "read-only legacy HostState admission and quarantine planning; a non-current public head is not historical-head proof; no migration apply, quarantine effect, recovery, installed journey, or product claim"
     }));
     if read_context.revalidate().is_err() {
         return super::stale_context();

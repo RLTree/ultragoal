@@ -13,6 +13,8 @@ mod directory_entries;
 mod host_state;
 #[path = "migration_admission.rs"]
 mod migration_admission;
+#[path = "reserved_recovery_admission.rs"]
+mod reserved_recovery_admission;
 #[path = "state_components.rs"]
 mod state_components;
 #[path = "validate_name.rs"]

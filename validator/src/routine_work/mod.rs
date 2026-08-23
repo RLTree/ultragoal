@@ -65,9 +65,11 @@ pub(crate) use catalog::{
 };
 pub(crate) use runtime_adapter::{
     PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, ProductionExecutionControl,
-    PublicRoutineControl, RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
+    PublicRoutineControl, ReservedRecoveryEffectEvidence, ReservedRecoveryOwnerObservation,
+    RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReservationPublication, RoutineTerminalOutcome, authenticate_public_routine_checkpoint,
+    RoutineReservationPublication, RoutineReservedRecoveryAssessment, RoutineTerminalOutcome,
+    assess_public_routine_reserved_recovery, authenticate_public_routine_checkpoint,
     bind_rust_source_syntax_invocation, fixed_environment,
     mediate_public_routine_execution_with_control, observe_public_routine_terminal_settlement,
     prepare_routine_execution, reconcile_public_routine_reservation,
