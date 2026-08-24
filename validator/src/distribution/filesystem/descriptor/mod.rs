@@ -13,4 +13,6 @@ pub(crate) use mutation::{
     rename_noreplace, rename_swap, unlink_directory_identity, unlink_entry_identity,
     unlink_file_identity,
 };
-pub(crate) use types::{DirectoryIdentity, EntryKind, FileIdentity, FileSnapshot};
+pub(crate) use types::{
+    DirectoryIdentity, DirectoryObservationMetadata, EntryKind, FileIdentity, FileSnapshot,
+};

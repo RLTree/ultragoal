@@ -65,6 +65,7 @@ pub(crate) use host_registry_observation::{
 pub(crate) use local_authority::{
     AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };
+pub(crate) use source::InstalledSourceAuthorityCapture;
 
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{

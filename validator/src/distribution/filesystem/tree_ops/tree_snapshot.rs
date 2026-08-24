@@ -19,6 +19,9 @@ pub(super) fn snapshot_at(
         return Err(error(DistributionErrorId::UnsafeObject));
     }
     let directory = parent.open_directory(name)?;
+    if directory.identity() != metadata.identity {
+        return Err(error(DistributionErrorId::ObjectChanged));
+    }
     let rows = super::walk::inspect(&directory, entries, bytes)?;
     if !parent
         .stat(name)?

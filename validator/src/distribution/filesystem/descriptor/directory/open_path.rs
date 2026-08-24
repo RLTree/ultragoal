@@ -50,6 +50,24 @@ impl Directory {
         self.identity
     }
 
+    pub(crate) fn observation_metadata(
+        &self,
+    ) -> Result<DirectoryObservationMetadata, DistributionError> {
+        let descriptor = self.current_descriptor()?;
+        let metadata = descriptor
+            .metadata()
+            .map_err(|_| error(DistributionErrorId::ObjectChanged))?;
+        if !metadata.is_dir() || directory_identity(&metadata) != self.identity {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
+        Ok(DirectoryObservationMetadata {
+            identity: self.identity,
+            mode: metadata.mode(),
+            owner: metadata.uid(),
+            group: metadata.gid(),
+        })
+    }
+
     /// Retain this directory as the mutation anchor for one confined root.
     ///
     /// The resulting descriptor binds owner, group, and the complete mode in

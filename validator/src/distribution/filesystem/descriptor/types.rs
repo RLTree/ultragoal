@@ -9,6 +9,14 @@ pub(crate) struct DirectoryIdentity {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct DirectoryObservationMetadata {
+    pub(crate) identity: DirectoryIdentity,
+    pub(crate) mode: u32,
+    pub(crate) owner: u32,
+    pub(crate) group: u32,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum EntryKind {
     Directory,
     Regular,
