@@ -7,6 +7,7 @@ use crate::cli::successor::{
 };
 use std::collections::BTreeSet;
 
+mod migration_apply;
 mod migration_plan;
 mod package;
 mod public_operation;
@@ -202,6 +203,7 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
+    migration_apply::BINDING,
     binding(
         PublicOperation::MigrationVerification,
         SuccessorCommand::Migrate(MigrateAction::Verify),

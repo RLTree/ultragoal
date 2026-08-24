@@ -11,4 +11,7 @@ mod process_lock;
 #[path = "regular_file.rs"]
 mod regular_file;
 
+#[cfg(test)]
+pub(crate) use exclusive_publish::{fail_after_next_rename, fail_before_next_rename};
+pub(crate) use exclusive_publish::{ExclusivePublishFailure, ExclusivePublishSite};
 pub(crate) use process_lock::write_lock_marker;

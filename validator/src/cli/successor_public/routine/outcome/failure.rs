@@ -87,6 +87,15 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
+        PublicFailure::Host(HostFailure::TransitionAmbiguous) => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::StateUnavailable,
+            "the routine host namespace changed but its durability or post-publish verification is uncertain",
+            "routine host namespace transition",
+            "preserve every transition artifact and diagnose before retrying any routine effect",
+            "host_state_namespace_or_durability_transition_preserved",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
         PublicFailure::Host(HostFailure::Invalid) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
@@ -130,6 +139,27 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             },
         ),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ambiguous_host_transition_never_projects_a_no_effect_failure() {
+        let outcome = failure(PublicFailure::Host(HostFailure::TransitionAmbiguous));
+        let diagnostic = serde_json::to_value(outcome.diagnostic.unwrap()).unwrap();
+
+        assert_eq!(outcome.exit_class, ExitClass::ActionableFinding);
+        assert_eq!(
+            diagnostic["diagnostic_id"],
+            DiagnosticId::StateUnavailable.as_str()
+        );
+        assert_eq!(
+            diagnostic["effect"],
+            "host_state_namespace_or_durability_transition_preserved"
+        );
+    }
 }
 
 pub(crate) fn routine_failure(

@@ -53,6 +53,9 @@ pub(crate) fn execute_invocation_with_home(
     if operation == super::operation_binding::PublicOperation::EvaluationRun {
         return evaluation::run(&invocation);
     }
+    if operation == super::operation_binding::PublicOperation::MigrationApply {
+        return routine::apply_state_quarantine(root, &invocation, home);
+    }
     if let Some(outcome) = package_dispatch::execute(root, &invocation, operation, home) {
         return outcome;
     }

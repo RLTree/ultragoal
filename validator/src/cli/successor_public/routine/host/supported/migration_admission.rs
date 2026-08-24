@@ -1,8 +1,12 @@
 use super::super::{CheckpointBinding, RoutineStateMigrationAdmission, RoutineStateQuarantinePlan};
 use super::*;
-use crate::routine_work::{RoutineCustodyCapability, RoutineReservedRecoveryAssessment};
+use crate::routine_work::{
+    ReservedRecoveryEffectEvidence, ReservedRecoveryOwnerObservation, RoutineCustodyCapability,
+    RoutineReservedRecoveryAssessment,
+};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
+use std::os::unix::ffi::OsStrExt;
 
 const AUTHORITY_ENTRIES: &[&str] = &[
     "routine-authority.key",
@@ -13,6 +17,27 @@ const MAX_AUTHORITY_ENTRY_BYTES: u64 = 16 * 1024 * 1024;
 const MAX_EVENT_ENTRY_BYTES: u64 = 4 * 1024 * 1024;
 const MAX_CHECKPOINT_ENTRY_BYTES: u64 = 16 * 1024;
 const MAX_LOCK_ENTRY_BYTES: u64 = 1024;
+const STALE_RESERVED_HEAD_CEILING: &str = "noncurrent_value_only_historical_head_unproven";
+const QUARANTINE_PLAN_NEXT_ACTION: &str = "preserve all bytes; persist the exact ultragoal --json diagnose JSON unchanged at a relative in-repository path, independently review its deterministic quarantine_plan, then run ultragoal --json migrate apply --plan <relative-diagnosis-record> --accept-plan <quarantine_plan.plan_id>; migrate plan emits a separate ProductMigration projection and is not this command's input";
+const QUARANTINE_PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v4";
+const QUARANTINE_STRATEGY: &str =
+    "stage_fresh_v8_then_atomic_exchange_finalize_legacy_and_publish_settlement_receipt";
+const QUARANTINE_APPLY_CAPABILITY: &str = "available_exact_record_only";
+const QUARANTINE_PLAN_OPERATIONS: &[&str] = &[
+    "acquire_parent_migration_lock_and_legacy_adapter_lock_then_revalidate_exact_source_inventory",
+    "stage_and_verify_fresh_v8_owner_with_plan_bound_transition_marker_without_importing_legacy_authority",
+    "atomically_exchange_legacy_source_owner_with_verified_fresh_v8_stage",
+    "fsync_owner_parent_after_atomic_exchange",
+    "finalize_swapped_legacy_stage_to_bound_quarantine_sibling",
+    "fsync_owner_parent_after_quarantine_finalize",
+    "verify_active_fresh_v8_transition_and_unchanged_quarantine_inventory",
+    "stage_and_fsync_exact_plan_bound_settlement_receipt",
+    "atomically_publish_settlement_receipt_and_fsync_active_fresh_v8_owner",
+    "verify_permanent_pending_and_settled_receipts_with_active_fresh_v8_and_unchanged_quarantine",
+];
+const QUARANTINE_ROLLBACK: &str = "before_swap: preserve the verified plan-bound unpublished fresh-v8 stage for exact replay while the legacy source remains active; after_swap: never exchange back or delete either owner, finalize only the unchanged legacy stage to the bound quarantine sibling, retain the permanent pending record, and publish only an exact plan-bound settlement receipt; pending-only, staged-receipt, or malformed settlement evidence preserves every observed name and holds";
+const QUARANTINE_PLAN_STRATEGY_BINDING: &[u8] =
+    b"\0stage-fresh-v8-then-atomic-exchange-finalize-legacy-and-publish-settlement-receipt";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct InventoryEntry {
@@ -40,21 +65,82 @@ pub(crate) fn assess_migration_admission(
         Err(HostFailure::Unavailable) => return Ok(None),
         Err(error) => return Err(error),
     };
+    let parent_state_lock = ParentStateLock::shared(&harness)?;
+    let transition_entries = transition_entries(&harness)?;
     let state = match harness.open_child(STATE_COMPONENTS[3]) {
         Ok(value) => value,
+        Err(HostFailure::Unavailable) if !transition_entries.is_empty() => {
+            return Ok(Some(transition_hold()));
+        }
         Err(HostFailure::Unavailable) => return Ok(None),
         Err(error) => return Err(error),
     };
 
     if state.stat(STATE_FORMAT_NAME)?.is_some() {
-        return assess_versioned(home, state).map(Some);
+        if transition_entries.contains(BOOTSTRAP_STAGE) {
+            return Ok(Some(transition_hold()));
+        }
+        match quarantine_transition::classify_present(&state) {
+            Ok(Some((accepted, quarantine_transition::SettlementState::Settled)))
+                if transition_entries.len() == 1
+                    && transition_entries.contains(&accepted.quarantine_owner) => {}
+            Ok(None) if transition_entries.is_empty() => {}
+            _ => return Ok(Some(transition_hold())),
+        }
+        return assess_versioned(home, state, parent_state_lock).map(Some);
     }
-    assess_format_absent(&harness, state, binding).map(Some)
+    if !transition_entries.is_empty() {
+        return Ok(Some(transition_hold()));
+    }
+    assess_format_absent(&harness, state, binding, STATE_COMPONENTS[3], &[]).map(Some)
+}
+
+fn transition_entries(owner_parent: &AnchoredDirectory) -> Result<BTreeSet<String>, HostFailure> {
+    Ok(owner_parent
+        .entry_names()?
+        .into_iter()
+        .filter(|name| name == BOOTSTRAP_STAGE || name.starts_with("routine-public.quarantine-"))
+        .collect())
+}
+
+pub(super) fn has_transition_evidence(
+    owner_parent: &AnchoredDirectory,
+) -> Result<bool, HostFailure> {
+    let entries = transition_entries(owner_parent)?;
+    if entries
+        .iter()
+        .any(|name| name.starts_with("routine-public.quarantine-"))
+    {
+        return Ok(true);
+    }
+    if !entries.contains(BOOTSTRAP_STAGE) {
+        return Ok(false);
+    }
+    let stage = match owner_parent.open_child(BOOTSTRAP_STAGE) {
+        Ok(stage) => stage,
+        Err(_) => return Ok(true),
+    };
+    quarantine_transition::is_present(&stage)
+}
+
+fn transition_hold() -> RoutineStateMigrationAdmission {
+    RoutineStateMigrationAdmission {
+        status: "quarantine_transition_preserve_and_hold",
+        format_status: "quarantine_or_bootstrap_transition",
+        legacy_singleton_count: 0,
+        canonical_continuation_count: 0,
+        event_journal_count: 0,
+        history_relation: "transition_requires_exact_accepted_plan",
+        next_action: "preserve the quarantine and bootstrap evidence; retry only through the exact accepted quarantine plan",
+        reserved_recovery: None,
+        quarantine_plan: None,
+    }
 }
 
 fn assess_versioned(
     home: AnchoredDirectory,
     state: AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     let format = state.open_regular(STATE_FORMAT_NAME, libc::O_RDONLY, 0o600);
     let Ok(format) = format else {
@@ -78,7 +164,7 @@ fn assess_versioned(
             quarantine_plan: None,
         });
     }
-    match host_state::open_existing_state(home, state) {
+    match host_state::open_existing_state(home, state, parent_state_lock) {
         Ok(current) => {
             let counts = counts(&current.adapter)?;
             Ok(RoutineStateMigrationAdmission {
@@ -98,10 +184,12 @@ fn assess_versioned(
     }
 }
 
-fn assess_format_absent(
+pub(super) fn assess_format_absent(
     owner_parent: &AnchoredDirectory,
     state: AnchoredDirectory,
     binding: CheckpointBinding<'_>,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     if state.entry_names()?
         != [AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY]
@@ -142,14 +230,30 @@ fn assess_format_absent(
         return Ok(unsafe_hold("absent"));
     }
 
-    let before = inventory(owner_parent, &state, &authority, &adapter, &launch)?;
+    let before = inventory(
+        owner_parent,
+        &state,
+        &authority,
+        &adapter,
+        &launch,
+        observed_owner,
+        ignored_parent_entries,
+    )?;
     let (singleton_count, continuation_count, event_count) = counts(&adapter)?;
     if singleton_count == 1 && continuation_count > 0 {
         let relation = match reconcile_mixed_history(&authority, &adapter, &launch, binding) {
             Ok(value) => value,
             Err(_) => return Ok(unsafe_hold("absent")),
         };
-        let after = inventory(owner_parent, &state, &authority, &adapter, &launch)?;
+        let after = inventory(
+            owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            observed_owner,
+            ignored_parent_entries,
+        )?;
         if before != after {
             return Ok(stale_writer_hold("absent"));
         }
@@ -159,16 +263,25 @@ fn assess_format_absent(
             event_count,
             relation,
             &before,
+            binding.target(),
         );
     }
     if validate_legacy(&adapter).is_err() {
         return Ok(unsafe_hold("absent"));
     }
-    let after = inventory(owner_parent, &state, &authority, &adapter, &launch)?;
+    let after = inventory(
+        owner_parent,
+        &state,
+        &authority,
+        &adapter,
+        &launch,
+        observed_owner,
+        ignored_parent_entries,
+    )?;
     if before != after {
         return Ok(stale_writer_hold("absent"));
     }
-    let quarantine_plan = quarantine_plan(&before, "single_history_only")?;
+    let quarantine_plan = quarantine_plan(&before, "single_history_only", binding.target())?;
     Ok(RoutineStateMigrationAdmission {
         status: "migration_candidate_requires_approval",
         format_status: "absent_legacy",
@@ -176,7 +289,7 @@ fn assess_format_absent(
         canonical_continuation_count: continuation_count,
         event_journal_count: event_count,
         history_relation: "single_history_only",
-        next_action: "independently review the deterministic reversible quarantine plan before any host write",
+        next_action: QUARANTINE_PLAN_NEXT_ACTION,
         reserved_recovery: None,
         quarantine_plan: Some(quarantine_plan),
     })
@@ -559,14 +672,37 @@ fn inventory(
     authority: &AnchoredDirectory,
     adapter: &AnchoredDirectory,
     launch: &AnchoredDirectory,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
 ) -> Result<BTreeMap<String, InventoryEntry>, HostFailure> {
     let mut rows = BTreeMap::new();
-    rows.insert("owner_parent".to_owned(), directory_inventory(owner_parent));
+    let mut parent_inventory = directory_inventory(owner_parent);
+    // Parent `nlink` is not a stable identity component on the supported
+    // filesystem and necessarily changes on some filesystems when the
+    // transaction adds the fresh owner beside its quarantine. Exact parent
+    // entry names and child identities remain inventoried below.
+    parent_inventory.identity.links = 0;
+    rows.insert("owner_parent".to_owned(), parent_inventory);
     rows.insert("state".to_owned(), directory_inventory(state));
     rows.insert("authority".to_owned(), directory_inventory(authority));
     rows.insert("adapter".to_owned(), directory_inventory(adapter));
     rows.insert("launch".to_owned(), directory_inventory(launch));
     capture_entries("owner_parent", owner_parent, &mut rows)?;
+    for ignored in ignored_parent_entries {
+        rows.remove(&format!("owner_parent/{ignored}"))
+            .ok_or(HostFailure::Invalid)?;
+    }
+    if observed_owner != STATE_COMPONENTS[3] {
+        let observed = rows
+            .remove(&format!("owner_parent/{observed_owner}"))
+            .ok_or(HostFailure::Invalid)?;
+        if rows
+            .insert(format!("owner_parent/{}", STATE_COMPONENTS[3]), observed)
+            .is_some()
+        {
+            return Err(HostFailure::Invalid);
+        }
+    }
     capture_entries("authority", authority, &mut rows)?;
     capture_entries("adapter", adapter, &mut rows)?;
     capture_entries("launch", launch, &mut rows)?;
@@ -588,55 +724,242 @@ fn inventory(
 fn quarantine_plan(
     inventory: &BTreeMap<String, InventoryEntry>,
     history_relation: &'static str,
+    target: &Path,
 ) -> Result<RoutineStateQuarantinePlan, HostFailure> {
-    let authoritative_history = match history_relation {
-        "single_history_only" => "the_only_authenticated_history",
-        "redundant_equivalent" | "canonical_strictly_supersedes" => {
-            "canonical_authenticated_history"
+    quarantine_plan_with_history_basis(
+        inventory,
+        history_relation,
+        target,
+        QuarantinePlanHistoryBasis::Authenticated,
+    )
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum QuarantinePlanHistoryBasis {
+    Authenticated,
+    StaleReservedHistoricalHeadUnproven,
+}
+
+impl QuarantinePlanHistoryBasis {
+    fn authoritative_history(self, history_relation: &str) -> Result<&'static str, HostFailure> {
+        Ok(match (self, history_relation) {
+            (Self::Authenticated, "single_history_only") => "the_only_authenticated_history",
+            (Self::Authenticated, "redundant_equivalent" | "canonical_strictly_supersedes") => {
+                "canonical_authenticated_history"
+            }
+            (Self::Authenticated, "singleton_strictly_supersedes") => {
+                "singleton_authenticated_history"
+            }
+            (Self::StaleReservedHistoricalHeadUnproven, "redundant_equivalent") => {
+                "none_noncurrent_value_only_historical_head_unproven"
+            }
+            _ => return Err(HostFailure::Invalid),
+        })
+    }
+
+    fn bind_plan_identity(self, plan: &mut Sha256) {
+        if self == Self::StaleReservedHistoricalHeadUnproven {
+            plan.update(b"\0stale-reserved-head-evidence:");
+            plan.update(STALE_RESERVED_HEAD_CEILING.as_bytes());
         }
-        "singleton_strictly_supersedes" => "singleton_authenticated_history",
-        _ => return Err(HostFailure::Invalid),
-    };
+    }
+}
+
+fn quarantine_plan_with_history_basis(
+    inventory: &BTreeMap<String, InventoryEntry>,
+    history_relation: &'static str,
+    target: &Path,
+    history_basis: QuarantinePlanHistoryBasis,
+) -> Result<RoutineStateQuarantinePlan, HostFailure> {
+    let authoritative_history = history_basis.authoritative_history(history_relation)?;
     let source_inventory_sha256 = inventory_sha256(inventory);
-    let mut plan = Sha256::new();
-    plan.update(b"routine-state-quarantine-plan-v1\0");
-    plan.update(source_inventory_sha256.as_bytes());
-    plan.update([0]);
-    plan.update(history_relation.as_bytes());
-    plan.update(b"\0quarantine-entire-legacy-owner-then-bootstrap-v8");
-    let plan_id = format!("routine-quarantine-sha256:{:x}", plan.finalize());
+    let source_owner_tree_sha256 = owner_tree_sha256(inventory);
+    let target_path_sha256 = target_path_sha256(target);
+    let plan_id = quarantine_plan_id(
+        &source_inventory_sha256,
+        &source_owner_tree_sha256,
+        &target_path_sha256,
+        history_relation,
+        history_basis,
+    );
     let suffix = plan_id
         .strip_prefix("routine-quarantine-sha256:")
         .ok_or(HostFailure::Invalid)?
         .to_owned();
     Ok(RoutineStateQuarantinePlan {
+        schema_version: QUARANTINE_PLAN_SCHEMA.to_owned(),
         plan_id,
         source_inventory_sha256,
-        history_relation,
-        authoritative_history,
-        source_owner: STATE_COMPONENTS[3],
+        source_owner_tree_sha256,
+        target_path_sha256,
+        history_relation: history_relation.to_owned(),
+        authoritative_history: authoritative_history.to_owned(),
+        source_owner: STATE_COMPONENTS[3].to_owned(),
         quarantine_owner: format!("{}.quarantine-{}", STATE_COMPONENTS[3], suffix),
-        target_format: "routine-host-state-v8",
-        strategy: "quarantine_entire_legacy_owner_then_bootstrap_v8",
-        apply_capability: "not_implemented",
-        operations: vec![
-            "acquire_parent_migration_lock_and_revalidate_exact_source_inventory",
-            "atomically_rename_source_owner_to_quarantine_sibling",
-            "fsync_owner_parent_after_quarantine_publish",
-            "bootstrap_fresh_v8_owner_without_importing_legacy_authority",
-            "verify_fresh_v8_owner_and_unchanged_quarantine_inventory",
-        ],
-        rollback: "only_before_any_new_v8_attempt: quarantine the verified-empty v8 owner, atomically restore the unchanged source owner, and fsync the owner parent",
+        target_format: "routine-host-state-v8".to_owned(),
+        strategy: QUARANTINE_STRATEGY.to_owned(),
+        apply_capability: QUARANTINE_APPLY_CAPABILITY.to_owned(),
+        operations: QUARANTINE_PLAN_OPERATIONS
+            .iter()
+            .map(|operation| (*operation).to_owned())
+            .collect(),
+        rollback: QUARANTINE_ROLLBACK.to_owned(),
     })
 }
 
-fn inventory_sha256(inventory: &BTreeMap<String, InventoryEntry>) -> String {
+fn quarantine_plan_id(
+    source_inventory_sha256: &str,
+    source_owner_tree_sha256: &str,
+    target_path_sha256: &str,
+    history_relation: &str,
+    history_basis: QuarantinePlanHistoryBasis,
+) -> String {
+    let mut plan = Sha256::new();
+    plan.update(b"routine-state-quarantine-plan-v4\0");
+    plan.update(source_inventory_sha256.as_bytes());
+    plan.update([0]);
+    plan.update(source_owner_tree_sha256.as_bytes());
+    plan.update([0]);
+    plan.update(target_path_sha256.as_bytes());
+    plan.update([0]);
+    plan.update(history_relation.as_bytes());
+    history_basis.bind_plan_identity(&mut plan);
+    plan.update(QUARANTINE_PLAN_STRATEGY_BINDING);
+    format!("routine-quarantine-sha256:{:x}", plan.finalize())
+}
+
+pub(super) fn quarantine_plan_is_semantically_valid(plan: &RoutineStateQuarantinePlan) -> bool {
+    let history_basis = match (
+        plan.history_relation.as_str(),
+        plan.authoritative_history.as_str(),
+    ) {
+        ("single_history_only", "the_only_authenticated_history")
+        | ("redundant_equivalent", "canonical_authenticated_history")
+        | ("canonical_strictly_supersedes", "canonical_authenticated_history")
+        | ("singleton_strictly_supersedes", "singleton_authenticated_history") => {
+            QuarantinePlanHistoryBasis::Authenticated
+        }
+        ("redundant_equivalent", "none_noncurrent_value_only_historical_head_unproven") => {
+            QuarantinePlanHistoryBasis::StaleReservedHistoricalHeadUnproven
+        }
+        _ => return false,
+    };
+    let expected_plan_id = quarantine_plan_id(
+        &plan.source_inventory_sha256,
+        &plan.source_owner_tree_sha256,
+        &plan.target_path_sha256,
+        &plan.history_relation,
+        history_basis,
+    );
+    let Some(suffix) = expected_plan_id.strip_prefix("routine-quarantine-sha256:") else {
+        return false;
+    };
+    plan.schema_version == QUARANTINE_PLAN_SCHEMA
+        && plan.plan_id == expected_plan_id
+        && is_sha256(&plan.source_inventory_sha256)
+        && is_sha256(&plan.source_owner_tree_sha256)
+        && is_sha256(&plan.target_path_sha256)
+        && plan.source_owner == STATE_COMPONENTS[3]
+        && plan.quarantine_owner == format!("{}.quarantine-{suffix}", STATE_COMPONENTS[3])
+        && plan.target_format == "routine-host-state-v8"
+        && plan.strategy == QUARANTINE_STRATEGY
+        && plan.apply_capability == QUARANTINE_APPLY_CAPABILITY
+        && plan
+            .operations
+            .iter()
+            .map(String::as_str)
+            .eq(QUARANTINE_PLAN_OPERATIONS.iter().copied())
+        && plan.rollback == QUARANTINE_ROLLBACK
+}
+
+fn is_sha256(value: &str) -> bool {
+    value.strip_prefix("sha256:").is_some_and(|digest| {
+        digest.len() == 64
+            && digest
+                .bytes()
+                .all(|byte| byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase())
+    })
+}
+
+fn owner_tree_sha256(inventory: &BTreeMap<String, InventoryEntry>) -> String {
+    inventory_sha256_entries(
+        inventory.iter().filter(|(path, _)| {
+            path.as_str() != "owner_parent" && !path.starts_with("owner_parent/")
+        }),
+        b"routine-state-quarantine-owner-tree-v2\0",
+    )
+}
+
+pub(super) fn observed_owner_tree_sha256(
+    owner_parent: &AnchoredDirectory,
+    state: &AnchoredDirectory,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
+) -> Result<String, HostFailure> {
+    let authority = state.open_child(AUTHORITY_DIRECTORY)?;
+    let adapter = state.open_child(ADAPTER_DIRECTORY)?;
+    let launch = state.open_child(LAUNCH_DIRECTORY)?;
+    let inventory = inventory(
+        owner_parent,
+        state,
+        &authority,
+        &adapter,
+        &launch,
+        observed_owner,
+        ignored_parent_entries,
+    )?;
+    Ok(owner_tree_sha256(&inventory))
+}
+
+pub(super) fn observed_inventory_digests(
+    owner_parent: &AnchoredDirectory,
+    state: &AnchoredDirectory,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
+) -> Result<(String, String), HostFailure> {
+    let authority = state.open_child(AUTHORITY_DIRECTORY)?;
+    let adapter = state.open_child(ADAPTER_DIRECTORY)?;
+    let launch = state.open_child(LAUNCH_DIRECTORY)?;
+    let inventory = inventory(
+        owner_parent,
+        state,
+        &authority,
+        &adapter,
+        &launch,
+        observed_owner,
+        ignored_parent_entries,
+    )?;
+    Ok((inventory_sha256(&inventory), owner_tree_sha256(&inventory)))
+}
+
+fn target_path_sha256(target: &Path) -> String {
     let mut digest = Sha256::new();
-    digest.update(b"routine-state-quarantine-source-inventory-v1\0");
+    digest.update(b"routine-state-quarantine-target-path-v1\0");
+    digest.update((target.as_os_str().as_bytes().len() as u64).to_be_bytes());
+    digest.update(target.as_os_str().as_bytes());
+    format!("sha256:{:x}", digest.finalize())
+}
+
+fn inventory_sha256(inventory: &BTreeMap<String, InventoryEntry>) -> String {
+    inventory_sha256_entries(
+        inventory.iter(),
+        b"routine-state-quarantine-source-inventory-v2\0",
+    )
+}
+
+fn inventory_sha256_entries<'a>(
+    inventory: impl Iterator<Item = (&'a String, &'a InventoryEntry)>,
+    domain: &[u8],
+) -> String {
+    let mut digest = Sha256::new();
+    digest.update(domain);
     for (path, identity) in inventory {
         digest.update(path.as_bytes());
         digest.update([0]);
-        digest.update(identity.identity.device.to_le_bytes());
+        // `st_dev` is a mount-session observation on macOS, not durable object
+        // identity. Descriptor/path comparisons retain the device number while
+        // an operation is open; persisted migration plans bind only the stable
+        // inventory dimensions so an exact crash replay survives a reboot.
         digest.update(identity.identity.inode.to_le_bytes());
         digest.update(identity.identity.owner.to_le_bytes());
         digest.update(identity.identity.mode.to_le_bytes());
@@ -728,13 +1051,30 @@ fn reconciled_hold(
     events: usize,
     history: ReconciledHistory,
     inventory: &BTreeMap<String, InventoryEntry>,
+    target: &Path,
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     let relation = history.relation;
     if relation == HistoryRelation::RedundantEquivalent
-        && raw_duplicate_history(inventory)
         && let Some(assessment) = history.reserved
     {
-        let (reserved_recovery, next_action) = reserved_recovery_admission::admission(assessment);
+        let (reserved_recovery, reserved_next_action) =
+            reserved_recovery_admission::admission(assessment);
+        let quarantine_plan = if canonical == 1
+            && raw_duplicate_history(inventory)
+            && assessment
+                == (RoutineReservedRecoveryAssessment {
+                    owner: ReservedRecoveryOwnerObservation::NotObserved,
+                    effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
+                }) {
+            Some(quarantine_plan_with_history_basis(
+                inventory,
+                relation.as_str(),
+                target,
+                QuarantinePlanHistoryBasis::StaleReservedHistoricalHeadUnproven,
+            )?)
+        } else {
+            None
+        };
         return Ok(RoutineStateMigrationAdmission {
             status: reserved_recovery.status,
             format_status: "absent_legacy",
@@ -742,16 +1082,20 @@ fn reconciled_hold(
             canonical_continuation_count: canonical,
             event_journal_count: events,
             history_relation: relation.as_str(),
-            next_action,
+            next_action: if quarantine_plan.is_some() {
+                QUARANTINE_PLAN_NEXT_ACTION
+            } else {
+                reserved_next_action
+            },
             reserved_recovery: Some(reserved_recovery),
-            quarantine_plan: None,
+            quarantine_plan,
         });
     }
     let quarantine_plan = match relation {
         HistoryRelation::RedundantEquivalent
         | HistoryRelation::CanonicalStrictlySupersedes
         | HistoryRelation::SingletonStrictlySupersedes => {
-            Some(quarantine_plan(inventory, relation.as_str())?)
+            Some(quarantine_plan(inventory, relation.as_str(), target)?)
         }
         HistoryRelation::ConflictingHistories => None,
     };
@@ -770,7 +1114,7 @@ fn reconciled_hold(
         event_journal_count: events,
         history_relation: relation.as_str(),
         next_action: if quarantine_plan.is_some() {
-            "preserve all bytes; independently review the deterministic reversible quarantine plan before any host write"
+            QUARANTINE_PLAN_NEXT_ACTION
         } else {
             "preserve all bytes; resolve the conflicting authenticated histories without proposing a migration"
         },
@@ -795,11 +1139,7 @@ fn raw_duplicate_history(inventory: &BTreeMap<String, InventoryEntry>) -> bool {
             .flatten()
         })
         .collect::<Vec<_>>();
-    canonical
-        .iter()
-        .filter(|candidate| **candidate == singleton)
-        .count()
-        == 1
+    canonical.len() == 1 && canonical[0] == singleton
 }
 
 fn stale_writer_hold(format_status: &'static str) -> RoutineStateMigrationAdmission {
@@ -869,6 +1209,33 @@ mod tests {
             "event_transition": "execute-to-complete"
         }))
         .unwrap()
+    }
+
+    fn raw_duplicate_inventory() -> BTreeMap<String, InventoryEntry> {
+        let identity = Identity {
+            device: 1,
+            inode: 2,
+            owner: 501,
+            mode: 0o100600,
+            links: 1,
+        };
+        let digest: [u8; 32] = Sha256::digest(b"same raw checkpoint").into();
+        BTreeMap::from([
+            (
+                format!("adapter/{CONTINUITY_CHECKPOINT_NAME}"),
+                InventoryEntry {
+                    identity,
+                    content_sha256: Some(digest),
+                },
+            ),
+            (
+                "adapter/continuations/routine-continuation-a.json".to_owned(),
+                InventoryEntry {
+                    identity,
+                    content_sha256: Some(digest),
+                },
+            ),
+        ])
     }
 
     #[test]
@@ -946,30 +1313,7 @@ mod tests {
 
     #[test]
     fn reserved_projection_requires_one_raw_identical_duplicate() {
-        let identity = Identity {
-            device: 1,
-            inode: 2,
-            owner: 501,
-            mode: 0o100600,
-            links: 1,
-        };
-        let digest: [u8; 32] = Sha256::digest(b"same raw checkpoint").into();
-        let mut inventory = BTreeMap::from([
-            (
-                format!("adapter/{CONTINUITY_CHECKPOINT_NAME}"),
-                InventoryEntry {
-                    identity,
-                    content_sha256: Some(digest),
-                },
-            ),
-            (
-                "adapter/continuations/routine-continuation-a.json".to_owned(),
-                InventoryEntry {
-                    identity,
-                    content_sha256: Some(digest),
-                },
-            ),
-        ]);
+        let mut inventory = raw_duplicate_inventory();
         assert!(raw_duplicate_history(&inventory));
 
         inventory
@@ -978,10 +1322,34 @@ mod tests {
             .content_sha256 = Some(Sha256::digest(b"semantic match, raw difference").into());
         assert!(!raw_duplicate_history(&inventory));
 
+        let raw_different = reconciled_hold(
+            1,
+            1,
+            0,
+            ReconciledHistory {
+                relation: HistoryRelation::RedundantEquivalent,
+                reserved: Some(RoutineReservedRecoveryAssessment {
+                    owner: ReservedRecoveryOwnerObservation::NotObserved,
+                    effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
+                }),
+            },
+            &inventory,
+            Path::new("/private/tmp/target"),
+        )
+        .unwrap();
+        assert!(raw_different.reserved_recovery.is_some());
+        assert!(raw_different.quarantine_plan.is_none());
+        assert!(!raw_different.next_action.contains("migrate apply"));
+
+        let digest: [u8; 32] = Sha256::digest(b"same raw checkpoint").into();
         inventory
             .get_mut("adapter/continuations/routine-continuation-a.json")
             .unwrap()
             .content_sha256 = Some(digest);
+        let identity = inventory
+            .get(&format!("adapter/{CONTINUITY_CHECKPOINT_NAME}"))
+            .unwrap()
+            .identity;
         inventory.insert(
             "adapter/continuations/routine-continuation-b.json".to_owned(),
             InventoryEntry {
@@ -990,6 +1358,135 @@ mod tests {
             },
         );
         assert!(!raw_duplicate_history(&inventory));
+
+        inventory
+            .get_mut("adapter/continuations/routine-continuation-b.json")
+            .unwrap()
+            .content_sha256 = Some(Sha256::digest(b"valid disjoint canonical history").into());
+        assert!(!raw_duplicate_history(&inventory));
+
+        let held = reconciled_hold(
+            1,
+            2,
+            0,
+            ReconciledHistory {
+                relation: HistoryRelation::RedundantEquivalent,
+                reserved: Some(RoutineReservedRecoveryAssessment {
+                    owner: ReservedRecoveryOwnerObservation::NotObserved,
+                    effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
+                }),
+            },
+            &inventory,
+            Path::new("/private/tmp/target"),
+        )
+        .unwrap();
+        assert!(held.reserved_recovery.is_some());
+        assert!(held.quarantine_plan.is_none());
+    }
+
+    #[test]
+    fn exact_abandoned_pristine_reserved_duplicate_mints_one_deterministic_ceiling_bound_plan() {
+        let inventory = raw_duplicate_inventory();
+        let target = Path::new("/private/tmp/target");
+        let history = || ReconciledHistory {
+            relation: HistoryRelation::RedundantEquivalent,
+            reserved: Some(RoutineReservedRecoveryAssessment {
+                owner: ReservedRecoveryOwnerObservation::NotObserved,
+                effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
+            }),
+        };
+
+        let first = reconciled_hold(1, 1, 0, history(), &inventory, target).unwrap();
+        let second = reconciled_hold(1, 1, 0, history(), &inventory, target).unwrap();
+        assert_eq!(first, second);
+        assert_eq!(
+            first.status,
+            "stale_reserved_abandoned_candidate_preserve_and_hold"
+        );
+        assert_eq!(first.history_relation, "redundant_equivalent");
+        assert!(first.reserved_recovery.is_some());
+        let plan = first.quarantine_plan.as_ref().unwrap();
+        assert_eq!(plan.schema_version, "RoutineStateQuarantinePlan-v4");
+        assert_eq!(
+            plan.authoritative_history,
+            "none_noncurrent_value_only_historical_head_unproven"
+        );
+        assert_eq!(plan.apply_capability, "available_exact_record_only");
+        assert!(
+            first
+                .next_action
+                .contains("persist the exact ultragoal --json diagnose JSON")
+        );
+        assert!(first.next_action.contains(
+            "ultragoal --json migrate apply --plan <relative-diagnosis-record> --accept-plan <quarantine_plan.plan_id>"
+        ));
+
+        let ordinary = quarantine_plan(&inventory, "redundant_equivalent", target).unwrap();
+        assert_ne!(plan.plan_id, ordinary.plan_id);
+        assert_ne!(plan.authoritative_history, ordinary.authoritative_history);
+
+        let other_target = reconciled_hold(
+            1,
+            1,
+            0,
+            history(),
+            &inventory,
+            Path::new("/private/tmp/other-target"),
+        )
+        .unwrap();
+        assert_ne!(plan.plan_id, other_target.quarantine_plan.unwrap().plan_id);
+    }
+
+    #[test]
+    fn every_other_reserved_assessment_remains_planless() {
+        let inventory = raw_duplicate_inventory();
+        let target = Path::new("/private/tmp/target");
+        let cases = [
+            (
+                ReservedRecoveryOwnerObservation::Active,
+                ReservedRecoveryEffectEvidence::PristineNoEffect,
+            ),
+            (
+                ReservedRecoveryOwnerObservation::Unavailable,
+                ReservedRecoveryEffectEvidence::PristineNoEffect,
+            ),
+            (
+                ReservedRecoveryOwnerObservation::Active,
+                ReservedRecoveryEffectEvidence::EffectOrAmbiguityPresent,
+            ),
+            (
+                ReservedRecoveryOwnerObservation::NotObserved,
+                ReservedRecoveryEffectEvidence::EffectOrAmbiguityPresent,
+            ),
+            (
+                ReservedRecoveryOwnerObservation::Unavailable,
+                ReservedRecoveryEffectEvidence::EffectOrAmbiguityPresent,
+            ),
+        ];
+
+        for (owner, effect) in cases {
+            let admission = reconciled_hold(
+                1,
+                1,
+                0,
+                ReconciledHistory {
+                    relation: HistoryRelation::RedundantEquivalent,
+                    reserved: Some(RoutineReservedRecoveryAssessment { owner, effect }),
+                },
+                &inventory,
+                target,
+            )
+            .unwrap();
+            assert!(
+                admission.reserved_recovery.is_some(),
+                "{owner:?}/{effect:?}"
+            );
+            assert!(admission.quarantine_plan.is_none(), "{owner:?}/{effect:?}");
+            assert!(
+                !admission.next_action.contains("migrate apply"),
+                "{owner:?}/{effect:?}"
+            );
+        }
     }
 
     #[test]
@@ -1093,20 +1590,72 @@ mod tests {
             },
         );
 
-        let first = quarantine_plan(&observed, "redundant_equivalent").unwrap();
-        let second = quarantine_plan(&observed, "redundant_equivalent").unwrap();
+        let target = Path::new("/private/tmp/target");
+        let first = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
+        let second = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
         assert_eq!(first, second);
-        assert_eq!(first.operations.len(), 5);
+        assert!(quarantine_plan_is_semantically_valid(&first));
+        for mutation in ["plan_id", "quarantine_owner", "strategy", "operation"] {
+            let mut invalid = first.clone();
+            match mutation {
+                "plan_id" => invalid.plan_id.push('0'),
+                "quarantine_owner" => invalid.quarantine_owner.push('0'),
+                "strategy" => invalid.strategy.push('0'),
+                "operation" => invalid.operations[0].push('0'),
+                _ => unreachable!(),
+            }
+            assert!(
+                !quarantine_plan_is_semantically_valid(&invalid),
+                "{mutation}"
+            );
+        }
+        let encoded = serde_json::to_value(&first).unwrap();
+        assert_eq!(
+            serde_json::from_value::<RoutineStateQuarantinePlan>(encoded.clone()).unwrap(),
+            first
+        );
+        let mut extended = encoded;
+        extended["unexpected"] = serde_json::json!(true);
+        assert!(serde_json::from_value::<RoutineStateQuarantinePlan>(extended).is_err());
+        assert_eq!(
+            first
+                .operations
+                .iter()
+                .map(String::as_str)
+                .collect::<Vec<_>>(),
+            vec![
+                "acquire_parent_migration_lock_and_legacy_adapter_lock_then_revalidate_exact_source_inventory",
+                "stage_and_verify_fresh_v8_owner_with_plan_bound_transition_marker_without_importing_legacy_authority",
+                "atomically_exchange_legacy_source_owner_with_verified_fresh_v8_stage",
+                "fsync_owner_parent_after_atomic_exchange",
+                "finalize_swapped_legacy_stage_to_bound_quarantine_sibling",
+                "fsync_owner_parent_after_quarantine_finalize",
+                "verify_active_fresh_v8_transition_and_unchanged_quarantine_inventory",
+                "stage_and_fsync_exact_plan_bound_settlement_receipt",
+                "atomically_publish_settlement_receipt_and_fsync_active_fresh_v8_owner",
+                "verify_permanent_pending_and_settled_receipts_with_active_fresh_v8_and_unchanged_quarantine",
+            ]
+        );
+        assert_eq!(
+            first.strategy,
+            "stage_fresh_v8_then_atomic_exchange_finalize_legacy_and_publish_settlement_receipt"
+        );
+        assert!(first.rollback.contains("before_swap"));
+        assert!(first.rollback.contains("after_swap"));
+        assert!(first.rollback.contains("permanent pending record"));
         assert_eq!(first.source_owner, "routine-public");
+        assert_eq!(first.apply_capability, "available_exact_record_only");
+        assert!(first.source_owner_tree_sha256.starts_with("sha256:"));
+        assert!(first.target_path_sha256.starts_with("sha256:"));
         assert!(
             first
                 .quarantine_owner
                 .starts_with("routine-public.quarantine-")
         );
-        assert!(quarantine_plan(&observed, "conflicting_histories_hold").is_err());
+        assert!(quarantine_plan(&observed, "conflicting_histories_hold", target).is_err());
 
         observed.get_mut("state").unwrap().identity.inode += 1;
-        let changed = quarantine_plan(&observed, "redundant_equivalent").unwrap();
+        let changed = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
         assert_ne!(first.plan_id, changed.plan_id);
         assert_ne!(
             first.source_inventory_sha256,
@@ -1114,12 +1663,33 @@ mod tests {
         );
 
         observed.get_mut("state").unwrap().identity.inode -= 1;
+        observed.get_mut("state").unwrap().identity.device += 9;
+        let renumbered_device = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
+        assert_eq!(first.plan_id, renumbered_device.plan_id);
+        assert_eq!(
+            first.source_inventory_sha256,
+            renumbered_device.source_inventory_sha256
+        );
+        assert_eq!(
+            first.source_owner_tree_sha256,
+            renumbered_device.source_owner_tree_sha256
+        );
+
         observed
             .get_mut("adapter/routine-continuation.json")
             .unwrap()
             .content_sha256 = Some(Sha256::digest(b"rewritten-in-place").into());
-        let rewritten = quarantine_plan(&observed, "redundant_equivalent").unwrap();
+        let rewritten = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
         assert_ne!(first.plan_id, rewritten.plan_id);
+
+        let other_target = quarantine_plan(
+            &observed,
+            "redundant_equivalent",
+            Path::new("/private/tmp/other"),
+        )
+        .unwrap();
+        assert_ne!(first.target_path_sha256, other_target.target_path_sha256);
+        assert_ne!(first.plan_id, other_target.plan_id);
 
         let held = reconciled_hold(
             1,
@@ -1133,6 +1703,7 @@ mod tests {
                 }),
             },
             &observed,
+            target,
         )
         .unwrap();
         assert!(held.quarantine_plan.is_none());
@@ -1176,16 +1747,117 @@ mod tests {
         let authority = state.open_child(AUTHORITY_DIRECTORY).unwrap();
         let adapter = state.open_child(ADAPTER_DIRECTORY).unwrap();
         let launch = state.open_child(LAUNCH_DIRECTORY).unwrap();
-        let before = inventory(&owner_parent, &state, &authority, &adapter, &launch).unwrap();
+        let before = inventory(
+            &owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            "state",
+            &[],
+        )
+        .unwrap();
 
         let original_inode = fs::metadata(&event).unwrap().ino();
         fs::write(&event, b"replacement\n").unwrap();
         fs::set_permissions(&event, fs::Permissions::from_mode(0o600)).unwrap();
         assert_eq!(fs::metadata(&event).unwrap().ino(), original_inode);
-        let after = inventory(&owner_parent, &state, &authority, &adapter, &launch).unwrap();
+        let after = inventory(
+            &owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            "state",
+            &[],
+        )
+        .unwrap();
 
         assert_ne!(before, after);
         drop((launch, adapter, authority, state, owner_parent));
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn ignored_transition_directory_normalizes_the_parent_link_count() {
+        let root = std::env::temp_dir().join(format!(
+            "hul-migration-parent-links-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        let state_path = root.join("legacy-owner");
+        let authority_path = state_path.join(AUTHORITY_DIRECTORY);
+        let adapter_path = state_path.join(ADAPTER_DIRECTORY);
+        let launch_path = state_path.join(LAUNCH_DIRECTORY);
+        for directory in [
+            &root,
+            &state_path,
+            &authority_path,
+            &adapter_path,
+            &launch_path,
+        ] {
+            fs::create_dir(directory).unwrap();
+            fs::set_permissions(directory, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+        let owner_parent =
+            AnchoredDirectory::open_absolute(&root, DirectorySecurity::PrivateAuthority).unwrap();
+        let state =
+            AnchoredDirectory::open_absolute(&state_path, DirectorySecurity::PrivateAuthority)
+                .unwrap();
+        let authority = state.open_child(AUTHORITY_DIRECTORY).unwrap();
+        let adapter = state.open_child(ADAPTER_DIRECTORY).unwrap();
+        let launch = state.open_child(LAUNCH_DIRECTORY).unwrap();
+        let baseline = inventory(
+            &owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            "legacy-owner",
+            &[],
+        )
+        .unwrap();
+
+        let fresh = root.join("fresh-owner");
+        fs::create_dir(&fresh).unwrap();
+        fs::set_permissions(&fresh, fs::Permissions::from_mode(0o700)).unwrap();
+        let normalized = inventory(
+            &owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            "legacy-owner",
+            &["fresh-owner"],
+        )
+        .unwrap();
+        assert_eq!(normalized, baseline);
+
+        drop((launch, adapter, authority, state, owner_parent));
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn malformed_quarantine_sibling_is_still_a_preserve_and_hold_transition() {
+        let root = std::env::temp_dir().join(format!(
+            "hul-malformed-quarantine-transition-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir(&root).unwrap();
+        fs::set_permissions(&root, fs::Permissions::from_mode(0o700)).unwrap();
+        let malformed = root.join("routine-public.quarantine-not-a-plan-id");
+        fs::create_dir(&malformed).unwrap();
+        fs::set_permissions(&malformed, fs::Permissions::from_mode(0o700)).unwrap();
+        let parent =
+            AnchoredDirectory::open_absolute(&root, DirectorySecurity::PrivateAuthority).unwrap();
+
+        assert_eq!(
+            transition_entries(&parent).unwrap(),
+            BTreeSet::from(["routine-public.quarantine-not-a-plan-id".to_owned()])
+        );
+
+        drop(parent);
         fs::remove_dir_all(root).unwrap();
     }
 }

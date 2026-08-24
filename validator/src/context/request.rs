@@ -73,6 +73,19 @@ impl BuildRequest {
         self
     }
 
+    /// Root-owned construction seam for a public effect outside the worktree.
+    /// The typed operation still owns the concrete external authority; this
+    /// grant only prevents an ordinary caller-selected `with_effect` from
+    /// manufacturing a non-read `LiveContext`.
+    pub(crate) fn with_root_external_grant(mut self) -> Self {
+        self.effect = EffectClass::ExternalWrite;
+        self.root_grant = Some(RootEffectGrant::issue(
+            EffectClass::ExternalWrite,
+            Vec::new(),
+        ));
+        self
+    }
+
     pub fn bind_non_secret_configuration(
         mut self,
         key: impl Into<String>,

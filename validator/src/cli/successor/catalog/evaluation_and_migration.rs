@@ -2,8 +2,8 @@ use super::super::command_contract::{
     CommandDescriptor, EvalAction, MigrateAction, SuccessorCommand,
 };
 use super::options::{
-    descriptor, ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
-    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT,
+    ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
+    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -47,14 +47,14 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Migrate(MigrateAction::Plan),
         Some("plan"),
         EffectClass::Read,
-        "Plan routes, compatibility, and retirement from the migration registry.",
+        "Produce a read-only ProductMigration projection from the migration registry; it is not the Routine HostState apply record.",
         REGISTRY_OPTION,
     ),
     descriptor(
         SuccessorCommand::Migrate(MigrateAction::Apply),
         Some("apply"),
-        EffectClass::WorkspaceWrite,
-        "Apply only an explicitly accepted, context-bound migration plan.",
+        EffectClass::ExternalWrite,
+        "Quarantine legacy Routine HostState only from the exact immutable ultragoal --json diagnose record and its quarantine_plan.plan_id.",
         MIGRATE_APPLY,
     ),
     descriptor(

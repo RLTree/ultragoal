@@ -188,6 +188,10 @@ fn help_is_a_projection_of_the_same_compiled_catalog() {
         "machine help snapshot drift"
     );
     assert!(human.contains("Usage: ultragoal [--json]"));
+    assert!(human.contains("ProductMigration projection"));
+    assert!(human.contains("not the Routine HostState apply record"));
+    assert!(human.contains("exact immutable ultragoal --json diagnose record"));
+    assert!(human.contains("quarantine_plan.plan_id"));
     assert!(!human.contains("--format"));
     assert!(!json.contains("--format"));
     let parsed: serde_json::Value = serde_json::from_str(&json).expect("valid machine help JSON");
@@ -214,13 +218,13 @@ fn sensitive_effects_are_never_attached_to_read_routes() {
             | (Group::Check, Some("routine"))
             | (Group::Prove, _)
             | (Group::Package, Some("inventory" | "build" | "install-test"))
-            | (Group::Eval, Some("run" | "harvest" | "promote"))
-            | (Group::Migrate, Some("apply")) => {
+            | (Group::Eval, Some("run" | "harvest" | "promote")) => {
                 assert_eq!(descriptor.effect, EffectClass::WorkspaceWrite)
             }
             (Group::Observe, Some("export"))
             | (Group::Package, Some("publish"))
-            | (Group::Eval, Some("adapter")) => {
+            | (Group::Eval, Some("adapter"))
+            | (Group::Migrate, Some("apply")) => {
                 assert_eq!(descriptor.effect, EffectClass::ExternalWrite)
             }
             (Group::Migrate, Some("retire")) => {

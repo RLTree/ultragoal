@@ -20,6 +20,10 @@ pub(crate) fn current_workspace_context(root: &Path) -> Result<LiveContext, ()> 
     LiveContext::build(BuildRequest::new(root).with_root_workspace_grant(root)).map_err(|_| ())
 }
 
+pub(crate) fn current_external_context(root: &Path) -> Result<LiveContext, ()> {
+    LiveContext::build(BuildRequest::new(root).with_root_external_grant()).map_err(|_| ())
+}
+
 pub(crate) fn compatibility_read_context(root: &Path) -> Result<LiveContext, ()> {
     LiveContext::build(
         BuildRequest::new(root)
@@ -75,11 +79,14 @@ mod tests {
 
         let read = current_read_context(&root).unwrap();
         let workspace = current_workspace_context(&root).unwrap();
+        let external = current_external_context(&root).unwrap();
 
         assert!(read.configuration().public_values.is_empty());
         assert!(workspace.configuration().public_values.is_empty());
         assert_eq!(read.effect().selected, EffectClass::Read);
         assert_eq!(workspace.effect().selected, EffectClass::WorkspaceWrite);
+        assert_eq!(external.effect().selected, EffectClass::ExternalWrite);
+        assert!(external.effect().write_scopes.is_empty());
         assert!(
             workspace
                 .effect()

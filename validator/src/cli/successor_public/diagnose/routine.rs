@@ -95,51 +95,9 @@ pub(super) fn migration_admission(
     read_context: &LiveContext,
     admission: super::super::routine::RoutineStateMigrationAdmission,
 ) -> RuntimeOutcome {
-    let machine = serde_json::to_vec(&json!({
-        "schema_version": "RoutineStateMigrationAdmission-v3",
-        "status": admission.status,
-        "format_status": admission.format_status,
-        "legacy_singleton_count": admission.legacy_singleton_count,
-        "canonical_continuation_count": admission.canonical_continuation_count,
-        "event_journal_count": admission.event_journal_count,
-        "history_relation": admission.history_relation,
-        "migration_effect": "none",
-        "migration_authorized": false,
-        "reserved_recovery": admission.reserved_recovery.as_ref().map(|assessment| json!({
-            "schema_version": "RoutineReservedRecoveryAssessment-v1",
-            "status": assessment.status,
-            "checkpoint_relation": "noncurrent_head_matching_private_attempt",
-            "checkpoint_head_evidence": "noncurrent_value_only_historical_head_unproven",
-            "private_attempt_state": "reserved",
-            "effect_evidence": assessment.effect_evidence,
-            "owner_observation": assessment.owner_observation,
-            "recovery_effect": "none",
-            "recovery_authorized": false,
-            "claim_effect": "none"
-        })),
-        "quarantine_plan": admission.quarantine_plan.as_ref().map(|plan| json!({
-            "schema_version": "RoutineStateQuarantinePlan-v1",
-            "plan_id": plan.plan_id,
-            "status": "review_required",
-            "source_inventory_sha256": plan.source_inventory_sha256,
-            "history_relation": plan.history_relation,
-            "authoritative_history": plan.authoritative_history,
-            "source_owner": plan.source_owner,
-            "quarantine_owner": plan.quarantine_owner,
-            "target_format": plan.target_format,
-            "strategy": plan.strategy,
-            "apply_capability": plan.apply_capability,
-            "operations": plan.operations,
-            "rollback": plan.rollback,
-            "precondition": "same locked parent and source inventory; no stale writer; quarantine destination absent",
-            "migration_effect": "none",
-            "migration_authorized": false,
-            "claim_effect": "none"
-        })),
-        "next_action": admission.next_action,
-        "claim_effect": "none",
-        "support_limit": "read-only legacy HostState admission and quarantine planning; a non-current public head is not historical-head proof; no migration apply, quarantine effect, recovery, installed journey, or product claim"
-    }));
+    let machine = serde_json::to_vec(&super::super::routine::migration_admission_record(
+        &admission,
+    ));
     if read_context.revalidate().is_err() {
         return super::stale_context();
     }

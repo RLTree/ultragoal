@@ -101,16 +101,7 @@ pub(crate) fn current_checkpoint(
     home: &Path,
     binding: &RoutineDiagnosisBinding,
 ) -> Result<RoutineCheckpointRead, RoutineCheckpointFailure> {
-    let execution_id = prepare(
-        binding.context(),
-        binding.manifest(),
-        binding.graph(),
-        binding.snapshot(),
-        binding.plan(),
-    )
-    .map_err(|_| RoutineCheckpointFailure::Projection)?
-    .checkpoint_execution_id()
-    .to_owned();
+    let execution_id = checkpoint_execution_id(binding)?;
     let checkpoint_binding = host::CheckpointBinding::new(
         binding.target(),
         binding.context().context_id(),
@@ -167,4 +158,19 @@ pub(crate) fn current_checkpoint(
             })
         }),
     )
+}
+
+pub(crate) fn checkpoint_execution_id(
+    binding: &RoutineDiagnosisBinding,
+) -> Result<String, RoutineCheckpointFailure> {
+    Ok(prepare(
+        binding.context(),
+        binding.manifest(),
+        binding.graph(),
+        binding.snapshot(),
+        binding.plan(),
+    )
+    .map_err(|_| RoutineCheckpointFailure::Projection)?
+    .checkpoint_execution_id()
+    .to_owned())
 }

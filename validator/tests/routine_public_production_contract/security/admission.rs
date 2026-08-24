@@ -184,6 +184,7 @@ fn forged_short_staged_marker_refuses_without_publication() {
         fixture.home.join(".codex"),
         fixture.home.join(".codex/state"),
         fixture.home.join(".codex/state/harness-ultragoal"),
+        stage.clone(),
         stage.join("authority"),
         stage.join("adapter"),
     ] {

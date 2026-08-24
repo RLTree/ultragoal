@@ -59,6 +59,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Migrate(MigrateAction::Apply),
+            EffectClass::ExternalWrite,
+        )),
+        Some(PublicOperation::MigrationApply),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Package(PackageAction::Inventory),
             EffectClass::WorkspaceWrite,
         )),
@@ -126,6 +133,10 @@ fn only_exact_supported_command_effect_pairs_bind() {
             EffectClass::WorkspaceWrite,
         ),
         invocation(
+            SuccessorCommand::Migrate(MigrateAction::Apply),
+            EffectClass::Read,
+        ),
+        invocation(
             SuccessorCommand::Migrate(MigrateAction::Retire),
             EffectClass::Destructive,
         ),
@@ -137,6 +148,14 @@ fn only_exact_supported_command_effect_pairs_bind() {
 #[test]
 fn unsupported_api_families_do_not_gain_dispatcher_authority() {
     let active = active_api_identifiers();
+    for api in [
+        "MigrateAction::Apply",
+        "RoutineStateQuarantinePlan",
+        "ImmutableAcceptedPlan",
+        "RoutineStateQuarantineApplyOutcome",
+    ] {
+        assert!(active.contains(api), "migrate apply requires {api}");
+    }
     for api in [
         "InstallSnapshot",
         "MarketplaceSnapshot",

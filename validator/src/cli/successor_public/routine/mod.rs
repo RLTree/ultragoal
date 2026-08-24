@@ -8,6 +8,7 @@
 mod behavior_child;
 mod host;
 mod manifest;
+mod migration_apply;
 mod outcome;
 
 pub(crate) use self::host::{
@@ -50,6 +51,7 @@ mod source_selection;
 pub(crate) use diagnosis::*;
 pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;
+pub(crate) use migration_apply::{apply_state_quarantine, migration_admission_record};
 pub(crate) use observability_context::*;
 pub(crate) use source_configuration::*;
 pub(crate) use source_selection::*;

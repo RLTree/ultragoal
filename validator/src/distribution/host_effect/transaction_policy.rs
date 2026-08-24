@@ -214,8 +214,8 @@ mod prior_authority_tests {
 
     #[test]
     fn monotonic_update_preserves_distinct_prior_target_and_rollback_authority() {
-        let prior = package("0.0.38", '8');
-        let target = package("0.0.39", '9');
+        let prior = package("0.0.39", '9');
+        let target = package("0.0.40", 'a');
         let custody = custody(&prior, &target).unwrap();
 
         let accepted = accepted_lifecycle(&custody).unwrap();
@@ -239,8 +239,8 @@ mod prior_authority_tests {
 
     #[test]
     fn monotonic_update_rejects_missing_substituted_and_target_as_prior_authority() {
-        let prior = package("0.0.38", '8');
-        let target = package("0.0.39", '9');
+        let prior = package("0.0.39", '9');
+        let target = package("0.0.40", 'a');
         assert!(custody_with_prior(&prior, &target, None).is_err());
         assert!(
             custody_with_prior(

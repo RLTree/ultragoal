@@ -12,6 +12,9 @@ pub(crate) const CONTINUITY_CHECKPOINT_STAGE_NAME: &str = ".routine-continuation
 pub(crate) const CONTINUITY_DIRECTORY_NAME: &str = "continuations";
 pub(crate) const LOCK_MARKER: &[u8] = b"routine-public-lock-v1\n";
 pub(crate) const BOOTSTRAP_STAGE: &str = ".routine-public-bootstrap";
+pub(crate) const QUARANTINE_TRANSITION_MARKER: &str = ".routine-state-quarantine-pending.json";
+pub(crate) const QUARANTINE_SETTLEMENT_STAGE: &str = ".routine-state-quarantine-settled.next";
+pub(crate) const QUARANTINE_SETTLEMENT_RECEIPT: &str = ".routine-state-quarantine-settled.json";
 pub(crate) const LAUNCH_DIRECTORY: &str = ".routine-authority-launch";
 pub(crate) const EVENT_FILE_PREFIX: &str = "routine-events-";
 pub(crate) const EVENT_FILE_SUFFIX: &str = ".jsonl";
@@ -52,6 +55,7 @@ pub(crate) struct HostState {
     pub(crate) launch: AnchoredDirectory,
     pub(crate) lock: File,
     pub(crate) lock_identity: Identity,
+    pub(crate) _parent_state_lock: ParentStateLock,
 }
 
 pub(crate) struct HostEventStore {

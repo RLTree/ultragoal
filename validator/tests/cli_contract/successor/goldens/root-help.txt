@@ -62,9 +62,9 @@ Commands:
   eval adapter  [external-write] --spec <value> --provider <value>
       Invoke one explicitly named external evaluation provider adapter.
   migrate plan  [read] [--registry <value>]
-      Plan routes, compatibility, and retirement from the migration registry.
-  migrate apply  [workspace-write] --plan <value> --accept-plan <value>
-      Apply only an explicitly accepted, context-bound migration plan.
+      Produce a read-only ProductMigration projection from the migration registry; it is not the Routine HostState apply record.
+  migrate apply  [external-write] --plan <value> --accept-plan <value>
+      Quarantine legacy Routine HostState only from the exact immutable ultragoal --json diagnose record and its quarantine_plan.plan_id.
   migrate verify  [read] [--registry <value>]
       Verify replacement behavior and absence of duplicate authority.
   migrate retire  [destructive] --plan <value> --approve-retirement

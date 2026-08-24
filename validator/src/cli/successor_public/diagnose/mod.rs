@@ -238,6 +238,14 @@ fn routine_checkpoint_failure(
             "the exact routine state authority is busy with another invocation",
             "wait for the active invocation to settle, then retry the same read request",
         ),
+        super::routine::RoutineCheckpointFailure::Host(
+            super::routine::HostFailure::TransitionAmbiguous,
+        ) => (
+            DiagnosticId::StateUnavailable,
+            ExitClass::ActionableFinding,
+            "a prior routine HostState namespace transition has uncertain durability or verification",
+            "preserve every transition artifact and diagnose again only after the HostState owner settles",
+        ),
         super::routine::RoutineCheckpointFailure::Host(super::routine::HostFailure::Invalid) => (
             DiagnosticId::AuthorityRequired,
             ExitClass::BlockedAuthority,

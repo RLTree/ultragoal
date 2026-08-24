@@ -11,6 +11,7 @@ pub(crate) enum HostFailure {
     Unsupported,
     Unavailable,
     Busy,
+    TransitionAmbiguous,
     Invalid,
 }
 
@@ -39,19 +40,33 @@ pub(crate) struct RoutineReservedRecoveryAdmission {
     pub(crate) effect_evidence: &'static str,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
 pub(crate) struct RoutineStateQuarantinePlan {
+    pub(crate) schema_version: String,
     pub(crate) plan_id: String,
     pub(crate) source_inventory_sha256: String,
-    pub(crate) history_relation: &'static str,
-    pub(crate) authoritative_history: &'static str,
-    pub(crate) source_owner: &'static str,
+    pub(crate) source_owner_tree_sha256: String,
+    pub(crate) target_path_sha256: String,
+    pub(crate) history_relation: String,
+    pub(crate) authoritative_history: String,
+    pub(crate) source_owner: String,
     pub(crate) quarantine_owner: String,
-    pub(crate) target_format: &'static str,
-    pub(crate) strategy: &'static str,
-    pub(crate) apply_capability: &'static str,
-    pub(crate) operations: Vec<&'static str>,
-    pub(crate) rollback: &'static str,
+    pub(crate) target_format: String,
+    pub(crate) strategy: String,
+    pub(crate) apply_capability: String,
+    pub(crate) operations: Vec<String>,
+    pub(crate) rollback: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RoutineStateQuarantineApplyOutcome {
+    pub(crate) status: &'static str,
+    pub(crate) effect: &'static str,
+    pub(crate) settlement_state: &'static str,
+    pub(crate) plan_id: String,
+    pub(crate) quarantine_owner: String,
+    pub(crate) fresh_format_verified: bool,
 }
 
 pub(crate) struct HostEventStore {
@@ -130,6 +145,27 @@ impl HostState {
         #[cfg(not(target_vendor = "apple"))]
         {
             let _ = (home, binding);
+            Err(HostFailure::Unsupported)
+        }
+    }
+
+    pub(crate) fn apply_quarantine_plan<F>(
+        home: &Path,
+        target: &Path,
+        binding: CheckpointBinding<'_>,
+        accepted: &RoutineStateQuarantinePlan,
+        record_matches: F,
+    ) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure>
+    where
+        F: Fn(&RoutineStateMigrationAdmission) -> bool,
+    {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::apply_quarantine_plan(home, target, binding, accepted, &record_matches)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (home, target, binding, accepted, record_matches);
             Err(HostFailure::Unsupported)
         }
     }

@@ -2,14 +2,40 @@ use super::*;
 use sha2::{Digest, Sha256};
 use std::os::unix::ffi::OsStrExt;
 
+#[cfg(test)]
+thread_local! {
+    static AFTER_QUARANTINE_MARKER_BEGIN_FAILPOINT: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+#[cfg(test)]
+#[allow(dead_code)]
+pub(super) fn fail_after_next_quarantine_marker_begin() {
+    AFTER_QUARANTINE_MARKER_BEGIN_FAILPOINT.with(|failpoint| failpoint.set(true));
+}
+
+#[cfg(test)]
+fn take_after_quarantine_marker_begin_failpoint() -> bool {
+    AFTER_QUARANTINE_MARKER_BEGIN_FAILPOINT.with(|failpoint| failpoint.replace(false))
+}
+
+#[cfg(not(test))]
+fn take_after_quarantine_marker_begin_failpoint() -> bool {
+    false
+}
+
 impl HostState {
     pub(crate) fn open_existing(home: &Path) -> Result<Self, HostFailure> {
         let home_directory = open_home(home)?;
         let codex = home_directory.open_child(STATE_COMPONENTS[0])?;
         let state_root = codex.open_child(STATE_COMPONENTS[1])?;
         let harness = state_root.open_child(STATE_COMPONENTS[2])?;
+        let parent_state_lock = ParentStateLock::shared(&harness)?;
+        if harness.stat(BOOTSTRAP_STAGE)?.is_some() {
+            return Err(HostFailure::TransitionAmbiguous);
+        }
         let state = harness.open_child(STATE_COMPONENTS[3])?;
-        open_existing_state(home_directory, state)
+        verify_ordinary_transition_gate(&harness, &state)?;
+        open_existing_state(home_directory, state, parent_state_lock)
     }
 
     pub(crate) fn open_existing_for_target(
@@ -24,9 +50,44 @@ impl HostState {
         let home_directory = open_home(home)?;
         validate_target(home, target)?;
         let base = open_base(&home_directory)?;
+        let parent_state_lock = ParentStateLock::shared(&base)?;
+        let bootstrap_present = base.stat(BOOTSTRAP_STAGE)?.is_some();
         match base.open_child(STATE_COMPONENTS[3]) {
-            Ok(state) => open_existing_state(home_directory, state),
-            Err(HostFailure::Unavailable) => bootstrap_new_state(home_directory, base),
+            Ok(_) if bootstrap_present => Err(HostFailure::TransitionAmbiguous),
+            Ok(state) => {
+                verify_ordinary_transition_gate(&base, &state)?;
+                open_existing_state(home_directory, state, parent_state_lock)
+            }
+            Err(HostFailure::Unavailable)
+                if migration_admission::has_transition_evidence(&base)? =>
+            {
+                Err(HostFailure::TransitionAmbiguous)
+            }
+            Err(HostFailure::Unavailable) => {
+                // Bootstrap changes the complete owner namespace, so it must
+                // not run under a reader lock. Release the observation guard,
+                // acquire the writer guard, and repeat every decision under
+                // that exclusive authority.
+                drop(parent_state_lock);
+                let parent_state_lock = ParentStateLock::exclusive(&base)?;
+                let bootstrap_present = base.stat(BOOTSTRAP_STAGE)?.is_some();
+                match base.open_child(STATE_COMPONENTS[3]) {
+                    Ok(_) if bootstrap_present => Err(HostFailure::TransitionAmbiguous),
+                    Ok(state) => {
+                        verify_ordinary_transition_gate(&base, &state)?;
+                        open_existing_state(home_directory, state, parent_state_lock)
+                    }
+                    Err(HostFailure::Unavailable)
+                        if migration_admission::has_transition_evidence(&base)? =>
+                    {
+                        Err(HostFailure::TransitionAmbiguous)
+                    }
+                    Err(HostFailure::Unavailable) => {
+                        bootstrap_new_state(home_directory, base, parent_state_lock)
+                    }
+                    Err(error) => Err(error),
+                }
+            }
             Err(error) => Err(error),
         }
     }
@@ -39,6 +100,7 @@ impl HostState {
         launch: AnchoredDirectory,
         lock: File,
         initialize_marker: bool,
+        parent_state_lock: ParentStateLock,
     ) -> Result<Self, HostFailure> {
         let (lock, lock_identity) = acquire_locked_marker(lock, initialize_marker)?;
         let state = Self {
@@ -49,6 +111,7 @@ impl HostState {
             launch,
             lock,
             lock_identity,
+            _parent_state_lock: parent_state_lock,
         };
         state.verify_structure()?;
         Ok(state)
@@ -71,15 +134,11 @@ impl HostState {
         self.authority.verify()?;
         self.adapter.verify()?;
         self.launch.verify()?;
-        require_entries(
-            &self.state,
-            &[
-                AUTHORITY_DIRECTORY,
-                ADAPTER_DIRECTORY,
-                LAUNCH_DIRECTORY,
-                STATE_FORMAT_NAME,
-            ],
-        )?;
+        verify_ordinary_state_entries(&self.state)?;
+        let codex = self.home.open_child(STATE_COMPONENTS[0])?;
+        let state_root = codex.open_child(STATE_COMPONENTS[1])?;
+        let owner_parent = state_root.open_child(STATE_COMPONENTS[2])?;
+        verify_ordinary_parent_evidence(&owner_parent, &self.state)?;
         verify_state_format(&self.state)?;
         require_adapter_shape(&self.adapter)?;
         let metadata = self.lock.metadata().map_err(|_| HostFailure::Invalid)?;
@@ -224,7 +283,7 @@ impl HostState {
     }
 }
 
-fn validate_target(home: &Path, target: &Path) -> Result<(), HostFailure> {
+pub(super) fn validate_target(home: &Path, target: &Path) -> Result<(), HostFailure> {
     let state_root = home.join(STATE_COMPONENTS.join("/"));
     if !target.is_absolute()
         || fs::canonicalize(target).map_err(|_| HostFailure::Invalid)? != target
@@ -290,16 +349,9 @@ fn open_base(home: &AnchoredDirectory) -> Result<AnchoredDirectory, HostFailure>
 pub(super) fn open_existing_state(
     home: AnchoredDirectory,
     state: AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
 ) -> Result<HostState, HostFailure> {
-    require_entries(
-        &state,
-        &[
-            AUTHORITY_DIRECTORY,
-            ADAPTER_DIRECTORY,
-            LAUNCH_DIRECTORY,
-            STATE_FORMAT_NAME,
-        ],
-    )?;
+    verify_ordinary_state_entries(&state)?;
     verify_state_format(&state)?;
     let authority = state.open_child(AUTHORITY_DIRECTORY)?;
     let adapter = state.open_child(ADAPTER_DIRECTORY)?;
@@ -307,15 +359,26 @@ pub(super) fn open_existing_state(
     require_entries(&launch, &[])?;
     require_adapter_shape(&adapter)?;
     let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
-    HostState::from_locked(home, state, authority, adapter, launch, lock, false)
+    HostState::from_locked(
+        home,
+        state,
+        authority,
+        adapter,
+        launch,
+        lock,
+        false,
+        parent_state_lock,
+    )
 }
 
-fn bootstrap_new_state(
+pub(super) fn bootstrap_new_state(
     home: AnchoredDirectory,
     base: AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
 ) -> Result<HostState, HostFailure> {
-    match bootstrap_stage(home, &base) {
+    match bootstrap_stage(home, &base, parent_state_lock) {
         Ok(state) => Ok(state),
+        Err(HostFailure::TransitionAmbiguous) => Err(HostFailure::TransitionAmbiguous),
         Err(_) if base.open_child(STATE_COMPONENTS[3]).is_ok() => Err(HostFailure::Busy),
         Err(error) => Err(error),
     }
@@ -324,39 +387,121 @@ fn bootstrap_new_state(
 fn bootstrap_stage(
     home: AnchoredDirectory,
     base: &AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
 ) -> Result<HostState, HostFailure> {
-    let (state, _) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
-    require_entries(
-        &state,
+    let mut staged = build_staged_state(home, base, parent_state_lock, None)?;
+    match base.publish_child_exclusive(
+        BOOTSTRAP_STAGE,
+        STATE_COMPONENTS[3],
+        ExclusivePublishSite::BootstrapFresh,
+    ) {
+        Ok(()) => {}
+        Err(ExclusivePublishFailure::BeforeRename) => return Err(HostFailure::Invalid),
+        Err(ExclusivePublishFailure::AfterRenameDurabilityUnknown) => {
+            return Err(HostFailure::TransitionAmbiguous);
+        }
+    }
+    rebind_state_owner(&mut staged, base, STATE_COMPONENTS[3]);
+    staged
+        .verify()
+        .map_err(|_| HostFailure::TransitionAmbiguous)?;
+    Ok(staged)
+}
+
+pub(super) fn stage_quarantine_state(
+    home: AnchoredDirectory,
+    base: &AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
+    accepted: &super::super::RoutineStateQuarantinePlan,
+) -> Result<HostState, HostFailure> {
+    build_staged_state(home, base, parent_state_lock, Some(accepted))
+}
+
+pub(super) fn open_quarantine_transition_state(
+    home: AnchoredDirectory,
+    base: &AnchoredDirectory,
+    owner: &str,
+    parent_state_lock: ParentStateLock,
+    accepted: &super::super::RoutineStateQuarantinePlan,
+) -> Result<HostState, HostFailure> {
+    let state = base.open_child(owner)?;
+    let authority = state.open_child(AUTHORITY_DIRECTORY)?;
+    let adapter = state.open_child(ADAPTER_DIRECTORY)?;
+    let launch = state.open_child(LAUNCH_DIRECTORY)?;
+    let lock = adapter.open_regular(LOCK_NAME, libc::O_RDWR, 0o600)?;
+    let (lock, lock_identity) = acquire_locked_marker(lock, false)?;
+    let staged = HostState {
+        home,
+        state,
+        authority,
+        adapter,
+        launch,
+        lock,
+        lock_identity,
+        _parent_state_lock: parent_state_lock,
+    };
+    verify_quarantine_transition_state(&staged, accepted)?;
+    Ok(staged)
+}
+
+pub(super) fn rebind_state_owner(state: &mut HostState, base: &AnchoredDirectory, owner: &str) {
+    state.state.path = base.path.join(owner);
+    state.authority.path = state.state.path.join(AUTHORITY_DIRECTORY);
+    state.adapter.path = state.state.path.join(ADAPTER_DIRECTORY);
+    state.launch.path = state.state.path.join(LAUNCH_DIRECTORY);
+}
+
+fn build_staged_state(
+    home: AnchoredDirectory,
+    base: &AnchoredDirectory,
+    parent_state_lock: ParentStateLock,
+    transition: Option<&super::super::RoutineStateQuarantinePlan>,
+) -> Result<HostState, HostFailure> {
+    let (state, created) = base.open_or_create_owned_child(BOOTSTRAP_STAGE)?;
+    let allowed = if transition.is_some() {
         &[
             AUTHORITY_DIRECTORY,
             ADAPTER_DIRECTORY,
             LAUNCH_DIRECTORY,
             STATE_FORMAT_NAME,
-        ],
-    )?;
-    let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
-    let (mut format, created) = state.open_or_create_regular(STATE_FORMAT_NAME, 0o600)?;
-    if !created {
+            QUARANTINE_TRANSITION_MARKER,
+        ][..]
+    } else {
+        &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+        ][..]
+    };
+    require_entries(&state, allowed)?;
+    if transition.is_some() && !created && state.stat(QUARANTINE_TRANSITION_MARKER)?.is_none() {
         return Err(HostFailure::Invalid);
     }
-    use std::io::Write;
-    format
-        .write_all(STATE_FORMAT_BYTES)
-        .map_err(|_| HostFailure::Invalid)?;
-    format.sync_all().map_err(|_| HostFailure::Invalid)?;
+    if let Some(accepted) = transition {
+        quarantine_transition::begin(&state, accepted)?;
+        if take_after_quarantine_marker_begin_failpoint() {
+            return Err(HostFailure::Invalid);
+        }
+    }
+    let (adapter, _) = state.open_or_create_owned_child(ADAPTER_DIRECTORY)?;
+    let (mut format, created) = state.open_or_create_regular(STATE_FORMAT_NAME, 0o600)?;
+    if !created && transition.is_none() {
+        return Err(HostFailure::Invalid);
+    }
+    if created {
+        use std::io::Write;
+        format
+            .write_all(STATE_FORMAT_BYTES)
+            .map_err(|_| HostFailure::Invalid)?;
+        format.sync_all().map_err(|_| HostFailure::Invalid)?;
+    } else {
+        verify_state_format(&state)?;
+    }
     require_entries(&adapter, &[LOCK_NAME])?;
     let (lock, _) = adapter.open_or_create_regular(LOCK_NAME, 0o600)?;
     let (lock, lock_identity) = acquire_locked_marker(lock, true)?;
-    require_entries(
-        &state,
-        &[
-            AUTHORITY_DIRECTORY,
-            ADAPTER_DIRECTORY,
-            LAUNCH_DIRECTORY,
-            STATE_FORMAT_NAME,
-        ],
-    )?;
+    require_entries(&state, allowed)?;
     let (authority, _) = state.open_or_create_owned_child(AUTHORITY_DIRECTORY)?;
     require_entries(&authority, &[])?;
     let (launch, _) = state.open_or_create_owned_child(LAUNCH_DIRECTORY)?;
@@ -369,12 +514,148 @@ fn bootstrap_stage(
         launch,
         lock,
         lock_identity,
+        _parent_state_lock: parent_state_lock,
     };
-    staged.verify()?;
-    base.publish_child_exclusive(BOOTSTRAP_STAGE, STATE_COMPONENTS[3])?;
-    drop(staged);
-    let state = base.open_child(STATE_COMPONENTS[3])?;
-    open_existing_state(home, state)
+    if let Some(accepted) = transition {
+        verify_quarantine_transition_state(&staged, accepted)?;
+    } else {
+        staged.verify()?;
+    }
+    Ok(staged)
+}
+
+pub(super) fn verify_quarantine_transition_state(
+    state: &HostState,
+    accepted: &super::super::RoutineStateQuarantinePlan,
+) -> Result<(), HostFailure> {
+    state.home.verify()?;
+    state.state.verify()?;
+    state.authority.verify()?;
+    state.adapter.verify()?;
+    state.launch.verify()?;
+    let allowed = match quarantine_transition::classify(&state.state, accepted)? {
+        quarantine_transition::SettlementState::Pending => &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+            QUARANTINE_TRANSITION_MARKER,
+        ][..],
+        quarantine_transition::SettlementState::ReceiptStaged => &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+            QUARANTINE_TRANSITION_MARKER,
+            QUARANTINE_SETTLEMENT_STAGE,
+        ][..],
+        quarantine_transition::SettlementState::None
+        | quarantine_transition::SettlementState::Settled => return Err(HostFailure::Invalid),
+    };
+    require_entries(&state.state, allowed)?;
+    verify_state_format(&state.state)?;
+    require_adapter_shape(&state.adapter)?;
+    let metadata = state.lock.metadata().map_err(|_| HostFailure::Invalid)?;
+    if identity(&metadata) != state.lock_identity
+        || state.adapter.stat(LOCK_NAME)? != Some(state.lock_identity)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(())
+}
+
+fn verify_ordinary_transition_gate(
+    owner_parent: &AnchoredDirectory,
+    state: &AnchoredDirectory,
+) -> Result<(), HostFailure> {
+    match verify_ordinary_parent_evidence(owner_parent, state) {
+        Ok(()) => Ok(()),
+        Err(_) => Err(HostFailure::TransitionAmbiguous),
+    }
+}
+
+fn verify_ordinary_parent_evidence(
+    owner_parent: &AnchoredDirectory,
+    state: &AnchoredDirectory,
+) -> Result<(), HostFailure> {
+    let quarantine_siblings = quarantine_siblings(owner_parent)?;
+    match persisted_settlement(state)? {
+        None if quarantine_siblings.is_empty() => Ok(()),
+        Some((accepted, quarantine_transition::SettlementState::Settled))
+            if quarantine_siblings.len() == 1
+                && quarantine_siblings[0] == accepted.quarantine_owner =>
+        {
+            Ok(())
+        }
+        None
+        | Some((
+            _,
+            quarantine_transition::SettlementState::None
+            | quarantine_transition::SettlementState::Pending
+            | quarantine_transition::SettlementState::ReceiptStaged,
+        ))
+        | Some((_, quarantine_transition::SettlementState::Settled)) => Err(HostFailure::Invalid),
+    }
+}
+
+fn verify_ordinary_state_entries(state: &AnchoredDirectory) -> Result<(), HostFailure> {
+    let allowed = match persisted_settlement_state(state)? {
+        quarantine_transition::SettlementState::None => &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+        ][..],
+        quarantine_transition::SettlementState::Settled => &[
+            AUTHORITY_DIRECTORY,
+            ADAPTER_DIRECTORY,
+            LAUNCH_DIRECTORY,
+            STATE_FORMAT_NAME,
+            QUARANTINE_TRANSITION_MARKER,
+            QUARANTINE_SETTLEMENT_RECEIPT,
+        ][..],
+        quarantine_transition::SettlementState::Pending
+        | quarantine_transition::SettlementState::ReceiptStaged => {
+            return Err(HostFailure::Invalid);
+        }
+    };
+    require_entries(state, allowed)
+}
+
+fn persisted_settlement_state(
+    state: &AnchoredDirectory,
+) -> Result<quarantine_transition::SettlementState, HostFailure> {
+    Ok(persisted_settlement(state)?
+        .map(|(_, settlement)| settlement)
+        .unwrap_or(quarantine_transition::SettlementState::None))
+}
+
+fn persisted_settlement(
+    state: &AnchoredDirectory,
+) -> Result<
+    Option<(
+        super::super::RoutineStateQuarantinePlan,
+        quarantine_transition::SettlementState,
+    )>,
+    HostFailure,
+> {
+    let Some((accepted, settlement)) = quarantine_transition::classify_present(state)? else {
+        return Ok(None);
+    };
+    if !migration_admission::quarantine_plan_is_semantically_valid(&accepted) {
+        return Err(HostFailure::Invalid);
+    }
+    Ok(Some((accepted, settlement)))
+}
+
+fn quarantine_siblings(owner_parent: &AnchoredDirectory) -> Result<Vec<String>, HostFailure> {
+    let mut siblings = owner_parent
+        .entry_names()?
+        .into_iter()
+        .filter(|name| name.starts_with("routine-public.quarantine-"))
+        .collect::<Vec<_>>();
+    siblings.sort();
+    Ok(siblings)
 }
 
 fn require_entries(directory: &AnchoredDirectory, allowed: &[&str]) -> Result<(), HostFailure> {
@@ -451,6 +732,147 @@ pub(super) fn read_lock_marker(lock: &File) -> Result<Vec<u8>, HostFailure> {
         .read_to_end(&mut bytes)
         .map_err(|_| HostFailure::Invalid)?;
     Ok(bytes)
+}
+
+#[cfg(test)]
+mod migration_transition_tests {
+    use super::*;
+    use std::os::unix::fs::PermissionsExt;
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    static NEXT: AtomicU64 = AtomicU64::new(0);
+
+    fn fixture(name: &str) -> (PathBuf, PathBuf, PathBuf) {
+        let root = fs::canonicalize(std::env::temp_dir())
+            .unwrap()
+            .join(format!(
+                "hul-bootstrap-transition-{name}-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+        let home = root.join("home");
+        let target = root.join("target");
+        let parent = home.join(".codex/state/harness-ultragoal");
+        for directory in [
+            &root,
+            &home,
+            &target,
+            &home.join(".codex"),
+            &home.join(".codex/state"),
+            &parent,
+        ] {
+            fs::create_dir(directory).unwrap();
+            fs::set_permissions(directory, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+        (root, home, target)
+    }
+
+    fn assert_transition_refuses_bootstrap(name: &str) {
+        let (root, home, target) = fixture(name);
+        let parent = home.join(".codex/state/harness-ultragoal");
+        let transition = parent.join(name);
+        fs::create_dir(&transition).unwrap();
+        fs::set_permissions(&transition, fs::Permissions::from_mode(0o700)).unwrap();
+        if name == BOOTSTRAP_STAGE {
+            let marker = transition.join(QUARANTINE_TRANSITION_MARKER);
+            fs::write(&marker, b"plan-bound-transition").unwrap();
+            fs::set_permissions(&marker, fs::Permissions::from_mode(0o600)).unwrap();
+        }
+
+        assert!(matches!(
+            HostState::open_or_bootstrap(&home, &target),
+            Err(HostFailure::TransitionAmbiguous)
+        ));
+        assert!(!parent.join(STATE_COMPONENTS[3]).exists());
+        assert!(transition.is_dir());
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn ordinary_open_cannot_bootstrap_over_prebootstrap_quarantine_evidence() {
+        assert_transition_refuses_bootstrap(&format!(
+            "routine-public.quarantine-{}",
+            "a".repeat(64)
+        ));
+    }
+
+    #[test]
+    fn ordinary_open_cannot_bootstrap_over_a_plan_marked_bootstrap_stage() {
+        assert_transition_refuses_bootstrap(BOOTSTRAP_STAGE);
+    }
+
+    #[test]
+    fn ordinary_bootstrap_upgrades_to_and_retains_the_exclusive_parent_lock() {
+        let (root, home, target) = fixture("exclusive-bootstrap");
+        let parent_path = home.join(".codex/state/harness-ultragoal");
+        let state = HostState::open_or_bootstrap(&home, &target).unwrap();
+        let observer =
+            AnchoredDirectory::open_absolute(&parent_path, DirectorySecurity::PrivateAuthority)
+                .unwrap();
+
+        assert!(matches!(
+            ParentStateLock::shared(&observer),
+            Err(HostFailure::Busy)
+        ));
+        assert_eq!(
+            fs::read(
+                parent_path
+                    .join(STATE_COMPONENTS[3])
+                    .join(STATE_FORMAT_NAME)
+            )
+            .unwrap(),
+            STATE_FORMAT_BYTES
+        );
+
+        drop(state);
+        ParentStateLock::shared(&observer).unwrap();
+        drop(observer);
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn ordinary_entry_points_hold_while_the_active_fresh_owner_is_plan_marked() {
+        let (root, home, target) = fixture("active-plan-marked");
+        let state = HostState::open_or_bootstrap(&home, &target).unwrap();
+        drop(state);
+        let marker = home
+            .join(".codex/state/harness-ultragoal")
+            .join(STATE_COMPONENTS[3])
+            .join(QUARANTINE_TRANSITION_MARKER);
+        fs::write(&marker, b"pending").unwrap();
+        fs::set_permissions(&marker, fs::Permissions::from_mode(0o600)).unwrap();
+
+        assert!(matches!(
+            HostState::open_existing(&home),
+            Err(HostFailure::TransitionAmbiguous)
+        ));
+        assert!(matches!(
+            HostState::open_or_bootstrap(&home, &target),
+            Err(HostFailure::TransitionAmbiguous)
+        ));
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn ordinary_bootstrap_reports_post_publish_durability_ambiguity() {
+        let (root, home, target) = fixture("bootstrap-publish-ambiguity");
+        let parent = home.join(".codex/state/harness-ultragoal");
+        fail_after_next_rename(ExclusivePublishSite::BootstrapFresh);
+
+        assert!(matches!(
+            HostState::open_or_bootstrap(&home, &target),
+            Err(HostFailure::TransitionAmbiguous)
+        ));
+        assert!(!parent.join(BOOTSTRAP_STAGE).exists());
+        assert_eq!(
+            fs::read(parent.join(STATE_COMPONENTS[3]).join(STATE_FORMAT_NAME)).unwrap(),
+            STATE_FORMAT_BYTES
+        );
+
+        fs::remove_dir_all(root).unwrap();
+    }
 }
 
 fn acquire_locked_marker(
