@@ -67,6 +67,12 @@ run_registered_tests lib lib \
   "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::substituted_leaf_is_quarantined_and_preserved_without_deletion" \
   "routine_work::runtime_adapter::production::launch_custody::cleanup::tests::cleanup_recovers_original_absent_quarantine_present" \
   "routine_work::behavior::refusal::tests::only_the_closed_refusal_shape_maps_to_a_public_failure_code" \
+  "observability::format::tests::strict_decode_still_rejects_a_duplicate_row_while_tolerant_decode_records_it" \
+  "observability::format::tests::tolerant_decode_records_conflicting_content_for_one_event_id" \
+  "observability::format::tests::tolerant_decode_scans_past_a_duplicate_and_rejects_later_corruption" \
+  "observability::store::event_query::tests::migration_reader_is_tolerant_only_after_complete_descriptor_bound_validation" \
+  "observability::store::event_query::tests::migration_reader_rejects_any_valid_row_with_the_wrong_store_binding" \
+  "observability::store::event_query::tests::migration_reader_returns_the_full_validated_scan_without_query_truncation" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::causal_relation_requires_a_strict_generation_and_explicit_predecessor" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::closed_relation_classifier_distinguishes_equivalence_order_and_conflict" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::stale_legacy_authentication_is_closed_to_terminal_or_reconciled_history" \
@@ -75,6 +81,15 @@ run_registered_tests lib lib \
   "cli::successor_public::routine::host::supported::migration_admission::tests::every_other_reserved_assessment_remains_planless" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::exact_abandoned_pristine_reserved_duplicate_mints_one_deterministic_ceiling_bound_plan" \
   "cli::successor_public::routine::host::supported::migration_admission::tests::same_inode_content_rewrite_invalidates_the_observed_inventory" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::terminal_event_classifier_distinguishes_missing_conflict_and_complete" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::terminal_event_holds_are_causal_private_and_planless" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::unrelated_owner_parent_siblings_never_enter_the_inventory" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::reserved_parent_namespace_is_exact_and_ignored_identity_remains_snapshotted" \
+  "cli::successor_public::routine::host::supported::migration_admission::tests::active_bootstrap_and_quarantine_replay_normalize_the_same_legacy_source" \
+  "cli::successor_public::routine::migration_apply::tests::typed_event_history_holds_are_never_apply_capable_without_a_plan" \
+  "cli::successor_public::routine::migration_apply::tests::typed_event_history_holds_reject_a_forged_apply_capable_plan" \
+  "cli::successor_public::routine::migration_apply::tests::previous_v6_admission_with_current_v5_plan_is_rejected_fail_closed" \
+  "cli::successor_public::routine::migration_apply::tests::current_v7_admission_with_previous_v4_plan_is_rejected_fail_closed" \
   "cli::successor_public::routine::host::supported::quarantine_apply::tests::visible_settlement_receipt_is_effectful_and_exact_replay_settles_no_effect" \
   "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::authenticated_v4_device_renumbering_migrates_on_first_mutation" \
   "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::legacy_durable_inode_substitution_still_fails_closed" \
@@ -94,13 +109,17 @@ run_registered_tests test routine_public_production_contract \
   "routine_public_production_contract::journeys::diagnosis_is_binding_scoped_while_mutation_remains_globally_strict" \
   "routine_public_production_contract::journeys::routine_host_state_rejects_unknown_format_before_effect" \
   "routine_public_production_contract::journeys::format_absent_canonical_state_is_a_zero_write_migration_candidate" \
+  "routine_public_production_contract::journeys::format_absent_diagnosis_ignores_unrelated_parent_siblings_without_plan_drift" \
   "routine_public_production_contract::journeys::malformed_mixed_singleton_and_canonical_history_is_unsafe_and_preserved" \
   "routine_public_production_contract::journeys::authenticated_equivalent_mixed_history_is_classified_and_preserved" \
   "routine_public_production_contract::journeys::authenticated_stale_reconciled_mixed_history_is_classified_and_preserved" \
   "routine_public_production_contract::journeys::caller_relabelled_reconciled_history_without_a_rolled_back_attempt_is_unsafe" \
   "routine_public_production_contract::journeys::stale_reserved_binding_refuses_after_a_distinct_binding_advances_the_ledger" \
-  "routine_public_production_contract::journeys::mixed_history_with_a_missing_required_event_is_unsafe_and_preserved" \
+  "routine_public_production_contract::journeys::mixed_history_with_a_missing_required_event_is_causal_and_preserved" \
+  "routine_public_production_contract::journeys::duplicate_terminal_event_row_is_causal_conflict_and_preserved" \
+  "routine_public_production_contract::journeys::complete_multi_history_is_conflicting_and_never_mints_a_plan" \
   "routine_public_production_contract::journeys::unknown_format_is_a_typed_read_only_hold" \
+  "routine_public_production_contract::journeys::reserved_parent_transition_names_remain_planless_and_zero_write" \
   "routine_public_production_contract::journeys::unsafe_legacy_entry_is_not_promoted_to_a_migration_candidate" \
   "routine_public_production_contract::journeys::active_legacy_writer_returns_a_preserve_and_retry_hold" \
   "routine_public_production_contract::journeys::exact_diagnosis_record_quarantines_legacy_owner_bootstraps_v8_and_unblocks_next" \

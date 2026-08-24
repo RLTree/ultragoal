@@ -6,8 +6,8 @@ use crate::cli::successor::{ExitClass, OptionName};
 use serde::{Deserialize, Serialize};
 
 const PLAN_LIMIT: u64 = 1024 * 1024;
-const ADMISSION_SCHEMA: &str = "RoutineStateMigrationAdmission-v6";
-const PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v4";
+const ADMISSION_SCHEMA: &str = "RoutineStateMigrationAdmission-v7";
+const PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v5";
 const SUPPORT_LIMIT: &str = "read-only legacy HostState admission plus exact accepted no-gap whole-owner quarantine; a non-current public head is not historical-head proof, a verified fresh v8 stage atomically replaces the legacy owner before that unchanged legacy tree is finalized under a deterministic sibling, permanent exact pending and settled receipts bind the terminal migrated layout, and no legacy authority is imported; no routine execution, ProductState, Product Fitness, readiness, or release claim";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -455,7 +455,7 @@ mod tests {
     }
 
     #[test]
-    fn admission_v6_serializes_one_closed_apply_capable_plan_v4() {
+    fn admission_v7_serializes_one_closed_apply_capable_plan_v5() {
         let record = migration_admission_record(&admission());
         let bytes = serde_json::to_vec(&record).unwrap();
         let decoded: RoutineStateMigrationRecord = serde_json::from_slice(&bytes).unwrap();
@@ -465,6 +465,99 @@ mod tests {
         assert_eq!(plan.schema_version, PLAN_SCHEMA);
         assert_eq!(plan.apply_capability, "available_exact_record_only");
         assert_eq!(validate_accepted_record(&record, &plan.plan_id), Some(plan));
+    }
+
+    #[test]
+    fn typed_event_history_holds_are_never_apply_capable_without_a_plan() {
+        for (status, history_relation) in [
+            (
+                "terminal_event_history_incomplete_preserve_and_hold",
+                "terminal_event_history_incomplete",
+            ),
+            (
+                "terminal_event_history_conflicting_preserve_and_hold",
+                "terminal_event_history_conflicting",
+            ),
+        ] {
+            let mut record = migration_admission_record(&admission());
+            record.status = status.to_owned();
+            record.history_relation = history_relation.to_owned();
+            record.quarantine_plan = None;
+
+            assert!(
+                validate_accepted_record(
+                    &record,
+                    &format!("routine-quarantine-sha256:{}", "a".repeat(64))
+                )
+                .is_none()
+            );
+        }
+    }
+
+    #[test]
+    fn typed_event_history_holds_reject_a_forged_apply_capable_plan() {
+        for (status, history_relation) in [
+            (
+                "terminal_event_history_incomplete_preserve_and_hold",
+                "terminal_event_history_incomplete",
+            ),
+            (
+                "terminal_event_history_conflicting_preserve_and_hold",
+                "terminal_event_history_conflicting",
+            ),
+        ] {
+            let mut forged = migration_admission_record(&admission());
+            forged.status = status.to_owned();
+            forged.history_relation = history_relation.to_owned();
+            let accepted = forged.quarantine_plan.as_ref().unwrap().plan_id.clone();
+
+            assert!(validate_accepted_record(&forged, &accepted).is_none());
+        }
+    }
+
+    #[test]
+    fn previous_v6_admission_with_current_v5_plan_is_rejected_fail_closed() {
+        let mut previous_admission = migration_admission_record(&admission());
+        previous_admission.schema_version = "RoutineStateMigrationAdmission-v6".to_owned();
+        let accepted = previous_admission
+            .quarantine_plan
+            .as_ref()
+            .unwrap()
+            .plan_id
+            .clone();
+
+        let previous_bytes = serde_json::to_vec(&previous_admission).unwrap();
+        let decoded: RoutineStateMigrationRecord = serde_json::from_slice(&previous_bytes).unwrap();
+
+        assert_eq!(
+            decoded.quarantine_plan.as_ref().unwrap().schema_version,
+            PLAN_SCHEMA
+        );
+        assert_eq!(serde_json::to_vec(&decoded).unwrap(), previous_bytes);
+        assert!(validate_accepted_record(&decoded, &accepted).is_none());
+    }
+
+    #[test]
+    fn current_v7_admission_with_previous_v4_plan_is_rejected_fail_closed() {
+        let mut previous_plan = migration_admission_record(&admission());
+        previous_plan
+            .quarantine_plan
+            .as_mut()
+            .unwrap()
+            .schema_version = "RoutineStateQuarantinePlan-v4".to_owned();
+        let accepted = previous_plan
+            .quarantine_plan
+            .as_ref()
+            .unwrap()
+            .plan_id
+            .clone();
+
+        let previous_bytes = serde_json::to_vec(&previous_plan).unwrap();
+        let decoded: RoutineStateMigrationRecord = serde_json::from_slice(&previous_bytes).unwrap();
+
+        assert_eq!(decoded.schema_version, ADMISSION_SCHEMA);
+        assert_eq!(serde_json::to_vec(&decoded).unwrap(), previous_bytes);
+        assert!(validate_accepted_record(&decoded, &accepted).is_none());
     }
 
     #[test]

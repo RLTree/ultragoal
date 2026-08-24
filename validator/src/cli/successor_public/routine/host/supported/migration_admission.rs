@@ -19,7 +19,8 @@ const MAX_CHECKPOINT_ENTRY_BYTES: u64 = 16 * 1024;
 const MAX_LOCK_ENTRY_BYTES: u64 = 1024;
 const STALE_RESERVED_HEAD_CEILING: &str = "noncurrent_value_only_historical_head_unproven";
 const QUARANTINE_PLAN_NEXT_ACTION: &str = "preserve all bytes; persist the exact ultragoal --json diagnose JSON unchanged at a relative in-repository path, independently review its deterministic quarantine_plan, then run ultragoal --json migrate apply --plan <relative-diagnosis-record> --accept-plan <quarantine_plan.plan_id>; migrate plan emits a separate ProductMigration projection and is not this command's input";
-const QUARANTINE_PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v4";
+const QUARANTINE_PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v5";
+const IGNORED_PARENT_SNAPSHOT_PREFIX: &str = "owner_parent_ignored/";
 const QUARANTINE_STRATEGY: &str =
     "stage_fresh_v8_then_atomic_exchange_finalize_legacy_and_publish_settlement_receipt";
 const QUARANTINE_APPLY_CAPABILITY: &str = "available_exact_record_only";
@@ -257,6 +258,14 @@ pub(super) fn assess_format_absent(
         if before != after {
             return Ok(stale_writer_hold("absent"));
         }
+        if relation.terminal_events != TerminalEventAssessment::Complete {
+            return Ok(terminal_event_hold(
+                singleton_count,
+                continuation_count,
+                event_count,
+                relation.terminal_events,
+            ));
+        }
         return reconciled_hold(
             singleton_count,
             continuation_count,
@@ -402,6 +411,24 @@ enum HistoryRelation {
 struct ReconciledHistory {
     relation: HistoryRelation,
     reserved: Option<RoutineReservedRecoveryAssessment>,
+    terminal_events: TerminalEventAssessment,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum TerminalEventAssessment {
+    Complete,
+    MissingRequired,
+    Conflicting,
+}
+
+impl TerminalEventAssessment {
+    const fn merge(self, other: Self) -> Self {
+        match (self, other) {
+            (Self::Conflicting, _) | (_, Self::Conflicting) => Self::Conflicting,
+            (Self::MissingRequired, _) | (_, Self::MissingRequired) => Self::MissingRequired,
+            (Self::Complete, Self::Complete) => Self::Complete,
+        }
+    }
 }
 
 impl HistoryRelation {
@@ -440,7 +467,7 @@ fn reconcile_mixed_history(
             }
         }
     }
-    validate_terminal_event_history(adapter, &checkpoints)?;
+    let terminal_events = validate_terminal_event_history(adapter, &checkpoints)?;
     let relation = classify_history_relation(singleton, &checkpoints[1..])?;
     Ok(ReconciledHistory {
         relation,
@@ -451,6 +478,7 @@ fn reconcile_mixed_history(
         reserved: (relation == HistoryRelation::RedundantEquivalent)
             .then(|| reserved.map(|(_, assessment)| assessment))
             .flatten(),
+        terminal_events,
     })
 }
 
@@ -478,6 +506,9 @@ fn classify_history_relation(
     singleton: &ContinuationCheckpoint,
     canonical: &[ContinuationCheckpoint],
 ) -> Result<HistoryRelation, HostFailure> {
+    if canonical.len() != 1 {
+        return Ok(HistoryRelation::ConflictingHistories);
+    }
     let matching = canonical
         .iter()
         .filter(|candidate| same_binding(singleton, candidate))
@@ -584,7 +615,7 @@ fn may_authenticate_stale_legacy_checkpoint(checkpoint: &ContinuationCheckpoint)
 fn validate_terminal_event_history(
     adapter: &AnchoredDirectory,
     checkpoints: &[ContinuationCheckpoint],
-) -> Result<(), HostFailure> {
+) -> Result<TerminalEventAssessment, HostFailure> {
     let mut expected = BTreeMap::<String, Vec<(crate::observability::SemanticEvent, bool)>>::new();
     for checkpoint in checkpoints
         .iter()
@@ -607,10 +638,12 @@ fn validate_terminal_event_history(
         .into_iter()
         .filter(|name| name.starts_with(EVENT_FILE_PREFIX) && name.ends_with(EVENT_FILE_SUFFIX))
         .collect::<BTreeSet<_>>();
-    if actual_leaves != expected.keys().cloned().collect() {
-        return Err(HostFailure::Invalid);
-    }
+    let expected_leaves = expected.keys().cloned().collect::<BTreeSet<_>>();
+    let mut assessment = classify_terminal_leaf_sets(&expected_leaves, &actual_leaves);
     for (leaf, expected_events) in expected {
+        if !actual_leaves.contains(&leaf) {
+            continue;
+        }
         let binding = expected_events
             .first()
             .ok_or(HostFailure::Invalid)?
@@ -628,27 +661,55 @@ fn validate_terminal_event_history(
             binding.source_id(),
         )
         .map_err(|_| HostFailure::Invalid)?;
-        let query = crate::observability::EventQuery::new(
-            binding.context_id(),
-            binding.candidate_id(),
-            binding.source_id(),
-        )
-        .map_err(|_| HostFailure::Invalid)?
-        .limit(crate::observability::EventStore::supported_result_limit())
-        .map_err(|_| HostFailure::Invalid)?;
-        let events = store.query(&query).map_err(|_| HostFailure::Invalid)?;
-        if events.iter().any(|event| {
-            !expected_events
-                .iter()
-                .any(|(expected, _)| expected == event)
-        }) || expected_events.iter().any(|(expected, required)| {
-            let count = events.iter().filter(|event| *event == expected).count();
-            count > 1 || (*required && count != 1)
-        }) {
-            return Err(HostFailure::Invalid);
+        let (events, duplicate_or_conflicting_event_id) = store
+            .read_events_for_migration_admission()
+            .map_err(|_| HostFailure::Invalid)?;
+        if duplicate_or_conflicting_event_id {
+            assessment = assessment.merge(TerminalEventAssessment::Conflicting);
         }
+        assessment = assessment.merge(classify_terminal_event_rows(&expected_events, &events));
     }
-    Ok(())
+    Ok(assessment)
+}
+
+fn classify_terminal_leaf_sets(
+    expected: &BTreeSet<String>,
+    actual: &BTreeSet<String>,
+) -> TerminalEventAssessment {
+    if actual.iter().any(|leaf| !expected.contains(leaf)) {
+        TerminalEventAssessment::Conflicting
+    } else if expected.iter().any(|leaf| !actual.contains(leaf)) {
+        TerminalEventAssessment::MissingRequired
+    } else {
+        TerminalEventAssessment::Complete
+    }
+}
+
+fn classify_terminal_event_rows(
+    expected: &[(crate::observability::SemanticEvent, bool)],
+    actual: &[crate::observability::SemanticEvent],
+) -> TerminalEventAssessment {
+    let duplicate_actual = actual
+        .iter()
+        .enumerate()
+        .any(|(index, event)| actual[..index].iter().any(|prior| prior == event));
+    let unexpected = actual
+        .iter()
+        .any(|event| !expected.iter().any(|(candidate, _)| candidate == event));
+    // A byte-identical singleton/canonical pair legitimately contributes the
+    // same expected semantic event twice. Treat those expectations as one;
+    // duplicate rows in the observed journal remain conflicting evidence.
+    if duplicate_actual || unexpected {
+        return TerminalEventAssessment::Conflicting;
+    }
+    if expected
+        .iter()
+        .any(|(event, required)| *required && !actual.iter().any(|candidate| candidate == event))
+    {
+        TerminalEventAssessment::MissingRequired
+    } else {
+        TerminalEventAssessment::Complete
+    }
 }
 
 fn counts(adapter: &AnchoredDirectory) -> Result<(usize, usize, usize), HostFailure> {
@@ -687,22 +748,13 @@ fn inventory(
     rows.insert("authority".to_owned(), directory_inventory(authority));
     rows.insert("adapter".to_owned(), directory_inventory(adapter));
     rows.insert("launch".to_owned(), directory_inventory(launch));
-    capture_entries("owner_parent", owner_parent, &mut rows)?;
-    for ignored in ignored_parent_entries {
-        rows.remove(&format!("owner_parent/{ignored}"))
-            .ok_or(HostFailure::Invalid)?;
-    }
-    if observed_owner != STATE_COMPONENTS[3] {
-        let observed = rows
-            .remove(&format!("owner_parent/{observed_owner}"))
-            .ok_or(HostFailure::Invalid)?;
-        if rows
-            .insert(format!("owner_parent/{}", STATE_COMPONENTS[3]), observed)
-            .is_some()
-        {
-            return Err(HostFailure::Invalid);
-        }
-    }
+    capture_scoped_parent_entries(
+        owner_parent,
+        state,
+        observed_owner,
+        ignored_parent_entries,
+        &mut rows,
+    )?;
     capture_entries("authority", authority, &mut rows)?;
     capture_entries("adapter", adapter, &mut rows)?;
     capture_entries("launch", launch, &mut rows)?;
@@ -719,6 +771,104 @@ fn inventory(
     adapter.verify()?;
     launch.verify()?;
     Ok(rows)
+}
+
+fn capture_scoped_parent_entries(
+    owner_parent: &AnchoredDirectory,
+    state: &AnchoredDirectory,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
+    rows: &mut BTreeMap<String, InventoryEntry>,
+) -> Result<(), HostFailure> {
+    let ignored = ignored_parent_entries
+        .iter()
+        .map(|name| (*name).to_owned())
+        .collect::<BTreeSet<_>>();
+    if ignored.len() != ignored_parent_entries.len()
+        || !valid_parent_transition_phase(observed_owner, &ignored)
+    {
+        return Err(HostFailure::Invalid);
+    }
+    let expected = ignored
+        .iter()
+        .cloned()
+        .chain(std::iter::once(observed_owner.to_owned()))
+        .collect::<BTreeSet<_>>();
+    let discovered = scoped_reserved_parent_names(owner_parent, observed_owner)?;
+    if discovered != expected {
+        return Err(HostFailure::Invalid);
+    }
+
+    let mut identities = BTreeMap::new();
+    for name in &discovered {
+        let observed = owner_parent.stat(name)?.ok_or(HostFailure::Invalid)?;
+        if observed.mode & libc::S_IFMT as u32 != libc::S_IFDIR as u32 {
+            return Err(HostFailure::Invalid);
+        }
+        let opened = owner_parent.open_child(name)?;
+        if opened.identity != observed
+            || (name == observed_owner && opened.identity != state.identity)
+        {
+            return Err(HostFailure::Invalid);
+        }
+        opened.verify()?;
+        identities.insert(name.clone(), observed);
+    }
+    if scoped_reserved_parent_names(owner_parent, observed_owner)? != discovered
+        || identities
+            .iter()
+            .any(|(name, identity)| owner_parent.stat(name).ok().flatten() != Some(*identity))
+    {
+        return Err(HostFailure::Invalid);
+    }
+
+    for (name, identity) in identities {
+        let path = if ignored.contains(&name) {
+            format!("{IGNORED_PARENT_SNAPSHOT_PREFIX}{name}")
+        } else {
+            format!("owner_parent/{}", STATE_COMPONENTS[3])
+        };
+        if rows
+            .insert(
+                path,
+                InventoryEntry {
+                    identity,
+                    content_sha256: None,
+                },
+            )
+            .is_some()
+        {
+            return Err(HostFailure::Invalid);
+        }
+    }
+    Ok(())
+}
+
+fn scoped_reserved_parent_names(
+    owner_parent: &AnchoredDirectory,
+    observed_owner: &str,
+) -> Result<BTreeSet<String>, HostFailure> {
+    Ok(owner_parent
+        .entry_names()?
+        .into_iter()
+        .filter(|name| {
+            name == observed_owner
+                || name == STATE_COMPONENTS[3]
+                || name == BOOTSTRAP_STAGE
+                || name.starts_with("routine-public.quarantine-")
+        })
+        .collect())
+}
+
+fn valid_parent_transition_phase(observed_owner: &str, ignored: &BTreeSet<String>) -> bool {
+    if observed_owner == STATE_COMPONENTS[3] {
+        return ignored.is_empty() || ignored == &BTreeSet::from([BOOTSTRAP_STAGE.to_owned()]);
+    }
+    if observed_owner == BOOTSTRAP_STAGE || observed_owner.starts_with("routine-public.quarantine-")
+    {
+        return ignored == &BTreeSet::from([STATE_COMPONENTS[3].to_owned()]);
+    }
+    false
 }
 
 fn quarantine_plan(
@@ -815,7 +965,7 @@ fn quarantine_plan_id(
     history_basis: QuarantinePlanHistoryBasis,
 ) -> String {
     let mut plan = Sha256::new();
-    plan.update(b"routine-state-quarantine-plan-v4\0");
+    plan.update(b"routine-state-quarantine-plan-v5\0");
     plan.update(source_inventory_sha256.as_bytes());
     plan.update([0]);
     plan.update(source_owner_tree_sha256.as_bytes());
@@ -884,7 +1034,9 @@ fn is_sha256(value: &str) -> bool {
 fn owner_tree_sha256(inventory: &BTreeMap<String, InventoryEntry>) -> String {
     inventory_sha256_entries(
         inventory.iter().filter(|(path, _)| {
-            path.as_str() != "owner_parent" && !path.starts_with("owner_parent/")
+            path.as_str() != "owner_parent"
+                && !path.starts_with("owner_parent/")
+                && !path.starts_with(IGNORED_PARENT_SNAPSHOT_PREFIX)
         }),
         b"routine-state-quarantine-owner-tree-v2\0",
     )
@@ -942,8 +1094,10 @@ fn target_path_sha256(target: &Path) -> String {
 
 fn inventory_sha256(inventory: &BTreeMap<String, InventoryEntry>) -> String {
     inventory_sha256_entries(
-        inventory.iter(),
-        b"routine-state-quarantine-source-inventory-v2\0",
+        inventory
+            .iter()
+            .filter(|(path, _)| !path.starts_with(IGNORED_PARENT_SNAPSHOT_PREFIX)),
+        b"routine-state-quarantine-source-inventory-v3\0",
     )
 }
 
@@ -1142,6 +1296,40 @@ fn raw_duplicate_history(inventory: &BTreeMap<String, InventoryEntry>) -> bool {
     canonical.len() == 1 && canonical[0] == singleton
 }
 
+fn terminal_event_hold(
+    singleton: usize,
+    canonical: usize,
+    events: usize,
+    assessment: TerminalEventAssessment,
+) -> RoutineStateMigrationAdmission {
+    let (status, history_relation, next_action) = match assessment {
+        TerminalEventAssessment::MissingRequired => (
+            "terminal_event_history_incomplete_preserve_and_hold",
+            "terminal_event_history_incomplete",
+            "preserve all bytes; inspect the missing authenticated terminal-event evidence without synthesizing, deleting, or rewriting history; retry diagnosis only after the exact evidence is lawfully restored",
+        ),
+        TerminalEventAssessment::Conflicting => (
+            "terminal_event_history_conflicting_preserve_and_hold",
+            "terminal_event_history_conflicting",
+            "preserve all bytes; inspect the conflicting terminal-event evidence without synthesizing, deleting, or rewriting history; do not propose or apply a migration",
+        ),
+        TerminalEventAssessment::Complete => {
+            return unsafe_hold("absent");
+        }
+    };
+    RoutineStateMigrationAdmission {
+        status,
+        format_status: "absent_legacy",
+        legacy_singleton_count: singleton,
+        canonical_continuation_count: canonical,
+        event_journal_count: events,
+        history_relation,
+        next_action,
+        reserved_recovery: None,
+        quarantine_plan: None,
+    }
+}
+
 fn stale_writer_hold(format_status: &'static str) -> RoutineStateMigrationAdmission {
     RoutineStateMigrationAdmission {
         status: "stale_writer_preserve_and_retry",
@@ -1173,7 +1361,8 @@ fn unsafe_hold(format_status: &'static str) -> RoutineStateMigrationAdmission {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::os::unix::fs::PermissionsExt;
+    use std::ffi::CString;
+    use std::os::unix::fs::{PermissionsExt, symlink};
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT: AtomicU64 = AtomicU64::new(0);
@@ -1236,6 +1425,44 @@ mod tests {
                 },
             ),
         ])
+    }
+
+    fn create_empty_legacy_owner(root: &Path) {
+        let state = root.join(STATE_COMPONENTS[3]);
+        for directory in [
+            root.to_path_buf(),
+            state.clone(),
+            state.join(AUTHORITY_DIRECTORY),
+            state.join(ADAPTER_DIRECTORY),
+            state.join(LAUNCH_DIRECTORY),
+        ] {
+            fs::create_dir(directory.clone()).unwrap();
+            fs::set_permissions(directory, fs::Permissions::from_mode(0o700)).unwrap();
+        }
+    }
+
+    fn test_inventory(
+        root: &Path,
+        observed_owner: &str,
+        ignored_parent_entries: &[&str],
+    ) -> Result<BTreeMap<String, InventoryEntry>, HostFailure> {
+        let state_path = root.join(observed_owner);
+        let owner_parent =
+            AnchoredDirectory::open_absolute(root, DirectorySecurity::PrivateAuthority)?;
+        let state =
+            AnchoredDirectory::open_absolute(&state_path, DirectorySecurity::PrivateAuthority)?;
+        let authority = state.open_child(AUTHORITY_DIRECTORY)?;
+        let adapter = state.open_child(ADAPTER_DIRECTORY)?;
+        let launch = state.open_child(LAUNCH_DIRECTORY)?;
+        inventory(
+            &owner_parent,
+            &state,
+            &authority,
+            &adapter,
+            &launch,
+            observed_owner,
+            ignored_parent_entries,
+        )
     }
 
     #[test]
@@ -1332,6 +1559,7 @@ mod tests {
                     owner: ReservedRecoveryOwnerObservation::NotObserved,
                     effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
                 }),
+                terminal_events: TerminalEventAssessment::Complete,
             },
             &inventory,
             Path::new("/private/tmp/target"),
@@ -1375,6 +1603,7 @@ mod tests {
                     owner: ReservedRecoveryOwnerObservation::NotObserved,
                     effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
                 }),
+                terminal_events: TerminalEventAssessment::Complete,
             },
             &inventory,
             Path::new("/private/tmp/target"),
@@ -1394,6 +1623,7 @@ mod tests {
                 owner: ReservedRecoveryOwnerObservation::NotObserved,
                 effect: ReservedRecoveryEffectEvidence::PristineNoEffect,
             }),
+            terminal_events: TerminalEventAssessment::Complete,
         };
 
         let first = reconciled_hold(1, 1, 0, history(), &inventory, target).unwrap();
@@ -1406,7 +1636,7 @@ mod tests {
         assert_eq!(first.history_relation, "redundant_equivalent");
         assert!(first.reserved_recovery.is_some());
         let plan = first.quarantine_plan.as_ref().unwrap();
-        assert_eq!(plan.schema_version, "RoutineStateQuarantinePlan-v4");
+        assert_eq!(plan.schema_version, "RoutineStateQuarantinePlan-v5");
         assert_eq!(
             plan.authoritative_history,
             "none_noncurrent_value_only_historical_head_unproven"
@@ -1472,6 +1702,7 @@ mod tests {
                 ReconciledHistory {
                     relation: HistoryRelation::RedundantEquivalent,
                     reserved: Some(RoutineReservedRecoveryAssessment { owner, effect }),
+                    terminal_events: TerminalEventAssessment::Complete,
                 },
                 &inventory,
                 target,
@@ -1528,6 +1759,97 @@ mod tests {
             classify_history_relation(&singleton, &[singleton.clone(), singleton.clone()]).unwrap(),
             HistoryRelation::ConflictingHistories
         );
+        assert_eq!(
+            classify_history_relation(&singleton, &[singleton.clone(), disjoint]).unwrap(),
+            HistoryRelation::ConflictingHistories
+        );
+    }
+
+    #[test]
+    fn terminal_event_classifier_distinguishes_missing_conflict_and_complete() {
+        let terminal = checkpoint(1, "routine-cont-sha256:event", &[]);
+        let event = super::super::super::terminal_semantic_event_from_checkpoint(
+            Path::new(terminal.target()),
+            &terminal,
+        )
+        .unwrap();
+        let expected = vec![(event.clone(), true)];
+        assert_eq!(
+            classify_terminal_event_rows(&expected, std::slice::from_ref(&event)),
+            TerminalEventAssessment::Complete
+        );
+        assert_eq!(
+            classify_terminal_event_rows(&expected, &[]),
+            TerminalEventAssessment::MissingRequired
+        );
+        assert_eq!(
+            classify_terminal_event_rows(&[(event.clone(), false)], &[]),
+            TerminalEventAssessment::Complete
+        );
+        assert_eq!(
+            classify_terminal_event_rows(&expected, &[event.clone(), event.clone()]),
+            TerminalEventAssessment::Conflicting
+        );
+        assert_eq!(
+            classify_terminal_event_rows(
+                &[(event.clone(), true), (event.clone(), true)],
+                &[event.clone()]
+            ),
+            TerminalEventAssessment::Complete
+        );
+        let mut unexpected = event.clone();
+        unexpected.event_id.push_str("-unexpected");
+        assert_eq!(
+            classify_terminal_event_rows(&expected, &[unexpected]),
+            TerminalEventAssessment::Conflicting
+        );
+
+        let expected_leaves = BTreeSet::from(["expected".to_owned()]);
+        assert_eq!(
+            classify_terminal_leaf_sets(&expected_leaves, &BTreeSet::new()),
+            TerminalEventAssessment::MissingRequired
+        );
+        assert_eq!(
+            classify_terminal_leaf_sets(
+                &expected_leaves,
+                &BTreeSet::from(["unexpected".to_owned()]),
+            ),
+            TerminalEventAssessment::Conflicting
+        );
+        assert_eq!(
+            classify_terminal_leaf_sets(&expected_leaves, &expected_leaves),
+            TerminalEventAssessment::Complete
+        );
+    }
+
+    #[test]
+    fn terminal_event_holds_are_causal_private_and_planless() {
+        for (assessment, status, relation) in [
+            (
+                TerminalEventAssessment::MissingRequired,
+                "terminal_event_history_incomplete_preserve_and_hold",
+                "terminal_event_history_incomplete",
+            ),
+            (
+                TerminalEventAssessment::Conflicting,
+                "terminal_event_history_conflicting_preserve_and_hold",
+                "terminal_event_history_conflicting",
+            ),
+        ] {
+            let held = terminal_event_hold(1, 37, 8, assessment);
+            assert_eq!(held.status, status);
+            assert_eq!(held.history_relation, relation);
+            assert_eq!(held.legacy_singleton_count, 1);
+            assert_eq!(held.canonical_continuation_count, 37);
+            assert_eq!(held.event_journal_count, 8);
+            assert!(held.reserved_recovery.is_none());
+            assert!(held.quarantine_plan.is_none());
+            assert!(held.next_action.contains("preserve all bytes"));
+            assert!(held.next_action.contains("without synthesizing"));
+            assert!(!held.next_action.contains("/private/"));
+            assert!(!held.next_action.contains("sha256:"));
+            assert!(!held.next_action.contains("migrate apply --plan"));
+        }
     }
 
     #[test]
@@ -1594,7 +1916,18 @@ mod tests {
         let first = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
         let second = quarantine_plan(&observed, "redundant_equivalent", target).unwrap();
         assert_eq!(first, second);
+        assert_eq!(first.schema_version, "RoutineStateQuarantinePlan-v5");
         assert!(quarantine_plan_is_semantically_valid(&first));
+        let mut legacy_v4 = first.clone();
+        legacy_v4.schema_version = "RoutineStateQuarantinePlan-v4".to_owned();
+        assert!(!quarantine_plan_is_semantically_valid(&legacy_v4));
+        assert_ne!(
+            first.source_inventory_sha256,
+            inventory_sha256_entries(
+                observed.iter(),
+                b"routine-state-quarantine-source-inventory-v2\0",
+            )
+        );
         for mutation in ["plan_id", "quarantine_owner", "strategy", "operation"] {
             let mut invalid = first.clone();
             match mutation {
@@ -1701,6 +2034,7 @@ mod tests {
                     owner: crate::routine_work::ReservedRecoveryOwnerObservation::NotObserved,
                     effect: crate::routine_work::ReservedRecoveryEffectEvidence::PristineNoEffect,
                 }),
+                terminal_events: TerminalEventAssessment::Complete,
             },
             &observed,
             target,
@@ -1712,13 +2046,124 @@ mod tests {
     }
 
     #[test]
+    fn unrelated_owner_parent_siblings_never_enter_the_inventory() {
+        let root = std::env::temp_dir().join(format!(
+            "hmi{:x}{:x}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        create_empty_legacy_owner(&root);
+        let baseline = test_inventory(&root, STATE_COMPONENTS[3], &[]).unwrap();
+
+        let unreadable = root.join("unrelated-regular");
+        fs::write(&unreadable, b"must not be opened").unwrap();
+        fs::set_permissions(&unreadable, fs::Permissions::from_mode(0o000)).unwrap();
+        let unrelated_directory = root.join("repository-fit");
+        fs::create_dir(&unrelated_directory).unwrap();
+        fs::set_permissions(&unrelated_directory, fs::Permissions::from_mode(0o777)).unwrap();
+        symlink("missing-target", root.join("unrelated-symlink")).unwrap();
+        let fifo = root.join("unrelated-fifo");
+        let fifo_name = CString::new(fifo.as_os_str().as_bytes()).unwrap();
+        // SAFETY: `fifo_name` is a live NUL-terminated pathname and the mode is bounded.
+        assert_eq!(unsafe { libc::mkfifo(fifo_name.as_ptr(), 0o000) }, 0);
+
+        let with_siblings = test_inventory(&root, STATE_COMPONENTS[3], &[]).unwrap();
+        assert_eq!(with_siblings, baseline);
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn reserved_parent_namespace_is_exact_and_ignored_identity_remains_snapshotted() {
+        let root = std::env::temp_dir().join(format!(
+            "hul-migration-reserved-parent-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        create_empty_legacy_owner(&root);
+        let baseline = test_inventory(&root, STATE_COMPONENTS[3], &[]).unwrap();
+        let bootstrap = root.join(BOOTSTRAP_STAGE);
+
+        fs::write(&bootstrap, b"wrong type").unwrap();
+        assert!(test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).is_err());
+        fs::remove_file(&bootstrap).unwrap();
+        symlink(STATE_COMPONENTS[3], &bootstrap).unwrap();
+        assert!(test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).is_err());
+        fs::remove_file(&bootstrap).unwrap();
+        fs::create_dir(&bootstrap).unwrap();
+        fs::set_permissions(&bootstrap, fs::Permissions::from_mode(0o755)).unwrap();
+        assert!(test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).is_err());
+        fs::set_permissions(&bootstrap, fs::Permissions::from_mode(0o700)).unwrap();
+
+        let before = test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).unwrap();
+        assert_ne!(before, baseline);
+        assert_eq!(inventory_sha256(&before), inventory_sha256(&baseline));
+        assert_eq!(owner_tree_sha256(&before), owner_tree_sha256(&baseline));
+
+        let extra = root.join("routine-public.quarantine-extra");
+        fs::create_dir(&extra).unwrap();
+        fs::set_permissions(&extra, fs::Permissions::from_mode(0o700)).unwrap();
+        assert!(test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).is_err());
+        fs::remove_dir(&extra).unwrap();
+
+        let drift = bootstrap.join("identity-drift");
+        fs::create_dir(&drift).unwrap();
+        fs::set_permissions(&drift, fs::Permissions::from_mode(0o700)).unwrap();
+        let after = test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).unwrap();
+        assert_ne!(after, before);
+        assert_eq!(inventory_sha256(&after), inventory_sha256(&before));
+        assert_eq!(owner_tree_sha256(&after), owner_tree_sha256(&before));
+
+        fs::remove_dir(&drift).unwrap();
+        fs::remove_dir(&bootstrap).unwrap();
+        assert!(test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).is_err());
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn active_bootstrap_and_quarantine_replay_normalize_the_same_legacy_source() {
+        let root = std::env::temp_dir().join(format!(
+            "hul-migration-transition-normalization-{}-{}",
+            std::process::id(),
+            NEXT.fetch_add(1, Ordering::Relaxed)
+        ));
+        create_empty_legacy_owner(&root);
+        let baseline = test_inventory(&root, STATE_COMPONENTS[3], &[]).unwrap();
+
+        let bootstrap = root.join(BOOTSTRAP_STAGE);
+        fs::create_dir(&bootstrap).unwrap();
+        fs::set_permissions(&bootstrap, fs::Permissions::from_mode(0o700)).unwrap();
+        let staged = test_inventory(&root, STATE_COMPONENTS[3], &[BOOTSTRAP_STAGE]).unwrap();
+        assert_eq!(inventory_sha256(&staged), inventory_sha256(&baseline));
+
+        let swap = root.join("unrelated-swap-name");
+        fs::rename(root.join(STATE_COMPONENTS[3]), &swap).unwrap();
+        fs::rename(&bootstrap, root.join(STATE_COMPONENTS[3])).unwrap();
+        fs::rename(&swap, &bootstrap).unwrap();
+        let exchanged = test_inventory(&root, BOOTSTRAP_STAGE, &[STATE_COMPONENTS[3]]).unwrap();
+        assert_eq!(inventory_sha256(&exchanged), inventory_sha256(&baseline));
+        assert_eq!(owner_tree_sha256(&exchanged), owner_tree_sha256(&baseline));
+
+        let quarantine_name = "routine-public.quarantine-test-plan";
+        fs::rename(&bootstrap, root.join(quarantine_name)).unwrap();
+        let quarantined = test_inventory(&root, quarantine_name, &[STATE_COMPONENTS[3]]).unwrap();
+        assert_eq!(inventory_sha256(&quarantined), inventory_sha256(&baseline));
+        assert_eq!(
+            owner_tree_sha256(&quarantined),
+            owner_tree_sha256(&baseline)
+        );
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
     fn same_inode_content_rewrite_invalidates_the_observed_inventory() {
         let root = std::env::temp_dir().join(format!(
             "hul-migration-inventory-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
-        let state_path = root.join("state");
+        let state_path = root.join(STATE_COMPONENTS[3]);
         let authority_path = state_path.join(AUTHORITY_DIRECTORY);
         let adapter_path = state_path.join(ADAPTER_DIRECTORY);
         let launch_path = state_path.join(LAUNCH_DIRECTORY);
@@ -1753,7 +2198,7 @@ mod tests {
             &authority,
             &adapter,
             &launch,
-            "state",
+            STATE_COMPONENTS[3],
             &[],
         )
         .unwrap();
@@ -1768,7 +2213,7 @@ mod tests {
             &authority,
             &adapter,
             &launch,
-            "state",
+            STATE_COMPONENTS[3],
             &[],
         )
         .unwrap();
@@ -1785,7 +2230,7 @@ mod tests {
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
-        let state_path = root.join("legacy-owner");
+        let state_path = root.join(STATE_COMPONENTS[3]);
         let authority_path = state_path.join(AUTHORITY_DIRECTORY);
         let adapter_path = state_path.join(ADAPTER_DIRECTORY);
         let launch_path = state_path.join(LAUNCH_DIRECTORY);
@@ -1813,12 +2258,12 @@ mod tests {
             &authority,
             &adapter,
             &launch,
-            "legacy-owner",
+            STATE_COMPONENTS[3],
             &[],
         )
         .unwrap();
 
-        let fresh = root.join("fresh-owner");
+        let fresh = root.join(BOOTSTRAP_STAGE);
         fs::create_dir(&fresh).unwrap();
         fs::set_permissions(&fresh, fs::Permissions::from_mode(0o700)).unwrap();
         let normalized = inventory(
@@ -1827,11 +2272,16 @@ mod tests {
             &authority,
             &adapter,
             &launch,
-            "legacy-owner",
-            &["fresh-owner"],
+            STATE_COMPONENTS[3],
+            &[BOOTSTRAP_STAGE],
         )
         .unwrap();
-        assert_eq!(normalized, baseline);
+        assert_ne!(normalized, baseline);
+        assert!(normalized.contains_key(&format!(
+            "{IGNORED_PARENT_SNAPSHOT_PREFIX}{BOOTSTRAP_STAGE}"
+        )));
+        assert_eq!(inventory_sha256(&normalized), inventory_sha256(&baseline));
+        assert_eq!(owner_tree_sha256(&normalized), owner_tree_sha256(&baseline));
 
         drop((launch, adapter, authority, state, owner_parent));
         fs::remove_dir_all(root).unwrap();
