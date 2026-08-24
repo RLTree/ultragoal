@@ -62,13 +62,27 @@ pub(crate) fn component(value: &str) -> Result<CString, DistributionError> {
         || value.contains('/')
         || value.contains('\\')
         || !value.is_ascii()
-        || value
-            .bytes()
-            .any(|byte| !(byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-')))
+        || value.bytes().any(|byte| {
+            !(byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'-' | b'+'))
+        })
     {
         return Err(error(DistributionErrorId::InvalidPath));
     }
     CString::new(value).map_err(|_| error(DistributionErrorId::InvalidPath))
+}
+
+#[cfg(test)]
+mod component_tests {
+    use super::component;
+
+    #[test]
+    fn semver_build_separator_does_not_relax_descriptor_path_safety() {
+        assert!(component("0.0.41+codex.20260824093100").is_ok());
+        for invalid in ["", ".", "..", "a/b", "a\\b", "a\0b", "café"] {
+            assert!(component(invalid).is_err(), "{invalid:?}");
+        }
+        assert!(component(&"a".repeat(256)).is_err());
+    }
 }
 
 pub(crate) fn directory_identity(metadata: &std::fs::Metadata) -> DirectoryIdentity {

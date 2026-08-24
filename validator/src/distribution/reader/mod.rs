@@ -110,6 +110,16 @@ mod tests {
     static NEXT: AtomicU64 = AtomicU64::new(0);
 
     #[test]
+    fn public_relative_paths_do_not_admit_semver_build_separators() {
+        assert_eq!(
+            validate_relative_path("cache/0.0.41+codex.20260824093100")
+                .unwrap_err()
+                .id(),
+            DistributionErrorId::InvalidPath
+        );
+    }
+
+    #[test]
     fn changed_object_between_read_and_session_seal_is_rejected() {
         let root = std::env::temp_dir().join(format!(
             "ultragoal-distribution-reader-race-{}-{}",
