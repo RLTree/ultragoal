@@ -16,6 +16,8 @@ pub use materialize::{
     materialize_package, reconcile as reconcile_materialized_tree, rollback_materialization,
     tree_sha256,
 };
+#[cfg(test)]
+pub(crate) use output::output_filename_version;
 pub use output::{
     PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact,
     reconcile_package_artifact, recover_package_artifact, rollback_package_artifact,

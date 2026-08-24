@@ -124,7 +124,7 @@ fn parse_host_plugin_registry_observation_inner(
     let (marketplace_index, marketplace) = exact_marketplace_row(marketplace_rows)?;
 
     let plugin_version = string(plugin, "version").ok_or_else(identity)?;
-    if crate::plugin_product::lifecycle::Version::parse(plugin_version).is_err()
+    if crate::plugin_manifest::Version::parse_codex_plugin(plugin_version).is_none()
         || expected_plugin_version.is_some_and(|expected| expected != plugin_version)
         || string(plugin, "pluginId") != Some(PLUGIN_ID)
         || string(plugin, "name") != Some(PLUGIN_NAME)
@@ -455,6 +455,7 @@ mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT: AtomicU64 = AtomicU64::new(1);
+    const CURRENT_VERSION: &str = "0.0.41+codex.20260824093100";
 
     #[test]
     fn exact_enabled_local_rows_select_one_canonical_installed_root() {
@@ -462,7 +463,7 @@ mod tests {
         let observation = parse_host_plugin_registry_observation(
             &fixture.plugin_json(),
             &fixture.marketplace_json(),
-            "0.0.40",
+            CURRENT_VERSION,
             &fixture.codex,
             &digest(b"selected-codex"),
         )
@@ -481,7 +482,7 @@ mod tests {
             &digest(b"selected-codex"),
         )
         .unwrap();
-        assert_eq!(observation.plugin_version(), "0.0.40");
+        assert_eq!(observation.plugin_version(), CURRENT_VERSION);
         let malformed = serde_json::to_vec(&json!({
             "installed": [merge(&fixture.plugin_row(), "version", json!("latest"))]
         }))
@@ -495,6 +496,88 @@ mod tests {
             )
             .is_err()
         );
+    }
+
+    #[test]
+    fn registry_observation_accepts_and_seals_the_live_plugin_creator_version() {
+        let fixture = Fixture::new();
+        let version = "0.0.39+codex.20260820190706";
+        let plugin_json = serde_json::to_vec(&json!({
+            "installed": [merge(&fixture.plugin_row(), "version", json!(version))]
+        }))
+        .unwrap();
+        let observation = parse_unpinned_host_plugin_registry_observation(
+            &plugin_json,
+            &fixture.marketplace_json(),
+            &fixture.codex,
+            &digest(b"selected-codex"),
+        )
+        .unwrap();
+        assert_eq!(observation.plugin_version(), version);
+        assert!(
+            parse_host_plugin_registry_observation(
+                &plugin_json,
+                &fixture.marketplace_json(),
+                version,
+                &fixture.codex,
+                &digest(b"selected-codex"),
+            )
+            .is_ok()
+        );
+
+        let substituted_version = "0.0.39+codex.substituted-cachebuster";
+        let substituted_json = serde_json::to_vec(&json!({
+            "installed": [merge(
+                &fixture.plugin_row(),
+                "version",
+                json!(substituted_version),
+            )]
+        }))
+        .unwrap();
+        let substituted = parse_unpinned_host_plugin_registry_observation(
+            &substituted_json,
+            &fixture.marketplace_json(),
+            &fixture.codex,
+            &digest(b"selected-codex"),
+        )
+        .unwrap();
+        assert_ne!(observation.sha256(), substituted.sha256());
+        assert!(
+            parse_host_plugin_registry_observation(
+                &plugin_json,
+                &fixture.marketplace_json(),
+                substituted_version,
+                &fixture.codex,
+                &digest(b"selected-codex"),
+            )
+            .is_err()
+        );
+
+        for invalid in [
+            "0.0.39+other.token",
+            "0.0.39+codex.",
+            "0.0.39+codex.-token",
+            "0.0.39+codex.token-",
+            "0.0.39+codex.two--hyphens",
+            "0.0.39+codex.UPPER",
+            "0.0.39+codex.two.parts",
+            "0.0.39+codex.token+extra",
+        ] {
+            let malformed = serde_json::to_vec(&json!({
+                "installed": [merge(&fixture.plugin_row(), "version", json!(invalid))]
+            }))
+            .unwrap();
+            assert!(
+                parse_unpinned_host_plugin_registry_observation(
+                    &malformed,
+                    &fixture.marketplace_json(),
+                    &fixture.codex,
+                    &digest(b"selected-codex"),
+                )
+                .is_err(),
+                "{invalid}"
+            );
+        }
     }
 
     #[test]
@@ -521,7 +604,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &bytes,
                     &fixture.marketplace_json(),
-                    "0.0.40",
+                    CURRENT_VERSION,
                     &fixture.codex,
                     &digest(b"selected-codex"),
                 )
@@ -545,7 +628,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &bytes,
-                    "0.0.40",
+                    CURRENT_VERSION,
                     &fixture.codex,
                     &digest(b"selected-codex"),
                 )
@@ -569,7 +652,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &fixture.marketplace_json(),
-                    "0.0.40",
+                    CURRENT_VERSION,
                     &alias,
                     &digest(b"selected-codex"),
                 )
@@ -636,10 +719,10 @@ mod tests {
                 serde_json::to_string(&fixture.plugin_row()).unwrap()
             ),
             format!(
-                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.40\",\"installed\":true,\"enabled\":false,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path}}}}}]}}"
+                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"{CURRENT_VERSION}\",\"installed\":true,\"enabled\":false,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path}}}}}]}}"
             ),
             format!(
-                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"0.0.40\",\"installed\":true,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path},\"path\":{plugin_path}}}}}]}}"
+                "{{\"installed\":[{{\"pluginId\":{PLUGIN_ID:?},\"name\":{PLUGIN_NAME:?},\"marketplaceName\":{MARKETPLACE_NAME:?},\"version\":\"{CURRENT_VERSION}\",\"installed\":true,\"enabled\":true,\"source\":{{\"source\":\"local\",\"path\":{plugin_path},\"path\":{plugin_path}}}}}]}}"
             ),
         ];
         for plugin_json in plugin_cases {
@@ -693,7 +776,7 @@ mod tests {
                 "pluginId": PLUGIN_ID,
                 "name": PLUGIN_NAME,
                 "marketplaceName": MARKETPLACE_NAME,
-                "version": "0.0.40",
+                "version": CURRENT_VERSION,
                 "installed": true,
                 "enabled": true,
                 "source": {"source":"local","path":self.plugin},
@@ -717,7 +800,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 &self.plugin_json(),
                 &self.marketplace_json(),
-                "0.0.40",
+                CURRENT_VERSION,
                 codex,
                 codex_sha256,
             )
@@ -732,7 +815,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 plugin_json,
                 marketplace_json,
-                "0.0.40",
+                CURRENT_VERSION,
                 &self.codex,
                 &digest(b"selected-codex"),
             )

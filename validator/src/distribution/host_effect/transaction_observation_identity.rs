@@ -30,7 +30,7 @@ pub(crate) fn expected_plugin_digest(
         "plugin",
         &[
             input.plugin.clone(),
-            version_text(authority.version),
+            version_text(&authority.version),
             authority.package_sha256.clone(),
             authority.inventory_sha256.clone(),
             authority.candidate_id.clone(),
@@ -79,7 +79,7 @@ pub(crate) fn observe_plugin(
         .ok_or("Codex plugin JSON lacks the expected plugin row")?;
     let version = string_field(row, &["version"])
         .ok_or("Codex plugin JSON lacks the typed plugin version")?;
-    if version != version_text(authority.version) {
+    if version != version_text(&authority.version) {
         return Err("Codex plugin version does not match the lifecycle authority");
     }
     if string_field(row, &["marketplaceName", "marketplace"]) != Some(input.marketplace.as_str()) {
@@ -176,8 +176,8 @@ fn canonical_path(path: &Path) -> Result<String, &'static str> {
         .map_err(|_| "host observation authority path unavailable")
 }
 
-fn version_text(version: Version) -> String {
-    format!("{}.{}.{}", version.major, version.minor, version.patch)
+fn version_text(version: &Version) -> String {
+    version.to_string()
 }
 
 #[cfg(test)]
@@ -207,22 +207,24 @@ mod tests {
         altered_marketplace["marketplaces"][0]["source_root"] =
             json!(root.join("other").display().to_string());
         assert!(observe_marketplace(&altered_marketplace, &input, true).is_err());
+        let version = "1.2.3+codex.local-20260824-120000";
         let authority = PackageAuthority {
-            version: Version::parse("1.2.3").unwrap(),
+            version: Version::parse(version).unwrap(),
             package_sha256: digest('a'),
             inventory_sha256: digest('b'),
             candidate_id: digest('c'),
         };
         let plugin = json!({"installed": [{
             "id": "harness-ultragoal",
-            "version": "1.2.3",
+            "version": version,
             "marketplaceName": "local-marketplace",
             "source": {
                 "source": "local",
                 "path": input.marketplace_source_path.display().to_string()
             }
         }]});
-        assert!(observe_plugin(&plugin, &input, Some(&authority), &root).is_ok());
+        let (_, locations) = observe_plugin(&plugin, &input, Some(&authority), &root).unwrap();
+        assert!(locations.cache.ends_with(version));
         let mut altered_plugin = plugin.clone();
         altered_plugin["installed"][0]["source"]["path"] =
             json!(root.join("other").display().to_string());

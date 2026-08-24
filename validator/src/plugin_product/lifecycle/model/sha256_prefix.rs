@@ -26,17 +26,31 @@ pub enum LifecycleEffect {
     ProbeRuntime,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Version {
     pub major: u64,
     pub minor: u64,
     pub patch: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    prerelease: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    build_metadata: Option<String>,
 }
 
 impl Version {
     pub fn parse(value: &str) -> Result<Self, LifecycleError> {
-        let mut parts = value.split('.');
+        crate::plugin_manifest::Version::parse_codex_plugin(value)
+            .ok_or(LifecycleError::InvalidVersion)?;
+        let (core_prerelease, build_metadata) = value
+            .split_once('+')
+            .map_or((value, None), |(core, build)| (core, Some(build)));
+        let (core, prerelease) = core_prerelease
+            .split_once('-')
+            .map_or((core_prerelease, None), |(core, prerelease)| {
+                (core, Some(prerelease))
+            });
+        let mut parts = core.split('.');
         let major = number(parts.next())?;
         let minor = number(parts.next())?;
         let patch = number(parts.next())?;
@@ -47,19 +61,36 @@ impl Version {
             major,
             minor,
             patch,
+            prerelease: prerelease.map(str::to_owned),
+            build_metadata: build_metadata.map(str::to_owned),
         })
     }
-}
 
-impl Ord for Version {
-    fn cmp(&self, other: &Self) -> Ordering {
-        (self.major, self.minor, self.patch).cmp(&(other.major, other.minor, other.patch))
+    pub fn precedence_cmp(&self, other: &Self) -> Result<Ordering, LifecycleError> {
+        let left = crate::plugin_manifest::Version::parse_codex_plugin(&self.to_string())
+            .ok_or(LifecycleError::InvalidVersion)?;
+        let right = crate::plugin_manifest::Version::parse_codex_plugin(&other.to_string())
+            .ok_or(LifecycleError::InvalidVersion)?;
+        Ok(left.precedence_cmp(&right))
+    }
+
+    fn validate(&self) -> Result<(), LifecycleError> {
+        (Self::parse(&self.to_string())? == *self)
+            .then_some(())
+            .ok_or(LifecycleError::InvalidVersion)
     }
 }
 
-impl PartialOrd for Version {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
+impl fmt::Display for Version {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "{}.{}.{}", self.major, self.minor, self.patch)?;
+        if let Some(prerelease) = &self.prerelease {
+            write!(formatter, "-{prerelease}")?;
+        }
+        if let Some(build_metadata) = &self.build_metadata {
+            write!(formatter, "+{build_metadata}")?;
+        }
+        Ok(())
     }
 }
 
@@ -82,6 +113,7 @@ pub struct PackageAuthority {
 
 impl PackageAuthority {
     pub fn validate(&self) -> Result<(), LifecycleError> {
+        self.version.validate()?;
         for digest in [
             &self.package_sha256,
             &self.inventory_sha256,

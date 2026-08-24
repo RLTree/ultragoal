@@ -184,6 +184,8 @@ fn component(value: &str, subtree: bool) -> Result<String, DistributionError> {
 mod tests {
     use super::*;
 
+    const VERSION: &str = "0.0.41+codex.20260824093100";
+
     fn entry(path: &str, role: PackageRole, bytes: &[u8]) -> PackageEntry {
         PackageEntry {
             path: path.to_owned(),
@@ -199,7 +201,7 @@ mod tests {
             entry(
                 ".codex-plugin/plugin.json",
                 PackageRole::Manifest,
-                br#"{"name":"harness-ultragoal","version":"0.0.40","description":"valid","skills":"./skills/"}"#,
+                br#"{"name":"harness-ultragoal","version":"0.0.41+codex.20260824093100","description":"valid","skills":"./skills/"}"#,
             ),
             entry(
                 "skills/harness-ultragoal/SKILL.md",
@@ -218,13 +220,13 @@ mod tests {
     #[test]
     fn canonical_root_agents_are_exact_non_subtree_agent_roots() {
         let entries = entries();
-        validate(&entries, "harness-ultragoal", "0.0.40").expect("canonical root agents");
+        validate(&entries, "harness-ultragoal", VERSION).expect("canonical root agents");
 
         let mut missing = entries.clone();
         missing.retain(|entry| {
             entry.path != crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path
         });
-        assert!(validate(&missing, "harness-ultragoal", "0.0.40").is_err());
+        assert!(validate(&missing, "harness-ultragoal", VERSION).is_err());
 
         let mut nested = entries.clone();
         nested.push(entry(
@@ -232,7 +234,7 @@ mod tests {
             PackageRole::Agent,
             b"unknown",
         ));
-        assert!(validate(&nested, "harness-ultragoal", "0.0.40").is_err());
+        assert!(validate(&nested, "harness-ultragoal", VERSION).is_err());
 
         let mut wrong_role = entries;
         wrong_role
@@ -240,6 +242,6 @@ mod tests {
             .find(|entry| entry.path == crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path)
             .expect("canonical agent")
             .role = PackageRole::Data;
-        assert!(validate(&wrong_role, "harness-ultragoal", "0.0.40").is_err());
+        assert!(validate(&wrong_role, "harness-ultragoal", VERSION).is_err());
     }
 }

@@ -234,14 +234,18 @@ fn build_plan(
         return Err("input archive does not match the exact current-source package");
     }
     let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
-        .map_err(|_| "current installed plugin registry observation is unavailable")?;
+        .map_err(registry_observation_failure_cause)?;
     let before = installed_authority(home, &registry)?;
     let target_version = artifact.snapshot().identity().source().version();
     let before_version = Version::parse(&before.plugin_version)
         .map_err(|_| "installed plugin version is invalid")?;
     let target_version_parsed =
         Version::parse(target_version).map_err(|_| "target plugin version is invalid")?;
-    if target_version_parsed <= before_version {
+    if target_version_parsed
+        .precedence_cmp(&before_version)
+        .map_err(|_| "installed or target plugin version is invalid")?
+        != std::cmp::Ordering::Greater
+    {
         return Err("target package is not a monotonic installed-version successor");
     }
     let target = TargetPackage {
@@ -309,6 +313,15 @@ fn build_plan(
     };
     validate_plan_identity(&record)?;
     Ok(record)
+}
+
+fn registry_observation_failure_cause(
+    failure: super::capabilities::RegistryObservationFailure,
+) -> &'static str {
+    match failure {
+        super::capabilities::RegistryObservationFailure::Unavailable(code) => code,
+        super::capabilities::RegistryObservationFailure::Blocked(id) => id.code(),
+    }
 }
 
 fn installed_authority(
@@ -671,6 +684,8 @@ mod tests {
     use super::*;
     use crate::cli::successor::parse_args;
 
+    const TARGET_VERSION: &str = "0.0.41+codex.20260824093100";
+
     fn digest(byte: char) -> String {
         format!("sha256:{}", byte.to_string().repeat(64))
     }
@@ -678,7 +693,7 @@ mod tests {
     fn record() -> PersonalMarketplaceInstallPlan {
         let mut before = InstalledAuthority {
             schema_version: "HarnessObservedInstalledAuthority-v1".to_owned(),
-            plugin_version: "0.0.39".to_owned(),
+            plugin_version: "0.0.39+codex.20260820190706".to_owned(),
             registry_observation_sha256: digest('a'),
             marketplace_source_relative_path_sha256: digest('0'),
             marketplace_source_tree_sha256: digest('6'),
@@ -697,14 +712,14 @@ mod tests {
             effect: "none".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
             lifecycle_intent: "monotonic-update".to_owned(),
-            input: "target/ultragoal/package-0.0.40.hugpkg".to_owned(),
+            input: "target/ultragoal/package-0.0.41.hugpkg".to_owned(),
             cli: "target/ultragoal/release/ultragoal".to_owned(),
             before,
             target: TargetPackage {
                 context_id: digest('0'),
                 candidate_id: digest('1'),
                 catalog_id: digest('2'),
-                version: "0.0.40".to_owned(),
+                version: TARGET_VERSION.to_owned(),
                 source_tree_sha256: digest('3'),
                 archive_sha256: digest('4'),
                 inventory_sha256: digest('5'),
@@ -754,6 +769,26 @@ mod tests {
     }
 
     #[test]
+    fn registry_observation_failure_keeps_its_typed_cause() {
+        assert_eq!(
+            registry_observation_failure_cause(
+                super::capabilities::RegistryObservationFailure::Blocked(
+                    crate::plugin_product::agent_discovery::AgentDiscoveryErrorId::IdentityMismatch,
+                ),
+            ),
+            "identity-mismatch"
+        );
+        assert_eq!(
+            registry_observation_failure_cause(
+                super::capabilities::RegistryObservationFailure::Unavailable(
+                    "codex-observation-unavailable",
+                ),
+            ),
+            "codex-observation-unavailable"
+        );
+    }
+
+    #[test]
     fn prior_authority_digest_is_independent_from_target_package_identity() {
         let original = record();
         assert_ne!(
@@ -765,6 +800,13 @@ mod tests {
         assert_ne!(
             installed_authority_digest(&relabeled).unwrap(),
             relabeled.installed_authority_sha256
+        );
+
+        let mut substituted_cachebuster = original.before;
+        substituted_cachebuster.plugin_version = "0.0.39+codex.substituted-cachebuster".to_owned();
+        assert_ne!(
+            installed_authority_digest(&substituted_cachebuster).unwrap(),
+            substituted_cachebuster.installed_authority_sha256
         );
     }
 
@@ -790,6 +832,9 @@ mod tests {
         let mut downgraded = record.clone();
         downgraded.target.version = downgraded.before.plugin_version.clone();
         assert!(adopted_lifecycle_plan(&downgraded).is_err());
+        let mut cachebuster_only = record.clone();
+        cachebuster_only.target.version = "0.0.39+codex.different-cachebuster".to_owned();
+        assert!(adopted_lifecycle_plan(&cachebuster_only).is_err());
         let mut aliased = record;
         aliased.target.archive_sha256 = aliased.before.installed_authority_sha256.clone();
         assert!(adopted_lifecycle_plan(&aliased).is_err());
@@ -802,7 +847,7 @@ mod tests {
             "package",
             "install-plan",
             "--input",
-            "target/ultragoal/package-0.0.40.hugpkg",
+            "target/ultragoal/package-0.0.41.hugpkg",
             "--cli",
             "target/ultragoal/release/ultragoal",
         ])
