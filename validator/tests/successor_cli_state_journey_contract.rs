@@ -6,6 +6,8 @@ mod assertions;
 mod diagnosis_stability;
 #[path = "successor_cli_state_journey_contract/fixture.rs"]
 mod fixture;
+#[path = "successor_cli_state_journey_contract/nested_repository_fit.rs"]
+mod nested_repository_fit;
 #[path = "successor_cli_state_journey_contract/repository_classification.rs"]
 mod repository_classification;
 #[path = "successor_cli_state_journey_contract/snapshot.rs"]

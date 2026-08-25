@@ -17,7 +17,10 @@ pub(crate) fn current_capabilities_context(root: &Path) -> Result<LiveContext, (
 }
 
 pub(crate) fn current_workspace_context(root: &Path) -> Result<LiveContext, ()> {
-    LiveContext::build(BuildRequest::new(root).with_root_workspace_grant(root)).map_err(|_| ())
+    // The grant is relative to the worktree resolved from `root`. Reusing a
+    // relative context start here would append that path a second time during
+    // scope canonicalization (for example `target/target`).
+    LiveContext::build(BuildRequest::new(root).with_root_workspace_grant(".")).map_err(|_| ())
 }
 
 pub(crate) fn current_external_context(root: &Path) -> Result<LiveContext, ()> {
