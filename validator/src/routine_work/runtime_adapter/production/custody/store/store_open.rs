@@ -1,5 +1,28 @@
 use super::*;
 
+#[cfg(test)]
+thread_local! {
+    static REFUSE_EXISTING_WRITE_OPENS: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+#[cfg(test)]
+pub(super) struct ExistingWriteOpenRefusal;
+
+#[cfg(test)]
+impl Drop for ExistingWriteOpenRefusal {
+    fn drop(&mut self) {
+        REFUSE_EXISTING_WRITE_OPENS.with(|value| value.set(false));
+    }
+}
+
+#[cfg(test)]
+pub(super) fn refuse_existing_write_opens_for_test() -> ExistingWriteOpenRefusal {
+    REFUSE_EXISTING_WRITE_OPENS.with(|value| {
+        assert!(!value.replace(true), "write-open refusal already active");
+    });
+    ExistingWriteOpenRefusal
+}
+
 impl Store {
     pub(super) fn open(root: &Path) -> Result<Self, RoutineError> {
         let supplied = root.to_path_buf();
@@ -130,6 +153,14 @@ impl Store {
         Ok(unsafe { File::from_raw_fd(descriptor) })
     }
     pub(super) fn open_existing(&self, name: &str, flags: i32) -> Result<File, RoutineError> {
+        #[cfg(test)]
+        if flags & libc::O_ACCMODE != libc::O_RDONLY
+            && REFUSE_EXISTING_WRITE_OPENS.with(std::cell::Cell::get)
+        {
+            return Err(error(
+                "routine-production-authority-test-write-open-refused",
+            ));
+        }
         validate_name(name)?;
         let name =
             CString::new(name).map_err(|_| error("routine-production-authority-name-invalid"))?;

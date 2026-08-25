@@ -12,7 +12,10 @@ use std::process::Command;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
-const BASE: &str = "/tmp/hul-repository-fit-public-adapter-056";
+
+fn base() -> PathBuf {
+    std::env::temp_dir().join("hul-repository-fit-public-adapter-056")
+}
 
 pub(super) struct Fixture {
     pub(super) container: PathBuf,
@@ -22,7 +25,7 @@ pub(super) struct Fixture {
 impl Fixture {
     pub(super) fn new(label: &str) -> Self {
         let nonce = NEXT_FIXTURE.fetch_add(1, Ordering::Relaxed);
-        let container = PathBuf::from(BASE).join(format!(
+        let container = base().join(format!(
             "{}-{}-{nonce}",
             label.replace(|character: char| !character.is_ascii_alphanumeric(), "-"),
             std::process::id()
@@ -78,8 +81,10 @@ impl Fixture {
 
 impl Drop for Fixture {
     fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(BASE));
+        let base = base();
+        debug_assert!(self.container.starts_with(&base));
         let _ = fs::remove_dir_all(&self.container);
+        let _ = fs::remove_dir(base);
     }
 }
 

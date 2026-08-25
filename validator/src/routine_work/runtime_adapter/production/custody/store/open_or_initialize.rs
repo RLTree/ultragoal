@@ -15,9 +15,15 @@ impl FileLedger {
         {
             return Err(error("routine-production-authority-store-incomplete"));
         }
-        let lock = store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+        let lock_access = AuthorityLockAccess::ReadOnly;
+        let lock = store.open_existing(LOCK_NAME, lock_access.open_flags())?;
         let lock_identity = store.exact_identity(LOCK_NAME, &lock, 0o600)?;
-        Self::load_complete(store, ProcessLock::acquire(lock)?, lock_identity)
+        Self::load_complete(
+            store,
+            ProcessLock::acquire(lock)?,
+            lock_identity,
+            lock_access,
+        )
     }
 
     pub(in crate::routine_work::runtime_adapter::production::custody::store) fn open_or_initialize(
@@ -32,9 +38,15 @@ impl FileLedger {
                 STATE_NAME.to_owned(),
             ])
         {
-            let lock = store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+            let lock_access = AuthorityLockAccess::ReadWrite;
+            let lock = store.open_existing(LOCK_NAME, lock_access.open_flags())?;
             let lock_identity = store.exact_identity(LOCK_NAME, &lock, 0o600)?;
-            return Self::load_complete(store, ProcessLock::acquire(lock)?, lock_identity);
+            return Self::load_complete(
+                store,
+                ProcessLock::acquire(lock)?,
+                lock_identity,
+                lock_access,
+            );
         }
         if !names.is_empty() {
             return Err(error("routine-production-authority-store-incomplete"));
@@ -54,12 +66,13 @@ impl FileLedger {
         } else {
             return Err(error("routine-production-authority-store-incomplete"));
         }
-        Self::load_complete(store, guard, lock_identity)
+        Self::load_complete(store, guard, lock_identity, AuthorityLockAccess::ReadWrite)
     }
     pub(super) fn load_complete(
         store: Store,
         guard: ProcessLock,
         lock_identity: FileIdentity,
+        lock_access: AuthorityLockAccess,
     ) -> Result<(Self, LocalHead), RoutineError> {
         let key_file = store.open_existing(KEY_NAME, libc::O_RDONLY)?;
         let key_identity = store.exact_identity(KEY_NAME, &key_file, 0o600)?;
@@ -87,6 +100,7 @@ impl FileLedger {
                 lock_identity,
                 key_id,
                 authority_id,
+                lock_access,
             },
             LocalHead {
                 generation: payload.generation,

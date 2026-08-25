@@ -79,6 +79,38 @@ fn replace_state(root: &Path, bytes: &[u8]) {
 }
 
 #[test]
+fn read_only_authority_authentication_never_requests_write_capable_lock_access() {
+    let root = TestRoot::new("read-only-lock-access");
+    drop(FileLedger::open_or_initialize(&root.0).expect("initialize"));
+    let before = fs::read(root.0.join(STATE_NAME)).expect("state before read");
+
+    let _refusal = super::store_open::refuse_existing_write_opens_for_test();
+    let (ledger, mut head) = FileLedger::open_existing(&root.0).expect("read-only open");
+    ledger
+        .with_payload(&mut head, false, |_payload, _tick| Ok(()))
+        .expect("read-only authenticated transaction");
+    assert_eq!(
+        fs::read(root.0.join(STATE_NAME)).expect("state after read"),
+        before
+    );
+
+    assert!(
+        ledger
+            .with_payload(&mut head, true, |_payload, _tick| Ok(()))
+            .is_err(),
+        "read-only authority capability must refuse publication"
+    );
+    assert_eq!(
+        fs::read(root.0.join(STATE_NAME)).expect("state after refused publication"),
+        before
+    );
+    assert!(
+        FileLedger::open_or_initialize(&root.0).is_err(),
+        "mutation-capable authority access must retain a write-capable lock descriptor"
+    );
+}
+
+#[test]
 fn authenticated_v4_device_renumbering_migrates_on_first_mutation() {
     let root = TestRoot::new("migrate");
     let _ = FileLedger::open_or_initialize(&root.0).expect("initialize");

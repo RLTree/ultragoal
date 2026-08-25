@@ -87,6 +87,11 @@ impl FileLedger {
             return Err(error("routine-production-trusted-time-regressed"));
         }
         let (value, write) = operation(&mut payload, tick, &head_sha256)?;
+        if write && !self.lock_access.permits_publication() {
+            return Err(error(
+                "routine-production-authority-read-only-publication-refused",
+            ));
+        }
         if write {
             payload.generation = payload
                 .generation
@@ -228,7 +233,9 @@ impl FileLedger {
 
     pub(super) fn acquire_lock(&self) -> Result<ProcessLock, RoutineError> {
         self.store.verify_root()?;
-        let file = self.store.open_existing(LOCK_NAME, libc::O_RDWR)?;
+        let file = self
+            .store
+            .open_existing(LOCK_NAME, self.lock_access.open_flags())?;
         if self.store.exact_identity(LOCK_NAME, &file, 0o600)? != self.lock_identity {
             return Err(error("routine-production-authority-lock-replaced"));
         }

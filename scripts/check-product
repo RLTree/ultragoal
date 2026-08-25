@@ -91,6 +91,7 @@ run_registered_tests lib lib \
   "cli::successor_public::routine::migration_apply::tests::previous_v6_admission_with_current_v5_plan_is_rejected_fail_closed" \
   "cli::successor_public::routine::migration_apply::tests::current_v7_admission_with_previous_v4_plan_is_rejected_fail_closed" \
   "cli::successor_public::routine::host::supported::quarantine_apply::tests::visible_settlement_receipt_is_effectful_and_exact_replay_settles_no_effect" \
+  "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::read_only_authority_authentication_never_requests_write_capable_lock_access" \
   "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::authenticated_v4_device_renumbering_migrates_on_first_mutation" \
   "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::legacy_durable_inode_substitution_still_fails_closed" \
   "routine_work::runtime_adapter::production::custody::store::supported::device_neutral_migration_tests::legacy_hmac_tampering_still_fails_closed" \

@@ -241,4 +241,26 @@ pub(in crate::routine_work::runtime_adapter::production::custody::store) struct 
         String,
     pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) authority_id:
         String,
+    pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) lock_access:
+        AuthorityLockAccess,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(in crate::routine_work::runtime_adapter::production::custody::store::supported) enum AuthorityLockAccess
+{
+    ReadOnly,
+    ReadWrite,
+}
+
+impl AuthorityLockAccess {
+    pub(super) fn open_flags(self) -> i32 {
+        match self {
+            Self::ReadOnly => libc::O_RDONLY,
+            Self::ReadWrite => libc::O_RDWR,
+        }
+    }
+
+    pub(super) fn permits_publication(self) -> bool {
+        self == Self::ReadWrite
+    }
 }
