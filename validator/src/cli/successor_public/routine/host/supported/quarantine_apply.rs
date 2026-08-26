@@ -11,6 +11,47 @@ pub(crate) fn apply_quarantine_plan(
     accepted: &RoutineStateQuarantinePlan,
     record_matches: &impl Fn(&RoutineStateMigrationAdmission) -> bool,
 ) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure> {
+    apply_plan(
+        home_path,
+        target,
+        binding,
+        accepted,
+        record_matches,
+        AdmissionMode::Migration,
+    )
+}
+
+pub(crate) fn apply_abandonment_plan(
+    home_path: &Path,
+    target: &Path,
+    binding: CheckpointBinding<'_>,
+    accepted: &RoutineStateQuarantinePlan,
+    record_matches: &impl Fn(&RoutineStateMigrationAdmission) -> bool,
+) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure> {
+    apply_plan(
+        home_path,
+        target,
+        binding,
+        accepted,
+        record_matches,
+        AdmissionMode::ExplicitAbandonment,
+    )
+}
+
+#[derive(Clone, Copy)]
+enum AdmissionMode {
+    Migration,
+    ExplicitAbandonment,
+}
+
+fn apply_plan(
+    home_path: &Path,
+    target: &Path,
+    binding: CheckpointBinding<'_>,
+    accepted: &RoutineStateQuarantinePlan,
+    record_matches: &impl Fn(&RoutineStateMigrationAdmission) -> bool,
+    mode: AdmissionMode,
+) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure> {
     if binding.target() != target {
         return Err(HostFailure::Invalid);
     }
@@ -34,6 +75,7 @@ pub(crate) fn apply_quarantine_plan(
             accepted,
             quarantine_present,
             bootstrap_present,
+            mode,
         );
     }
     if quarantine_present {
@@ -50,6 +92,7 @@ pub(crate) fn apply_quarantine_plan(
         &ignored,
         binding,
         accepted,
+        mode,
     )?;
     let mut fresh = match host_state::stage_quarantine_state(home, &parent, parent_lock, accepted) {
         Ok(fresh) => fresh,
@@ -92,6 +135,7 @@ fn apply_from_fresh_source(
     accepted: &RoutineStateQuarantinePlan,
     quarantine_present: bool,
     bootstrap_present: bool,
+    mode: AdmissionMode,
 ) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure> {
     let settlement = quarantine_transition::classify(&source, accepted)?;
     if bootstrap_present == quarantine_present
@@ -114,6 +158,7 @@ fn apply_from_fresh_source(
         &[STATE_COMPONENTS[3]],
         binding,
         accepted,
+        mode,
     )?;
     if settlement == quarantine_transition::SettlementState::Settled {
         verify_exact_digests(
@@ -173,15 +218,27 @@ fn prepare_exact_legacy_owner(
     ignored_parent_entries: &[&str],
     binding: CheckpointBinding<'_>,
     accepted: &RoutineStateQuarantinePlan,
+    mode: AdmissionMode,
 ) -> Result<ProcessLock, HostFailure> {
     let state = parent.open_child(observed_owner)?;
-    let admission = migration_admission::assess_format_absent(
-        parent,
-        state,
-        binding,
-        observed_owner,
-        ignored_parent_entries,
-    )?;
+    let admission = match mode {
+        AdmissionMode::Migration => migration_admission::assess_format_absent(
+            parent,
+            state,
+            binding,
+            observed_owner,
+            ignored_parent_entries,
+        )?,
+        AdmissionMode::ExplicitAbandonment => {
+            migration_admission::assess_format_absent_for_abandonment(
+                parent,
+                state,
+                binding,
+                observed_owner,
+                ignored_parent_entries,
+            )?
+        }
+    };
     if admission.quarantine_plan.as_ref() != Some(accepted) || !record_matches(&admission) {
         return Err(HostFailure::Invalid);
     }
@@ -749,6 +806,7 @@ mod tests {
             &[],
             fixture.binding(),
             &plan,
+            AdmissionMode::Migration,
         )
         .unwrap();
         let fresh = host_state::stage_quarantine_state(home, &parent, parent_lock, &plan).unwrap();

@@ -161,6 +161,7 @@ fn canonical_commands_match_the_typed_successor_catalog() {
             &[
                 "EvalAction::Audit",
                 "MigrateAction::Plan",
+                "MigrateAction::Abandon",
                 "MigrateAction::Verify",
                 "MigrateAction::Retire",
             ],

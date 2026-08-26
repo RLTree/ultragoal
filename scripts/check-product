@@ -117,6 +117,7 @@ run_registered_tests test routine_public_production_contract \
   "routine_public_production_contract::journeys::caller_relabelled_reconciled_history_without_a_rolled_back_attempt_is_unsafe" \
   "routine_public_production_contract::journeys::stale_reserved_binding_refuses_after_a_distinct_binding_advances_the_ledger" \
   "routine_public_production_contract::journeys::mixed_history_with_a_missing_required_event_is_causal_and_preserved" \
+  "routine_public_production_contract::journeys::explicitly_approved_abandonment_quarantines_irreconcilable_history_then_executes_and_reuses" \
   "routine_public_production_contract::journeys::duplicate_terminal_event_row_is_causal_conflict_and_preserved" \
   "routine_public_production_contract::journeys::complete_multi_history_is_conflicting_and_never_mints_a_plan" \
   "routine_public_production_contract::journeys::unknown_format_is_a_typed_read_only_hold" \

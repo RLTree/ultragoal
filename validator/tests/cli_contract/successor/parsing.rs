@@ -72,6 +72,30 @@ fn typed_commands_and_effects_cover_representative_routes() {
         SuccessorCommand::Migrate(MigrateAction::Retire)
     );
     assert_eq!(retire.effect, EffectClass::Destructive);
+
+    let abandon = invocation(&["migrate", "abandon-plan", "--target", "nested"]);
+    assert_eq!(
+        abandon.command,
+        SuccessorCommand::Migrate(MigrateAction::Abandon)
+    );
+    assert_eq!(abandon.effect, EffectClass::Read);
+
+    let abandonment_apply = invocation(&[
+        "migrate",
+        "apply",
+        "--target",
+        "nested",
+        "--plan",
+        "migration/abandonment.json",
+        "--accept-plan",
+        "routine-quarantine-sha256:accepted",
+        "--approve-retirement",
+    ]);
+    assert_eq!(
+        abandonment_apply.command,
+        SuccessorCommand::Migrate(MigrateAction::Apply)
+    );
+    assert_eq!(abandonment_apply.effect, EffectClass::ExternalWrite);
 }
 
 #[test]

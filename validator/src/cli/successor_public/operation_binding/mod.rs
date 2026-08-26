@@ -203,6 +203,12 @@ const BINDINGS: &[Binding] = &[
         EffectClass::Read,
         migration_plan::APIS,
     ),
+    binding(
+        PublicOperation::RoutineStateAbandonmentPlan,
+        SuccessorCommand::Migrate(MigrateAction::Abandon),
+        EffectClass::Read,
+        &["MigrateAction::Abandon", "RoutineStateAbandonmentPlan"],
+    ),
     migration_apply::BINDING,
     binding(
         PublicOperation::MigrationVerification,

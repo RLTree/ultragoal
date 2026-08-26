@@ -59,6 +59,13 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
+            SuccessorCommand::Migrate(MigrateAction::Abandon),
+            EffectClass::Read,
+        )),
+        Some(PublicOperation::RoutineStateAbandonmentPlan),
+    );
+    assert_eq!(
+        bind(&invocation(
             SuccessorCommand::Migrate(MigrateAction::Apply),
             EffectClass::ExternalWrite,
         )),

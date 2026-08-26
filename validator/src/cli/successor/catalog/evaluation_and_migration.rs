@@ -3,7 +3,7 @@ use super::super::command_contract::{
 };
 use super::options::{
     ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
-    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, descriptor,
+    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, TARGET_OPTION, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -51,10 +51,17 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         REGISTRY_OPTION,
     ),
     descriptor(
+        SuccessorCommand::Migrate(MigrateAction::Abandon),
+        Some("abandon-plan"),
+        EffectClass::Read,
+        "Produce a read-only exact-owner plan that explicitly abandons irreconcilable legacy Routine history; it does not authorize or apply the quarantine.",
+        TARGET_OPTION,
+    ),
+    descriptor(
         SuccessorCommand::Migrate(MigrateAction::Apply),
         Some("apply"),
         EffectClass::ExternalWrite,
-        "Quarantine legacy Routine HostState only from the exact immutable ultragoal --json diagnose record and its quarantine_plan.plan_id.",
+        "Quarantine legacy Routine HostState only from an exact immutable diagnose or explicit abandonment record, its quarantine_plan.plan_id, and any required retirement approval.",
         MIGRATE_APPLY,
     ),
     descriptor(

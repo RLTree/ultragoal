@@ -20,6 +20,9 @@ const MAX_LOCK_ENTRY_BYTES: u64 = 1024;
 const STALE_RESERVED_HEAD_CEILING: &str = "noncurrent_value_only_historical_head_unproven";
 const QUARANTINE_PLAN_NEXT_ACTION: &str = "preserve all bytes; persist the exact ultragoal --json diagnose JSON unchanged at a relative in-repository path, independently review its deterministic quarantine_plan, then run ultragoal --json migrate apply --plan <relative-diagnosis-record> --accept-plan <quarantine_plan.plan_id>; migrate plan emits a separate ProductMigration projection and is not this command's input";
 const QUARANTINE_PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v5";
+const ABANDONMENT_PLAN_SCHEMA: &str = "RoutineStateQuarantinePlan-v6";
+const ABANDONMENT_PLAN_NEXT_ACTION: &str = "review the declared loss of legacy continuity, reuse, and recovery; persist this exact ultragoal --json migrate abandon-plan record unchanged at a relative in-repository path, then run ultragoal --json migrate apply --plan <relative-abandonment-record> --accept-plan <quarantine_plan.plan_id> --approve-retirement";
+const ABANDONMENT_CONSEQUENCE_BINDING: &[u8] = b"\0legacy-history-continuity-abandoned\0legacy-authority-not-imported\0previous-reuse-and-recovery-unavailable\0declared-target-local-routine-outputs-may-reexecute";
 const IGNORED_PARENT_SNAPSHOT_PREFIX: &str = "owner_parent_ignored/";
 const QUARANTINE_STRATEGY: &str =
     "stage_fresh_v8_then_atomic_exchange_finalize_legacy_and_publish_settlement_receipt";
@@ -49,6 +52,27 @@ struct InventoryEntry {
 pub(crate) fn assess_migration_admission(
     home: &Path,
     binding: CheckpointBinding<'_>,
+) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
+    assess_admission(home, binding, LegacyAdmissionMode::Migration)
+}
+
+pub(crate) fn assess_abandonment_admission(
+    home: &Path,
+    binding: CheckpointBinding<'_>,
+) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
+    assess_admission(home, binding, LegacyAdmissionMode::ExplicitAbandonment)
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum LegacyAdmissionMode {
+    Migration,
+    ExplicitAbandonment,
+}
+
+fn assess_admission(
+    home: &Path,
+    binding: CheckpointBinding<'_>,
+    mode: LegacyAdmissionMode,
 ) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
     let home = host_state::open_home(home)?;
     let codex = match home.open_child(STATE_COMPONENTS[0]) {
@@ -93,7 +117,8 @@ pub(crate) fn assess_migration_admission(
     if !transition_entries.is_empty() {
         return Ok(Some(transition_hold()));
     }
-    assess_format_absent(&harness, state, binding, STATE_COMPONENTS[3], &[]).map(Some)
+    assess_format_absent_with_mode(&harness, state, binding, STATE_COMPONENTS[3], &[], mode)
+        .map(Some)
 }
 
 fn transition_entries(owner_parent: &AnchoredDirectory) -> Result<BTreeSet<String>, HostFailure> {
@@ -192,6 +217,41 @@ pub(super) fn assess_format_absent(
     observed_owner: &str,
     ignored_parent_entries: &[&str],
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
+    assess_format_absent_with_mode(
+        owner_parent,
+        state,
+        binding,
+        observed_owner,
+        ignored_parent_entries,
+        LegacyAdmissionMode::Migration,
+    )
+}
+
+pub(super) fn assess_format_absent_for_abandonment(
+    owner_parent: &AnchoredDirectory,
+    state: AnchoredDirectory,
+    binding: CheckpointBinding<'_>,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
+) -> Result<RoutineStateMigrationAdmission, HostFailure> {
+    assess_format_absent_with_mode(
+        owner_parent,
+        state,
+        binding,
+        observed_owner,
+        ignored_parent_entries,
+        LegacyAdmissionMode::ExplicitAbandonment,
+    )
+}
+
+fn assess_format_absent_with_mode(
+    owner_parent: &AnchoredDirectory,
+    state: AnchoredDirectory,
+    binding: CheckpointBinding<'_>,
+    observed_owner: &str,
+    ignored_parent_entries: &[&str],
+    mode: LegacyAdmissionMode,
+) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     if state.entry_names()?
         != [AUTHORITY_DIRECTORY, ADAPTER_DIRECTORY, LAUNCH_DIRECTORY]
             .into_iter()
@@ -259,12 +319,23 @@ pub(super) fn assess_format_absent(
             return Ok(stale_writer_hold("absent"));
         }
         if relation.terminal_events != TerminalEventAssessment::Complete {
-            return Ok(terminal_event_hold(
-                singleton_count,
-                continuation_count,
-                event_count,
-                relation.terminal_events,
-            ));
+            return if mode == LegacyAdmissionMode::ExplicitAbandonment {
+                terminal_event_abandonment_admission(
+                    singleton_count,
+                    continuation_count,
+                    event_count,
+                    relation.terminal_events,
+                    &before,
+                    binding.target(),
+                )
+            } else {
+                Ok(terminal_event_hold(
+                    singleton_count,
+                    continuation_count,
+                    event_count,
+                    relation.terminal_events,
+                ))
+            };
         }
         return reconciled_hold(
             singleton_count,
@@ -273,6 +344,7 @@ pub(super) fn assess_format_absent(
             relation,
             &before,
             binding.target(),
+            mode,
         );
     }
     if validate_legacy(&adapter).is_err() {
@@ -888,6 +960,7 @@ fn quarantine_plan(
 enum QuarantinePlanHistoryBasis {
     Authenticated,
     StaleReservedHistoricalHeadUnproven,
+    ExplicitOperatorAbandonment,
 }
 
 impl QuarantinePlanHistoryBasis {
@@ -903,14 +976,44 @@ impl QuarantinePlanHistoryBasis {
             (Self::StaleReservedHistoricalHeadUnproven, "redundant_equivalent") => {
                 "none_noncurrent_value_only_historical_head_unproven"
             }
+            (
+                Self::ExplicitOperatorAbandonment,
+                "terminal_event_history_incomplete"
+                | "terminal_event_history_conflicting"
+                | "conflicting_histories_hold",
+            ) => "none_explicit_operator_abandonment",
             _ => return Err(HostFailure::Invalid),
         })
     }
 
     fn bind_plan_identity(self, plan: &mut Sha256) {
-        if self == Self::StaleReservedHistoricalHeadUnproven {
-            plan.update(b"\0stale-reserved-head-evidence:");
-            plan.update(STALE_RESERVED_HEAD_CEILING.as_bytes());
+        match self {
+            Self::Authenticated => {}
+            Self::StaleReservedHistoricalHeadUnproven => {
+                plan.update(b"\0stale-reserved-head-evidence:");
+                plan.update(STALE_RESERVED_HEAD_CEILING.as_bytes());
+            }
+            Self::ExplicitOperatorAbandonment => {
+                plan.update(ABANDONMENT_CONSEQUENCE_BINDING);
+            }
+        }
+    }
+
+    const fn schema(self) -> &'static str {
+        match self {
+            Self::Authenticated | Self::StaleReservedHistoricalHeadUnproven => {
+                QUARANTINE_PLAN_SCHEMA
+            }
+            Self::ExplicitOperatorAbandonment => ABANDONMENT_PLAN_SCHEMA,
+        }
+    }
+
+    const fn identity_domain(self) -> &'static [u8] {
+        match self {
+            Self::Authenticated | Self::StaleReservedHistoricalHeadUnproven => {
+                b"routine-state-quarantine-plan-v5\0"
+            }
+            Self::ExplicitOperatorAbandonment => b"routine-state-quarantine-plan-v6\0",
         }
     }
 }
@@ -937,7 +1040,7 @@ fn quarantine_plan_with_history_basis(
         .ok_or(HostFailure::Invalid)?
         .to_owned();
     Ok(RoutineStateQuarantinePlan {
-        schema_version: QUARANTINE_PLAN_SCHEMA.to_owned(),
+        schema_version: history_basis.schema().to_owned(),
         plan_id,
         source_inventory_sha256,
         source_owner_tree_sha256,
@@ -965,7 +1068,7 @@ fn quarantine_plan_id(
     history_basis: QuarantinePlanHistoryBasis,
 ) -> String {
     let mut plan = Sha256::new();
-    plan.update(b"routine-state-quarantine-plan-v5\0");
+    plan.update(history_basis.identity_domain());
     plan.update(source_inventory_sha256.as_bytes());
     plan.update([0]);
     plan.update(source_owner_tree_sha256.as_bytes());
@@ -992,6 +1095,12 @@ pub(super) fn quarantine_plan_is_semantically_valid(plan: &RoutineStateQuarantin
         ("redundant_equivalent", "none_noncurrent_value_only_historical_head_unproven") => {
             QuarantinePlanHistoryBasis::StaleReservedHistoricalHeadUnproven
         }
+        (
+            "terminal_event_history_incomplete"
+            | "terminal_event_history_conflicting"
+            | "conflicting_histories_hold",
+            "none_explicit_operator_abandonment",
+        ) => QuarantinePlanHistoryBasis::ExplicitOperatorAbandonment,
         _ => return false,
     };
     let expected_plan_id = quarantine_plan_id(
@@ -1004,7 +1113,7 @@ pub(super) fn quarantine_plan_is_semantically_valid(plan: &RoutineStateQuarantin
     let Some(suffix) = expected_plan_id.strip_prefix("routine-quarantine-sha256:") else {
         return false;
     };
-    plan.schema_version == QUARANTINE_PLAN_SCHEMA
+    plan.schema_version == history_basis.schema()
         && plan.plan_id == expected_plan_id
         && is_sha256(&plan.source_inventory_sha256)
         && is_sha256(&plan.source_owner_tree_sha256)
@@ -1206,6 +1315,7 @@ fn reconciled_hold(
     history: ReconciledHistory,
     inventory: &BTreeMap<String, InventoryEntry>,
     target: &Path,
+    mode: LegacyAdmissionMode,
 ) -> Result<RoutineStateMigrationAdmission, HostFailure> {
     let relation = history.relation;
     if relation == HistoryRelation::RedundantEquivalent
@@ -1251,6 +1361,16 @@ fn reconciled_hold(
         | HistoryRelation::SingletonStrictlySupersedes => {
             Some(quarantine_plan(inventory, relation.as_str(), target)?)
         }
+        HistoryRelation::ConflictingHistories
+            if mode == LegacyAdmissionMode::ExplicitAbandonment =>
+        {
+            Some(quarantine_plan_with_history_basis(
+                inventory,
+                relation.as_str(),
+                target,
+                QuarantinePlanHistoryBasis::ExplicitOperatorAbandonment,
+            )?)
+        }
         HistoryRelation::ConflictingHistories => None,
     };
     Ok(RoutineStateMigrationAdmission {
@@ -1267,13 +1387,48 @@ fn reconciled_hold(
         canonical_continuation_count: canonical,
         event_journal_count: events,
         history_relation: relation.as_str(),
-        next_action: if quarantine_plan.is_some() {
+        next_action: if relation == HistoryRelation::ConflictingHistories
+            && quarantine_plan.is_some()
+        {
+            ABANDONMENT_PLAN_NEXT_ACTION
+        } else if quarantine_plan.is_some() {
             QUARANTINE_PLAN_NEXT_ACTION
         } else {
             "preserve all bytes; resolve the conflicting authenticated histories without proposing a migration"
         },
         reserved_recovery: None,
         quarantine_plan,
+    })
+}
+
+fn terminal_event_abandonment_admission(
+    singleton: usize,
+    canonical: usize,
+    events: usize,
+    assessment: TerminalEventAssessment,
+    inventory: &BTreeMap<String, InventoryEntry>,
+    target: &Path,
+) -> Result<RoutineStateMigrationAdmission, HostFailure> {
+    let history_relation = match assessment {
+        TerminalEventAssessment::MissingRequired => "terminal_event_history_incomplete",
+        TerminalEventAssessment::Conflicting => "terminal_event_history_conflicting",
+        TerminalEventAssessment::Complete => return Err(HostFailure::Invalid),
+    };
+    Ok(RoutineStateMigrationAdmission {
+        status: "legacy_history_abandonment_requires_explicit_retirement_approval",
+        format_status: "absent_legacy",
+        legacy_singleton_count: singleton,
+        canonical_continuation_count: canonical,
+        event_journal_count: events,
+        history_relation,
+        next_action: ABANDONMENT_PLAN_NEXT_ACTION,
+        reserved_recovery: None,
+        quarantine_plan: Some(quarantine_plan_with_history_basis(
+            inventory,
+            history_relation,
+            target,
+            QuarantinePlanHistoryBasis::ExplicitOperatorAbandonment,
+        )?),
     })
 }
 
@@ -1563,6 +1718,7 @@ mod tests {
             },
             &inventory,
             Path::new("/private/tmp/target"),
+            LegacyAdmissionMode::Migration,
         )
         .unwrap();
         assert!(raw_different.reserved_recovery.is_some());
@@ -1607,6 +1763,7 @@ mod tests {
             },
             &inventory,
             Path::new("/private/tmp/target"),
+            LegacyAdmissionMode::Migration,
         )
         .unwrap();
         assert!(held.reserved_recovery.is_some());
@@ -1626,8 +1783,26 @@ mod tests {
             terminal_events: TerminalEventAssessment::Complete,
         };
 
-        let first = reconciled_hold(1, 1, 0, history(), &inventory, target).unwrap();
-        let second = reconciled_hold(1, 1, 0, history(), &inventory, target).unwrap();
+        let first = reconciled_hold(
+            1,
+            1,
+            0,
+            history(),
+            &inventory,
+            target,
+            LegacyAdmissionMode::Migration,
+        )
+        .unwrap();
+        let second = reconciled_hold(
+            1,
+            1,
+            0,
+            history(),
+            &inventory,
+            target,
+            LegacyAdmissionMode::Migration,
+        )
+        .unwrap();
         assert_eq!(first, second);
         assert_eq!(
             first.status,
@@ -1662,6 +1837,7 @@ mod tests {
             history(),
             &inventory,
             Path::new("/private/tmp/other-target"),
+            LegacyAdmissionMode::Migration,
         )
         .unwrap();
         assert_ne!(plan.plan_id, other_target.quarantine_plan.unwrap().plan_id);
@@ -1706,6 +1882,7 @@ mod tests {
                 },
                 &inventory,
                 target,
+                LegacyAdmissionMode::Migration,
             )
             .unwrap();
             assert!(
@@ -1850,6 +2027,62 @@ mod tests {
             assert!(!held.next_action.contains("sha256:"));
             assert!(!held.next_action.contains("migrate apply --plan"));
         }
+    }
+
+    #[test]
+    fn explicit_abandonment_mints_only_consequence_bound_v6_plans_for_irreconcilable_history() {
+        let inventory = raw_duplicate_inventory();
+        let target = Path::new("/private/tmp/target");
+        for assessment in [
+            TerminalEventAssessment::MissingRequired,
+            TerminalEventAssessment::Conflicting,
+        ] {
+            let ordinary = terminal_event_hold(1, 1, 0, assessment);
+            assert!(ordinary.quarantine_plan.is_none());
+
+            let admitted =
+                terminal_event_abandonment_admission(1, 1, 0, assessment, &inventory, target)
+                    .unwrap();
+            let plan = admitted.quarantine_plan.as_ref().unwrap();
+            assert_eq!(plan.schema_version, ABANDONMENT_PLAN_SCHEMA);
+            assert_eq!(
+                plan.authoritative_history,
+                "none_explicit_operator_abandonment"
+            );
+            assert!(quarantine_plan_is_semantically_valid(plan));
+        }
+
+        let history = || ReconciledHistory {
+            relation: HistoryRelation::ConflictingHistories,
+            reserved: None,
+            terminal_events: TerminalEventAssessment::Complete,
+        };
+        let ordinary = reconciled_hold(
+            1,
+            2,
+            2,
+            history(),
+            &inventory,
+            target,
+            LegacyAdmissionMode::Migration,
+        )
+        .unwrap();
+        assert!(ordinary.quarantine_plan.is_none());
+
+        let explicit = reconciled_hold(
+            1,
+            2,
+            2,
+            history(),
+            &inventory,
+            target,
+            LegacyAdmissionMode::ExplicitAbandonment,
+        )
+        .unwrap();
+        let plan = explicit.quarantine_plan.as_ref().unwrap();
+        assert_eq!(plan.schema_version, ABANDONMENT_PLAN_SCHEMA);
+        assert_eq!(plan.history_relation, "conflicting_histories_hold");
+        assert!(quarantine_plan_is_semantically_valid(plan));
     }
 
     #[test]
@@ -2038,6 +2271,7 @@ mod tests {
             },
             &observed,
             target,
+            LegacyAdmissionMode::Migration,
         )
         .unwrap();
         assert!(held.quarantine_plan.is_none());

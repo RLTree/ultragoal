@@ -3,6 +3,7 @@ use super::*;
 use crate::cli::successor::command_contract::MigrateAction;
 use crate::cli::successor::runtime::{Diagnostic, DiagnosticDetails, DiagnosticId};
 use crate::cli::successor::{ExitClass, OptionName};
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
 const PLAN_LIMIT: u64 = 1024 * 1024;
@@ -59,6 +60,57 @@ struct RoutineStateQuarantineApplyRecord<'a> {
     support_limit: &'static str,
 }
 
+#[derive(Serialize)]
+struct RoutineStateAbandonmentApplyRecord<'a> {
+    schema_version: &'static str,
+    status: &'a str,
+    effect: &'a str,
+    settlement_state: &'a str,
+    plan_id: &'a str,
+    quarantine_owner: &'a str,
+    fresh_format_verified: bool,
+    accepted_plan_consumed: bool,
+    retirement_approved: bool,
+    legacy_history_continuity: &'static str,
+    legacy_authority_imported: bool,
+    previous_reuse_and_recovery: &'static str,
+    possible_duplicate_effect: &'static str,
+    claim_effect: &'static str,
+    support_limit: &'static str,
+}
+
+enum AcceptedQuarantineRecord {
+    Migration(RoutineStateMigrationRecord),
+    Abandonment(RoutineStateAbandonmentRecord),
+}
+
+impl AcceptedQuarantineRecord {
+    fn plan(&self) -> &RoutineStateQuarantinePlan {
+        match self {
+            Self::Migration(record) => record.quarantine_plan.as_ref().unwrap(),
+            Self::Abandonment(record) => &record.quarantine_plan,
+        }
+    }
+
+    fn matches(&self, admission: &RoutineStateMigrationAdmission) -> bool {
+        match self {
+            Self::Migration(record) => migration_admission_record(admission) == *record,
+            Self::Abandonment(record) => abandonment_record(admission).as_ref() == Some(record),
+        }
+    }
+
+    const fn is_abandonment(&self) -> bool {
+        matches!(self, Self::Abandonment(_))
+    }
+}
+
+struct ApplyArguments<'a> {
+    requested_target: Option<&'a str>,
+    relative_plan: &'a str,
+    accepted_plan: &'a str,
+    retirement_approved: bool,
+}
+
 pub(crate) fn migration_admission_record(
     admission: &RoutineStateMigrationAdmission,
 ) -> RoutineStateMigrationRecord {
@@ -99,11 +151,11 @@ pub(crate) fn apply_state_quarantine(
     invocation: &ParsedInvocation,
     home: Option<&Path>,
 ) -> RuntimeOutcome {
-    let Some((relative_plan, accepted_plan)) = apply_arguments(invocation) else {
+    let Some(arguments) = apply_arguments(invocation) else {
         return failure(
             ExitClass::InvalidInvocation,
             DiagnosticId::UnexpectedArguments,
-            "migrate apply requires one relative --plan and its exact --accept-plan identity",
+            "migrate apply requires one relative --plan, its exact --accept-plan identity, and retirement approval only for an abandonment record",
             "reparse the exact migrate apply command through the successor grammar",
             "none",
         );
@@ -129,7 +181,7 @@ pub(crate) fn apply_state_quarantine(
             );
         }
     };
-    let plan_path = root.join(relative_plan);
+    let plan_path = root.join(arguments.relative_plan);
     let bytes = match super::super::fit::external_plan_file::read_immutable_plan(
         &plan_path, PLAN_LIMIT,
     ) {
@@ -138,40 +190,45 @@ pub(crate) fn apply_state_quarantine(
             return failure(
                 ExitClass::BlockedAuthority,
                 DiagnosticId::AuthorityRequired,
-                "the accepted migration record is not one immutable confined input",
-                "write the exact diagnose JSON to the declared in-repository plan path without aliases or hard links",
+                "the accepted quarantine record is not one immutable confined input",
+                "write the exact diagnose or abandon-plan JSON to the declared in-repository plan path without aliases or hard links",
                 "none",
             );
         }
     };
-    let canonical = exact_json_frame(&bytes);
-    let accepted: RoutineStateMigrationRecord = match canonical.and_then(|bytes| {
-        serde_json::from_slice(bytes)
-            .ok()
-            .map(|record| (bytes, record))
-    }) {
-        Some((bytes, record)) if serde_json::to_vec(&record).ok().as_deref() == Some(bytes) => {
-            record
+    let Some(canonical) = exact_json_frame(&bytes) else {
+        return failure(
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the accepted quarantine record is not exact canonical closed JSON",
+            "use the unmodified JSON bytes emitted by ultragoal --json diagnose or migrate abandon-plan",
+            "none",
+        );
+    };
+    let migration = exact_closed_record::<RoutineStateMigrationRecord>(canonical);
+    let abandonment = exact_closed_record::<RoutineStateAbandonmentRecord>(canonical);
+    let accepted = match (migration, abandonment, arguments.retirement_approved) {
+        (Some(record), None, false)
+            if validate_accepted_record(&record, arguments.accepted_plan).is_some() =>
+        {
+            AcceptedQuarantineRecord::Migration(record)
+        }
+        (None, Some(record), true)
+            if validate_abandonment_record(&record, arguments.accepted_plan).is_some() =>
+        {
+            AcceptedQuarantineRecord::Abandonment(record)
         }
         _ => {
             return failure(
                 ExitClass::BlockedAuthority,
                 DiagnosticId::AuthorityRequired,
-                "the accepted migration record is not exact canonical closed JSON",
-                "use the unmodified JSON bytes emitted by ultragoal --json diagnose",
+                "the accepted record, plan identity, or abandonment approval was substituted",
+                "repeat diagnose or abandon-plan, explicitly accept that exact plan identity, and include --approve-retirement only for the abandonment record",
                 "none",
             );
         }
     };
-    let Some(plan) = validate_accepted_record(&accepted, accepted_plan) else {
-        return failure(
-            ExitClass::BlockedAuthority,
-            DiagnosticId::AuthorityRequired,
-            "the accepted migration record or plan identity was substituted",
-            "repeat diagnose and explicitly accept that exact plan identity",
-            "none",
-        );
-    };
+    let plan = accepted.plan();
     let context = match super::super::current_external_context(&root) {
         Ok(context) => context,
         Err(()) => {
@@ -184,7 +241,7 @@ pub(crate) fn apply_state_quarantine(
             );
         }
     };
-    let binding = match current_diagnosis_binding(&root, None, &context) {
+    let binding = match current_diagnosis_binding(&root, arguments.requested_target, &context) {
         Ok(Some(binding)) => binding,
         _ => {
             return failure(
@@ -216,14 +273,19 @@ pub(crate) fn apply_state_quarantine(
         binding.snapshot().snapshot_id(),
         &execution_id,
     );
-    let current = match HostState::assess_migration_admission(home, checkpoint_binding) {
+    let current_assessment = if accepted.is_abandonment() {
+        HostState::assess_abandonment_admission(home, checkpoint_binding)
+    } else {
+        HostState::assess_migration_admission(home, checkpoint_binding)
+    };
+    let current = match current_assessment {
         Ok(Some(current)) => current,
         Ok(None) | Err(_) => {
             return failure(
                 ExitClass::BlockedAuthority,
                 DiagnosticId::AuthorityRequired,
-                "the current HostState migration admission is unavailable or unsafe",
-                "preserve HostState and recompute diagnose after resolving the typed hold",
+                "the current HostState quarantine admission is unavailable or unsafe",
+                "preserve HostState and recompute the exact diagnose or abandonment record",
                 "none",
             );
         }
@@ -237,35 +299,46 @@ pub(crate) fn apply_state_quarantine(
         && current.history_relation == "transition_requires_exact_accepted_plan"
         && current.reserved_recovery.is_none()
         && current.quarantine_plan.is_none();
-    if (!exact_replay && !exact_transition && migration_admission_record(&current) != accepted)
+    if (!exact_replay && !exact_transition && !accepted.matches(&current))
         || context.revalidate().is_err()
         || binding.context().revalidate().is_err()
     {
         return failure(
             ExitClass::ActionableFinding,
             DiagnosticId::StaleContext,
-            "the accepted migration record is no longer byte-equivalent to current diagnosis",
+            "the accepted quarantine record is no longer byte-equivalent to current evidence",
             "discard the stale record and explicitly accept one freshly derived plan",
             "none",
         );
     }
-    let outcome = match HostState::apply_quarantine_plan(
-        home,
-        binding.target(),
-        checkpoint_binding,
-        plan,
-        |admission| migration_admission_record(admission) == accepted,
-    ) {
+    let outcome = match if accepted.is_abandonment() {
+        HostState::apply_abandonment_plan(
+            home,
+            binding.target(),
+            checkpoint_binding,
+            plan,
+            |admission| accepted.matches(admission),
+        )
+    } else {
+        HostState::apply_quarantine_plan(
+            home,
+            binding.target(),
+            checkpoint_binding,
+            plan,
+            |admission| accepted.matches(admission),
+        )
+    } {
         Ok(outcome) => outcome,
         Err(error) => return outcome::failure(PublicFailure::Host(error)),
     };
     let contexts_current = context.revalidate().is_ok() && binding.context().revalidate().is_ok();
-    project_apply_outcome(outcome, contexts_current)
+    project_apply_outcome(outcome, contexts_current, accepted.is_abandonment())
 }
 
 fn project_apply_outcome(
     outcome: super::host::RoutineStateQuarantineApplyOutcome,
     contexts_current: bool,
+    abandonment: bool,
 ) -> RuntimeOutcome {
     if !contexts_current {
         return failure(
@@ -275,6 +348,9 @@ fn project_apply_outcome(
             "preserve the quarantine and fresh owner, then diagnose before any routine effect",
             outcome.effect,
         );
+    }
+    if abandonment {
+        return project_abandonment_apply_outcome(outcome);
     }
     let record = RoutineStateQuarantineApplyRecord {
         schema_version: "RoutineStateQuarantineApplyOutcome-v3",
@@ -319,10 +395,64 @@ fn project_apply_outcome(
     }
 }
 
-fn apply_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
+fn project_abandonment_apply_outcome(
+    outcome: super::host::RoutineStateQuarantineApplyOutcome,
+) -> RuntimeOutcome {
+    let record = RoutineStateAbandonmentApplyRecord {
+        schema_version: "RoutineStateAbandonmentApplyOutcome-v1",
+        status: outcome.status,
+        effect: outcome.effect,
+        settlement_state: outcome.settlement_state,
+        plan_id: &outcome.plan_id,
+        quarantine_owner: &outcome.quarantine_owner,
+        fresh_format_verified: outcome.fresh_format_verified,
+        accepted_plan_consumed: true,
+        retirement_approved: true,
+        legacy_history_continuity: "abandoned_not_imported",
+        legacy_authority_imported: false,
+        previous_reuse_and_recovery: "unavailable",
+        possible_duplicate_effect: "declared_target_local_routine_outputs_may_reexecute",
+        claim_effect: "host_state_abandonment_only",
+        support_limit: ABANDONMENT_SUPPORT_LIMIT,
+    };
+    match serde_json::to_vec(&record) {
+        Ok(machine) if super::super::public_output_allowed(machine.len()) => {
+            RuntimeOutcome::payload(
+                apply_exit_class(outcome.status),
+                machine,
+                format!(
+                    "routine legacy history abandonment status={} effect={}",
+                    outcome.status, outcome.effect
+                ),
+            )
+        }
+        _ => failure(
+            ExitClass::InternalFailure,
+            DiagnosticId::ProjectionFailed,
+            "the bounded HostState abandonment outcome could not be encoded",
+            "preserve the quarantine and diagnose before retrying",
+            outcome.effect,
+        ),
+    }
+}
+
+fn apply_exit_class(status: &str) -> ExitClass {
+    if matches!(
+        status,
+        "ambiguous_hold"
+            | "settlement_receipt_observed_durability_unacknowledged"
+            | "settlement_receipt_durable_post_verify_hold"
+    ) {
+        ExitClass::ActionableFinding
+    } else {
+        ExitClass::Success
+    }
+}
+
+fn apply_arguments(invocation: &ParsedInvocation) -> Option<ApplyArguments<'_>> {
     if invocation.command != SuccessorCommand::Migrate(MigrateAction::Apply)
         || invocation.effect != EffectClass::ExternalWrite
-        || invocation.arguments.len() != 2
+        || !(2..=4).contains(&invocation.arguments.len())
     {
         return None;
     }
@@ -334,12 +464,45 @@ fn apply_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
         .arguments
         .iter()
         .find(|argument| argument.name == OptionName::AcceptPlan)?;
+    let retirement = invocation
+        .arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::ApproveRetirement);
+    let target = invocation
+        .arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::Target);
     match (&plan.value, &accepted.value) {
         (ParsedValue::RelativePath(plan), ParsedValue::Identifier(accepted)) => {
-            Some((plan.as_str(), accepted.as_str()))
+            let retirement_approved = match retirement {
+                Some(argument) if matches!(argument.value, ParsedValue::Flag) => true,
+                None => false,
+                _ => return None,
+            };
+            let requested_target = match target {
+                Some(argument) => match &argument.value {
+                    ParsedValue::RepositoryTarget(target) => Some(target.as_str()),
+                    _ => return None,
+                },
+                None => None,
+            };
+            Some(ApplyArguments {
+                requested_target,
+                relative_plan: plan.as_str(),
+                accepted_plan: accepted.as_str(),
+                retirement_approved,
+            })
         }
         _ => None,
     }
+}
+
+fn exact_closed_record<T>(bytes: &[u8]) -> Option<T>
+where
+    T: DeserializeOwned + Serialize,
+{
+    let record = serde_json::from_slice::<T>(bytes).ok()?;
+    (serde_json::to_vec(&record).ok().as_deref() == Some(bytes)).then_some(record)
 }
 
 fn exact_json_frame(bytes: &[u8]) -> Option<&[u8]> {
@@ -386,6 +549,38 @@ fn validate_accepted_record<'a>(
         && record.support_limit == SUPPORT_LIMIT
         && plan.schema_version == PLAN_SCHEMA
         && plan.plan_id == accepted_plan
+        && plan.apply_capability == "available_exact_record_only")
+        .then_some(plan)
+}
+
+fn validate_abandonment_record<'a>(
+    record: &'a RoutineStateAbandonmentRecord,
+    accepted_plan: &str,
+) -> Option<&'a RoutineStateQuarantinePlan> {
+    let plan = &record.quarantine_plan;
+    let supported_relation = matches!(
+        record.history_relation.as_str(),
+        "terminal_event_history_incomplete"
+            | "terminal_event_history_conflicting"
+            | "conflicting_histories_hold"
+    );
+    (record.schema_version == ABANDONMENT_RECORD_SCHEMA
+        && record.status == "legacy_history_abandonment_requires_explicit_retirement_approval"
+        && record.format_status == "absent_legacy"
+        && supported_relation
+        && record.abandonment_effect == "none"
+        && !record.abandonment_authorized
+        && record.consequences.legacy_history_continuity == "abandoned"
+        && !record.consequences.legacy_authority_imported
+        && record.consequences.previous_reuse_and_recovery == "unavailable"
+        && record.consequences.possible_duplicate_effect
+            == "declared_target_local_routine_outputs_may_reexecute"
+        && record.claim_effect == "none"
+        && record.support_limit == ABANDONMENT_SUPPORT_LIMIT
+        && plan.schema_version == ABANDONMENT_PLAN_SCHEMA
+        && plan.plan_id == accepted_plan
+        && plan.history_relation == record.history_relation
+        && plan.authoritative_history == "none_explicit_operator_abandonment"
         && plan.apply_capability == "available_exact_record_only")
         .then_some(plan)
 }
@@ -516,6 +711,31 @@ mod tests {
     }
 
     #[test]
+    fn abandonment_record_requires_v6_identity_bound_consequences_and_separate_validation() {
+        let mut admission = admission();
+        admission.status = "legacy_history_abandonment_requires_explicit_retirement_approval";
+        admission.history_relation = "terminal_event_history_incomplete";
+        let plan = admission.quarantine_plan.as_mut().unwrap();
+        plan.schema_version = ABANDONMENT_PLAN_SCHEMA.to_owned();
+        plan.history_relation = "terminal_event_history_incomplete".to_owned();
+        plan.authoritative_history = "none_explicit_operator_abandonment".to_owned();
+        let record = abandonment_record(&admission).unwrap();
+        let accepted = record.quarantine_plan.plan_id.clone();
+
+        assert_eq!(
+            validate_abandonment_record(&record, &accepted),
+            Some(&record.quarantine_plan)
+        );
+        assert!(
+            validate_accepted_record(&migration_admission_record(&admission), &accepted).is_none()
+        );
+
+        let mut substituted = record.clone();
+        substituted.consequences.previous_reuse_and_recovery = "available".to_owned();
+        assert!(validate_abandonment_record(&substituted, &accepted).is_none());
+    }
+
+    #[test]
     fn previous_v6_admission_with_current_v5_plan_is_rejected_fail_closed() {
         let mut previous_admission = migration_admission_record(&admission());
         previous_admission.schema_version = "RoutineStateMigrationAdmission-v6".to_owned();
@@ -623,6 +843,7 @@ mod tests {
                 quarantine_owner: format!("routine-public.quarantine-{}", "a".repeat(64)),
                 fresh_format_verified: true,
             },
+            false,
             false,
         );
         assert_eq!(outcome.exit_class, ExitClass::ActionableFinding);

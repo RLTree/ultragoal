@@ -20,6 +20,8 @@ const CLI: OptionSpec = option(OptionName::Cli, ValueKind::RelativePath, true);
 const CANDIDATE: OptionSpec = option(OptionName::Candidate, ValueKind::Identifier, true);
 const REGISTRY: OptionSpec = option(OptionName::Registry, ValueKind::RelativePath, false);
 const APPROVE_RETIREMENT: OptionSpec = option(OptionName::ApproveRetirement, ValueKind::Flag, true);
+const OPTIONAL_APPROVE_RETIREMENT: OptionSpec =
+    option(OptionName::ApproveRetirement, ValueKind::Flag, false);
 const PACKAGE_ROOT: OptionSpec = option(OptionName::PackageRoot, ValueKind::HostPath, false);
 const RETAIN_ISOLATED_ROOT: OptionSpec =
     option(OptionName::RetainIsolatedRoot, ValueKind::Flag, false);
@@ -51,7 +53,12 @@ pub(super) const INPUT_OUTPUT_RETAIN: &[OptionSpec] = &[INPUT, OUTPUT, CLI, RETA
 pub(super) const CANDIDATE_OUTPUT: &[OptionSpec] = &[CANDIDATE, OUTPUT];
 pub(super) const ADAPTER_OPTIONS: &[OptionSpec] = &[SPEC, PROVIDER];
 pub(super) const REGISTRY_OPTION: &[OptionSpec] = &[REGISTRY];
-pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[MIGRATION_PLAN, ACCEPT_PLAN];
+pub(super) const MIGRATE_APPLY: &[OptionSpec] = &[
+    TARGET,
+    MIGRATION_PLAN,
+    ACCEPT_PLAN,
+    OPTIONAL_APPROVE_RETIREMENT,
+];
 pub(super) const MIGRATE_RETIRE: &[OptionSpec] = &[MIGRATION_PLAN, APPROVE_RETIREMENT];
 pub(super) const CAPABILITIES_OPTION: &[OptionSpec] = &[PACKAGE_ROOT];
 

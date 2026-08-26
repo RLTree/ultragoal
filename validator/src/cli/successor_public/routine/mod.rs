@@ -5,6 +5,7 @@
 //! parent-authenticated observations; repository content cannot select a
 //! program, argument template, fallback, or child-authored outcome.
 
+mod abandonment_plan;
 mod behavior_child;
 mod host;
 mod manifest;
@@ -48,6 +49,10 @@ mod source_context;
 #[path = "source/selection.rs"]
 mod source_selection;
 
+pub(crate) use abandonment_plan::{
+    ABANDONMENT_PLAN_SCHEMA, ABANDONMENT_RECORD_SCHEMA, ABANDONMENT_SUPPORT_LIMIT,
+    RoutineStateAbandonmentRecord, abandonment_record, plan_state_abandonment,
+};
 pub(crate) use diagnosis::*;
 pub(crate) use host::HostCustodyIssuance;
 pub(crate) use invocation_binding::*;

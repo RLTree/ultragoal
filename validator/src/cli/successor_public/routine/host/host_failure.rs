@@ -149,6 +149,21 @@ impl HostState {
         }
     }
 
+    pub(crate) fn assess_abandonment_admission(
+        home: &Path,
+        binding: CheckpointBinding<'_>,
+    ) -> Result<Option<RoutineStateMigrationAdmission>, HostFailure> {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::assess_abandonment_admission(home, binding)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (home, binding);
+            Err(HostFailure::Unsupported)
+        }
+    }
+
     pub(crate) fn apply_quarantine_plan<F>(
         home: &Path,
         target: &Path,
@@ -162,6 +177,27 @@ impl HostState {
         #[cfg(target_vendor = "apple")]
         {
             supported::apply_quarantine_plan(home, target, binding, accepted, &record_matches)
+        }
+        #[cfg(not(target_vendor = "apple"))]
+        {
+            let _ = (home, target, binding, accepted, record_matches);
+            Err(HostFailure::Unsupported)
+        }
+    }
+
+    pub(crate) fn apply_abandonment_plan<F>(
+        home: &Path,
+        target: &Path,
+        binding: CheckpointBinding<'_>,
+        accepted: &RoutineStateQuarantinePlan,
+        record_matches: F,
+    ) -> Result<RoutineStateQuarantineApplyOutcome, HostFailure>
+    where
+        F: Fn(&RoutineStateMigrationAdmission) -> bool,
+    {
+        #[cfg(target_vendor = "apple")]
+        {
+            supported::apply_abandonment_plan(home, target, binding, accepted, &record_matches)
         }
         #[cfg(not(target_vendor = "apple"))]
         {

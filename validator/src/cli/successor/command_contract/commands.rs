@@ -101,6 +101,7 @@ pub enum EvalAction {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MigrateAction {
     Plan,
+    Abandon,
     Apply,
     Verify,
     Retire,

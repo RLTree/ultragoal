@@ -26,13 +26,13 @@ mod state_components;
 #[path = "validate_name.rs"]
 mod validate_name;
 
-#[cfg(test)]
-pub(crate) use anchored_directory::{fail_after_next_rename, fail_before_next_rename};
 pub(crate) use anchored_directory::write_lock_marker;
 pub(crate) use anchored_directory::{ExclusivePublishFailure, ExclusivePublishSite};
+#[cfg(test)]
+pub(crate) use anchored_directory::{fail_after_next_rename, fail_before_next_rename};
 pub(crate) use continuity::{ContinuationCheckpoint, ContinuationResolution};
-pub(crate) use migration_admission::assess_migration_admission;
+pub(crate) use migration_admission::{assess_abandonment_admission, assess_migration_admission};
 pub(crate) use parent_state_lock::ParentStateLock;
-pub(crate) use quarantine_apply::apply_quarantine_plan;
+pub(crate) use quarantine_apply::{apply_abandonment_plan, apply_quarantine_plan};
 pub(crate) use state_components::*;
 pub(crate) use validate_name::*;
