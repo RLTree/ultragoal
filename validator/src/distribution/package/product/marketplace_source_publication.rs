@@ -77,7 +77,7 @@ impl ProductionPackageArtifact {
         ProductionPackageError,
     > {
         verify_product_package(self, context, catalog)?;
-        if output.relative_path() != MARKETPLACE_SOURCE_PATH {
+        if !supported_marketplace_source_path(output.relative_path()) {
             return Err(failure(ProductionPackageErrorId::OutputFailed));
         }
         let guard = PackageCapture::begin(context)
@@ -120,7 +120,6 @@ impl ProductionPackageArtifact {
         Ok((observation, transaction))
     }
 
-    #[cfg(test)]
     pub(crate) fn rollback_marketplace_source_transition(
         &self,
         transaction: super::materialize::MaterializeTransaction,
@@ -158,7 +157,7 @@ impl ProductionPackageArtifact {
         output: &ScopedTree,
     ) -> Result<MarketplaceSourceObservation, ProductionPackageError> {
         verify_product_package(self, context, catalog)?;
-        if output.relative_path() != MARKETPLACE_SOURCE_PATH {
+        if !supported_marketplace_source_path(output.relative_path()) {
             return Err(failure(ProductionPackageErrorId::OutputFailed));
         }
         let observed = output
@@ -177,4 +176,11 @@ impl ProductionPackageArtifact {
                 .map_err(|_| failure(ProductionPackageErrorId::OutputFailed))?,
         })
     }
+}
+
+fn supported_marketplace_source_path(path: &str) -> bool {
+    matches!(
+        path,
+        MARKETPLACE_SOURCE_PATH | super::PERSONAL_MARKETPLACE_SOURCE_RELATIVE
+    )
 }

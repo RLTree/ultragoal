@@ -2,8 +2,7 @@ use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
     PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PackageIdentity, PersonalMarketplaceSourceObservation,
-    PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateDisposition,
-    PersonalMarketplaceUpdateEffects, PersonalMarketplaceUpdateObservation, ReadOnlyWorkspace,
+    PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateDisposition, ReadOnlyWorkspace,
     SourceIdentity, capture_product_package, capture_product_package_with_cli,
     execute_personal_marketplace_update, verify_product_package,
 };
@@ -18,6 +17,8 @@ use crate::plugin_product::lifecycle::{
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::path::Path;
+
+mod live_effects;
 
 const PACKAGE_LIMIT: usize = 65 * 1024 * 1024;
 const PLAN_LIMIT: u64 = 1024 * 1024;
@@ -205,65 +206,94 @@ pub(super) fn apply(
         Err(_) => return apply_failure("accepted plan does not match the closed plan schema"),
     };
     if record.plan_sha256 != accepted_plan
-        || record.effect != "none"
-        || record.apply_status != "hold-live-personal-marketplace-effect-adapter-not-implemented"
+        || record.effect != "personal-marketplace-update"
+        || record.apply_status != "ready-exact-live-personal-marketplace-adapter"
         || validate_plan_identity(&record).is_err()
     {
         return apply_failure("accepted plan identity or HOLD boundary was substituted");
     }
-    let current = match build_plan(
-        source_context,
-        observation_context,
-        home,
-        &record.input,
-        &record.cli,
-    ) {
-        Ok(current) => current,
-        Err(_) => return apply_failure("installed or candidate authority changed after planning"),
-    };
-    if current.record != record
-        || current
-            .revalidate(source_context, observation_context)
-            .is_err()
+    let (artifact, catalog) =
+        match capture_accepted_candidate(source_context, &record.input, &record.cli) {
+            Ok(candidate) => candidate,
+            Err(_) => return apply_failure("candidate authority changed after planning"),
+        };
+    if target_package(&artifact) != record.target
         || source_context.revalidate().is_err()
         || observation_context.revalidate().is_err()
     {
         return apply_failure("installed or candidate authority changed after planning");
     }
-    let (_, _, prior) = match adopted_lifecycle_plan(&record) {
-        Ok(adopted) => adopted,
-        Err(_) => return apply_failure("typed prior installed authority adoption failed"),
+    let (authority, prior) = match accepted_update_authority(&record, &target_package(&artifact)) {
+        Ok(accepted) => accepted,
+        Err(cause) => return apply_failure(cause),
     };
-    let authority = match PersonalMarketplaceUpdateAuthority::new(
-        record.plan_sha256.clone(),
+    let mut effects = match live_effects::LivePersonalMarketplaceUpdateEffects::new(
+        source_context,
+        observation_context,
+        home,
+        record.clone(),
         prior,
-        record.before.marketplace_source_tree_sha256.clone(),
-        record.target.archive_sha256.clone(),
-        record.target.source_tree_sha256.clone(),
+        artifact,
+        catalog,
     ) {
-        Ok(authority) => authority,
-        Err(_) => return apply_failure("atomic marketplace update authority is invalid"),
+        Ok(effects) => effects,
+        Err(cause) => return apply_failure(cause),
     };
-    let mut unavailable = UnavailablePersonalMarketplaceUpdateEffects;
-    let report = execute_personal_marketplace_update(&authority, &mut unavailable);
-    if report.disposition != PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect {
-        return apply_failure("unavailable live adapter crossed the no-effect boundary");
+    let report = execute_personal_marketplace_update(&authority, &mut effects);
+    if let Err(cause) = effects.finish() {
+        return match report.disposition {
+            PersonalMarketplaceUpdateDisposition::Applied => apply_effect_failure(
+                cause,
+                "observed-exact-target; pinned-executable-finalization-failed",
+                "preserve the observed target and reconcile the exact selected Codex executable before any retry",
+            ),
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => apply_effect_failure(
+                cause,
+                "restored-exact-prior; pinned-executable-finalization-failed",
+                "preserve the restored prior state and reconcile the exact selected Codex executable before deriving a new plan",
+            ),
+            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => apply_effect_failure(
+                cause,
+                "ambiguous-recovery-and-executable-finalization",
+                "reconcile every marketplace, registry, cache, runtime, and selected-Codex authority before any retry",
+            ),
+            PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget
+            | PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => apply_failure(cause),
+        };
     }
-    RuntimeOutcome::failure(
-        ExitClass::UnsupportedCapability,
-        Diagnostic::new(
-            DiagnosticId::DownstreamToolUnavailable,
-            ExitClass::UnsupportedCapability,
-            DiagnosticDetails {
-                cause: "the accepted exact plan, typed prior authority, and recoverable marketplace transaction are current, but no reviewed live personal-marketplace effect adapter is exposed",
-                affected_surface: "HCT-DISTRIBUTION personal marketplace install apply",
-                repair: "implement the live adapter with one exclusive lease and the existing pinned Codex executor, then pass the same interruption and exact-rollback matrix",
-                effect: "none",
-                rerun: "ultragoal --json package install-apply --plan <absolute-plan-path> --accept-plan <sha256>",
-                ceiling: "plan, prior-authority adoption, and isolated recoverable transaction passed; marketplace, plugin registry, cache, runtime, and host installation remain unchanged",
-            },
+    match report.disposition {
+        PersonalMarketplaceUpdateDisposition::Applied => RuntimeOutcome::payload(
+            ExitClass::Success,
+            Vec::new(),
+            format!(
+                "personal marketplace install applied plan={} effect=marketplace-source+plugin-install",
+                record.plan_sha256
+            ),
         ),
-    )
+        PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget => RuntimeOutcome::payload(
+            ExitClass::Success,
+            Vec::new(),
+            format!(
+                "personal marketplace install reused plan={} effect=none",
+                record.plan_sha256
+            ),
+        ),
+        PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => apply_effect_failure(
+            "personal marketplace update failed and exact prior authority was restored",
+            "restored-exact-prior",
+            "retry only after rederiving a fresh exact install plan",
+        ),
+        PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => apply_effect_failure(
+            "personal marketplace update was refused before a package or host effect",
+            "none",
+            "restore exact plan, candidate, predecessor, lease, and selected-Codex custody before retrying",
+        ),
+        PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => apply_effect_failure(
+            "personal marketplace update could not prove exact target or exact prior recovery",
+            "ambiguous-recovery-required",
+            "reconcile the exact marketplace source, installed registry, cache, runtime, and selected Codex executable before any retry",
+        ),
+    }
 }
 
 fn build_plan(
@@ -273,6 +303,91 @@ fn build_plan(
     input: &str,
     cli: &str,
 ) -> Result<PreparedInstallPlan, &'static str> {
+    let (artifact, _catalog) = capture_accepted_candidate(source_context, input, cli)?;
+    let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
+        .map_err(registry_observation_failure_cause)?;
+    let installed = installed_authority(home, &registry)?;
+    let before = installed.authority.clone();
+    let target = target_package(&artifact);
+    let before_version = Version::parse(&before.plugin_version)
+        .map_err(|_| "installed plugin version is invalid")?;
+    let target_version_parsed =
+        Version::parse(&target.version).map_err(|_| "target plugin version is invalid")?;
+    if target_version_parsed
+        .precedence_cmp(&before_version)
+        .map_err(|_| "installed or target plugin version is invalid")?
+        != std::cmp::Ordering::Greater
+    {
+        return Err("target package is not a monotonic installed-version successor");
+    }
+    let required_effects = vec![
+        "atomically materialize exact target bytes into the observed personal marketplace source"
+            .to_owned(),
+        "execute the pinned Codex executable: plugin add harness-ultragoal@local-harness-plugins"
+            .to_owned(),
+    ];
+    let required_reconciliation = vec![
+        "reobserve the exact installed registry row and personal marketplace root".to_owned(),
+        "verify installed source, cache, and runtime bytes equal the target package".to_owned(),
+        "prove idempotent replay produces no second materialization or install effect".to_owned(),
+    ];
+    let rollback = vec![
+        "restore the exact pre-plan marketplace source tree".to_owned(),
+        "reinstall and reobserve the exact prior installed authority".to_owned(),
+        "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
+    ];
+    let binding = PlanBinding {
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4",
+        effect: "personal-marketplace-update",
+        marketplace: MARKETPLACE,
+        lifecycle_intent: "monotonic-update",
+        input,
+        cli,
+        before: &before,
+        target: &target,
+        apply_status: "ready-exact-live-personal-marketplace-adapter",
+        required_effects: &required_effects,
+        required_reconciliation: &required_reconciliation,
+        rollback: &rollback,
+        claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers",
+    };
+    let plan_sha256 = digest_json(&binding)?;
+    drop(binding);
+    let record = PersonalMarketplaceInstallPlan {
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4".to_owned(),
+        plan_sha256,
+        effect: "personal-marketplace-update".to_owned(),
+        marketplace: MARKETPLACE.to_owned(),
+        lifecycle_intent: "monotonic-update".to_owned(),
+        input: input.to_owned(),
+        cli: cli.to_owned(),
+        before,
+        target,
+        apply_status: "ready-exact-live-personal-marketplace-adapter".to_owned(),
+        required_effects,
+        required_reconciliation,
+        rollback,
+        claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers".to_owned(),
+    };
+    validate_plan_identity(&record)?;
+    Ok(PreparedInstallPlan {
+        record,
+        registry,
+        installed,
+    })
+}
+
+fn capture_accepted_candidate(
+    source_context: &LiveContext,
+    input: &str,
+    cli: &str,
+) -> Result<
+    (
+        crate::distribution::ProductionPackageArtifact,
+        crate::inventory::AuthorityCatalog,
+    ),
+    &'static str,
+> {
     if !super::package_dispatch::package_archive_input_allowed(input)
         || !super::package_cli_payload::allowed(cli)
     {
@@ -297,23 +412,14 @@ fn build_plan(
     if archive != artifact.snapshot().archive() {
         return Err("input archive does not match the exact current-source package");
     }
-    let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
-        .map_err(registry_observation_failure_cause)?;
-    let installed = installed_authority(home, &registry)?;
-    let before = installed.authority.clone();
-    let target_version = artifact.snapshot().identity().source().version();
-    let before_version = Version::parse(&before.plugin_version)
-        .map_err(|_| "installed plugin version is invalid")?;
-    let target_version_parsed =
-        Version::parse(target_version).map_err(|_| "target plugin version is invalid")?;
-    if target_version_parsed
-        .precedence_cmp(&before_version)
-        .map_err(|_| "installed or target plugin version is invalid")?
-        != std::cmp::Ordering::Greater
-    {
-        return Err("target package is not a monotonic installed-version successor");
-    }
-    let target = TargetPackage {
+    source_context
+        .revalidate()
+        .map_err(|_| "candidate source changed after package capture")?;
+    Ok((artifact, catalog))
+}
+
+fn target_package(artifact: &crate::distribution::ProductionPackageArtifact) -> TargetPackage {
+    TargetPackage {
         context_id: artifact
             .snapshot()
             .identity()
@@ -322,66 +428,11 @@ fn build_plan(
             .to_owned(),
         candidate_id: artifact.candidate_id().to_owned(),
         catalog_id: artifact.catalog_id().to_owned(),
-        version: target_version.to_owned(),
+        version: artifact.snapshot().identity().source().version().to_owned(),
         source_tree_sha256: artifact.snapshot().source_tree_sha256().to_owned(),
         archive_sha256: artifact.snapshot().package_sha256().to_owned(),
         inventory_sha256: artifact.snapshot().inventory_sha256().to_owned(),
-    };
-    let required_effects = vec![
-        "atomically materialize exact target bytes into the observed personal marketplace source"
-            .to_owned(),
-        "execute the pinned Codex executable: plugin add harness-ultragoal@local-harness-plugins"
-            .to_owned(),
-    ];
-    let required_reconciliation = vec![
-        "reobserve the exact installed registry row and personal marketplace root".to_owned(),
-        "verify installed source, cache, and runtime bytes equal the target package".to_owned(),
-        "prove idempotent replay produces no second materialization or install effect".to_owned(),
-    ];
-    let rollback = vec![
-        "restore the exact pre-plan marketplace source tree".to_owned(),
-        "reinstall and reobserve the exact prior installed authority".to_owned(),
-        "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
-    ];
-    let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4",
-        effect: "none",
-        marketplace: MARKETPLACE,
-        lifecycle_intent: "monotonic-update",
-        input,
-        cli,
-        before: &before,
-        target: &target,
-        apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented",
-        required_effects: &required_effects,
-        required_reconciliation: &required_reconciliation,
-        rollback: &rollback,
-        claim_ceiling: "read-only exact install plan; no marketplace, registry, cache, runtime, or host mutation authorized",
-    };
-    let plan_sha256 = digest_json(&binding)?;
-    drop(binding);
-    let record = PersonalMarketplaceInstallPlan {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4".to_owned(),
-        plan_sha256,
-        effect: "none".to_owned(),
-        marketplace: MARKETPLACE.to_owned(),
-        lifecycle_intent: "monotonic-update".to_owned(),
-        input: input.to_owned(),
-        cli: cli.to_owned(),
-        before,
-        target,
-        apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented".to_owned(),
-        required_effects,
-        required_reconciliation,
-        rollback,
-        claim_ceiling: "read-only exact install plan; no marketplace, registry, cache, runtime, or host mutation authorized".to_owned(),
-    };
-    validate_plan_identity(&record)?;
-    Ok(PreparedInstallPlan {
-        record,
-        registry,
-        installed,
-    })
+    }
 }
 
 fn registry_observation_failure_cause(
@@ -576,11 +627,38 @@ fn adopted_lifecycle_plan(
     Ok((lifecycle, target, prior))
 }
 
+fn accepted_update_authority(
+    record: &PersonalMarketplaceInstallPlan,
+    current_target: &TargetPackage,
+) -> Result<(PersonalMarketplaceUpdateAuthority, PriorInstalledAuthority), &'static str> {
+    if current_target != &record.target || validate_plan_identity(record).is_err() {
+        return Err("accepted candidate authority changed after planning");
+    }
+    let (_, target, prior) = adopted_lifecycle_plan(record)
+        .map_err(|_| "typed prior installed authority adoption failed")?;
+    if target.archive_sha256() != current_target.archive_sha256
+        || target.tree_sha256() != current_target.source_tree_sha256
+    {
+        return Err("accepted target package authority changed after planning");
+    }
+    let authority = PersonalMarketplaceUpdateAuthority::new(
+        record.plan_sha256.clone(),
+        prior.clone(),
+        record.before.marketplace_source_tree_sha256.clone(),
+        record.target.archive_sha256.clone(),
+        record.target.source_tree_sha256.clone(),
+    )
+    .map_err(|_| "atomic marketplace update authority is invalid")?;
+    Ok((authority, prior))
+}
+
 fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(), &'static str> {
     if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v4"
+        || record.effect != "personal-marketplace-update"
         || record.before.schema_version != "HarnessObservedInstalledAuthority-v2"
         || record.marketplace != MARKETPLACE
         || record.lifecycle_intent != "monotonic-update"
+        || record.apply_status != "ready-exact-live-personal-marketplace-adapter"
         || record.before.installed_authority_sha256 != installed_authority_digest(&record.before)?
     {
         return Err("plan contract changed");
@@ -603,45 +681,6 @@ fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(),
     (record.plan_sha256 == digest_json(&binding)?)
         .then_some(())
         .ok_or("plan identity changed")
-}
-
-struct UnavailablePersonalMarketplaceUpdateEffects;
-
-impl PersonalMarketplaceUpdateEffects for UnavailablePersonalMarketplaceUpdateEffects {
-    fn observe(
-        &mut self,
-        _authority: &PersonalMarketplaceUpdateAuthority,
-    ) -> Result<PersonalMarketplaceUpdateObservation, &'static str> {
-        Ok(PersonalMarketplaceUpdateObservation::unavailable())
-    }
-
-    fn materialize_target(
-        &mut self,
-        _authority: &PersonalMarketplaceUpdateAuthority,
-    ) -> Result<(), &'static str> {
-        Err("live personal marketplace effect adapter unavailable")
-    }
-
-    fn install_target(
-        &mut self,
-        _authority: &PersonalMarketplaceUpdateAuthority,
-    ) -> Result<(), &'static str> {
-        Err("live personal marketplace effect adapter unavailable")
-    }
-
-    fn restore_prior_tree(
-        &mut self,
-        _authority: &PersonalMarketplaceUpdateAuthority,
-    ) -> Result<(), &'static str> {
-        Err("live personal marketplace effect adapter unavailable")
-    }
-
-    fn reinstall_prior(
-        &mut self,
-        _authority: &PersonalMarketplaceUpdateAuthority,
-    ) -> Result<(), &'static str> {
-        Err("live personal marketplace effect adapter unavailable")
-    }
 }
 
 fn plan_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
@@ -708,6 +747,28 @@ fn plan_failure(cause: &'static str) -> RuntimeOutcome {
 
 fn apply_failure(cause: &'static str) -> RuntimeOutcome {
     failure(cause, "none", "package install-apply")
+}
+
+fn apply_effect_failure(
+    cause: &'static str,
+    effect: &'static str,
+    repair: &'static str,
+) -> RuntimeOutcome {
+    RuntimeOutcome::failure(
+        ExitClass::ActionableFinding,
+        Diagnostic::new(
+            DiagnosticId::StaleContext,
+            ExitClass::ActionableFinding,
+            DiagnosticDetails {
+                cause,
+                affected_surface: "HCT-DISTRIBUTION personal marketplace lifecycle",
+                repair,
+                effect,
+                rerun: "package install-plan then package install-apply",
+                ceiling: "the accepted update did not prove an exact installed target; do not infer install success or repeat an effect until exact authority is rederived",
+            },
+        ),
+    )
 }
 
 fn failure(cause: &'static str, effect: &'static str, command: &'static str) -> RuntimeOutcome {
@@ -781,7 +842,7 @@ mod tests {
         let mut record = PersonalMarketplaceInstallPlan {
             schema_version: "HarnessPersonalMarketplaceInstallPlan-v4".to_owned(),
             plan_sha256: String::new(),
-            effect: "none".to_owned(),
+            effect: "personal-marketplace-update".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
             lifecycle_intent: "monotonic-update".to_owned(),
             input: "target/ultragoal/package-0.0.41.hugpkg".to_owned(),
@@ -796,12 +857,11 @@ mod tests {
                 archive_sha256: digest('4'),
                 inventory_sha256: digest('5'),
             },
-            apply_status: "hold-live-personal-marketplace-effect-adapter-not-implemented"
-                .to_owned(),
+            apply_status: "ready-exact-live-personal-marketplace-adapter".to_owned(),
             required_effects: vec!["materialize".to_owned(), "install".to_owned()],
             required_reconciliation: vec!["registry".to_owned(), "cache".to_owned()],
             rollback: vec!["restore".to_owned()],
-            claim_ceiling: "read-only exact install plan; no marketplace, registry, cache, runtime, or host mutation authorized".to_owned(),
+            claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers".to_owned(),
         };
         rebind_plan(&mut record);
         record
@@ -1048,6 +1108,102 @@ mod tests {
         let mut sequence = original;
         sequence.required_effects.swap(0, 1);
         assert!(validate_plan_identity(&sequence).is_err());
+    }
+
+    #[test]
+    fn apply_admission_revalidates_the_accepted_candidate_without_replanning_the_predecessor() {
+        struct Interrupted {
+            observation: crate::distribution::PersonalMarketplaceUpdateObservation,
+            restorations: usize,
+            reinstalls: usize,
+        }
+
+        impl crate::distribution::PersonalMarketplaceUpdateEffects for Interrupted {
+            fn observe(
+                &mut self,
+                _authority: &PersonalMarketplaceUpdateAuthority,
+            ) -> Result<crate::distribution::PersonalMarketplaceUpdateObservation, &'static str>
+            {
+                Ok(self.observation)
+            }
+
+            fn materialize_target(
+                &mut self,
+                _authority: &PersonalMarketplaceUpdateAuthority,
+            ) -> Result<(), &'static str> {
+                Err("already materialized")
+            }
+
+            fn install_target(
+                &mut self,
+                _authority: &PersonalMarketplaceUpdateAuthority,
+            ) -> Result<(), &'static str> {
+                Err("installation must not run before restart recovery")
+            }
+
+            fn restore_prior_tree(
+                &mut self,
+                _authority: &PersonalMarketplaceUpdateAuthority,
+            ) -> Result<(), &'static str> {
+                self.restorations += 1;
+                self.observation = exact_update_observation(
+                    crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
+                );
+                Ok(())
+            }
+
+            fn reinstall_prior(
+                &mut self,
+                _authority: &PersonalMarketplaceUpdateAuthority,
+            ) -> Result<(), &'static str> {
+                self.reinstalls += 1;
+                Ok(())
+            }
+        }
+
+        let accepted = record();
+        let (authority, prior) = accepted_update_authority(&accepted, &accepted.target).unwrap();
+        assert_eq!(authority.plan_sha256(), accepted.plan_sha256);
+        assert_eq!(authority.prior(), &prior);
+        assert_eq!(
+            authority.prior_tree_sha256(),
+            accepted.before.marketplace_source_tree_sha256
+        );
+        assert_eq!(
+            authority.target_tree_sha256(),
+            accepted.target.source_tree_sha256
+        );
+        let mut interrupted = Interrupted {
+            observation: crate::distribution::PersonalMarketplaceUpdateObservation {
+                marketplace_root_bound: true,
+                source_tree: crate::distribution::PersonalMarketplaceAuthorityMatch::Target,
+                installed: crate::distribution::PersonalMarketplaceAuthorityMatch::Target,
+                cache: crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
+                runtime: crate::distribution::PersonalMarketplaceAuthorityMatch::Other,
+                registry: crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
+            },
+            restorations: 0,
+            reinstalls: 0,
+        };
+        let report = execute_personal_marketplace_update(&authority, &mut interrupted);
+        assert_eq!(
+            report.disposition,
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure
+        );
+        assert_eq!((interrupted.restorations, interrupted.reinstalls), (1, 1));
+    }
+
+    fn exact_update_observation(
+        value: crate::distribution::PersonalMarketplaceAuthorityMatch,
+    ) -> crate::distribution::PersonalMarketplaceUpdateObservation {
+        crate::distribution::PersonalMarketplaceUpdateObservation {
+            marketplace_root_bound: true,
+            source_tree: value,
+            installed: value,
+            cache: value,
+            runtime: value,
+            registry: value,
+        }
     }
 
     #[test]

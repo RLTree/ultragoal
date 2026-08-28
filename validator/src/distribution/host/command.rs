@@ -111,6 +111,40 @@ impl HostCommandPlan {
         host_plugin_plan(package, "add", marketplace)
     }
 
+    pub(crate) fn personal_install_in_codex_home(
+        package: &PackageIdentity,
+        marketplace: &str,
+        home: &Path,
+    ) -> Result<Self, DistributionError> {
+        validate_name(marketplace)?;
+        let requested_home = home;
+        let home = requested_home
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        if home != requested_home || !home.is_absolute() {
+            return Err(error(DistributionErrorId::InvalidPath));
+        }
+        let codex_home = home
+            .join(".codex")
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        if codex_home != home.join(".codex") {
+            return Err(error(DistributionErrorId::InvalidPath));
+        }
+        let home = home.display().to_string();
+        let codex_home = codex_home.display().to_string();
+        bound_plan(
+            package,
+            vec![command_with_environment(
+                &["plugin", "add", &format!("harness-ultragoal@{marketplace}")],
+                &[
+                    ("CODEX_HOME".to_owned(), codex_home),
+                    ("HOME".to_owned(), home),
+                ],
+            )],
+        )
+    }
+
     pub fn personal_remove(
         package: &PackageIdentity,
         marketplace: &str,
@@ -232,4 +266,95 @@ fn validate_path_argument(value: &str) -> Result<(), DistributionError> {
         return Err(error(DistributionErrorId::InvalidPath));
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod personal_install_tests {
+    use super::*;
+    use crate::distribution::{PackageIdentity, SourceIdentity};
+    use std::sync::atomic::{AtomicU64, Ordering};
+
+    static NEXT_HOME: AtomicU64 = AtomicU64::new(0);
+
+    #[test]
+    fn personal_install_binds_user_home_and_global_codex_root_separately() {
+        let home = std::env::temp_dir().join(format!(
+            "hul-personal-command-home-{}-{}",
+            std::process::id(),
+            NEXT_HOME.fetch_add(1, Ordering::Relaxed)
+        ));
+        std::fs::create_dir_all(home.join(".codex")).unwrap();
+        let home = home.canonicalize().unwrap();
+        let plan = HostCommandPlan::personal_install_in_codex_home(
+            &package(),
+            "local-harness-plugins",
+            &home,
+        )
+        .unwrap();
+        let command = &plan.commands()[0];
+        assert_eq!(command.program(), "codex");
+        assert_eq!(
+            command.argv(),
+            [
+                "plugin".to_owned(),
+                "add".to_owned(),
+                "harness-ultragoal@local-harness-plugins".to_owned(),
+            ]
+        );
+        assert_eq!(
+            command.environment(),
+            [
+                (
+                    "CODEX_HOME".to_owned(),
+                    home.join(".codex").display().to_string(),
+                ),
+                ("HOME".to_owned(), home.display().to_string()),
+            ]
+        );
+        assert_ne!(command.environment()[0].1, command.environment()[1].1);
+        std::fs::remove_dir_all(home).unwrap();
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn personal_install_rejects_an_aliased_home() {
+        use std::os::unix::fs::symlink;
+
+        let root = std::env::temp_dir().join(format!(
+            "hul-personal-command-alias-{}-{}",
+            std::process::id(),
+            NEXT_HOME.fetch_add(1, Ordering::Relaxed)
+        ));
+        let home = root.join("home");
+        let alias = root.join("alias");
+        std::fs::create_dir_all(home.join(".codex")).unwrap();
+        symlink(&home, &alias).unwrap();
+        assert!(
+            HostCommandPlan::personal_install_in_codex_home(
+                &package(),
+                "local-harness-plugins",
+                &alias,
+            )
+            .is_err()
+        );
+        std::fs::remove_dir_all(root).unwrap();
+    }
+
+    fn package() -> PackageIdentity {
+        let digest = |seed: char| format!("sha256:{}", seed.to_string().repeat(64));
+        PackageIdentity::new(
+            SourceIdentity::new(
+                digest('1'),
+                digest('2'),
+                "harness-ultragoal".to_owned(),
+                "0.0.42".to_owned(),
+                digest('3'),
+                digest('4'),
+            )
+            .unwrap(),
+            digest('5'),
+            digest('6'),
+        )
+        .unwrap()
+    }
 }

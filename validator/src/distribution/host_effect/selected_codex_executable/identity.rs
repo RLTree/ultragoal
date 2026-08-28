@@ -20,6 +20,12 @@ pub(super) struct SelectedCodexExecutableIdentity {
 }
 
 impl SelectedCodexExecutableIdentity {
+    pub(super) fn canonical_path(&self) -> &std::path::Path {
+        std::path::Path::new(&self.canonical_path)
+    }
+}
+
+impl SelectedCodexExecutableIdentity {
     pub(super) fn binding_sha256(&self) -> Result<String, HostEffectLedgerError> {
         #[derive(Serialize)]
         struct Binding<'a> {

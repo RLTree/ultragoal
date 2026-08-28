@@ -12,10 +12,12 @@ impl OutputRoot {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap_or_default()
             .as_nanos();
-        let root = PathBuf::from("/tmp").join(format!(
-            "hul-distribution-{label}-{}-{nonce}",
-            std::process::id()
-        ));
+        let root = crate::distribution::canonical_temporary_parent()
+            .expect("canonical temporary parent")
+            .join(format!(
+                "hul-distribution-{label}-{}-{nonce}",
+                std::process::id()
+            ));
         fs::create_dir(&root).expect("confined output root");
         Self { root }
     }

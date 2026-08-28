@@ -33,6 +33,28 @@ impl HostEffectExecutionPolicy {
         Self::from_bound_environment(timeout_ms, &environment)
     }
 
+    pub(in crate::distribution::host_effect) fn strict_personal_codex_home(
+        timeout_ms: u64,
+        personal_home: &std::path::Path,
+    ) -> Result<Self, HostEffectExecutorFailure> {
+        let home = personal_home.canonicalize().map_err(|_| {
+            HostEffectExecutorFailure::new(HostEffectExecutorErrorId::EnvironmentInjection)
+        })?;
+        let codex_home = home.join(".codex").canonicalize().map_err(|_| {
+            HostEffectExecutorFailure::new(HostEffectExecutorErrorId::EnvironmentInjection)
+        })?;
+        if home != personal_home || codex_home != home.join(".codex") {
+            return Err(HostEffectExecutorFailure::new(
+                HostEffectExecutorErrorId::EnvironmentInjection,
+            ));
+        }
+        let environment = [
+            ("CODEX_HOME".to_owned(), codex_home.display().to_string()),
+            ("HOME".to_owned(), home.display().to_string()),
+        ];
+        Self::from_bound_environment(timeout_ms, &environment)
+    }
+
     pub(in crate::distribution::host_effect) fn strict_runtime(
         timeout_ms: u64,
     ) -> Result<Self, HostEffectExecutorFailure> {

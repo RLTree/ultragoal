@@ -40,6 +40,46 @@ impl ConfinedRoot {
     }
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
+    pub(crate) fn open_personal_home(
+        path: &Path,
+        expected_home_id: &str,
+    ) -> Result<Self, DistributionError> {
+        use std::os::unix::fs::MetadataExt;
+
+        let canonical = path
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        let metadata = std::fs::symlink_metadata(path)
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        let parent = canonical
+            .parent()
+            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?
+            .to_path_buf();
+        let name = canonical
+            .file_name()
+            .and_then(|row| row.to_str())
+            .ok_or_else(|| error(DistributionErrorId::InvalidPath))?
+            .to_owned();
+        let home_id = sha256(
+            format!(
+                "{}\0{}\0{}",
+                canonical.display(),
+                metadata.dev(),
+                metadata.ino()
+            )
+            .as_bytes(),
+        );
+        if path != canonical
+            || !metadata.is_dir()
+            || metadata.file_type().is_symlink()
+            || home_id != expected_home_id
+        {
+            return Err(error(DistributionErrorId::InvalidPath));
+        }
+        Self::open_bound(canonical, &parent, &name)
+    }
+
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
     fn open_bound(
         canonical: PathBuf,
         parent_path: &Path,

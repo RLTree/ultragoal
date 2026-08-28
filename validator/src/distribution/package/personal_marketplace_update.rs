@@ -41,6 +41,26 @@ impl PersonalMarketplaceUpdateAuthority {
         }
         Ok(())
     }
+
+    pub(crate) fn plan_sha256(&self) -> &str {
+        &self.plan_sha256
+    }
+
+    pub(crate) fn prior(&self) -> &PriorInstalledAuthority {
+        &self.prior
+    }
+
+    pub(crate) fn prior_tree_sha256(&self) -> &str {
+        &self.prior_tree_sha256
+    }
+
+    pub(crate) fn target_package_sha256(&self) -> &str {
+        &self.target_package_sha256
+    }
+
+    pub(crate) fn target_tree_sha256(&self) -> &str {
+        &self.target_tree_sha256
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -61,17 +81,6 @@ pub(crate) struct PersonalMarketplaceUpdateObservation {
 }
 
 impl PersonalMarketplaceUpdateObservation {
-    pub(crate) fn unavailable() -> Self {
-        Self {
-            marketplace_root_bound: false,
-            source_tree: PersonalMarketplaceAuthorityMatch::Other,
-            installed: PersonalMarketplaceAuthorityMatch::Other,
-            cache: PersonalMarketplaceAuthorityMatch::Other,
-            runtime: PersonalMarketplaceAuthorityMatch::Other,
-            registry: PersonalMarketplaceAuthorityMatch::Other,
-        }
-    }
-
     fn exact_prior(self) -> bool {
         self.marketplace_root_bound
             && [
@@ -98,12 +107,13 @@ impl PersonalMarketplaceUpdateObservation {
             .all(|value| value == PersonalMarketplaceAuthorityMatch::Target)
     }
 
-    fn target_tree_only(self) -> bool {
+    fn exact_materialized_pending_install(self) -> bool {
         self.marketplace_root_bound
             && self.source_tree == PersonalMarketplaceAuthorityMatch::Target
-            && [self.installed, self.cache, self.runtime, self.registry]
-                .into_iter()
-                .all(|value| value == PersonalMarketplaceAuthorityMatch::Prior)
+            && self.installed == PersonalMarketplaceAuthorityMatch::Target
+            && self.cache == PersonalMarketplaceAuthorityMatch::Prior
+            && self.runtime == PersonalMarketplaceAuthorityMatch::Other
+            && self.registry == PersonalMarketplaceAuthorityMatch::Prior
     }
 
     fn prior_tree_is_restored(self) -> bool {
@@ -112,6 +122,10 @@ impl PersonalMarketplaceUpdateObservation {
 }
 
 pub(crate) trait PersonalMarketplaceUpdateEffects {
+    fn cancelled(&self) -> bool {
+        false
+    }
+
     fn observe(
         &mut self,
         authority: &PersonalMarketplaceUpdateAuthority,
@@ -191,7 +205,7 @@ pub(crate) fn execute_personal_marketplace_update(
             None,
         );
     }
-    if initial.target_tree_only() {
+    if initial.exact_materialized_pending_install() {
         return rollback(
             authority,
             effects,
@@ -204,6 +218,12 @@ pub(crate) fn execute_personal_marketplace_update(
             Some(PersonalMarketplaceUpdateStage::InitialObservation),
         );
     }
+    if effects.cancelled() {
+        return report(
+            PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect,
+            Some(PersonalMarketplaceUpdateStage::MaterializeTarget),
+        );
+    }
     if effects.materialize_target(authority).is_err() {
         return rollback(
             authority,
@@ -212,11 +232,19 @@ pub(crate) fn execute_personal_marketplace_update(
         );
     }
     let materialized = effects.observe(authority);
-    if !matches!(materialized, Ok(observation) if observation.target_tree_only()) {
+    if !matches!(materialized, Ok(observation) if observation.exact_materialized_pending_install())
+    {
         return rollback(
             authority,
             effects,
             PersonalMarketplaceUpdateStage::ReconcileMaterializedTarget,
+        );
+    }
+    if effects.cancelled() {
+        return rollback(
+            authority,
+            effects,
+            PersonalMarketplaceUpdateStage::InstallTarget,
         );
     }
     let install_result = effects.install_target(authority);
@@ -261,7 +289,7 @@ fn rollback(
             Some(PersonalMarketplaceUpdateStage::RestorePriorTree),
         );
     }
-    if effects.reinstall_prior(authority).is_err() {
+    if effects.cancelled() || effects.reinstall_prior(authority).is_err() {
         return recovered_or_ambiguous(
             authority,
             effects,
@@ -332,6 +360,10 @@ mod tests {
     struct Effects {
         observation: PersonalMarketplaceUpdateObservation,
         failure: Option<Failure>,
+        cancel_before_start: bool,
+        cancel_after_materialization: bool,
+        cancel_after_restore: bool,
+        observations: usize,
         materializations: usize,
         target_installs: usize,
         restorations: usize,
@@ -348,15 +380,17 @@ mod tests {
         }
 
         fn interrupted() -> Self {
-            let mut observation = exact(PersonalMarketplaceAuthorityMatch::Prior);
-            observation.source_tree = PersonalMarketplaceAuthorityMatch::Target;
-            Self::new(observation)
+            Self::new(materialized_pending_install())
         }
 
         fn new(observation: PersonalMarketplaceUpdateObservation) -> Self {
             Self {
                 observation,
                 failure: None,
+                cancel_before_start: false,
+                cancel_after_materialization: false,
+                cancel_after_restore: false,
+                observations: 0,
                 materializations: 0,
                 target_installs: 0,
                 restorations: 0,
@@ -368,13 +402,35 @@ mod tests {
             self.failure = Some(failure);
             self
         }
+
+        fn cancel_before_start(mut self) -> Self {
+            self.cancel_before_start = true;
+            self
+        }
+
+        fn cancel_after_materialization(mut self) -> Self {
+            self.cancel_after_materialization = true;
+            self
+        }
+
+        fn cancel_after_restore(mut self) -> Self {
+            self.cancel_after_restore = true;
+            self
+        }
     }
 
     impl PersonalMarketplaceUpdateEffects for Effects {
+        fn cancelled(&self) -> bool {
+            self.cancel_before_start
+                || (self.cancel_after_materialization && self.materializations > 0)
+                || (self.cancel_after_restore && self.restorations > 0)
+        }
+
         fn observe(
             &mut self,
             _authority: &PersonalMarketplaceUpdateAuthority,
         ) -> Result<PersonalMarketplaceUpdateObservation, &'static str> {
+            self.observations += 1;
             Ok(self.observation)
         }
 
@@ -383,7 +439,7 @@ mod tests {
             _authority: &PersonalMarketplaceUpdateAuthority,
         ) -> Result<(), &'static str> {
             self.materializations += 1;
-            self.observation.source_tree = PersonalMarketplaceAuthorityMatch::Target;
+            self.observation = materialized_pending_install();
             if matches!(self.failure, Some(Failure::MaterializeAfterEffect)) {
                 Err("interrupted after materialization")
             } else {
@@ -419,6 +475,13 @@ mod tests {
                 return Err("prior tree restoration failed");
             }
             self.observation.source_tree = PersonalMarketplaceAuthorityMatch::Prior;
+            self.observation.installed = PersonalMarketplaceAuthorityMatch::Prior;
+            self.observation.runtime =
+                if self.observation.cache == PersonalMarketplaceAuthorityMatch::Prior {
+                    PersonalMarketplaceAuthorityMatch::Prior
+                } else {
+                    PersonalMarketplaceAuthorityMatch::Other
+                };
             Ok(())
         }
 
@@ -506,14 +569,65 @@ mod tests {
             report.disposition,
             PersonalMarketplaceUpdateDisposition::Applied
         );
+        assert!(lost_result.observations >= 3);
         assert!(lost_result.observation.exact_target());
+    }
+
+    #[test]
+    fn cancellation_is_zero_effect_before_start_and_recovers_after_materialization() {
+        let authority = authority();
+        let mut before = Effects::prior().cancel_before_start();
+        let report = execute_personal_marketplace_update(&authority, &mut before);
+        assert_eq!(
+            report.disposition,
+            PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect
+        );
+        assert_eq!(
+            (
+                before.materializations,
+                before.target_installs,
+                before.restorations,
+                before.prior_installs,
+            ),
+            (0, 0, 0, 0)
+        );
+
+        let mut after = Effects::prior().cancel_after_materialization();
+        let report = execute_personal_marketplace_update(&authority, &mut after);
+        assert_eq!(
+            report.disposition,
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure
+        );
+        assert_eq!(
+            (
+                after.materializations,
+                after.target_installs,
+                after.restorations,
+                after.prior_installs,
+            ),
+            (1, 0, 1, 0)
+        );
+        assert!(after.observation.exact_prior());
+    }
+
+    #[test]
+    fn cancellation_during_mixed_recovery_never_claims_success() {
+        let authority = authority();
+        let mut effects = Effects::prior()
+            .fail(Failure::SubstituteAfterInstall)
+            .cancel_after_restore();
+        let report = execute_personal_marketplace_update(&authority, &mut effects);
+        assert_eq!(
+            report.disposition,
+            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous
+        );
+        assert_eq!((effects.restorations, effects.prior_installs), (1, 0));
     }
 
     #[test]
     fn rollback_failure_never_claims_prior_or_target_success() {
         let update_authority = authority();
-        let mut failed_restore = Effects::prior().fail(Failure::Restore);
-        failed_restore.observation.source_tree = PersonalMarketplaceAuthorityMatch::Target;
+        let mut failed_restore = Effects::interrupted().fail(Failure::Restore);
         let report = execute_personal_marketplace_update(&update_authority, &mut failed_restore);
         assert_eq!(
             report.disposition,
@@ -521,8 +635,7 @@ mod tests {
         );
 
         let update_authority = authority();
-        let mut prior_already_exact = Effects::prior().fail(Failure::ReinstallBeforeEffect);
-        prior_already_exact.observation.source_tree = PersonalMarketplaceAuthorityMatch::Target;
+        let mut prior_already_exact = Effects::interrupted().fail(Failure::ReinstallBeforeEffect);
         let report =
             execute_personal_marketplace_update(&update_authority, &mut prior_already_exact);
         assert_eq!(
@@ -532,8 +645,7 @@ mod tests {
         assert!(prior_already_exact.observation.exact_prior());
 
         let authority = authority();
-        let mut lost_result = Effects::prior().fail(Failure::ReinstallAfterEffect);
-        lost_result.observation.source_tree = PersonalMarketplaceAuthorityMatch::Target;
+        let mut lost_result = Effects::interrupted().fail(Failure::ReinstallAfterEffect);
         let report = execute_personal_marketplace_update(&authority, &mut lost_result);
         assert_eq!(
             report.disposition,
@@ -564,6 +676,51 @@ mod tests {
         );
     }
 
+    #[test]
+    fn only_the_exact_real_materialized_shape_is_recoverable() {
+        let authority = authority();
+        let mut exact_pending = Effects::new(materialized_pending_install());
+        let report = execute_personal_marketplace_update(&authority, &mut exact_pending);
+        assert_eq!(
+            report.disposition,
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure
+        );
+
+        for substitute in [
+            PersonalMarketplaceUpdateObservation {
+                installed: PersonalMarketplaceAuthorityMatch::Prior,
+                ..materialized_pending_install()
+            },
+            PersonalMarketplaceUpdateObservation {
+                cache: PersonalMarketplaceAuthorityMatch::Target,
+                ..materialized_pending_install()
+            },
+            PersonalMarketplaceUpdateObservation {
+                runtime: PersonalMarketplaceAuthorityMatch::Prior,
+                ..materialized_pending_install()
+            },
+            PersonalMarketplaceUpdateObservation {
+                registry: PersonalMarketplaceAuthorityMatch::Target,
+                ..materialized_pending_install()
+            },
+        ] {
+            let mut effects = Effects::new(substitute);
+            let report = execute_personal_marketplace_update(&authority, &mut effects);
+            assert_eq!(
+                report.disposition,
+                PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect
+            );
+            assert_eq!(
+                (
+                    effects.materializations,
+                    effects.target_installs,
+                    effects.restorations
+                ),
+                (0, 0, 0)
+            );
+        }
+    }
+
     fn exact(value: PersonalMarketplaceAuthorityMatch) -> PersonalMarketplaceUpdateObservation {
         PersonalMarketplaceUpdateObservation {
             marketplace_root_bound: true,
@@ -572,6 +729,17 @@ mod tests {
             cache: value,
             runtime: value,
             registry: value,
+        }
+    }
+
+    fn materialized_pending_install() -> PersonalMarketplaceUpdateObservation {
+        PersonalMarketplaceUpdateObservation {
+            marketplace_root_bound: true,
+            source_tree: PersonalMarketplaceAuthorityMatch::Target,
+            installed: PersonalMarketplaceAuthorityMatch::Target,
+            cache: PersonalMarketplaceAuthorityMatch::Prior,
+            runtime: PersonalMarketplaceAuthorityMatch::Other,
+            registry: PersonalMarketplaceAuthorityMatch::Prior,
         }
     }
 
