@@ -19,7 +19,7 @@ pub(super) fn spawn(path: &Path, command: &HostCommand, cwd: RawFd) -> Result<Sp
         .map(|(key, value)| CString::new(format!("{key}={value}")))
         .collect::<Result<Vec<_>, _>>()
         .map_err(|_| ())?;
-    spawn_with_arguments(arguments, environment, cwd)
+    spawn_with_arguments(arguments, environment, cwd, None)
 }
 
 pub(super) fn spawn_runtime(
@@ -28,19 +28,40 @@ pub(super) fn spawn_runtime(
     cwd: RawFd,
 ) -> Result<Spawned, ()> {
     let arguments = sandbox::runtime_arguments(path, command)?;
-    spawn_with_arguments(arguments, Vec::new(), cwd)
+    spawn_with_arguments(arguments, Vec::new(), cwd, None)
+}
+
+pub(super) fn spawn_personal(
+    path: &Path,
+    command: &HostCommand,
+    cwd: RawFd,
+    lease_fd: RawFd,
+    codex_home: &Path,
+) -> Result<Spawned, ()> {
+    if lease_fd < 0 || unsafe { libc::fcntl(lease_fd, libc::F_GETFD) } < 0 {
+        return Err(());
+    }
+    let arguments = sandbox::personal_arguments(path, command, codex_home)?;
+    let environment = command
+        .environment()
+        .iter()
+        .map(|(key, value)| CString::new(format!("{key}={value}")))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|_| ())?;
+    spawn_with_arguments(arguments, environment, cwd, Some(lease_fd))
 }
 
 fn spawn_with_arguments(
     arguments: Vec<CString>,
     environment: Vec<CString>,
     cwd: RawFd,
+    inherited_lease: Option<RawFd>,
 ) -> Result<Spawned, ()> {
     let cwd = duplicate_cwd(cwd)?;
     let mut argv = pointers(&arguments);
     let mut envp = pointers(&environment);
     let mut pipes = Pipes::new().map_err(|_| ())?;
-    let actions = FileActions::new(cwd.as_raw_fd(), &pipes)?;
+    let actions = FileActions::new(cwd.as_raw_fd(), &pipes, inherited_lease)?;
     let attributes = SpawnAttributes::new()?;
     let executable = sandbox::verified_executable()?;
     let mut pid = 0;
@@ -89,7 +110,7 @@ fn pointers(values: &[CString]) -> Vec<*mut c_char> {
 struct FileActions(libc::posix_spawn_file_actions_t);
 
 impl FileActions {
-    fn new(cwd: RawFd, pipes: &Pipes) -> Result<Self, ()> {
+    fn new(cwd: RawFd, pipes: &Pipes, inherited_lease: Option<RawFd>) -> Result<Self, ()> {
         let mut value = std::ptr::null_mut();
         // SAFETY: value is writable storage for the initializer.
         if unsafe { libc::posix_spawn_file_actions_init(&mut value) } != 0 {
@@ -106,9 +127,14 @@ impl FileActions {
         {
             return Err(());
         }
+        if let Some(lease) = inherited_lease {
+            add_dup_and_close(&mut actions.0, lease, CHILD_LEASE_FD)?;
+        }
         Ok(actions)
     }
 }
+
+const CHILD_LEASE_FD: RawFd = 198;
 
 impl Drop for FileActions {
     fn drop(&mut self) {

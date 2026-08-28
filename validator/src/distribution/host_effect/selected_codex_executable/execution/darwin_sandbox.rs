@@ -54,3 +54,42 @@ pub(super) fn runtime_arguments(path: &Path, command: &HostCommand) -> Result<Ve
     }
     Ok(arguments)
 }
+
+pub(super) fn personal_arguments(
+    path: &Path,
+    command: &HostCommand,
+    codex_home: &Path,
+) -> Result<Vec<CString>, ()> {
+    if !codex_home.is_absolute() {
+        return Err(());
+    }
+    let codex_home = codex_home.as_os_str().as_bytes();
+    if codex_home.contains(&0) {
+        return Err(());
+    }
+    let escaped = codex_home
+        .iter()
+        .try_fold(String::new(), |mut output, byte| {
+            match *byte {
+                b'\\' => output.push_str("\\\\"),
+                b'\"' => output.push_str("\\\""),
+                0x20..=0x7e => output.push(*byte as char),
+                _ => return Err(()),
+            }
+            Ok(output)
+        })?;
+    let profile = CString::new(format!(
+        "(version 1) (allow default) (deny process-fork (with send-signal SIGKILL)) (deny file-write*) (allow file-write* (subpath \"{escaped}\"))"
+    ))
+    .map_err(|_| ())?;
+    let mut arguments = Vec::with_capacity(command.argv().len() + 5);
+    arguments.push(CString::new(SANDBOX_EXECUTABLE).map_err(|_| ())?);
+    arguments.push(CString::new("-p").map_err(|_| ())?);
+    arguments.push(profile);
+    arguments.push(CString::new(path.as_os_str().as_bytes()).map_err(|_| ())?);
+    arguments.push(CString::new(command.program()).map_err(|_| ())?);
+    for argument in command.argv() {
+        arguments.push(CString::new(argument.as_bytes()).map_err(|_| ())?);
+    }
+    Ok(arguments)
+}

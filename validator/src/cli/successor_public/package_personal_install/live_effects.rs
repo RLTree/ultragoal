@@ -1,11 +1,11 @@
-use super::PersonalMarketplaceInstallPlan;
+use super::{PersonalHomeAuthority, PersonalMarketplaceInstallPlan};
 use crate::context::LiveContext;
 use crate::distribution::{
-    ConfinedRoot, MaterializeEffects, MaterializeTransaction, PERSONAL_MARKETPLACE_SOURCE_RELATIVE,
+    MaterializeEffects, MaterializeTransaction, PERSONAL_MARKETPLACE_SOURCE_RELATIVE,
     PackageIdentity, PersonalMarketplaceAuthorityMatch, PersonalMarketplaceSourceObservation,
     PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateEffects,
-    PersonalMarketplaceUpdateObservation, ProductionPackageArtifact, ScopedTree, TreeObject,
-    tree_sha256,
+    PersonalMarketplaceUpdateObservation, ProductionPackageArtifact, ReadOnlyTreeObservation,
+    ScopedTree, TreeObject, tree_sha256,
 };
 use crate::inventory::AuthorityCatalog;
 use crate::plugin_product::agent_discovery::{
@@ -21,30 +21,31 @@ use std::path::{Path, PathBuf};
 pub(super) struct LivePersonalMarketplaceUpdateEffects<'a> {
     source_context: &'a LiveContext,
     observation_context: &'a LiveContext,
-    home: PathBuf,
+    home: PersonalHomeAuthority,
     record: PersonalMarketplaceInstallPlan,
     prior: PriorInstalledAuthority,
     artifact: ProductionPackageArtifact,
     catalog: AuthorityCatalog,
     package: PackageIdentity,
-    home_root: ConfinedRoot,
     source_tree: ScopedTree,
     lease: PersonalMarketplaceLease,
     executable: Option<crate::distribution::host_effect::SelectedCodexExecutable>,
     cancellation: crate::distribution::host_effect::HostEffectCancellation,
+    recovery_cancellation: crate::distribution::host_effect::HostEffectCancellation,
     materialization: Option<MaterializeTransaction>,
-    prior_tree: Option<Vec<TreeObject>>,
+    prior_tree: Vec<TreeObject>,
 }
 
 impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
     pub(super) fn new(
         source_context: &'a LiveContext,
         observation_context: &'a LiveContext,
-        home: &Path,
+        home: PersonalHomeAuthority,
         record: PersonalMarketplaceInstallPlan,
         prior: PriorInstalledAuthority,
         artifact: ProductionPackageArtifact,
         catalog: AuthorityCatalog,
+        cancellation: crate::distribution::host_effect::HostEffectCancellation,
     ) -> Result<Self, &'static str> {
         source_context
             .revalidate()
@@ -52,17 +53,14 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
         observation_context
             .revalidate()
             .map_err(|_| "host observation context changed before live adapter binding")?;
-        let requested_home = home;
-        let home = requested_home
-            .canonicalize()
-            .map_err(|_| "personal home authority is unavailable")?;
-        if home != requested_home || !home.is_absolute() {
-            return Err("personal home authority changed");
+        home.revalidate()?;
+        if home.record() != &record.personal_home
+            || record.before.personal_home_authority_sha256 != home.record().authority_sha256
+        {
+            return Err("accepted personal home authority changed");
         }
-        let lease = PersonalMarketplaceLease::acquire(&home)?;
-        let home_id = directory_id(&home)?;
-        let root = ConfinedRoot::open_personal_home(&home, &home_id)
-            .map_err(|_| "personal home confinement failed")?;
+        let lease = PersonalMarketplaceLease::acquire(home.path())?;
+        let root = home.root();
         let source_tree = ScopedTree::new(root.clone(), PERSONAL_MARKETPLACE_SOURCE_RELATIVE)
             .map_err(|_| "personal marketplace source confinement failed")?;
         let prior_cache_relative = format!(
@@ -70,13 +68,12 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             super::MARKETPLACE,
             record.before.plugin_version,
         );
-        let prior_tree = ScopedTree::new(root.clone(), &prior_cache_relative)
-            .ok()
-            .and_then(|tree| tree.inspect(4096, 65 * 1024 * 1024).ok().flatten())
-            .filter(|rows| {
-                tree_sha256(rows)
-                    .is_ok_and(|sha256| sha256 == record.before.marketplace_source_tree_sha256)
-            });
+        let prior_cache = home.path().join(&prior_cache_relative);
+        let prior_tree = capture_exact_prior_snapshot(
+            &prior_cache,
+            &record.before.cache_tree_sha256,
+            &record.before.marketplace_source_tree_sha256,
+        )?;
         let executable = crate::distribution::resolve_codex_executable()
             .map_err(|_| "pinned Codex executable unavailable")?;
         let package = artifact.snapshot().identity().clone();
@@ -89,11 +86,12 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             artifact,
             catalog,
             package,
-            home_root: root,
             source_tree,
             lease,
             executable: Some(executable),
-            cancellation: crate::distribution::host_effect::HostEffectCancellation::default(),
+            cancellation,
+            recovery_cancellation:
+                crate::distribution::host_effect::HostEffectCancellation::default(),
             materialization: None,
             prior_tree,
         })
@@ -109,6 +107,7 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
 
     fn require_current(&self) -> Result<(), &'static str> {
         self.lease.revalidate()?;
+        self.home.revalidate()?;
         self.source_context
             .revalidate()
             .map_err(|_| "candidate source changed during live personal update")?;
@@ -144,12 +143,19 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
 
     fn capture_observation(&self) -> Result<PersonalMarketplaceUpdateObservation, &'static str> {
         self.require_current()?;
+        let observation_cancellation = if self.cancellation.is_cancelled() {
+            &self.recovery_cancellation
+        } else {
+            &self.cancellation
+        };
         let (selected, plugin_json, marketplace_json) =
             self.executable()?.observe_personal_plugin(
-                &self.home,
+                self.home.path(),
                 &self.record.plan_sha256,
                 &self.record.before.selected_codex_identity_sha256,
-                &self.cancellation,
+                observation_cancellation,
+                self.lease.as_raw_fd(),
+                self.home.codex_home_fd(),
             )?;
         let registry = parse_unpinned_host_plugin_registry_observation(
             &plugin_json,
@@ -158,15 +164,11 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             &self.record.before.selected_codex_identity_sha256,
         )
         .map_err(|_| "pinned Codex registry observation is invalid")?;
-        let installed_root = self.home.join(PERSONAL_MARKETPLACE_SOURCE_RELATIVE);
-        let cache_root = self.home.join(format!(
+        let installed_root = self.home.path().join(PERSONAL_MARKETPLACE_SOURCE_RELATIVE);
+        let cache_root = self.home.path().join(format!(
             ".codex/plugins/cache/local-harness-plugins/harness-ultragoal/{}",
             registry.plugin_version()
         ));
-        let cache_relative = format!(
-            ".codex/plugins/cache/local-harness-plugins/harness-ultragoal/{}",
-            registry.plugin_version()
-        );
         let session_id = sha256(
             format!(
                 "personal-marketplace-live-observation-v1\0{}\0{}",
@@ -176,19 +178,16 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             .as_bytes(),
         );
         let source_tree =
-            PersonalMarketplaceSourceObservation::capture(&self.home, &installed_root)
+            PersonalMarketplaceSourceObservation::capture(self.home.path(), &installed_root)
                 .map_err(|_| "personal marketplace source observation failed")?;
         let installed =
             capture_installed_source_authority(&installed_root, registry.sha256(), &session_id)
                 .map_err(|_| "personal marketplace installed source observation failed")?;
         let cache = capture_installed_source_authority(&cache_root, registry.sha256(), &session_id)
             .map_err(|_| "personal marketplace cache observation failed")?;
-        let cache_tree = ScopedTree::new(self.home_root.clone(), &cache_relative)
-            .and_then(|tree| tree.inspect(4096, 65 * 1024 * 1024))
-            .map_err(|_| "personal marketplace cache tree observation failed")?
-            .ok_or("personal marketplace cache tree is unavailable")?;
-        let cache_tree_sha256 =
-            tree_sha256(&cache_tree).map_err(|_| "personal marketplace cache tree is invalid")?;
+        let cache_tree = ReadOnlyTreeObservation::capture_root(&cache_root, 4096, 65 * 1024 * 1024)
+            .map_err(|_| "personal marketplace cache tree observation failed")?;
+        let cache_tree_sha256 = cache_tree.tree_sha256().to_owned();
         installed
             .revalidate()
             .map_err(|_| "personal marketplace installed source changed")?;
@@ -199,9 +198,11 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             .revalidate()
             .map_err(|_| "personal marketplace source tree changed")?;
 
-        let tree = classify_digest(
+        let tree = classify_source(
             source_tree.tree_sha256(),
+            source_tree.observation_sha256(),
             &self.record.before.marketplace_source_tree_sha256,
+            &self.record.before.marketplace_source_observation_sha256,
             &self.record.target.source_tree_sha256,
         );
         let installed_match = classify_installed(
@@ -218,6 +219,7 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
             &cache_tree_sha256,
             &self.record.before.plugin_version,
             &self.record.before.cache_catalog_sha256,
+            &self.record.before.cache_tree_sha256,
             &self.record.target.version,
             &self.record.target.source_tree_sha256,
         );
@@ -233,14 +235,16 @@ impl<'a> LivePersonalMarketplaceUpdateEffects<'a> {
         } else {
             PersonalMarketplaceAuthorityMatch::Other
         };
-        let registry_match = if registry.plugin_version() == self.record.before.plugin_version {
+        let registry_match = if registry.plugin_version() == self.record.before.plugin_version
+            && registry.sha256() == self.record.before.registry_observation_sha256
+        {
             PersonalMarketplaceAuthorityMatch::Prior
         } else if registry.plugin_version() == self.record.target.version {
             PersonalMarketplaceAuthorityMatch::Target
         } else {
             PersonalMarketplaceAuthorityMatch::Other
         };
-        let marketplace_root_bound = registry.marketplace_root() == self.home
+        let marketplace_root_bound = registry.marketplace_root() == self.home.path()
             && registry.installed_root() == installed_root
             && registry.selected_codex_identity_sha256()
                 == self.record.before.selected_codex_identity_sha256;
@@ -287,7 +291,7 @@ impl PersonalMarketplaceUpdateEffects for LivePersonalMarketplaceUpdateEffects<'
         {
             return Err("exact prior marketplace source changed before materialization");
         }
-        self.prior_tree = Some(prior_tree);
+        self.prior_tree = prior_tree;
         let (_, transaction) = self
             .artifact
             .begin_marketplace_source_transition(
@@ -309,10 +313,12 @@ impl PersonalMarketplaceUpdateEffects for LivePersonalMarketplaceUpdateEffects<'
         self.executable()?.install_personal_plugin(
             &self.package,
             super::MARKETPLACE,
-            &self.home,
+            self.home.path(),
             &self.record.plan_sha256,
             &self.record.before.selected_codex_identity_sha256,
             &self.cancellation,
+            self.lease.as_raw_fd(),
+            self.home.codex_home_fd(),
         )?;
         self.require_current()
     }
@@ -331,14 +337,10 @@ impl PersonalMarketplaceUpdateEffects for LivePersonalMarketplaceUpdateEffects<'
                 )
                 .map_err(|_| "exact prior marketplace source restoration failed")?;
         } else {
-            let prior_tree = self
-                .prior_tree
-                .as_deref()
-                .ok_or("exact prior marketplace source recovery snapshot is unavailable")?;
             restore_exact_prior_tree(
                 &mut self.source_tree,
                 &self.record.target.source_tree_sha256,
-                prior_tree,
+                &self.prior_tree,
                 &self.record.before.marketplace_source_tree_sha256,
             )?;
         }
@@ -353,10 +355,12 @@ impl PersonalMarketplaceUpdateEffects for LivePersonalMarketplaceUpdateEffects<'
         self.executable()?.reinstall_personal_plugin(
             &self.prior,
             super::MARKETPLACE,
-            &self.home,
+            self.home.path(),
             &self.record.plan_sha256,
             &self.record.before.selected_codex_identity_sha256,
-            &self.cancellation,
+            &self.recovery_cancellation,
+            self.lease.as_raw_fd(),
+            self.home.codex_home_fd(),
         )?;
         self.require_current()
     }
@@ -391,6 +395,29 @@ fn restore_exact_prior_tree(
     Ok(())
 }
 
+fn capture_exact_prior_snapshot(
+    prior_cache: &Path,
+    expected_cache_sha256: &str,
+    expected_source_sha256: &str,
+) -> Result<Vec<TreeObject>, &'static str> {
+    let observation = ReadOnlyTreeObservation::capture_root(prior_cache, 4096, 65 * 1024 * 1024)
+        .map_err(|failure| match failure.id() {
+            crate::distribution::DistributionErrorId::ObjectUnavailable => {
+                "exact prior cache recovery snapshot is unavailable"
+            }
+            _ => "exact prior cache recovery snapshot failed",
+        })?;
+    let prior_tree = observation
+        .snapshot()
+        .map_err(|_| "exact prior cache recovery snapshot failed")?;
+    let prior_tree_sha256 =
+        tree_sha256(&prior_tree).map_err(|_| "exact prior cache recovery snapshot is invalid")?;
+    if prior_tree_sha256 != expected_cache_sha256 || prior_tree_sha256 != expected_source_sha256 {
+        return Err("exact prior cache recovery snapshot changed");
+    }
+    Ok(prior_tree)
+}
+
 fn classify_installed(
     version: &str,
     catalog: &str,
@@ -408,8 +435,14 @@ fn classify_installed(
     }
 }
 
-fn classify_digest(actual: &str, prior: &str, target: &str) -> PersonalMarketplaceAuthorityMatch {
-    if actual == prior {
+fn classify_source(
+    actual: &str,
+    observation: &str,
+    prior: &str,
+    prior_observation: &str,
+    target: &str,
+) -> PersonalMarketplaceAuthorityMatch {
+    if actual == prior && observation == prior_observation {
         PersonalMarketplaceAuthorityMatch::Prior
     } else if actual == target {
         PersonalMarketplaceAuthorityMatch::Target
@@ -424,26 +457,17 @@ fn classify_cache(
     tree_sha256: &str,
     prior_version: &str,
     prior_catalog: &str,
+    prior_tree_sha256: &str,
     target_version: &str,
     target_tree_sha256: &str,
 ) -> PersonalMarketplaceAuthorityMatch {
-    if version == prior_version && catalog == prior_catalog {
+    if version == prior_version && catalog == prior_catalog && tree_sha256 == prior_tree_sha256 {
         PersonalMarketplaceAuthorityMatch::Prior
     } else if version == target_version && tree_sha256 == target_tree_sha256 {
         PersonalMarketplaceAuthorityMatch::Target
     } else {
         PersonalMarketplaceAuthorityMatch::Other
     }
-}
-
-fn directory_id(path: &Path) -> Result<String, &'static str> {
-    let metadata = fs::symlink_metadata(path).map_err(|_| "personal home unavailable")?;
-    if metadata.file_type().is_symlink() || !metadata.is_dir() {
-        return Err("personal home is not a directory");
-    }
-    Ok(sha256(
-        format!("{}\0{}\0{}", path.display(), metadata.dev(), metadata.ino()).as_bytes(),
-    ))
 }
 
 fn sha256(bytes: &[u8]) -> String {
@@ -505,6 +529,10 @@ impl PersonalMarketplaceLease {
         }
         Ok(())
     }
+
+    fn as_raw_fd(&self) -> std::os::fd::RawFd {
+        self.file.as_raw_fd()
+    }
 }
 
 impl Drop for PersonalMarketplaceLease {
@@ -543,7 +571,13 @@ mod tests {
     #[test]
     fn authority_classification_rejects_mixed_values() {
         assert_eq!(
-            classify_digest("sha256:other", "sha256:prior", "sha256:target"),
+            classify_source(
+                "sha256:other",
+                "sha256:prior-observation",
+                "sha256:prior",
+                "sha256:prior-observation",
+                "sha256:target",
+            ),
             PersonalMarketplaceAuthorityMatch::Other
         );
         assert_eq!(
@@ -564,6 +598,7 @@ mod tests {
                 "sha256:exact-target-tree",
                 "0.0.41",
                 "sha256:path-bound-prior-catalog",
+                "sha256:exact-prior-tree",
                 "0.0.42",
                 "sha256:exact-target-tree",
             ),
@@ -576,6 +611,7 @@ mod tests {
                 "sha256:other-tree",
                 "0.0.41",
                 "sha256:path-bound-prior-catalog",
+                "sha256:exact-prior-tree",
                 "0.0.42",
                 "sha256:exact-target-tree",
             ),
@@ -592,7 +628,9 @@ mod tests {
         ));
         fs::create_dir(&requested).unwrap();
         let requested = requested.canonicalize().unwrap();
-        let root = ConfinedRoot::open(&requested).unwrap();
+        fs::create_dir(requested.join(".codex")).unwrap();
+        let home = PersonalHomeAuthority::capture(&requested).unwrap();
+        let root = home.root();
         let mut tree = ScopedTree::new(root.clone(), PERSONAL_MARKETPLACE_SOURCE_RELATIVE).unwrap();
         let prior = vec![TreeObject::regular(
             "prior.txt".to_owned(),
@@ -610,7 +648,47 @@ mod tests {
         restore_exact_prior_tree(&mut tree, &target_sha256, &prior, &prior_sha256).unwrap();
         assert_eq!(tree.inspect(16, 1024).unwrap().unwrap(), prior);
         drop(tree);
-        root.remove_owned().unwrap();
+        drop(root);
+        drop(home);
+        fs::remove_dir_all(&requested).unwrap();
+    }
+
+    #[test]
+    fn fresh_process_recovery_requires_one_exact_prior_cache_snapshot() {
+        let requested = std::env::temp_dir().join(format!(
+            "hul-personal-prior-snapshot-{}-{}",
+            std::process::id(),
+            NEXT_LEASE.fetch_add(1, Ordering::Relaxed)
+        ));
+        fs::create_dir(&requested).unwrap();
+        let requested = requested.canonicalize().unwrap();
+        fs::create_dir(requested.join(".codex")).unwrap();
+        let home = PersonalHomeAuthority::capture(&requested).unwrap();
+        let relative = ".codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.41+prior";
+        let prior_cache = requested.join(relative);
+        assert_eq!(
+            capture_exact_prior_snapshot(&prior_cache, "sha256:missing", "sha256:missing")
+                .unwrap_err(),
+            "exact prior cache recovery snapshot is unavailable"
+        );
+        let rows = vec![TreeObject::regular(
+            "prior.txt".to_owned(),
+            0o644,
+            b"exact prior".to_vec(),
+        )];
+        let digest = tree_sha256(&rows).unwrap();
+        fs::create_dir_all(&prior_cache).unwrap();
+        fs::write(prior_cache.join("prior.txt"), b"exact prior").unwrap();
+        assert_eq!(
+            capture_exact_prior_snapshot(&prior_cache, &digest, &digest).unwrap(),
+            rows
+        );
+        assert_eq!(
+            capture_exact_prior_snapshot(&prior_cache, &digest, "sha256:other").unwrap_err(),
+            "exact prior cache recovery snapshot changed"
+        );
+        drop(home);
+        fs::remove_dir_all(&requested).unwrap();
     }
 
     #[test]

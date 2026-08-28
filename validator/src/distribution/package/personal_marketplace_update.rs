@@ -289,7 +289,10 @@ fn rollback(
             Some(PersonalMarketplaceUpdateStage::RestorePriorTree),
         );
     }
-    if effects.cancelled() || effects.reinstall_prior(authority).is_err() {
+    // Cancellation stops the forward effect, not the compensating transaction.
+    // Production adapters use a separate bounded recovery token so a cancelled
+    // child cannot prevent exact-prior reinstall and reobservation.
+    if effects.reinstall_prior(authority).is_err() {
         return recovered_or_ambiguous(
             authority,
             effects,
@@ -605,13 +608,13 @@ mod tests {
                 after.restorations,
                 after.prior_installs,
             ),
-            (1, 0, 1, 0)
+            (1, 0, 1, 1)
         );
         assert!(after.observation.exact_prior());
     }
 
     #[test]
-    fn cancellation_during_mixed_recovery_never_claims_success() {
+    fn cancellation_during_mixed_recovery_runs_compensation_without_claiming_forward_success() {
         let authority = authority();
         let mut effects = Effects::prior()
             .fail(Failure::SubstituteAfterInstall)
@@ -619,9 +622,10 @@ mod tests {
         let report = execute_personal_marketplace_update(&authority, &mut effects);
         assert_eq!(
             report.disposition,
-            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure
         );
-        assert_eq!((effects.restorations, effects.prior_installs), (1, 0));
+        assert_eq!((effects.restorations, effects.prior_installs), (1, 1));
+        assert!(effects.observation.exact_prior());
     }
 
     #[test]

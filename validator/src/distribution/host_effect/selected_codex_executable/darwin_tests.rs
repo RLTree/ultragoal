@@ -68,7 +68,7 @@ fn executor_runs_sealed_copy_inside_contained_scope() {
     .expect("Darwin capability");
     let command = crate::distribution::HostCommand::from_untrusted_record(
         "codex".to_owned(),
-        vec!["--version".to_owned()],
+        vec!["ignored".to_owned()],
         Vec::new(),
         30_000,
         1,
@@ -91,6 +91,68 @@ fn executor_runs_sealed_copy_inside_contained_scope() {
     assert_eq!(capture.exit_code(), 0);
     assert_eq!(capture.stdout(), b"sealed-copy");
     selected.finalize().expect("explicit sealed cleanup");
+}
+
+#[test]
+fn production_sigterm_cancels_and_reaps_one_real_fake_child_group() {
+    use std::time::Duration;
+
+    let mut fixture: SelectedCodexExecutableTestFixture = selected_test_fixture(
+        "darwin-signal-cancel",
+        b"#!/usr/bin/perl\nselect(undef, undef, undef, 60);\n",
+    );
+    let selected = fixture.take_selected();
+    let capability = crate::distribution::host_effect::lifecycle::DescriptorExecutionCapability::new(
+        crate::distribution::host_effect::lifecycle::DescriptorExecutionPlatform::Darwin,
+        crate::distribution::host_effect::lifecycle::DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode,
+        "test-darwin-cancellation".to_owned(),
+        "v1".to_owned(),
+    )
+    .unwrap();
+    let command = crate::distribution::HostCommand::from_untrusted_record(
+        "codex".to_owned(),
+        vec!["--version".to_owned()],
+        Vec::new(),
+        30_000,
+        1,
+    );
+    let policy =
+        crate::distribution::host_effect::executor::HostEffectExecutionPolicy::strict(30_000, &[])
+            .unwrap();
+    let cancellation =
+        crate::distribution::host_effect::executor::HostEffectCancellation::default();
+    let recovery_cancellation =
+        crate::distribution::host_effect::executor::HostEffectCancellation::default();
+    let _signals = cancellation.install_process_signal_source().unwrap();
+    let signal = std::thread::spawn(|| {
+        std::thread::sleep(Duration::from_millis(50));
+        assert_eq!(unsafe { libc::kill(libc::getpid(), libc::SIGTERM) }, 0);
+    });
+    let cwd = fs::File::open(&fixture.root).unwrap();
+    let failure = selected
+        .execute(
+            &capability,
+            &command,
+            &policy,
+            &cancellation,
+            cwd.as_raw_fd(),
+        )
+        .expect_err("SIGTERM must cancel the child");
+    signal.join().unwrap();
+    assert_eq!(
+        failure.id,
+        crate::distribution::host_effect::executor::HostEffectExecutorErrorId::Cancelled,
+        "stdout={:?} stderr={:?}",
+        String::from_utf8_lossy(failure.capture.stdout()),
+        String::from_utf8_lossy(&failure.capture.stderr),
+    );
+    assert!(failure.started);
+    assert!(cancellation.is_cancelled());
+    assert!(
+        !recovery_cancellation.is_cancelled(),
+        "the production signal source must cancel only the forward token"
+    );
+    selected.finalize().unwrap();
 }
 
 #[test]

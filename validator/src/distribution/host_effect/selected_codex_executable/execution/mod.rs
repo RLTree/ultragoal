@@ -7,6 +7,7 @@ use crate::distribution::host_effect::executor::{
 use crate::distribution::host_effect::lifecycle::{
     DescriptorExecutionCapability, DescriptorExecutionPlatform, DescriptorExecutionPrimitive,
 };
+use std::path::Path;
 
 #[cfg(target_os = "macos")]
 mod darwin;
@@ -64,6 +65,55 @@ pub(super) fn execute_runtime(
         cwd,
         "ultragoal",
     )
+    }
+}
+
+pub(super) fn execute_personal(
+    executable: &SelectedCodexExecutable,
+    capability: &DescriptorExecutionCapability,
+    command: &HostCommand,
+    policy: &HostEffectExecutionPolicy,
+    cancellation: &HostEffectCancellation,
+    cwd: std::os::fd::RawFd,
+    lease_fd: std::os::fd::RawFd,
+    codex_home: &Path,
+) -> Result<CommandCapture, BackendFailure> {
+    if cancellation.is_cancelled()
+        || command.program() != "codex"
+        || command.argv().is_empty()
+        || !codex_home.is_absolute()
+        || lease_fd < 0
+    {
+        return Err(BackendFailure::before_start(
+            HostEffectExecutorErrorId::ProcessSpawnFailed,
+        ));
+    }
+    #[cfg(target_os = "macos")]
+    {
+        if capability.platform() != DescriptorExecutionPlatform::Darwin
+            || capability.primitive()
+                != DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode
+        {
+            return Err(BackendFailure::before_start(
+                HostEffectExecutorErrorId::UnsupportedPlatform,
+            ));
+        }
+        return darwin::execute_personal(
+            executable,
+            command,
+            policy,
+            cancellation,
+            cwd,
+            lease_fd,
+            codex_home,
+        );
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (executable, capability, policy, cwd, codex_home);
+        Err(BackendFailure::before_start(
+            HostEffectExecutorErrorId::UnsupportedPlatform,
+        ))
     }
 }
 

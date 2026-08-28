@@ -90,3 +90,51 @@ pub(super) fn execute_runtime(
     }
     Ok(capture)
 }
+
+#[cfg(target_os = "macos")]
+pub(super) fn execute_personal(
+    executable: &SelectedCodexExecutable,
+    command: &HostCommand,
+    policy: &HostEffectExecutionPolicy,
+    cancellation: &HostEffectCancellation,
+    cwd: std::os::fd::RawFd,
+    lease_fd: std::os::fd::RawFd,
+    codex_home: &std::path::Path,
+) -> Result<CommandCapture, BackendFailure> {
+    executable
+        .revalidate_launch()
+        .map_err(|_| BackendFailure::before_start(HostEffectExecutorErrorId::ExecutableMutation))?;
+    let capture = match custody::execute_personal(
+        executable.launch_path(),
+        command,
+        policy,
+        cancellation,
+        cwd,
+        lease_fd,
+        codex_home,
+    ) {
+        Ok(capture) => capture,
+        Err(failure) => {
+            if executable.revalidate_launch().is_err() {
+                return Err(BackendFailure {
+                    id: HostEffectExecutorErrorId::ExecutableMutation,
+                    started: failure.started,
+                    capture: failure.capture,
+                });
+            }
+            return Err(BackendFailure {
+                id: failure.id,
+                started: failure.started,
+                capture: failure.capture,
+            });
+        }
+    };
+    if executable.revalidate_launch().is_err() {
+        return Err(BackendFailure {
+            id: HostEffectExecutorErrorId::ExecutableMutation,
+            started: true,
+            capture,
+        });
+    }
+    Ok(capture)
+}

@@ -29,7 +29,8 @@ pub(crate) use personal_marketplace_source_observation::{
 pub(crate) use personal_marketplace_update::{
     PersonalMarketplaceAuthorityMatch, PersonalMarketplaceUpdateAuthority,
     PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateEffects,
-    PersonalMarketplaceUpdateObservation, execute_personal_marketplace_update,
+    PersonalMarketplaceUpdateObservation, PersonalMarketplaceUpdateStage,
+    execute_personal_marketplace_update,
 };
 pub use plan::{
     PackageEffects, PackageEntry, PackagePlan, PackageSnapshot, build_package, plan_package,

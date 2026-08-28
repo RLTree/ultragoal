@@ -136,19 +136,92 @@ impl HostEffectExecutionPolicy {
     }
 }
 
+#[cfg(unix)]
+static PROCESS_SIGNAL_TARGET: std::sync::atomic::AtomicPtr<HostEffectCancellation> =
+    std::sync::atomic::AtomicPtr::new(std::ptr::null_mut());
+#[cfg(unix)]
+static PROCESS_SIGNAL_INSTALLATION: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
 #[derive(Clone, Default)]
 pub(crate) struct HostEffectCancellation {
     cancelled: Arc<AtomicBool>,
 }
 
 impl HostEffectCancellation {
-    #[cfg(test)]
     pub(crate) fn cancel(&self) {
         self.cancelled.store(true, Ordering::SeqCst);
     }
 
     pub(crate) fn is_cancelled(&self) -> bool {
         self.cancelled.load(Ordering::SeqCst)
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn install_process_signal_source(
+        &self,
+    ) -> Result<HostEffectSignalGuard, &'static str> {
+        let installation = PROCESS_SIGNAL_INSTALLATION
+            .lock()
+            .map_err(|_| "process cancellation signal custody is unavailable")?;
+        let cancellation = Box::new(self.clone());
+        PROCESS_SIGNAL_TARGET.store(
+            std::ptr::from_ref(cancellation.as_ref()).cast_mut(),
+            Ordering::SeqCst,
+        );
+        let mut action = unsafe { std::mem::zeroed::<libc::sigaction>() };
+        action.sa_sigaction = record_process_cancellation as *const () as usize;
+        action.sa_flags = 0;
+        unsafe { libc::sigemptyset(&mut action.sa_mask) };
+        let mut previous_interrupt = unsafe { std::mem::zeroed::<libc::sigaction>() };
+        let mut previous_terminate = unsafe { std::mem::zeroed::<libc::sigaction>() };
+        if unsafe { libc::sigaction(libc::SIGINT, &action, &mut previous_interrupt) } != 0 {
+            PROCESS_SIGNAL_TARGET.store(std::ptr::null_mut(), Ordering::SeqCst);
+            return Err("SIGINT cancellation source is unavailable");
+        }
+        if unsafe { libc::sigaction(libc::SIGTERM, &action, &mut previous_terminate) } != 0 {
+            unsafe { libc::sigaction(libc::SIGINT, &previous_interrupt, std::ptr::null_mut()) };
+            PROCESS_SIGNAL_TARGET.store(std::ptr::null_mut(), Ordering::SeqCst);
+            return Err("SIGTERM cancellation source is unavailable");
+        }
+        Ok(HostEffectSignalGuard {
+            previous_interrupt,
+            previous_terminate,
+            _cancellation: cancellation,
+            _installation: installation,
+        })
+    }
+}
+
+#[cfg(unix)]
+extern "C" fn record_process_cancellation(_signal: libc::c_int) {
+    let target = PROCESS_SIGNAL_TARGET.load(Ordering::SeqCst);
+    if !target.is_null() {
+        // SAFETY: the installation guard retains the boxed token until both
+        // handlers have been restored and the target pointer has been cleared.
+        unsafe { (*target).cancel() };
+    }
+}
+
+#[cfg(unix)]
+pub(crate) struct HostEffectSignalGuard {
+    previous_interrupt: libc::sigaction,
+    previous_terminate: libc::sigaction,
+    _cancellation: Box<HostEffectCancellation>,
+    _installation: std::sync::MutexGuard<'static, ()>,
+}
+
+#[cfg(unix)]
+impl Drop for HostEffectSignalGuard {
+    fn drop(&mut self) {
+        unsafe {
+            libc::sigaction(
+                libc::SIGTERM,
+                &self.previous_terminate,
+                std::ptr::null_mut(),
+            );
+            libc::sigaction(libc::SIGINT, &self.previous_interrupt, std::ptr::null_mut());
+        }
+        PROCESS_SIGNAL_TARGET.store(std::ptr::null_mut(), Ordering::SeqCst);
     }
 }
 

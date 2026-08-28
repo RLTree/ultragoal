@@ -1,9 +1,10 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PackageIdentity, PersonalMarketplaceSourceObservation,
-    PersonalMarketplaceUpdateAuthority, PersonalMarketplaceUpdateDisposition, ReadOnlyWorkspace,
-    SourceIdentity, capture_product_package, capture_product_package_with_cli,
+    ConfinedRoot, PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PackageIdentity,
+    PersonalMarketplaceSourceObservation, PersonalMarketplaceUpdateAuthority,
+    PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateStage, ReadOnlyTreeObservation,
+    ReadOnlyWorkspace, SourceIdentity, capture_product_package, capture_product_package_with_cli,
     execute_personal_marketplace_update, verify_product_package,
 };
 use crate::plugin_product::agent_discovery::{
@@ -16,13 +17,222 @@ use crate::plugin_product::lifecycle::{
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::path::Path;
+use std::fs::{self, File, OpenOptions};
+use std::os::fd::{AsRawFd, FromRawFd};
+use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
+use std::path::{Path, PathBuf};
 
 mod live_effects;
 
 const PACKAGE_LIMIT: usize = 65 * 1024 * 1024;
 const PLAN_LIMIT: u64 = 1024 * 1024;
 const MARKETPLACE: &str = "local-harness-plugins";
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct DirectoryAuthority {
+    device: u64,
+    inode: u64,
+    owner: u32,
+    mode: u32,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct PersonalHomeAuthorityRecord {
+    schema_version: String,
+    canonical_path_sha256: String,
+    home: DirectoryAuthority,
+    codex_home: DirectoryAuthority,
+    authority_sha256: String,
+}
+
+/// One retained authority for the exact canonical personal home and its
+/// `.codex` object. Pathnames are reporting/admission inputs only; retained
+/// descriptors and `ConfinedRoot` own every filesystem effect.
+struct PersonalHomeAuthority {
+    canonical: PathBuf,
+    home: File,
+    codex_home: File,
+    root: ConfinedRoot,
+    record: PersonalHomeAuthorityRecord,
+}
+
+impl PersonalHomeAuthority {
+    fn capture(requested: &Path) -> Result<Self, &'static str> {
+        let canonical = requested
+            .canonicalize()
+            .map_err(|_| "personal home authority is unavailable")?;
+        if canonical != requested || !canonical.is_absolute() {
+            return Err("personal home authority changed");
+        }
+        let named = fs::symlink_metadata(&canonical)
+            .map_err(|_| "personal home authority is unavailable")?;
+        if named.file_type().is_symlink() || !named.is_dir() {
+            return Err("personal home authority is not one directory");
+        }
+        let mut options = OpenOptions::new();
+        options
+            .read(true)
+            .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_DIRECTORY);
+        let home = options
+            .open(&canonical)
+            .map_err(|_| "personal home authority descriptor is unavailable")?;
+        let opened = home
+            .metadata()
+            .map_err(|_| "personal home authority descriptor is unavailable")?;
+        if directory_authority(&named)? != directory_authority(&opened)? {
+            return Err("personal home authority changed during capture");
+        }
+        let codex_descriptor = unsafe {
+            libc::openat(
+                home.as_raw_fd(),
+                c".codex".as_ptr(),
+                libc::O_RDONLY | libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_DIRECTORY,
+            )
+        };
+        if codex_descriptor < 0 {
+            return Err("personal Codex home authority is unavailable");
+        }
+        let codex_home = unsafe { File::from_raw_fd(codex_descriptor) };
+        let codex_named = stat_codex_home(home.as_raw_fd())?;
+        let codex_opened = codex_home
+            .metadata()
+            .map_err(|_| "personal Codex home authority descriptor is unavailable")?;
+        let home_authority = directory_authority(&opened)?;
+        let codex_authority = directory_authority(&codex_opened)?;
+        if codex_named != codex_authority {
+            return Err("personal Codex home authority changed during capture");
+        }
+        let home_id = digest_bytes(
+            format!(
+                "{}\0{}\0{}",
+                canonical.display(),
+                home_authority.device,
+                home_authority.inode
+            )
+            .as_bytes(),
+        );
+        let root = ConfinedRoot::open_personal_home(&canonical, &home_id)
+            .map_err(|_| "personal home confinement failed")?;
+        let mut record = PersonalHomeAuthorityRecord {
+            schema_version: "HarnessPersonalHomeAuthority-v1".to_owned(),
+            canonical_path_sha256: digest_bytes(
+                format!("personal-home-path-v1\0{}", canonical.display()).as_bytes(),
+            ),
+            home: home_authority,
+            codex_home: codex_authority,
+            authority_sha256: String::new(),
+        };
+        record.authority_sha256 = personal_home_authority_digest(&record)?;
+        let authority = Self {
+            canonical,
+            home,
+            codex_home,
+            root,
+            record,
+        };
+        authority.revalidate()?;
+        Ok(authority)
+    }
+
+    fn revalidate(&self) -> Result<(), &'static str> {
+        self.root
+            .revalidate()
+            .map_err(|_| "personal home authority changed")?;
+        let named = fs::symlink_metadata(&self.canonical)
+            .map_err(|_| "personal home authority is unavailable")?;
+        let opened = self
+            .home
+            .metadata()
+            .map_err(|_| "personal home authority descriptor is unavailable")?;
+        let codex_opened = self
+            .codex_home
+            .metadata()
+            .map_err(|_| "personal Codex home authority descriptor is unavailable")?;
+        if self.canonical.canonicalize().ok().as_deref() != Some(self.canonical.as_path())
+            || directory_authority(&named)? != self.record.home
+            || directory_authority(&opened)? != self.record.home
+            || stat_codex_home(self.home.as_raw_fd())? != self.record.codex_home
+            || directory_authority(&codex_opened)? != self.record.codex_home
+            || self.record.authority_sha256 != personal_home_authority_digest(&self.record)?
+        {
+            return Err("personal home or Codex home authority changed");
+        }
+        Ok(())
+    }
+
+    fn path(&self) -> &Path {
+        &self.canonical
+    }
+
+    fn root(&self) -> ConfinedRoot {
+        self.root.clone()
+    }
+
+    fn record(&self) -> &PersonalHomeAuthorityRecord {
+        &self.record
+    }
+
+    fn codex_home_fd(&self) -> std::os::fd::RawFd {
+        self.codex_home.as_raw_fd()
+    }
+}
+
+fn directory_authority(metadata: &fs::Metadata) -> Result<DirectoryAuthority, &'static str> {
+    if !metadata.is_dir() || metadata.file_type().is_symlink() {
+        return Err("personal authority object is not one directory");
+    }
+    Ok(DirectoryAuthority {
+        device: metadata.dev(),
+        inode: metadata.ino(),
+        owner: metadata.uid(),
+        mode: metadata.mode(),
+    })
+}
+
+fn stat_codex_home(home: std::os::fd::RawFd) -> Result<DirectoryAuthority, &'static str> {
+    let mut value = std::mem::MaybeUninit::<libc::stat>::uninit();
+    let result = unsafe {
+        libc::fstatat(
+            home,
+            c".codex".as_ptr(),
+            value.as_mut_ptr(),
+            libc::AT_SYMLINK_NOFOLLOW,
+        )
+    };
+    if result != 0 {
+        return Err("personal Codex home authority is unavailable");
+    }
+    let value = unsafe { value.assume_init() };
+    if value.st_mode & libc::S_IFMT != libc::S_IFDIR {
+        return Err("personal Codex home authority is not one directory");
+    }
+    Ok(DirectoryAuthority {
+        device: value.st_dev as u64,
+        inode: value.st_ino as u64,
+        owner: value.st_uid,
+        mode: value.st_mode as u32,
+    })
+}
+
+fn personal_home_authority_digest(
+    authority: &PersonalHomeAuthorityRecord,
+) -> Result<String, &'static str> {
+    #[derive(Serialize)]
+    struct Binding<'a> {
+        schema_version: &'a str,
+        canonical_path_sha256: &'a str,
+        home: &'a DirectoryAuthority,
+        codex_home: &'a DirectoryAuthority,
+    }
+    digest_json(&Binding {
+        schema_version: &authority.schema_version,
+        canonical_path_sha256: &authority.canonical_path_sha256,
+        home: &authority.home,
+        codex_home: &authority.codex_home,
+    })
+}
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -35,10 +245,11 @@ struct InstalledAuthority {
     marketplace_source_observation_sha256: String,
     marketplace_source_catalog_sha256: String,
     cache_catalog_sha256: String,
+    cache_tree_sha256: String,
     marketplace_runtime_sha256: String,
     cache_runtime_sha256: String,
     selected_codex_identity_sha256: String,
-    home_identity_sha256: String,
+    personal_home_authority_sha256: String,
     installed_authority_sha256: String,
 }
 
@@ -47,6 +258,7 @@ struct InstalledAuthorityObservation {
     source: InstalledSourceAuthorityCapture,
     cache: InstalledSourceAuthorityCapture,
     source_tree: PersonalMarketplaceSourceObservation,
+    cache_tree: ReadOnlyTreeObservation,
 }
 
 impl InstalledAuthorityObservation {
@@ -59,7 +271,14 @@ impl InstalledAuthorityObservation {
             .map_err(|_| "installed cache changed during capture")?;
         self.source_tree
             .revalidate()
-            .map_err(|_| "installed marketplace source tree changed during capture")
+            .map_err(|_| "installed marketplace source tree changed during capture")?;
+        self.cache_tree
+            .revalidate()
+            .map_err(|_| "installed cache tree changed during capture")?;
+        if self.cache_tree.tree_sha256() != self.authority.cache_tree_sha256 {
+            return Err("installed cache tree changed during capture");
+        }
+        Ok(())
     }
 }
 
@@ -85,6 +304,7 @@ struct PersonalMarketplaceInstallPlan {
     lifecycle_intent: String,
     input: String,
     cli: String,
+    personal_home: PersonalHomeAuthorityRecord,
     before: InstalledAuthority,
     target: TargetPackage,
     apply_status: String,
@@ -98,6 +318,7 @@ struct PreparedInstallPlan {
     record: PersonalMarketplaceInstallPlan,
     registry: HostPluginRegistryObservation,
     installed: InstalledAuthorityObservation,
+    personal_home: PersonalHomeAuthority,
 }
 
 impl PreparedInstallPlan {
@@ -112,12 +333,14 @@ impl PreparedInstallPlan {
         observation_context
             .revalidate()
             .map_err(|_| "host observation context changed before plan publication")?;
+        self.personal_home.revalidate()?;
         let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
             .map_err(registry_observation_failure_cause)?;
         if registry != self.registry {
             return Err("installed registry changed before plan publication");
         }
         self.installed.revalidate()?;
+        self.personal_home.revalidate()?;
         source_context
             .revalidate()
             .map_err(|_| "candidate source changed before plan publication")?;
@@ -135,6 +358,7 @@ struct PlanBinding<'a> {
     lifecycle_intent: &'a str,
     input: &'a str,
     cli: &'a str,
+    personal_home: &'a PersonalHomeAuthorityRecord,
     before: &'a InstalledAuthority,
     target: &'a TargetPackage,
     apply_status: &'a str,
@@ -212,6 +436,16 @@ pub(super) fn apply(
     {
         return apply_failure("accepted plan identity or HOLD boundary was substituted");
     }
+    let personal_home = match PersonalHomeAuthority::capture(home) {
+        Ok(authority) if authority.record() == &record.personal_home => authority,
+        _ => return apply_failure("accepted personal home authority changed after planning"),
+    };
+    // Do not require the host to still be exact-prior here. A fresh process
+    // must be able to admit the one exact materialized-but-not-installed state
+    // and drive the existing rollback transaction. The live adapter acquires
+    // the exclusive lease, captures the required exact prior cache snapshot,
+    // and compares the typed registry/source/cache/runtime observations before
+    // any package or install effect.
     let (artifact, catalog) =
         match capture_accepted_candidate(source_context, &record.input, &record.cli) {
             Ok(candidate) => candidate,
@@ -227,14 +461,20 @@ pub(super) fn apply(
         Ok(accepted) => accepted,
         Err(cause) => return apply_failure(cause),
     };
+    let cancellation = crate::distribution::host_effect::HostEffectCancellation::default();
+    let _signal_guard = match cancellation.install_process_signal_source() {
+        Ok(guard) => guard,
+        Err(cause) => return apply_failure(cause),
+    };
     let mut effects = match live_effects::LivePersonalMarketplaceUpdateEffects::new(
         source_context,
         observation_context,
-        home,
+        personal_home,
         record.clone(),
         prior,
         artifact,
         catalog,
+        cancellation,
     ) {
         Ok(effects) => effects,
         Err(cause) => return apply_failure(cause),
@@ -247,18 +487,27 @@ pub(super) fn apply(
                 "observed-exact-target; pinned-executable-finalization-failed",
                 "preserve the observed target and reconcile the exact selected Codex executable before any retry",
             ),
-            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => apply_effect_failure(
-                cause,
-                "restored-exact-prior; pinned-executable-finalization-failed",
-                "preserve the restored prior state and reconcile the exact selected Codex executable before deriving a new plan",
-            ),
-            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => apply_effect_failure(
-                cause,
-                "ambiguous-recovery-and-executable-finalization",
-                "reconcile every marketplace, registry, cache, runtime, and selected-Codex authority before any retry",
-            ),
-            PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget
-            | PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => apply_failure(cause),
+            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => {
+                let (stage_cause, _) = recovered_stage_diagnostic(report.failed_stage);
+                apply_effect_failure(
+                    stage_cause,
+                    "restored-exact-prior; pinned-executable-finalization-failed",
+                    "preserve the restored prior state and reconcile the exact selected Codex executable before deriving a new plan",
+                )
+            }
+            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => {
+                let (stage_cause, _) = ambiguous_stage_diagnostic(report.failed_stage);
+                apply_effect_failure(
+                    stage_cause,
+                    "ambiguous-recovery-and-executable-finalization",
+                    "reconcile every marketplace, registry, cache, runtime, and selected-Codex authority before any retry",
+                )
+            }
+            PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => {
+                let (stage_cause, _) = refused_stage_diagnostic(report.failed_stage);
+                apply_failure(stage_cause)
+            }
+            PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget => apply_failure(cause),
         };
     }
     match report.disposition {
@@ -278,20 +527,90 @@ pub(super) fn apply(
                 record.plan_sha256
             ),
         ),
-        PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => apply_effect_failure(
-            "personal marketplace update failed and exact prior authority was restored",
-            "restored-exact-prior",
-            "retry only after rederiving a fresh exact install plan",
+        PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => {
+            let (cause, repair) = recovered_stage_diagnostic(report.failed_stage);
+            apply_effect_failure(cause, "restored-exact-prior", repair)
+        }
+        PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => {
+            let (cause, repair) = refused_stage_diagnostic(report.failed_stage);
+            apply_effect_failure(cause, "none", repair)
+        }
+        PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => {
+            let (cause, repair) = ambiguous_stage_diagnostic(report.failed_stage);
+            apply_effect_failure(cause, "ambiguous-recovery-required", repair)
+        }
+    }
+}
+
+fn recovered_stage_diagnostic(
+    stage: Option<PersonalMarketplaceUpdateStage>,
+) -> (&'static str, &'static str) {
+    match stage {
+        Some(PersonalMarketplaceUpdateStage::InterruptedAfterMaterialization) => (
+            "personal marketplace update recovered exact prior after stage=interrupted-after-materialization",
+            "derive a fresh exact plan after verifying the restored source, registry, cache, runtime, and child-group lease are terminal",
         ),
-        PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => apply_effect_failure(
-            "personal marketplace update was refused before a package or host effect",
-            "none",
-            "restore exact plan, candidate, predecessor, lease, and selected-Codex custody before retrying",
+        Some(PersonalMarketplaceUpdateStage::MaterializeTarget) => (
+            "personal marketplace update recovered exact prior after stage=materialize-target",
+            "derive a fresh exact plan after verifying source materialization custody and the restored predecessor",
         ),
-        PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => apply_effect_failure(
-            "personal marketplace update could not prove exact target or exact prior recovery",
-            "ambiguous-recovery-required",
-            "reconcile the exact marketplace source, installed registry, cache, runtime, and selected Codex executable before any retry",
+        Some(PersonalMarketplaceUpdateStage::ReconcileMaterializedTarget) => (
+            "personal marketplace update recovered exact prior after stage=reconcile-materialized-target",
+            "derive a fresh exact plan only after the target-source observation path is repaired",
+        ),
+        Some(PersonalMarketplaceUpdateStage::InstallTarget) => (
+            "personal marketplace update recovered exact prior after stage=install-target",
+            "derive a fresh exact plan only after the pinned child execution or cancellation cause is resolved",
+        ),
+        Some(PersonalMarketplaceUpdateStage::ReconcileTarget) => (
+            "personal marketplace update recovered exact prior after stage=reconcile-target",
+            "derive a fresh exact plan only after target registry, cache, runtime, and source observation agree",
+        ),
+        _ => (
+            "personal marketplace update recovered exact prior after stage=unknown-forward-stage",
+            "preserve the restored prior state and independently reconcile the redacted stage before deriving a new plan",
+        ),
+    }
+}
+
+fn refused_stage_diagnostic(
+    stage: Option<PersonalMarketplaceUpdateStage>,
+) -> (&'static str, &'static str) {
+    match stage {
+        Some(PersonalMarketplaceUpdateStage::InitialObservation) => (
+            "personal marketplace update refused before effect at stage=initial-observation",
+            "restore the exact typed home, registry, source, cache-tree, runtime, plan, and selected-Codex observations before retrying",
+        ),
+        Some(PersonalMarketplaceUpdateStage::MaterializeTarget) => (
+            "personal marketplace update refused before effect at stage=materialize-target",
+            "clear the production cancellation source, then derive a fresh exact plan before retrying",
+        ),
+        _ => (
+            "personal marketplace update refused before effect at stage=unknown-admission-stage",
+            "restore exact plan and predecessor custody and rederive a fresh plan before retrying",
+        ),
+    }
+}
+
+fn ambiguous_stage_diagnostic(
+    stage: Option<PersonalMarketplaceUpdateStage>,
+) -> (&'static str, &'static str) {
+    match stage {
+        Some(PersonalMarketplaceUpdateStage::RestorePriorTree) => (
+            "personal marketplace recovery is ambiguous at stage=restore-prior-tree",
+            "preserve all state and reconcile the exact marketplace source tree before any child or install retry",
+        ),
+        Some(PersonalMarketplaceUpdateStage::ReinstallPrior) => (
+            "personal marketplace recovery is ambiguous at stage=reinstall-prior",
+            "preserve all state and reconcile the exact prior registry, cache, runtime, and selected-Codex child result before any retry",
+        ),
+        Some(PersonalMarketplaceUpdateStage::ReconcilePrior) => (
+            "personal marketplace recovery is ambiguous at stage=reconcile-prior",
+            "preserve all state and independently reobserve every exact prior authority before deriving another plan",
+        ),
+        _ => (
+            "personal marketplace recovery is ambiguous at stage=unknown-recovery-stage",
+            "preserve all state and reconcile every marketplace, registry, cache, runtime, home, and child-group authority before any retry",
         ),
     }
 }
@@ -304,9 +623,10 @@ fn build_plan(
     cli: &str,
 ) -> Result<PreparedInstallPlan, &'static str> {
     let (artifact, _catalog) = capture_accepted_candidate(source_context, input, cli)?;
+    let personal_home = PersonalHomeAuthority::capture(home)?;
     let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
         .map_err(registry_observation_failure_cause)?;
-    let installed = installed_authority(home, &registry)?;
+    let installed = installed_authority(&personal_home, &registry)?;
     let before = installed.authority.clone();
     let target = target_package(&artifact);
     let before_version = Version::parse(&before.plugin_version)
@@ -337,12 +657,13 @@ fn build_plan(
         "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
     ];
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5",
         effect: "personal-marketplace-update",
         marketplace: MARKETPLACE,
         lifecycle_intent: "monotonic-update",
         input,
         cli,
+        personal_home: personal_home.record(),
         before: &before,
         target: &target,
         apply_status: "ready-exact-live-personal-marketplace-adapter",
@@ -354,13 +675,14 @@ fn build_plan(
     let plan_sha256 = digest_json(&binding)?;
     drop(binding);
     let record = PersonalMarketplaceInstallPlan {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4".to_owned(),
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5".to_owned(),
         plan_sha256,
         effect: "personal-marketplace-update".to_owned(),
         marketplace: MARKETPLACE.to_owned(),
         lifecycle_intent: "monotonic-update".to_owned(),
         input: input.to_owned(),
         cli: cli.to_owned(),
+        personal_home: personal_home.record().clone(),
         before,
         target,
         apply_status: "ready-exact-live-personal-marketplace-adapter".to_owned(),
@@ -374,6 +696,7 @@ fn build_plan(
         record,
         registry,
         installed,
+        personal_home,
     })
 }
 
@@ -445,12 +768,11 @@ fn registry_observation_failure_cause(
 }
 
 fn installed_authority(
-    home: &Path,
+    home: &PersonalHomeAuthority,
     registry: &HostPluginRegistryObservation,
 ) -> Result<InstalledAuthorityObservation, &'static str> {
-    let canonical_home = home
-        .canonicalize()
-        .map_err(|_| "personal home authority is unavailable")?;
+    home.revalidate()?;
+    let canonical_home = home.path();
     let marketplace_root = registry.marketplace_root();
     if marketplace_root != canonical_home {
         return Err("observed personal marketplace root does not equal the canonical home root");
@@ -478,10 +800,11 @@ fn installed_authority(
         &session_id,
     )
     .map_err(|_| "installed marketplace source authority could not be captured")?;
-    let cache_path = canonical_home.join(format!(
+    let cache_relative = format!(
         ".codex/plugins/cache/{MARKETPLACE}/harness-ultragoal/{}",
         registry.plugin_version()
-    ));
+    );
+    let cache_path = canonical_home.join(&cache_relative);
     let cache = capture_installed_source_authority(&cache_path, registry.sha256(), &session_id)
         .map_err(|_| "installed cache authority could not be captured")?;
     if source.plugin_version() != registry.plugin_version()
@@ -499,8 +822,14 @@ fn installed_authority(
             .map_err(|_| "installed marketplace source tree could not be captured")?;
     let marketplace_source_tree_sha256 = source_tree.tree_sha256().to_owned();
     let marketplace_source_observation_sha256 = source_tree.observation_sha256().to_owned();
+    let cache_tree = ReadOnlyTreeObservation::capture_root(&cache_path, 4096, PACKAGE_LIMIT)
+        .map_err(|_| "installed cache tree could not be captured")?;
+    let cache_tree_sha256 = cache_tree.tree_sha256().to_owned();
+    if cache_tree_sha256 != marketplace_source_tree_sha256 {
+        return Err("installed source and cache full trees diverge");
+    }
     let mut authority = InstalledAuthority {
-        schema_version: "HarnessObservedInstalledAuthority-v2".to_owned(),
+        schema_version: "HarnessObservedInstalledAuthority-v3".to_owned(),
         plugin_version: registry.plugin_version().to_owned(),
         registry_observation_sha256: registry.sha256().to_owned(),
         marketplace_source_relative_path_sha256: digest_bytes(
@@ -510,12 +839,11 @@ fn installed_authority(
         marketplace_source_observation_sha256,
         marketplace_source_catalog_sha256: source.catalog_sha256().to_owned(),
         cache_catalog_sha256: cache.catalog_sha256().to_owned(),
+        cache_tree_sha256,
         marketplace_runtime_sha256: source_runtime,
         cache_runtime_sha256: cache_runtime,
         selected_codex_identity_sha256: registry.selected_codex_identity_sha256().to_owned(),
-        home_identity_sha256: digest_bytes(
-            format!("personal-home-v1\0{}", canonical_home.display()).as_bytes(),
-        ),
+        personal_home_authority_sha256: home.record().authority_sha256.clone(),
         installed_authority_sha256: String::new(),
     };
     authority.installed_authority_sha256 = installed_authority_digest(&authority)?;
@@ -524,8 +852,10 @@ fn installed_authority(
         source,
         cache,
         source_tree,
+        cache_tree,
     };
     observation.revalidate()?;
+    home.revalidate()?;
     Ok(observation)
 }
 
@@ -540,10 +870,11 @@ fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, 
         marketplace_source_observation_sha256: &'a str,
         marketplace_source_catalog_sha256: &'a str,
         cache_catalog_sha256: &'a str,
+        cache_tree_sha256: &'a str,
         marketplace_runtime_sha256: &'a str,
         cache_runtime_sha256: &'a str,
         selected_codex_identity_sha256: &'a str,
-        home_identity_sha256: &'a str,
+        personal_home_authority_sha256: &'a str,
     }
     digest_json(&Binding {
         schema_version: &authority.schema_version,
@@ -554,10 +885,11 @@ fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, 
         marketplace_source_observation_sha256: &authority.marketplace_source_observation_sha256,
         marketplace_source_catalog_sha256: &authority.marketplace_source_catalog_sha256,
         cache_catalog_sha256: &authority.cache_catalog_sha256,
+        cache_tree_sha256: &authority.cache_tree_sha256,
         marketplace_runtime_sha256: &authority.marketplace_runtime_sha256,
         cache_runtime_sha256: &authority.cache_runtime_sha256,
         selected_codex_identity_sha256: &authority.selected_codex_identity_sha256,
-        home_identity_sha256: &authority.home_identity_sha256,
+        personal_home_authority_sha256: &authority.personal_home_authority_sha256,
     })
 }
 
@@ -653,23 +985,29 @@ fn accepted_update_authority(
 }
 
 fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(), &'static str> {
-    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v4"
+    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v5"
         || record.effect != "personal-marketplace-update"
-        || record.before.schema_version != "HarnessObservedInstalledAuthority-v2"
+        || record.personal_home.schema_version != "HarnessPersonalHomeAuthority-v1"
+        || record.before.schema_version != "HarnessObservedInstalledAuthority-v3"
         || record.marketplace != MARKETPLACE
         || record.lifecycle_intent != "monotonic-update"
         || record.apply_status != "ready-exact-live-personal-marketplace-adapter"
+        || record.personal_home.authority_sha256
+            != personal_home_authority_digest(&record.personal_home)?
+        || record.before.personal_home_authority_sha256 != record.personal_home.authority_sha256
+        || record.before.cache_tree_sha256 != record.before.marketplace_source_tree_sha256
         || record.before.installed_authority_sha256 != installed_authority_digest(&record.before)?
     {
         return Err("plan contract changed");
     }
     let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v4",
+        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5",
         effect: &record.effect,
         marketplace: &record.marketplace,
         lifecycle_intent: &record.lifecycle_intent,
         input: &record.input,
         cli: &record.cli,
+        personal_home: &record.personal_home,
         before: &record.before,
         target: &record.target,
         apply_status: &record.apply_status,
@@ -823,8 +1161,26 @@ mod tests {
     }
 
     fn record() -> PersonalMarketplaceInstallPlan {
+        let mut personal_home = PersonalHomeAuthorityRecord {
+            schema_version: "HarnessPersonalHomeAuthority-v1".to_owned(),
+            canonical_path_sha256: digest('f'),
+            home: DirectoryAuthority {
+                device: 1,
+                inode: 2,
+                owner: 501,
+                mode: (libc::S_IFDIR | 0o700) as u32,
+            },
+            codex_home: DirectoryAuthority {
+                device: 1,
+                inode: 3,
+                owner: 501,
+                mode: (libc::S_IFDIR | 0o700) as u32,
+            },
+            authority_sha256: String::new(),
+        };
+        personal_home.authority_sha256 = personal_home_authority_digest(&personal_home).unwrap();
         let mut before = InstalledAuthority {
-            schema_version: "HarnessObservedInstalledAuthority-v2".to_owned(),
+            schema_version: "HarnessObservedInstalledAuthority-v3".to_owned(),
             plugin_version: "0.0.39+codex.20260820190706".to_owned(),
             registry_observation_sha256: digest('a'),
             marketplace_source_relative_path_sha256: digest('0'),
@@ -832,21 +1188,23 @@ mod tests {
             marketplace_source_observation_sha256: digest('7'),
             marketplace_source_catalog_sha256: digest('b'),
             cache_catalog_sha256: digest('c'),
+            cache_tree_sha256: digest('6'),
             marketplace_runtime_sha256: digest('d'),
             cache_runtime_sha256: digest('d'),
             selected_codex_identity_sha256: digest('e'),
-            home_identity_sha256: digest('f'),
+            personal_home_authority_sha256: personal_home.authority_sha256.clone(),
             installed_authority_sha256: String::new(),
         };
         before.installed_authority_sha256 = installed_authority_digest(&before).unwrap();
         let mut record = PersonalMarketplaceInstallPlan {
-            schema_version: "HarnessPersonalMarketplaceInstallPlan-v4".to_owned(),
+            schema_version: "HarnessPersonalMarketplaceInstallPlan-v5".to_owned(),
             plan_sha256: String::new(),
             effect: "personal-marketplace-update".to_owned(),
             marketplace: MARKETPLACE.to_owned(),
             lifecycle_intent: "monotonic-update".to_owned(),
             input: "target/ultragoal/package-0.0.41.hugpkg".to_owned(),
             cli: "target/ultragoal/release/ultragoal".to_owned(),
+            personal_home,
             before,
             target: TargetPackage {
                 context_id: digest('0'),
@@ -875,6 +1233,7 @@ mod tests {
             lifecycle_intent: &record.lifecycle_intent,
             input: &record.input,
             cli: &record.cli,
+            personal_home: &record.personal_home,
             before: &record.before,
             target: &record.target,
             apply_status: &record.apply_status,
@@ -891,6 +1250,7 @@ mod tests {
         root: PathBuf,
         home: PathBuf,
         installed: PathBuf,
+        cache: PathBuf,
     }
 
     #[cfg(unix)]
@@ -917,6 +1277,7 @@ mod tests {
                 root,
                 home,
                 installed,
+                cache,
             }
         }
 
@@ -1018,7 +1379,8 @@ mod tests {
         let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
         let before = tree_snapshot(&fixture.root);
 
-        let observation = installed_authority(&fixture.home, &fixture.registry()).unwrap();
+        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
+        let observation = installed_authority(&home, &fixture.registry()).unwrap();
 
         assert_eq!(observation.authority.plugin_version, INSTALLED_VERSION);
         assert!(
@@ -1045,7 +1407,8 @@ mod tests {
     #[test]
     fn installed_authority_observation_rejects_later_source_change() {
         let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
-        let observation = installed_authority(&fixture.home, &fixture.registry()).unwrap();
+        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
+        let observation = installed_authority(&home, &fixture.registry()).unwrap();
 
         fs::write(
             fixture.installed.join("runtime/ultragoal"),
@@ -1065,7 +1428,8 @@ mod tests {
         let fixture = PersonalInstallFixture::new("foreign-marketplace");
         let before = tree_snapshot(&fixture.root);
 
-        let failure = match installed_authority(&fixture.home, &fixture.registry()) {
+        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
+        let failure = match installed_authority(&home, &fixture.registry()) {
             Ok(_) => panic!("foreign marketplace unexpectedly admitted"),
             Err(failure) => failure,
         };
@@ -1075,6 +1439,37 @@ mod tests {
             "installed source path is not the canonical Harness marketplace member"
         );
         assert_eq!(tree_snapshot(&fixture.root), before);
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn personal_home_authority_rejects_alternate_home_and_same_path_inode_substitution() {
+        let first = PersonalInstallFixture::new("harness-ultragoal-local");
+        let second = PersonalInstallFixture::new("harness-ultragoal-local");
+        let retained = PersonalHomeAuthority::capture(&first.home).unwrap();
+        let alternate = PersonalHomeAuthority::capture(&second.home).unwrap();
+        assert_ne!(retained.record(), alternate.record());
+
+        let held = first.root.join("held-home");
+        fs::rename(&first.home, &held).unwrap();
+        fs::create_dir(&first.home).unwrap();
+        fs::create_dir(first.home.join(".codex")).unwrap();
+        assert_eq!(
+            retained.revalidate().unwrap_err(),
+            "personal home authority changed"
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn installed_authority_rejects_prior_cache_full_tree_mismatch() {
+        let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
+        fs::write(fixture.cache.join("cache-only.txt"), b"not in source").unwrap();
+        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
+        let failure = installed_authority(&home, &fixture.registry())
+            .err()
+            .expect("mismatched cache tree must fail closed");
+        assert_eq!(failure, "installed source and cache full trees diverge");
     }
 
     #[test]
@@ -1087,6 +1482,21 @@ mod tests {
         let mut authority = original.clone();
         authority.before.cache_catalog_sha256 = digest('9');
         assert!(validate_plan_identity(&authority).is_err());
+        let mut cache_tree = original.clone();
+        cache_tree.before.cache_tree_sha256 = digest('9');
+        cache_tree.before.installed_authority_sha256 =
+            installed_authority_digest(&cache_tree.before).unwrap();
+        rebind_plan(&mut cache_tree);
+        assert!(validate_plan_identity(&cache_tree).is_err());
+        let mut home = original.clone();
+        home.personal_home.home.inode += 1;
+        home.personal_home.authority_sha256 =
+            personal_home_authority_digest(&home.personal_home).unwrap();
+        home.before.personal_home_authority_sha256 = home.personal_home.authority_sha256.clone();
+        home.before.installed_authority_sha256 = installed_authority_digest(&home.before).unwrap();
+        rebind_plan(&mut home);
+        assert!(validate_plan_identity(&home).is_ok());
+        assert_ne!(home.personal_home, original.personal_home);
         let mut directory_observation = original.clone();
         directory_observation
             .before
@@ -1223,6 +1633,28 @@ mod tests {
                 ),
             ),
             "codex-observation-unavailable"
+        );
+    }
+
+    #[test]
+    fn public_failure_diagnostics_preserve_stable_stage_causality_and_next_action() {
+        assert_eq!(
+            recovered_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::InstallTarget)),
+            (
+                "personal marketplace update recovered exact prior after stage=install-target",
+                "derive a fresh exact plan only after the pinned child execution or cancellation cause is resolved",
+            )
+        );
+        assert_eq!(
+            ambiguous_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::ReinstallPrior)),
+            (
+                "personal marketplace recovery is ambiguous at stage=reinstall-prior",
+                "preserve all state and reconcile the exact prior registry, cache, runtime, and selected-Codex child result before any retry",
+            )
+        );
+        assert_eq!(
+            refused_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::InitialObservation)).0,
+            "personal marketplace update refused before effect at stage=initial-observation"
         );
     }
 

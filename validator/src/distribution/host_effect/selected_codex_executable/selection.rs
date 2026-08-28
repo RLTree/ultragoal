@@ -77,12 +77,15 @@ impl SelectedCodexExecutable {
         install_plan_sha256: &str,
         expected_content_sha256: &str,
         cancellation: &super::super::executor::HostEffectCancellation,
+        lease_fd: std::os::fd::RawFd,
+        codex_home_fd: std::os::fd::RawFd,
     ) -> Result<(PathBuf, Vec<u8>, Vec<u8>), &'static str> {
         if !exact_digest(install_plan_sha256) || self.content_sha256() != expected_content_sha256 {
             return Err("selected Codex executable identity changed");
         }
         let home = canonical_personal_home(home)?;
         let cwd = open_personal_home(&home)?;
+        revalidate_personal_codex_home(&cwd, codex_home_fd)?;
         let policy = super::super::executor::HostEffectExecutionPolicy::strict_personal_codex_home(
             30_000, &home,
         )
@@ -111,24 +114,28 @@ impl SelectedCodexExecutable {
         let capability = super::super::transaction_policy::current_capability()
             .map_err(|_| "personal Codex execution capability unavailable")?;
         let marketplace = self
-            .execute(
+            .execute_personal(
                 &capability,
                 &marketplace,
                 &policy,
                 cancellation,
                 cwd.as_raw_fd(),
+                lease_fd,
+                &home.join(".codex"),
             )
             .map_err(|_| "pinned Codex marketplace observation failed")?;
         if marketplace.exit_code() != 0 {
             return Err("pinned Codex marketplace observation returned failure");
         }
         let plugins = self
-            .execute(
+            .execute_personal(
                 &capability,
                 &plugins,
                 &policy,
                 cancellation,
                 cwd.as_raw_fd(),
+                lease_fd,
+                &home.join(".codex"),
             )
             .map_err(|_| "pinned Codex plugin observation failed")?;
         if plugins.exit_code() != 0 {
@@ -149,12 +156,15 @@ impl SelectedCodexExecutable {
         install_plan_sha256: &str,
         expected_content_sha256: &str,
         cancellation: &super::super::executor::HostEffectCancellation,
+        lease_fd: std::os::fd::RawFd,
+        codex_home_fd: std::os::fd::RawFd,
     ) -> Result<(), &'static str> {
         if !exact_digest(install_plan_sha256) || self.content_sha256() != expected_content_sha256 {
             return Err("selected Codex executable identity changed");
         }
         let home = canonical_personal_home(home)?;
         let cwd = open_personal_home(&home)?;
+        revalidate_personal_codex_home(&cwd, codex_home_fd)?;
         let plan = crate::distribution::HostCommandPlan::personal_install_in_codex_home(
             package,
             marketplace,
@@ -172,7 +182,15 @@ impl SelectedCodexExecutable {
         let capability = super::super::transaction_policy::current_capability()
             .map_err(|_| "personal Codex execution capability unavailable")?;
         let capture = self
-            .execute(&capability, command, &policy, cancellation, cwd.as_raw_fd())
+            .execute_personal(
+                &capability,
+                command,
+                &policy,
+                cancellation,
+                cwd.as_raw_fd(),
+                lease_fd,
+                &home.join(".codex"),
+            )
             .map_err(|_| "pinned Codex plugin installation failed")?;
         (capture.exit_code() == 0)
             .then_some(())
@@ -187,6 +205,8 @@ impl SelectedCodexExecutable {
         install_plan_sha256: &str,
         expected_content_sha256: &str,
         cancellation: &super::super::executor::HostEffectCancellation,
+        lease_fd: std::os::fd::RawFd,
+        codex_home_fd: std::os::fd::RawFd,
     ) -> Result<(), &'static str> {
         prior
             .validate()
@@ -199,6 +219,7 @@ impl SelectedCodexExecutable {
         }
         let home = canonical_personal_home(home)?;
         let cwd = open_personal_home(&home)?;
+        revalidate_personal_codex_home(&cwd, codex_home_fd)?;
         let command = crate::distribution::HostCommand::from_untrusted_record(
             "codex".to_owned(),
             vec![
@@ -217,12 +238,14 @@ impl SelectedCodexExecutable {
         let capability = super::super::transaction_policy::current_capability()
             .map_err(|_| "personal Codex execution capability unavailable")?;
         let capture = self
-            .execute(
+            .execute_personal(
                 &capability,
                 &command,
                 &policy,
                 cancellation,
                 cwd.as_raw_fd(),
+                lease_fd,
+                &home.join(".codex"),
             )
             .map_err(|_| "pinned Codex prior reinstallation failed")?;
         (capture.exit_code() == 0)
@@ -333,6 +356,40 @@ impl SelectedCodexExecutable {
         })?;
         super::execution::execute_runtime(self, capability, command, policy, cancellation, cwd)
     }
+
+    fn execute_personal(
+        &self,
+        capability: &super::super::lifecycle::DescriptorExecutionCapability,
+        command: &super::super::super::HostCommand,
+        policy: &super::super::executor::HostEffectExecutionPolicy,
+        cancellation: &super::super::executor::HostEffectCancellation,
+        cwd: std::os::fd::RawFd,
+        lease_fd: std::os::fd::RawFd,
+        codex_home: &Path,
+    ) -> Result<super::super::executor::CommandCapture, super::super::executor::BackendFailure>
+    {
+        self.revalidate().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
+        #[cfg(target_os = "macos")]
+        self.revalidate_launch().map_err(|_| {
+            super::super::executor::BackendFailure::before_start(
+                super::super::executor::HostEffectExecutorErrorId::ExecutableMutation,
+            )
+        })?;
+        super::execution::execute_personal(
+            self,
+            capability,
+            command,
+            policy,
+            cancellation,
+            cwd,
+            lease_fd,
+            codex_home,
+        )
+    }
 }
 
 fn canonical_personal_home(home: &Path) -> Result<PathBuf, &'static str> {
@@ -365,6 +422,38 @@ fn open_personal_home(home: &Path) -> Result<File, &'static str> {
         return Err("personal home binding changed");
     }
     Ok(file)
+}
+
+fn revalidate_personal_codex_home(
+    home: &File,
+    retained_codex_home: std::os::fd::RawFd,
+) -> Result<(), &'static str> {
+    let mut named = std::mem::MaybeUninit::<libc::stat>::uninit();
+    let mut retained = std::mem::MaybeUninit::<libc::stat>::uninit();
+    let named_result = unsafe {
+        libc::fstatat(
+            home.as_raw_fd(),
+            c".codex".as_ptr(),
+            named.as_mut_ptr(),
+            libc::AT_SYMLINK_NOFOLLOW,
+        )
+    };
+    let retained_result = unsafe { libc::fstat(retained_codex_home, retained.as_mut_ptr()) };
+    if named_result != 0 || retained_result != 0 {
+        return Err("personal Codex home authority is unavailable");
+    }
+    let named = unsafe { named.assume_init() };
+    let retained = unsafe { retained.assume_init() };
+    if named.st_mode & libc::S_IFMT != libc::S_IFDIR
+        || retained.st_mode & libc::S_IFMT != libc::S_IFDIR
+        || named.st_dev != retained.st_dev
+        || named.st_ino != retained.st_ino
+        || named.st_uid != retained.st_uid
+        || named.st_mode != retained.st_mode
+    {
+        return Err("personal Codex home authority changed before child spawn");
+    }
+    Ok(())
 }
 
 fn personal_environment(home: &Path) -> Vec<(String, String)> {

@@ -85,6 +85,44 @@ impl ReadOnlyTreeObservation {
         if target.strip_prefix(canonical_home).ok() != Some(Path::new(relative)) {
             return Err(error(DistributionErrorId::InvalidPath));
         }
+        Self::capture_bound_root(canonical_home, &target, maximum_entries, maximum_bytes)
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn capture_root(
+        canonical_root: &Path,
+        maximum_entries: usize,
+        maximum_bytes: usize,
+    ) -> Result<Self, DistributionError> {
+        Self::capture_bound_root(
+            canonical_root,
+            canonical_root,
+            maximum_entries,
+            maximum_bytes,
+        )
+    }
+
+    #[cfg(unix)]
+    fn capture_bound_root(
+        canonical_home: &Path,
+        target: &Path,
+        maximum_entries: usize,
+        maximum_bytes: usize,
+    ) -> Result<Self, DistributionError> {
+        if maximum_entries == 0 || maximum_bytes == 0 || !canonical_home.is_absolute() {
+            return Err(error(DistributionErrorId::InvalidPath));
+        }
+        let home_metadata = std::fs::symlink_metadata(canonical_home)
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?;
+        if canonical_home
+            .canonicalize()
+            .map_err(|_| error(DistributionErrorId::ObjectUnavailable))?
+            != canonical_home
+            || home_metadata.file_type().is_symlink()
+            || !home_metadata.is_dir()
+        {
+            return Err(error(DistributionErrorId::InvalidPath));
+        }
         let chain = DirectoryChain::open(&target, canonical_home)?;
         if target
             .canonicalize()
@@ -137,6 +175,20 @@ impl ReadOnlyTreeObservation {
             return Err(error(DistributionErrorId::ObjectChanged));
         }
         Ok(())
+    }
+
+    #[cfg(unix)]
+    pub(crate) fn snapshot(
+        &self,
+    ) -> Result<Vec<crate::distribution::TreeObject>, DistributionError> {
+        self.chain.revalidate()?;
+        self.tree.verify_descriptor()?;
+        let rows = super::walk::inspect(&self.tree, self.maximum_entries, self.maximum_bytes)?;
+        self.revalidate()?;
+        if tree_sha256(&rows)? != self.tree_sha256 {
+            return Err(error(DistributionErrorId::ObjectChanged));
+        }
+        Ok(rows)
     }
 
     #[cfg(not(unix))]
@@ -422,7 +474,7 @@ mod tests {
 
     impl Fixture {
         fn new(label: &str) -> Self {
-            let requested = Path::new("/tmp").canonicalize().unwrap().join(format!(
+            let requested = std::env::temp_dir().canonicalize().unwrap().join(format!(
                 "hul-read-only-tree-{label}-{}-{}",
                 std::process::id(),
                 NEXT.fetch_add(1, Ordering::Relaxed),

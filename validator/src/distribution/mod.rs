@@ -29,13 +29,13 @@ pub struct EffectFailure;
 pub use cache::{CacheExpectation, CacheSnapshot, reconcile_cache_read_only};
 pub use cache_observation::{CacheReader, publish_cache_file, reconcile_cache_file};
 pub use error::{DistributionError, DistributionErrorId};
-pub(crate) use filesystem::ReadOnlyWorkspace;
 pub(crate) use filesystem::canonical_temporary_parent;
 pub use filesystem::{ConfinedRoot, ScopedFile, ScopedInstall, ScopedTree};
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{
     EffectPoint, assert_test_effect_hook_consumed, set_test_effect_hook_matching,
 };
+pub(crate) use filesystem::{ReadOnlyTreeObservation, ReadOnlyWorkspace};
 pub(crate) use host::HostCommandPlanProjection;
 pub use host::{HostCommand, HostCommandPlan};
 pub use host_capability::{
@@ -83,7 +83,8 @@ pub(crate) use package::{
     PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceAuthorityMatch,
     PersonalMarketplaceSourceObservation, PersonalMarketplaceUpdateAuthority,
     PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateEffects,
-    PersonalMarketplaceUpdateObservation, execute_personal_marketplace_update,
+    PersonalMarketplaceUpdateObservation, PersonalMarketplaceUpdateStage,
+    execute_personal_marketplace_update,
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,
