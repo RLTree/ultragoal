@@ -41,6 +41,7 @@ mod package_verify;
 mod public_context;
 pub(crate) mod routine;
 mod strict;
+mod supported_host_oracle;
 
 #[cfg(test)]
 #[path = "tests/mod.rs"]

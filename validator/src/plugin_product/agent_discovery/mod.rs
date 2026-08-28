@@ -57,10 +57,9 @@ pub(crate) fn capture_installed_source_authority(
 #[path = "tests/mod.rs"]
 mod tests;
 
+#[cfg(test)]
 pub(crate) use error::AgentDiscoveryErrorId;
-pub(crate) use host_registry_observation::{
-    HostPluginRegistryObservation, parse_host_plugin_registry_observation,
-};
+pub(crate) use host_registry_observation::HostPluginRegistryObservation;
 pub(crate) use local_authority::{
     AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };

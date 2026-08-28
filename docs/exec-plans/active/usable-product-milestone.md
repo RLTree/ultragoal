@@ -252,8 +252,19 @@ the exact candidate and read-only plan evidence.
   and catalog root, `plugins/harness-ultragoal`, configured marketplace,
   registry identity, and `harness-ultragoal@harness-ultragoal-local` are bound
   separately and exactly. Focused repair tests and offline compilation pass;
-  root integration, aggregate/package rebuild, and same-scope immutable
-  rereview remain. Because this active plan is itself packaged, the immutable
+  repair commit `f4e0f4ad5efc7a0131e89ba7449ee57ab424d7f5` passed the
+  security rereview, while product rereview found one remaining continuance
+  contradiction: public `inspect capabilities --package-root` still launched
+  the unproved Codex listing probe, and the oracle-missing install diagnostic
+  recommended an immediate rerun that could not satisfy its own prerequisite.
+  The current unstaged correction makes one shared closed supported-host oracle
+  gate authoritative for both public readers, removes production Codex listing
+  process surfaces from capabilities inspection, and emits one dedicated
+  no-action/no-immediate-rerun diagnostic routing to the separate authority/
+  oracle decision. Its focused public-route tests, coupled handoff tests, and
+  offline compile pass; root integration, aggregate/package rebuild, and
+  same-scope immutable rereview remain. Because this active plan is itself
+  packaged, the immutable
   integration commit must be followed by one final same-source archive rebuild
   and verification before review. P1 remains correctly
   `blocked_by_environment_or_authority`: descriptor-bound observation found a
@@ -689,6 +700,15 @@ exact disposable roots proven safe to remove.
   synthetic action; the separate user decision follows only after immutable
   source review.
   Date: 2026-08-28.
+- Decision: apply one shared closed zero-write-oracle gate to every public
+  reader of supported-host plugin state and make the missing-oracle result
+  terminal for the current command.
+  Rationale: a Read-classified capabilities route cannot launch the same Codex
+  listing process that install planning rejects as unproved, and an immediate
+  rerun cannot create its missing authority. One typed unavailable result and
+  one separate authority/oracle decision minimize false control and repeated
+  operator attention.
+  Date: 2026-08-28.
 
 ## Idempotence, recovery, and cleanup
 
@@ -737,9 +757,14 @@ external Git diff helpers while deriving one exact catalog-root/plugin-path/
 marketplace/action identity. The configured marketplace record still names a
 non-target source outside this workspace, the required durable workspace-local
 catalog source is absent, and no safe current help/listing action has been
-observed. The next open transition is to freeze, rebuild, and independently
-rereview the repaired P1 candidate, then present the separate supported-host
-authority decision. Personal plugin
+observed. Security rereview of `f4e0f4ad5efc7a0131e89ba7449ee57ab424d7f5`
+accepted those five corrections; product rereview required one final bounded
+reader/diagnostic correction so capabilities inspection launches no Codex
+process while the oracle is closed and install planning presents no impossible
+immediate rerun. That correction is now source-complete and locally green. The
+next open transition is to freeze, rebuild, and independently rereview this
+final repaired P1 candidate, then present the separate supported-host authority
+decision. Personal plugin
 installation, HostState, target, publication, and release effects remain
 closed. The protected diff remains exact, no project `.codex/config.toml`
 exists, and no install or live-product effect occurred. `CL-USABLE-LOOP`

@@ -17,6 +17,7 @@ pub(crate) enum DiagnosticId {
     RepositoryFitRequired,
     DownstreamToolUnavailable,
     AuthorityRequired,
+    SupportedHostOracleUnavailable,
 }
 
 impl DiagnosticId {
@@ -35,6 +36,9 @@ impl DiagnosticId {
             Self::RepositoryFitRequired => "repository_fit_required",
             Self::DownstreamToolUnavailable => "successor_runtime_downstream_tool_unavailable",
             Self::AuthorityRequired => "successor_runtime_authority_required",
+            Self::SupportedHostOracleUnavailable => {
+                "successor_runtime_supported_host_oracle_unavailable"
+            }
         }
     }
 }

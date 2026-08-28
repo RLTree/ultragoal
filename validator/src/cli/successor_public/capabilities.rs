@@ -3,16 +3,11 @@ use crate::agent_roles::CANONICAL_AGENT_ROLES;
 use crate::cli::successor::command_contract::HostPath;
 use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
-    AgentDiscoveryErrorId, AgentRepositoryAdoption, AgentRepositoryAdoptionRequest,
-    HostPluginRegistryObservation, adopt_agent_repository, capture_current_source,
-    parse_host_plugin_registry_observation,
+    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, HostPluginRegistryObservation,
+    adopt_agent_repository, capture_current_source,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
-use std::ffi::OsString;
-use std::time::Duration;
-
-const HOST_OBSERVATION_TIMEOUT: Duration = Duration::from_secs(30);
 
 pub(super) fn project(
     context: &LiveContext,
@@ -139,9 +134,6 @@ fn authority_projection_with_observer(
         Err(RegistryObservationFailure::Unavailable(code)) => {
             return authority_status("unavailable", code, binding, None);
         }
-        Err(RegistryObservationFailure::Blocked(id)) => {
-            return authority_status("blocked", id.code(), binding, None);
-        }
     };
     if source.revalidate().is_err() || context.revalidate().is_err() {
         return authority_status("blocked", "observation-changed", binding, None);
@@ -179,75 +171,20 @@ fn authority_projection_with_observer(
 
 pub(super) enum RegistryObservationFailure {
     Unavailable(&'static str),
-    Blocked(AgentDiscoveryErrorId),
 }
 
 pub(super) fn observe_host_registry(
-    context: &LiveContext,
-    expected_plugin_version: &str,
+    _context: &LiveContext,
+    _expected_plugin_version: &str,
 ) -> Result<HostPluginRegistryObservation, RegistryObservationFailure> {
-    let codex = context
-        .capabilities()
-        .tool("codex")
-        .filter(|tool| tool.available)
-        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
-    let executable = codex
-        .executable
-        .as_deref()
-        .map(Path::new)
-        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
-    let executable_sha256 = codex
-        .executable_sha256
-        .as_deref()
-        .filter(|value| {
-            value.len() == 64
-                && value
-                    .bytes()
-                    .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
-        })
-        .map(|value| format!("sha256:{value}"))
-        .ok_or(RegistryObservationFailure::Unavailable("codex-unavailable"))?;
-    context.revalidate().map_err(|_| {
-        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
-    })?;
-    let marketplace_json = run_codex_observation(
-        executable,
-        &["plugin", "marketplace", "list", "--json"],
-        context.worktree_root(),
-    )?;
-    let plugin_json = run_codex_observation(
-        executable,
-        &["plugin", "list", "--json"],
-        context.worktree_root(),
-    )?;
-    context.revalidate().map_err(|_| {
-        RegistryObservationFailure::Blocked(AgentDiscoveryErrorId::ObservationChanged)
-    })?;
-    parse_host_plugin_registry_observation(
-        &plugin_json,
-        &marketplace_json,
-        "harness-ultragoal-local",
-        expected_plugin_version,
-        executable,
-        &executable_sha256,
-    )
-    .map_err(|error| RegistryObservationFailure::Blocked(error.id()))
-}
-
-fn run_codex_observation(
-    executable: &Path,
-    arguments: &[&str],
-    current_dir: &Path,
-) -> Result<Vec<u8>, RegistryObservationFailure> {
-    let arguments = arguments.iter().map(OsString::from).collect::<Vec<_>>();
-    let output = crate::context::run_bounded(
-        executable,
-        &arguments,
-        current_dir,
-        HOST_OBSERVATION_TIMEOUT,
-    )
-    .map_err(|_| RegistryObservationFailure::Unavailable("codex-observation-unavailable"))?;
-    Ok(output.stdout)
+    if !super::supported_host_oracle::is_available() {
+        return Err(RegistryObservationFailure::Unavailable(
+            super::supported_host_oracle::MISSING_CODE,
+        ));
+    }
+    Err(RegistryObservationFailure::Unavailable(
+        "supported-host-registry-reader-unavailable",
+    ))
 }
 
 fn binding_projection(

@@ -4,7 +4,9 @@ use crate::cli::successor::{
     EffectClass, InspectTarget, OptionArgument, OptionName, ParseErrorId, ParsedInvocation,
     ParsedValue, SuccessorCommand, render_help,
 };
-use crate::cli::successor_public::{capabilities, current_capabilities_context};
+use crate::cli::successor_public::{
+    capabilities, current_capabilities_context, supported_host_oracle,
+};
 use crate::plugin_product::agent_discovery::HostPluginRegistryObservation;
 use std::path::PathBuf;
 
@@ -197,6 +199,126 @@ pub(crate) fn capabilities_withhold_host_authority_when_home_is_absent() {
     );
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
+}
+
+#[test]
+pub(crate) fn capabilities_with_package_root_stop_at_the_shared_oracle_without_a_codex_process() {
+    let repo = Repository::new("capabilities-missing-zero-write-oracle");
+    let home = repo
+        .root
+        .with_extension("capabilities-missing-zero-write-oracle-home");
+    fs::create_dir_all(&home).unwrap();
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let before_home = tree(&home);
+
+    let streams =
+        execute_invocation_with_home(&repo.root, invocation(Some(&repo.root)), Some(&home))
+            .render(OutputMode::Json);
+
+    assert_eq!(streams.exit_code, 0);
+    assert!(streams.stderr.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stdout).unwrap();
+    let authority = &value["agent_authority"];
+    assert_eq!(authority["status"], "unavailable");
+    assert_eq!(
+        authority["observation_code"],
+        supported_host_oracle::MISSING_CODE
+    );
+    assert_eq!(authority["claim_effect"], false);
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+    assert_eq!(tree(&home), before_home);
+
+    let source = include_str!("../../capabilities.rs");
+    for forbidden in [
+        "run_codex_observation",
+        "crate::context::run_bounded",
+        "plugin\", \"marketplace\", \"list",
+        "plugin\", \"list\", \"--json",
+        "std::process::Command",
+    ] {
+        assert!(
+            !source.contains(forbidden),
+            "production capabilities reader retained process surface {forbidden}"
+        );
+    }
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[test]
+pub(crate) fn install_plan_missing_oracle_emits_no_action_or_immediate_rerun() {
+    let repo = Repository::new("install-plan-missing-zero-write-oracle");
+    let home = repo
+        .root
+        .with_extension("install-plan-missing-zero-write-oracle-home");
+    fs::create_dir_all(&home).unwrap();
+    let before_tree = tree(&repo.root);
+    let before_status = repo.status();
+    let before_home = tree(&home);
+    let ParseOutcome::Invocation(invocation) = parse_args([
+        "--json",
+        "package",
+        "install-plan",
+        "--input",
+        "target/ultragoal/missing.hugpkg",
+        "--cli",
+        "target/ultragoal/release/ultragoal",
+    ])
+    .unwrap() else {
+        panic!("expected install-plan invocation")
+    };
+
+    let streams =
+        execute_invocation_with_home(&repo.root, invocation, Some(&home)).render(OutputMode::Json);
+
+    assert_eq!(streams.exit_code, 3);
+    assert!(streams.stdout.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&streams.stderr).unwrap();
+    assert_eq!(
+        value["diagnostic_id"],
+        "successor_runtime_supported_host_oracle_unavailable"
+    );
+    assert_eq!(value["cause"], supported_host_oracle::MISSING_CAUSE);
+    assert_eq!(value["effect"], "none");
+    assert!(
+        value["smallest_safe_repair"]
+            .as_str()
+            .unwrap()
+            .contains("no supported action is currently available")
+    );
+    assert_eq!(
+        value["exact_rerun"],
+        "no immediate rerun; next transition: separate supported-host authority/oracle decision"
+    );
+    assert!(!value.to_string().contains("package install-plan --input"));
+    assert!(!value.to_string().contains("supported_action"));
+    assert_eq!(tree(&repo.root), before_tree);
+    assert_eq!(repo.status(), before_status);
+    assert_eq!(tree(&home), before_home);
+
+    let source = include_str!("../../package_personal_install.rs");
+    let plan = source
+        .split_once("pub(super) fn plan(")
+        .unwrap()
+        .1
+        .split_once("pub(super) fn verify(")
+        .unwrap()
+        .0;
+    assert!(
+        plan.find("supported_host_oracle::is_available").unwrap()
+            < plan.find("build_handoff(").unwrap()
+    );
+    let observer = source
+        .split_once("fn observe_supported_host(")
+        .unwrap()
+        .1
+        .split_once("fn installed_authority(")
+        .unwrap()
+        .0;
+    assert!(!observer.contains("crate::context::run_bounded"));
+    assert!(!observer.contains("std::process::Command"));
+    fs::remove_dir_all(home).unwrap();
 }
 
 #[test]

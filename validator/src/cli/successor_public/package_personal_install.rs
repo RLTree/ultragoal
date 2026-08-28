@@ -385,6 +385,9 @@ pub(super) fn plan(
     let Some(home) = home else {
         return handoff_failure("canonical personal HOME is unavailable");
     };
+    if !super::supported_host_oracle::is_available() {
+        return handoff_failure(super::supported_host_oracle::MISSING_CAUSE);
+    }
     match build_handoff(source_context, observation_context, home, input, cli) {
         Ok(prepared) => {
             if let Err(cause) = prepared.revalidate(source_context, observation_context) {
@@ -777,9 +780,7 @@ fn observe_supported_host(
     context
         .revalidate()
         .map_err(|_| "host context changed during supported-action observation")?;
-    Err(
-        "supported Codex help/listing has no proven zero-write observation surface; no action was emitted",
-    )
+    Err(super::supported_host_oracle::MISSING_CAUSE)
 }
 
 fn installed_authority(
@@ -1461,6 +1462,15 @@ fn invalid_verify_invocation() -> RuntimeOutcome {
 }
 
 fn handoff_failure(cause: &'static str) -> RuntimeOutcome {
+    if cause == super::supported_host_oracle::MISSING_CAUSE {
+        return failure(
+            DiagnosticId::SupportedHostOracleUnavailable,
+            ExitClass::BlockedAuthority,
+            cause,
+            "preserve state; no supported action is currently available; make one separate Codex/user authority decision whether to establish and independently review an OS-enforced zero-write current-host help/listing oracle",
+            "no immediate rerun; next transition: separate supported-host authority/oracle decision",
+        );
+    }
     let repair = match cause {
         "configured marketplace identity or source is not the exact workspace-local authority" => {
             "preserve personal state; establish one supported configured marketplace whose exact source is the catalog-bound workspace path, then rerun without asking UltraGoal to edit host state"

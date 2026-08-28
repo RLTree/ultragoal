@@ -1,18 +1,30 @@
+#[cfg(test)]
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+#[cfg(test)]
 use super::filesystem::{digest, valid_sha256};
+#[cfg(test)]
 use serde::de::{Error as _, MapAccess, SeqAccess, Visitor};
+#[cfg(test)]
 use serde::{Deserialize, Deserializer};
+#[cfg(test)]
 use serde_json::{Map, Value};
+#[cfg(test)]
 use std::ffi::OsStr;
+#[cfg(test)]
 use std::fmt;
-use std::path::{Component, Path, PathBuf};
+#[cfg(test)]
+use std::path::Component;
+use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 const PLUGIN_NAME: &str = "harness-ultragoal";
 #[cfg(test)]
 const MARKETPLACE_NAME: &str = "harness-ultragoal-local";
 #[cfg(test)]
 const PLUGIN_ID: &str = "harness-ultragoal@harness-ultragoal-local";
+#[cfg(test)]
 const MAX_REGISTRY_BYTES: usize = 8 * 1024 * 1024;
+#[cfg(test)]
 const MAX_REGISTRY_ROWS: usize = 128;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -79,419 +91,430 @@ impl HostPluginRegistryObservation {
     }
 }
 
-pub(crate) fn parse_host_plugin_registry_observation(
-    plugin_json: &[u8],
-    marketplace_json: &[u8],
-    expected_marketplace_name: &str,
-    expected_plugin_version: &str,
-    selected_codex_executable: &Path,
-    selected_codex_identity_sha256: &str,
-) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
-    parse_host_plugin_registry_observation_inner(
-        plugin_json,
-        marketplace_json,
-        expected_marketplace_name,
-        Some(expected_plugin_version),
-        selected_codex_executable,
-        selected_codex_identity_sha256,
-    )
+#[cfg(test)]
+mod parser {
+    use super::*;
+
+    pub(crate) fn parse_host_plugin_registry_observation(
+        plugin_json: &[u8],
+        marketplace_json: &[u8],
+        expected_marketplace_name: &str,
+        expected_plugin_version: &str,
+        selected_codex_executable: &Path,
+        selected_codex_identity_sha256: &str,
+    ) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
+        parse_host_plugin_registry_observation_inner(
+            plugin_json,
+            marketplace_json,
+            expected_marketplace_name,
+            Some(expected_plugin_version),
+            selected_codex_executable,
+            selected_codex_identity_sha256,
+        )
+    }
+
+    #[cfg(test)]
+    pub(crate) fn parse_unpinned_host_plugin_registry_observation(
+        plugin_json: &[u8],
+        marketplace_json: &[u8],
+        expected_marketplace_name: &str,
+        selected_codex_executable: &Path,
+        selected_codex_identity_sha256: &str,
+    ) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
+        parse_host_plugin_registry_observation_inner(
+            plugin_json,
+            marketplace_json,
+            expected_marketplace_name,
+            None,
+            selected_codex_executable,
+            selected_codex_identity_sha256,
+        )
+    }
+
+    fn parse_host_plugin_registry_observation_inner(
+        plugin_json: &[u8],
+        marketplace_json: &[u8],
+        expected_marketplace_name: &str,
+        expected_plugin_version: Option<&str>,
+        selected_codex_executable: &Path,
+        selected_codex_identity_sha256: &str,
+    ) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
+        if plugin_json.len() > MAX_REGISTRY_BYTES
+            || marketplace_json.len() > MAX_REGISTRY_BYTES
+            || !valid_sha256(selected_codex_identity_sha256)
+            || !valid_identity_name(expected_marketplace_name)
+        {
+            return Err(invalid());
+        }
+        let selected_codex_executable = canonical_observed_file(selected_codex_executable)?;
+        let plugins = parse_unique_json(plugin_json)?;
+        let marketplaces = parse_unique_json(marketplace_json)?;
+        let plugin_rows = rows(&plugins, "installed")?;
+        let marketplace_rows = rows(&marketplaces, "marketplaces")?;
+        let expected_plugin_id = format!("{PLUGIN_NAME}@{expected_marketplace_name}");
+        let (plugin_index, plugin) = exact_plugin_row(plugin_rows, &expected_plugin_id)?;
+        let (marketplace_index, marketplace) =
+            exact_marketplace_row(marketplace_rows, expected_marketplace_name)?;
+
+        let plugin_version = string(plugin, "version").ok_or_else(identity)?;
+        if crate::plugin_manifest::Version::parse_codex_plugin(plugin_version).is_none()
+            || expected_plugin_version.is_some_and(|expected| expected != plugin_version)
+            || string(plugin, "pluginId") != Some(expected_plugin_id.as_str())
+            || string(plugin, "name") != Some(PLUGIN_NAME)
+            || string(plugin, "marketplaceName") != Some(expected_marketplace_name)
+            || boolean(plugin, "installed") != Some(true)
+            || boolean(plugin, "enabled") != Some(true)
+        {
+            return Err(identity());
+        }
+        let source = plugin
+            .get("source")
+            .and_then(Value::as_object)
+            .ok_or_else(identity)?;
+        if string(source, "source") != Some("local") {
+            return Err(identity());
+        }
+        let installed_root =
+            canonical_observed_directory(string(source, "path").ok_or_else(identity)?)?;
+        let marketplace_root =
+            canonical_observed_directory(string(marketplace, "root").ok_or_else(identity)?)?;
+        if string(marketplace, "name") != Some(expected_marketplace_name)
+            || installed_root == marketplace_root
+            || !installed_root.starts_with(&marketplace_root)
+            || installed_root.file_name().and_then(|name| name.to_str()) != Some(PLUGIN_NAME)
+        {
+            return Err(identity());
+        }
+        reject_plugin_aliases(
+            plugin_rows,
+            plugin_index,
+            &installed_root,
+            &expected_plugin_id,
+        )?;
+        reject_marketplace_aliases(
+            marketplace_rows,
+            marketplace_index,
+            &marketplace_root,
+            expected_marketplace_name,
+        )?;
+
+        let sha256 = digest(
+            &serde_json::to_vec(&(
+                "HostPluginRegistryObservation-v1",
+                &selected_codex_executable,
+                selected_codex_identity_sha256,
+                &plugins,
+                &marketplaces,
+                expected_marketplace_name,
+                &installed_root,
+                &marketplace_root,
+            ))
+            .map_err(|_| invalid())?,
+        );
+        Ok(HostPluginRegistryObservation {
+            selected_codex_executable,
+            selected_codex_identity_sha256: selected_codex_identity_sha256.to_owned(),
+            installed_root,
+            marketplace_root,
+            marketplace_name: expected_marketplace_name.to_owned(),
+            plugin_version: plugin_version.to_owned(),
+            sha256,
+        })
+    }
+
+    fn exact_plugin_row<'a>(
+        rows: &'a [Value],
+        expected_plugin_id: &str,
+    ) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
+        exact_row(rows, |row| {
+            string(row, "pluginId") == Some(expected_plugin_id)
+                || string(row, "name") == Some(PLUGIN_NAME)
+        })
+    }
+
+    fn exact_marketplace_row<'a>(
+        rows: &'a [Value],
+        expected_marketplace_name: &str,
+    ) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
+        exact_row(rows, |row| {
+            string(row, "name") == Some(expected_marketplace_name)
+        })
+    }
+
+    fn rows<'a>(value: &'a Value, collection: &str) -> Result<&'a [Value], AgentDiscoveryError> {
+        let rows = value
+            .as_object()
+            .and_then(|root| root.get(collection))
+            .and_then(Value::as_array)
+            .ok_or_else(invalid)?;
+        if rows.len() > MAX_REGISTRY_ROWS {
+            return Err(AgentDiscoveryError::new(
+                AgentDiscoveryErrorId::InputTooLarge,
+            ));
+        }
+        Ok(rows)
+    }
+
+    fn exact_row(
+        rows: &[Value],
+        matches: impl Fn(&Map<String, Value>) -> bool,
+    ) -> Result<(usize, &Map<String, Value>), AgentDiscoveryError> {
+        let mut selected = None;
+        for (index, value) in rows.iter().enumerate() {
+            let row = value.as_object().ok_or_else(invalid)?;
+            if matches(row) && selected.replace((index, row)).is_some() {
+                return Err(conflict());
+            }
+        }
+        selected
+            .ok_or_else(|| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))
+    }
+
+    fn reject_plugin_aliases(
+        rows: &[Value],
+        selected_index: usize,
+        installed_root: &Path,
+        expected_plugin_id: &str,
+    ) -> Result<(), AgentDiscoveryError> {
+        for (index, value) in rows.iter().enumerate() {
+            if index == selected_index {
+                continue;
+            }
+            let row = value.as_object().ok_or_else(invalid)?;
+            if [("pluginId", expected_plugin_id), ("name", PLUGIN_NAME)]
+                .into_iter()
+                .any(|(key, expected)| string(row, key).is_some_and(|value| alias(value, expected)))
+            {
+                return Err(conflict());
+            }
+            if row
+                .get("source")
+                .and_then(Value::as_object)
+                .and_then(|source| string(source, "path"))
+                .and_then(canonical_directory_if_present)
+                .is_some_and(|path| path == installed_root)
+            {
+                return Err(conflict());
+            }
+        }
+        Ok(())
+    }
+
+    fn reject_marketplace_aliases(
+        rows: &[Value],
+        selected_index: usize,
+        marketplace_root: &Path,
+        expected_marketplace_name: &str,
+    ) -> Result<(), AgentDiscoveryError> {
+        for (index, value) in rows.iter().enumerate() {
+            if index == selected_index {
+                continue;
+            }
+            let row = value.as_object().ok_or_else(invalid)?;
+            if string(row, "name").is_some_and(|value| alias(value, expected_marketplace_name))
+                || string(row, "root")
+                    .and_then(canonical_directory_if_present)
+                    .is_some_and(|path| path == marketplace_root)
+            {
+                return Err(conflict());
+            }
+        }
+        Ok(())
+    }
+
+    fn valid_identity_name(value: &str) -> bool {
+        !value.is_empty()
+            && value.len() <= 128
+            && value.bytes().all(|byte| {
+                byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'-' | b'_')
+            })
+    }
+
+    fn alias(value: &str, expected: &str) -> bool {
+        value
+            .bytes()
+            .filter(u8::is_ascii_alphanumeric)
+            .map(|byte| byte.to_ascii_lowercase())
+            .eq(expected
+                .bytes()
+                .filter(u8::is_ascii_alphanumeric)
+                .map(|byte| byte.to_ascii_lowercase()))
+    }
+
+    fn canonical_directory_if_present(value: &str) -> Option<PathBuf> {
+        let path = Path::new(value);
+        path.is_absolute()
+            .then(|| path.canonicalize().ok())
+            .flatten()
+    }
+
+    fn canonical_observed_directory(value: &str) -> Result<PathBuf, AgentDiscoveryError> {
+        if value.is_empty() || value.len() > 4096 || value.chars().any(char::is_control) {
+            return Err(invalid());
+        }
+        let path = Path::new(value);
+        if !path.is_absolute()
+            || path
+                .components()
+                .any(|component| matches!(component, Component::ParentDir | Component::CurDir))
+        {
+            return Err(identity());
+        }
+        let canonical = path
+            .canonicalize()
+            .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
+        if canonical.as_os_str() != OsStr::new(value)
+            || !std::fs::symlink_metadata(&canonical)
+                .is_ok_and(|metadata| metadata.is_dir() && !metadata.file_type().is_symlink())
+        {
+            return Err(identity());
+        }
+        Ok(canonical)
+    }
+
+    fn canonical_observed_file(path: &Path) -> Result<PathBuf, AgentDiscoveryError> {
+        if !path.is_absolute()
+            || path
+                .components()
+                .any(|component| matches!(component, Component::ParentDir | Component::CurDir))
+        {
+            return Err(identity());
+        }
+        let canonical = path
+            .canonicalize()
+            .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
+        let metadata = std::fs::symlink_metadata(&canonical)
+            .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
+        if canonical.as_os_str() != path.as_os_str()
+            || metadata.file_type().is_symlink()
+            || !metadata.is_file()
+        {
+            return Err(identity());
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::{MetadataExt, PermissionsExt};
+            if metadata.nlink() != 1 || metadata.permissions().mode() & 0o111 == 0 {
+                return Err(identity());
+            }
+        }
+        Ok(canonical)
+    }
+
+    fn parse_unique_json(bytes: &[u8]) -> Result<Value, AgentDiscoveryError> {
+        serde_json::from_slice::<UniqueValue>(bytes)
+            .map(|value| value.0)
+            .map_err(|_| invalid())
+    }
+
+    struct UniqueValue(Value);
+
+    impl<'de> Deserialize<'de> for UniqueValue {
+        fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: Deserializer<'de>,
+        {
+            deserializer.deserialize_any(UniqueValueVisitor)
+        }
+    }
+
+    struct UniqueValueVisitor;
+
+    impl<'de> Visitor<'de> for UniqueValueVisitor {
+        type Value = UniqueValue;
+
+        fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+            formatter.write_str("JSON with unique object keys")
+        }
+
+        fn visit_bool<E>(self, value: bool) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::Bool(value)))
+        }
+
+        fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::Number(value.into())))
+        }
+
+        fn visit_u64<E>(self, value: u64) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::Number(value.into())))
+        }
+
+        fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
+        where
+            E: serde::de::Error,
+        {
+            serde_json::Number::from_f64(value)
+                .map(Value::Number)
+                .map(UniqueValue)
+                .ok_or_else(|| E::custom("non-finite JSON number"))
+        }
+
+        fn visit_str<E>(self, value: &str) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::String(value.to_owned())))
+        }
+
+        fn visit_string<E>(self, value: String) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::String(value)))
+        }
+
+        fn visit_none<E>(self) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::Null))
+        }
+
+        fn visit_unit<E>(self) -> Result<Self::Value, E> {
+            Ok(UniqueValue(Value::Null))
+        }
+
+        fn visit_seq<A>(self, mut sequence: A) -> Result<Self::Value, A::Error>
+        where
+            A: SeqAccess<'de>,
+        {
+            let mut values = Vec::new();
+            while let Some(value) = sequence.next_element::<UniqueValue>()? {
+                values.push(value.0);
+            }
+            Ok(UniqueValue(Value::Array(values)))
+        }
+
+        fn visit_map<A>(self, mut object: A) -> Result<Self::Value, A::Error>
+        where
+            A: MapAccess<'de>,
+        {
+            let mut values = Map::new();
+            while let Some((key, value)) = object.next_entry::<String, UniqueValue>()? {
+                if values.insert(key.clone(), value.0).is_some() {
+                    return Err(A::Error::custom(format!("duplicate object key {key:?}")));
+                }
+            }
+            Ok(UniqueValue(Value::Object(values)))
+        }
+    }
+
+    fn string<'a>(row: &'a Map<String, Value>, key: &str) -> Option<&'a str> {
+        row.get(key).and_then(Value::as_str)
+    }
+
+    fn boolean(row: &Map<String, Value>, key: &str) -> Option<bool> {
+        row.get(key).and_then(Value::as_bool)
+    }
+
+    fn invalid() -> AgentDiscoveryError {
+        AgentDiscoveryError::new(AgentDiscoveryErrorId::InvalidBinding)
+    }
+
+    fn identity() -> AgentDiscoveryError {
+        AgentDiscoveryError::new(AgentDiscoveryErrorId::IdentityMismatch)
+    }
+
+    fn conflict() -> AgentDiscoveryError {
+        AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationConflict)
+    }
 }
 
 #[cfg(test)]
-pub(crate) fn parse_unpinned_host_plugin_registry_observation(
-    plugin_json: &[u8],
-    marketplace_json: &[u8],
-    expected_marketplace_name: &str,
-    selected_codex_executable: &Path,
-    selected_codex_identity_sha256: &str,
-) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
-    parse_host_plugin_registry_observation_inner(
-        plugin_json,
-        marketplace_json,
-        expected_marketplace_name,
-        None,
-        selected_codex_executable,
-        selected_codex_identity_sha256,
-    )
-}
-
-fn parse_host_plugin_registry_observation_inner(
-    plugin_json: &[u8],
-    marketplace_json: &[u8],
-    expected_marketplace_name: &str,
-    expected_plugin_version: Option<&str>,
-    selected_codex_executable: &Path,
-    selected_codex_identity_sha256: &str,
-) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
-    if plugin_json.len() > MAX_REGISTRY_BYTES
-        || marketplace_json.len() > MAX_REGISTRY_BYTES
-        || !valid_sha256(selected_codex_identity_sha256)
-        || !valid_identity_name(expected_marketplace_name)
-    {
-        return Err(invalid());
-    }
-    let selected_codex_executable = canonical_observed_file(selected_codex_executable)?;
-    let plugins = parse_unique_json(plugin_json)?;
-    let marketplaces = parse_unique_json(marketplace_json)?;
-    let plugin_rows = rows(&plugins, "installed")?;
-    let marketplace_rows = rows(&marketplaces, "marketplaces")?;
-    let expected_plugin_id = format!("{PLUGIN_NAME}@{expected_marketplace_name}");
-    let (plugin_index, plugin) = exact_plugin_row(plugin_rows, &expected_plugin_id)?;
-    let (marketplace_index, marketplace) =
-        exact_marketplace_row(marketplace_rows, expected_marketplace_name)?;
-
-    let plugin_version = string(plugin, "version").ok_or_else(identity)?;
-    if crate::plugin_manifest::Version::parse_codex_plugin(plugin_version).is_none()
-        || expected_plugin_version.is_some_and(|expected| expected != plugin_version)
-        || string(plugin, "pluginId") != Some(expected_plugin_id.as_str())
-        || string(plugin, "name") != Some(PLUGIN_NAME)
-        || string(plugin, "marketplaceName") != Some(expected_marketplace_name)
-        || boolean(plugin, "installed") != Some(true)
-        || boolean(plugin, "enabled") != Some(true)
-    {
-        return Err(identity());
-    }
-    let source = plugin
-        .get("source")
-        .and_then(Value::as_object)
-        .ok_or_else(identity)?;
-    if string(source, "source") != Some("local") {
-        return Err(identity());
-    }
-    let installed_root =
-        canonical_observed_directory(string(source, "path").ok_or_else(identity)?)?;
-    let marketplace_root =
-        canonical_observed_directory(string(marketplace, "root").ok_or_else(identity)?)?;
-    if string(marketplace, "name") != Some(expected_marketplace_name)
-        || installed_root == marketplace_root
-        || !installed_root.starts_with(&marketplace_root)
-        || installed_root.file_name().and_then(|name| name.to_str()) != Some(PLUGIN_NAME)
-    {
-        return Err(identity());
-    }
-    reject_plugin_aliases(
-        plugin_rows,
-        plugin_index,
-        &installed_root,
-        &expected_plugin_id,
-    )?;
-    reject_marketplace_aliases(
-        marketplace_rows,
-        marketplace_index,
-        &marketplace_root,
-        expected_marketplace_name,
-    )?;
-
-    let sha256 = digest(
-        &serde_json::to_vec(&(
-            "HostPluginRegistryObservation-v1",
-            &selected_codex_executable,
-            selected_codex_identity_sha256,
-            &plugins,
-            &marketplaces,
-            expected_marketplace_name,
-            &installed_root,
-            &marketplace_root,
-        ))
-        .map_err(|_| invalid())?,
-    );
-    Ok(HostPluginRegistryObservation {
-        selected_codex_executable,
-        selected_codex_identity_sha256: selected_codex_identity_sha256.to_owned(),
-        installed_root,
-        marketplace_root,
-        marketplace_name: expected_marketplace_name.to_owned(),
-        plugin_version: plugin_version.to_owned(),
-        sha256,
-    })
-}
-
-fn exact_plugin_row<'a>(
-    rows: &'a [Value],
-    expected_plugin_id: &str,
-) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
-    exact_row(rows, |row| {
-        string(row, "pluginId") == Some(expected_plugin_id)
-            || string(row, "name") == Some(PLUGIN_NAME)
-    })
-}
-
-fn exact_marketplace_row<'a>(
-    rows: &'a [Value],
-    expected_marketplace_name: &str,
-) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
-    exact_row(rows, |row| {
-        string(row, "name") == Some(expected_marketplace_name)
-    })
-}
-
-fn rows<'a>(value: &'a Value, collection: &str) -> Result<&'a [Value], AgentDiscoveryError> {
-    let rows = value
-        .as_object()
-        .and_then(|root| root.get(collection))
-        .and_then(Value::as_array)
-        .ok_or_else(invalid)?;
-    if rows.len() > MAX_REGISTRY_ROWS {
-        return Err(AgentDiscoveryError::new(
-            AgentDiscoveryErrorId::InputTooLarge,
-        ));
-    }
-    Ok(rows)
-}
-
-fn exact_row(
-    rows: &[Value],
-    matches: impl Fn(&Map<String, Value>) -> bool,
-) -> Result<(usize, &Map<String, Value>), AgentDiscoveryError> {
-    let mut selected = None;
-    for (index, value) in rows.iter().enumerate() {
-        let row = value.as_object().ok_or_else(invalid)?;
-        if matches(row) && selected.replace((index, row)).is_some() {
-            return Err(conflict());
-        }
-    }
-    selected.ok_or_else(|| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))
-}
-
-fn reject_plugin_aliases(
-    rows: &[Value],
-    selected_index: usize,
-    installed_root: &Path,
-    expected_plugin_id: &str,
-) -> Result<(), AgentDiscoveryError> {
-    for (index, value) in rows.iter().enumerate() {
-        if index == selected_index {
-            continue;
-        }
-        let row = value.as_object().ok_or_else(invalid)?;
-        if [("pluginId", expected_plugin_id), ("name", PLUGIN_NAME)]
-            .into_iter()
-            .any(|(key, expected)| string(row, key).is_some_and(|value| alias(value, expected)))
-        {
-            return Err(conflict());
-        }
-        if row
-            .get("source")
-            .and_then(Value::as_object)
-            .and_then(|source| string(source, "path"))
-            .and_then(canonical_directory_if_present)
-            .is_some_and(|path| path == installed_root)
-        {
-            return Err(conflict());
-        }
-    }
-    Ok(())
-}
-
-fn reject_marketplace_aliases(
-    rows: &[Value],
-    selected_index: usize,
-    marketplace_root: &Path,
-    expected_marketplace_name: &str,
-) -> Result<(), AgentDiscoveryError> {
-    for (index, value) in rows.iter().enumerate() {
-        if index == selected_index {
-            continue;
-        }
-        let row = value.as_object().ok_or_else(invalid)?;
-        if string(row, "name").is_some_and(|value| alias(value, expected_marketplace_name))
-            || string(row, "root")
-                .and_then(canonical_directory_if_present)
-                .is_some_and(|path| path == marketplace_root)
-        {
-            return Err(conflict());
-        }
-    }
-    Ok(())
-}
-
-fn valid_identity_name(value: &str) -> bool {
-    !value.is_empty()
-        && value.len() <= 128
-        && value.bytes().all(|byte| {
-            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'-' | b'_')
-        })
-}
-
-fn alias(value: &str, expected: &str) -> bool {
-    value
-        .bytes()
-        .filter(u8::is_ascii_alphanumeric)
-        .map(|byte| byte.to_ascii_lowercase())
-        .eq(expected
-            .bytes()
-            .filter(u8::is_ascii_alphanumeric)
-            .map(|byte| byte.to_ascii_lowercase()))
-}
-
-fn canonical_directory_if_present(value: &str) -> Option<PathBuf> {
-    let path = Path::new(value);
-    path.is_absolute()
-        .then(|| path.canonicalize().ok())
-        .flatten()
-}
-
-fn canonical_observed_directory(value: &str) -> Result<PathBuf, AgentDiscoveryError> {
-    if value.is_empty() || value.len() > 4096 || value.chars().any(char::is_control) {
-        return Err(invalid());
-    }
-    let path = Path::new(value);
-    if !path.is_absolute()
-        || path
-            .components()
-            .any(|component| matches!(component, Component::ParentDir | Component::CurDir))
-    {
-        return Err(identity());
-    }
-    let canonical = path
-        .canonicalize()
-        .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
-    if canonical.as_os_str() != OsStr::new(value)
-        || !std::fs::symlink_metadata(&canonical)
-            .is_ok_and(|metadata| metadata.is_dir() && !metadata.file_type().is_symlink())
-    {
-        return Err(identity());
-    }
-    Ok(canonical)
-}
-
-fn canonical_observed_file(path: &Path) -> Result<PathBuf, AgentDiscoveryError> {
-    if !path.is_absolute()
-        || path
-            .components()
-            .any(|component| matches!(component, Component::ParentDir | Component::CurDir))
-    {
-        return Err(identity());
-    }
-    let canonical = path
-        .canonicalize()
-        .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
-    let metadata = std::fs::symlink_metadata(&canonical)
-        .map_err(|_| AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationUnavailable))?;
-    if canonical.as_os_str() != path.as_os_str()
-        || metadata.file_type().is_symlink()
-        || !metadata.is_file()
-    {
-        return Err(identity());
-    }
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::{MetadataExt, PermissionsExt};
-        if metadata.nlink() != 1 || metadata.permissions().mode() & 0o111 == 0 {
-            return Err(identity());
-        }
-    }
-    Ok(canonical)
-}
-
-fn parse_unique_json(bytes: &[u8]) -> Result<Value, AgentDiscoveryError> {
-    serde_json::from_slice::<UniqueValue>(bytes)
-        .map(|value| value.0)
-        .map_err(|_| invalid())
-}
-
-struct UniqueValue(Value);
-
-impl<'de> Deserialize<'de> for UniqueValue {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        deserializer.deserialize_any(UniqueValueVisitor)
-    }
-}
-
-struct UniqueValueVisitor;
-
-impl<'de> Visitor<'de> for UniqueValueVisitor {
-    type Value = UniqueValue;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter.write_str("JSON with unique object keys")
-    }
-
-    fn visit_bool<E>(self, value: bool) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::Bool(value)))
-    }
-
-    fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::Number(value.into())))
-    }
-
-    fn visit_u64<E>(self, value: u64) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::Number(value.into())))
-    }
-
-    fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
-    where
-        E: serde::de::Error,
-    {
-        serde_json::Number::from_f64(value)
-            .map(Value::Number)
-            .map(UniqueValue)
-            .ok_or_else(|| E::custom("non-finite JSON number"))
-    }
-
-    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::String(value.to_owned())))
-    }
-
-    fn visit_string<E>(self, value: String) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::String(value)))
-    }
-
-    fn visit_none<E>(self) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::Null))
-    }
-
-    fn visit_unit<E>(self) -> Result<Self::Value, E> {
-        Ok(UniqueValue(Value::Null))
-    }
-
-    fn visit_seq<A>(self, mut sequence: A) -> Result<Self::Value, A::Error>
-    where
-        A: SeqAccess<'de>,
-    {
-        let mut values = Vec::new();
-        while let Some(value) = sequence.next_element::<UniqueValue>()? {
-            values.push(value.0);
-        }
-        Ok(UniqueValue(Value::Array(values)))
-    }
-
-    fn visit_map<A>(self, mut object: A) -> Result<Self::Value, A::Error>
-    where
-        A: MapAccess<'de>,
-    {
-        let mut values = Map::new();
-        while let Some((key, value)) = object.next_entry::<String, UniqueValue>()? {
-            if values.insert(key.clone(), value.0).is_some() {
-                return Err(A::Error::custom(format!("duplicate object key {key:?}")));
-            }
-        }
-        Ok(UniqueValue(Value::Object(values)))
-    }
-}
-
-fn string<'a>(row: &'a Map<String, Value>, key: &str) -> Option<&'a str> {
-    row.get(key).and_then(Value::as_str)
-}
-
-fn boolean(row: &Map<String, Value>, key: &str) -> Option<bool> {
-    row.get(key).and_then(Value::as_bool)
-}
-
-fn invalid() -> AgentDiscoveryError {
-    AgentDiscoveryError::new(AgentDiscoveryErrorId::InvalidBinding)
-}
-
-fn identity() -> AgentDiscoveryError {
-    AgentDiscoveryError::new(AgentDiscoveryErrorId::IdentityMismatch)
-}
-
-fn conflict() -> AgentDiscoveryError {
-    AgentDiscoveryError::new(AgentDiscoveryErrorId::ObservationConflict)
-}
+pub(crate) use parser::{
+    parse_host_plugin_registry_observation, parse_unpinned_host_plugin_registry_observation,
+};
 
 #[cfg(test)]
 mod tests {
