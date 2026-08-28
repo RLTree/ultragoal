@@ -301,11 +301,13 @@ gate from another.
 
 Require explicit authority for the exact P1 install plan and personal
 marketplace/cache/config scope. Revalidate candidate, archive, predecessor,
-install-plan identity, global Harness config projection, and protected state
-immediately before effect. Apply only through:
+install-plan identity, the recorded digest and identity of the exact P1 release
+CLI at `target/ultragoal/release/ultragoal`, global Harness config projection,
+and protected state immediately before effect. Apply only through that exact P1
+release CLI:
 
 ```text
-ultragoal --json package install-apply --plan <exact-plan-file> --accept-plan <exact-plan-id>
+target/ultragoal/release/ultragoal --json package install-apply --plan <exact-plan-file> --accept-plan <exact-plan-id>
 ```
 
 After effect, reconcile marketplace source, cache, supported Codex registration,
