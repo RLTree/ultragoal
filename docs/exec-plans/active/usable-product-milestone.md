@@ -52,6 +52,15 @@ The combined tracked protected diff at P0 entry is SHA-256
 Every checkpoint must re-resolve HEAD, tree, status, and this digest. A mismatch
 stops integration before staging or effect.
 
+## Integration ownership
+
+The root conductor in the canonical checkout is the sole integration owner for
+P1 through P4. That owner retains shared public grammar, version and package
+bindings, effect-authority fan-in, accepted-commit ordering, reviewer
+correction, and terminal `CL-USABLE-LOOP` acceptance. A bounded work owner may
+implement one coherent P1 or P3 change but cannot independently change shared
+surfaces, integrate itself, cross a P2 authority gate, or decide P4.
+
 ## Current product truth
 
 ### Established at the installed 0.0.41 surface
@@ -89,11 +98,19 @@ stops integration before staging or effect.
   the preserved representative target. That observation is comparison evidence
   only; its plan identity must be rederived and must not be reused after source,
   install, target, or HostState drift.
+- Current `package install-apply` source always binds
+  `UnavailablePersonalMarketplaceUpdateEffects` and refuses before effect
+  because no reviewed live personal-marketplace update adapter is exposed.
+  This is a known P1 prerequisite, not an installed-canary discovery: implement
+  the adapter under one exclusive lease and prove interruption, reconciliation,
+  and exact rollback before freezing or packaging the final P1 candidate.
 
 ### Still unknown
 
-- Whether the P0-adjusted source freezes, packages, installs, and is observed
-  as the same bytes through the supported host surface.
+- Whether a live personal-marketplace adapter can satisfy the existing
+  exclusive-lease, pinned-executor, interruption, reconciliation, and exact
+  rollback contracts, after which the P0-adjusted source can freeze, package,
+  install, and be observed as the same bytes through the supported host surface.
 - Whether the live HostState still produces an acceptable abandonment plan.
 - Whether authorized live abandonment completes without ambiguous effect.
 - Whether the installed successor completes useful routine work, deterministic
@@ -146,7 +163,8 @@ prerequisite or Terry authorizes a separate later product goal.
 ```text
 P0 replace the sole active plan with current truth and validate its bindings
   |
-P1 freeze one monotonic successor and complete every local pre-host gate
+P1 implement and prove the known live-install adapter, then freeze one
+   monotonic successor and complete every local pre-host gate
   |
 P2 cross separately authorized install and live-product gates, then run the
    complete installed canary under a minimal independent evaluator
@@ -168,10 +186,13 @@ the exact candidate and read-only plan evidence.
   bindings, preserve protected state, and commit only the plan. The first
   aggregate run exposed a missing canonical `The external evaluator` literal;
   restoring that binding made the focused current-authority regression and
-  complete `scripts/check .` aggregate pass on 2026-08-27.
-- [ ] P1 freeze a monotonic successor, pass exact-source checks, build the
-  release CLI and deterministic package, verify it, complete disposable
-  installation, and derive a read-only personal-install plan.
+  complete `scripts/check .` aggregate pass on 2026-08-27. The first immutable
+  review returned `REVISE`; this correction closes its four plan-only findings
+  before the same bounded rereview.
+- [ ] P1 implement and prove the known live personal-marketplace adapter first,
+  then freeze a monotonic successor, pass exact-source checks, build the release
+  CLI and deterministic package, verify it, complete disposable installation,
+  and derive a read-only personal-install plan.
 - [ ] P2 obtain the exact internal effect authorities, install through the
   supported lifecycle route, observe same-byte runtime identity, derive a fresh
   live abandonment plan, apply it only under its exact authority, and complete
@@ -205,38 +226,60 @@ P0 acceptance is a committed, restartable plan whose Progress, current truth,
 authority gates, repair budget, and terminal outcomes agree. P0 raises no
 runtime or product claim.
 
-## Milestone P1 — Exact successor and pre-host gates
+## Milestone P1 — Live-install capability, exact successor, and pre-host gates
 
-Advance every canonical `0.0.41+codex.20260824093100` product-version binding
-to one monotonic `0.0.42+codex.<UTC timestamp>` candidate, including the local
-unpublished policy references required by current package validation. Do not
-publish those policies or package bytes. Exclude every protected path.
+First replace the unavailable binding in
+`validator/src/cli/successor_public/package_personal_install.rs` with a
+production adapter over the existing `PersonalMarketplaceUpdateEffects`
+transaction. Hold one exclusive lease across observe, materialize, pinned Codex
+plugin-add execution, result reconciliation, rollback, and final observation.
+Use the existing selected/pinned Codex executable and recoverable lifecycle
+machinery; do not introduce a direct unbound process path.
 
-Use only `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/.codex-worktree/tmp`
-for disposable artifacts and set its `runtime-tmp` child as `TMPDIR` for
-execution-capable checks. Do not create new work under `/tmp` or `/private/tmp`.
+At the lowest falsifying surfaces, prove exact-prior apply and target replay,
+interruption after materialization, every injected target failure, result loss,
+prior restore and reinstall, mixed-state refusal, rollback ambiguity,
+cancellation, lease contention, and post-effect observation. If this requires
+editing a protected path, stop for an ownership decision rather than overwrite
+user work. This known pre-host capability repair belongs to P1 and does not
+consume P3.
+
+Only after that adapter and its failure matrix pass, advance every canonical
+`0.0.41+codex.20260824093100` product-version binding to one monotonic
+`0.0.42+codex.<UTC timestamp>` candidate, including the local unpublished
+policy references required by current package validation. Do not publish those
+policies or package bytes. Exclude every protected path.
+
+Set `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal/.codex-worktree/tmp/runtime-tmp`
+as `TMPDIR` for execution-capable checks and isolated temporary roots. Keep the
+existing package contract: reproducible outputs live beneath
+`target/ultragoal`, product-check build output lives beneath
+`target/ultragoal-product-check`, and the exact release CLI is
+`target/ultragoal/release/ultragoal`. Do not create work under `/tmp` or
+`/private/tmp`.
 
 On the exact post-version source candidate:
 
 1. run the focused version, manifest, package-identity, and lifecycle tests;
 2. run `cargo check --locked --offline -p ultragoal`;
-3. build `target/release/ultragoal`;
+3. build `target/ultragoal/release/ultragoal`;
 4. run `scripts/check .` on a capable execution surface;
-5. write package inventory and package output beneath `.codex-worktree/tmp`;
+5. write package inventory and package output beneath `target/ultragoal`;
 6. build twice and require byte-identical archives;
 7. verify the archive against the exact release CLI and current source;
 8. run `package install-test` without retaining an isolated root; and
 9. run the read-only `package install-plan` against the unchanged personal
    installation.
 
-The public command grammar is:
+The public command grammar and canonical P1 paths are:
 
 ```text
-ultragoal --json package inventory --output <project-local-output>
-ultragoal --json package build --output <project-local-output> --cli <exact-cli>
-ultragoal --json package verify --input <archive> --cli <exact-cli>
-ultragoal --json package install-test --input <archive> --output <project-local-output> --cli <exact-cli>
-ultragoal --json package install-plan --input <archive> --cli <exact-cli>
+target/ultragoal/release/ultragoal --json package inventory --output target/ultragoal/inventory.json
+target/ultragoal/release/ultragoal --json package build --output target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal
+target/ultragoal/release/ultragoal --json package build --output target/ultragoal/package-b.hugpkg --cli target/ultragoal/release/ultragoal
+target/ultragoal/release/ultragoal --json package verify --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal
+target/ultragoal/release/ultragoal --json package install-test --input target/ultragoal/package-a.hugpkg --output target/ultragoal/install-test.json --cli target/ultragoal/release/ultragoal
+target/ultragoal/release/ultragoal --json package install-plan --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal
 ```
 
 Before P1 completion, record exact source commit/tree/status, plan digest,
@@ -330,11 +373,15 @@ The evaluator is independent of the deferred U5 context campaign. It owns:
   refusal, correction, and recovery;
 - effectiveness, cognitive/recovery/trust burden, retained-artifact cost, and
   any false pass or false rejection; and
-- terminal `pass`, `fail`, `blocked_by_product`,
-  `blocked_by_environment_or_authority`, or `inconclusive` judgment.
+- one exhaustive result: `pass`; `material_product_defect` with one exact causal
+  mechanism; `blocked_by_product` after the repair budget is exhausted;
+  `blocked_by_environment_or_authority`; or `inconclusive`.
 
 UltraGoal's output, tests, and receipts are evidence inputs, not the evaluator's
-authority or final decision.
+authority or final decision. A first `material_product_defect` enters P3 only
+while its repair budget remains. The P3 rerun must map to `pass`,
+`blocked_by_product`, `blocked_by_environment_or_authority`, or `inconclusive`;
+no generic failure value or unmapped result may exit the plan.
 
 ## Milestone P3 — One conditional product repair
 
@@ -388,6 +435,11 @@ exact disposable roots proven safe to remove.
   idea as “an evaluator” made `inspect context` return
   `successor_runtime_state_unavailable`; restoring the canonical marker repaired
   the state projection without weakening validation.
+- The first immutable P0 review found four restartability defects: the known
+  unavailable live-install adapter was mislabeled unknown and omitted from P1,
+  artifact paths contradicted current package grammar, evaluator outcomes were
+  non-exhaustive, and no integration owner was named. These are plan defects;
+  correcting them neither starts P1 nor raises the proof ceiling.
 
 ## Decision log
 
@@ -415,13 +467,26 @@ exact disposable roots proven safe to remove.
   Rationale: outcome-sized work does not collapse independent consequential
   authorities.
   Date: 2026-08-27.
+- Decision: make the live personal-marketplace adapter and its failure matrix a
+  known P1 prerequisite, then retain canonical `target/ultragoal` package paths.
+  Rationale: current source already proves the capability is absent and current
+  public grammar already owns the output namespace.
+  Date: 2026-08-27.
+- Decision: name the root conductor as sole integration owner and exhaustively
+  map evaluator results into P3 or the four legal terminal outcomes.
+  Rationale: shared authority surfaces and chat-independent resumption require
+  one owner and no outcome may leave the plan without a legal next state.
+  Date: 2026-08-27.
 
 ## Idempotence, recovery, and cleanup
 
-P0 and P1 local checks are repeatable. Package outputs live only under the
-ignored project-local `.codex-worktree/tmp` root. Do not retain isolated install
-roots unless a failure requires causal inspection; after resolution, prove no
-unique recovery state remains and remove only the exact product-owned path.
+P0 and P1 local checks are repeatable. Canonical reproducible package outputs
+live only under `target/ultragoal`; product-check build output lives under
+`target/ultragoal-product-check`. Temporary runtime and isolated-install roots
+live beneath the ignored project-local `.codex-worktree/tmp/runtime-tmp`. Do not
+retain isolated install roots unless a failure requires causal inspection;
+after resolution, prove no unique recovery state remains and remove only the
+exact product-owned path.
 
 Before P2 effects, capture exact source, package, installed predecessor,
 marketplace/cache/config, HostState, target, plan, and protected-state custody.
@@ -436,12 +501,13 @@ artifacts as incidental P0-P4 cleanup.
 
 ## Outcomes and retrospective
 
-P0 is complete at the plan/source-authority ceiling. The active plan is reduced
-from 1,211 chronological lines to a restartable current-truth plan. The focused
-current-authority regression and complete `scripts/check .` aggregate pass; the
-protected diff remains exact, no project `.codex/config.toml` exists, and no
-install, runtime, HostState, target, publication, or release effect occurred.
-`CL-USABLE-LOOP` remains `blocked_by_product` for installed 0.0.41. The next
-transition is P1 on the exact committed P0 candidate. At P4, replace this
-paragraph with the terminal candidate-bound decision and move the completed
-plan according to repository convention.
+P0 implementation and the four plan-only review corrections are complete at
+the plan/source-authority ceiling; acceptance requires a fresh immutable
+rereview of the corrected plan-only commit. The focused current-authority
+regression and complete `scripts/check .` aggregate passed again on the
+corrected candidate. The protected diff remains exact, no project
+`.codex/config.toml` exists, and no install, runtime, HostState, target,
+publication, or release effect occurred. `CL-USABLE-LOOP` remains
+`blocked_by_product` for installed 0.0.41. Only an accepted P0 rereview opens P1.
+At P4, replace this paragraph with the terminal candidate-bound decision and
+move the completed plan according to repository convention.
