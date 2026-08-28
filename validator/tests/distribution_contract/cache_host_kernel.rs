@@ -1,7 +1,6 @@
 use crate::distribution::{
-    CacheExpectation, DistributionErrorId as ErrorId, ExpectedPrior, HostCommandPlan, InstallPlan,
-    InstallScope, PackageIdentity, SourceIdentity, reconcile_cache_read_only,
-    reject_stale_version_reuse,
+    CacheExpectation, DistributionErrorId as ErrorId, ExpectedPrior, InstallPlan, InstallScope,
+    PackageIdentity, SourceIdentity, reconcile_cache_read_only, reject_stale_version_reuse,
 };
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID};
 use serde_json::json;
@@ -78,51 +77,6 @@ fn cache_reconciliation_is_read_only_and_rejects_wrong_root_or_duplicate_version
             ErrorId::InstallConflict
         );
     }
-}
-
-#[test]
-fn host_command_plans_use_exact_argv_and_explicit_rollback_plans() {
-    let root = "/tmp/repo with spaces;touch SHOULD_NOT_RUN";
-    let identity = package("0.0.12", B, C);
-    let plan =
-        HostCommandPlan::repository_install(&identity, root, "harness-ultragoal-repo").unwrap();
-    assert!(!format!("{plan:?}").contains(root));
-    assert_eq!(plan.commands()[0].program(), "codex");
-    assert!(plan.commands().iter().all(|command| {
-        command.environment().is_empty()
-            && command.timeout_ms() == 30_000
-            && command.max_attempts() == 1
-    }));
-    assert_eq!(
-        plan.commands()[0].argv(),
-        ["plugin", "marketplace", "add", root]
-    );
-    assert!(HostCommandPlan::repository_install(&identity, "/tmp/repo\nattack", "repo").is_err());
-    assert_eq!(
-        HostCommandPlan::personal_install(&identity, "local-harness-plugins")
-            .unwrap()
-            .commands()[0]
-            .argv(),
-        ["plugin", "add", "harness-ultragoal@local-harness-plugins"]
-    );
-    assert_eq!(
-        HostCommandPlan::personal_remove(&identity, "local-harness-plugins")
-            .unwrap()
-            .commands()[0]
-            .argv(),
-        [
-            "plugin",
-            "remove",
-            "harness-ultragoal@local-harness-plugins"
-        ]
-    );
-    assert_eq!(
-        HostCommandPlan::repository_remove(&identity, "harness-ultragoal-repo")
-            .unwrap()
-            .commands()[1]
-            .argv(),
-        ["plugin", "marketplace", "remove", "harness-ultragoal-repo"]
-    );
 }
 
 #[test]

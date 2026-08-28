@@ -236,23 +236,37 @@ the exact candidate and read-only plan evidence.
   value. That route is retired from this milestone.
 - [ ] P1 is complete through source retirement, reader reconciliation, version
   freeze, release build, deterministic package verification, disposable
-  installation, and the zero-effect handoff refusal. The unstaged candidate
-  based on `04b63c08e826cee5672b6abc66bb3c0c7887a16f` removes public
-  `package install-apply`, freezes
+  installation, and the zero-effect handoff refusal. Immutable candidate
+  `9219471fe421c46721e4afd866f6e290be1da10d` removed public
+  `package install-apply` and froze
   `0.0.42+codex.20260828085546`, produces byte-identical pre-commit package
   archives, and passes the focused source/package and complete repository
-  aggregate gates. Because this active plan is itself packaged, the immutable
+  aggregate gates. Independent security and product review returned REVISE on
+  five bounded defects: residual public personal-command minting, synthetic
+  binary-string help authority, stale recovery-action replay, Git external
+  diff/textconv execution, and a catalog/action marketplace identity mismatch.
+  The current unstaged repair closes those defects without a version bump:
+  personal commands are crate-private/test-only; no action is emitted without a
+  fresh zero-write help/listing oracle; stale or ambiguous verification emits
+  no next action; protected-state Git observation disables external helpers;
+  and catalog root, `plugins/harness-ultragoal`, configured marketplace,
+  registry identity, and `harness-ultragoal@harness-ultragoal-local` are bound
+  separately and exactly. Focused repair tests and offline compilation pass;
+  root integration, aggregate/package rebuild, and same-scope immutable
+  rereview remain. Because this active plan is itself packaged, the immutable
   integration commit must be followed by one final same-source archive rebuild
-  and verification before review. P1 is now correctly
+  and verification before review. P1 remains correctly
   `blocked_by_environment_or_authority`: descriptor-bound observation found a
-  configured marketplace identity/source mismatch whose source is a stale
-  `/private/tmp` path outside this workspace, while the required durable
-  workspace-local catalog source is not materialized. No supported handoff was
-  emitted and no personal state was changed. Resume P1 only after one current
-  supported Codex/user action establishes the exact configured, catalog-bound,
-  durable workspace-local marketplace source; then reobserve it read-only,
-  materialize the already verified exact package, and emit the immutable
-  handoff. Do not restore the retired UltraGoal installer to bypass this HOLD.
+  configured marketplace identity/source mismatch whose source is outside this
+  workspace, while the required durable workspace-local catalog source is not
+  materialized; the selected Codex help/listing action also cannot yet be
+  proven OS-enforced zero-write. No supported action or handoff was emitted and
+  no personal state was changed. Resume P1 only after immutable rereview and an
+  explicit Codex/user authority decision establish a current supported,
+  zero-write-observed action for the exact catalog-bound durable
+  workspace-local marketplace source; then reobserve it read-only, materialize
+  the verified exact package, and emit the immutable handoff. Do not restore
+  the retired UltraGoal installer or replay a stale command to bypass this HOLD.
 - [ ] P2 present the exact candidate-bound handoff, let the explicitly
   authorized user/host run its one supported Codex action, resume read-only in a
   fresh task, verify same-byte source/cache/config/registry/discovery/runtime
@@ -667,6 +681,14 @@ exact disposable roots proven safe to remove.
   Codex/user boundary; UltraGoal must withhold its handoff until the exact
   catalog and descriptor-bound observations agree.
   Date: 2026-08-28.
+- Decision: emit no supported action when current Codex help/listing cannot be
+  proven zero-write on the exact selected executable and host context.
+  Rationale: embedded binary strings, reconstructed registry records, and a
+  handoff's prior recovery command cannot prove current command authority. A
+  typed no-action HOLD is cheaper and safer than presenting a stale or
+  synthetic action; the separate user decision follows only after immutable
+  source review.
+  Date: 2026-08-28.
 
 ## Idempotence, recovery, and cleanup
 
@@ -708,12 +730,16 @@ disposable installation, and the complete repository aggregate, and returns
 an exact zero-effect HOLD instead of emitting a handoff. Freeze the source and
 plan together, then rebuild and record the exact immutable-candidate archive
 and disposable-install digests outside this packaged plan before independent
-review. The configured marketplace
-record names the wrong identity/source and points to stale `/private/tmp`
-state; the required durable workspace-local catalog source is absent. The next
-open transition is to freeze and independently review this P1 candidate, then
-obtain explicit Codex/user authority for one current supported action that
-establishes the exact workspace-local marketplace source. Personal plugin
+review. Review of commit `9219471fe421c46721e4afd866f6e290be1da10d`
+found five bounded authority/identity defects; the current repair removes
+public command minting, synthetic help authority, stale next-action replay, and
+external Git diff helpers while deriving one exact catalog-root/plugin-path/
+marketplace/action identity. The configured marketplace record still names a
+non-target source outside this workspace, the required durable workspace-local
+catalog source is absent, and no safe current help/listing action has been
+observed. The next open transition is to freeze, rebuild, and independently
+rereview the repaired P1 candidate, then present the separate supported-host
+authority decision. Personal plugin
 installation, HostState, target, publication, and release effects remain
 closed. The protected diff remains exact, no project `.codex/config.toml`
 exists, and no install or live-product effect occurred. `CL-USABLE-LOOP`

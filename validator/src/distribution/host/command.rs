@@ -2,7 +2,7 @@ const COMMAND_TIMEOUT_MS: u64 = 30_000;
 const COMMAND_MAX_ATTEMPTS: u8 = 1;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
-pub struct HostCommand {
+pub(crate) struct HostCommand {
     program: String,
     argv: Vec<String>,
     environment: Vec<(String, String)>,
@@ -27,28 +27,28 @@ impl HostCommand {
         }
     }
 
-    pub fn program(&self) -> &str {
+    pub(crate) fn program(&self) -> &str {
         &self.program
     }
 
-    pub fn argv(&self) -> &[String] {
+    pub(crate) fn argv(&self) -> &[String] {
         &self.argv
     }
 
-    pub fn environment(&self) -> &[(String, String)] {
+    pub(crate) fn environment(&self) -> &[(String, String)] {
         &self.environment
     }
 
-    pub const fn timeout_ms(&self) -> u64 {
+    pub(crate) const fn timeout_ms(&self) -> u64 {
         self.timeout_ms
     }
 
-    pub const fn max_attempts(&self) -> u8 {
+    pub(crate) const fn max_attempts(&self) -> u8 {
         self.max_attempts
     }
 }
 
-pub struct HostCommandPlan {
+pub(crate) struct HostCommandPlan {
     package: PackageIdentity,
     commands: Vec<HostCommand>,
     plan_sha256: String,
@@ -86,7 +86,8 @@ impl std::fmt::Debug for HostCommandPlan {
 }
 
 impl HostCommandPlan {
-    pub fn repository_install(
+    #[cfg(test)]
+    pub(crate) fn repository_install(
         package: &PackageIdentity,
         repository_root: &str,
         repository_marketplace: &str,
@@ -104,14 +105,15 @@ impl HostCommandPlan {
         bound_plan(package, commands)
     }
 
-    pub fn personal_install(
+    #[cfg(test)]
+    pub(crate) fn personal_install(
         package: &PackageIdentity,
         marketplace: &str,
     ) -> Result<Self, DistributionError> {
         host_plugin_plan(package, "add", marketplace)
     }
 
-    #[cfg_attr(not(test), allow(dead_code))]
+    #[cfg(test)]
     pub(crate) fn personal_install_in_codex_home(
         package: &PackageIdentity,
         marketplace: &str,
@@ -146,14 +148,15 @@ impl HostCommandPlan {
         )
     }
 
-    pub fn personal_remove(
+    #[cfg(test)]
+    pub(crate) fn personal_remove(
         package: &PackageIdentity,
         marketplace: &str,
     ) -> Result<Self, DistributionError> {
         host_plugin_plan(package, "remove", marketplace)
     }
 
-    pub fn repository_remove(
+    pub(crate) fn repository_remove(
         package: &PackageIdentity,
         marketplace: &str,
     ) -> Result<Self, DistributionError> {
@@ -169,7 +172,7 @@ impl HostCommandPlan {
         bound_plan(package, commands)
     }
 
-    pub fn commands(&self) -> &[HostCommand] {
+    pub(crate) fn commands(&self) -> &[HostCommand] {
         &self.commands
     }
 
@@ -181,11 +184,12 @@ impl HostCommandPlan {
         self.commands.len()
     }
 
-    pub fn plan_sha256(&self) -> &str {
+    pub(crate) fn plan_sha256(&self) -> &str {
         &self.plan_sha256
     }
 }
 
+#[cfg(test)]
 fn host_plugin_plan(
     package: &PackageIdentity,
     action: &str,

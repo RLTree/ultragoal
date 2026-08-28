@@ -37,7 +37,7 @@ pub(crate) use filesystem::{
 };
 pub(crate) use filesystem::{ReadOnlyTreeObservation, ReadOnlyWorkspace};
 pub(crate) use host::HostCommandPlanProjection;
-pub use host::{HostCommand, HostCommandPlan};
+pub(crate) use host::{HostCommand, HostCommandPlan};
 pub use host_capability::{
     HostAdapterKind, HostCapabilityDeclaration, HostCapabilityState, JourneyBinding,
 };

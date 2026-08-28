@@ -7,9 +7,11 @@ use std::ffi::OsStr;
 use std::fmt;
 use std::path::{Component, Path, PathBuf};
 
-const PLUGIN_ID: &str = "harness-ultragoal@local-harness-plugins";
 const PLUGIN_NAME: &str = "harness-ultragoal";
-const MARKETPLACE_NAME: &str = "local-harness-plugins";
+#[cfg(test)]
+const MARKETPLACE_NAME: &str = "harness-ultragoal-local";
+#[cfg(test)]
+const PLUGIN_ID: &str = "harness-ultragoal@harness-ultragoal-local";
 const MAX_REGISTRY_BYTES: usize = 8 * 1024 * 1024;
 const MAX_REGISTRY_ROWS: usize = 128;
 
@@ -19,6 +21,7 @@ pub(crate) struct HostPluginRegistryObservation {
     selected_codex_identity_sha256: String,
     installed_root: PathBuf,
     marketplace_root: PathBuf,
+    marketplace_name: String,
     plugin_version: String,
     sha256: String,
 }
@@ -30,6 +33,10 @@ impl HostPluginRegistryObservation {
 
     pub(crate) fn marketplace_root(&self) -> &Path {
         &self.marketplace_root
+    }
+
+    pub(crate) fn marketplace_name(&self) -> &str {
+        &self.marketplace_name
     }
 
     pub(crate) fn selected_codex_identity_sha256(&self) -> &str {
@@ -65,6 +72,7 @@ impl HostPluginRegistryObservation {
             selected_codex_identity_sha256: digest(b"fixture-selected-codex"),
             installed_root: installed_root.to_path_buf(),
             marketplace_root: marketplace_root.to_path_buf(),
+            marketplace_name: MARKETPLACE_NAME.to_owned(),
             plugin_version: plugin_version.to_owned(),
             sha256,
         }
@@ -74,6 +82,7 @@ impl HostPluginRegistryObservation {
 pub(crate) fn parse_host_plugin_registry_observation(
     plugin_json: &[u8],
     marketplace_json: &[u8],
+    expected_marketplace_name: &str,
     expected_plugin_version: &str,
     selected_codex_executable: &Path,
     selected_codex_identity_sha256: &str,
@@ -81,21 +90,25 @@ pub(crate) fn parse_host_plugin_registry_observation(
     parse_host_plugin_registry_observation_inner(
         plugin_json,
         marketplace_json,
+        expected_marketplace_name,
         Some(expected_plugin_version),
         selected_codex_executable,
         selected_codex_identity_sha256,
     )
 }
 
+#[cfg(test)]
 pub(crate) fn parse_unpinned_host_plugin_registry_observation(
     plugin_json: &[u8],
     marketplace_json: &[u8],
+    expected_marketplace_name: &str,
     selected_codex_executable: &Path,
     selected_codex_identity_sha256: &str,
 ) -> Result<HostPluginRegistryObservation, AgentDiscoveryError> {
     parse_host_plugin_registry_observation_inner(
         plugin_json,
         marketplace_json,
+        expected_marketplace_name,
         None,
         selected_codex_executable,
         selected_codex_identity_sha256,
@@ -105,6 +118,7 @@ pub(crate) fn parse_unpinned_host_plugin_registry_observation(
 fn parse_host_plugin_registry_observation_inner(
     plugin_json: &[u8],
     marketplace_json: &[u8],
+    expected_marketplace_name: &str,
     expected_plugin_version: Option<&str>,
     selected_codex_executable: &Path,
     selected_codex_identity_sha256: &str,
@@ -112,6 +126,7 @@ fn parse_host_plugin_registry_observation_inner(
     if plugin_json.len() > MAX_REGISTRY_BYTES
         || marketplace_json.len() > MAX_REGISTRY_BYTES
         || !valid_sha256(selected_codex_identity_sha256)
+        || !valid_identity_name(expected_marketplace_name)
     {
         return Err(invalid());
     }
@@ -120,15 +135,17 @@ fn parse_host_plugin_registry_observation_inner(
     let marketplaces = parse_unique_json(marketplace_json)?;
     let plugin_rows = rows(&plugins, "installed")?;
     let marketplace_rows = rows(&marketplaces, "marketplaces")?;
-    let (plugin_index, plugin) = exact_plugin_row(plugin_rows)?;
-    let (marketplace_index, marketplace) = exact_marketplace_row(marketplace_rows)?;
+    let expected_plugin_id = format!("{PLUGIN_NAME}@{expected_marketplace_name}");
+    let (plugin_index, plugin) = exact_plugin_row(plugin_rows, &expected_plugin_id)?;
+    let (marketplace_index, marketplace) =
+        exact_marketplace_row(marketplace_rows, expected_marketplace_name)?;
 
     let plugin_version = string(plugin, "version").ok_or_else(identity)?;
     if crate::plugin_manifest::Version::parse_codex_plugin(plugin_version).is_none()
         || expected_plugin_version.is_some_and(|expected| expected != plugin_version)
-        || string(plugin, "pluginId") != Some(PLUGIN_ID)
+        || string(plugin, "pluginId") != Some(expected_plugin_id.as_str())
         || string(plugin, "name") != Some(PLUGIN_NAME)
-        || string(plugin, "marketplaceName") != Some(MARKETPLACE_NAME)
+        || string(plugin, "marketplaceName") != Some(expected_marketplace_name)
         || boolean(plugin, "installed") != Some(true)
         || boolean(plugin, "enabled") != Some(true)
     {
@@ -145,15 +162,25 @@ fn parse_host_plugin_registry_observation_inner(
         canonical_observed_directory(string(source, "path").ok_or_else(identity)?)?;
     let marketplace_root =
         canonical_observed_directory(string(marketplace, "root").ok_or_else(identity)?)?;
-    if string(marketplace, "name") != Some(MARKETPLACE_NAME)
+    if string(marketplace, "name") != Some(expected_marketplace_name)
         || installed_root == marketplace_root
         || !installed_root.starts_with(&marketplace_root)
         || installed_root.file_name().and_then(|name| name.to_str()) != Some(PLUGIN_NAME)
     {
         return Err(identity());
     }
-    reject_plugin_aliases(plugin_rows, plugin_index, &installed_root)?;
-    reject_marketplace_aliases(marketplace_rows, marketplace_index, &marketplace_root)?;
+    reject_plugin_aliases(
+        plugin_rows,
+        plugin_index,
+        &installed_root,
+        &expected_plugin_id,
+    )?;
+    reject_marketplace_aliases(
+        marketplace_rows,
+        marketplace_index,
+        &marketplace_root,
+        expected_marketplace_name,
+    )?;
 
     let sha256 = digest(
         &serde_json::to_vec(&(
@@ -162,6 +189,7 @@ fn parse_host_plugin_registry_observation_inner(
             selected_codex_identity_sha256,
             &plugins,
             &marketplaces,
+            expected_marketplace_name,
             &installed_root,
             &marketplace_root,
         ))
@@ -172,21 +200,29 @@ fn parse_host_plugin_registry_observation_inner(
         selected_codex_identity_sha256: selected_codex_identity_sha256.to_owned(),
         installed_root,
         marketplace_root,
+        marketplace_name: expected_marketplace_name.to_owned(),
         plugin_version: plugin_version.to_owned(),
         sha256,
     })
 }
 
-fn exact_plugin_row(rows: &[Value]) -> Result<(usize, &Map<String, Value>), AgentDiscoveryError> {
+fn exact_plugin_row<'a>(
+    rows: &'a [Value],
+    expected_plugin_id: &str,
+) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
     exact_row(rows, |row| {
-        string(row, "pluginId") == Some(PLUGIN_ID) || string(row, "name") == Some(PLUGIN_NAME)
+        string(row, "pluginId") == Some(expected_plugin_id)
+            || string(row, "name") == Some(PLUGIN_NAME)
     })
 }
 
-fn exact_marketplace_row(
-    rows: &[Value],
-) -> Result<(usize, &Map<String, Value>), AgentDiscoveryError> {
-    exact_row(rows, |row| string(row, "name") == Some(MARKETPLACE_NAME))
+fn exact_marketplace_row<'a>(
+    rows: &'a [Value],
+    expected_marketplace_name: &str,
+) -> Result<(usize, &'a Map<String, Value>), AgentDiscoveryError> {
+    exact_row(rows, |row| {
+        string(row, "name") == Some(expected_marketplace_name)
+    })
 }
 
 fn rows<'a>(value: &'a Value, collection: &str) -> Result<&'a [Value], AgentDiscoveryError> {
@@ -221,13 +257,14 @@ fn reject_plugin_aliases(
     rows: &[Value],
     selected_index: usize,
     installed_root: &Path,
+    expected_plugin_id: &str,
 ) -> Result<(), AgentDiscoveryError> {
     for (index, value) in rows.iter().enumerate() {
         if index == selected_index {
             continue;
         }
         let row = value.as_object().ok_or_else(invalid)?;
-        if [("pluginId", PLUGIN_ID), ("name", PLUGIN_NAME)]
+        if [("pluginId", expected_plugin_id), ("name", PLUGIN_NAME)]
             .into_iter()
             .any(|(key, expected)| string(row, key).is_some_and(|value| alias(value, expected)))
         {
@@ -250,13 +287,14 @@ fn reject_marketplace_aliases(
     rows: &[Value],
     selected_index: usize,
     marketplace_root: &Path,
+    expected_marketplace_name: &str,
 ) -> Result<(), AgentDiscoveryError> {
     for (index, value) in rows.iter().enumerate() {
         if index == selected_index {
             continue;
         }
         let row = value.as_object().ok_or_else(invalid)?;
-        if string(row, "name").is_some_and(|value| alias(value, MARKETPLACE_NAME))
+        if string(row, "name").is_some_and(|value| alias(value, expected_marketplace_name))
             || string(row, "root")
                 .and_then(canonical_directory_if_present)
                 .is_some_and(|path| path == marketplace_root)
@@ -265,6 +303,14 @@ fn reject_marketplace_aliases(
         }
     }
     Ok(())
+}
+
+fn valid_identity_name(value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= 128
+        && value.bytes().all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || matches!(byte, b'-' | b'_')
+        })
 }
 
 fn alias(value: &str, expected: &str) -> bool {
@@ -463,6 +509,7 @@ mod tests {
         let observation = parse_host_plugin_registry_observation(
             &fixture.plugin_json(),
             &fixture.marketplace_json(),
+            MARKETPLACE_NAME,
             CURRENT_VERSION,
             &fixture.codex,
             &digest(b"selected-codex"),
@@ -478,6 +525,7 @@ mod tests {
         let observation = parse_unpinned_host_plugin_registry_observation(
             &fixture.plugin_json(),
             &fixture.marketplace_json(),
+            MARKETPLACE_NAME,
             &fixture.codex,
             &digest(b"selected-codex"),
         )
@@ -491,6 +539,7 @@ mod tests {
             parse_unpinned_host_plugin_registry_observation(
                 &malformed,
                 &fixture.marketplace_json(),
+                MARKETPLACE_NAME,
                 &fixture.codex,
                 &digest(b"selected-codex"),
             )
@@ -509,6 +558,7 @@ mod tests {
         let observation = parse_unpinned_host_plugin_registry_observation(
             &plugin_json,
             &fixture.marketplace_json(),
+            MARKETPLACE_NAME,
             &fixture.codex,
             &digest(b"selected-codex"),
         )
@@ -518,6 +568,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 &plugin_json,
                 &fixture.marketplace_json(),
+                MARKETPLACE_NAME,
                 version,
                 &fixture.codex,
                 &digest(b"selected-codex"),
@@ -537,6 +588,7 @@ mod tests {
         let substituted = parse_unpinned_host_plugin_registry_observation(
             &substituted_json,
             &fixture.marketplace_json(),
+            MARKETPLACE_NAME,
             &fixture.codex,
             &digest(b"selected-codex"),
         )
@@ -546,6 +598,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 &plugin_json,
                 &fixture.marketplace_json(),
+                MARKETPLACE_NAME,
                 substituted_version,
                 &fixture.codex,
                 &digest(b"selected-codex"),
@@ -571,6 +624,7 @@ mod tests {
                 parse_unpinned_host_plugin_registry_observation(
                     &malformed,
                     &fixture.marketplace_json(),
+                    MARKETPLACE_NAME,
                     &fixture.codex,
                     &digest(b"selected-codex"),
                 )
@@ -604,6 +658,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &bytes,
                     &fixture.marketplace_json(),
+                    MARKETPLACE_NAME,
                     CURRENT_VERSION,
                     &fixture.codex,
                     &digest(b"selected-codex"),
@@ -628,6 +683,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &bytes,
+                    MARKETPLACE_NAME,
                     CURRENT_VERSION,
                     &fixture.codex,
                     &digest(b"selected-codex"),
@@ -652,6 +708,7 @@ mod tests {
                 parse_host_plugin_registry_observation(
                     &fixture.plugin_json(),
                     &fixture.marketplace_json(),
+                    MARKETPLACE_NAME,
                     CURRENT_VERSION,
                     &alias,
                     &digest(b"selected-codex"),
@@ -676,7 +733,7 @@ mod tests {
                 "name":"other",
                 "source":{"source":"local","path":fixture.plugin}
             }),
-            json!({"pluginId":"HARNESS_ULTRAGOAL@LOCAL_HARNESS_PLUGINS","name":"other"}),
+            json!({"pluginId":"HARNESS_ULTRAGOAL@HARNESS_ULTRAGOAL_LOCAL","name":"other"}),
             json!({"pluginId":"other@marketplace","name":"Harness_Ultragoal"}),
         ] {
             let plugins = serde_json::to_vec(&json!({
@@ -691,7 +748,7 @@ mod tests {
         }
         for alias_row in [
             json!({"name":"other-marketplace","root":fixture.root}),
-            json!({"name":"LOCAL_HARNESS_PLUGINS","root":fixture.root.join("other")}),
+            json!({"name":"HARNESS_ULTRAGOAL_LOCAL","root":fixture.root.join("other")}),
         ] {
             let marketplaces = serde_json::to_vec(&json!({
                 "marketplaces":[
@@ -800,6 +857,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 &self.plugin_json(),
                 &self.marketplace_json(),
+                MARKETPLACE_NAME,
                 CURRENT_VERSION,
                 codex,
                 codex_sha256,
@@ -815,6 +873,7 @@ mod tests {
             parse_host_plugin_registry_observation(
                 plugin_json,
                 marketplace_json,
+                MARKETPLACE_NAME,
                 CURRENT_VERSION,
                 &self.codex,
                 &digest(b"selected-codex"),

@@ -151,7 +151,7 @@ fn authority_projection_with_observer(
         package_root: package_root.to_path_buf(),
         host_registry_observation: first_registry.clone(),
         cache_family_root: home
-            .join(".codex/plugins/cache/local-harness-plugins/harness-ultragoal"),
+            .join(".codex/plugins/cache/harness-ultragoal-local/harness-ultragoal"),
         global_root: home.to_path_buf(),
         project_root: project_root.to_path_buf(),
         candidate_id,
@@ -226,6 +226,7 @@ pub(super) fn observe_host_registry(
     parse_host_plugin_registry_observation(
         &plugin_json,
         &marketplace_json,
+        "harness-ultragoal-local",
         expected_plugin_version,
         executable,
         &executable_sha256,
