@@ -289,17 +289,45 @@ Before version freeze, make the smallest source correction that reflects the
 selected ownership model:
 
 1. Remove custom `package install-apply` execution from public dispatch,
-   command catalogs, help, and the packaged candidate. A compatibility parse,
-   if required, may only return a stable no-effect diagnostic directing the
-   operator to a fresh supported-install handoff; it may not construct a child
-   command or mutate personal state.
+   command enums, option grammar, operation bindings, command catalogs, help,
+   live-effect construction, and the packaged candidate. Delete those paths or
+   make them unreachable from every public and packaged route. A compatibility
+   parse, if required, may only return a stable no-effect diagnostic directing
+   the operator to a fresh supported-install handoff; it may not construct a
+   child command or mutate personal state. Reconcile every active or
+   package-visible reader and projection in the same correction:
+   - rewrite `skills/improve-and-maintain/SKILL.md` so install, update,
+     uninstall, retry, rollback, and recovery route only to one exact current
+     supported Codex/user action followed by fresh-task read-only verification;
+     remove the reviewed-lifecycle-adapter and UltraGoal prior-restoration
+     promises;
+   - rewrite the lifecycle boundary in `docs/install-and-visibility.md` so any
+     retained source-local lifecycle primitives are explicitly private,
+     non-authoritative fixtures; supported Codex/user owns personal mutation and
+     recovery, while UltraGoal owns only handoff and read-only verification; and
+   - reconcile `docs/plugin-resource-map.md`,
+     `fixtures/plugin-product/lifecycle-cases.json`, source-closure
+     `RuntimeAuthority` projections, plugin manifests, and package inventories
+     so generic lifecycle modeling cannot mint or route personal install,
+     update, removal, rollback, restore, or recovery authority; retain a generic
+     lifecycle fixture only when it is explicitly non-personal and non-public;
+     and
+   - add a bounded source/package-negative gate proving that no active skill,
+     current install guide, command catalog, help row, or packaged resource
+     exposes public `install-apply`, an UltraGoal personal-install adapter,
+     automatic retry/rollback, or prior-state restoration. Frozen historical
+     artifacts may retain old language only when excluded from every active and
+     packaged reader.
 2. Keep `package install-plan` read-only but replace its apply-authority record
    with `HarnessPersonalMarketplaceInstallHandoff-v1`. Bind the exact source
    commit/tree/status, candidate/version, release CLI and archive digests,
    plugin identity, durable marketplace source path and tree digest, selected
    Codex executable path/version/content identity, confirmed local marketplace
-   identity, current predecessor observations, expected target observations,
-   protected-state digest, and handoff identity.
+   identity, effective canonical `HOME`, `CODEX_HOME`, config/profile context,
+   and working directory used by the supported action, current predecessor
+   observations, expected target observations, protected-state digest, and
+   handoff identity. If that exact current host context cannot be observed and
+   bound without effect, return a typed no-effect HOLD.
 3. Select the install action only from the current supported host listing/help
    surface. The expected personal-marketplace form is
    `<selected-codex-executable> plugin add
@@ -343,7 +371,8 @@ existing package contract: reproducible outputs live beneath
 
 On the exact post-version source candidate:
 
-1. run the focused version, manifest, package-identity, and lifecycle tests;
+1. run the focused version, manifest, package-identity, supported-handoff, and
+   active/package-visible negative-route tests;
 2. run `cargo check --locked --offline -p ultragoal`;
 3. build `target/ultragoal/release/ultragoal`;
 4. run `scripts/check .` on a capable execution surface;
