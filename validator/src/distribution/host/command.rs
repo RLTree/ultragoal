@@ -111,6 +111,7 @@ impl HostCommandPlan {
         host_plugin_plan(package, "add", marketplace)
     }
 
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(crate) fn personal_install_in_codex_home(
         package: &PackageIdentity,
         marketplace: &str,

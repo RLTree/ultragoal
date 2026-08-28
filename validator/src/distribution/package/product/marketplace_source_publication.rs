@@ -120,6 +120,7 @@ impl ProductionPackageArtifact {
         Ok((observation, transaction))
     }
 
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(crate) fn rollback_marketplace_source_transition(
         &self,
         transaction: super::materialize::MaterializeTransaction,
@@ -179,8 +180,5 @@ impl ProductionPackageArtifact {
 }
 
 fn supported_marketplace_source_path(path: &str) -> bool {
-    matches!(
-        path,
-        MARKETPLACE_SOURCE_PATH | super::PERSONAL_MARKETPLACE_SOURCE_RELATIVE
-    )
+    path == MARKETPLACE_SOURCE_PATH
 }

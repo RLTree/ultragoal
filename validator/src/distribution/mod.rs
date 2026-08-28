@@ -80,11 +80,7 @@ pub use package::{
     rollback_package_artifact, tree_sha256, verify_package,
 };
 pub(crate) use package::{
-    PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceAuthorityMatch,
-    PersonalMarketplaceSourceObservation, PersonalMarketplaceUpdateAuthority,
-    PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateEffects,
-    PersonalMarketplaceUpdateObservation, PersonalMarketplaceUpdateStage,
-    execute_personal_marketplace_update,
+    PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceSourceObservation,
 };
 pub use registry_observation::{
     AppRegistryObservation, AppRegistryVerdict, DiscoveryObservation, DiscoveryVerdict,

@@ -85,7 +85,7 @@ pub enum PackageAction {
     Verify,
     InstallTest,
     InstallPlan,
-    InstallApply,
+    InstallVerify,
     Publish,
 }
 

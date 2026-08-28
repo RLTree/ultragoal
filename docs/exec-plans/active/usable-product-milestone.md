@@ -234,12 +234,25 @@ the exact candidate and read-only plan evidence.
   unjustified second installer, read/network authority, non-atomic cache/config
   commit, config-object ambiguity, and durable recovery burden before first
   value. That route is retired from this milestone.
-- [ ] P1 remove custom `package install-apply` execution from the public
-  candidate, replace the read-only install plan with an exact supported Codex
-  install handoff, freeze one monotonic successor, pass exact-source checks,
-  build and verify the release CLI and deterministic package, materialize it at
-  one read-only-confirmed durable local marketplace source, and complete
-  disposable installation.
+- [ ] P1 is complete through source retirement, reader reconciliation, version
+  freeze, release build, deterministic package verification, disposable
+  installation, and the zero-effect handoff refusal. The unstaged candidate
+  based on `04b63c08e826cee5672b6abc66bb3c0c7887a16f` removes public
+  `package install-apply`, freezes
+  `0.0.42+codex.20260828085546`, produces byte-identical pre-commit package
+  archives, and passes the focused source/package and complete repository
+  aggregate gates. Because this active plan is itself packaged, the immutable
+  integration commit must be followed by one final same-source archive rebuild
+  and verification before review. P1 is now correctly
+  `blocked_by_environment_or_authority`: descriptor-bound observation found a
+  configured marketplace identity/source mismatch whose source is a stale
+  `/private/tmp` path outside this workspace, while the required durable
+  workspace-local catalog source is not materialized. No supported handoff was
+  emitted and no personal state was changed. Resume P1 only after one current
+  supported Codex/user action establishes the exact configured, catalog-bound,
+  durable workspace-local marketplace source; then reobserve it read-only,
+  materialize the already verified exact package, and emit the immutable
+  handoff. Do not restore the retired UltraGoal installer to bypass this HOLD.
 - [ ] P2 present the exact candidate-bound handoff, let the explicitly
   authorized user/host run its one supported Codex action, resume read-only in a
   fresh task, verify same-byte source/cache/config/registry/discovery/runtime
@@ -645,6 +658,15 @@ exact disposable roots proven safe to remove.
   sooner, preserves same-surface verification, and avoids false claims of
   upstream atomicity or rollback.
   Date: 2026-08-28.
+- Decision: treat the absent durable workspace-local marketplace source and the
+  currently configured stale temporary source as an authority/environment
+  boundary, not a package defect.
+  Rationale: the P1 source, release, deterministic archive, verification, and
+  disposable-install gates passed without a personal effect. Creating or
+  replacing a configured personal marketplace source belongs to the supported
+  Codex/user boundary; UltraGoal must withhold its handoff until the exact
+  catalog and descriptor-bound observations agree.
+  Date: 2026-08-28.
 
 ## Idempotence, recovery, and cleanup
 
@@ -679,10 +701,22 @@ is `HOLD` on same-path ordinary-directory child-write escape. Provisional plan
 candidate `06a4e84ee773f045ba988fa0bfacf3692e1ead87` moved the effect to staging;
 independent product-simplicity and security review both returned HOLD and
 selected the supported Codex/user handoff plus read-only verification route.
-The next open transition is the bounded P1 source/package/handoff work only;
-every personal-install, HostState, target, publication, and release effect
-remains closed. The protected diff remains exact, no project
-`.codex/config.toml` exists, and no install or live-product effect occurred.
-`CL-USABLE-LOOP` remains `blocked_by_product` for installed 0.0.41. At P4,
+Exact P1 source/package candidate `0.0.42+codex.20260828085546` retires the
+public custom installer, reconciles active readers, builds the release CLI,
+produces two byte-identical pre-commit archives, passes archive verification,
+disposable installation, and the complete repository aggregate, and returns
+an exact zero-effect HOLD instead of emitting a handoff. Freeze the source and
+plan together, then rebuild and record the exact immutable-candidate archive
+and disposable-install digests outside this packaged plan before independent
+review. The configured marketplace
+record names the wrong identity/source and points to stale `/private/tmp`
+state; the required durable workspace-local catalog source is absent. The next
+open transition is to freeze and independently review this P1 candidate, then
+obtain explicit Codex/user authority for one current supported action that
+establishes the exact workspace-local marketplace source. Personal plugin
+installation, HostState, target, publication, and release effects remain
+closed. The protected diff remains exact, no project `.codex/config.toml`
+exists, and no install or live-product effect occurred. `CL-USABLE-LOOP`
+remains `blocked_by_product` for installed 0.0.41. At P4,
 replace this paragraph with the terminal candidate-bound decision and move the
 completed plan according to repository convention.

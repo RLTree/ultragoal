@@ -177,20 +177,6 @@ impl ReadOnlyTreeObservation {
         Ok(())
     }
 
-    #[cfg(unix)]
-    pub(crate) fn snapshot(
-        &self,
-    ) -> Result<Vec<crate::distribution::TreeObject>, DistributionError> {
-        self.chain.revalidate()?;
-        self.tree.verify_descriptor()?;
-        let rows = super::walk::inspect(&self.tree, self.maximum_entries, self.maximum_bytes)?;
-        self.revalidate()?;
-        if tree_sha256(&rows)? != self.tree_sha256 {
-            return Err(error(DistributionErrorId::ObjectChanged));
-        }
-        Ok(rows)
-    }
-
     #[cfg(not(unix))]
     pub(crate) fn revalidate(&self) -> Result<(), DistributionError> {
         Err(error(DistributionErrorId::CapabilityMismatch))

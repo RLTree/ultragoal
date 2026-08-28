@@ -18,7 +18,7 @@ pub fn plugin_product_build_policy() -> Result<BuildClosurePolicy, ClosureError>
         ),
         (
             "fixtures/plugin-product/lifecycle-cases.json",
-            RuntimeAuthority,
+            VerifierInput,
         ),
         (
             "fixtures/plugin-product/product-fitness-cases.json",

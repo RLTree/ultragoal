@@ -4,7 +4,6 @@ mod manifest_bind;
 mod materialize;
 mod output;
 mod personal_marketplace_source_observation;
-mod personal_marketplace_update;
 mod plan;
 mod snapshot;
 mod source;
@@ -25,12 +24,6 @@ pub use output::{
 };
 pub(crate) use personal_marketplace_source_observation::{
     PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceSourceObservation,
-};
-pub(crate) use personal_marketplace_update::{
-    PersonalMarketplaceAuthorityMatch, PersonalMarketplaceUpdateAuthority,
-    PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateEffects,
-    PersonalMarketplaceUpdateObservation, PersonalMarketplaceUpdateStage,
-    execute_personal_marketplace_update,
 };
 pub use plan::{
     PackageEffects, PackageEntry, PackagePlan, PackageSnapshot, build_package, plan_package,

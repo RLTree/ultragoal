@@ -184,7 +184,7 @@ fn component(value: &str, subtree: bool) -> Result<String, DistributionError> {
 mod tests {
     use super::*;
 
-    const VERSION: &str = "0.0.41+codex.20260824093100";
+    const VERSION: &str = "0.0.42+codex.20260828085546";
 
     fn entry(path: &str, role: PackageRole, bytes: &[u8]) -> PackageEntry {
         PackageEntry {
@@ -201,7 +201,7 @@ mod tests {
             entry(
                 ".codex-plugin/plugin.json",
                 PackageRole::Manifest,
-                br#"{"name":"harness-ultragoal","version":"0.0.41+codex.20260824093100","description":"valid","skills":"./skills/"}"#,
+                br#"{"name":"harness-ultragoal","version":"0.0.42+codex.20260828085546","description":"valid","skills":"./skills/"}"#,
             ),
             entry(
                 "skills/harness-ultragoal/SKILL.md",

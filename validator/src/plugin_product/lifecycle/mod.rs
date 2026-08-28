@@ -1,7 +1,10 @@
-//! Public lifecycle data and read-only planning/verification.
+//! Generic lifecycle data and read-only planning/verification.
 //!
-//! Mutation authority is crate-private. External callers cannot import the
-//! adapter, apply route, recovery route, or recovery-token issuer:
+//! This model is a non-personal verifier fixture. It cannot authorize Codex
+//! plugin installation, update, removal, rollback, restoration, or recovery.
+//! Mutation adapters are crate-private and unreachable from public package
+//! routing. External callers cannot import the adapter, apply route, recovery
+//! route, or recovery-token issuer:
 //!
 //! ```compile_fail,E0432
 //! use ultragoal::plugin_product::lifecycle::apply;
@@ -22,7 +25,10 @@ mod verification;
 
 #[cfg(test)]
 fn read(path: &str) -> String {
-    std::fs::read_to_string(path).expect("lifecycle fixture readable")
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .expect("validator has repository parent");
+    std::fs::read_to_string(root.join(path)).expect("lifecycle fixture readable")
 }
 
 #[cfg(test)]

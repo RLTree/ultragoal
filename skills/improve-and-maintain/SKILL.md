@@ -86,18 +86,27 @@ or renamed source for real behavior and retirement proof.
 
 ## Maintain the plugin lifecycle
 
-Treat fresh install, monotonic update, failed-update recovery, authorized
-rollback, idempotent reinstall, uninstall and teardown, stale-cache recovery,
-and repeat use as distinct operations. Inspect and bind the exact installed and
-cache authority before planning. Any host write requires explicit authority;
-rollback additionally requires downgrade authority. A failed effect preserves
-or restores the prior authority before another operation can proceed.
+UltraGoal does not install, update, remove, retry, roll back, restore, or recover
+personal Codex plugin state. First build and verify one exact monotonic package
+candidate, then use `package install-plan` to request a zero-write
+`HarnessPersonalMarketplaceInstallHandoff-v1`. If exact candidate, durable
+workspace-local marketplace source, selected Codex, configured marketplace,
+canonical personal scope, predecessor, target, and protected state cannot be
+descriptor-observed, report the typed no-effect HOLD and stop.
 
-If the current host does not expose the reviewed lifecycle adapter, report that
-surface as unsupported. Do not hand-edit plugin, marketplace, cache, app
-registry, or Plugins UI state. Verify source, package, marketplace, install,
-cache, app registry, Plugins UI, discovery, runtime, and journey layers
-separately after an authorized operation.
+Present the single candidate-bound supported Codex action named by that handoff
+for an explicit user decision. Do not invoke it or substitute a private adapter.
+After the user-owned supported action is terminal, start a fresh Codex task and
+run `package install-verify --handoff <exact-owner-only-record>`. Exact target,
+exact prior/no effect, partial or stale, and ambiguous are distinct results.
+For any non-target result, name only the current supported Codex/user recovery
+action bound by the handoff and stop; never execute, repair, or retry it.
+
+Verify source, package, durable marketplace source, personal cache/config,
+registry, fresh-task discovery, installed runtime, and journey behavior as
+separate layers. Do not hand-edit plugin, marketplace, cache, app registry, or
+Plugins UI state, and do not infer upstream atomicity or recovery from command
+output.
 
 ## Output
 

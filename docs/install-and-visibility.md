@@ -44,46 +44,36 @@ identity; it does not establish source-to-binary compilation provenance.
 Compilation provenance and actual runtime behavior remain separate proof
 surfaces.
 
-A repository marketplace is non-default host configuration. After the root has
-accepted the catalog and materialized the exact package, an authorized operator
-may plan these host effects:
+A repository marketplace catalog identifies only a package source. P1 may
+materialize an accepted package at `plugins/harness-ultragoal` only when the
+current catalog is descriptor-read, binds exactly that workspace-local path,
+and the complete postimage reconciles to the package tree. UltraGoal does not
+register that catalog with a personal host and does not treat repository bytes
+as proof that a personal marketplace alias exists.
 
-```text
-codex plugin marketplace add <repository-root>
-codex plugin add harness-ultragoal@<repository-marketplace-name>
-```
-
-Do not execute those commands during source validation. They mutate host state
-and require the selected repository marketplace, package bytes, and authority
-to be current.
-
-The source-local `HostCommandPlan` binds those exact argv rows to the package
-identity and carries an empty scrubbed environment, a 30-second timeout, and
-one attempt. The integrated source now joins that plan to sealed lifecycle
-admission, the production host-handoff caller, and typed fail-closed outcome
-records. Source controls still do not prove command execution, host mutation,
-installation, or fresh-task discovery: those require current host observations
-against the exact package candidate and remain separate claim surfaces.
+The retained source-local host-command and lifecycle types are private,
+non-personal fixtures for confined disposable testing. They cannot authorize,
+dispatch, retry, roll back, or recover a personal Codex mutation. Public package
+authority ends at an exact read-only handoff and read-only verification.
 
 ## Personal marketplace
 
-The default personal marketplace file is
-`~/.agents/plugins/marketplace.json`. It is discovered implicitly; do not add
-it through `codex plugin marketplace add`. A personal entry must point at the
-actual authorized local plugin source and include installation,
-authentication, and category policy.
+Personal installation, update, removal, retry, and recovery belong to supported
+Codex and the user. `package install-plan` may emit
+`HarnessPersonalMarketplaceInstallHandoff-v1` only after descriptor-bound reads
+bind the exact candidate, durable workspace-local source, selected Codex binary
+and supported action surface, confirmed configured marketplace identity,
+canonical `HOME` and `CODEX_HOME`, config/profile context, working directory,
+predecessor, target, and protected state. If any input is absent, personal, or
+ambiguous, it returns a typed no-effect HOLD.
 
-For an already configured local marketplace, first confirm through the host's
-supported marketplace-listing surface which marketplace currently surfaces the
-plugin. Reinstall only after that observation:
-
-```text
-codex plugin add harness-ultragoal@<confirmed-local-marketplace>
-```
-
-Use a new Codex task after an authorized reinstall so discovery can be observed
-without stale task context. Never hand-edit host marketplace or cache state as
-a substitute for the supported install path.
+The handoff names one current supported action for the user to consider. It is
+not execution authority. UltraGoal never invokes that action, edits the
+personal catalog, cache, or config, or claims Codex rollback behavior. After an
+explicit user-owned supported action is terminal, start a fresh Codex task and
+run `package install-verify --handoff <exact-owner-only-record>`. Non-target
+results name one observed supported Codex/user recovery action and stop; they do
+not repair or retry.
 
 ## Project-scoped agents
 
@@ -113,12 +103,15 @@ Verify each layer independently against the same candidate:
    successor catalog, into the same invalidation closure.
 2. **Package:** build two HUGPKG artifacts from the root-owned inventory and
    compare their bytes, inventory, version, and provenance inputs.
-3. **Marketplace:** validate the selected catalog path and relative source,
-   while proving nothing about installation or host registration.
-4. **Install:** materialize the authorized package and compare installed bytes
-   with the package identity.
-5. **Cache:** observe the selected cache separately and reconcile it to the
-   installed package; do not infer hidden cache state.
+3. **Marketplace source:** validate the selected catalog path and materialized
+   workspace-local source tree, while proving nothing about personal host
+   registration.
+4. **Supported handoff:** bind the exact current package, source, host context,
+   predecessor, selected Codex identity, supported action, and expected target
+   without executing the action.
+5. **Install verification:** in a fresh task, read marketplace source, cache,
+   config enablement, registry identity, and runtime bytes and classify only
+   exact target, exact prior/no effect, partial or stale, or ambiguous.
 6. **App registry and Plugins UI:** use only host-exposed observations in a
    current task. Record unsupported surfaces explicitly.
 7. **Discovery:** start a fresh task and observe the front-door skill and all
@@ -151,31 +144,20 @@ exposure as unavailable and cannot raise a claim.
 
 ## Lifecycle coordinator boundary
 
-The source-local lifecycle coordinator covers eight operations with typed
-plan, apply, verify, and recovery semantics:
+The generic eight-case lifecycle model is retained only as a private,
+non-personal, non-public verifier fixture. It can test transition mathematics
+and interrupted local adapters, but it cannot mint or route personal install,
+update, removal, rollback, restore, or recovery authority. No active skill or
+package command exposes its apply or recovery adapters.
 
-| Operation | Required invariant |
-| --- | --- |
-| Fresh install | The observed state is absent and a host write is explicitly authorized. |
-| Monotonic update | The plugin manifest version and marketplace-observed plugin version both advance to the same strictly newer version, the expected installed digest still matches, and marketplace registration plus plugin installation are explicitly refreshed. |
-| Failed-update recovery | The exact captured prior installed and cache authority is restored before reuse. |
-| Authorized rollback | The target is older and a separate downgrade authorization is present. |
-| Idempotent reinstall | Matching installed and cache bytes are verified without replacement. |
-| Uninstall and teardown | Installed and cache authority are removed and absence is verified. |
-| Stale-cache recovery | Installed authority is preserved while cache identity is reconciled. |
-| Repeat use | Installed bytes, cache identity, and runtime behavior are re-observed without writes. |
-
-Planning and verification are read-only. Applying a host mutation remains
-behind an explicit adapter and authorization; source tests do not authorize or
-perform installation. Every effect rechecks the observed prior state. A failed
-effect restores that prior authority or returns a recovery-required result.
-
-Never retain a configured local marketplace whose root is a disposable build
-or `/private/tmp` path. Materialize the exact accepted package at a durable
-local marketplace root, increment the version on every changed installable
-candidate, refresh marketplace registration and plugin installation, then use a
-fresh Codex task for discovery. A cache entry or an enabled row does not by
-itself prove fresh app recognition.
+For personal Codex state, UltraGoal owns only the exact zero-write handoff and
+the fresh-task zero-write verifier. Supported Codex and the user own the
+mutation, cancellation after invocation, completion, and recovery. Never
+retain a durable marketplace source under a disposable build or temporary path;
+materialize only the catalog-confirmed workspace-local source, increment the
+version on every changed installable candidate, and keep discovery and runtime
+as later independent observations. Cache or config presence alone does not
+prove fresh app recognition.
 
 Product Fitness is independently withheld until accessibility, cognitive
 load, recovery burden, continuance, and real-use evidence are all bound to the

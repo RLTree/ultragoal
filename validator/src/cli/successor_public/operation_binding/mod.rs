@@ -219,7 +219,7 @@ const BINDINGS: &[Binding] = &[
     package::BUILD,
     package::INSTALL_TEST,
     package::INSTALL_PLAN,
-    package::INSTALL_APPLY,
+    package::INSTALL_VERIFY,
     package::INVENTORY,
     package::VERIFY,
 ];

@@ -34,6 +34,20 @@ missing.
 | Existing callers that require both | `scripts/check` | Product plus governance; not a release gate. |
 | Release-surface verification | `scripts/check-release` | Holds at one clean committed candidate until Terry separately authorizes an exact release scope; it does not infer approval from an environment variable. |
 
+## Supported personal-install boundary
+
+UltraGoal owns package construction, one exact zero-write supported-Codex
+handoff, and fresh-task read-only install verification. Supported Codex and the
+user own every personal install, update, removal, retry, cancellation after
+invocation, and recovery effect. `package install-plan` returns a typed
+no-effect HOLD unless it can bind the exact monotonic candidate, materialized
+workspace-local marketplace source, selected Codex binary and supported action,
+configured marketplace, canonical personal scope, predecessor, target, and
+protected state. `package install-verify --handoff <exact-owner-only-record>`
+classifies exact target, exact prior/no effect, partial or stale, or ambiguity;
+it never repairs state. Discovery, installed runtime invocation, Product
+Fitness, and release are later independent proof surfaces.
+
 ## Deterministic selection
 
 Select the skill that owns the requested immediate outcome:

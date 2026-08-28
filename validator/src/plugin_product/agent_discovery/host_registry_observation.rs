@@ -455,7 +455,7 @@ mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 
     static NEXT: AtomicU64 = AtomicU64::new(1);
-    const CURRENT_VERSION: &str = "0.0.41+codex.20260824093100";
+    const CURRENT_VERSION: &str = "0.0.42+codex.20260828085546";
 
     #[test]
     fn exact_enabled_local_rows_select_one_canonical_installed_root() {

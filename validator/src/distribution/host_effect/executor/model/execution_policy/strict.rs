@@ -33,6 +33,7 @@ impl HostEffectExecutionPolicy {
         Self::from_bound_environment(timeout_ms, &environment)
     }
 
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(in crate::distribution::host_effect) fn strict_personal_codex_home(
         timeout_ms: u64,
         personal_home: &std::path::Path,
@@ -137,9 +138,11 @@ impl HostEffectExecutionPolicy {
 }
 
 #[cfg(unix)]
+#[cfg_attr(not(test), allow(dead_code))]
 static PROCESS_SIGNAL_TARGET: std::sync::atomic::AtomicPtr<HostEffectCancellation> =
     std::sync::atomic::AtomicPtr::new(std::ptr::null_mut());
 #[cfg(unix)]
+#[cfg_attr(not(test), allow(dead_code))]
 static PROCESS_SIGNAL_INSTALLATION: std::sync::Mutex<()> = std::sync::Mutex::new(());
 
 #[derive(Clone, Default)]
@@ -148,6 +151,7 @@ pub(crate) struct HostEffectCancellation {
 }
 
 impl HostEffectCancellation {
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(crate) fn cancel(&self) {
         self.cancelled.store(true, Ordering::SeqCst);
     }
@@ -157,6 +161,7 @@ impl HostEffectCancellation {
     }
 
     #[cfg(unix)]
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(crate) fn install_process_signal_source(
         &self,
     ) -> Result<HostEffectSignalGuard, &'static str> {
@@ -193,6 +198,7 @@ impl HostEffectCancellation {
 }
 
 #[cfg(unix)]
+#[cfg_attr(not(test), allow(dead_code))]
 extern "C" fn record_process_cancellation(_signal: libc::c_int) {
     let target = PROCESS_SIGNAL_TARGET.load(Ordering::SeqCst);
     if !target.is_null() {
@@ -203,6 +209,7 @@ extern "C" fn record_process_cancellation(_signal: libc::c_int) {
 }
 
 #[cfg(unix)]
+#[cfg_attr(not(test), allow(dead_code))]
 pub(crate) struct HostEffectSignalGuard {
     previous_interrupt: libc::sigaction,
     previous_terminate: libc::sigaction,

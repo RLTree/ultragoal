@@ -4,14 +4,14 @@ use crate::cli::successor::{EffectClass, SuccessorCommand};
 
 const PLAN_APIS: &[&str] = &[
     "PackageAction::InstallPlan",
-    "PersonalMarketplaceInstallPlan",
+    "HarnessPersonalMarketplaceInstallHandoff-v1",
     "HostPluginRegistryObservation",
 ];
 
-const APPLY_APIS: &[&str] = &[
-    "PackageAction::InstallApply",
-    "PersonalMarketplaceInstallPlan",
-    "ImmutableAcceptedPlan",
+const VERIFY_APIS: &[&str] = &[
+    "PackageAction::InstallVerify",
+    "HarnessPersonalMarketplaceInstallHandoff-v1",
+    "ReadOnlyTreeObservation",
 ];
 
 pub(super) const PLAN_BINDING: Binding = binding(
@@ -21,9 +21,9 @@ pub(super) const PLAN_BINDING: Binding = binding(
     PLAN_APIS,
 );
 
-pub(super) const APPLY_BINDING: Binding = binding(
-    PublicOperation::PackageInstallApply,
-    SuccessorCommand::Package(PackageAction::InstallApply),
-    EffectClass::ExternalWrite,
-    APPLY_APIS,
+pub(super) const VERIFY_BINDING: Binding = binding(
+    PublicOperation::PackageInstallVerify,
+    SuccessorCommand::Package(PackageAction::InstallVerify),
+    EffectClass::Read,
+    VERIFY_APIS,
 );

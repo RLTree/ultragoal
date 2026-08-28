@@ -108,10 +108,10 @@ fn only_exact_supported_command_effect_pairs_bind() {
     );
     assert_eq!(
         bind(&invocation(
-            SuccessorCommand::Package(PackageAction::InstallApply),
-            EffectClass::ExternalWrite,
+            SuccessorCommand::Package(PackageAction::InstallVerify),
+            EffectClass::Read,
         )),
-        Some(PublicOperation::PackageInstallApply),
+        Some(PublicOperation::PackageInstallVerify),
     );
     for invocation in [
         invocation(
@@ -131,8 +131,8 @@ fn only_exact_supported_command_effect_pairs_bind() {
             EffectClass::ExternalWrite,
         ),
         invocation(
-            SuccessorCommand::Package(PackageAction::InstallApply),
-            EffectClass::Read,
+            SuccessorCommand::Package(PackageAction::InstallVerify),
+            EffectClass::ExternalWrite,
         ),
         invocation(SuccessorCommand::Fit(FitAction::Apply), EffectClass::Read),
         invocation(

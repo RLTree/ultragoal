@@ -3,7 +3,7 @@ use super::super::command_contract::{
 };
 use super::options::{
     EXPORT_OPTIONS, INPUT_OUTPUT_RETAIN, OBSERVE_QUERY_OPTIONS, OUTPUT_OPTION,
-    PACKAGE_BUILD_OPTIONS, PACKAGE_INSTALL_APPLY_OPTIONS, PACKAGE_INSTALL_PLAN_OPTIONS,
+    PACKAGE_BUILD_OPTIONS, PACKAGE_INSTALL_PLAN_OPTIONS, PACKAGE_INSTALL_VERIFY_OPTIONS,
     PACKAGE_VERIFY_OPTIONS, PUBLISH_OPTIONS, descriptor,
 };
 use crate::context::EffectClass;
@@ -55,15 +55,15 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Package(PackageAction::InstallPlan),
         Some("install-plan"),
         EffectClass::Read,
-        "Plan an exact personal-marketplace update without mutation.",
+        "Create an exact supported-Codex personal-install handoff without mutation.",
         PACKAGE_INSTALL_PLAN_OPTIONS,
     ),
     descriptor(
-        SuccessorCommand::Package(PackageAction::InstallApply),
-        Some("install-apply"),
-        EffectClass::ExternalWrite,
-        "Apply only one explicitly accepted personal-marketplace lifecycle plan.",
-        PACKAGE_INSTALL_APPLY_OPTIONS,
+        SuccessorCommand::Package(PackageAction::InstallVerify),
+        Some("install-verify"),
+        EffectClass::Read,
+        "Classify the current personal installation against one immutable handoff without repair.",
+        PACKAGE_INSTALL_VERIFY_OPTIONS,
     ),
     descriptor(
         SuccessorCommand::Package(PackageAction::Publish),

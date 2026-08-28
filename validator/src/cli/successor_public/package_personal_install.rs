@@ -1,32 +1,42 @@
 use super::*;
 use crate::cli::successor::command_contract::{OptionName, PackageAction, ParsedValue};
 use crate::distribution::{
-    ConfinedRoot, PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PackageIdentity,
-    PersonalMarketplaceSourceObservation, PersonalMarketplaceUpdateAuthority,
-    PersonalMarketplaceUpdateDisposition, PersonalMarketplaceUpdateStage, ReadOnlyTreeObservation,
-    ReadOnlyWorkspace, SourceIdentity, capture_product_package, capture_product_package_with_cli,
-    execute_personal_marketplace_update, verify_product_package,
+    PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceSourceObservation,
+    ReadOnlyTreeObservation, ReadOnlyWorkspace, capture_product_package,
+    capture_product_package_with_cli, verify_product_package,
 };
 use crate::plugin_product::agent_discovery::{
     HostPluginRegistryObservation, InstalledSourceAuthorityCapture,
-    capture_installed_source_authority,
-};
-use crate::plugin_product::lifecycle::{
-    LifecycleAuthorization, LifecycleIntent, LifecycleRequest, LifecycleState, PackageAuthority,
-    PriorInstalledAuthority, Version,
+    capture_installed_source_authority, parse_unpinned_host_plugin_registry_observation,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use std::ffi::OsString;
 use std::fs::{self, File, OpenOptions};
+use std::io::Read;
 use std::os::fd::{AsRawFd, FromRawFd};
+use std::os::unix::ffi::OsStrExt;
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 use std::path::{Path, PathBuf};
-
-mod live_effects;
+use std::time::Duration;
 
 const PACKAGE_LIMIT: usize = 65 * 1024 * 1024;
-const PLAN_LIMIT: u64 = 1024 * 1024;
+const HANDOFF_LIMIT: u64 = 1024 * 1024;
+const FILE_LIMIT: usize = 256 * 1024 * 1024;
+const CONFIG_LIMIT: usize = 1024 * 1024;
 const MARKETPLACE: &str = "local-harness-plugins";
+const PLUGIN_ID: &str = "harness-ultragoal@local-harness-plugins";
+const PLUGIN_NAME: &str = "harness-ultragoal";
+const HANDOFF_SCHEMA: &str = "HarnessPersonalMarketplaceInstallHandoff-v1";
+const INSTALLED_SCHEMA: &str = "HarnessObservedInstalledAuthority-v4";
+const HOST_TIMEOUT: Duration = Duration::from_secs(30);
+const PROTECTED_PATHS: [&str; 4] = [
+    "validator/src/distribution/host_effect/executor/tests/mod.rs",
+    "validator/src/distribution/host_effect/mod.rs",
+    "validator/src/distribution/host_effect/selected_codex_executable/selected_tests.rs",
+    "validator/src/distribution/package/manifest_bind.rs",
+];
+const PROTECTED_MARKER: &str = ".ultragoal-e2e-unrelated-state.txt";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -41,95 +51,81 @@ struct DirectoryAuthority {
 #[serde(deny_unknown_fields)]
 struct PersonalHomeAuthorityRecord {
     schema_version: String,
-    canonical_path_sha256: String,
+    canonical_home: String,
+    canonical_codex_home: String,
     home: DirectoryAuthority,
     codex_home: DirectoryAuthority,
     authority_sha256: String,
 }
 
-/// One retained authority for the exact canonical personal home and its
-/// `.codex` object. Pathnames are reporting/admission inputs only; retained
-/// descriptors and `ConfinedRoot` own every filesystem effect.
+/// Retained descriptors make observation resistant to pathname substitution.
+/// This capability exposes no writer, recovery primitive, or confined root.
 struct PersonalHomeAuthority {
-    canonical: PathBuf,
+    home_path: PathBuf,
+    codex_home_path: PathBuf,
     home: File,
     codex_home: File,
-    root: ConfinedRoot,
     record: PersonalHomeAuthorityRecord,
 }
 
 impl PersonalHomeAuthority {
-    fn capture(requested: &Path) -> Result<Self, &'static str> {
-        let canonical = requested
-            .canonicalize()
-            .map_err(|_| "personal home authority is unavailable")?;
-        if canonical != requested || !canonical.is_absolute() {
-            return Err("personal home authority changed");
+    fn capture(requested_home: &Path) -> Result<Self, &'static str> {
+        let home_path = canonical_directory(requested_home, "personal home is unavailable")?;
+        if home_path != requested_home {
+            return Err("ambient HOME is not the canonical personal home");
         }
-        let named = fs::symlink_metadata(&canonical)
-            .map_err(|_| "personal home authority is unavailable")?;
-        if named.file_type().is_symlink() || !named.is_dir() {
-            return Err("personal home authority is not one directory");
+        let requested_codex = std::env::var_os("CODEX_HOME")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| home_path.join(".codex"));
+        let codex_home_path =
+            canonical_directory(&requested_codex, "effective CODEX_HOME is unavailable")?;
+        if codex_home_path != home_path.join(".codex") {
+            return Err("effective CODEX_HOME is outside the supported personal scope");
         }
-        let mut options = OpenOptions::new();
-        options
-            .read(true)
-            .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_DIRECTORY);
-        let home = options
-            .open(&canonical)
-            .map_err(|_| "personal home authority descriptor is unavailable")?;
-        let opened = home
-            .metadata()
-            .map_err(|_| "personal home authority descriptor is unavailable")?;
-        if directory_authority(&named)? != directory_authority(&opened)? {
-            return Err("personal home authority changed during capture");
-        }
-        let codex_descriptor = unsafe {
+        let home = open_directory(&home_path)?;
+        let codex_fd = unsafe {
             libc::openat(
                 home.as_raw_fd(),
                 c".codex".as_ptr(),
                 libc::O_RDONLY | libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_DIRECTORY,
             )
         };
-        if codex_descriptor < 0 {
-            return Err("personal Codex home authority is unavailable");
+        if codex_fd < 0 {
+            return Err("effective CODEX_HOME descriptor is unavailable");
         }
-        let codex_home = unsafe { File::from_raw_fd(codex_descriptor) };
-        let codex_named = stat_codex_home(home.as_raw_fd())?;
-        let codex_opened = codex_home
-            .metadata()
-            .map_err(|_| "personal Codex home authority descriptor is unavailable")?;
-        let home_authority = directory_authority(&opened)?;
-        let codex_authority = directory_authority(&codex_opened)?;
-        if codex_named != codex_authority {
-            return Err("personal Codex home authority changed during capture");
+        let codex_home = unsafe { File::from_raw_fd(codex_fd) };
+        let home_authority = directory_authority(
+            &home
+                .metadata()
+                .map_err(|_| "personal home descriptor is unavailable")?,
+        )?;
+        let codex_authority = directory_authority(
+            &codex_home
+                .metadata()
+                .map_err(|_| "CODEX_HOME descriptor is unavailable")?,
+        )?;
+        if home_authority
+            != directory_authority(
+                &fs::symlink_metadata(&home_path).map_err(|_| "personal home is unavailable")?,
+            )?
+            || codex_authority != stat_child_directory(home.as_raw_fd(), c".codex")?
+        {
+            return Err("personal HOME or CODEX_HOME changed during capture");
         }
-        let home_id = digest_bytes(
-            format!(
-                "{}\0{}\0{}",
-                canonical.display(),
-                home_authority.device,
-                home_authority.inode
-            )
-            .as_bytes(),
-        );
-        let root = ConfinedRoot::open_personal_home(&canonical, &home_id)
-            .map_err(|_| "personal home confinement failed")?;
         let mut record = PersonalHomeAuthorityRecord {
-            schema_version: "HarnessPersonalHomeAuthority-v1".to_owned(),
-            canonical_path_sha256: digest_bytes(
-                format!("personal-home-path-v1\0{}", canonical.display()).as_bytes(),
-            ),
+            schema_version: "HarnessPersonalHomeAuthority-v2".to_owned(),
+            canonical_home: path_string(&home_path)?,
+            canonical_codex_home: path_string(&codex_home_path)?,
             home: home_authority,
             codex_home: codex_authority,
             authority_sha256: String::new(),
         };
-        record.authority_sha256 = personal_home_authority_digest(&record)?;
+        record.authority_sha256 = home_authority_digest(&record)?;
         let authority = Self {
-            canonical,
+            home_path,
+            codex_home_path,
             home,
             codex_home,
-            root,
             record,
         };
         authority.revalidate()?;
@@ -137,101 +133,56 @@ impl PersonalHomeAuthority {
     }
 
     fn revalidate(&self) -> Result<(), &'static str> {
-        self.root
-            .revalidate()
-            .map_err(|_| "personal home authority changed")?;
-        let named = fs::symlink_metadata(&self.canonical)
-            .map_err(|_| "personal home authority is unavailable")?;
-        let opened = self
-            .home
-            .metadata()
-            .map_err(|_| "personal home authority descriptor is unavailable")?;
-        let codex_opened = self
-            .codex_home
-            .metadata()
-            .map_err(|_| "personal Codex home authority descriptor is unavailable")?;
-        if self.canonical.canonicalize().ok().as_deref() != Some(self.canonical.as_path())
-            || directory_authority(&named)? != self.record.home
-            || directory_authority(&opened)? != self.record.home
-            || stat_codex_home(self.home.as_raw_fd())? != self.record.codex_home
-            || directory_authority(&codex_opened)? != self.record.codex_home
-            || self.record.authority_sha256 != personal_home_authority_digest(&self.record)?
+        if self.home_path.canonicalize().ok().as_deref() != Some(self.home_path.as_path())
+            || self.codex_home_path.canonicalize().ok().as_deref()
+                != Some(self.codex_home_path.as_path())
+            || directory_authority(
+                &self
+                    .home
+                    .metadata()
+                    .map_err(|_| "personal home descriptor is unavailable")?,
+            )? != self.record.home
+            || directory_authority(
+                &self
+                    .codex_home
+                    .metadata()
+                    .map_err(|_| "CODEX_HOME descriptor is unavailable")?,
+            )? != self.record.codex_home
+            || stat_child_directory(self.home.as_raw_fd(), c".codex")? != self.record.codex_home
+            || self.record.authority_sha256 != home_authority_digest(&self.record)?
         {
-            return Err("personal home or Codex home authority changed");
+            return Err("personal HOME or CODEX_HOME authority changed");
         }
         Ok(())
     }
-
-    fn path(&self) -> &Path {
-        &self.canonical
-    }
-
-    fn root(&self) -> ConfinedRoot {
-        self.root.clone()
-    }
-
-    fn record(&self) -> &PersonalHomeAuthorityRecord {
-        &self.record
-    }
-
-    fn codex_home_fd(&self) -> std::os::fd::RawFd {
-        self.codex_home.as_raw_fd()
-    }
 }
 
-fn directory_authority(metadata: &fs::Metadata) -> Result<DirectoryAuthority, &'static str> {
-    if !metadata.is_dir() || metadata.file_type().is_symlink() {
-        return Err("personal authority object is not one directory");
-    }
-    Ok(DirectoryAuthority {
-        device: metadata.dev(),
-        inode: metadata.ino(),
-        owner: metadata.uid(),
-        mode: metadata.mode(),
-    })
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct BoundFile {
+    canonical_path: String,
+    sha256: String,
+    byte_length: u64,
+    unix_mode: u32,
 }
 
-fn stat_codex_home(home: std::os::fd::RawFd) -> Result<DirectoryAuthority, &'static str> {
-    let mut value = std::mem::MaybeUninit::<libc::stat>::uninit();
-    let result = unsafe {
-        libc::fstatat(
-            home,
-            c".codex".as_ptr(),
-            value.as_mut_ptr(),
-            libc::AT_SYMLINK_NOFOLLOW,
-        )
-    };
-    if result != 0 {
-        return Err("personal Codex home authority is unavailable");
-    }
-    let value = unsafe { value.assume_init() };
-    if value.st_mode & libc::S_IFMT != libc::S_IFDIR {
-        return Err("personal Codex home authority is not one directory");
-    }
-    Ok(DirectoryAuthority {
-        device: value.st_dev as u64,
-        inode: value.st_ino as u64,
-        owner: value.st_uid,
-        mode: value.st_mode as u32,
-    })
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct HostContext {
+    personal_home: PersonalHomeAuthorityRecord,
+    config: BoundFile,
+    profile_context: String,
+    working_directory: String,
+    context_sha256: String,
 }
 
-fn personal_home_authority_digest(
-    authority: &PersonalHomeAuthorityRecord,
-) -> Result<String, &'static str> {
-    #[derive(Serialize)]
-    struct Binding<'a> {
-        schema_version: &'a str,
-        canonical_path_sha256: &'a str,
-        home: &'a DirectoryAuthority,
-        codex_home: &'a DirectoryAuthority,
-    }
-    digest_json(&Binding {
-        schema_version: &authority.schema_version,
-        canonical_path_sha256: &authority.canonical_path_sha256,
-        home: &authority.home,
-        codex_home: &authority.codex_home,
-    })
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct SelectedCodex {
+    executable: BoundFile,
+    version: String,
+    plugin_help_sha256: String,
+    registry_observation_sha256: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -240,16 +191,15 @@ struct InstalledAuthority {
     schema_version: String,
     plugin_version: String,
     registry_observation_sha256: String,
-    marketplace_source_relative_path_sha256: String,
+    marketplace_source_path: String,
     marketplace_source_tree_sha256: String,
     marketplace_source_observation_sha256: String,
     marketplace_source_catalog_sha256: String,
-    cache_catalog_sha256: String,
+    cache_path: String,
     cache_tree_sha256: String,
+    cache_catalog_sha256: String,
     marketplace_runtime_sha256: String,
     cache_runtime_sha256: String,
-    selected_codex_identity_sha256: String,
-    personal_home_authority_sha256: String,
     installed_authority_sha256: String,
 }
 
@@ -265,20 +215,16 @@ impl InstalledAuthorityObservation {
     fn revalidate(&self) -> Result<(), &'static str> {
         self.source
             .revalidate()
-            .map_err(|_| "installed marketplace source changed during capture")?;
+            .map_err(|_| "installed marketplace source changed")?;
         self.cache
             .revalidate()
-            .map_err(|_| "installed cache changed during capture")?;
+            .map_err(|_| "installed cache changed")?;
         self.source_tree
             .revalidate()
-            .map_err(|_| "installed marketplace source tree changed during capture")?;
+            .map_err(|_| "installed marketplace source tree changed")?;
         self.cache_tree
             .revalidate()
-            .map_err(|_| "installed cache tree changed during capture")?;
-        if self.cache_tree.tree_sha256() != self.authority.cache_tree_sha256 {
-            return Err("installed cache tree changed during capture");
-        }
-        Ok(())
+            .map_err(|_| "installed cache tree changed")
     }
 }
 
@@ -290,38 +236,88 @@ struct TargetPackage {
     catalog_id: String,
     version: String,
     source_tree_sha256: String,
+    archive_path: String,
     archive_sha256: String,
     inventory_sha256: String,
+    runtime_sha256: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
-struct PersonalMarketplaceInstallPlan {
+struct DurableMarketplaceSource {
+    catalog: BoundFile,
+    catalog_name: String,
+    canonical_path: String,
+    tree_sha256: String,
+    observation_sha256: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct SourceCandidate {
+    head_commit: String,
+    head_tree: String,
+    branch: String,
+    status_sha256: String,
+    worktree_diff_sha256: String,
+    staged_diff_sha256: String,
+    untracked_content_sha256: String,
+    dirty: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct ProtectedState {
+    tracked_diff_sha256: String,
+    marker_sha256: String,
+    state_sha256: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct SupportedAction {
+    executable: String,
+    arguments: Vec<String>,
+    working_directory: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct PersonalMarketplaceInstallHandoff {
     schema_version: String,
-    plan_sha256: String,
+    handoff_sha256: String,
     effect: String,
-    marketplace: String,
-    lifecycle_intent: String,
-    input: String,
-    cli: String,
-    personal_home: PersonalHomeAuthorityRecord,
-    before: InstalledAuthority,
+    status: String,
+    source: SourceCandidate,
     target: TargetPackage,
-    apply_status: String,
-    required_effects: Vec<String>,
-    required_reconciliation: Vec<String>,
-    rollback: Vec<String>,
+    release_cli: BoundFile,
+    durable_marketplace_source: DurableMarketplaceSource,
+    plugin_id: String,
+    marketplace: String,
+    host: HostContext,
+    selected_codex: SelectedCodex,
+    predecessor: InstalledAuthority,
+    expected_target_source_tree_sha256: String,
+    expected_target_cache_tree_sha256: String,
+    expected_target_runtime_sha256: String,
+    protected_state: ProtectedState,
+    supported_action: SupportedAction,
+    recovery_action: SupportedAction,
+    consequences: Vec<String>,
+    cancellation_boundary: String,
+    restart_rule: String,
     claim_ceiling: String,
 }
 
-struct PreparedInstallPlan {
-    record: PersonalMarketplaceInstallPlan,
-    registry: HostPluginRegistryObservation,
+struct PreparedHandoff {
+    record: PersonalMarketplaceInstallHandoff,
+    home: PersonalHomeAuthority,
     installed: InstalledAuthorityObservation,
-    personal_home: PersonalHomeAuthority,
+    registry: HostPluginRegistryObservation,
+    marketplace_source: ReadOnlyTreeObservation,
 }
 
-impl PreparedInstallPlan {
+impl PreparedHandoff {
     fn revalidate(
         &self,
         source_context: &LiveContext,
@@ -329,43 +325,45 @@ impl PreparedInstallPlan {
     ) -> Result<(), &'static str> {
         source_context
             .revalidate()
-            .map_err(|_| "candidate source changed before plan publication")?;
+            .map_err(|_| "candidate changed before handoff publication")?;
         observation_context
             .revalidate()
-            .map_err(|_| "host observation context changed before plan publication")?;
-        self.personal_home.revalidate()?;
-        let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
-            .map_err(registry_observation_failure_cause)?;
-        if registry != self.registry {
-            return Err("installed registry changed before plan publication");
-        }
+            .map_err(|_| "host context changed before handoff publication")?;
+        self.home.revalidate()?;
         self.installed.revalidate()?;
-        self.personal_home.revalidate()?;
-        source_context
+        self.marketplace_source
             .revalidate()
-            .map_err(|_| "candidate source changed before plan publication")?;
-        observation_context
-            .revalidate()
-            .map_err(|_| "host observation context changed before plan publication")
+            .map_err(|_| "durable marketplace source changed before handoff publication")?;
+        let observed = observe_supported_host(observation_context, &self.home)?;
+        if observed.registry != self.registry {
+            return Err("supported Codex listing changed before handoff publication");
+        }
+        Ok(())
     }
 }
 
+struct SupportedHostObservation {
+    registry: HostPluginRegistryObservation,
+    selected: SelectedCodex,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+enum VerificationClassification {
+    ExactTarget,
+    ExactPriorNoEffect,
+    PartialOrStale,
+    Ambiguous,
+}
+
 #[derive(Serialize)]
-struct PlanBinding<'a> {
-    schema_version: &'a str,
-    effect: &'a str,
-    marketplace: &'a str,
-    lifecycle_intent: &'a str,
-    input: &'a str,
-    cli: &'a str,
-    personal_home: &'a PersonalHomeAuthorityRecord,
-    before: &'a InstalledAuthority,
-    target: &'a TargetPackage,
-    apply_status: &'a str,
-    required_effects: &'a [String],
-    required_reconciliation: &'a [String],
-    rollback: &'a [String],
-    claim_ceiling: &'a str,
+struct InstallVerification<'a> {
+    schema_version: &'static str,
+    handoff_sha256: &'a str,
+    classification: VerificationClassification,
+    effect: &'static str,
+    next_action: Option<&'a SupportedAction>,
+    claim_ceiling: &'static str,
 }
 
 pub(super) fn plan(
@@ -378,330 +376,185 @@ pub(super) fn plan(
         return invalid_plan_invocation();
     };
     let Some(home) = home else {
-        return plan_failure("personal home authority is unavailable");
+        return handoff_failure("canonical personal HOME is unavailable");
     };
-    match build_plan(source_context, observation_context, home, input, cli) {
-        Ok(prepared) => match serde_json::to_vec(&prepared.record) {
-            Ok(bytes) if public_output_allowed(bytes.len()) => {
-                if let Err(cause) = prepared.revalidate(source_context, observation_context) {
-                    return plan_failure(cause);
-                }
-                RuntimeOutcome::payload(
+    match build_handoff(source_context, observation_context, home, input, cli) {
+        Ok(prepared) => {
+            if let Err(cause) = prepared.revalidate(source_context, observation_context) {
+                return handoff_failure(cause);
+            }
+            match serde_json::to_vec(&prepared.record) {
+                Ok(bytes) if public_output_allowed(bytes.len()) => RuntimeOutcome::payload(
                     ExitClass::Success,
                     bytes,
                     format!(
-                        "personal marketplace install plan {} effect=none",
-                        prepared.record.plan_sha256
+                        "supported install handoff {} effect=none",
+                        prepared.record.handoff_sha256
                     ),
-                )
+                ),
+                _ => handoff_failure("supported install handoff encoding failed"),
             }
-            _ => plan_failure("personal marketplace install plan encoding failed"),
-        },
-        Err(cause) => plan_failure(cause),
+        }
+        Err(cause) => handoff_failure(cause),
     }
 }
 
-pub(super) fn apply(
+pub(super) fn verify(
     source_context: &LiveContext,
     observation_context: &LiveContext,
     invocation: &ParsedInvocation,
     home: Option<&Path>,
 ) -> RuntimeOutcome {
-    let Some((plan_path, accepted_plan)) = apply_arguments(invocation) else {
-        return invalid_apply_invocation();
+    let Some(path) = verify_argument(invocation) else {
+        return invalid_verify_invocation();
     };
     let Some(home) = home else {
-        return apply_failure("personal home authority is unavailable");
+        return verify_failure("canonical personal HOME is unavailable");
     };
-    if source_context.revalidate().is_err() || observation_context.revalidate().is_err() {
-        return apply_failure("candidate context changed before plan admission");
-    }
-    let bytes = match super::fit::external_plan_file::read_immutable_plan(plan_path, PLAN_LIMIT) {
+    let bytes = match super::fit::external_plan_file::read_immutable_plan(path, HANDOFF_LIMIT) {
         Ok(bytes) => bytes,
-        Err(_) => return apply_failure("accepted plan file is not one immutable owner-only input"),
+        Err(_) => return verify_failure("handoff is not one immutable owner-only input"),
     };
-    let canonical = if bytes.ends_with(b"\n") && !bytes[..bytes.len() - 1].ends_with(b"\n") {
-        &bytes[..bytes.len() - 1]
-    } else {
-        bytes.as_slice()
-    };
-    let record: PersonalMarketplaceInstallPlan = match serde_json::from_slice(canonical) {
+    let canonical = bytes.strip_suffix(b"\n").unwrap_or(&bytes);
+    let record: PersonalMarketplaceInstallHandoff = match serde_json::from_slice(canonical) {
         Ok(record) => record,
-        Err(_) => return apply_failure("accepted plan does not match the closed plan schema"),
+        Err(_) => return verify_failure("handoff does not match the closed schema"),
     };
-    if record.plan_sha256 != accepted_plan
-        || record.effect != "personal-marketplace-update"
-        || record.apply_status != "ready-exact-live-personal-marketplace-adapter"
-        || validate_plan_identity(&record).is_err()
+    if validate_handoff_identity(&record).is_err() {
+        return verify_failure("handoff identity was changed or substituted");
+    }
+    let source = match capture_source_candidate(source_context) {
+        Ok(source) => source,
+        Err(cause) => return verify_failure(cause),
+    };
+    if source != record.source {
+        return verification_result(&record, VerificationClassification::PartialOrStale);
+    }
+    let protected = match capture_protected_state(source_context) {
+        Ok(protected) => protected,
+        Err(cause) => return verify_failure(cause),
+    };
+    if protected != record.protected_state {
+        return verification_result(&record, VerificationClassification::PartialOrStale);
+    }
+    let durable = match capture_durable_marketplace_source(source_context, &record.target) {
+        Ok((source, _observation)) => source,
+        Err(_) => return verification_result(&record, VerificationClassification::PartialOrStale),
+    };
+    if durable != record.durable_marketplace_source {
+        return verification_result(&record, VerificationClassification::PartialOrStale);
+    }
+    let authority = match PersonalHomeAuthority::capture(home) {
+        Ok(authority) => authority,
+        Err(_) => return verification_result(&record, VerificationClassification::Ambiguous),
+    };
+    let host = match capture_host_context(observation_context, &authority) {
+        Ok(host) => host,
+        Err(_) => return verification_result(&record, VerificationClassification::Ambiguous),
+    };
+    if host.personal_home != record.host.personal_home
+        || host.profile_context != record.host.profile_context
+        || host.working_directory != record.host.working_directory
     {
-        return apply_failure("accepted plan identity or HOLD boundary was substituted");
+        return verification_result(&record, VerificationClassification::PartialOrStale);
     }
-    let personal_home = match PersonalHomeAuthority::capture(home) {
-        Ok(authority) if authority.record() == &record.personal_home => authority,
-        _ => return apply_failure("accepted personal home authority changed after planning"),
+    let supported = match observe_supported_host(observation_context, &authority) {
+        Ok(observation) => observation,
+        Err(_) => return verification_result(&record, VerificationClassification::Ambiguous),
     };
-    // Do not require the host to still be exact-prior here. A fresh process
-    // must be able to admit the one exact materialized-but-not-installed state
-    // and drive the existing rollback transaction. The live adapter acquires
-    // the exclusive lease, captures the required exact prior cache snapshot,
-    // and compares the typed registry/source/cache/runtime observations before
-    // any package or install effect.
-    let (artifact, catalog) =
-        match capture_accepted_candidate(source_context, &record.input, &record.cli) {
-            Ok(candidate) => candidate,
-            Err(_) => return apply_failure("candidate authority changed after planning"),
-        };
-    if target_package(&artifact) != record.target
-        || source_context.revalidate().is_err()
-        || observation_context.revalidate().is_err()
+    if supported.selected.executable != record.selected_codex.executable
+        || supported.selected.version != record.selected_codex.version
+        || supported.selected.plugin_help_sha256 != record.selected_codex.plugin_help_sha256
     {
-        return apply_failure("installed or candidate authority changed after planning");
+        return verification_result(&record, VerificationClassification::PartialOrStale);
     }
-    let (authority, prior) = match accepted_update_authority(&record, &target_package(&artifact)) {
-        Ok(accepted) => accepted,
-        Err(cause) => return apply_failure(cause),
+    let installed = match installed_authority(&authority, &supported.registry) {
+        Ok(observation) => observation,
+        Err(_) => return verification_result(&record, VerificationClassification::PartialOrStale),
     };
-    let cancellation = crate::distribution::host_effect::HostEffectCancellation::default();
-    let _signal_guard = match cancellation.install_process_signal_source() {
-        Ok(guard) => guard,
-        Err(cause) => return apply_failure(cause),
-    };
-    let mut effects = match live_effects::LivePersonalMarketplaceUpdateEffects::new(
-        source_context,
-        observation_context,
-        personal_home,
-        record.clone(),
-        prior,
-        artifact,
-        catalog,
-        cancellation,
-    ) {
-        Ok(effects) => effects,
-        Err(cause) => return apply_failure(cause),
-    };
-    let report = execute_personal_marketplace_update(&authority, &mut effects);
-    if let Err(cause) = effects.finish() {
-        return match report.disposition {
-            PersonalMarketplaceUpdateDisposition::Applied => apply_effect_failure(
-                cause,
-                "observed-exact-target; pinned-executable-finalization-failed",
-                "preserve the observed target and reconcile the exact selected Codex executable before any retry",
-            ),
-            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => {
-                let (stage_cause, _) = recovered_stage_diagnostic(report.failed_stage);
-                apply_effect_failure(
-                    stage_cause,
-                    "restored-exact-prior; pinned-executable-finalization-failed",
-                    "preserve the restored prior state and reconcile the exact selected Codex executable before deriving a new plan",
-                )
-            }
-            PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => {
-                let (stage_cause, _) = ambiguous_stage_diagnostic(report.failed_stage);
-                apply_effect_failure(
-                    stage_cause,
-                    "ambiguous-recovery-and-executable-finalization",
-                    "reconcile every marketplace, registry, cache, runtime, and selected-Codex authority before any retry",
-                )
-            }
-            PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => {
-                let (stage_cause, _) = refused_stage_diagnostic(report.failed_stage);
-                apply_failure(stage_cause)
-            }
-            PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget => apply_failure(cause),
-        };
-    }
-    match report.disposition {
-        PersonalMarketplaceUpdateDisposition::Applied => RuntimeOutcome::payload(
-            ExitClass::Success,
-            Vec::new(),
-            format!(
-                "personal marketplace install applied plan={} effect=marketplace-source+plugin-install",
-                record.plan_sha256
-            ),
-        ),
-        PersonalMarketplaceUpdateDisposition::ReusedVerifiedTarget => RuntimeOutcome::payload(
-            ExitClass::Success,
-            Vec::new(),
-            format!(
-                "personal marketplace install reused plan={} effect=none",
-                record.plan_sha256
-            ),
-        ),
-        PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure => {
-            let (cause, repair) = recovered_stage_diagnostic(report.failed_stage);
-            apply_effect_failure(cause, "restored-exact-prior", repair)
-        }
-        PersonalMarketplaceUpdateDisposition::RefusedBeforeEffect => {
-            let (cause, repair) = refused_stage_diagnostic(report.failed_stage);
-            apply_effect_failure(cause, "none", repair)
-        }
-        PersonalMarketplaceUpdateDisposition::RecoveryAmbiguous => {
-            let (cause, repair) = ambiguous_stage_diagnostic(report.failed_stage);
-            apply_effect_failure(cause, "ambiguous-recovery-required", repair)
-        }
-    }
+    verification_result(
+        &record,
+        classify_installation(&record, &installed.authority),
+    )
 }
 
-fn recovered_stage_diagnostic(
-    stage: Option<PersonalMarketplaceUpdateStage>,
-) -> (&'static str, &'static str) {
-    match stage {
-        Some(PersonalMarketplaceUpdateStage::InterruptedAfterMaterialization) => (
-            "personal marketplace update recovered exact prior after stage=interrupted-after-materialization",
-            "derive a fresh exact plan after verifying the restored source, registry, cache, runtime, and child-group lease are terminal",
-        ),
-        Some(PersonalMarketplaceUpdateStage::MaterializeTarget) => (
-            "personal marketplace update recovered exact prior after stage=materialize-target",
-            "derive a fresh exact plan after verifying source materialization custody and the restored predecessor",
-        ),
-        Some(PersonalMarketplaceUpdateStage::ReconcileMaterializedTarget) => (
-            "personal marketplace update recovered exact prior after stage=reconcile-materialized-target",
-            "derive a fresh exact plan only after the target-source observation path is repaired",
-        ),
-        Some(PersonalMarketplaceUpdateStage::InstallTarget) => (
-            "personal marketplace update recovered exact prior after stage=install-target",
-            "derive a fresh exact plan only after the pinned child execution or cancellation cause is resolved",
-        ),
-        Some(PersonalMarketplaceUpdateStage::ReconcileTarget) => (
-            "personal marketplace update recovered exact prior after stage=reconcile-target",
-            "derive a fresh exact plan only after target registry, cache, runtime, and source observation agree",
-        ),
-        _ => (
-            "personal marketplace update recovered exact prior after stage=unknown-forward-stage",
-            "preserve the restored prior state and independently reconcile the redacted stage before deriving a new plan",
-        ),
-    }
-}
-
-fn refused_stage_diagnostic(
-    stage: Option<PersonalMarketplaceUpdateStage>,
-) -> (&'static str, &'static str) {
-    match stage {
-        Some(PersonalMarketplaceUpdateStage::InitialObservation) => (
-            "personal marketplace update refused before effect at stage=initial-observation",
-            "restore the exact typed home, registry, source, cache-tree, runtime, plan, and selected-Codex observations before retrying",
-        ),
-        Some(PersonalMarketplaceUpdateStage::MaterializeTarget) => (
-            "personal marketplace update refused before effect at stage=materialize-target",
-            "clear the production cancellation source, then derive a fresh exact plan before retrying",
-        ),
-        _ => (
-            "personal marketplace update refused before effect at stage=unknown-admission-stage",
-            "restore exact plan and predecessor custody and rederive a fresh plan before retrying",
-        ),
-    }
-}
-
-fn ambiguous_stage_diagnostic(
-    stage: Option<PersonalMarketplaceUpdateStage>,
-) -> (&'static str, &'static str) {
-    match stage {
-        Some(PersonalMarketplaceUpdateStage::RestorePriorTree) => (
-            "personal marketplace recovery is ambiguous at stage=restore-prior-tree",
-            "preserve all state and reconcile the exact marketplace source tree before any child or install retry",
-        ),
-        Some(PersonalMarketplaceUpdateStage::ReinstallPrior) => (
-            "personal marketplace recovery is ambiguous at stage=reinstall-prior",
-            "preserve all state and reconcile the exact prior registry, cache, runtime, and selected-Codex child result before any retry",
-        ),
-        Some(PersonalMarketplaceUpdateStage::ReconcilePrior) => (
-            "personal marketplace recovery is ambiguous at stage=reconcile-prior",
-            "preserve all state and independently reobserve every exact prior authority before deriving another plan",
-        ),
-        _ => (
-            "personal marketplace recovery is ambiguous at stage=unknown-recovery-stage",
-            "preserve all state and reconcile every marketplace, registry, cache, runtime, home, and child-group authority before any retry",
-        ),
-    }
-}
-
-fn build_plan(
+fn build_handoff(
     source_context: &LiveContext,
     observation_context: &LiveContext,
-    home: &Path,
+    home_path: &Path,
     input: &str,
     cli: &str,
-) -> Result<PreparedInstallPlan, &'static str> {
+) -> Result<PreparedHandoff, &'static str> {
     let (artifact, _catalog) = capture_accepted_candidate(source_context, input, cli)?;
-    let personal_home = PersonalHomeAuthority::capture(home)?;
-    let registry = super::capabilities::observe_unpinned_host_registry(observation_context)
-        .map_err(registry_observation_failure_cause)?;
-    let installed = installed_authority(&personal_home, &registry)?;
-    let before = installed.authority.clone();
-    let target = target_package(&artifact);
-    let before_version = Version::parse(&before.plugin_version)
-        .map_err(|_| "installed plugin version is invalid")?;
-    let target_version_parsed =
-        Version::parse(&target.version).map_err(|_| "target plugin version is invalid")?;
-    if target_version_parsed
-        .precedence_cmp(&before_version)
-        .map_err(|_| "installed or target plugin version is invalid")?
-        != std::cmp::Ordering::Greater
-    {
-        return Err("target package is not a monotonic installed-version successor");
+    let home = PersonalHomeAuthority::capture(home_path)?;
+    let supported = observe_supported_host(observation_context, &home)?;
+    let installed = installed_authority(&home, &supported.registry)?;
+    let target = target_package(&artifact, input)?;
+    if !monotonic_successor(&installed.authority.plugin_version, &target.version) {
+        return Err("target package is not one monotonic installed-version successor");
     }
-    let required_effects = vec![
-        "atomically materialize exact target bytes into the observed personal marketplace source"
-            .to_owned(),
-        "execute the pinned Codex executable: plugin add harness-ultragoal@local-harness-plugins"
-            .to_owned(),
-    ];
-    let required_reconciliation = vec![
-        "reobserve the exact installed registry row and personal marketplace root".to_owned(),
-        "verify installed source, cache, and runtime bytes equal the target package".to_owned(),
-        "prove idempotent replay produces no second materialization or install effect".to_owned(),
-    ];
-    let rollback = vec![
-        "restore the exact pre-plan marketplace source tree".to_owned(),
-        "reinstall and reobserve the exact prior installed authority".to_owned(),
-        "surface recovery-required if either restoration or reconciliation is ambiguous".to_owned(),
-    ];
-    let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5",
-        effect: "personal-marketplace-update",
-        marketplace: MARKETPLACE,
-        lifecycle_intent: "monotonic-update",
-        input,
-        cli,
-        personal_home: personal_home.record(),
-        before: &before,
-        target: &target,
-        apply_status: "ready-exact-live-personal-marketplace-adapter",
-        required_effects: &required_effects,
-        required_reconciliation: &required_reconciliation,
-        rollback: &rollback,
-        claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers",
+    let host = capture_host_context(observation_context, &home)?;
+    let release_cli = bind_workspace_file(source_context, cli, FILE_LIMIT)?;
+    if release_cli.sha256 != target.runtime_sha256 {
+        return Err("release CLI and packaged runtime differ");
+    }
+    let source = capture_source_candidate(source_context)?;
+    let (durable_marketplace_source, marketplace_source) =
+        capture_durable_marketplace_source(source_context, &target)?;
+    let protected_state = capture_protected_state(source_context)?;
+    let action = SupportedAction {
+        executable: supported.selected.executable.canonical_path.clone(),
+        arguments: vec![
+            "plugin".to_owned(),
+            "add".to_owned(),
+            format!("{PLUGIN_NAME}@{MARKETPLACE}"),
+        ],
+        working_directory: host.working_directory.clone(),
     };
-    let plan_sha256 = digest_json(&binding)?;
-    drop(binding);
-    let record = PersonalMarketplaceInstallPlan {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5".to_owned(),
-        plan_sha256,
-        effect: "personal-marketplace-update".to_owned(),
+    let mut record = PersonalMarketplaceInstallHandoff {
+        schema_version: HANDOFF_SCHEMA.to_owned(),
+        handoff_sha256: String::new(),
+        effect: "none".to_owned(),
+        status: "ready-for-explicit-supported-codex-user-action".to_owned(),
+        source,
+        target: target.clone(),
+        release_cli,
+        durable_marketplace_source,
+        plugin_id: PLUGIN_ID.to_owned(),
         marketplace: MARKETPLACE.to_owned(),
-        lifecycle_intent: "monotonic-update".to_owned(),
-        input: input.to_owned(),
-        cli: cli.to_owned(),
-        personal_home: personal_home.record().clone(),
-        before,
-        target,
-        apply_status: "ready-exact-live-personal-marketplace-adapter".to_owned(),
-        required_effects,
-        required_reconciliation,
-        rollback,
-        claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers".to_owned(),
+        host,
+        selected_codex: supported.selected,
+        predecessor: installed.authority.clone(),
+        expected_target_source_tree_sha256: target.source_tree_sha256.clone(),
+        expected_target_cache_tree_sha256: target.source_tree_sha256.clone(),
+        expected_target_runtime_sha256: target.runtime_sha256.clone(),
+        protected_state,
+        supported_action: action.clone(),
+        recovery_action: action,
+        consequences: vec![
+            "Supported Codex may replace its personal cache entry for this plugin version."
+                .to_owned(),
+            "Supported Codex may update personal config enablement for this plugin.".to_owned(),
+            "UltraGoal does not execute, retry, compensate, restore, or remove personal state."
+                .to_owned(),
+        ],
+        cancellation_boundary: "Cancellation before the supported command starts is no effect; after it starts, Codex and the user own completion and recovery.".to_owned(),
+        restart_rule: "After the supported command is terminal, start a fresh Codex task and run package install-verify before separate discovery or runtime evaluation.".to_owned(),
+        claim_ceiling: "read-only exact handoff only; personal installation, discovery, runtime behavior, readiness, and release remain unproved".to_owned(),
     };
-    validate_plan_identity(&record)?;
-    Ok(PreparedInstallPlan {
+    record.handoff_sha256 = handoff_digest(&record)?;
+    validate_handoff_identity(&record)?;
+    Ok(PreparedHandoff {
         record,
-        registry,
+        home,
         installed,
-        personal_home,
+        registry: supported.registry,
+        marketplace_source,
     })
 }
 
 fn capture_accepted_candidate(
-    source_context: &LiveContext,
+    context: &LiveContext,
     input: &str,
     cli: &str,
 ) -> Result<
@@ -714,57 +567,238 @@ fn capture_accepted_candidate(
     if !super::package_dispatch::package_archive_input_allowed(input)
         || !super::package_cli_payload::allowed(cli)
     {
-        return Err("package or candidate CLI input is outside the bounded package surface");
+        return Err("package or release CLI is outside the bounded package surface");
     }
-    let catalog = InventoryBuilder::new(source_context)
+    let catalog = InventoryBuilder::new(context)
         .build()
         .map_err(|_| "authority catalog is unavailable")?;
-    let source = capture_product_package(source_context, &catalog)
+    let source = capture_product_package(context, &catalog)
         .map_err(|_| "current-source package capture failed")?;
-    let payload =
-        super::package_cli_payload::from_read_only(source_context, cli, source.candidate_id())
-            .ok_or("candidate CLI payload is unavailable or not native")?;
-    let artifact = capture_product_package_with_cli(source_context, &catalog, payload)
+    let payload = super::package_cli_payload::from_read_only(context, cli, source.candidate_id())
+        .ok_or("release CLI payload is unavailable or not native")?;
+    let artifact = capture_product_package_with_cli(context, &catalog, payload)
         .map_err(|_| "current-source package capture failed")?;
-    verify_product_package(&artifact, source_context, &catalog)
+    verify_product_package(&artifact, context, &catalog)
         .map_err(|_| "current-source package verification failed")?;
-    let archive = ReadOnlyWorkspace::open(source_context)
+    let archive = ReadOnlyWorkspace::open(context)
         .and_then(|workspace| workspace.inspect_file(input, PACKAGE_LIMIT))
-        .map_err(|_| "package archive input is unavailable")?
-        .ok_or("package archive input is unavailable")?;
+        .map_err(|_| "package archive is unavailable")?
+        .ok_or("package archive is unavailable")?;
     if archive != artifact.snapshot().archive() {
-        return Err("input archive does not match the exact current-source package");
+        return Err("package archive does not match the exact current candidate");
     }
-    source_context
-        .revalidate()
-        .map_err(|_| "candidate source changed after package capture")?;
     Ok((artifact, catalog))
 }
 
-fn target_package(artifact: &crate::distribution::ProductionPackageArtifact) -> TargetPackage {
-    TargetPackage {
-        context_id: artifact
-            .snapshot()
-            .identity()
-            .source()
-            .context_id()
-            .to_owned(),
+fn target_package(
+    artifact: &crate::distribution::ProductionPackageArtifact,
+    input: &str,
+) -> Result<TargetPackage, &'static str> {
+    let snapshot = artifact.snapshot();
+    let runtime = snapshot
+        .entries()
+        .iter()
+        .find(|entry| entry.path == "runtime/ultragoal")
+        .ok_or("packaged runtime is unavailable")?;
+    Ok(TargetPackage {
+        context_id: snapshot.identity().source().context_id().to_owned(),
         candidate_id: artifact.candidate_id().to_owned(),
         catalog_id: artifact.catalog_id().to_owned(),
-        version: artifact.snapshot().identity().source().version().to_owned(),
-        source_tree_sha256: artifact.snapshot().source_tree_sha256().to_owned(),
-        archive_sha256: artifact.snapshot().package_sha256().to_owned(),
-        inventory_sha256: artifact.snapshot().inventory_sha256().to_owned(),
-    }
+        version: snapshot.identity().source().version().to_owned(),
+        source_tree_sha256: snapshot.source_tree_sha256().to_owned(),
+        archive_path: input.to_owned(),
+        archive_sha256: snapshot.package_sha256().to_owned(),
+        inventory_sha256: snapshot.inventory_sha256().to_owned(),
+        runtime_sha256: runtime.sha256.clone(),
+    })
 }
 
-fn registry_observation_failure_cause(
-    failure: super::capabilities::RegistryObservationFailure,
-) -> &'static str {
-    match failure {
-        super::capabilities::RegistryObservationFailure::Unavailable(code) => code,
-        super::capabilities::RegistryObservationFailure::Blocked(id) => id.code(),
+fn capture_durable_marketplace_source(
+    context: &LiveContext,
+    target: &TargetPackage,
+) -> Result<(DurableMarketplaceSource, ReadOnlyTreeObservation), &'static str> {
+    const CATALOG_PATH: &str = ".agents/plugins/marketplace.json";
+    let catalog = bind_workspace_file(context, CATALOG_PATH, CONFIG_LIMIT)?;
+    let bytes = fs::read(&catalog.canonical_path)
+        .map_err(|_| "workspace marketplace catalog is unreadable")?;
+    let value: serde_json::Value =
+        serde_json::from_slice(&bytes).map_err(|_| "workspace marketplace catalog is invalid")?;
+    let catalog_name = value
+        .get("name")
+        .and_then(serde_json::Value::as_str)
+        .filter(|name| !name.is_empty() && name.len() <= 128)
+        .ok_or("workspace marketplace name is unavailable")?;
+    let rows = value
+        .get("plugins")
+        .and_then(serde_json::Value::as_array)
+        .filter(|rows| rows.len() == 1)
+        .ok_or("workspace marketplace plugin source is ambiguous")?;
+    let plugin = &rows[0];
+    let source = plugin
+        .get("source")
+        .and_then(serde_json::Value::as_object)
+        .ok_or("workspace marketplace plugin source is unavailable")?;
+    if plugin.get("name").and_then(serde_json::Value::as_str) != Some(PLUGIN_NAME)
+        || source.get("source").and_then(serde_json::Value::as_str) != Some("local")
+    {
+        return Err("workspace marketplace does not bind the exact local plugin");
     }
+    let relative = source
+        .get("path")
+        .and_then(serde_json::Value::as_str)
+        .filter(|path| *path == "./plugins/harness-ultragoal")
+        .ok_or("workspace marketplace source path is not the canonical durable source")?;
+    let relative = relative
+        .strip_prefix("./")
+        .ok_or("workspace marketplace source path is invalid")?;
+    let path = context.worktree_root().join(relative);
+    let canonical = canonical_directory(
+        &path,
+        "durable workspace-local marketplace source is not materialized",
+    )?;
+    if !canonical.starts_with(context.worktree_root()) {
+        return Err("durable marketplace source escapes the workspace");
+    }
+    let observation = ReadOnlyTreeObservation::capture_root(&canonical, 4096, PACKAGE_LIMIT)
+        .map_err(|_| "durable marketplace source observation is unavailable")?;
+    if observation.tree_sha256() != target.source_tree_sha256 {
+        return Err("durable marketplace source does not match the exact target package");
+    }
+    let record = DurableMarketplaceSource {
+        catalog,
+        catalog_name: catalog_name.to_owned(),
+        canonical_path: path_string(&canonical)?,
+        tree_sha256: observation.tree_sha256().to_owned(),
+        observation_sha256: observation.observation_sha256().to_owned(),
+    };
+    observation
+        .revalidate()
+        .map_err(|_| "durable marketplace source changed during capture")?;
+    Ok((record, observation))
+}
+
+/// Directly reads exact selected-binary, config, cached-catalog, source, and
+/// cache objects. It does not invoke Codex: even a listing command may attempt
+/// host maintenance before producing output and is therefore not read proof.
+fn observe_supported_host(
+    context: &LiveContext,
+    home: &PersonalHomeAuthority,
+) -> Result<SupportedHostObservation, &'static str> {
+    home.revalidate()?;
+    let codex = context
+        .capabilities()
+        .tool("codex")
+        .filter(|tool| tool.available)
+        .ok_or("selected Codex executable is unavailable")?;
+    let selected_path = codex
+        .executable
+        .as_deref()
+        .map(Path::new)
+        .ok_or("selected Codex executable is unavailable")?;
+    let expected_sha256 = codex
+        .executable_sha256
+        .as_deref()
+        .filter(|value| valid_hex_digest(value))
+        .map(|value| format!("sha256:{value}"))
+        .ok_or("selected Codex executable identity is unavailable")?;
+    let executable = bind_file(selected_path, FILE_LIMIT)?;
+    if executable.sha256 != expected_sha256 {
+        return Err("selected Codex executable content changed");
+    }
+    let binary = fs::read(&executable.canonical_path)
+        .map_err(|_| "selected Codex executable is unreadable")?;
+    let add_signature = b"Install a plugin from a configured marketplace snapshot";
+    let remove_signature = b"Remove an installed plugin from local config and cache";
+    if !contains_bytes(&binary, add_signature) || !contains_bytes(&binary, remove_signature) {
+        return Err("selected Codex binary lacks the required supported action surfaces");
+    }
+    let version = selected_version_from_path(Path::new(&executable.canonical_path))?;
+    let (config, config_bytes) = bind_personal_file(home, Path::new("config.toml"), CONFIG_LIMIT)?;
+    let config_value: toml::Value =
+        toml::from_slice(&config_bytes).map_err(|_| "Codex config shape is unavailable")?;
+    let enabled = config_value
+        .get("plugins")
+        .and_then(toml::Value::as_table)
+        .and_then(|plugins| plugins.get(PLUGIN_ID))
+        .and_then(toml::Value::as_table)
+        .and_then(|plugin| plugin.get("enabled"))
+        .and_then(toml::Value::as_bool);
+    if enabled != Some(true) {
+        return Err("current plugin config enablement is absent or ambiguous");
+    }
+    let source_path = home.home_path.join(PERSONAL_MARKETPLACE_SOURCE_RELATIVE);
+    let personal_source_relative =
+        Path::new("local-marketplaces/harness-ultragoal-local/plugins/harness-ultragoal");
+    let (marketplace_config, marketplace_config_bytes) = bind_personal_file(
+        home,
+        Path::new("local-marketplaces/harness-ultragoal-local/config.toml"),
+        CONFIG_LIMIT,
+    )?;
+    if !configured_marketplace_is_exact(
+        &marketplace_config_bytes,
+        &context.worktree_root().join("plugins/harness-ultragoal"),
+    ) {
+        return Err(
+            "configured marketplace identity or source is not the exact workspace-local authority",
+        );
+    }
+    let (_manifest, manifest_bytes) = bind_personal_file(
+        home,
+        &personal_source_relative.join(".codex-plugin/plugin.json"),
+        CONFIG_LIMIT,
+    )?;
+    let parsed_manifest =
+        crate::plugin_manifest::parse(&manifest_bytes, crate::plugin_manifest::MANIFEST_LIMIT)
+            .map_err(|_| "installed plugin manifest is invalid")?;
+    if parsed_manifest.name != PLUGIN_NAME {
+        return Err("installed plugin identity is substituted");
+    }
+    let (cached_catalog, cached_catalog_bytes) = bind_personal_file(
+        home,
+        Path::new("local-marketplaces/harness-ultragoal-local/.agents/plugins/marketplace.json"),
+        CONFIG_LIMIT,
+    )?;
+    if !cached_catalog_binds_plugin(&cached_catalog_bytes) {
+        return Err("cached marketplace does not bind the exact local plugin source");
+    }
+    let plugin_json = serde_json::to_vec(&serde_json::json!({
+        "installed": [{
+            "pluginId": PLUGIN_ID,
+            "name": PLUGIN_NAME,
+            "marketplaceName": MARKETPLACE,
+            "version": parsed_manifest.version,
+            "installed": true,
+            "enabled": true,
+            "source": {"source": "local", "path": source_path},
+        }]
+    }))
+    .map_err(|_| "direct plugin observation encoding failed")?;
+    let marketplace_json = serde_json::to_vec(&serde_json::json!({
+        "marketplaces": [{"name": MARKETPLACE, "root": home.home_path}]
+    }))
+    .map_err(|_| "direct marketplace observation encoding failed")?;
+    let registry = parse_unpinned_host_plugin_registry_observation(
+        &plugin_json,
+        &marketplace_json,
+        Path::new(&executable.canonical_path),
+        &executable.sha256,
+    )
+    .map_err(|_| "direct plugin or marketplace observation is unavailable or ambiguous")?;
+    let selected = SelectedCodex {
+        executable,
+        version,
+        plugin_help_sha256: digest_json(&(
+            "descriptor-bound-supported-actions-v1",
+            digest_bytes(add_signature),
+            digest_bytes(remove_signature),
+            config.sha256,
+            marketplace_config.sha256,
+            cached_catalog.sha256,
+        ))?,
+        registry_observation_sha256: registry.sha256().to_owned(),
+    };
+    home.revalidate()?;
+    Ok(SupportedHostObservation { registry, selected })
 }
 
 fn installed_authority(
@@ -772,24 +806,15 @@ fn installed_authority(
     registry: &HostPluginRegistryObservation,
 ) -> Result<InstalledAuthorityObservation, &'static str> {
     home.revalidate()?;
-    let canonical_home = home.path();
-    let marketplace_root = registry.marketplace_root();
-    if marketplace_root != canonical_home {
-        return Err("observed personal marketplace root does not equal the canonical home root");
-    }
-    let relative = registry
-        .installed_root()
-        .strip_prefix(marketplace_root)
-        .ok()
-        .and_then(Path::to_str)
-        .ok_or("installed source is outside the observed marketplace root")?;
-    if relative != PERSONAL_MARKETPLACE_SOURCE_RELATIVE || Path::new(relative).is_absolute() {
-        return Err("installed source path is not the canonical Harness marketplace member");
+    if registry.marketplace_root() != home.home_path
+        || registry.installed_root() != home.home_path.join(PERSONAL_MARKETPLACE_SOURCE_RELATIVE)
+    {
+        return Err("observed marketplace source is outside the exact personal authority");
     }
     let session_id = digest_bytes(
         format!(
-            "personal-installed-authority-session-v1\0{}\0{}",
-            canonical_home.display(),
+            "personal-installed-observation-v2\0{}\0{}",
+            home.home_path.display(),
             registry.selected_codex_identity_sha256()
         )
         .as_bytes(),
@@ -799,54 +824,43 @@ fn installed_authority(
         registry.sha256(),
         &session_id,
     )
-    .map_err(|_| "installed marketplace source authority could not be captured")?;
-    let cache_relative = format!(
-        ".codex/plugins/cache/{MARKETPLACE}/harness-ultragoal/{}",
+    .map_err(|_| "installed marketplace source authority is unavailable")?;
+    let cache_path = home.home_path.join(format!(
+        ".codex/plugins/cache/{MARKETPLACE}/{PLUGIN_NAME}/{}",
         registry.plugin_version()
-    );
-    let cache_path = canonical_home.join(&cache_relative);
+    ));
     let cache = capture_installed_source_authority(&cache_path, registry.sha256(), &session_id)
-        .map_err(|_| "installed cache authority could not be captured")?;
+        .map_err(|_| "installed cache authority is unavailable")?;
     if source.plugin_version() != registry.plugin_version()
         || cache.plugin_version() != registry.plugin_version()
+        || source.runtime_sha256() != cache.runtime_sha256()
     {
-        return Err("installed source, cache, and registry versions diverge");
-    }
-    let source_runtime = source.runtime_sha256().to_owned();
-    let cache_runtime = cache.runtime_sha256().to_owned();
-    if source_runtime != cache_runtime {
-        return Err("installed marketplace and cache runtime bytes diverge");
+        return Err("registry, source, cache, or runtime identity diverges");
     }
     let source_tree =
-        PersonalMarketplaceSourceObservation::capture(&canonical_home, registry.installed_root())
-            .map_err(|_| "installed marketplace source tree could not be captured")?;
-    let marketplace_source_tree_sha256 = source_tree.tree_sha256().to_owned();
-    let marketplace_source_observation_sha256 = source_tree.observation_sha256().to_owned();
+        PersonalMarketplaceSourceObservation::capture(&home.home_path, registry.installed_root())
+            .map_err(|_| "installed marketplace source tree is unavailable")?;
     let cache_tree = ReadOnlyTreeObservation::capture_root(&cache_path, 4096, PACKAGE_LIMIT)
-        .map_err(|_| "installed cache tree could not be captured")?;
-    let cache_tree_sha256 = cache_tree.tree_sha256().to_owned();
-    if cache_tree_sha256 != marketplace_source_tree_sha256 {
-        return Err("installed source and cache full trees diverge");
+        .map_err(|_| "installed cache tree is unavailable")?;
+    if source_tree.tree_sha256() != cache_tree.tree_sha256() {
+        return Err("installed marketplace source and cache trees diverge");
     }
     let mut authority = InstalledAuthority {
-        schema_version: "HarnessObservedInstalledAuthority-v3".to_owned(),
+        schema_version: INSTALLED_SCHEMA.to_owned(),
         plugin_version: registry.plugin_version().to_owned(),
         registry_observation_sha256: registry.sha256().to_owned(),
-        marketplace_source_relative_path_sha256: digest_bytes(
-            format!("personal-marketplace-source-v1\0{relative}").as_bytes(),
-        ),
-        marketplace_source_tree_sha256,
-        marketplace_source_observation_sha256,
+        marketplace_source_path: path_string(registry.installed_root())?,
+        marketplace_source_tree_sha256: source_tree.tree_sha256().to_owned(),
+        marketplace_source_observation_sha256: source_tree.observation_sha256().to_owned(),
         marketplace_source_catalog_sha256: source.catalog_sha256().to_owned(),
+        cache_path: path_string(&cache_path)?,
+        cache_tree_sha256: cache_tree.tree_sha256().to_owned(),
         cache_catalog_sha256: cache.catalog_sha256().to_owned(),
-        cache_tree_sha256,
-        marketplace_runtime_sha256: source_runtime,
-        cache_runtime_sha256: cache_runtime,
-        selected_codex_identity_sha256: registry.selected_codex_identity_sha256().to_owned(),
-        personal_home_authority_sha256: home.record().authority_sha256.clone(),
+        marketplace_runtime_sha256: source.runtime_sha256().to_owned(),
+        cache_runtime_sha256: cache.runtime_sha256().to_owned(),
         installed_authority_sha256: String::new(),
     };
-    authority.installed_authority_sha256 = installed_authority_digest(&authority)?;
+    authority.installed_authority_sha256 = installed_digest(&authority)?;
     let observation = InstalledAuthorityObservation {
         authority,
         source,
@@ -859,166 +873,501 @@ fn installed_authority(
     Ok(observation)
 }
 
-fn installed_authority_digest(authority: &InstalledAuthority) -> Result<String, &'static str> {
-    #[derive(Serialize)]
-    struct Binding<'a> {
-        schema_version: &'a str,
-        plugin_version: &'a str,
-        registry_observation_sha256: &'a str,
-        marketplace_source_relative_path_sha256: &'a str,
-        marketplace_source_tree_sha256: &'a str,
-        marketplace_source_observation_sha256: &'a str,
-        marketplace_source_catalog_sha256: &'a str,
-        cache_catalog_sha256: &'a str,
-        cache_tree_sha256: &'a str,
-        marketplace_runtime_sha256: &'a str,
-        cache_runtime_sha256: &'a str,
-        selected_codex_identity_sha256: &'a str,
-        personal_home_authority_sha256: &'a str,
+fn capture_host_context(
+    context: &LiveContext,
+    home: &PersonalHomeAuthority,
+) -> Result<HostContext, &'static str> {
+    home.revalidate()?;
+    let config_path = home.codex_home_path.join("config.toml");
+    let config = bind_file(&config_path, CONFIG_LIMIT)?;
+    let profile_context = std::env::var("CODEX_PROFILE").unwrap_or_else(|_| "default".to_owned());
+    if profile_context.is_empty()
+        || profile_context.len() > 128
+        || profile_context.chars().any(char::is_control)
+    {
+        return Err("effective Codex profile context is invalid");
     }
-    digest_json(&Binding {
-        schema_version: &authority.schema_version,
-        plugin_version: &authority.plugin_version,
-        registry_observation_sha256: &authority.registry_observation_sha256,
-        marketplace_source_relative_path_sha256: &authority.marketplace_source_relative_path_sha256,
-        marketplace_source_tree_sha256: &authority.marketplace_source_tree_sha256,
-        marketplace_source_observation_sha256: &authority.marketplace_source_observation_sha256,
-        marketplace_source_catalog_sha256: &authority.marketplace_source_catalog_sha256,
-        cache_catalog_sha256: &authority.cache_catalog_sha256,
-        cache_tree_sha256: &authority.cache_tree_sha256,
-        marketplace_runtime_sha256: &authority.marketplace_runtime_sha256,
-        cache_runtime_sha256: &authority.cache_runtime_sha256,
-        selected_codex_identity_sha256: &authority.selected_codex_identity_sha256,
-        personal_home_authority_sha256: &authority.personal_home_authority_sha256,
+    let working_directory = canonical_directory(
+        context.worktree_root(),
+        "supported action working directory is unavailable",
+    )?;
+    let mut host = HostContext {
+        personal_home: home.record.clone(),
+        config,
+        profile_context,
+        working_directory: path_string(&working_directory)?,
+        context_sha256: String::new(),
+    };
+    host.context_sha256 = host_context_digest(&host)?;
+    Ok(host)
+}
+
+fn capture_source_candidate(context: &LiveContext) -> Result<SourceCandidate, &'static str> {
+    let candidate = context.candidate();
+    Ok(SourceCandidate {
+        head_commit: candidate
+            .head_commit
+            .clone()
+            .ok_or("source HEAD is unavailable")?,
+        head_tree: candidate
+            .head_tree
+            .clone()
+            .ok_or("source tree is unavailable")?,
+        branch: candidate
+            .branch
+            .clone()
+            .ok_or("source branch is unavailable")?,
+        status_sha256: candidate.status_sha256.clone(),
+        worktree_diff_sha256: candidate.worktree_diff_sha256.clone(),
+        staged_diff_sha256: candidate.staged_diff_sha256.clone(),
+        untracked_content_sha256: candidate.untracked_content_sha256.clone(),
+        dirty: candidate.dirty,
     })
 }
 
-fn adopted_lifecycle_plan(
-    record: &PersonalMarketplaceInstallPlan,
-) -> Result<
-    (
-        crate::plugin_product::lifecycle::LifecyclePlan,
-        PackageIdentity,
-        PriorInstalledAuthority,
-    ),
-    &'static str,
-> {
-    let prior_package_authority = PackageAuthority {
-        version: Version::parse(&record.before.plugin_version)
-            .map_err(|_| "prior installed version is invalid")?,
-        package_sha256: record.before.installed_authority_sha256.clone(),
-        inventory_sha256: record.before.marketplace_source_catalog_sha256.clone(),
-        candidate_id: record.before.registry_observation_sha256.clone(),
-    };
-    let prior = PriorInstalledAuthority::new(
-        prior_package_authority.clone(),
-        record.before.installed_authority_sha256.clone(),
-    )
-    .map_err(|_| "prior installed authority is invalid")?;
-    let target = PackageIdentity::new(
-        SourceIdentity::new(
-            record.target.context_id.clone(),
-            record.target.candidate_id.clone(),
-            "harness-ultragoal".to_owned(),
-            record.target.version.clone(),
-            record.target.catalog_id.clone(),
-            record.target.inventory_sha256.clone(),
-        )
-        .map_err(|_| "target source identity is invalid")?,
-        record.target.source_tree_sha256.clone(),
-        record.target.archive_sha256.clone(),
-    )
-    .map_err(|_| "target package identity is invalid")?;
-    let target_authority = PackageAuthority {
-        version: Version::parse(target.source().version())
-            .map_err(|_| "target package version is invalid")?,
-        package_sha256: target.archive_sha256().to_owned(),
-        inventory_sha256: target.source().accepted_inventory_sha256().to_owned(),
-        candidate_id: target.source().candidate_id().to_owned(),
-    };
-    let before = LifecycleState {
-        installed: Some(prior_package_authority.clone()),
-        cache: Some(prior_package_authority),
-        generation: 0,
-        recovery_required: false,
-    };
-    let lifecycle = crate::plugin_product::lifecycle::plan(
-        &before,
-        &LifecycleRequest {
-            intent: LifecycleIntent::MonotonicUpdate,
-            target: Some(target_authority),
-            prior_authority: None,
-            authorization: LifecycleAuthorization {
-                allow_host_write: true,
-                allow_downgrade: false,
-                expected_installed_sha256: Some(record.before.installed_authority_sha256.clone()),
-            },
+fn capture_protected_state(context: &LiveContext) -> Result<ProtectedState, &'static str> {
+    let git = context
+        .capabilities()
+        .tool("git")
+        .filter(|tool| tool.available)
+        .and_then(|tool| tool.executable.as_deref())
+        .map(Path::new)
+        .ok_or("Git is unavailable for protected-state observation")?;
+    let mut arguments = vec![
+        OsString::from("diff"),
+        OsString::from("--binary"),
+        OsString::from("--"),
+    ];
+    arguments.extend(PROTECTED_PATHS.iter().map(OsString::from));
+    let output =
+        crate::context::run_bounded(git, &arguments, context.worktree_root(), HOST_TIMEOUT)
+            .map_err(|_| "protected tracked diff observation failed")?;
+    let marker = ReadOnlyWorkspace::open(context)
+        .and_then(|workspace| workspace.inspect_file(PROTECTED_MARKER, CONFIG_LIMIT))
+        .map_err(|_| "protected marker observation failed")?
+        .ok_or("protected marker is unavailable")?;
+    let tracked_diff_sha256 = digest_bytes(&output.stdout);
+    let marker_sha256 = digest_bytes(&marker);
+    let state_sha256 = digest_json(&(tracked_diff_sha256.as_str(), marker_sha256.as_str()))?;
+    Ok(ProtectedState {
+        tracked_diff_sha256,
+        marker_sha256,
+        state_sha256,
+    })
+}
+
+fn classify_installation(
+    record: &PersonalMarketplaceInstallHandoff,
+    observed: &InstalledAuthority,
+) -> VerificationClassification {
+    if observed == &record.predecessor {
+        return VerificationClassification::ExactPriorNoEffect;
+    }
+    if observed.plugin_version == record.target.version
+        && observed.marketplace_source_tree_sha256 == record.expected_target_source_tree_sha256
+        && observed.cache_tree_sha256 == record.expected_target_cache_tree_sha256
+        && observed.marketplace_runtime_sha256 == record.expected_target_runtime_sha256
+        && observed.cache_runtime_sha256 == record.expected_target_runtime_sha256
+    {
+        return VerificationClassification::ExactTarget;
+    }
+    VerificationClassification::PartialOrStale
+}
+
+fn verification_result(
+    record: &PersonalMarketplaceInstallHandoff,
+    classification: VerificationClassification,
+) -> RuntimeOutcome {
+    let next_action = (!matches!(classification, VerificationClassification::ExactTarget))
+        .then_some(&record.recovery_action);
+    let result = InstallVerification {
+        schema_version: "HarnessPersonalMarketplaceInstallVerification-v1",
+        handoff_sha256: &record.handoff_sha256,
+        classification,
+        effect: "none",
+        next_action,
+        claim_ceiling: match classification {
+            VerificationClassification::ExactTarget => {
+                "exact disk and supported-host target observed; fresh-task discovery and runtime behavior remain separate"
+            }
+            VerificationClassification::ExactPriorNoEffect => {
+                "exact predecessor observed; no installation effect is claimed"
+            }
+            VerificationClassification::PartialOrStale => {
+                "partial or stale personal state observed; no success, repair, or retry is claimed"
+            }
+            VerificationClassification::Ambiguous => {
+                "personal state is ambiguous; preserve it and use only the named supported user action"
+            }
         },
-    )
-    .map_err(|_| "monotonic lifecycle adoption plan is invalid")?;
-    Ok((lifecycle, target, prior))
-}
-
-fn accepted_update_authority(
-    record: &PersonalMarketplaceInstallPlan,
-    current_target: &TargetPackage,
-) -> Result<(PersonalMarketplaceUpdateAuthority, PriorInstalledAuthority), &'static str> {
-    if current_target != &record.target || validate_plan_identity(record).is_err() {
-        return Err("accepted candidate authority changed after planning");
-    }
-    let (_, target, prior) = adopted_lifecycle_plan(record)
-        .map_err(|_| "typed prior installed authority adoption failed")?;
-    if target.archive_sha256() != current_target.archive_sha256
-        || target.tree_sha256() != current_target.source_tree_sha256
-    {
-        return Err("accepted target package authority changed after planning");
-    }
-    let authority = PersonalMarketplaceUpdateAuthority::new(
-        record.plan_sha256.clone(),
-        prior.clone(),
-        record.before.marketplace_source_tree_sha256.clone(),
-        record.target.archive_sha256.clone(),
-        record.target.source_tree_sha256.clone(),
-    )
-    .map_err(|_| "atomic marketplace update authority is invalid")?;
-    Ok((authority, prior))
-}
-
-fn validate_plan_identity(record: &PersonalMarketplaceInstallPlan) -> Result<(), &'static str> {
-    if record.schema_version != "HarnessPersonalMarketplaceInstallPlan-v5"
-        || record.effect != "personal-marketplace-update"
-        || record.personal_home.schema_version != "HarnessPersonalHomeAuthority-v1"
-        || record.before.schema_version != "HarnessObservedInstalledAuthority-v3"
-        || record.marketplace != MARKETPLACE
-        || record.lifecycle_intent != "monotonic-update"
-        || record.apply_status != "ready-exact-live-personal-marketplace-adapter"
-        || record.personal_home.authority_sha256
-            != personal_home_authority_digest(&record.personal_home)?
-        || record.before.personal_home_authority_sha256 != record.personal_home.authority_sha256
-        || record.before.cache_tree_sha256 != record.before.marketplace_source_tree_sha256
-        || record.before.installed_authority_sha256 != installed_authority_digest(&record.before)?
-    {
-        return Err("plan contract changed");
-    }
-    let binding = PlanBinding {
-        schema_version: "HarnessPersonalMarketplaceInstallPlan-v5",
-        effect: &record.effect,
-        marketplace: &record.marketplace,
-        lifecycle_intent: &record.lifecycle_intent,
-        input: &record.input,
-        cli: &record.cli,
-        personal_home: &record.personal_home,
-        before: &record.before,
-        target: &record.target,
-        apply_status: &record.apply_status,
-        required_effects: &record.required_effects,
-        required_reconciliation: &record.required_reconciliation,
-        rollback: &record.rollback,
-        claim_ceiling: &record.claim_ceiling,
     };
-    (record.plan_sha256 == digest_json(&binding)?)
-        .then_some(())
-        .ok_or("plan identity changed")
+    match serde_json::to_vec(&result) {
+        Ok(bytes) if public_output_allowed(bytes.len()) => RuntimeOutcome::payload(
+            if matches!(classification, VerificationClassification::ExactTarget) {
+                ExitClass::Success
+            } else {
+                ExitClass::ActionableFinding
+            },
+            bytes,
+            format!("install verification {classification:?} effect=none"),
+        ),
+        _ => verify_failure("install verification encoding failed"),
+    }
+}
+
+fn validate_handoff_identity(
+    record: &PersonalMarketplaceInstallHandoff,
+) -> Result<(), &'static str> {
+    if record.schema_version != HANDOFF_SCHEMA
+        || record.effect != "none"
+        || record.status != "ready-for-explicit-supported-codex-user-action"
+        || record.plugin_id != PLUGIN_ID
+        || record.marketplace != MARKETPLACE
+        || record.host.personal_home.schema_version != "HarnessPersonalHomeAuthority-v2"
+        || record.host.personal_home.authority_sha256
+            != home_authority_digest(&record.host.personal_home)?
+        || record.host.context_sha256 != host_context_digest(&record.host)?
+        || record.predecessor.schema_version != INSTALLED_SCHEMA
+        || record.predecessor.installed_authority_sha256 != installed_digest(&record.predecessor)?
+        || !monotonic_successor(&record.predecessor.plugin_version, &record.target.version)
+        || record.release_cli.sha256 != record.target.runtime_sha256
+        || record.durable_marketplace_source.tree_sha256 != record.target.source_tree_sha256
+        || record.durable_marketplace_source.canonical_path
+            != record.host.working_directory.to_owned() + "/plugins/harness-ultragoal"
+        || record.expected_target_source_tree_sha256 != record.target.source_tree_sha256
+        || record.expected_target_cache_tree_sha256 != record.target.source_tree_sha256
+        || record.expected_target_runtime_sha256 != record.target.runtime_sha256
+        || record.supported_action != record.recovery_action
+        || record.supported_action.executable != record.selected_codex.executable.canonical_path
+        || record.supported_action.arguments
+            != ["plugin", "add", "harness-ultragoal@local-harness-plugins"]
+        || record.supported_action.working_directory != record.host.working_directory
+        || record.protected_state.state_sha256
+            != digest_json(&(
+                record.protected_state.tracked_diff_sha256.as_str(),
+                record.protected_state.marker_sha256.as_str(),
+            ))?
+        || record.handoff_sha256 != handoff_digest(record)?
+    {
+        return Err("handoff contract changed");
+    }
+    Ok(())
+}
+
+fn handoff_digest(record: &PersonalMarketplaceInstallHandoff) -> Result<String, &'static str> {
+    let mut binding = record.clone();
+    binding.handoff_sha256.clear();
+    digest_json(&binding)
+}
+
+fn installed_digest(authority: &InstalledAuthority) -> Result<String, &'static str> {
+    let mut binding = authority.clone();
+    binding.installed_authority_sha256.clear();
+    digest_json(&binding)
+}
+
+fn home_authority_digest(authority: &PersonalHomeAuthorityRecord) -> Result<String, &'static str> {
+    let mut binding = authority.clone();
+    binding.authority_sha256.clear();
+    digest_json(&binding)
+}
+
+fn host_context_digest(host: &HostContext) -> Result<String, &'static str> {
+    let mut binding = host.clone();
+    binding.context_sha256.clear();
+    digest_json(&binding)
+}
+
+fn bind_workspace_file(
+    context: &LiveContext,
+    relative: &str,
+    maximum: usize,
+) -> Result<BoundFile, &'static str> {
+    bind_file(&context.worktree_root().join(relative), maximum)
+}
+
+fn bind_file(path: &Path, maximum: usize) -> Result<BoundFile, &'static str> {
+    let canonical = path
+        .canonicalize()
+        .map_err(|_| "bound file is unavailable")?;
+    if !canonical.is_absolute() {
+        return Err("bound file is not one canonical path");
+    }
+    let metadata = fs::symlink_metadata(&canonical).map_err(|_| "bound file is unavailable")?;
+    if metadata.file_type().is_symlink()
+        || !metadata.is_file()
+        || metadata.len() as usize > maximum
+        || metadata.nlink() != 1
+    {
+        return Err("bound file is unsafe or too large");
+    }
+    let bytes = fs::read(&canonical).map_err(|_| "bound file could not be read")?;
+    let after = fs::symlink_metadata(&canonical).map_err(|_| "bound file changed")?;
+    if metadata.dev() != after.dev()
+        || metadata.ino() != after.ino()
+        || metadata.len() != after.len()
+        || metadata.mtime() != after.mtime()
+        || metadata.mtime_nsec() != after.mtime_nsec()
+    {
+        return Err("bound file changed during capture");
+    }
+    Ok(BoundFile {
+        canonical_path: path_string(&canonical)?,
+        sha256: digest_bytes(&bytes),
+        byte_length: metadata.len(),
+        unix_mode: metadata.mode(),
+    })
+}
+
+fn bind_personal_file(
+    home: &PersonalHomeAuthority,
+    relative: &Path,
+    maximum: usize,
+) -> Result<(BoundFile, Vec<u8>), &'static str> {
+    home.revalidate()?;
+    let mut file = open_relative_file(&home.codex_home, relative)?;
+    let metadata = file
+        .metadata()
+        .map_err(|_| "personal authority file is unavailable")?;
+    if !metadata.is_file() || metadata.file_type().is_symlink() || metadata.nlink() != 1 {
+        return Err("personal authority file is unsafe");
+    }
+    if metadata.len() > maximum as u64 {
+        return Err("personal authority file is too large");
+    }
+    let mut bytes = Vec::with_capacity(metadata.len() as usize);
+    Read::by_ref(&mut file)
+        .take(maximum as u64 + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|_| "personal authority file is unreadable")?;
+    if bytes.len() > maximum {
+        return Err("personal authority file is too large");
+    }
+    let after = file
+        .metadata()
+        .map_err(|_| "personal authority file changed")?;
+    let rebound = open_relative_file(&home.codex_home, relative)?
+        .metadata()
+        .map_err(|_| "personal authority file changed")?;
+    if !same_file_observation(&metadata, &after) || !same_file_observation(&metadata, &rebound) {
+        return Err("personal authority file changed during capture");
+    }
+    let canonical_path = home.codex_home_path.join(relative);
+    home.revalidate()?;
+    Ok((
+        BoundFile {
+            canonical_path: path_string(&canonical_path)?,
+            sha256: digest_bytes(&bytes),
+            byte_length: metadata.len(),
+            unix_mode: metadata.mode(),
+        },
+        bytes,
+    ))
+}
+
+fn open_relative_file(root: &File, relative: &Path) -> Result<File, &'static str> {
+    let components = relative.components().collect::<Vec<_>>();
+    if components.is_empty() || components.len() > 32 {
+        return Err("personal authority file path is invalid");
+    }
+    let mut current = root
+        .try_clone()
+        .map_err(|_| "personal authority descriptor is unavailable")?;
+    for (index, component) in components.iter().enumerate() {
+        let std::path::Component::Normal(name) = component else {
+            return Err("personal authority file path is invalid");
+        };
+        let name = std::ffi::CString::new(name.as_bytes())
+            .map_err(|_| "personal authority file path is invalid")?;
+        let mut flags = libc::O_RDONLY | libc::O_CLOEXEC | libc::O_NOFOLLOW;
+        if index + 1 != components.len() {
+            flags |= libc::O_DIRECTORY;
+        }
+        let fd = unsafe { libc::openat(current.as_raw_fd(), name.as_ptr(), flags) };
+        if fd < 0 {
+            return Err("personal authority file is unavailable");
+        }
+        current = unsafe { File::from_raw_fd(fd) };
+    }
+    Ok(current)
+}
+
+fn same_file_observation(left: &fs::Metadata, right: &fs::Metadata) -> bool {
+    left.dev() == right.dev()
+        && left.ino() == right.ino()
+        && left.len() == right.len()
+        && left.mode() == right.mode()
+        && left.uid() == right.uid()
+        && left.mtime() == right.mtime()
+        && left.mtime_nsec() == right.mtime_nsec()
+}
+
+fn canonical_directory(path: &Path, cause: &'static str) -> Result<PathBuf, &'static str> {
+    let canonical = path.canonicalize().map_err(|_| cause)?;
+    let metadata = fs::symlink_metadata(&canonical).map_err(|_| cause)?;
+    if canonical != path || metadata.file_type().is_symlink() || !metadata.is_dir() {
+        return Err(cause);
+    }
+    Ok(canonical)
+}
+
+fn open_directory(path: &Path) -> Result<File, &'static str> {
+    let mut options = OpenOptions::new();
+    options
+        .read(true)
+        .custom_flags(libc::O_CLOEXEC | libc::O_NOFOLLOW | libc::O_DIRECTORY);
+    options
+        .open(path)
+        .map_err(|_| "directory descriptor is unavailable")
+}
+
+fn directory_authority(metadata: &fs::Metadata) -> Result<DirectoryAuthority, &'static str> {
+    if metadata.file_type().is_symlink() || !metadata.is_dir() {
+        return Err("authority object is not one directory");
+    }
+    Ok(DirectoryAuthority {
+        device: metadata.dev(),
+        inode: metadata.ino(),
+        owner: metadata.uid(),
+        mode: metadata.mode(),
+    })
+}
+
+fn stat_child_directory(
+    parent: std::os::fd::RawFd,
+    name: &std::ffi::CStr,
+) -> Result<DirectoryAuthority, &'static str> {
+    let mut value = std::mem::MaybeUninit::<libc::stat>::uninit();
+    let result = unsafe {
+        libc::fstatat(
+            parent,
+            name.as_ptr(),
+            value.as_mut_ptr(),
+            libc::AT_SYMLINK_NOFOLLOW,
+        )
+    };
+    if result != 0 {
+        return Err("child directory authority is unavailable");
+    }
+    let value = unsafe { value.assume_init() };
+    if value.st_mode & libc::S_IFMT != libc::S_IFDIR {
+        return Err("child authority is not one directory");
+    }
+    Ok(DirectoryAuthority {
+        device: value.st_dev as u64,
+        inode: value.st_ino as u64,
+        owner: value.st_uid,
+        mode: value.st_mode as u32,
+    })
+}
+
+fn monotonic_successor(prior: &str, target: &str) -> bool {
+    let prior = crate::plugin_product::lifecycle::Version::parse(prior);
+    let target = crate::plugin_product::lifecycle::Version::parse(target);
+    matches!(
+        (prior, target),
+        (Ok(prior), Ok(target))
+            if target.precedence_cmp(&prior).ok() == Some(std::cmp::Ordering::Greater)
+    )
+}
+
+fn selected_version_from_path(executable: &Path) -> Result<String, &'static str> {
+    let release = executable
+        .parent()
+        .and_then(Path::parent)
+        .and_then(Path::file_name)
+        .and_then(|value| value.to_str())
+        .ok_or("selected Codex version path is unavailable")?;
+    let version = release
+        .split_once('-')
+        .map(|(version, _)| version)
+        .ok_or("selected Codex version path is unavailable")?;
+    if version.is_empty()
+        || version.len() > 64
+        || !version
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || byte == b'.')
+    {
+        return Err("selected Codex version path is invalid");
+    }
+    Ok(version.to_owned())
+}
+
+fn cached_catalog_binds_plugin(bytes: &[u8]) -> bool {
+    let Ok(value) = serde_json::from_slice::<serde_json::Value>(bytes) else {
+        return false;
+    };
+    value
+        .get("plugins")
+        .and_then(serde_json::Value::as_array)
+        .is_some_and(|rows| {
+            rows.len() == 1
+                && rows[0].get("name").and_then(serde_json::Value::as_str) == Some(PLUGIN_NAME)
+                && rows[0]
+                    .get("source")
+                    .and_then(serde_json::Value::as_object)
+                    .and_then(|source| source.get("source"))
+                    .and_then(serde_json::Value::as_str)
+                    == Some("local")
+                && rows[0]
+                    .get("source")
+                    .and_then(serde_json::Value::as_object)
+                    .and_then(|source| source.get("path"))
+                    .and_then(serde_json::Value::as_str)
+                    == Some("./plugins/harness-ultragoal")
+        })
+}
+
+fn configured_marketplace_is_exact(bytes: &[u8], expected_source: &Path) -> bool {
+    let Ok(text) = std::str::from_utf8(bytes) else {
+        return false;
+    };
+    let Ok(value) = toml::from_str::<toml::Value>(text) else {
+        return false;
+    };
+    let marketplace = value
+        .get("marketplaces")
+        .and_then(toml::Value::as_table)
+        .and_then(|marketplaces| marketplaces.get(MARKETPLACE))
+        .and_then(toml::Value::as_table);
+    let plugin = value
+        .get("plugins")
+        .and_then(toml::Value::as_table)
+        .and_then(|plugins| plugins.get(PLUGIN_ID))
+        .and_then(toml::Value::as_table);
+    marketplace.is_some_and(|marketplace| {
+        marketplace.get("source_type").and_then(toml::Value::as_str) == Some("local")
+            && marketplace.get("source").and_then(toml::Value::as_str) == expected_source.to_str()
+    }) && plugin
+        .is_some_and(|plugin| plugin.get("enabled").and_then(toml::Value::as_bool) == Some(true))
+}
+
+fn contains_bytes(haystack: &[u8], needle: &[u8]) -> bool {
+    !needle.is_empty() && haystack.windows(needle.len()).any(|row| row == needle)
+}
+
+fn path_string(path: &Path) -> Result<String, &'static str> {
+    path.to_str()
+        .filter(|value| !value.is_empty() && value.len() <= 4096)
+        .map(str::to_owned)
+        .ok_or("path is not one bounded UTF-8 path")
+}
+
+fn valid_hex_digest(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
+}
+
+fn digest_json(value: &impl Serialize) -> Result<String, &'static str> {
+    serde_json::to_vec(value)
+        .map(|bytes| digest_bytes(&bytes))
+        .map_err(|_| "identity encoding failed")
+}
+
+fn digest_bytes(bytes: &[u8]) -> String {
+    format!("sha256:{:x}", Sha256::digest(bytes))
 }
 
 fn plan_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
@@ -1034,711 +1383,371 @@ fn plan_arguments(invocation: &ParsedInvocation) -> Option<(&str, &str)> {
     if arguments.len() != 2 {
         return None;
     }
-    let input = arguments.iter().find(|row| row.name == OptionName::Input)?;
-    let cli = arguments.iter().find(|row| row.name == OptionName::Cli)?;
+    let input = arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::Input)?;
+    let cli = arguments
+        .iter()
+        .find(|argument| argument.name == OptionName::Cli)?;
     match (&input.value, &cli.value) {
-        (ParsedValue::RelativePath(input), ParsedValue::RelativePath(cli)) => {
+        (ParsedValue::RelativePath(input), ParsedValue::RelativePath(cli))
+            if super::package_dispatch::package_archive_input_allowed(input.as_str())
+                && super::package_cli_payload::allowed(cli.as_str()) =>
+        {
             Some((input.as_str(), cli.as_str()))
         }
         _ => None,
     }
 }
 
-fn apply_arguments(invocation: &ParsedInvocation) -> Option<(&Path, &str)> {
+fn verify_argument(invocation: &ParsedInvocation) -> Option<&Path> {
     let ParsedInvocation {
-        command: SuccessorCommand::Package(PackageAction::InstallApply),
-        effect: EffectClass::ExternalWrite,
+        command: SuccessorCommand::Package(PackageAction::InstallVerify),
+        effect: EffectClass::Read,
         arguments,
         ..
     } = invocation
     else {
         return None;
     };
-    if arguments.len() != 2 {
-        return None;
-    }
-    let plan = arguments.iter().find(|row| row.name == OptionName::Plan)?;
-    let accepted = arguments
-        .iter()
-        .find(|row| row.name == OptionName::AcceptPlan)?;
-    match (&plan.value, &accepted.value) {
-        (ParsedValue::HostPath(plan), ParsedValue::Identifier(accepted)) => {
-            Some((plan.as_path(), accepted.as_str()))
-        }
+    match arguments.as_slice() {
+        [argument] if argument.name == OptionName::Handoff => match &argument.value {
+            ParsedValue::HostPath(path) if path.is_valid() => Some(path.as_path()),
+            _ => None,
+        },
         _ => None,
     }
 }
 
-fn digest_json(value: &impl Serialize) -> Result<String, &'static str> {
-    serde_json::to_vec(value)
-        .map(|bytes| digest_bytes(&bytes))
-        .map_err(|_| "canonical identity encoding failed")
+fn invalid_plan_invocation() -> RuntimeOutcome {
+    failure(
+        DiagnosticId::UnexpectedArguments,
+        ExitClass::InvalidInvocation,
+        "package install-plan requires exact --input and --cli paths",
+        "supply the exact current package archive and release CLI",
+        "ultragoal --json package install-plan --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal",
+    )
 }
 
-fn digest_bytes(bytes: &[u8]) -> String {
-    format!("sha256:{:x}", Sha256::digest(bytes))
+fn invalid_verify_invocation() -> RuntimeOutcome {
+    failure(
+        DiagnosticId::UnexpectedArguments,
+        ExitClass::InvalidInvocation,
+        "package install-verify requires one immutable --handoff host path",
+        "supply the exact owner-only handoff emitted by package install-plan",
+        "ultragoal --json package install-verify --handoff <exact-handoff-file>",
+    )
 }
 
-fn plan_failure(cause: &'static str) -> RuntimeOutcome {
-    failure(cause, "read", "package install-plan")
+fn handoff_failure(cause: &'static str) -> RuntimeOutcome {
+    let repair = match cause {
+        "configured marketplace identity or source is not the exact workspace-local authority" => {
+            "preserve personal state; establish one supported configured marketplace whose exact source is the catalog-bound workspace path, then rerun without asking UltraGoal to edit host state"
+        }
+        "durable workspace-local marketplace source is not materialized" => {
+            "materialize the exact verified package at the already configured catalog-bound workspace source, reconcile its complete tree, then rerun"
+        }
+        _ => {
+            "preserve personal state and restore exact package, host-listing, HOME, CODEX_HOME, config/profile, working-directory, and protected custody before deriving a handoff"
+        }
+    };
+    failure(
+        DiagnosticId::AuthorityRequired,
+        ExitClass::BlockedAuthority,
+        cause,
+        repair,
+        "ultragoal --json package install-plan --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal",
+    )
 }
 
-fn apply_failure(cause: &'static str) -> RuntimeOutcome {
-    failure(cause, "none", "package install-apply")
+fn verify_failure(cause: &'static str) -> RuntimeOutcome {
+    failure(
+        DiagnosticId::StaleContext,
+        ExitClass::ActionableFinding,
+        cause,
+        "preserve personal state and re-observe it through one fresh immutable handoff; do not repair or retry through UltraGoal",
+        "ultragoal --json package install-verify --handoff <exact-handoff-file>",
+    )
 }
 
-fn apply_effect_failure(
+fn failure(
+    id: DiagnosticId,
+    exit: ExitClass,
     cause: &'static str,
-    effect: &'static str,
     repair: &'static str,
+    rerun: &'static str,
 ) -> RuntimeOutcome {
     RuntimeOutcome::failure(
-        ExitClass::ActionableFinding,
+        exit,
         Diagnostic::new(
-            DiagnosticId::StaleContext,
-            ExitClass::ActionableFinding,
+            id,
+            exit,
             DiagnosticDetails {
                 cause,
-                affected_surface: "HCT-DISTRIBUTION personal marketplace lifecycle",
+                affected_surface: "HCT-DISTRIBUTION supported personal-install handoff",
                 repair,
-                effect,
-                rerun: "package install-plan then package install-apply",
-                ceiling: "the accepted update did not prove an exact installed target; do not infer install success or repeat an effect until exact authority is rederived",
+                effect: "none",
+                rerun,
+                ceiling: "UltraGoal performed no personal marketplace, cache, config, registry, install, removal, retry, rollback, restore, or recovery effect",
             },
         ),
-    )
-}
-
-fn failure(cause: &'static str, effect: &'static str, command: &'static str) -> RuntimeOutcome {
-    RuntimeOutcome::failure(
-        ExitClass::ActionableFinding,
-        Diagnostic::new(
-            DiagnosticId::StaleContext,
-            ExitClass::ActionableFinding,
-            DiagnosticDetails {
-                cause,
-                affected_surface: "HCT-DISTRIBUTION personal marketplace lifecycle",
-                repair: "restore exact package, installed-registry, marketplace, cache, runtime, and selected-Codex custody before retrying",
-                effect,
-                rerun: command,
-                ceiling: "no marketplace, plugin registry, cache, runtime, or host installation effect occurred",
-            },
-        ),
-    )
-}
-
-fn invalid_plan_invocation() -> RuntimeOutcome {
-    plan_failure("package install-plan requires exact --input and --cli paths")
-}
-
-fn invalid_apply_invocation() -> RuntimeOutcome {
-    apply_failure(
-        "package install-apply requires one immutable --plan and exact --accept-plan identity",
     )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cli::successor::parse_args;
-    #[cfg(unix)]
-    use std::fs;
-    #[cfg(unix)]
-    use std::os::unix::fs::MetadataExt;
-    #[cfg(unix)]
-    use std::path::{Path, PathBuf};
-    #[cfg(unix)]
-    use std::sync::atomic::{AtomicU64, Ordering};
 
-    const TARGET_VERSION: &str = "0.0.41+codex.20260824093100";
-    #[cfg(unix)]
-    const INSTALLED_VERSION: &str = "0.0.39+codex.20260820190706";
-    #[cfg(unix)]
-    static NEXT_PERSONAL_FIXTURE: AtomicU64 = AtomicU64::new(0);
-
-    fn digest(byte: char) -> String {
-        format!("sha256:{}", byte.to_string().repeat(64))
+    fn digest(seed: char) -> String {
+        format!("sha256:{}", seed.to_string().repeat(64))
     }
 
-    fn record() -> PersonalMarketplaceInstallPlan {
-        let mut personal_home = PersonalHomeAuthorityRecord {
-            schema_version: "HarnessPersonalHomeAuthority-v1".to_owned(),
-            canonical_path_sha256: digest('f'),
+    fn file(path: &str, seed: char) -> BoundFile {
+        BoundFile {
+            canonical_path: path.to_owned(),
+            sha256: digest(seed),
+            byte_length: 1,
+            unix_mode: 0o100600,
+        }
+    }
+
+    fn installed(version: &str, seed: char) -> InstalledAuthority {
+        let mut value = InstalledAuthority {
+            schema_version: INSTALLED_SCHEMA.to_owned(),
+            plugin_version: version.to_owned(),
+            registry_observation_sha256: digest('1'),
+            marketplace_source_path:
+                "/home/.codex/local-marketplaces/harness-ultragoal-local/plugins/harness-ultragoal"
+                    .to_owned(),
+            marketplace_source_tree_sha256: digest(seed),
+            marketplace_source_observation_sha256: digest('2'),
+            marketplace_source_catalog_sha256: digest('3'),
+            cache_path: format!(
+                "/home/.codex/plugins/cache/local-harness-plugins/harness-ultragoal/{version}"
+            ),
+            cache_tree_sha256: digest(seed),
+            cache_catalog_sha256: digest('4'),
+            marketplace_runtime_sha256: digest(seed),
+            cache_runtime_sha256: digest(seed),
+            installed_authority_sha256: String::new(),
+        };
+        value.installed_authority_sha256 = installed_digest(&value).unwrap();
+        value
+    }
+
+    fn record() -> PersonalMarketplaceInstallHandoff {
+        let mut home = PersonalHomeAuthorityRecord {
+            schema_version: "HarnessPersonalHomeAuthority-v2".to_owned(),
+            canonical_home: "/home".to_owned(),
+            canonical_codex_home: "/home/.codex".to_owned(),
             home: DirectoryAuthority {
                 device: 1,
                 inode: 2,
-                owner: 501,
-                mode: (libc::S_IFDIR | 0o700) as u32,
+                owner: 3,
+                mode: 0o40700,
             },
             codex_home: DirectoryAuthority {
                 device: 1,
-                inode: 3,
-                owner: 501,
-                mode: (libc::S_IFDIR | 0o700) as u32,
+                inode: 4,
+                owner: 3,
+                mode: 0o40700,
             },
             authority_sha256: String::new(),
         };
-        personal_home.authority_sha256 = personal_home_authority_digest(&personal_home).unwrap();
-        let mut before = InstalledAuthority {
-            schema_version: "HarnessObservedInstalledAuthority-v3".to_owned(),
-            plugin_version: "0.0.39+codex.20260820190706".to_owned(),
-            registry_observation_sha256: digest('a'),
-            marketplace_source_relative_path_sha256: digest('0'),
-            marketplace_source_tree_sha256: digest('6'),
-            marketplace_source_observation_sha256: digest('7'),
-            marketplace_source_catalog_sha256: digest('b'),
-            cache_catalog_sha256: digest('c'),
-            cache_tree_sha256: digest('6'),
-            marketplace_runtime_sha256: digest('d'),
-            cache_runtime_sha256: digest('d'),
-            selected_codex_identity_sha256: digest('e'),
-            personal_home_authority_sha256: personal_home.authority_sha256.clone(),
-            installed_authority_sha256: String::new(),
+        home.authority_sha256 = home_authority_digest(&home).unwrap();
+        let mut host = HostContext {
+            personal_home: home,
+            config: file("/home/.codex/config.toml", '5'),
+            profile_context: "default".to_owned(),
+            working_directory: "/workspace".to_owned(),
+            context_sha256: String::new(),
         };
-        before.installed_authority_sha256 = installed_authority_digest(&before).unwrap();
-        let mut record = PersonalMarketplaceInstallPlan {
-            schema_version: "HarnessPersonalMarketplaceInstallPlan-v5".to_owned(),
-            plan_sha256: String::new(),
-            effect: "personal-marketplace-update".to_owned(),
-            marketplace: MARKETPLACE.to_owned(),
-            lifecycle_intent: "monotonic-update".to_owned(),
-            input: "target/ultragoal/package-0.0.41.hugpkg".to_owned(),
-            cli: "target/ultragoal/release/ultragoal".to_owned(),
-            personal_home,
-            before,
-            target: TargetPackage {
-                context_id: digest('0'),
-                candidate_id: digest('1'),
-                catalog_id: digest('2'),
-                version: TARGET_VERSION.to_owned(),
-                source_tree_sha256: digest('3'),
-                archive_sha256: digest('4'),
-                inventory_sha256: digest('5'),
+        host.context_sha256 = host_context_digest(&host).unwrap();
+        let target = TargetPackage {
+            context_id: digest('6'),
+            candidate_id: digest('7'),
+            catalog_id: digest('8'),
+            version: "0.0.42+codex.20260828085546".to_owned(),
+            source_tree_sha256: digest('b'),
+            archive_path: "target/ultragoal/package-a.hugpkg".to_owned(),
+            archive_sha256: digest('c'),
+            inventory_sha256: digest('d'),
+            runtime_sha256: digest('e'),
+        };
+        let protected_state = ProtectedState {
+            tracked_diff_sha256: digest('f'),
+            marker_sha256: digest('a'),
+            state_sha256: digest_json(&(digest('f'), digest('a'))).unwrap(),
+        };
+        let selected = SelectedCodex {
+            executable: file("/usr/local/bin/codex", '9'),
+            version: "0.150.1".to_owned(),
+            plugin_help_sha256: digest('0'),
+            registry_observation_sha256: digest('1'),
+        };
+        let action = SupportedAction {
+            executable: "/usr/local/bin/codex".to_owned(),
+            arguments: vec!["plugin".to_owned(), "add".to_owned(), PLUGIN_ID.to_owned()],
+            working_directory: "/workspace".to_owned(),
+        };
+        let mut record = PersonalMarketplaceInstallHandoff {
+            schema_version: HANDOFF_SCHEMA.to_owned(),
+            handoff_sha256: String::new(),
+            effect: "none".to_owned(),
+            status: "ready-for-explicit-supported-codex-user-action".to_owned(),
+            source: SourceCandidate {
+                head_commit: "1".repeat(40),
+                head_tree: "2".repeat(40),
+                branch: "codex/test".to_owned(),
+                status_sha256: digest('3'),
+                worktree_diff_sha256: digest('4'),
+                staged_diff_sha256: digest('5'),
+                untracked_content_sha256: digest('6'),
+                dirty: true,
             },
-            apply_status: "ready-exact-live-personal-marketplace-adapter".to_owned(),
-            required_effects: vec!["materialize".to_owned(), "install".to_owned()],
-            required_reconciliation: vec!["registry".to_owned(), "cache".to_owned()],
-            rollback: vec!["restore".to_owned()],
-            claim_ceiling: "read-only exact install plan; apply still requires this immutable plan identity and may update only the bound personal marketplace and Codex plugin layers".to_owned(),
+            target: target.clone(),
+            release_cli: file("/workspace/target/ultragoal/release/ultragoal", 'e'),
+            durable_marketplace_source: DurableMarketplaceSource {
+                catalog: file("/workspace/.agents/plugins/marketplace.json", 'c'),
+                catalog_name: "harness-ultragoal-local".to_owned(),
+                canonical_path: "/workspace/plugins/harness-ultragoal".to_owned(),
+                tree_sha256: target.source_tree_sha256.clone(),
+                observation_sha256: digest('d'),
+            },
+            plugin_id: PLUGIN_ID.to_owned(),
+            marketplace: MARKETPLACE.to_owned(),
+            host,
+            selected_codex: selected,
+            predecessor: installed("0.0.41+codex.20260824093100", 'a'),
+            expected_target_source_tree_sha256: target.source_tree_sha256.clone(),
+            expected_target_cache_tree_sha256: target.source_tree_sha256.clone(),
+            expected_target_runtime_sha256: target.runtime_sha256.clone(),
+            protected_state,
+            supported_action: action.clone(),
+            recovery_action: action,
+            consequences: vec!["bounded".to_owned()],
+            cancellation_boundary: "before start is no effect".to_owned(),
+            restart_rule: "fresh task".to_owned(),
+            claim_ceiling: "handoff only".to_owned(),
         };
-        rebind_plan(&mut record);
+        record.handoff_sha256 = handoff_digest(&record).unwrap();
         record
     }
 
-    fn rebind_plan(record: &mut PersonalMarketplaceInstallPlan) {
-        let binding = PlanBinding {
-            schema_version: &record.schema_version,
-            effect: &record.effect,
-            marketplace: &record.marketplace,
-            lifecycle_intent: &record.lifecycle_intent,
-            input: &record.input,
-            cli: &record.cli,
-            personal_home: &record.personal_home,
-            before: &record.before,
-            target: &record.target,
-            apply_status: &record.apply_status,
-            required_effects: &record.required_effects,
-            required_reconciliation: &record.required_reconciliation,
-            rollback: &record.rollback,
-            claim_ceiling: &record.claim_ceiling,
-        };
-        record.plan_sha256 = digest_json(&binding).unwrap();
-    }
-
-    #[cfg(unix)]
-    struct PersonalInstallFixture {
-        root: PathBuf,
-        home: PathBuf,
-        installed: PathBuf,
-        cache: PathBuf,
-    }
-
-    #[cfg(unix)]
-    impl PersonalInstallFixture {
-        fn new(marketplace_directory: &str) -> Self {
-            let requested_root = std::env::temp_dir().join(format!(
-                "hul-personal-install-plan-{}-{}",
-                std::process::id(),
-                NEXT_PERSONAL_FIXTURE.fetch_add(1, Ordering::Relaxed),
-            ));
-            fs::create_dir(&requested_root).unwrap();
-            let root = requested_root.canonicalize().unwrap();
-            let home = root.join("home");
-            let installed = home.join(format!(
-                ".codex/local-marketplaces/{marketplace_directory}/plugins/harness-ultragoal"
-            ));
-            let cache = home.join(format!(
-                ".codex/plugins/cache/{MARKETPLACE}/harness-ultragoal/{INSTALLED_VERSION}"
-            ));
-            fs::create_dir_all(&home).unwrap();
-            materialize_installed_fixture(&installed);
-            materialize_installed_fixture(&cache);
-            Self {
-                root,
-                home,
-                installed,
-                cache,
-            }
-        }
-
-        fn registry(&self) -> HostPluginRegistryObservation {
-            HostPluginRegistryObservation::fixture(&self.installed, &self.home, INSTALLED_VERSION)
-        }
-    }
-
-    #[cfg(unix)]
-    impl Drop for PersonalInstallFixture {
-        fn drop(&mut self) {
-            let _ = fs::remove_dir_all(&self.root);
-        }
-    }
-
-    #[cfg(unix)]
-    fn materialize_installed_fixture(target: &Path) {
-        let repository = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .expect("validator has a repository parent");
-        fs::create_dir_all(target.join(".codex/agents")).unwrap();
-        for entry in fs::read_dir(repository.join(".codex/agents")).unwrap() {
-            let entry = entry.unwrap();
-            if entry.file_type().unwrap().is_file() {
-                fs::copy(
-                    entry.path(),
-                    target.join(".codex/agents").join(entry.file_name()),
-                )
-                .unwrap();
-            }
-        }
-        fs::create_dir_all(target.join(".codex-plugin")).unwrap();
-        let mut manifest: serde_json::Value = serde_json::from_slice(
-            &fs::read(repository.join(".codex-plugin/plugin.json")).unwrap(),
-        )
-        .unwrap();
-        manifest["version"] = serde_json::Value::String(INSTALLED_VERSION.to_owned());
-        fs::write(
-            target.join(".codex-plugin/plugin.json"),
-            serde_json::to_vec_pretty(&manifest).unwrap(),
-        )
-        .unwrap();
-        fs::create_dir_all(target.join("runtime")).unwrap();
-        fs::write(target.join("runtime/ultragoal"), b"fixture-runtime").unwrap();
-    }
-
-    #[cfg(unix)]
-    fn tree_snapshot(root: &Path) -> Vec<(String, String, u32, u64, Vec<u8>)> {
-        fn visit(root: &Path, current: &Path, rows: &mut Vec<(String, String, u32, u64, Vec<u8>)>) {
-            let mut entries = fs::read_dir(current)
-                .unwrap()
-                .map(Result::unwrap)
-                .collect::<Vec<_>>();
-            entries.sort_by_key(|entry| entry.file_name());
-            for entry in entries {
-                let path = entry.path();
-                let metadata = fs::symlink_metadata(&path).unwrap();
-                let relative = path
-                    .strip_prefix(root)
-                    .unwrap()
-                    .to_string_lossy()
-                    .into_owned();
-                if metadata.is_dir() {
-                    rows.push((
-                        relative,
-                        "directory".to_owned(),
-                        metadata.mode(),
-                        metadata.nlink(),
-                        Vec::new(),
-                    ));
-                    visit(root, &path, rows);
-                } else if metadata.is_file() {
-                    rows.push((
-                        relative,
-                        "regular".to_owned(),
-                        metadata.mode(),
-                        metadata.nlink(),
-                        fs::read(path).unwrap(),
-                    ));
-                } else {
-                    rows.push((
-                        relative,
-                        "special".to_owned(),
-                        metadata.mode(),
-                        metadata.nlink(),
-                        Vec::new(),
-                    ));
-                }
-            }
-        }
-        let mut rows = Vec::new();
-        visit(root, root, &mut rows);
-        rows
-    }
-
-    #[cfg(unix)]
     #[test]
-    fn installed_authority_accepts_the_exact_live_personal_marketplace_shape_without_mutation() {
-        let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
-        let before = tree_snapshot(&fixture.root);
-
-        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
-        let observation = installed_authority(&home, &fixture.registry()).unwrap();
-
-        assert_eq!(observation.authority.plugin_version, INSTALLED_VERSION);
-        assert!(
-            observation
-                .authority
-                .marketplace_source_tree_sha256
-                .starts_with("sha256:")
-        );
-        assert!(
-            observation
-                .authority
-                .marketplace_source_observation_sha256
-                .starts_with("sha256:")
-        );
-        assert_ne!(
-            observation.authority.marketplace_source_tree_sha256,
-            observation.authority.marketplace_source_observation_sha256
-        );
-        observation.revalidate().unwrap();
-        assert_eq!(tree_snapshot(&fixture.root), before);
-    }
-
-    #[cfg(unix)]
-    #[test]
-    fn installed_authority_observation_rejects_later_source_change() {
-        let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
-        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
-        let observation = installed_authority(&home, &fixture.registry()).unwrap();
-
-        fs::write(
-            fixture.installed.join("runtime/ultragoal"),
-            b"changed-runtime",
-        )
-        .unwrap();
-
-        assert_eq!(
-            observation.revalidate().unwrap_err(),
-            "installed marketplace source changed during capture"
-        );
-    }
-
-    #[cfg(unix)]
-    #[test]
-    fn installed_authority_rejects_a_foreign_marketplace_directory_before_capture() {
-        let fixture = PersonalInstallFixture::new("foreign-marketplace");
-        let before = tree_snapshot(&fixture.root);
-
-        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
-        let failure = match installed_authority(&home, &fixture.registry()) {
-            Ok(_) => panic!("foreign marketplace unexpectedly admitted"),
-            Err(failure) => failure,
-        };
-
-        assert_eq!(
-            failure,
-            "installed source path is not the canonical Harness marketplace member"
-        );
-        assert_eq!(tree_snapshot(&fixture.root), before);
-    }
-
-    #[cfg(unix)]
-    #[test]
-    fn personal_home_authority_rejects_alternate_home_and_same_path_inode_substitution() {
-        let first = PersonalInstallFixture::new("harness-ultragoal-local");
-        let second = PersonalInstallFixture::new("harness-ultragoal-local");
-        let retained = PersonalHomeAuthority::capture(&first.home).unwrap();
-        let alternate = PersonalHomeAuthority::capture(&second.home).unwrap();
-        assert_ne!(retained.record(), alternate.record());
-
-        let held = first.root.join("held-home");
-        fs::rename(&first.home, &held).unwrap();
-        fs::create_dir(&first.home).unwrap();
-        fs::create_dir(first.home.join(".codex")).unwrap();
-        assert_eq!(
-            retained.revalidate().unwrap_err(),
-            "personal home authority changed"
-        );
-    }
-
-    #[cfg(unix)]
-    #[test]
-    fn installed_authority_rejects_prior_cache_full_tree_mismatch() {
-        let fixture = PersonalInstallFixture::new("harness-ultragoal-local");
-        fs::write(fixture.cache.join("cache-only.txt"), b"not in source").unwrap();
-        let home = PersonalHomeAuthority::capture(&fixture.home).unwrap();
-        let failure = installed_authority(&home, &fixture.registry())
-            .err()
-            .expect("mismatched cache tree must fail closed");
-        assert_eq!(failure, "installed source and cache full trees diverge");
-    }
-
-    #[test]
-    fn exact_plan_identity_rejects_every_authority_or_effect_relabel() {
-        let original = record();
-        assert!(validate_plan_identity(&original).is_ok());
-        let mut effect = original.clone();
-        effect.effect = "external-write".to_owned();
-        assert!(validate_plan_identity(&effect).is_err());
-        let mut authority = original.clone();
-        authority.before.cache_catalog_sha256 = digest('9');
-        assert!(validate_plan_identity(&authority).is_err());
-        let mut cache_tree = original.clone();
-        cache_tree.before.cache_tree_sha256 = digest('9');
-        cache_tree.before.installed_authority_sha256 =
-            installed_authority_digest(&cache_tree.before).unwrap();
-        rebind_plan(&mut cache_tree);
-        assert!(validate_plan_identity(&cache_tree).is_err());
-        let mut home = original.clone();
-        home.personal_home.home.inode += 1;
-        home.personal_home.authority_sha256 =
-            personal_home_authority_digest(&home.personal_home).unwrap();
-        home.before.personal_home_authority_sha256 = home.personal_home.authority_sha256.clone();
-        home.before.installed_authority_sha256 = installed_authority_digest(&home.before).unwrap();
-        rebind_plan(&mut home);
-        assert!(validate_plan_identity(&home).is_ok());
-        assert_ne!(home.personal_home, original.personal_home);
-        let mut directory_observation = original.clone();
-        directory_observation
-            .before
-            .marketplace_source_observation_sha256 = digest('8');
-        assert!(validate_plan_identity(&directory_observation).is_err());
-        let mut inner_schema = original.clone();
-        inner_schema.before.schema_version = "HarnessObservedInstalledAuthority-v1".to_owned();
-        inner_schema.before.installed_authority_sha256 =
-            installed_authority_digest(&inner_schema.before).unwrap();
-        rebind_plan(&mut inner_schema);
-        assert!(validate_plan_identity(&inner_schema).is_err());
-        let mut outer_schema = original.clone();
-        outer_schema.schema_version = "HarnessPersonalMarketplaceInstallPlan-v3".to_owned();
-        rebind_plan(&mut outer_schema);
-        assert!(validate_plan_identity(&outer_schema).is_err());
-        let mut target = original.clone();
-        target.target.version = "0.0.39".to_owned();
-        assert!(validate_plan_identity(&target).is_err());
-        let mut sequence = original;
-        sequence.required_effects.swap(0, 1);
-        assert!(validate_plan_identity(&sequence).is_err());
-    }
-
-    #[test]
-    fn apply_admission_revalidates_the_accepted_candidate_without_replanning_the_predecessor() {
-        struct Interrupted {
-            observation: crate::distribution::PersonalMarketplaceUpdateObservation,
-            restorations: usize,
-            reinstalls: usize,
-        }
-
-        impl crate::distribution::PersonalMarketplaceUpdateEffects for Interrupted {
-            fn observe(
-                &mut self,
-                _authority: &PersonalMarketplaceUpdateAuthority,
-            ) -> Result<crate::distribution::PersonalMarketplaceUpdateObservation, &'static str>
-            {
-                Ok(self.observation)
-            }
-
-            fn materialize_target(
-                &mut self,
-                _authority: &PersonalMarketplaceUpdateAuthority,
-            ) -> Result<(), &'static str> {
-                Err("already materialized")
-            }
-
-            fn install_target(
-                &mut self,
-                _authority: &PersonalMarketplaceUpdateAuthority,
-            ) -> Result<(), &'static str> {
-                Err("installation must not run before restart recovery")
-            }
-
-            fn restore_prior_tree(
-                &mut self,
-                _authority: &PersonalMarketplaceUpdateAuthority,
-            ) -> Result<(), &'static str> {
-                self.restorations += 1;
-                self.observation = exact_update_observation(
-                    crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
-                );
-                Ok(())
-            }
-
-            fn reinstall_prior(
-                &mut self,
-                _authority: &PersonalMarketplaceUpdateAuthority,
-            ) -> Result<(), &'static str> {
-                self.reinstalls += 1;
-                Ok(())
-            }
-        }
-
-        let accepted = record();
-        let (authority, prior) = accepted_update_authority(&accepted, &accepted.target).unwrap();
-        assert_eq!(authority.plan_sha256(), accepted.plan_sha256);
-        assert_eq!(authority.prior(), &prior);
-        assert_eq!(
-            authority.prior_tree_sha256(),
-            accepted.before.marketplace_source_tree_sha256
-        );
-        assert_eq!(
-            authority.target_tree_sha256(),
-            accepted.target.source_tree_sha256
-        );
-        let mut interrupted = Interrupted {
-            observation: crate::distribution::PersonalMarketplaceUpdateObservation {
-                marketplace_root_bound: true,
-                source_tree: crate::distribution::PersonalMarketplaceAuthorityMatch::Target,
-                installed: crate::distribution::PersonalMarketplaceAuthorityMatch::Target,
-                cache: crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
-                runtime: crate::distribution::PersonalMarketplaceAuthorityMatch::Other,
-                registry: crate::distribution::PersonalMarketplaceAuthorityMatch::Prior,
-            },
-            restorations: 0,
-            reinstalls: 0,
-        };
-        let report = execute_personal_marketplace_update(&authority, &mut interrupted);
-        assert_eq!(
-            report.disposition,
-            PersonalMarketplaceUpdateDisposition::RecoveredAfterFailure
-        );
-        assert_eq!((interrupted.restorations, interrupted.reinstalls), (1, 1));
-    }
-
-    fn exact_update_observation(
-        value: crate::distribution::PersonalMarketplaceAuthorityMatch,
-    ) -> crate::distribution::PersonalMarketplaceUpdateObservation {
-        crate::distribution::PersonalMarketplaceUpdateObservation {
-            marketplace_root_bound: true,
-            source_tree: value,
-            installed: value,
-            cache: value,
-            runtime: value,
-            registry: value,
-        }
-    }
-
-    #[test]
-    fn registry_observation_failure_keeps_its_typed_cause() {
-        assert_eq!(
-            registry_observation_failure_cause(
-                super::capabilities::RegistryObservationFailure::Blocked(
-                    crate::plugin_product::agent_discovery::AgentDiscoveryErrorId::IdentityMismatch,
-                ),
-            ),
-            "identity-mismatch"
-        );
-        assert_eq!(
-            registry_observation_failure_cause(
-                super::capabilities::RegistryObservationFailure::Unavailable(
-                    "codex-observation-unavailable",
-                ),
-            ),
-            "codex-observation-unavailable"
-        );
-    }
-
-    #[test]
-    fn public_failure_diagnostics_preserve_stable_stage_causality_and_next_action() {
-        assert_eq!(
-            recovered_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::InstallTarget)),
-            (
-                "personal marketplace update recovered exact prior after stage=install-target",
-                "derive a fresh exact plan only after the pinned child execution or cancellation cause is resolved",
-            )
-        );
-        assert_eq!(
-            ambiguous_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::ReinstallPrior)),
-            (
-                "personal marketplace recovery is ambiguous at stage=reinstall-prior",
-                "preserve all state and reconcile the exact prior registry, cache, runtime, and selected-Codex child result before any retry",
-            )
-        );
-        assert_eq!(
-            refused_stage_diagnostic(Some(PersonalMarketplaceUpdateStage::InitialObservation)).0,
-            "personal marketplace update refused before effect at stage=initial-observation"
-        );
-    }
-
-    #[test]
-    fn prior_authority_digest_is_independent_from_target_package_identity() {
-        let original = record();
-        assert_ne!(
-            original.before.installed_authority_sha256,
-            original.target.archive_sha256
-        );
-        let mut relabeled = original.before.clone();
-        relabeled.installed_authority_sha256 = original.target.archive_sha256;
-        assert_ne!(
-            installed_authority_digest(&relabeled).unwrap(),
-            relabeled.installed_authority_sha256
-        );
-
-        let mut substituted_cachebuster = original.before;
-        substituted_cachebuster.plugin_version = "0.0.39+codex.substituted-cachebuster".to_owned();
-        assert_ne!(
-            installed_authority_digest(&substituted_cachebuster).unwrap(),
-            substituted_cachebuster.installed_authority_sha256
-        );
-    }
-
-    #[test]
-    fn accepted_plan_adopts_prior_authority_without_relabeling_it_as_target() {
+    fn handoff_identity_binds_every_authority_and_rejects_tampering() {
         let record = record();
-        let (lifecycle, target, prior) = adopted_lifecycle_plan(&record).unwrap();
-        assert_eq!(lifecycle.intent, LifecycleIntent::MonotonicUpdate);
-        assert_eq!(lifecycle.before.generation, 0);
-        assert_eq!(lifecycle.before.installed.as_ref(), Some(prior.authority()));
-        assert_eq!(lifecycle.rollback_state, lifecycle.before);
-        assert_eq!(
-            lifecycle
-                .expected_after
-                .installed
-                .as_ref()
-                .unwrap()
-                .package_sha256,
-            target.archive_sha256()
-        );
-        assert_ne!(prior.authority().package_sha256, target.archive_sha256());
-
-        let mut downgraded = record.clone();
-        downgraded.target.version = downgraded.before.plugin_version.clone();
-        assert!(adopted_lifecycle_plan(&downgraded).is_err());
-        let mut cachebuster_only = record.clone();
-        cachebuster_only.target.version = "0.0.39+codex.different-cachebuster".to_owned();
-        assert!(adopted_lifecycle_plan(&cachebuster_only).is_err());
-        let mut aliased = record;
-        aliased.target.archive_sha256 = aliased.before.installed_authority_sha256.clone();
-        assert!(adopted_lifecycle_plan(&aliased).is_err());
+        validate_handoff_identity(&record).unwrap();
+        let mut cases = Vec::new();
+        let mut source = record.clone();
+        source.source.status_sha256 = digest('9');
+        cases.push(source);
+        let mut home = record.clone();
+        home.host.personal_home.home.inode += 1;
+        cases.push(home);
+        let mut codex = record.clone();
+        codex.selected_codex.version = "0.151.0".to_owned();
+        cases.push(codex);
+        let mut marketplace_source = record.clone();
+        marketplace_source.durable_marketplace_source.tree_sha256 = digest('9');
+        cases.push(marketplace_source);
+        let mut profile = record.clone();
+        profile.host.profile_context = "other".to_owned();
+        cases.push(profile);
+        let mut cwd = record.clone();
+        cwd.host.working_directory = "/other".to_owned();
+        cases.push(cwd);
+        let mut protected = record.clone();
+        protected.protected_state.marker_sha256 = digest('8');
+        cases.push(protected);
+        for changed in cases {
+            assert!(validate_handoff_identity(&changed).is_err());
+        }
     }
 
     #[test]
-    fn public_grammar_separates_read_only_plan_from_external_apply_acceptance() {
-        let plan = parse_args([
-            "--json",
-            "package",
-            "install-plan",
-            "--input",
-            "target/ultragoal/package-0.0.41.hugpkg",
-            "--cli",
-            "target/ultragoal/release/ultragoal",
-        ])
-        .unwrap();
-        let ParseOutcome::Invocation(plan) = plan else {
-            panic!("expected install plan invocation")
-        };
-        assert_eq!(plan.effect, EffectClass::Read);
-        let apply = parse_args([
-            "--json",
-            "package",
-            "install-apply",
-            "--plan",
-            "/private/tmp/hul-install-plan.json",
-            "--accept-plan",
-            "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        ])
-        .unwrap();
-        let ParseOutcome::Invocation(apply) = apply else {
-            panic!("expected install apply invocation")
-        };
-        assert_eq!(apply.effect, EffectClass::ExternalWrite);
+    fn verification_classifies_exact_target_prior_and_mixed_state() {
+        let record = record();
+        assert_eq!(
+            classify_installation(&record, &record.predecessor),
+            VerificationClassification::ExactPriorNoEffect
+        );
+        let mut target = installed(&record.target.version, 'b');
+        target.marketplace_runtime_sha256 = record.target.runtime_sha256.clone();
+        target.cache_runtime_sha256 = record.target.runtime_sha256.clone();
+        target.installed_authority_sha256 = installed_digest(&target).unwrap();
+        assert_eq!(
+            classify_installation(&record, &target),
+            VerificationClassification::ExactTarget
+        );
+        let mut mixed = target;
+        mixed.cache_tree_sha256 = digest('c');
+        mixed.installed_authority_sha256 = installed_digest(&mixed).unwrap();
+        assert_eq!(
+            classify_installation(&record, &mixed),
+            VerificationClassification::PartialOrStale
+        );
+    }
+
+    #[test]
+    fn selected_action_is_current_supported_codex_only_and_never_an_executor() {
+        let record = record();
+        assert_eq!(
+            record.supported_action.arguments,
+            ["plugin", "add", "harness-ultragoal@local-harness-plugins"]
+        );
+        assert_eq!(record.supported_action, record.recovery_action);
+        assert_eq!(record.effect, "none");
+    }
+
+    #[test]
+    fn direct_marketplace_config_requires_exact_alias_source_and_enablement() {
+        let source = Path::new("/workspace/plugins/harness-ultragoal");
+        let exact = r#"
+[marketplaces.local-harness-plugins]
+source_type = "local"
+source = "/workspace/plugins/harness-ultragoal"
+
+[plugins."harness-ultragoal@local-harness-plugins"]
+enabled = true
+"#;
+        assert!(configured_marketplace_is_exact(exact.as_bytes(), source));
+        for changed in [
+            exact.replace(
+                "/workspace/plugins/harness-ultragoal",
+                "/private/tmp/stale-harness-source",
+            ),
+            exact.replace("local-harness-plugins", "different-marketplace"),
+            exact.replace("enabled = true", "enabled = false"),
+        ] {
+            assert!(!configured_marketplace_is_exact(changed.as_bytes(), source));
+        }
+    }
+
+    #[test]
+    fn active_and_packaged_readers_expose_no_personal_mutation_adapter() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+        let forbidden = [
+            ["install", "apply"].join("-"),
+            "reviewed lifecycle adapter".to_owned(),
+            "restores the prior authority".to_owned(),
+            "automatic retry".to_owned(),
+        ];
+        for relative in [
+            "skills/improve-and-maintain/SKILL.md",
+            "docs/install-and-visibility.md",
+            "docs/plugin-resource-map.md",
+            "validator/src/cli/successor/catalog/observability_and_package.rs",
+            ".codex-plugin/plugin.json",
+            "plugin-manifest-draft.json",
+        ] {
+            let bytes = fs::read_to_string(root.join(relative)).unwrap();
+            for denied in &forbidden {
+                assert!(
+                    !bytes.contains(denied),
+                    "active/package reader {relative} retained {denied}"
+                );
+            }
+        }
     }
 }

@@ -3,9 +3,14 @@ use std::env;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 
+// The personal mutation implementation remains only as a private permanent
+// regression surface. No production package route can reach these members.
+#[allow(dead_code)]
 mod execution;
+#[allow(dead_code)]
 mod identity;
 mod immutable_launch;
+#[allow(dead_code)]
 mod selection;
 pub(crate) use selection::SelectedCodexExecutable;
 

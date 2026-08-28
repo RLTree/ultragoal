@@ -52,6 +52,8 @@ fn recovery_during_apply_refuses_until_effects_finish_and_then_arms() {
 #[serde(deny_unknown_fields)]
 struct LifecycleCases {
     schema_version: String,
+    scope: String,
+    public_authority: bool,
     cases: Vec<LifecycleCase>,
 }
 
@@ -68,7 +70,9 @@ struct LifecycleCase {
 fn lifecycle_fixture_is_exact_and_covers_all_eight_intents() {
     let fixture: LifecycleCases =
         serde_json::from_str(&super::read("fixtures/plugin-product/lifecycle-cases.json")).unwrap();
-    assert_eq!(fixture.schema_version, "HarnessPluginLifecycleCases-v1");
+    assert_eq!(fixture.schema_version, "HarnessPluginLifecycleCases-v2");
+    assert_eq!(fixture.scope, "disposable_non_personal_verifier_fixture");
+    assert!(!fixture.public_authority);
     assert_eq!(fixture.cases.len(), 8);
     for (case, journey) in fixture.cases.iter().zip(JOURNEYS.iter()) {
         assert_eq!(case.id, journey.id);

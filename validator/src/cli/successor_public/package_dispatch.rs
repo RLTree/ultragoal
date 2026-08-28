@@ -35,9 +35,9 @@ pub(super) fn execute(
                 package_personal_install::plan(source, observation, invocation, home)
             }))
         }
-        operation_binding::PublicOperation::PackageInstallApply => {
+        operation_binding::PublicOperation::PackageInstallVerify => {
             Some(with_lifecycle_contexts(root, |source, observation| {
-                package_personal_install::apply(source, observation, invocation, home)
+                package_personal_install::verify(source, observation, invocation, home)
             }))
         }
         _ => None,

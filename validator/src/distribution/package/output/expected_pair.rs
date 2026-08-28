@@ -88,12 +88,12 @@ mod filename_version_tests {
     #[test]
     fn semver_build_separator_has_one_injective_path_safe_encoding() {
         assert_eq!(
-            output_filename_version("0.0.41+codex.20260824093100"),
+            output_filename_version("0.0.42+codex.20260828085546"),
             "0.0.41_plus_codex.20260824093100"
         );
         assert_ne!(
             output_filename_version("0.0.41"),
-            output_filename_version("0.0.41+codex.20260824093100")
+            output_filename_version("0.0.42+codex.20260828085546")
         );
         assert_ne!(
             output_filename_version("0.0.41+codex.first"),
