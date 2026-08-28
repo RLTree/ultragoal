@@ -98,19 +98,22 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
   the preserved representative target. That observation is comparison evidence
   only; its plan identity must be rederived and must not be reused after source,
   install, target, or HostState drift.
-- Current `package install-apply` source always binds
-  `UnavailablePersonalMarketplaceUpdateEffects` and refuses before effect
-  because no reviewed live personal-marketplace update adapter is exposed.
-  This is a known P1 prerequisite, not an installed-canary discovery: implement
-  the adapter under one exclusive lease and prove interruption, reconciliation,
-  and exact rollback before freezing or packaging the final P1 candidate.
+- P1a commit `21138f1aeb7b7c5bb09ed3464e58b399ca2e7daf`
+  replaces the unavailable `package install-apply` binding with a production
+  personal-marketplace adapter. At the source and isolated-oracle ceiling it
+  holds one exclusive descriptor lease, uses one pinned Codex executable,
+  binds the canonical user home and global `.codex` root, admits only exact
+  prior, exact target, or the one exact interrupted post-materialization state,
+  and reconciles or restores before returning. Twenty-five focused adapter,
+  state-machine, and command-binding tests, two marketplace-transition tests,
+  locked offline compile, and the complete `scripts/check .` aggregate passed.
+  No live Codex command or personal-host effect was exercised.
 
 ### Still unknown
 
-- Whether a live personal-marketplace adapter can satisfy the existing
-  exclusive-lease, pinned-executor, interruption, reconciliation, and exact
-  rollback contracts, after which the P0-adjusted source can freeze, package,
-  install, and be observed as the same bytes through the supported host surface.
+- Whether the source-proven personal-marketplace adapter behaves identically
+  through the live personal host. P1 still must freeze and package the exact
+  successor before P2 can test that boundary under separate effect authority.
 - Whether the live HostState still produces an acceptable abandonment plan.
 - Whether authorized live abandonment completes without ambiguous effect.
 - Whether the installed successor completes useful routine work, deterministic
@@ -186,13 +189,16 @@ the exact candidate and read-only plan evidence.
   bindings, preserve protected state, and commit only the plan. The first
   aggregate run exposed a missing canonical `The external evaluator` literal;
   restoring that binding made the focused current-authority regression and
-  complete `scripts/check .` aggregate pass on 2026-08-27. The first immutable
-  review returned `REVISE`; this correction closes its four plan-only findings
-  before the same bounded rereview.
-- [ ] P1 implement and prove the known live personal-marketplace adapter first,
-  then freeze a monotonic successor, pass exact-source checks, build the release
-  CLI and deterministic package, verify it, complete disposable installation,
-  and derive a read-only personal-install plan.
+  complete `scripts/check .` aggregate pass on 2026-08-27. Two bounded revision
+  rounds closed five plan/source-binding findings; independent immutable review
+  approved exact P0 commit `3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`.
+- [x] P1a implement the live personal-marketplace adapter and prove its exact
+  prior/target/restart, result-loss, rollback, cancellation, lease, mixed-state,
+  and home/executable bindings at source and isolated-test surfaces. Integrated
+  as `21138f1aeb7b7c5bb09ed3464e58b399ca2e7daf`; no P2 effect occurred.
+- [ ] P1b freeze a monotonic successor, pass exact-source checks, build the
+  release CLI and deterministic package, verify it, complete disposable
+  installation, and derive a read-only personal-install plan.
 - [ ] P2 obtain the exact internal effect authorities, install through the
   supported lifecycle route, observe same-byte runtime identity, derive a fresh
   live abandonment plan, apply it only under its exact authority, and complete
@@ -228,13 +234,14 @@ runtime or product claim.
 
 ## Milestone P1 — Live-install capability, exact successor, and pre-host gates
 
-First replace the unavailable binding in
+P1a replaced the unavailable binding in
 `validator/src/cli/successor_public/package_personal_install.rs` with a
 production adapter over the existing `PersonalMarketplaceUpdateEffects`
-transaction. Hold one exclusive lease across observe, materialize, pinned Codex
-plugin-add execution, result reconciliation, rollback, and final observation.
-Use the existing selected/pinned Codex executable and recoverable lifecycle
-machinery; do not introduce a direct unbound process path.
+transaction. It holds one exclusive lease across observe, materialize, pinned
+Codex plugin-add execution, result reconciliation, rollback, and final
+observation. It uses the existing selected/pinned Codex executable and
+recoverable lifecycle machinery without introducing a direct unbound process
+path.
 
 At the lowest falsifying surfaces, prove exact-prior apply and target replay,
 interruption after materialization, every injected target failure, result loss,
