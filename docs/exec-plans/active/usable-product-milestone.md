@@ -98,24 +98,41 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
   the preserved representative target. That observation is comparison evidence
   only; its plan identity must be rederived and must not be reused after source,
   install, target, or HostState drift.
-- P1a commit `21138f1aeb7b7c5bb09ed3464e58b399ca2e7daf`
-  replaces the unavailable `package install-apply` binding with a production
-  personal-marketplace adapter. Twenty-five total focused tests across adapter,
-  state-machine, command-binding, and marketplace-transition surfaces, locked
-  offline compile, and the complete `scripts/check .` aggregate passed. Fresh
-  immutable review of candidate `b030621927a32d1d4e2f36a3e4d50b644d75c093`
-  nevertheless found seven material source/claim defects: incomplete exact-home
-  and predecessor admission, pathname-race write escape, lease loss after
-  parent death, unreachable production cancellation, optional exact-prior
-  restart custody, discarded causal stages, and stale plan truth. P1a is in
-  `REVISE`; P1b remains closed. No live Codex command or personal-host effect
-  was exercised.
+- P1a repair commit `0d8feda22bf5a7c2f9bb488ef4b404cf6566ded7`
+  closes exact-home/predecessor admission, parent-death lease custody,
+  production cancellation, exact-prior restart custody, causal diagnostics,
+  and plan truth at source and isolated-process surfaces. Independent rereview
+  accepted those six findings and kept one material blocker open: macOS
+  `sandbox-exec` grants descendant writes by pathname, not by the retained
+  `.codex` descriptor. A suspended child can therefore write into a different
+  ordinary directory renamed into the accepted pathname after spawn.
+- The deterministic red oracle
+  `spawn_boundary_real_directory_substitution_cannot_mutate_either_tree` is
+  retained as an explicitly ignored test in
+  `validator/src/distribution/host_effect/selected_codex_executable/execution/darwin_custody_tests.rs`.
+  Running it with `--ignored --exact` fails against `0d8feda22` because the
+  substituted directory is mutated; its corrected symlink companion still
+  passes. P1a-S must remove the ignore only after making this exact oracle
+  green. `/dev/fd/<directory-fd>` is not traversable as a child namespace on
+  macOS, and initializing the sandbox before pathname substitution does not
+  bind the rule to the original vnode.
+- Current upstream Codex installation performs two coupled effects: plugin
+  cache replacement and semantic enablement in `CODEX_HOME/config.toml`.
+  Therefore a safe successor cannot patch the direct pathname-authorized child
+  route. It requires an independently approved staged-CODEX_HOME transaction
+  with a retained-descriptor commit and cross-process recovery. P1a is
+  `blocked_by_product` at this architecture gate; P1b remains closed. No live
+  Codex command or personal-host effect was exercised.
 
 ### Still unknown
 
-- Whether a repaired personal-marketplace adapter can close the seven bounded
-  P1a review findings at source and isolated-process surfaces. Only an approved
-  immutable rereview may open P1b version freeze and packaging.
+- Whether the staged-CODEX_HOME plus retained-descriptor transaction can be
+  bounded without copying arbitrary personal state, relying on undocumented
+  Codex storage, or weakening the same-user pathname-substitution threat model.
+- Whether architecture/security review approves exact cache/config preimages,
+  postimages, commit ordering, durable recovery, cancellation, and cleanup.
+  Only approved architecture followed by an approved immutable implementation
+  rereview may open P1b version freeze and packaging.
 - Whether the live HostState still produces an acceptable abandonment plan.
 - Whether authorized live abandonment completes without ambiguous effect.
 - Whether the installed successor completes useful routine work, deterministic
@@ -168,8 +185,13 @@ prerequisite or Terry authorizes a separate later product goal.
 ```text
 P0 replace the sole active plan with current truth and validate its bindings
   |
-P1 implement and prove the known live-install adapter, then freeze one
-   monotonic successor and complete every local pre-host gate
+P1a-A remap and independently approve a staged-CODEX_HOME plus
+      retained-descriptor cache/config commit transaction
+  |
+P1a-S implement and prove that transaction, including the preserved red
+      pathname-rebinding oracle and cross-process recovery
+  |
+P1b freeze one monotonic successor and complete every local pre-host gate
   |
 P2 cross separately authorized install and live-product gates, then run the
    complete installed canary under a minimal independent evaluator
@@ -194,11 +216,15 @@ the exact candidate and read-only plan evidence.
   complete `scripts/check .` aggregate pass on 2026-08-27. Two bounded revision
   rounds closed five plan/source-binding findings; independent immutable review
   approved exact P0 commit `3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`.
-- [ ] P1a repair and rereview the live personal-marketplace adapter. Candidate
-  `b030621927a32d1d4e2f36a3e4d50b644d75c093` is `REVISE`: close exact-home and
-  predecessor admission, child write confinement, parent-death lease custody,
-  production cancellation, exact-prior restart custody, causal diagnostics,
-  and plan-truth findings without a P2 effect.
+- [x] P1a-D falsify the direct pathname-authorized child design. Candidate
+  `0d8feda22bf5a7c2f9bb488ef4b404cf6566ded7` closes six of seven review
+  findings, but a real-directory suspended-spawn oracle proves that the child
+  can mutate a same-path substitute. Direct repair is stopped.
+- [ ] P1a-A specify and independently approve the staged-CODEX_HOME plus
+  retained-descriptor cache/config transaction before assigning implementation.
+- [ ] P1a-S implement the approved transaction, make the ordinary-directory
+  oracle green without weakening it, pass focused/process/aggregate gates, and
+  obtain a new immutable rereview.
 - [ ] P1b freeze a monotonic successor, pass exact-source checks, build the
   release CLI and deterministic package, verify it, complete disposable
   installation, and derive a read-only personal-install plan.
@@ -237,22 +263,61 @@ runtime or product claim.
 
 ## Milestone P1 — Live-install capability, exact successor, and pre-host gates
 
-P1a is repairing the replacement for the unavailable binding in
-`validator/src/cli/successor_public/package_personal_install.rs` with a
-production adapter over the existing `PersonalMarketplaceUpdateEffects`
-transaction. The first immutable candidate did not yet prove effect-root
-identity, child-path confinement, parent-death lease continuity, production
-cancellation, or restart rollback strongly enough. Keep P1b closed until those
-properties, stage-specific diagnostics, and exact plan truth pass the bounded
-rereview.
+P1a-D established that the unavailable personal-install binding cannot be
+repaired safely by running the selected Codex child directly against the live
+personal `CODEX_HOME`. The retained directory descriptors authenticate the
+preimage, but the macOS child sandbox authorizes writes by pathname. Pre/post
+revalidation detects a same-path real-directory substitution only after an
+escaped write; advisory lease custody does not constrain a noncooperating
+same-user process. Do not resume or weaken that design.
 
-At the lowest falsifying surfaces, prove exact-prior apply and target replay,
-interruption after materialization, every injected target failure, result loss,
-prior restore and reinstall, mixed-state refusal, rollback ambiguity,
-cancellation, lease contention, and post-effect observation. If this requires
-editing a protected path, stop for an ownership decision rather than overwrite
-user work. This known pre-host capability repair belongs to P1 and does not
-consume P3.
+P1a-A is an architecture gate owned by the root conductor and reviewed at both
+product-simplicity and security/trust-boundary surfaces. Its candidate must
+define one bounded transaction with all of these properties:
+
+1. Run the selected Codex child only against a disposable private staged
+   `CODEX_HOME`; the child never receives the live personal HOME or `.codex`
+   pathname as a writable scope.
+2. Admit the exact retained personal-home authority, exact `config.toml`
+   preimage or absence, exact prior plugin-cache tree, source/package identity,
+   selected executable, and immutable install plan before staging.
+3. Copy only the minimum reviewed non-secret inputs needed by current Codex.
+   Refuse if successful staging would require auth, transcripts, sessions,
+   arbitrary personal state, an undocumented store, or an unbounded tree.
+4. Require a closed staged-tree manifest. The only accepted semantic postimage
+   is the exact target cache tree plus the one expected plugin-enabled config
+   change; every other staged mutation refuses before personal effect.
+5. Commit through retained descriptor-rooted confinement, not personal
+   pathnames. Revalidate exact cache/config preimages at each boundary and use
+   compare/exchange semantics for both surfaces.
+6. Define commit ordering, a durable owner-only recovery record, exact rollback
+   snapshots, parent-death/interruption/cancellation reconciliation, replay,
+   and ambiguity. No success is legal until cache, config, registry, source,
+   runtime, and lease all reobserve exact target.
+7. Preserve unrelated config formatting and fields, unrelated plugin cache,
+   global user configuration, and protected repository state. Cleanup removes
+   only exact disposable staging/recovery paths after proving no unique recovery
+   authority remains.
+
+The architecture review must bind these requirements to current upstream Codex
+source: `install_resolved_plugin` installs the cache and then calls
+`set_user_plugin_enabled`; the store atomically replaces
+`plugins/cache/<marketplace>/<plugin>`; the config editor reads or creates and
+atomically rewrites `CODEX_HOME/config.toml`. Review must reject a cache-only
+shim, raw TOML string patch, full personal-home clone, pathname-only commit, or
+revalidation-only boundary.
+
+Only an approved P1a-A contract may open P1a-S implementation. At the lowest
+falsifying surfaces, P1a-S must retain the six accepted findings and prove the
+ordinary-directory race, exact-prior apply and target replay, staged-manifest
+refusal, config/cache partial commit in both orders, interruption after every
+possible effect, result loss, exact rollback/replay, cancellation, lease
+contention, post-effect observation, and cleanup. A required durable recovery
+record is permitted here because the newly established two-surface commit is a
+real cross-process recovery boundary. If this requires editing a protected
+path, stop for an ownership decision rather than overwrite user work. This
+pre-host architecture and implementation remain inside P1 and do not consume
+P3.
 
 Only after that adapter and its failure matrix pass, advance every canonical
 `0.0.41+codex.20260824093100` product-version binding to one monotonic
@@ -320,10 +385,10 @@ release CLI:
 target/ultragoal/release/ultragoal --json package install-apply --plan <exact-plan-file> --accept-plan <exact-plan-id>
 ```
 
-After effect, reconcile marketplace source, cache, supported Codex registration,
-and release runtime bytes to the exact candidate. Failure or ambiguity invokes
-the existing lifecycle recovery/rollback contract and cannot be reported as
-success.
+After effect, reconcile marketplace source, cache, supported Codex
+registration, config postimage, and release runtime bytes to the exact
+candidate. Failure or ambiguity invokes the approved P1a-S staged-transaction
+recovery contract and cannot be reported as success.
 
 ### Gate B: live abandonment and target effects
 
@@ -452,6 +517,15 @@ exact disposable roots proven safe to remove.
   artifact paths contradicted current package grammar, evaluator outcomes were
   non-exhaustive, and no integration owner was named. These are plan defects;
   correcting them neither starts P1 nor raises the proof ceiling.
+- The direct personal-install child design remained unsafe even after six of
+  seven P1a findings closed. A real ordinary-directory substitution after
+  suspended spawn bypassed the pathname sandbox and mutated non-retained
+  authority. macOS exposed no supported descendant-write capability rooted in
+  the inherited directory descriptor for an unmodified Codex child.
+- Current upstream Codex installs a plugin across both cache and
+  `config.toml`. This converts the next truthful step from another spawn repair
+  into an architecture-reviewed staged transaction with multi-surface recovery.
+  The red oracle is preserved so the remap cannot erase the discovered defect.
 
 ## Decision log
 
@@ -489,6 +563,13 @@ exact disposable roots proven safe to remove.
   Rationale: shared authority surfaces and chat-independent resumption require
   one owner and no outcome may leave the plan without a legal next state.
   Date: 2026-08-27.
+- Decision: stop the direct pathname-authorized personal Codex child design and
+  insert P1a-A architecture/security review before any further implementation.
+  Rationale: the ordinary-directory race proves the child can write outside
+  retained inode authority, and upstream Codex couples cache replacement with a
+  config edit. Repeated spawn hardening cannot provide the missing descriptor
+  write primitive or truthful two-surface recovery.
+  Date: 2026-08-28.
 
 ## Idempotence, recovery, and cleanup
 
@@ -502,10 +583,11 @@ exact product-owned path.
 
 Before P2 effects, capture exact source, package, installed predecessor,
 marketplace/cache/config, HostState, target, plan, and protected-state custody.
-The existing lifecycle transaction owns install recovery. The existing
-whole-owner quarantine transaction owns abandonment recovery. Any ambiguous
-effect stops before routine work and is reconciled through those existing
-interfaces rather than manual rewriting or deletion.
+The independently approved P1a-S staged transaction must own install recovery;
+until it exists, no personal install effect is legal. The existing whole-owner
+quarantine transaction owns abandonment recovery. Any ambiguous effect stops
+before routine work and is reconciled through those interfaces rather than
+manual rewriting or deletion.
 
 Never clean the user-owned protected paths, the representative target, live
 HostState, marketplace/cache, global Codex configuration, or deferred U5
@@ -514,8 +596,10 @@ artifacts as incidental P0-P4 cleanup.
 ## Outcomes and retrospective
 
 P0 is independently approved at exact commit
-`3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`. P1a candidate
-`b030621927a32d1d4e2f36a3e4d50b644d75c093` is `REVISE`, so P1b and every P2
+`3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`. Direct P1a candidate
+`0d8feda22bf5a7c2f9bb488ef4b404cf6566ded7` closes six reviewed boundaries but
+is `HOLD` on same-path ordinary-directory child-write escape. P1a-A
+architecture review is the only open transition; P1a-S, P1b, and every P2
 effect remain closed. The protected diff remains exact, no project
 `.codex/config.toml` exists, and no install, runtime, HostState, target,
 publication, or release effect occurred. `CL-USABLE-LOOP` remains

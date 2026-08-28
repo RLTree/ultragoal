@@ -3,7 +3,7 @@ use crate::distribution::HostCommand;
 use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
 use std::os::fd::AsRawFd;
-use std::os::unix::fs::{OpenOptionsExt, symlink};
+use std::os::unix::fs::{MetadataExt, OpenOptionsExt, symlink};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
@@ -44,11 +44,8 @@ fn spawn_boundary_codex_home_symlink_race_cannot_write_outside_retained_authorit
     let lease = lock_home(&home, false).expect("exclusive lease");
     let cwd = File::open(&home).unwrap();
     let command = HostCommand::from_untrusted_record(
-        "codex".to_owned(),
-        vec![
-            "-c".to_owned(),
-            "printf escaped > \"$CODEX_HOME/escaped\"".to_owned(),
-        ],
+        "-c".to_owned(),
+        vec!["printf escaped > \"$CODEX_HOME/escaped\"".to_owned()],
         vec![
             ("HOME".to_owned(), home.display().to_string()),
             ("CODEX_HOME".to_owned(), codex_home.display().to_string()),
@@ -82,6 +79,71 @@ fn spawn_boundary_codex_home_symlink_race_cannot_write_outside_retained_authorit
     fs::rename(&held_codex_home, &codex_home).unwrap();
     drop(lease);
     fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+#[ignore = "P1a-A red oracle: pathname sandbox permits real-directory substitution"]
+fn spawn_boundary_real_directory_substitution_cannot_mutate_either_tree() {
+    let root = process_test_root("codex-home-real-directory-race");
+    let home = root.join("home");
+    let codex_home = home.join(".codex");
+    let held_codex_home = home.join(".codex-held");
+    let substitute_source = root.join("substitute-source");
+    fs::create_dir_all(&codex_home).unwrap();
+    fs::write(codex_home.join("retained-sentinel"), b"retained").unwrap();
+    fs::create_dir(&substitute_source).unwrap();
+    fs::write(substitute_source.join("substitute-sentinel"), b"substitute").unwrap();
+    let lease = lock_home(&home, false).expect("exclusive lease");
+    let cwd = File::open(&home).unwrap();
+    let command = HostCommand::from_untrusted_record(
+        "-c".to_owned(),
+        vec!["printf escaped > \"$CODEX_HOME/escaped\"".to_owned()],
+        vec![
+            ("HOME".to_owned(), home.display().to_string()),
+            ("CODEX_HOME".to_owned(), codex_home.display().to_string()),
+        ],
+        5_000,
+        1,
+    );
+    let policy = crate::distribution::host_effect::executor::HostEffectExecutionPolicy::strict_personal_codex_home(
+        5_000,
+        &home,
+    )
+    .unwrap();
+    let spawned = spawn::spawn_personal(
+        Path::new("/bin/sh"),
+        &command,
+        cwd.as_raw_fd(),
+        lease.as_raw_fd(),
+        &codex_home,
+    )
+    .expect("suspended confined child");
+    let child_pid = spawned.pid;
+
+    fs::rename(&codex_home, &held_codex_home).unwrap();
+    fs::rename(&substitute_source, &codex_home).unwrap();
+    let retained_before = directory_state(&held_codex_home);
+    let substitute_before = directory_state(&codex_home);
+    let cancellation =
+        crate::distribution::host_effect::executor::HostEffectCancellation::default();
+    let result = session::ChildSession::new(spawned).run_guarded(&policy, &cancellation);
+    let retained_after = directory_state(&held_codex_home);
+    let substitute_after = directory_state(&codex_home);
+    let group_terminal = !recovery::group_exists(child_pid);
+    drop(lease);
+    let competing_lease = lock_home(&home, true);
+    let lease_terminal = competing_lease.is_ok();
+    drop(competing_lease);
+    fs::remove_dir_all(&root).unwrap();
+
+    assert!(
+        result.is_err(),
+        "substituted-directory write unexpectedly succeeded"
+    );
+    assert_eq!(substitute_after, substitute_before);
+    assert_eq!(retained_after, retained_before);
+    assert!(group_terminal, "substituted child group survived refusal");
+    assert!(lease_terminal, "inherited child lease survived refusal");
 }
 
 #[test]
@@ -191,4 +253,75 @@ fn process_test_root(label: &str) -> PathBuf {
     ));
     fs::create_dir(&root).unwrap();
     root.canonicalize().unwrap()
+}
+
+#[derive(Debug, Eq, PartialEq)]
+struct DirectoryState(Vec<DirectoryStateRow>);
+
+#[derive(Debug, Eq, PartialEq)]
+struct DirectoryStateRow {
+    relative: String,
+    kind: &'static str,
+    mode: u32,
+    owner: u32,
+    group: u32,
+    links: u64,
+    length: u64,
+    modified_seconds: i64,
+    modified_nanoseconds: i64,
+    changed_seconds: i64,
+    changed_nanoseconds: i64,
+    bytes: Vec<u8>,
+}
+
+fn directory_state(root: &Path) -> DirectoryState {
+    fn visit(root: &Path, path: &Path, rows: &mut Vec<DirectoryStateRow>) {
+        let metadata = fs::symlink_metadata(path).unwrap();
+        let relative = path
+            .strip_prefix(root)
+            .unwrap()
+            .to_string_lossy()
+            .into_owned();
+        let kind = if metadata.is_dir() {
+            "directory"
+        } else if metadata.is_file() {
+            "regular"
+        } else if metadata.file_type().is_symlink() {
+            "symlink"
+        } else {
+            "special"
+        };
+        rows.push(DirectoryStateRow {
+            relative,
+            kind,
+            mode: metadata.mode(),
+            owner: metadata.uid(),
+            group: metadata.gid(),
+            links: metadata.nlink(),
+            length: metadata.size(),
+            modified_seconds: metadata.mtime(),
+            modified_nanoseconds: metadata.mtime_nsec(),
+            changed_seconds: metadata.ctime(),
+            changed_nanoseconds: metadata.ctime_nsec(),
+            bytes: metadata
+                .is_file()
+                .then(|| fs::read(path).unwrap())
+                .unwrap_or_default(),
+        });
+        if metadata.is_dir() {
+            let mut children = fs::read_dir(path)
+                .unwrap()
+                .map(Result::unwrap)
+                .map(|entry| entry.path())
+                .collect::<Vec<_>>();
+            children.sort();
+            for child in children {
+                visit(root, &child, rows);
+            }
+        }
+    }
+
+    let mut rows = Vec::new();
+    visit(root, root, &mut rows);
+    DirectoryState(rows)
 }
