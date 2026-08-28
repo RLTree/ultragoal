@@ -100,20 +100,22 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
   install, target, or HostState drift.
 - P1a commit `21138f1aeb7b7c5bb09ed3464e58b399ca2e7daf`
   replaces the unavailable `package install-apply` binding with a production
-  personal-marketplace adapter. At the source and isolated-oracle ceiling it
-  holds one exclusive descriptor lease, uses one pinned Codex executable,
-  binds the canonical user home and global `.codex` root, admits only exact
-  prior, exact target, or the one exact interrupted post-materialization state,
-  and reconciles or restores before returning. Twenty-five focused adapter,
-  state-machine, and command-binding tests, two marketplace-transition tests,
-  locked offline compile, and the complete `scripts/check .` aggregate passed.
-  No live Codex command or personal-host effect was exercised.
+  personal-marketplace adapter. Twenty-five total focused tests across adapter,
+  state-machine, command-binding, and marketplace-transition surfaces, locked
+  offline compile, and the complete `scripts/check .` aggregate passed. Fresh
+  immutable review of candidate `b030621927a32d1d4e2f36a3e4d50b644d75c093`
+  nevertheless found seven material source/claim defects: incomplete exact-home
+  and predecessor admission, pathname-race write escape, lease loss after
+  parent death, unreachable production cancellation, optional exact-prior
+  restart custody, discarded causal stages, and stale plan truth. P1a is in
+  `REVISE`; P1b remains closed. No live Codex command or personal-host effect
+  was exercised.
 
 ### Still unknown
 
-- Whether the source-proven personal-marketplace adapter behaves identically
-  through the live personal host. P1 still must freeze and package the exact
-  successor before P2 can test that boundary under separate effect authority.
+- Whether a repaired personal-marketplace adapter can close the seven bounded
+  P1a review findings at source and isolated-process surfaces. Only an approved
+  immutable rereview may open P1b version freeze and packaging.
 - Whether the live HostState still produces an acceptable abandonment plan.
 - Whether authorized live abandonment completes without ambiguous effect.
 - Whether the installed successor completes useful routine work, deterministic
@@ -192,10 +194,11 @@ the exact candidate and read-only plan evidence.
   complete `scripts/check .` aggregate pass on 2026-08-27. Two bounded revision
   rounds closed five plan/source-binding findings; independent immutable review
   approved exact P0 commit `3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`.
-- [x] P1a implement the live personal-marketplace adapter and prove its exact
-  prior/target/restart, result-loss, rollback, cancellation, lease, mixed-state,
-  and home/executable bindings at source and isolated-test surfaces. Integrated
-  as `21138f1aeb7b7c5bb09ed3464e58b399ca2e7daf`; no P2 effect occurred.
+- [ ] P1a repair and rereview the live personal-marketplace adapter. Candidate
+  `b030621927a32d1d4e2f36a3e4d50b644d75c093` is `REVISE`: close exact-home and
+  predecessor admission, child write confinement, parent-death lease custody,
+  production cancellation, exact-prior restart custody, causal diagnostics,
+  and plan-truth findings without a P2 effect.
 - [ ] P1b freeze a monotonic successor, pass exact-source checks, build the
   release CLI and deterministic package, verify it, complete disposable
   installation, and derive a read-only personal-install plan.
@@ -234,14 +237,14 @@ runtime or product claim.
 
 ## Milestone P1 — Live-install capability, exact successor, and pre-host gates
 
-P1a replaced the unavailable binding in
+P1a is repairing the replacement for the unavailable binding in
 `validator/src/cli/successor_public/package_personal_install.rs` with a
 production adapter over the existing `PersonalMarketplaceUpdateEffects`
-transaction. It holds one exclusive lease across observe, materialize, pinned
-Codex plugin-add execution, result reconciliation, rollback, and final
-observation. It uses the existing selected/pinned Codex executable and
-recoverable lifecycle machinery without introducing a direct unbound process
-path.
+transaction. The first immutable candidate did not yet prove effect-root
+identity, child-path confinement, parent-death lease continuity, production
+cancellation, or restart rollback strongly enough. Keep P1b closed until those
+properties, stage-specific diagnostics, and exact plan truth pass the bounded
+rereview.
 
 At the lowest falsifying surfaces, prove exact-prior apply and target replay,
 interruption after materialization, every injected target failure, result loss,
@@ -510,13 +513,12 @@ artifacts as incidental P0-P4 cleanup.
 
 ## Outcomes and retrospective
 
-P0 implementation and the four plan-only review corrections are complete at
-the plan/source-authority ceiling; acceptance requires a fresh immutable
-rereview of the corrected plan-only commit. The focused current-authority
-regression and complete `scripts/check .` aggregate passed again on the
-corrected candidate. The protected diff remains exact, no project
+P0 is independently approved at exact commit
+`3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`. P1a candidate
+`b030621927a32d1d4e2f36a3e4d50b644d75c093` is `REVISE`, so P1b and every P2
+effect remain closed. The protected diff remains exact, no project
 `.codex/config.toml` exists, and no install, runtime, HostState, target,
 publication, or release effect occurred. `CL-USABLE-LOOP` remains
-`blocked_by_product` for installed 0.0.41. Only an accepted P0 rereview opens P1.
-At P4, replace this paragraph with the terminal candidate-bound decision and
-move the completed plan according to repository convention.
+`blocked_by_product` for installed 0.0.41. At P4, replace this paragraph with
+the terminal candidate-bound decision and move the completed plan according to
+repository convention.
