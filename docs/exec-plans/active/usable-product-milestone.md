@@ -112,27 +112,39 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
   `validator/src/distribution/host_effect/selected_codex_executable/execution/darwin_custody_tests.rs`.
   Running it with `--ignored --exact` fails against `0d8feda22` because the
   substituted directory is mutated; its corrected symlink companion still
-  passes. P1a-S must remove the ignore only after making this exact oracle
-  green. `/dev/fd/<directory-fd>` is not traversable as a child namespace on
-  macOS, and initializing the sandbox before pathname substitution does not
-  bind the rule to the original vnode.
+  passes. The oracle remains ignored and red as a permanent marker that this
+  unsupported direct-child route must never be restored; the current milestone
+  does not make that unsafe mechanism green. `/dev/fd/<directory-fd>` is not
+  traversable as a child namespace on macOS, and initializing the sandbox
+  before pathname substitution does not bind the rule to the original vnode.
 - Current upstream Codex installation performs two coupled effects: plugin
   cache replacement and semantic enablement in `CODEX_HOME/config.toml`.
-  Therefore a safe successor cannot patch the direct pathname-authorized child
-  route. It requires an independently approved staged-CODEX_HOME transaction
-  with a retained-descriptor commit and cross-process recovery. P1a is
-  `blocked_by_product` at this architecture gate; P1b remains closed. No live
+  Independent product-simplicity and security review rejected the provisional
+  staged-CODEX_HOME replacement. A staged pathname remains substitutable by a
+  same-user process; the child read/network scope was not closed; cache and
+  config cannot be made jointly atomic with the named primitives; and config
+  symlink/object semantics were unspecified. More importantly,
+  `CL-USABLE-LOOP` requires an exact authorized installation, not a second
+  UltraGoal-owned installer and recovery system. The supported Codex/user
+  install boundary is therefore the selected mutation owner. UltraGoal owns
+  the exact candidate-bound handoff and read-only post-install verification,
+  not cache/config mutation, atomicity, rollback, or automatic retry. No live
   Codex command or personal-host effect was exercised.
 
 ### Still unknown
 
-- Whether the staged-CODEX_HOME plus retained-descriptor transaction can be
-  bounded without copying arbitrary personal state, relying on undocumented
-  Codex storage, or weakening the same-user pathname-substitution threat model.
-- Whether architecture/security review approves exact cache/config preimages,
-  postimages, commit ordering, durable recovery, cancellation, and cleanup.
-  Only approved architecture followed by an approved immutable implementation
-  rereview may open P1b version freeze and packaging.
+- Which exact current supported Codex listing/install surface, selected Codex
+  executable, configured local marketplace, and durable marketplace source are
+  available on this host. P1 must observe and bind them read-only; it must not
+  guess, hand-edit host configuration, or fall back to the unsafe custom child.
+- Whether one monotonic successor can be built, materialized at that exact
+  durable local marketplace source without personal-host mutation, and exposed
+  through one understandable candidate-bound install handoff.
+- Whether the supported Codex/user effect produces exact source, cache,
+  enablement, registry/listing, discovery, and runtime postimages. UltraGoal
+  does not claim upstream atomicity or rollback; any partial, stale, mixed, or
+  ambiguous observation remains a no-success HOLD owned by the supported host
+  recovery surface.
 - Whether the live HostState still produces an acceptable abandonment plan.
 - Whether authorized live abandonment completes without ambiguous effect.
 - Whether the installed successor completes useful routine work, deterministic
@@ -185,16 +197,12 @@ prerequisite or Terry authorizes a separate later product goal.
 ```text
 P0 replace the sole active plan with current truth and validate its bindings
   |
-P1a-A remap and independently approve a staged-CODEX_HOME plus
-      retained-descriptor cache/config commit transaction
+P1 retire unsafe custom install execution, freeze one monotonic successor,
+   build and verify it, and emit one exact supported Codex install handoff
   |
-P1a-S implement and prove that transaction, including the preserved red
-      pathname-rebinding oracle and cross-process recovery
-  |
-P1b freeze one monotonic successor and complete every local pre-host gate
-  |
-P2 cross separately authorized install and live-product gates, then run the
-   complete installed canary under a minimal independent evaluator
+P2 let the user/host perform that explicitly authorized supported install,
+   resume read-only in a fresh task, and run the complete installed canary
+   under a minimal independent evaluator
   |
 P3 if and only if P2 finds one material product defect, repair it once and
    rerun the exact installed canary
@@ -220,18 +228,23 @@ the exact candidate and read-only plan evidence.
   `0d8feda22bf5a7c2f9bb488ef4b404cf6566ded7` closes six of seven review
   findings, but a real-directory suspended-spawn oracle proves that the child
   can mutate a same-path substitute. Direct repair is stopped.
-- [ ] P1a-A specify and independently approve the staged-CODEX_HOME plus
-  retained-descriptor cache/config transaction before assigning implementation.
-- [ ] P1a-S implement the approved transaction, make the ordinary-directory
-  oracle green without weakening it, pass focused/process/aggregate gates, and
-  obtain a new immutable rereview.
-- [ ] P1b freeze a monotonic successor, pass exact-source checks, build the
-  release CLI and deterministic package, verify it, complete disposable
-  installation, and derive a read-only personal-install plan.
-- [ ] P2 obtain the exact internal effect authorities, install through the
-  supported lifecycle route, observe same-byte runtime identity, derive a fresh
-  live abandonment plan, apply it only under its exact authority, and complete
-  the installed useful-work/failure/recovery/reuse journey.
+- [x] P1a-A test the staged-CODEX_HOME alternative at independent
+  product-simplicity and security/trust-boundary surfaces. Both reviews returned
+  HOLD: the staged path preserves the pathname-rebinding class and adds an
+  unjustified second installer, read/network authority, non-atomic cache/config
+  commit, config-object ambiguity, and durable recovery burden before first
+  value. That route is retired from this milestone.
+- [ ] P1 remove custom `package install-apply` execution from the public
+  candidate, replace the read-only install plan with an exact supported Codex
+  install handoff, freeze one monotonic successor, pass exact-source checks,
+  build and verify the release CLI and deterministic package, materialize it at
+  one read-only-confirmed durable local marketplace source, and complete
+  disposable installation.
+- [ ] P2 present the exact candidate-bound handoff, let the explicitly
+  authorized user/host run its one supported Codex action, resume read-only in a
+  fresh task, verify same-byte source/cache/config/registry/discovery/runtime
+  identity, then derive and separately authorize the live abandonment/target
+  effects and complete the useful-work/failure/recovery/reuse journey.
 - [ ] P3 conditional: repair at most one material installed product defect and
   rerun the same P2 journey on one new exact monotonic candidate.
 - [ ] P4 record one compact same-surface product decision, clean disposable
@@ -261,65 +274,60 @@ P0 acceptance is a committed, restartable plan whose Progress, current truth,
 authority gates, repair budget, and terminal outcomes agree. P0 raises no
 runtime or product claim.
 
-## Milestone P1 — Live-install capability, exact successor, and pre-host gates
+## Milestone P1 — Exact successor and supported-install handoff
 
-P1a-D established that the unavailable personal-install binding cannot be
-repaired safely by running the selected Codex child directly against the live
-personal `CODEX_HOME`. The retained directory descriptors authenticate the
-preimage, but the macOS child sandbox authorizes writes by pathname. Pre/post
-revalidation detects a same-path real-directory substitution only after an
-escaped write; advisory lease custody does not constrain a noncooperating
-same-user process. Do not resume or weaken that design.
+P1a-D established that UltraGoal cannot safely run a selected Codex child
+against either the live or a staged pathname while claiming retained-directory
+write authority. Independent P1a-A review also established that cache/config
+pair atomicity, rollback, and cross-process history are not supplied by the
+named macOS primitives. Treat that work as a completed falsification, not an
+implementation backlog. Do not resume the direct child, move it behind a new
+pathname, hand-edit personal cache/config, or claim the supported Codex
+installer's atomicity or recovery as UltraGoal behavior.
 
-P1a-A is an architecture gate owned by the root conductor and reviewed at both
-product-simplicity and security/trust-boundary surfaces. Its candidate must
-define one bounded transaction with all of these properties:
+Before version freeze, make the smallest source correction that reflects the
+selected ownership model:
 
-1. Run the selected Codex child only against a disposable private staged
-   `CODEX_HOME`; the child never receives the live personal HOME or `.codex`
-   pathname as a writable scope.
-2. Admit the exact retained personal-home authority, exact `config.toml`
-   preimage or absence, exact prior plugin-cache tree, source/package identity,
-   selected executable, and immutable install plan before staging.
-3. Copy only the minimum reviewed non-secret inputs needed by current Codex.
-   Refuse if successful staging would require auth, transcripts, sessions,
-   arbitrary personal state, an undocumented store, or an unbounded tree.
-4. Require a closed staged-tree manifest. The only accepted semantic postimage
-   is the exact target cache tree plus the one expected plugin-enabled config
-   change; every other staged mutation refuses before personal effect.
-5. Commit through retained descriptor-rooted confinement, not personal
-   pathnames. Revalidate exact cache/config preimages at each boundary and use
-   compare/exchange semantics for both surfaces.
-6. Define commit ordering, a durable owner-only recovery record, exact rollback
-   snapshots, parent-death/interruption/cancellation reconciliation, replay,
-   and ambiguity. No success is legal until cache, config, registry, source,
-   runtime, and lease all reobserve exact target.
-7. Preserve unrelated config formatting and fields, unrelated plugin cache,
-   global user configuration, and protected repository state. Cleanup removes
-   only exact disposable staging/recovery paths after proving no unique recovery
-   authority remains.
+1. Remove custom `package install-apply` execution from public dispatch,
+   command catalogs, help, and the packaged candidate. A compatibility parse,
+   if required, may only return a stable no-effect diagnostic directing the
+   operator to a fresh supported-install handoff; it may not construct a child
+   command or mutate personal state.
+2. Keep `package install-plan` read-only but replace its apply-authority record
+   with `HarnessPersonalMarketplaceInstallHandoff-v1`. Bind the exact source
+   commit/tree/status, candidate/version, release CLI and archive digests,
+   plugin identity, durable marketplace source path and tree digest, selected
+   Codex executable path/version/content identity, confirmed local marketplace
+   identity, current predecessor observations, expected target observations,
+   protected-state digest, and handoff identity.
+3. Select the install action only from the current supported host listing/help
+   surface. The expected personal-marketplace form is
+   `<selected-codex-executable> plugin add
+   harness-ultragoal@<confirmed-local-marketplace>`, but P1 must return a typed
+   no-effect HOLD rather than emit it if this exact executable, marketplace,
+   plugin, or command form is not observed. Never add the default personal
+   marketplace through a repository-marketplace command and never hand-edit
+   its catalog.
+4. The handoff must state in plain language the selected plugin, version,
+   package and source digests, exact personal scope, expected cache/config
+   consequences, cancellation boundary, and restart rule. It is evidence for
+   an operator decision, not authority for UltraGoal to execute the command.
+5. Add a zero-write `package install-verify --handoff <exact-record>` route.
+   It must revalidate the immutable handoff and observe marketplace source,
+   cache tree, config enablement, supported host registry/listing, and installed
+   runtime bytes through retained read-only authority. Fresh-task discovery and
+   invocation of the installed runtime are separate same-task evaluator
+   observations; the release CLI cannot mint them. The verification route
+   returns only exact target, exact no-effect/prior, typed partial or stale
+   state, or ambiguity; it never repairs, retries, or reports upstream
+   atomicity.
+6. Every non-target verification result must name one current supported
+   Codex/user recovery action derived from host help and stop. UltraGoal may
+   suggest retry, remove/reinstall, or another supported action only when that
+   exact action is observed and candidate-bound; it must not auto-execute it or
+   create a private recovery ledger.
 
-The architecture review must bind these requirements to current upstream Codex
-source: `install_resolved_plugin` installs the cache and then calls
-`set_user_plugin_enabled`; the store atomically replaces
-`plugins/cache/<marketplace>/<plugin>`; the config editor reads or creates and
-atomically rewrites `CODEX_HOME/config.toml`. Review must reject a cache-only
-shim, raw TOML string patch, full personal-home clone, pathname-only commit, or
-revalidation-only boundary.
-
-Only an approved P1a-A contract may open P1a-S implementation. At the lowest
-falsifying surfaces, P1a-S must retain the six accepted findings and prove the
-ordinary-directory race, exact-prior apply and target replay, staged-manifest
-refusal, config/cache partial commit in both orders, interruption after every
-possible effect, result loss, exact rollback/replay, cancellation, lease
-contention, post-effect observation, and cleanup. A required durable recovery
-record is permitted here because the newly established two-surface commit is a
-real cross-process recovery boundary. If this requires editing a protected
-path, stop for an ownership decision rather than overwrite user work. This
-pre-host architecture and implementation remain inside P1 and do not consume
-P3.
-
-Only after that adapter and its failure matrix pass, advance every canonical
+After that source correction passes focused review, advance every canonical
 `0.0.41+codex.20260824093100` product-version binding to one monotonic
 `0.0.42+codex.<UTC timestamp>` candidate, including the local unpublished
 policy references required by current package validation. Do not publish those
@@ -343,8 +351,12 @@ On the exact post-version source candidate:
 6. build twice and require byte-identical archives;
 7. verify the archive against the exact release CLI and current source;
 8. run `package install-test` without retaining an isolated root; and
-9. run the read-only `package install-plan` against the unchanged personal
-   installation.
+9. materialize the exact package only at the durable workspace-local source
+   already bound by the read-only-confirmed personal marketplace; if no such
+   writable source is currently configured, stop as
+   `blocked_by_environment_or_authority`; and
+10. run the read-only `package install-plan` against the unchanged personal
+    installation and require one exact supported-install handoff.
 
 The public command grammar and canonical P1 paths are:
 
@@ -355,17 +367,20 @@ target/ultragoal/release/ultragoal --json package build --output target/ultragoa
 target/ultragoal/release/ultragoal --json package verify --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal
 target/ultragoal/release/ultragoal --json package install-test --input target/ultragoal/package-a.hugpkg --output target/ultragoal/install-test.json --cli target/ultragoal/release/ultragoal
 target/ultragoal/release/ultragoal --json package install-plan --input target/ultragoal/package-a.hugpkg --cli target/ultragoal/release/ultragoal
+target/ultragoal/release/ultragoal --json package install-verify --handoff <exact-handoff-file>
 ```
 
 Before P1 completion, record exact source commit/tree/status, plan digest,
 release-CLI digest, both archive digests, disposable-install result and cleanup,
-install-plan identity, installed predecessor observation, and protected-state
-digest. Correct ordinary pre-host package or custody defects in this same
-milestone; they do not consume P3.
+durable marketplace source identity, selected Codex identity, confirmed
+marketplace observation, handoff identity, installed predecessor observation,
+and protected-state digest. Correct ordinary pre-host package, handoff, or
+custody defects in this same milestone; they do not consume P3.
 
-P1 stops before `package install-apply`, live HostState mutation, or target
-effect. Its ceiling is exact source/build/archive/disposable-install/read-only
-install-plan evidence.
+P1 stops before any supported Codex install invocation, personal cache/config
+effect, live HostState mutation, or target effect. Its ceiling is exact
+source/build/archive/disposable-install/materialized-source/read-only-handoff
+evidence.
 
 ## Milestone P2 — Installed successor canary
 
@@ -374,21 +389,36 @@ gate from another.
 
 ### Gate A: personal installation
 
-Require explicit authority for the exact P1 install plan and personal
-marketplace/cache/config scope. Revalidate candidate, archive, predecessor,
-install-plan identity, the recorded digest and identity of the exact P1 release
-CLI at `target/ultragoal/release/ultragoal`, global Harness config projection,
-and protected state immediately before effect. Apply only through that exact P1
-release CLI:
+Revalidate the exact P1 handoff, candidate, archive, materialized marketplace
+source, predecessor, selected Codex identity, current supported command/help,
+global Harness config projection, and protected state immediately before
+presenting the effect. Show the operator the exact plugin, version, source and
+package digests, personal scope, expected cache/config consequences, current
+uncertainty, and this selected supported action:
 
 ```text
-target/ultragoal/release/ultragoal --json package install-apply --plan <exact-plan-file> --accept-plan <exact-plan-id>
+<selected-codex-executable> plugin add harness-ultragoal@<confirmed-local-marketplace>
 ```
 
-After effect, reconcile marketplace source, cache, supported Codex
-registration, config postimage, and release runtime bytes to the exact
-candidate. Failure or ambiguity invokes the approved P1a-S staged-transaction
-recovery contract and cannot be reported as success.
+The command above is illustrative until P1 binds its exact marketplace and
+selected executable from current host output. The user or supported host—not
+UltraGoal—must explicitly authorize and invoke the final bound action.
+Cancellation before invocation is no effect; after invocation begins,
+installation and recovery remain at the supported Codex/user boundary.
+UltraGoal must not intercept, auto-retry, compensate, or infer completion from
+the command result.
+
+Resume only in a fresh Codex task. First run the exact P1 release CLI's
+zero-write `package install-verify --handoff <exact-handoff-file>` route, then
+independently reconcile marketplace source, cache tree, config enablement,
+supported host registry/listing, and installed runtime bytes to the exact
+candidate. In that same fresh task, separately observe the front-door skill and
+invoke the installed runtime before claiming discovery or runtime behavior.
+Only exact disk/registry target plus fresh-task discovery/runtime observations
+open Gate B. Exact prior/no effect, partial, stale, mixed, ambiguous, absent
+discovery, or wrong runtime is a no-success HOLD with one current supported
+Codex/user recovery action; do not hand-edit state, claim upstream
+atomicity/rollback, or automatically invoke that action.
 
 ### Gate B: live abandonment and target effects
 
@@ -523,9 +553,13 @@ exact disposable roots proven safe to remove.
   authority. macOS exposed no supported descendant-write capability rooted in
   the inherited directory descriptor for an unmodified Codex child.
 - Current upstream Codex installs a plugin across both cache and
-  `config.toml`. This converts the next truthful step from another spawn repair
-  into an architecture-reviewed staged transaction with multi-surface recovery.
-  The red oracle is preserved so the remap cannot erase the discovered defect.
+  `config.toml`. Security review proved that moving this work to an UltraGoal
+  stage preserves the pathname race and adds unbounded child reads/network,
+  non-atomic cross-surface commit, config-object ambiguity, and recovery
+  authority. Product-simplicity review independently found no first-value
+  benefit that justifies those costs. The red oracle is preserved so the plan
+  cannot erase the discovered defect, while mutation ownership returns to the
+  supported Codex/user boundary.
 
 ## Decision log
 
@@ -553,10 +587,12 @@ exact disposable roots proven safe to remove.
   Rationale: outcome-sized work does not collapse independent consequential
   authorities.
   Date: 2026-08-27.
-- Decision: make the live personal-marketplace adapter and its failure matrix a
-  known P1 prerequisite, then retain canonical `target/ultragoal` package paths.
-  Rationale: current source already proves the capability is absent and current
-  public grammar already owns the output namespace.
+- Superseded decision: make the live personal-marketplace adapter and its
+  failure matrix a known P1 prerequisite, then retain canonical
+  `target/ultragoal` package paths.
+  Rationale: later process and architecture falsifiers proved that UltraGoal
+  cannot safely own this effect with the selected primitives. The canonical
+  package paths remain current; the adapter prerequisite does not.
   Date: 2026-08-27.
 - Decision: name the root conductor as sole integration owner and exhaustively
   map evaluator results into P3 or the four legal terminal outcomes.
@@ -570,6 +606,16 @@ exact disposable roots proven safe to remove.
   config edit. Repeated spawn hardening cannot provide the missing descriptor
   write primitive or truthful two-surface recovery.
   Date: 2026-08-28.
+- Decision: retire UltraGoal-owned personal installation from this milestone
+  and use one exact supported Codex/user install handoff followed by fresh-task
+  read-only verification.
+  Rationale: `GOAL_CONTRACT.md` requires an exact authorized install but does
+  not assign mutation ownership to UltraGoal. Independent product and security
+  reviews found the custom staged route both unjustified and unsafe. This
+  ownership split exposes the real consequential action, reaches first value
+  sooner, preserves same-surface verification, and avoids false claims of
+  upstream atomicity or rollback.
+  Date: 2026-08-28.
 
 ## Idempotence, recovery, and cleanup
 
@@ -582,12 +628,14 @@ after resolution, prove no unique recovery state remains and remove only the
 exact product-owned path.
 
 Before P2 effects, capture exact source, package, installed predecessor,
-marketplace/cache/config, HostState, target, plan, and protected-state custody.
-The independently approved P1a-S staged transaction must own install recovery;
-until it exists, no personal install effect is legal. The existing whole-owner
-quarantine transaction owns abandonment recovery. Any ambiguous effect stops
-before routine work and is reconciled through those interfaces rather than
-manual rewriting or deletion.
+marketplace/cache/config, selected Codex, handoff, HostState, target, plan, and
+protected-state custody. The user or supported Codex host owns personal-install
+execution and recovery. UltraGoal resumes only through the immutable handoff
+and zero-write verification; it never auto-retries, hand-edits, rolls back, or
+claims a mixed state as success. A current supported user recovery action may
+be presented only after typed observation and must be explicitly invoked by
+the user. The existing whole-owner quarantine transaction separately owns
+abandonment recovery. Any ambiguous effect stops before routine work.
 
 Never clean the user-owned protected paths, the representative target, live
 HostState, marketplace/cache, global Codex configuration, or deferred U5
@@ -598,11 +646,14 @@ artifacts as incidental P0-P4 cleanup.
 P0 is independently approved at exact commit
 `3e75f650fc4552fd0e85fb0dab6c016a54a7ed0b`. Direct P1a candidate
 `0d8feda22bf5a7c2f9bb488ef4b404cf6566ded7` closes six reviewed boundaries but
-is `HOLD` on same-path ordinary-directory child-write escape. P1a-A
-architecture review is the only open transition; P1a-S, P1b, and every P2
-effect remain closed. The protected diff remains exact, no project
-`.codex/config.toml` exists, and no install, runtime, HostState, target,
-publication, or release effect occurred. `CL-USABLE-LOOP` remains
-`blocked_by_product` for installed 0.0.41. At P4, replace this paragraph with
-the terminal candidate-bound decision and move the completed plan according to
-repository convention.
+is `HOLD` on same-path ordinary-directory child-write escape. Provisional plan
+candidate `06a4e84ee773f045ba988fa0bfacf3692e1ead87` moved the effect to staging;
+independent product-simplicity and security review both returned HOLD and
+selected the supported Codex/user handoff plus read-only verification route.
+The next open transition is the bounded P1 source/package/handoff work only;
+every personal-install, HostState, target, publication, and release effect
+remains closed. The protected diff remains exact, no project
+`.codex/config.toml` exists, and no install or live-product effect occurred.
+`CL-USABLE-LOOP` remains `blocked_by_product` for installed 0.0.41. At P4,
+replace this paragraph with the terminal candidate-bound decision and move the
+completed plan according to repository convention.
