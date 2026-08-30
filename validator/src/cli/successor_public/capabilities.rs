@@ -4,7 +4,7 @@ use crate::cli::successor::command_contract::HostPath;
 use crate::cli::successor::{OptionName, ParsedValue};
 use crate::plugin_product::agent_discovery::{
     AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, HostPluginRegistryObservation,
-    adopt_agent_repository, capture_current_source, parse_host_plugin_registry_observation,
+    adopt_agent_repository, capture_current_source,
 };
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -15,7 +15,7 @@ pub(super) fn project(
     home: Option<&Path>,
 ) -> RuntimeOutcome {
     project_with_registry_observer(context, invocation, home, |expected_plugin_version| {
-        observe_host_registry(context, home, expected_plugin_version)
+        observe_host_registry(context, expected_plugin_version)
     })
 }
 
@@ -174,26 +174,17 @@ pub(super) enum RegistryObservationFailure {
 }
 
 pub(super) fn observe_host_registry(
-    context: &LiveContext,
-    home: Option<&Path>,
-    expected_plugin_version: &str,
+    _context: &LiveContext,
+    _expected_plugin_version: &str,
 ) -> Result<HostPluginRegistryObservation, RegistryObservationFailure> {
-    let home = home.ok_or(RegistryObservationFailure::Unavailable("home-unavailable"))?;
-    let observation = super::supported_host_oracle::observe(context, home, context.worktree_root())
-        .map_err(|_| {
-            RegistryObservationFailure::Unavailable(super::supported_host_oracle::MISSING_CODE)
-        })?;
-    parse_host_plugin_registry_observation(
-        &observation.plugin_list_json,
-        &observation.marketplace_list_json,
-        "harness-ultragoal-local",
-        expected_plugin_version,
-        &observation.executable,
-        &observation.executable_binding_sha256,
-    )
-    .map_err(|_| {
-        RegistryObservationFailure::Unavailable("supported-host-registry-identity-unavailable")
-    })
+    if !super::supported_host_oracle::is_available() {
+        return Err(RegistryObservationFailure::Unavailable(
+            super::supported_host_oracle::MISSING_CODE,
+        ));
+    }
+    Err(RegistryObservationFailure::Unavailable(
+        "supported-host-registry-reader-unavailable",
+    ))
 }
 
 fn binding_projection(

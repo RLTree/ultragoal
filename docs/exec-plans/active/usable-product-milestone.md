@@ -133,15 +133,14 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
 
 ### Still unknown
 
-- The exact selected Codex executable and current listing/install grammar are
-  now known through the OS-enforced zero-write observer: Codex `0.150.1` at the
-  exact path and content digest recorded in Progress accepts `plugin add
-  <PLUGIN[@MARKETPLACE]>`, and returns strict plugin and marketplace JSON.
-  Current personal state is also known: it names the predecessor marketplace
-  alias `local-harness-plugins`, not the candidate catalog authority
-  `harness-ultragoal-local`. What remains unknown is which exact supported
-  Codex/user action will establish the durable catalog-bound workspace source.
-  P1 must not guess, hand-edit host configuration, or fall back to the unsafe
+- A separately authorized one-off probe observed Codex `0.150.1` help and
+  listing output, but independent immutable review proved that the production
+  observer copied the executable before launching its sandboxed child and
+  inferred the version from the release pathname. Those observations therefore
+  do not satisfy the claimed zero-write or executable-derived identity
+  boundary. The shared production oracle remains closed and the exact current
+  supported action remains unknown. P1 must not guess, hand-edit host
+  configuration, reuse that rejected observer, or fall back to the unsafe
   custom child.
 - Whether one monotonic successor can be built, materialized at that exact
   durable local marketplace source without personal-host mutation, and exposed
@@ -265,58 +264,38 @@ the exact candidate and read-only plan evidence.
   recommended an immediate rerun that could not satisfy its own prerequisite.
   Commit `f4b3444193dd36465a77e4fc54cf0dca998284f6` integrated the shared closed
   gate and passed independent security and product rereview. On 2026-08-30 the
-  user separately authorized a real-Codex zero-write oracle slice. Exact Codex
-  `0.150.1` at
-  `/Users/terrynoblin/.codex/packages/standalone/releases/0.150.1-aarch64-apple-darwin/bin/codex`
-  (SHA-256
-  `a14f9a907c12c8812878b70e6b7d65f81c39ed795513e46a55817d7428c0ca6b`)
-  returned version, plugin-add help, plugin-list JSON, and marketplace-list JSON
-  under an inner macOS profile denying every write, clone/link, network action,
-  and fork. A deliberate write was denied; scoped personal config/marketplace/
-  cache digest
-  `702755c8e21dc827490551a95c3446cdbec0f796ad921842ed22e4b28f6bd6da`
-  and the protected four-path digest remained exact before and after. The
-  current source correction replaces the closed placeholder with that pinned,
-  descriptor-retained, bounded observer, promotes strict registry parsing to
-  production, binds plugin-add grammar and exact executable identity, and keeps
-  both capabilities and install planning fail-closed. Its production
-  capabilities run reaches the real oracle and returns typed no-effect
-  `supported-host-registry-identity-unavailable`, because the installed plugin
-  remains `harness-ultragoal@local-harness-plugins` while the exact packaged
-  catalog authority is `harness-ultragoal-local`. Focused observer, selected-
-  executable, package-personal-install, registry, and no-action tests pass. A
-  broad parallel `cargo test --lib` run reported 1,697 passes, 228 shared-state
-  and legacy-projection failures, and two ignored tests; it is retained as a
-  classified aggregate gap rather than substituted for the repository's
-  serialized gate. The canonical `scripts/check .` aggregate then passed its
-  release build, registered product and routine production-contract journeys,
-  successor grammar, supported package identity, and governance checks outside
-  the outer sandbox on 2026-08-30. The zero-write observer and plan were frozen
-  at commit `d78ddc8ccf24cde90cc1fa269b1eb603149aad10`. Its first immutable
-  disposable-install attempt failed inside the outer sandbox before the host
-  lifecycle process; the capable rerun exposed one real current-Codex
-  compatibility defect. Codex `0.150.1` reports both the registered isolated
-  marketplace root and a development-style workspace root under the same
-  marketplace name. The installed plugin row independently identifies the
-  registered isolated root. The internal disposable lifecycle observer now
-  selects exactly one marketplace row by both expected name and descriptor-
-  bound expected root, while duplicate rows for that exact root still fail.
-  Production personal handoff parsing remains unchanged and strict about all
-  aliases. Focused observation tests pass, and a repaired capable disposable
-  install completed with no retained isolated root. Final immutable package
-  rebuild and same-scope rereview remain. Because
-  this active plan is packaged, the immutable integration commit must be
-  followed by one final same-source archive rebuild and verification before
-  review. P1 remains correctly `blocked_by_environment_or_authority`: the
-  required durable workspace-local catalog source is not materialized and the
-  configured/installed marketplace alias is not the exact target identity. No
-  supported install action or handoff was emitted and no personal state was
-  changed. Resume P1 only after immutable rereview and an explicit Codex/user
-  authority decision establish the exact catalog-bound workspace marketplace
-  source; then reobserve it through the now-proven zero-write oracle,
-  materialize the verified package, and emit the immutable handoff. Do not
-  restore the retired UltraGoal installer or replay a stale command to bypass
-  this HOLD.
+  user separately authorized a real-Codex oracle slice. The candidate at
+  `d78ddc8ccf24cde90cc1fa269b1eb603149aad10` added a sandboxed observer, and
+  `21edd831cfa6c93fc2e0f66d188acbc909c6a42a` preserved it while correcting one
+  independently useful disposable-install fixture: current Codex may report
+  two marketplace rows with the same name, so that fixture now selects one row
+  by both expected name and descriptor-bound expected root and still rejects
+  duplicate rows for that exact root. The capable disposable journey passed
+  without retaining an isolated root.
+
+  Independent immutable review returned REVISE on two material observer risks.
+  The parent copied the selected Codex executable into a temporary staging
+  directory before the write-denied child began, so the public Read route was
+  not zero-write and error paths could retain the staged executable. The
+  handoff also derived Codex version from a versioned pathname rather than the
+  exact executable. A bounded macOS inherited-descriptor launch probe failed
+  with `EACCES`; no smaller supported no-staging primitive is available in the
+  current design. The current repair therefore deletes the observer and
+  pathname-derived version flow, restores the one shared closed oracle before
+  both capabilities inspection and handoff construction, and retains only the
+  exact-root disposable fixture correction. No debugger, tracer, second
+  installer, or new recovery protocol is added.
+
+  Focused no-process/no-action, handoff, and compilation checks pass for this
+  working correction. Because the active plan is packaged, the correction must
+  be frozen, rebuilt from the exact source, and independently rereviewed before
+  P1 can advance. P1 remains `blocked_by_environment_or_authority`: no credible
+  zero-write supported-host oracle exists, the required durable workspace-local
+  catalog source is not materialized, and the configured/installed marketplace
+  alias is not the exact target identity. No supported install action or
+  handoff was emitted and no personal state changed. The only later transition
+  is a separate supported Codex/user authority decision; do not restore the
+  rejected observer or retired UltraGoal installer to bypass this HOLD.
 - [ ] P2 present the exact candidate-bound handoff, let the explicitly
   authorized user/host run its one supported Codex action, resume read-only in a
   fresh task, verify same-byte source/cache/config/registry/discovery/runtime
@@ -748,6 +727,14 @@ exact disposable roots proven safe to remove.
   one separate authority/oracle decision minimize false control and repeated
   operator attention.
   Date: 2026-08-28.
+- Decision: retain that closed gate after the first production observer was
+  falsified instead of adding a macOS debugger/tracer launch subsystem.
+  Rationale: the rejected observer staged executable bytes before its
+  write-denied child and derived version from a pathname. Direct inherited-file
+  descriptor execution was denied by macOS. Removing the observer closes both
+  false claims now; a tracer would materially expand complexity and authority
+  without advancing the installed product journey.
+  Date: 2026-08-30.
 
 ## Idempotence, recovery, and cleanup
 
@@ -799,22 +786,18 @@ catalog source is absent. Security rereview of
 `f4e0f4ad5efc7a0131e89ba7449ee57ab424d7f5` accepted those five corrections;
 the final reader/diagnostic correction was integrated at
 `f4b3444193dd36465a77e4fc54cf0dca998284f6` and accepted by both rereviewers.
-The separately authorized real-Codex slice has now proven the missing
-OS-enforced zero-write observation boundary and replaced the closed placeholder
-with a pinned production observer at commit
-`d78ddc8ccf24cde90cc1fa269b1eb603149aad10`. Its exact disposable-install
-failure was traced to two current-Codex marketplace rows sharing the target
-name but naming the isolated and workspace roots. The bounded repair keeps
-production personal alias rejection intact, binds the internal disposable
-observation to the exact expected root, rejects duplicate exact-root rows, and
-passes the real disposable journey without retaining a root. The exact current
-personal result remains a truthful no-effect marketplace identity HOLD, not an
-install action: installed
-`local-harness-plugins` does not equal packaged `harness-ultragoal-local`, and
-the durable workspace-local source remains absent. The next open transition is
-to freeze, rebuild, and independently rereview this oracle candidate, then
-present the separate supported Codex/user marketplace-source authority
-decision. Personal plugin
+The separately authorized real-Codex slice produced useful falsification, not
+an accepted oracle. Independent review of exact candidate
+`21edd831cfa6c93fc2e0f66d188acbc909c6a42a` found that the production observer
+staged executable bytes before its sandboxed child and inferred version from a
+release pathname. The current correction removes that observer and returns
+both public readers to the accepted shared typed no-effect HOLD. The exact-root
+disposable lifecycle correction from `21edd831` remains: isolated observation
+binds marketplace name and expected root, rejects duplicate exact-root rows,
+and passed the capable journey without retaining an isolated root. The next
+open transition is to freeze, rebuild, and independently rereview this bounded
+repair. The separate supported Codex/user authority decision remains blocked
+until a truthful current-host oracle exists. Personal plugin
 installation, HostState, target, publication, and release effects remain
 closed. The protected diff remains exact, no project `.codex/config.toml`
 exists, and no install or live-product effect occurred. `CL-USABLE-LOOP`

@@ -71,10 +71,6 @@ impl SelectedCodexExecutable {
         &self.identity.content_sha256
     }
 
-    pub(in crate::distribution::host_effect) fn canonical_path(&self) -> &Path {
-        self.identity.canonical_path()
-    }
-
     pub(crate) fn observe_personal_plugin(
         &self,
         home: &Path,

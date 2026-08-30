@@ -1,19 +1,30 @@
+#[cfg(test)]
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+#[cfg(test)]
 use super::filesystem::{digest, valid_sha256};
+#[cfg(test)]
 use serde::de::{Error as _, MapAccess, SeqAccess, Visitor};
+#[cfg(test)]
 use serde::{Deserialize, Deserializer};
+#[cfg(test)]
 use serde_json::{Map, Value};
+#[cfg(test)]
 use std::ffi::OsStr;
+#[cfg(test)]
 use std::fmt;
+#[cfg(test)]
 use std::path::Component;
 use std::path::{Path, PathBuf};
 
+#[cfg(test)]
 const PLUGIN_NAME: &str = "harness-ultragoal";
 #[cfg(test)]
 const MARKETPLACE_NAME: &str = "harness-ultragoal-local";
 #[cfg(test)]
 const PLUGIN_ID: &str = "harness-ultragoal@harness-ultragoal-local";
+#[cfg(test)]
 const MAX_REGISTRY_BYTES: usize = 8 * 1024 * 1024;
+#[cfg(test)]
 const MAX_REGISTRY_ROWS: usize = 128;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -80,6 +91,7 @@ impl HostPluginRegistryObservation {
     }
 }
 
+#[cfg(test)]
 mod parser {
     use super::*;
 
@@ -101,6 +113,7 @@ mod parser {
         )
     }
 
+    #[cfg(test)]
     pub(crate) fn parse_unpinned_host_plugin_registry_observation(
         plugin_json: &[u8],
         marketplace_json: &[u8],
@@ -498,6 +511,7 @@ mod parser {
     }
 }
 
+#[cfg(test)]
 pub(crate) use parser::{
     parse_host_plugin_registry_observation, parse_unpinned_host_plugin_registry_observation,
 };
