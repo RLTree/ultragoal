@@ -291,8 +291,20 @@ the exact candidate and read-only plan evidence.
   serialized gate. The canonical `scripts/check .` aggregate then passed its
   release build, registered product and routine production-contract journeys,
   successor grammar, supported package identity, and governance checks outside
-  the outer sandbox on 2026-08-30. Package rebuild and immutable same-scope
-  rereview remain. Because
+  the outer sandbox on 2026-08-30. The zero-write observer and plan were frozen
+  at commit `d78ddc8ccf24cde90cc1fa269b1eb603149aad10`. Its first immutable
+  disposable-install attempt failed inside the outer sandbox before the host
+  lifecycle process; the capable rerun exposed one real current-Codex
+  compatibility defect. Codex `0.150.1` reports both the registered isolated
+  marketplace root and a development-style workspace root under the same
+  marketplace name. The installed plugin row independently identifies the
+  registered isolated root. The internal disposable lifecycle observer now
+  selects exactly one marketplace row by both expected name and descriptor-
+  bound expected root, while duplicate rows for that exact root still fail.
+  Production personal handoff parsing remains unchanged and strict about all
+  aliases. Focused observation tests pass, and a repaired capable disposable
+  install completed with no retained isolated root. Final immutable package
+  rebuild and same-scope rereview remain. Because
   this active plan is packaged, the immutable integration commit must be
   followed by one final same-source archive rebuild and verification before
   review. P1 remains correctly `blocked_by_environment_or_authority`: the
@@ -789,8 +801,15 @@ the final reader/diagnostic correction was integrated at
 `f4b3444193dd36465a77e4fc54cf0dca998284f6` and accepted by both rereviewers.
 The separately authorized real-Codex slice has now proven the missing
 OS-enforced zero-write observation boundary and replaced the closed placeholder
-with a pinned production observer. The exact current result is a truthful
-no-effect marketplace identity HOLD, not an install action: installed
+with a pinned production observer at commit
+`d78ddc8ccf24cde90cc1fa269b1eb603149aad10`. Its exact disposable-install
+failure was traced to two current-Codex marketplace rows sharing the target
+name but naming the isolated and workspace roots. The bounded repair keeps
+production personal alias rejection intact, binds the internal disposable
+observation to the exact expected root, rejects duplicate exact-root rows, and
+passes the real disposable journey without retaining a root. The exact current
+personal result remains a truthful no-effect marketplace identity HOLD, not an
+install action: installed
 `local-harness-plugins` does not equal packaged `harness-ultragoal-local`, and
 the durable workspace-local source remains absent. The next open transition is
 to freeze, rebuild, and independently rereview this oracle candidate, then

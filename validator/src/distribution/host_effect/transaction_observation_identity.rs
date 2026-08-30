@@ -43,7 +43,8 @@ pub(crate) fn observe_marketplace(
     input: &HostLifecycleObservationInput,
     required: bool,
 ) -> Result<Option<String>, &'static str> {
-    let Some(row) = marketplace_row(value, &input.marketplace)? else {
+    let expected_root = canonical_path(&input.marketplace_source_root)?;
+    let Some(row) = marketplace_row(value, &input.marketplace, &expected_root)? else {
         return if required {
             Err("Codex marketplace JSON lacks the expected marketplace row")
         } else {
@@ -52,7 +53,6 @@ pub(crate) fn observe_marketplace(
     };
     let source_root =
         marketplace_root(row).ok_or("Codex marketplace JSON lacks a typed source root")?;
-    let expected_root = canonical_path(&input.marketplace_source_root)?;
     if source_root != expected_root {
         return Err("Codex marketplace source root does not match the bound repository root");
     }
