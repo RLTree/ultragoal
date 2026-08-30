@@ -28,7 +28,13 @@ pub(super) fn spawn_runtime(
     cwd: RawFd,
 ) -> Result<Spawned, ()> {
     let arguments = sandbox::runtime_arguments(path, command)?;
-    spawn_with_arguments(arguments, Vec::new(), cwd, None)
+    let environment = command
+        .environment()
+        .iter()
+        .map(|(key, value)| CString::new(format!("{key}={value}")))
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|_| ())?;
+    spawn_with_arguments(arguments, environment, cwd, None)
 }
 
 pub(super) fn spawn_personal(

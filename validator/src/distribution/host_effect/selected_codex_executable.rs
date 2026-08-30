@@ -10,6 +10,7 @@ mod execution;
 #[allow(dead_code)]
 mod identity;
 mod immutable_launch;
+mod read_only_observation;
 #[allow(dead_code)]
 mod selection;
 pub(crate) use selection::SelectedCodexExecutable;

@@ -133,10 +133,16 @@ surfaces, integrate itself, cross a P2 authority gate, or decide P4.
 
 ### Still unknown
 
-- Which exact current supported Codex listing/install surface, selected Codex
-  executable, configured local marketplace, and durable marketplace source are
-  available on this host. P1 must observe and bind them read-only; it must not
-  guess, hand-edit host configuration, or fall back to the unsafe custom child.
+- The exact selected Codex executable and current listing/install grammar are
+  now known through the OS-enforced zero-write observer: Codex `0.150.1` at the
+  exact path and content digest recorded in Progress accepts `plugin add
+  <PLUGIN[@MARKETPLACE]>`, and returns strict plugin and marketplace JSON.
+  Current personal state is also known: it names the predecessor marketplace
+  alias `local-harness-plugins`, not the candidate catalog authority
+  `harness-ultragoal-local`. What remains unknown is which exact supported
+  Codex/user action will establish the durable catalog-bound workspace source.
+  P1 must not guess, hand-edit host configuration, or fall back to the unsafe
+  custom child.
 - Whether one monotonic successor can be built, materialized at that exact
   durable local marketplace source without personal-host mutation, and exposed
   through one understandable candidate-bound install handoff.
@@ -257,27 +263,48 @@ the exact candidate and read-only plan evidence.
   contradiction: public `inspect capabilities --package-root` still launched
   the unproved Codex listing probe, and the oracle-missing install diagnostic
   recommended an immediate rerun that could not satisfy its own prerequisite.
-  The current unstaged correction makes one shared closed supported-host oracle
-  gate authoritative for both public readers, removes production Codex listing
-  process surfaces from capabilities inspection, and emits one dedicated
-  no-action/no-immediate-rerun diagnostic routing to the separate authority/
-  oracle decision. Its focused public-route tests, coupled handoff tests, and
-  offline compile pass; root integration, aggregate/package rebuild, and
-  same-scope immutable rereview remain. Because this active plan is itself
-  packaged, the immutable
-  integration commit must be followed by one final same-source archive rebuild
-  and verification before review. P1 remains correctly
-  `blocked_by_environment_or_authority`: descriptor-bound observation found a
-  configured marketplace identity/source mismatch whose source is outside this
-  workspace, while the required durable workspace-local catalog source is not
-  materialized; the selected Codex help/listing action also cannot yet be
-  proven OS-enforced zero-write. No supported action or handoff was emitted and
-  no personal state was changed. Resume P1 only after immutable rereview and an
-  explicit Codex/user authority decision establish a current supported,
-  zero-write-observed action for the exact catalog-bound durable
-  workspace-local marketplace source; then reobserve it read-only, materialize
-  the verified exact package, and emit the immutable handoff. Do not restore
-  the retired UltraGoal installer or replay a stale command to bypass this HOLD.
+  Commit `f4b3444193dd36465a77e4fc54cf0dca998284f6` integrated the shared closed
+  gate and passed independent security and product rereview. On 2026-08-30 the
+  user separately authorized a real-Codex zero-write oracle slice. Exact Codex
+  `0.150.1` at
+  `/Users/terrynoblin/.codex/packages/standalone/releases/0.150.1-aarch64-apple-darwin/bin/codex`
+  (SHA-256
+  `a14f9a907c12c8812878b70e6b7d65f81c39ed795513e46a55817d7428c0ca6b`)
+  returned version, plugin-add help, plugin-list JSON, and marketplace-list JSON
+  under an inner macOS profile denying every write, clone/link, network action,
+  and fork. A deliberate write was denied; scoped personal config/marketplace/
+  cache digest
+  `702755c8e21dc827490551a95c3446cdbec0f796ad921842ed22e4b28f6bd6da`
+  and the protected four-path digest remained exact before and after. The
+  current source correction replaces the closed placeholder with that pinned,
+  descriptor-retained, bounded observer, promotes strict registry parsing to
+  production, binds plugin-add grammar and exact executable identity, and keeps
+  both capabilities and install planning fail-closed. Its production
+  capabilities run reaches the real oracle and returns typed no-effect
+  `supported-host-registry-identity-unavailable`, because the installed plugin
+  remains `harness-ultragoal@local-harness-plugins` while the exact packaged
+  catalog authority is `harness-ultragoal-local`. Focused observer, selected-
+  executable, package-personal-install, registry, and no-action tests pass. A
+  broad parallel `cargo test --lib` run reported 1,697 passes, 228 shared-state
+  and legacy-projection failures, and two ignored tests; it is retained as a
+  classified aggregate gap rather than substituted for the repository's
+  serialized gate. The canonical `scripts/check .` aggregate then passed its
+  release build, registered product and routine production-contract journeys,
+  successor grammar, supported package identity, and governance checks outside
+  the outer sandbox on 2026-08-30. Package rebuild and immutable same-scope
+  rereview remain. Because
+  this active plan is packaged, the immutable integration commit must be
+  followed by one final same-source archive rebuild and verification before
+  review. P1 remains correctly `blocked_by_environment_or_authority`: the
+  required durable workspace-local catalog source is not materialized and the
+  configured/installed marketplace alias is not the exact target identity. No
+  supported install action or handoff was emitted and no personal state was
+  changed. Resume P1 only after immutable rereview and an explicit Codex/user
+  authority decision establish the exact catalog-bound workspace marketplace
+  source; then reobserve it through the now-proven zero-write oracle,
+  materialize the verified package, and emit the immutable handoff. Do not
+  restore the retired UltraGoal installer or replay a stale command to bypass
+  this HOLD.
 - [ ] P2 present the exact candidate-bound handoff, let the explicitly
   authorized user/host run its one supported Codex action, resume read-only in a
   fresh task, verify same-byte source/cache/config/registry/discovery/runtime
@@ -756,14 +783,18 @@ public command minting, synthetic help authority, stale next-action replay, and
 external Git diff helpers while deriving one exact catalog-root/plugin-path/
 marketplace/action identity. The configured marketplace record still names a
 non-target source outside this workspace, the required durable workspace-local
-catalog source is absent, and no safe current help/listing action has been
-observed. Security rereview of `f4e0f4ad5efc7a0131e89ba7449ee57ab424d7f5`
-accepted those five corrections; product rereview required one final bounded
-reader/diagnostic correction so capabilities inspection launches no Codex
-process while the oracle is closed and install planning presents no impossible
-immediate rerun. That correction is now source-complete and locally green. The
-next open transition is to freeze, rebuild, and independently rereview this
-final repaired P1 candidate, then present the separate supported-host authority
+catalog source is absent. Security rereview of
+`f4e0f4ad5efc7a0131e89ba7449ee57ab424d7f5` accepted those five corrections;
+the final reader/diagnostic correction was integrated at
+`f4b3444193dd36465a77e4fc54cf0dca998284f6` and accepted by both rereviewers.
+The separately authorized real-Codex slice has now proven the missing
+OS-enforced zero-write observation boundary and replaced the closed placeholder
+with a pinned production observer. The exact current result is a truthful
+no-effect marketplace identity HOLD, not an install action: installed
+`local-harness-plugins` does not equal packaged `harness-ultragoal-local`, and
+the durable workspace-local source remains absent. The next open transition is
+to freeze, rebuild, and independently rereview this oracle candidate, then
+present the separate supported Codex/user marketplace-source authority
 decision. Personal plugin
 installation, HostState, target, publication, and release effects remain
 closed. The protected diff remains exact, no project `.codex/config.toml`

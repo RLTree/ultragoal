@@ -7,7 +7,7 @@ use crate::distribution::{
 };
 use crate::plugin_product::agent_discovery::{
     HostPluginRegistryObservation, InstalledSourceAuthorityCapture,
-    capture_installed_source_authority,
+    capture_installed_source_authority, parse_unpinned_host_plugin_registry_observation,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -385,9 +385,6 @@ pub(super) fn plan(
     let Some(home) = home else {
         return handoff_failure("canonical personal HOME is unavailable");
     };
-    if !super::supported_host_oracle::is_available() {
-        return handoff_failure(super::supported_host_oracle::MISSING_CAUSE);
-    }
     match build_handoff(source_context, observation_context, home, input, cli) {
         Ok(prepared) => {
             if let Err(cause) = prepared.revalidate(source_context, observation_context) {
@@ -706,11 +703,9 @@ fn capture_durable_marketplace_source(
     Ok((record, observation))
 }
 
-/// Refuses to mint an action until the exact selected executable can expose its
-/// current plugin grammar and registry through an OS-enforced zero-write
-/// observation. Direct binary strings and reconstructed registry JSON are not
-/// host observations. The current supported Codex listing probe may perform
-/// personal maintenance, so this bounded milestone returns a no-action HOLD.
+/// Mints an action only after the exact selected executable exposes its current
+/// plugin grammar and registry through the OS-enforced zero-write observer.
+/// Direct binary strings and reconstructed registry JSON are never authority.
 fn observe_supported_host(
     context: &LiveContext,
     home: &PersonalHomeAuthority,
@@ -741,7 +736,7 @@ fn observe_supported_host(
     if executable.sha256 != expected_sha256 {
         return Err("selected Codex executable content changed");
     }
-    let _version = selected_version_from_path(Path::new(&executable.canonical_path))?;
+    let version = selected_version_from_path(Path::new(&executable.canonical_path))?;
     if marketplace.catalog_root != host.working_directory
         || marketplace.plugin_source_path
             != host.working_directory.to_owned() + "/plugins/harness-ultragoal"
@@ -776,11 +771,57 @@ fn observe_supported_host(
     if !cached_catalog_binds_plugin(&cached_catalog_bytes, &marketplace.catalog_name) {
         return Err("cached marketplace catalog identity or plugin source is substituted");
     }
+    let oracle = super::supported_host_oracle::observe(
+        context,
+        &home.home_path,
+        Path::new(&host.working_directory),
+    )?;
+    if oracle.executable != Path::new(&executable.canonical_path)
+        || oracle.executable_content_sha256 != executable.sha256
+    {
+        return Err("selected Codex executable changed during supported-action observation");
+    }
+    let registry = parse_unpinned_host_plugin_registry_observation(
+        &oracle.plugin_list_json,
+        &oracle.marketplace_list_json,
+        &marketplace.catalog_name,
+        &oracle.executable,
+        &oracle.executable_binding_sha256,
+    )
+    .map_err(|_| "supported Codex registry does not expose the exact marketplace identity")?;
+    let action = SupportedAction {
+        executable: executable.canonical_path.clone(),
+        arguments: vec![
+            "plugin".to_owned(),
+            "add".to_owned(),
+            plugin_id(&marketplace.catalog_name)?,
+        ],
+        working_directory: host.working_directory.clone(),
+    };
+    let supported_action_observation_sha256 = digest_json(&(
+        "HarnessSupportedCodexActionObservation-v1",
+        &oracle.executable_binding_sha256,
+        &oracle.executable_content_sha256,
+        &oracle.plugin_add_help_sha256,
+        registry.sha256(),
+        &action,
+        &host.context_sha256,
+    ))?;
+    let selected = SelectedCodex {
+        executable,
+        version,
+        supported_action_observation_sha256,
+        registry_observation_sha256: registry.sha256().to_owned(),
+    };
     home.revalidate()?;
     context
         .revalidate()
         .map_err(|_| "host context changed during supported-action observation")?;
-    Err(super::supported_host_oracle::MISSING_CAUSE)
+    Ok(SupportedHostObservation {
+        registry,
+        selected,
+        action,
+    })
 }
 
 fn installed_authority(

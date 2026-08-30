@@ -7,6 +7,7 @@ use std::path::Path;
 pub(super) const SANDBOX_EXECUTABLE: &str = "/usr/bin/sandbox-exec";
 const SANDBOX_PROFILE: &str =
     "(version 1) (allow default) (deny process-fork (with send-signal SIGKILL))";
+const READ_ONLY_SANDBOX_PROFILE: &str = "(version 1) (allow default) (deny file-write*) (deny file-clone file-link) (deny network*) (deny process-fork (with send-signal SIGKILL))";
 
 pub(super) fn verified_executable() -> Result<CString, ()> {
     let path = Path::new(SANDBOX_EXECUTABLE);
@@ -47,7 +48,7 @@ pub(super) fn runtime_arguments(path: &Path, command: &HostCommand) -> Result<Ve
     let mut arguments = Vec::with_capacity(command.argv().len() + 4);
     arguments.push(CString::new(SANDBOX_EXECUTABLE).map_err(|_| ())?);
     arguments.push(CString::new("-p").map_err(|_| ())?);
-    arguments.push(CString::new(SANDBOX_PROFILE).map_err(|_| ())?);
+    arguments.push(CString::new(READ_ONLY_SANDBOX_PROFILE).map_err(|_| ())?);
     arguments.push(CString::new(path.as_os_str().as_bytes()).map_err(|_| ())?);
     for argument in command.argv() {
         arguments.push(CString::new(argument.as_bytes()).map_err(|_| ())?);

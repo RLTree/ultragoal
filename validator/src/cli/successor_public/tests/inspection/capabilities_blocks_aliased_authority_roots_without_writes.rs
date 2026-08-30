@@ -202,7 +202,7 @@ pub(crate) fn capabilities_withhold_host_authority_when_home_is_absent() {
 }
 
 #[test]
-pub(crate) fn capabilities_with_package_root_stop_at_the_shared_oracle_without_a_codex_process() {
+pub(crate) fn capabilities_with_package_root_fail_closed_before_process_without_codex_home() {
     let repo = Repository::new("capabilities-missing-zero-write-oracle");
     let home = repo
         .root
@@ -243,11 +243,14 @@ pub(crate) fn capabilities_with_package_root_stop_at_the_shared_oracle_without_a
             "production capabilities reader retained process surface {forbidden}"
         );
     }
+    let oracle = include_str!("../../supported_host_oracle.rs");
+    assert!(oracle.contains("observe_supported_read_only"));
+    assert!(!oracle.contains("std::process::Command"));
     fs::remove_dir_all(home).unwrap();
 }
 
 #[test]
-pub(crate) fn install_plan_missing_oracle_emits_no_action_or_immediate_rerun() {
+pub(crate) fn install_plan_missing_artifact_emits_no_action_and_does_not_reach_oracle() {
     let repo = Repository::new("install-plan-missing-zero-write-oracle");
     let home = repo
         .root
@@ -277,38 +280,22 @@ pub(crate) fn install_plan_missing_oracle_emits_no_action_or_immediate_rerun() {
     let value: serde_json::Value = serde_json::from_slice(&streams.stderr).unwrap();
     assert_eq!(
         value["diagnostic_id"],
-        "successor_runtime_supported_host_oracle_unavailable"
+        "successor_runtime_authority_required"
     );
-    assert_eq!(value["cause"], supported_host_oracle::MISSING_CAUSE);
+    assert_eq!(value["cause"], "authority catalog is unavailable");
     assert_eq!(value["effect"], "none");
     assert!(
         value["smallest_safe_repair"]
             .as_str()
             .unwrap()
-            .contains("no supported action is currently available")
+            .contains("restore exact package")
     );
-    assert_eq!(
-        value["exact_rerun"],
-        "no immediate rerun; next transition: separate supported-host authority/oracle decision"
-    );
-    assert!(!value.to_string().contains("package install-plan --input"));
     assert!(!value.to_string().contains("supported_action"));
     assert_eq!(tree(&repo.root), before_tree);
     assert_eq!(repo.status(), before_status);
     assert_eq!(tree(&home), before_home);
 
     let source = include_str!("../../package_personal_install.rs");
-    let plan = source
-        .split_once("pub(super) fn plan(")
-        .unwrap()
-        .1
-        .split_once("pub(super) fn verify(")
-        .unwrap()
-        .0;
-    assert!(
-        plan.find("supported_host_oracle::is_available").unwrap()
-            < plan.find("build_handoff(").unwrap()
-    );
     let observer = source
         .split_once("fn observe_supported_host(")
         .unwrap()
