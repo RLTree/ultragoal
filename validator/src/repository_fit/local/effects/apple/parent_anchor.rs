@@ -124,7 +124,10 @@ impl LocalEffects {
         let identity = object_identity(&metadata);
         if !metadata.is_dir()
             || require_same_device(self.root_identity.device, metadata.dev()).is_err()
-            || unsafe { libc::fchmod(staged.as_raw_fd(), 0o755 as libc::mode_t) } != 0
+            || {
+                // SAFETY: `staged` owns a live descriptor for the directory created above.
+                unsafe { libc::fchmod(staged.as_raw_fd(), 0o755 as libc::mode_t) != 0 }
+            }
             || staged.sync_all().is_err()
             || stat_at(parent, &staged_name)?.is_none_or(|stat| stat_identity(stat) != identity)
             || descriptor_path(&staged).ok() != Some(parent_canonical.join(&staged_name))

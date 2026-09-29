@@ -1,0 +1,3 @@
+[
+  {"id":"test","owner":"Cargo.toml","entrypoint":"Cargo.toml","kind":"cargo","argv":["cargo","test","--locked","--offline"]}
+]

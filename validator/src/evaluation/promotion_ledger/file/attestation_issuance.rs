@@ -1,5 +1,5 @@
 impl FilePromotionReviewLedger {
-    fn issue_bound_attestation(
+    pub(crate) fn issue_bound_attestation(
         &mut self,
         binding_sha256: &str,
     ) -> Result<String, PromotionLedgerError> {
@@ -26,7 +26,7 @@ impl FilePromotionReviewLedger {
                     binding_sha256: binding_sha256.to_owned(),
                     attestation_sha256: attestation.clone(),
                 },
-                attestation,
+                attestation.clone(),
             )),
             PromotionLedgerState::Issued {
                 binding_sha256: existing_binding,
@@ -44,13 +44,13 @@ impl FilePromotionReviewLedger {
         })
     }
 
-    fn consume_attestation(
+    pub(crate) fn consume_attestation(
         &mut self,
         binding_sha256: &str,
         reviewer_id: &str,
         review_id: &str,
         attestation_sha256: &str,
-    ) -> Result<bool, PromotionLedgerError> {
+    ) -> Result<PromotionConsumptionOutcome, PromotionLedgerError> {
         let expected_review_id =
             sha256(format!("promotion-review|{binding_sha256}|{attestation_sha256}").as_bytes());
         if reviewer_id != self.binding.reviewer_id
@@ -59,7 +59,9 @@ impl FilePromotionReviewLedger {
             || !super::valid_sha256(attestation_sha256)
             || review_id != expected_review_id
         {
-            return Ok(false);
+            return Ok(PromotionConsumptionOutcome::Refused {
+                causal_code: "promotion-review-attestation-invalid",
+            });
         }
         self.mutate(|state| match state {
             PromotionLedgerState::Issued {
@@ -72,10 +74,32 @@ impl FilePromotionReviewLedger {
                         review_id: review_id.to_owned(),
                         attestation_sha256: issued_attestation,
                     },
-                    true,
+                    PromotionConsumptionOutcome::Consumed,
                 ))
             }
-            _ => Ok((state, false)),
+            PromotionLedgerState::Consumed {
+                binding_sha256: consumed_binding,
+                review_id,
+                attestation_sha256: consumed_attestation,
+            } => {
+                let outcome = PromotionConsumptionOutcome::AlreadyConsumed {
+                    review_id: review_id.clone(),
+                };
+                Ok((
+                    PromotionLedgerState::Consumed {
+                        binding_sha256: consumed_binding,
+                        review_id,
+                        attestation_sha256: consumed_attestation,
+                    },
+                    outcome,
+                ))
+            }
+            _ => Ok((
+                state,
+                PromotionConsumptionOutcome::Refused {
+                    causal_code: "promotion-review-consumption-refused",
+                },
+            )),
         })
     }
 

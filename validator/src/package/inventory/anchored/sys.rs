@@ -56,10 +56,12 @@ pub(super) fn open_file(parent: &File, name: &OsStr) -> Result<File, String> {
 fn open_at(parent: &File, name: &OsStr, flags: i32) -> Result<File, String> {
     let name = CString::new(name.as_bytes())
         .map_err(|_| "anchored package path contains NUL".to_string())?;
+    // SAFETY: `parent` is live and `name` is a NUL-terminated CString.
     let descriptor = unsafe { libc::openat(parent.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return Err("anchored package component open failed".to_string());
     }
+    // SAFETY: openat returned this unique, owned file descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
@@ -67,6 +69,7 @@ pub(super) fn nofollow_snapshot(parent: &File, name: &OsStr) -> Result<Snapshot,
     let name = CString::new(name.as_bytes())
         .map_err(|_| "anchored package path contains NUL".to_string())?;
     let mut stat = MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: `parent` is live, `name` is NUL-terminated, and `stat` is writable storage.
     let result = unsafe {
         libc::fstatat(
             parent.as_raw_fd(),
@@ -78,6 +81,7 @@ pub(super) fn nofollow_snapshot(parent: &File, name: &OsStr) -> Result<Snapshot,
     if result != 0 {
         return Err("anchored package component metadata failed".to_string());
     }
+    // SAFETY: successful fstatat initialized `stat` completely.
     let stat = unsafe { stat.assume_init() };
     Ok(Snapshot::from_stat(&stat))
 }

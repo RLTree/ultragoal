@@ -13,4 +13,3 @@ mod adopted_claim_cases;
 mod permit_mutation_cases;
 
 pub(crate) use adopted_claim_cases::*;
-pub(crate) use permit_mutation_cases::*;

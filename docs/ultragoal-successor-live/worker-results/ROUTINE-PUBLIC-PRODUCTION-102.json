@@ -6,7 +6,7 @@
     "candidate_id": "sha256:c91499453d4cd387b1cb033b3ab186b82f4628b9916a99b4621f45a3a8a745ad",
     "context_id": "sha256:c33f189c69a52356e3c5f894163177680f91dadedee87b067aa4cf974b9626fa",
     "context_formula": "SHA-256 of ROUTINE-PUBLIC-PRODUCTION-102|worker|freeze base HEAD|candidate_id.",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "freeze_base_head_commit": "860c803d736f7928e1ba5d45b5650513fcbf75eb",
     "freeze_base_head_tree": "07b8bb10fefd16574db487e7abeadaad7a142560",
     "current_root_anchor_commit": "40982060ab4f89d6ced890e50edbe184c1c473ff",

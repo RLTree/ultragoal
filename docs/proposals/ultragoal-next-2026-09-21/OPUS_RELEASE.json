@@ -1,0 +1,23 @@
+{
+  "schema": "ultragoal-opus-handoff-release/1",
+  "status": "ready_for_user_launch; prior_owner_frozen",
+  "prior_owner_terminal_delivery_received": true,
+  "bundle_root": "/Users/terrynoblin/.codex/worktrees/ultragoal-next-owner/harness-ultragoal-plugin-proposal/.codex-worktree/transfers/20260923-opus55",
+  "bundle_manifest_sha256": "655deabde6b81cadba66382bb6fecb2d6a278dc0d06bfc5de78ce2a2811e62b9",
+  "source_manifest_sha256": "f611f873538e8cb30615d7cc6206db3e54d7007f8ac2d344370e52eceb428a31",
+  "executable_manifest_sha256": "d2b0b7a4d440f30df23cc51f94bcd5453dd20b22959f5874e2077756d958fa19",
+  "acceptance_baseline_manifest_sha256": "686e4933a3022594c4095a99ddd5bb48b9defe18cf0e84471e71fca8791ef39b",
+  "checks": {
+    "bundle_files": 3131,
+    "source_files": 114,
+    "package_files": 8,
+    "live_source_matches": true,
+    "source_runtime_delta": "three documentation files; extra historical root ug-core preserved, not current binary"
+  },
+  "prompt_generation": "Cadence Rust work-owner renderer; terminal callback adapted for user-requested manual non-Codex host delivery",
+  "files": {
+    "OPUS_HANDOFF.md": "8ae516dda8af3d04ff8402b96b126007f254e2c2a426f187a4fe62c366d4ae80",
+    "OPUS_PROMPT.txt": "1ecb498889d117cfc7d9b81f32160441d335ffcced5bb37adc6001128b3d6560"
+  },
+  "claim": "Complete handoff package, not product completion, model launch or independent final acceptance"
+}

@@ -40,6 +40,7 @@ impl StableDirectoryAuthority {
 
     fn confined_root(metadata: &std::fs::Metadata) -> Result<Self, DistributionError> {
         let authority = Self::capture(metadata)?;
+        // SAFETY: geteuid has no pointer or ownership preconditions.
         if authority.uid != unsafe { libc::geteuid() } || authority.mode & 0o022 != 0 {
             return Err(error(DistributionErrorId::UnsafeObject));
         }

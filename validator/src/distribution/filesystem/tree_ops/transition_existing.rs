@@ -1,14 +1,29 @@
 #[cfg(unix)]
+struct ExistingTreeTransition<'a, 'stage> {
+    root: &'a Directory,
+    target_parent: &'a Directory,
+    target: &'a str,
+    stage_name: &'a str,
+    backup_name: &'a str,
+    expected: &'a TreeSnapshot,
+    replacement: Option<&'a [TreeObject]>,
+    stage: Option<&'stage mut OwnedTree>,
+}
+
+#[cfg(unix)]
 fn transition_existing(
-    root: &Directory,
-    target_parent: &Directory,
-    target: &str,
-    stage_name: &str,
-    backup_name: &str,
-    expected: &TreeSnapshot,
-    replacement: Option<&[TreeObject]>,
-    mut stage: Option<&mut OwnedTree>,
+    request: ExistingTreeTransition<'_, '_>,
 ) -> Result<bool, DistributionError> {
+    let ExistingTreeTransition {
+        root,
+        target_parent,
+        target,
+        stage_name,
+        backup_name,
+        expected,
+        replacement,
+        mut stage,
+    } = request;
     if replacement.is_some() != stage.is_some() {
         return Err(error(DistributionErrorId::EffectFailed));
     }

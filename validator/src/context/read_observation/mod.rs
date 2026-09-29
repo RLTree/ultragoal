@@ -7,9 +7,9 @@ use std::collections::BTreeMap;
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 
+#[path = "model.rs"]
+mod model;
 #[path = "observation_collection.rs"]
 mod observation_collection;
-#[path = "read_observation.rs"]
-mod read_observation;
 
-pub(in crate::context) use read_observation::ObservationSet;
+pub(in crate::context) use model::ObservationSet;

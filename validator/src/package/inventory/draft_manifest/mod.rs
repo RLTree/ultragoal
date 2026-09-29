@@ -39,7 +39,7 @@ pub(crate) struct DraftSkill {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
-struct DraftAgent {
+pub(crate) struct DraftAgent {
     name: AgentId,
     path: RepoPath,
 }
@@ -71,6 +71,10 @@ impl DraftPackageManifest {
         &self.skills
     }
 
+    pub(crate) fn agents(&self) -> &[DraftAgent] {
+        &self.agents
+    }
+
     pub(crate) fn inventory_paths(&self) -> Vec<String> {
         self.skills
             .iter()
@@ -88,6 +92,16 @@ impl DraftPackageManifest {
 }
 
 impl DraftSkill {
+    pub(crate) fn name(&self) -> &str {
+        self.name.as_str()
+    }
+
+    pub(crate) fn path(&self) -> &str {
+        self.path.as_str()
+    }
+}
+
+impl DraftAgent {
     pub(crate) fn name(&self) -> &str {
         self.name.as_str()
     }

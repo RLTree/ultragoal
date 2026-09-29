@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-bash -c 'printf "{\"schema\":\"harness-ultragoal.observability-query.v1\",\"status\":\"pass\"}\n"'

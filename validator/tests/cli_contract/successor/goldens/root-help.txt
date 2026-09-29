@@ -7,10 +7,14 @@ Commands:
       Summarize live context, findings, capabilities, and claim ceilings.
   inspect context  [read]
       Inspect candidate-bound live context.
+  inspect orchestration  [read]
+      Inspect the current canonical orchestration frontier without authority exposure.
+  inspect inception  [read]
+      Inspect current goal, Product Success Contract, and sole active ExecPlan authority without writes.
   inspect inventory  [read]
       Inspect semantic components and authority conflicts.
-  inspect capabilities  [read]
-      Inspect exposed tools and supported capability surfaces.
+  inspect capabilities  [read] [--package-root <value>]
+      Inspect exposed tools and candidate-bound agent authority availability.
   inspect findings  [read]
       Inspect typed current findings.
   inspect claims  [read]
@@ -29,21 +33,21 @@ Commands:
       Run conservative affected validation with declared local build artifacts.
   check strict  [read] [--target <value>] --claim <value>
       Run dependency-closed validation for one named claim.
-  diagnose  [read] [--finding <value>]
+  diagnose  [read] [--target <value>] [--finding <value>]
       Explain cause, smallest repair, exact rerun, effect, and ceiling.
   prove  [workspace-write] --claim <value> --output <value>
       Execute one claim-specific proof and independent reconciliation packet.
-  observe query  [read] [--filter <value>]
+  observe query  [read] [--target <value>] [--filter <value>]
       Query local semantic events without access-metadata writes.
   observe export  [external-write] --output <value> --approve-export
       Export explicitly approved semantic data to an external destination.
   package inventory  [workspace-write] --output <value>
       Write a deterministic package inventory from canonical source.
-  package build  [workspace-write] --output <value>
+  package build  [workspace-write] --output <value> --cli <value>
       Build deterministic package bytes and local provenance inputs.
-  package verify  [read] --input <value>
+  package verify  [read] --input <value> --cli <value>
       Verify package bytes and inventory without mutation.
-  package install-test  [workspace-write] --input <value> --output <value>
+  package install-test  [workspace-write] --input <value> --output <value> --cli <value> [--retain-isolated-root]
       Exercise an isolated install and write a local verification artifact.
   package publish  [external-write] --input <value> --provider <value> --approve-publish
       Publish only an explicitly approved package through a named provider.
@@ -58,9 +62,9 @@ Commands:
   eval adapter  [external-write] --spec <value> --provider <value>
       Invoke one explicitly named external evaluation provider adapter.
   migrate plan  [read] [--registry <value>]
-      Plan routes, compatibility, and retirement from the migration registry.
-  migrate apply  [workspace-write] --plan <value> --accept-plan <value>
-      Apply only an explicitly accepted, context-bound migration plan.
+      Produce a read-only ProductMigration projection from the migration registry; it is not the Routine HostState apply record.
+  migrate apply  [external-write] --plan <value> --accept-plan <value>
+      Quarantine legacy Routine HostState only from the exact immutable ultragoal --json diagnose record and its quarantine_plan.plan_id.
   migrate verify  [read] [--registry <value>]
       Verify replacement behavior and absence of duplicate authority.
   migrate retire  [destructive] --plan <value> --approve-retirement

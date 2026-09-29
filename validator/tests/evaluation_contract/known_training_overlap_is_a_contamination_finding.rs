@@ -21,11 +21,9 @@ fn known_training_overlap_is_a_contamination_finding() {
     let spec = EvaluationSpec::new(sha('c'), sha('1'), "suite", vec![task]).unwrap();
     let audit = spec.audit(&sha('c'), &sha('1'));
     assert!(!audit.eligible());
-    assert!(
-        audit
-            .findings()
-            .contains(&"evaluation-dataset-contamination-detected".to_owned())
-    );
+    assert!(audit
+        .findings()
+        .contains(&"evaluation-dataset-contamination-detected".to_owned()));
 }
 
 #[test]
@@ -162,7 +160,7 @@ fn mutate_restore_requires_a_fresh_audit() {
 fn paired_behavior_improvement_yields_only_an_improvement_candidate() {
     let baseline = run('1', BehaviorOutcome::Failed, 2);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
+    let mut authority = review_authority(&baseline, &candidate);
     let review = review(&baseline, &candidate, &mut authority);
     let decision = PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority);
     assert_eq!(decision.status, PromotionStatus::ImprovementCandidate);
@@ -177,13 +175,11 @@ fn paired_behavior_improvement_yields_only_an_improvement_candidate() {
 fn score_gain_without_behavior_improvement_is_a_false_pass() {
     let baseline = run('1', BehaviorOutcome::Passed, 8);
     let candidate = run('2', BehaviorOutcome::Passed, 10);
-    let mut authority = TestReviewAuthority::current('2');
+    let mut authority = review_authority(&baseline, &candidate);
     let review = review(&baseline, &candidate, &mut authority);
     let decision = PromotionDecision::reconcile(&baseline, &candidate, &review, &mut authority);
     assert_eq!(decision.status, PromotionStatus::Rejected);
-    assert!(
-        decision
-            .reasons
-            .contains(&"evaluation-no-representative-behavior-improvement".to_owned())
-    );
+    assert!(decision
+        .reasons
+        .contains(&"evaluation-no-representative-behavior-improvement".to_owned()));
 }

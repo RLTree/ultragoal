@@ -14,33 +14,12 @@ pub(crate) fn canonical_package_failures(root: &Path, receipt: &Value) -> Vec<St
     out
 }
 
-pub(crate) fn canonical_package_failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    let mut out = Vec::new();
-    if pointer_string(receipt, "/claim/id") != "CLAIM-001" {
-        out.push("product_fitness_receipt_wrong_claim_id".to_string());
-    }
-    out.extend(failures_with_candidate(root, receipt, target_digest));
-    out
-}
-
 pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     failures_with_digest(
         root,
         receipt,
         crate::package::inventory::package_digest(root),
     )
-}
-
-pub(crate) fn failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    failures_with_digest(root, receipt, Ok(target_digest.to_string()))
 }
 
 fn failures_with_digest(
@@ -57,6 +36,9 @@ fn failures_with_digest(
     out.extend(crate::audit::product::fitness::substitutions::failures(
         receipt,
     ));
+    if string(receipt, "schema") == "harness-ultragoal.product-fitness-receipt.v2" {
+        out.extend(crate::audit::product::fitness::v2::failures(receipt));
+    }
     out
 }
 
@@ -73,7 +55,14 @@ pub(crate) fn canonical_digest(receipt: &Value) -> String {
 
 fn required_field_failures(receipt: &Value) -> Vec<String> {
     let mut out = Vec::new();
-    if string(receipt, "schema") != "harness-ultragoal.product-fitness-receipt.v1" {
+    let schema = string(receipt, "schema");
+    if schema == "harness-ultragoal.dogfood-receipt.v1" {
+        out.push("product_fitness_dogfood_receipt_rejected".to_string());
+    } else if !matches!(
+        schema.as_str(),
+        "harness-ultragoal.product-fitness-receipt.v1"
+            | "harness-ultragoal.product-fitness-receipt.v2"
+    ) {
         out.push("product_fitness_receipt_malformed:schema".to_string());
     }
     for (ptr, error) in required_fields() {
@@ -202,4 +191,22 @@ fn authority_failures(receipt: &Value, current: Result<String, String>) -> Vec<S
         Err(err) => out.push(format!("product_fitness_digest_unavailable:{err}")),
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::required_field_failures;
+    use serde_json::json;
+
+    #[test]
+    fn legacy_dogfood_receipt_is_not_product_fitness_evidence() {
+        let failures = required_field_failures(&json!({
+            "schema": "harness-ultragoal.dogfood-receipt.v1"
+        }));
+        assert!(
+            failures
+                .iter()
+                .any(|failure| failure == "product_fitness_dogfood_receipt_rejected")
+        );
+    }
 }

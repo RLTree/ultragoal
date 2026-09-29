@@ -1,0 +1,93 @@
+{
+  "schema_version": "RootOrchestrationDecision-v1",
+  "decision_id": "AGENTIC-ENGINEERING-V3-P1-INTEGRATION-002",
+  "accepted_increment": {
+    "base": "65d62a4886e0cd0b0e21d52f9ee082050ba392ca",
+    "source_head": "25eeec3ec7476ca68b12f29f885c5cc498f65446",
+    "integrated_head": "4e41e94a98089bc662c8c702e96d8b677d028db7",
+    "integrated_tree": "e26541e953d4d81c4cb0cae19e2115e171e95d0d"
+  },
+  "decision": "accept_bounded_p1_projection_integration",
+  "sole_executable_and_claim_authority": "harness-ultragoal",
+  "agentic_engineering_role": "explicit_advisory_candidate_artifacts_only",
+  "authority_changes": [
+    {
+      "artifact": "LearningAdoptionRecord-v1",
+      "decision": "extend",
+      "owner": "docs/improvement-loop-registry.json",
+      "boundary": "one_learning_at_a_time_unique_identity_no_peer_knowledge_store"
+    },
+    {
+      "artifact": "Knowledge Projection Card",
+      "decision": "map_as_generated_projection",
+      "owner": "validator/src/audit/improvement_loop",
+      "boundary": "exact_registry_bytes_derive_reader_projection_no_claim"
+    },
+    {
+      "artifact": "SkillEvalCase-v1",
+      "decision": "map_into_existing_product_eval_protocol",
+      "owner": "schemas/product-eval-protocol.schema.json",
+      "boundary": "behavior_evidence_and_calibrated_repair_budget_no_claim_promotion"
+    }
+  ],
+  "schema_evolution": [
+    {
+      "schema": "harness-ultragoal.improvement-loop-registry.v1",
+      "old_sha256": "sha256:6f984bca194c650c2ae5a4fdda8821e083a241a424af4e636705239ff1c35b25",
+      "new_sha256": "sha256:4d6912b29ac741bd6e85ffd5df620bc21ff341c086fd4c67ce16733d7a23cce4",
+      "compatibility": "prior registry bytes remain historical but cannot satisfy the current learning-adoption projection check",
+      "migration": "the single canonical registry is extended in place; no external or historical registry instance is rewritten",
+      "affected_claim_ids": [
+        "CL-EVAL-IMPROVEMENT"
+      ]
+    },
+    {
+      "schema": "harness-ultragoal.product-eval-protocol.v1",
+      "old_sha256": "sha256:4df813387dd0878fd0a2c7ec8073665c3ac90a98adf7788b9590d19215a583d3",
+      "new_sha256": "sha256:578040a1991951648f484b5bce0c4ddbf5ddba6ac5116871db484d0e1f7f3f1c",
+      "compatibility": "no current protocol instances were found; future current protocols must include behavior_evaluation and a nonempty calibration_basis",
+      "migration": "older or incomplete protocol instances are invalid for current evaluation claims and must be regenerated from the current template",
+      "affected_claim_ids": [
+        "CL-EVAL-IMPROVEMENT"
+      ]
+    }
+  ],
+  "review": {
+    "model": "gpt-5.6-terra",
+    "reasoning": "medium",
+    "initial_disposition": "REWORK",
+    "material_findings": [
+      "duplicate learning record identities could create ambiguous authority",
+      "repair budgets could claim calibration without a calibration basis"
+    ],
+    "correction": "25eeec3ec",
+    "confirmation_disposition": "accepted_with_nonmaterial_test_backlog",
+    "backlog": "add a focused missing-record-id test if this validator seam changes; schema and executable validator already fail missing ids closed"
+  },
+  "refresh_obligations": {
+    "plugin_version": "0.0.17",
+    "source_package_install_cache_marketplace_app_registry_discovery_runtime": "must be rebuilt and reobserved on one exact post-integration candidate",
+    "older_installed_version": "0.0.16 remains valid only for its recorded P0 observations and cannot support P1 claims"
+  },
+  "claim_ceiling": {
+    "supported": [
+      "source_local_learning_adoption_registry",
+      "source_local_generated_knowledge_projection",
+      "source_local_behavior_evaluation_contract",
+      "source_local_calibrated_repair_budget_contract"
+    ],
+    "withheld": [
+      "empirical_product_improvement",
+      "installed_p1_activation",
+      "runtime_behavior_change",
+      "human_use",
+      "repeated_use",
+      "product_fitness",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "rollback": "Revert the two accepted P1 commits and this root integration decision, then restore the prior schema digests and retain the P0 authority boundaries.",
+  "no_claim_statement": "The registry, generated projection, schema checks, tests, and reviewer disposition cannot promote an installed, runtime, Product Fitness, readiness, release, or completion claim."
+}

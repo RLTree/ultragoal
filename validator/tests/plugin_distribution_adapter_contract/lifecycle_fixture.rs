@@ -1,15 +1,15 @@
+use crate::distribution::{
+    ConfinedRoot, PackagePlan, PackageSnapshot, ScopedFile, build_package, plan_package,
+};
+use crate::plugin_product::distribution_adapter::DistributionLifecycleOperation;
+use crate::plugin_product::lifecycle::{
+    LifecycleAuthorization, LifecycleIntent, LifecyclePlan, LifecycleRequest, LifecycleState,
+    PackageAuthority, Version, plan,
+};
 use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
-use ultragoal::distribution::{
-    ConfinedRoot, PackagePlan, PackageSnapshot, ScopedFile, build_package, plan_package,
-};
-use ultragoal::plugin_product::distribution_adapter::DistributionLifecycleOperation;
-use ultragoal::plugin_product::lifecycle::{
-    LifecycleAuthorization, LifecycleIntent, LifecyclePlan, LifecycleRequest, LifecycleState,
-    PackageAuthority, Version, plan,
-};
 
 pub const CONTEXT: &str = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 pub const CANDIDATE: &str =

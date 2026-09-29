@@ -1,8 +1,8 @@
 use super::catalog::{DependencyActionCatalog, DependencyStatus};
 use super::ceiling::ClaimCeiling;
 use super::findings::{
-    authority_name, contradiction_repair, dependency_code, dependency_severity, finding,
-    policy_repair,
+    FindingInput, authority_name, contradiction_repair, dependency_code, dependency_severity,
+    finding, policy_repair,
 };
 use super::product_state::{
     CeilingReduction, Finding, FindingSeverity, FindingSource, NextActionKind, ProductGoalState,

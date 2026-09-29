@@ -33,6 +33,10 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
         .file_name()
         .and_then(|name| name.to_str())
         .unwrap_or_default();
+    let stem = rel
+        .file_stem()
+        .and_then(|name| name.to_str())
+        .unwrap_or_default();
     if lower.starts_with("docs/ultragoal-contract-2026-07/") {
         found("contract", "path:adopted-predecessor-contract")
     } else if lower.starts_with("docs/ultragoal-contract-2026-07-successor-candidate-v1/") {
@@ -49,7 +53,18 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
         || (component(rel, "agents") && !lower.starts_with(".codex/agents/"))
     {
         found("agent", "path:legacy-agent-collection")
-    } else if file == "LANE_REGISTRY.json" || component(rel, "lane") {
+    } else if matches!(
+        text.as_ref(),
+        "validator/src/claim_semantics/ready/mod.rs"
+            | "validator/src/claim_semantics/ready/receipt.rs"
+    ) {
+        found("finalizer", "path:retired-ready-authority")
+    } else if matches!(
+        text.as_ref(),
+        "LANE_REGISTRY.json" | "templates/LANE_REGISTRY.json"
+    ) {
+        None
+    } else if component(rel, "lane") {
         found("lane", "path:lane-authority")
     } else if component(rel, "gate") || lower.contains("gate_registry") {
         found("gate", "path:gate-authority")
@@ -61,9 +76,8 @@ pub(super) fn path_match(rel: &Path) -> Option<LegacyMatch> {
     {
         found("command", "path:legacy-command-authority")
     } else if component(rel, "final_packet")
-        || lower.contains("finalizer")
-        || lower.contains("finalization")
-        || lower.contains("final-packet")
+        || component(rel, "finalizer")
+        || (component(rel, "legacy") && matches!(stem, "finalizer" | "finalization"))
     {
         found("finalizer", "path:legacy-finalization-authority")
     } else {
@@ -98,4 +112,31 @@ pub(super) fn model_reference(
     } else {
         ModelReference::NoMatch
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn finalizer_scope_requires_an_exact_legacy_path_shape() {
+        for path in [
+            "validator/src/audit/final_packet/mod.rs",
+            "validator/src/cli/final_packet/mod.rs",
+            "legacy/finalizer.md",
+            "legacy/finalization.rs",
+        ] {
+            assert_eq!(
+                path_match(Path::new(path)).map(|found| found.kind),
+                Some("finalizer"),
+                "expected legacy finalizer classification for {path}",
+            );
+        }
+    }
+
+    #[test]
+    fn current_host_lifecycle_finalization_is_not_a_legacy_authority() {
+        let path = Path::new("validator/src/plugin_product/lifecycle/host_custody/finalization.rs");
+        assert!(path_match(path).is_none());
+    }
 }

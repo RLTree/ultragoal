@@ -1,5 +1,3 @@
-#[cfg(test)]
-use super::model::AUTHORITY_CLASSIFICATION;
 use super::model::{
     ACTIVE_READER_WRITER_STATE, COMPATIBILITY_BEHAVIOR, COMPATIBILITY_BOUNDARY, CatalogEvidence,
     EQUIVALENCE_PROOF, EntryEvidence, INTENDED_DISPOSITION, OBSERVED_AUTHORITY_STATE,
@@ -30,11 +28,6 @@ pub(crate) struct VerifiedPendingAuthority {
 }
 
 impl VerifiedPendingAuthority {
-    #[cfg(test)]
-    pub(crate) const fn classification(self) -> &'static str {
-        AUTHORITY_CLASSIFICATION
-    }
-
     /// This does not demote the source. It authorizes a distinct pending-
     /// migration finding only while the exact source, definition-only target,
     /// registry row, and current source bytes remain jointly verified.
@@ -46,11 +39,6 @@ impl VerifiedPendingAuthority {
 #[derive(Debug, Eq, PartialEq)]
 pub(crate) struct VerifiedCatalog {
     pub routes: Vec<VerifiedPendingAuthority>,
-}
-
-#[cfg(test)]
-pub(crate) fn registry_route_is_compiled(route: &RegistryRouteEvidence<'_>) -> bool {
-    super::specs::by_route_id(route.route_id).is_some_and(|spec| registry_matches(spec, route))
 }
 
 pub(crate) fn verify_catalog(

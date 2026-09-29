@@ -16,10 +16,14 @@ struct MemoryEffects {
 }
 
 impl InstallEffects for MemoryEffects {
-    fn read_installed(&mut self, target: &str, _maximum: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_installed(
+        &mut self,
+        target: &str,
+        _maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         self.reads += 1;
         if self.fail_read_at == Some(self.reads) {
-            return Err(());
+            return Err(crate::distribution::EffectFailure);
         }
         if self.special_targets.contains(target) {
             return Ok(None);
@@ -32,7 +36,7 @@ impl InstallEffects for MemoryEffects {
         target: &str,
         expected: &Prior,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         self.transitions += 1;
         if self
             .mutate_before_transition
@@ -52,7 +56,7 @@ impl InstallEffects for MemoryEffects {
             }
         }
         if self.fail_transition_at == Some(self.transitions) {
-            return Err(());
+            return Err(crate::distribution::EffectFailure);
         }
         if self.special_targets.contains(target)
             || !expected_matches(expected, self.files.get(target).map(Vec::as_slice))
@@ -82,14 +86,17 @@ fn expected_matches(expected: &Prior, actual: Option<&[u8]>) -> bool {
 struct PackageSink(Option<Vec<u8>>);
 
 impl PackageEffects for PackageSink {
-    fn read_package(&mut self, _maximum: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_package(
+        &mut self,
+        _maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
     fn compare_exchange_package(
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         let current_sha256 = self.0.as_deref().map(digest);
         if current_sha256.as_deref() != expected_sha256 {
             return Ok(false);

@@ -4,7 +4,7 @@
   "title": "Harness Ultragoal Improvement Loop Registry",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "law_id", "forbidden_substitutions", "loops"],
+  "required": ["schema", "law_id", "forbidden_substitutions", "loops", "learning_adoption"],
   "properties": {
     "schema": {
       "const": "harness-ultragoal.improvement-loop-registry.v1"
@@ -107,6 +107,9 @@
           }
         }
       }
+    },
+    "learning_adoption": {
+      "$ref": "#/$defs/learning_adoption"
     }
   },
   "$defs": {
@@ -117,6 +120,134 @@
         "type": "string",
         "minLength": 1
       }
+    },
+    "learning_adoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "one_learning_at_a_time", "records", "knowledge_projection"],
+      "properties": {
+        "schema": {
+          "const": "harness-ultragoal.learning-adoption.v1"
+        },
+        "one_learning_at_a_time": {
+          "const": true
+        },
+        "records": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/learning_record"
+          }
+        },
+        "knowledge_projection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "schema", "format", "generator"],
+          "properties": {
+            "path": {
+              "const": "docs/improvement-loop/knowledge-projection.md"
+            },
+            "schema": {
+              "const": "harness-ultragoal.improvement-loop-knowledge-projection.v1"
+            },
+            "format": {
+              "const": "markdown"
+            },
+            "generator": {
+              "const": "validator/src/audit/improvement_loop/mod.rs"
+            }
+          }
+        }
+      }
+    },
+    "learning_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id", "version", "owner", "status", "observation", "provenance",
+        "operating_envelope", "evidence_class", "facts", "interpretations", "hypotheses",
+        "counterevidence", "responsible_layer", "mechanism_hypothesis", "recurrence",
+        "severity", "intervention_burden", "proposed_intervention", "rejected_alternatives",
+        "evaluation", "results", "decision", "review_date", "expiry_or_invalidation",
+        "rollback", "residual_risks", "authority_handoff", "repair_budget"
+      ],
+      "properties": {
+        "record_id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "status": {
+          "enum": ["proposed", "adopted", "held", "narrowed", "rejected", "superseded", "retired"]
+        },
+        "observation": { "type": "string", "minLength": 1 },
+        "provenance": { "$ref": "#/$defs/non_empty_strings" },
+        "operating_envelope": { "type": "string", "minLength": 1 },
+        "evidence_class": {
+          "enum": ["isolated", "recurring", "cross_context", "causal", "unresolved"]
+        },
+        "facts": { "$ref": "#/$defs/non_empty_strings" },
+        "interpretations": { "$ref": "#/$defs/non_empty_strings" },
+        "hypotheses": { "$ref": "#/$defs/non_empty_strings" },
+        "counterevidence": { "$ref": "#/$defs/non_empty_strings" },
+        "responsible_layer": {
+          "enum": ["specification", "context", "tool", "harness", "loop", "graph", "runtime", "repository", "software", "product", "lifecycle", "human_boundary"]
+        },
+        "mechanism_hypothesis": { "type": "string", "minLength": 1 },
+        "recurrence": { "type": "string", "minLength": 1 },
+        "severity": { "type": "string", "minLength": 1 },
+        "intervention_burden": { "type": "string", "minLength": 1 },
+        "proposed_intervention": { "type": "string", "minLength": 1 },
+        "rejected_alternatives": { "$ref": "#/$defs/non_empty_strings" },
+        "evaluation": { "$ref": "#/$defs/learning_evaluation" },
+        "results": { "$ref": "#/$defs/non_empty_strings" },
+        "decision": {
+          "enum": ["adopt", "hold", "narrow", "reject", "supersede", "retire"]
+        },
+        "review_date": { "type": "string", "minLength": 1 },
+        "expiry_or_invalidation": { "$ref": "#/$defs/non_empty_strings" },
+        "rollback": { "type": "string", "minLength": 1 },
+        "residual_risks": { "$ref": "#/$defs/non_empty_strings" },
+        "authority_handoff": { "type": "string", "minLength": 1 },
+        "repair_budget": { "$ref": "#/$defs/repair_budget" },
+        "supersedes": { "type": "string", "minLength": 1 },
+        "superseded_by": { "type": "string", "minLength": 1 }
+      }
+    },
+    "learning_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline", "visible", "held_out", "negative_controls", "overlap", "already_specified",
+        "no_change", "semantic_mutation", "specification_evolution", "measures"
+      ],
+      "properties": {
+        "baseline": { "$ref": "#/$defs/non_empty_strings" },
+        "visible": { "$ref": "#/$defs/non_empty_strings" },
+        "held_out": { "$ref": "#/$defs/non_empty_strings" },
+        "negative_controls": { "$ref": "#/$defs/non_empty_strings" },
+        "overlap": { "$ref": "#/$defs/non_empty_strings" },
+        "already_specified": { "$ref": "#/$defs/non_empty_strings" },
+        "no_change": { "$ref": "#/$defs/non_empty_strings" },
+        "semantic_mutation": { "$ref": "#/$defs/non_empty_strings" },
+        "specification_evolution": { "$ref": "#/$defs/non_empty_strings" },
+        "measures": { "$ref": "#/$defs/non_empty_strings" }
+      }
+    },
+    "repair_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_family", "operating_envelope", "max_repair_attempts", "calibration_basis", "universal_count"],
+      "properties": {
+        "task_family": { "type": "string", "minLength": 1 },
+        "operating_envelope": { "type": "string", "minLength": 1 },
+        "max_repair_attempts": { "type": "integer", "minimum": 1 },
+        "calibration_basis": { "type": "string", "minLength": 1 },
+        "universal_count": { "const": false }
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
     }
   }
 }

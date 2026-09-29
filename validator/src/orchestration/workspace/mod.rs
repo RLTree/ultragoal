@@ -17,7 +17,7 @@ impl RootWorkspace {
     pub fn open(root: impl AsRef<Path>) -> Result<Self, OrchestrationError> {
         #[cfg(unix)]
         {
-            return unix::Workspace::open(root.as_ref()).map(|inner| Self { inner });
+            unix::Workspace::open(root.as_ref()).map(|inner| Self { inner })
         }
         #[cfg(not(unix))]
         {
@@ -32,7 +32,7 @@ impl RootWorkspace {
     ) -> Result<RootIntegrationObservation, OrchestrationError> {
         #[cfg(unix)]
         {
-            return self.inner.observe(intent);
+            self.inner.observe(intent)
         }
         #[cfg(not(unix))]
         {

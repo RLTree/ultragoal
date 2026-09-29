@@ -1,30 +1,79 @@
 {
   "schema_version": "1.0.0",
   "node_id": "N02-INVENTORY",
-  "node_state": "incomplete_live_authority_reconciliation",
+  "node_state": "source_accepted",
   "tool_id": "HCT-INVENTORY",
-  "root_decision": "accepted_tool_implementation",
-  "binding_rule": "This acceptance applies only when this record, the listed implementation, the historical worker result, and the adopted successor-v2 contract are tracked by the same current HEAD with no tracked or staged diff.",
-  "worker_result": "docs/ultragoal-successor-live/worker-results/LEASE-N02-INVENTORY-001.json",
-  "worker_result_disposition": "historical_input_reworked_and_reconciled_by_root",
-  "independent_reviewers": [
+  "root_decision": "accepted_dependency_frontier_inventory_source",
+  "binding_rule": "This acceptance binds the exact source candidate and reviewed correction below. Later root state records may consume it but cannot promote package, install, runtime, journey, release, or completion claims.",
+  "source_candidate": {
+    "head_commit": "9a2141e3f5ccf5d7488947a5c0156794b4376066",
+    "head_tree": "9cc386a9b5dafb55259fe4c60439e326d120802a",
+    "base_commit": "99740d2e3c006b674e2df7906ed64d667eab20f6",
+    "commits": [
+      "deb886b36",
+      "e648c0bd6",
+      "9a2141e3f"
+    ]
+  },
+  "implemented_behavior": [
+    "The inventory requirement set follows the exact dependency-closed scheduler frontier instead of prematurely requiring future APIs and commands.",
+    "The root lane registry is canonical scheduler context and the template is its non-authoritative projection; neither is legacy authority.",
+    "Fourteen exact preserved agent descriptors are context-only only while compiled target, reader, registry, digest, and preservation witnesses remain current.",
+    "Fifteen sole-current legacy implementations remain active with exact pending-migration routes; registry text cannot demote them or raise a replacement claim.",
+    "REPORT.md is exact digest-bound predecessor proposal context.",
+    "Generated predecessor outputs retain exact context digests and cannot self-attest authority.",
+    "Future command and plugin adoption gaps are open obligations rather than false current-frontier blockers."
+  ],
+  "review": {
+    "model_route": "gpt-5.6-terra-high-standard",
+    "initial_result": "REWORK",
+    "material_finding": "A legacy-scope fixture overwrote canonical scheduler authority and failed before legacy discovery.",
+    "correction": "The fixture preserves canonical root and template scheduler files and asserts neither is classified as legacy.",
+    "corrected_exact_result": "ACCEPT"
+  },
+  "verification": [
     {
-      "role": "claim_falsifier",
-      "result": "no_remaining_P0_P1_P2_in_current_macos_HCT_INVENTORY_scope"
+      "surface": "production_build",
+      "command": "cargo build --manifest-path validator/Cargo.toml --example hct_inventory",
+      "result": "pass_warning_free"
     },
     {
-      "role": "security_reviewer",
-      "result": "no_remaining_P0_P1_P2_in_current_macos_HCT_INVENTORY_scope"
+      "surface": "live_inventory_determinism",
+      "command": "target/debug/examples/hct_inventory | shasum -a 256",
+      "result": "two_runs_byte_identical_sha256_01a7a6a7f164bcfc0534451a8f5e96ddcc8037636ea4812d1160ea6f816c01b5"
+    },
+    {
+      "surface": "zero_write_git_scope",
+      "command": "git status --porcelain=v1 | shasum -a 256 before and after both inventory runs",
+      "result": "unchanged_sha256_326b6c0923ff44f99242cb71f97ac1f01fac67b7958b1309ba07b27c9d14bc6d"
+    },
+    {
+      "surface": "focused_behavior",
+      "result": "pass",
+      "controls": [
+        "exact and forged agent routes",
+        "exact and stale activation sources",
+        "exact and tampered proposal context",
+        "sole-current pending migration catalog",
+        "untrusted routing error redaction",
+        "canonical scheduler exclusion from legacy scope"
+      ]
+    },
+    {
+      "surface": "source_laws",
+      "result": "pass",
+      "details": "changed and new authored Rust files are at most 250 lines; rustfmt, JSON parse, and git diff checks pass; no suppression was added"
     }
   ],
-  "reviewed_pre_acceptance_catalog": {
-    "canonical_json_sha256": "415a2c2f28f7310897e575811fd26b7bbd35e14e8557f71696f8b8a1fe9f6dfb",
-    "catalog_id": "sha256:018364fd1940113f4a4b69ba751094ecf9056e16b9b7dc403d2b06121b0fe123",
-    "context_id": "sha256:e55bbf024d0396caca7f22e27e9b88c6c1cd49dcba09486eb3112f0efed34e93",
-    "entry_count": 4092,
-    "finding_count": 246,
-    "run_exit": 1,
-    "interpretation": "Deterministic tool execution succeeded and returned the error-finding exit because live authority reconciliation remains incomplete."
+  "live_source_closure": {
+    "blocker_count": 0,
+    "open_obligation_count": 40,
+    "open_obligations": {
+      "sole_current_authority_pending_migration": 15,
+      "compatibility_route_retained": 14,
+      "candidate_component_not_active": 10,
+      "projection_requires_canonical_reconciliation": 1
+    }
   },
   "accepted_requirements": [],
   "partial_requirements": [
@@ -39,114 +88,10 @@
     "REQ-MAINT-005",
     "REQ-MAINT-006"
   ],
-  "partial_requirement_state": "HCT-INVENTORY enforcement foundation exists; required live topology, canonical projection adoption, migration, retirement, package closure, and representative product proof remain unreconciled.",
-  "root_reconciliation": [
-    "Contract rows are definitions and cannot satisfy implementation presence.",
-    "Required public APIs use compiled in-crate and external-crate witnesses rather than lexical source matching.",
-    "The adopted handoff and contract manifests are root-digest-bound, coverage-checked, and tamper-evident.",
-    "Generated-output authority is root-owned, input-complete, and regenerate-and-diff checked; projections cannot self-attest authority.",
-    "Schema references resolve confined relative targets and JSON Pointers with causal generic findings.",
-    "Component identity requires valid declared metadata; directory or stem fallbacks cannot promote active authority.",
-    "Repository and collection reads are descriptor-bound, mutation-detecting, budgeted, and session-revalidated, including absent collections and rejected bounded reads.",
-    "Legacy and parallel authority remain findings until adopted root migration dispositions are actually enforced."
-  ],
-  "verification": [
-    {
-      "command": "cargo fmt --all --check",
-      "result": "pass"
-    },
-    {
-      "command": "git diff --check",
-      "result": "pass"
-    },
-    {
-      "command": "cargo check --locked --offline --all-targets",
-      "result": "pass_warning_free"
-    },
-    {
-      "command": "cargo test --locked --offline --lib context:: -- --test-threads=1",
-      "result": "pass_21_of_21"
-    },
-    {
-      "command": "cargo test --locked --offline --test inventory_contract -- --test-threads=1",
-      "result": "pass_18_of_18"
-    },
-    {
-      "command": "cargo test --locked --offline --lib inventory::race_tests -- --test-threads=1",
-      "result": "pass_3_of_3"
-    },
-    {
-      "command": "cargo test --locked --offline --test public_api_witness -- --test-threads=1",
-      "result": "pass_1_of_1"
-    },
-    {
-      "command": "cargo build --locked --offline --example hct_inventory",
-      "result": "pass"
-    },
-    {
-      "command": "target/debug/examples/hct_inventory --summary <live-repository-root>",
-      "result": "two_runs_exit_1_byte_identical_and_git_status_stable"
-    }
-  ],
-  "negative_controls": [
-    "contract and routing tamper",
-    "omitted duplicate and renamed components",
-    "lexical API spoof and external visibility failure",
-    "projection and generated-output tamper",
-    "generator deletion and provenance repoint",
-    "schema pointer failure",
-    "symlink hardlink directory-swap file-swap and mutate-restore",
-    "hidden entry and hidden collection restore",
-    "transient over-limit file restore",
-    "static over-limit legacy scan",
-    "post-exhaustion read and descriptor retention"
-  ],
-  "resource_bounds": {
-    "repository_walk_file_limit": 100000,
-    "repository_walk_depth_limit": 64,
-    "read_session_entry_limit": 250000,
-    "read_session_byte_limit": 536870912,
-    "legacy_text_file_limit": 2097152,
-    "budget_behavior": "Capacity is reserved before each operating-system read; exhausted sessions fail before opening another path."
-  },
-  "live_findings": {
-    "parallel_authority": 151,
-    "missing_required_component": 71,
-    "unregistered_generated_surface": 9,
-    "generated_surface_missing_provenance": 9,
-    "invalid_component_metadata": 3,
-    "invalid_json_reference_source": 1,
-    "projection_drift": 1,
-    "projection_requires_canonical_reconciliation": 1
-  },
-  "known_red_checks": [
-    {
-      "command": "cargo test --locked --offline --lib inventory:: -- --test-threads=1",
-      "result": "fail_82_passed_1_failed",
-      "impact": "The legacy package-inventory closure remains red on orphaned or unlisted live files and namespace/package authority drift; it cannot support package, readiness, release, or completion claims."
-    },
-    {
-      "command": "cargo clippy --locked --offline --all-targets -- -D warnings",
-      "result": "fail_existing_repository_wide_clippy_debt",
-      "impact": "No warning-free repository-wide Clippy claim is made."
-    }
-  ],
-  "environment_ceiling": "exercised_macos_candidate_only",
-  "linux_status": "same_source_path_unexercised",
-  "other_host_status": "unsupported_or_unverified_under_OD_003",
-  "downstream_claims_raised": [],
   "explicitly_withheld": [
-    "N02-INVENTORY completion",
-    "REQ-PRODUCT-004 completion",
-    "REQ-PLUGIN-004 completion",
-    "REQ-PLUGIN-006 completion",
-    "REQ-CLI-002 completion",
-    "REQ-PROOF-001 completion",
-    "REQ-SUPPLY-001 completion",
-    "REQ-MAINT-001 completion",
-    "REQ-MAINT-003 completion",
-    "REQ-MAINT-005 completion",
-    "REQ-MAINT-006 completion",
+    "migration and compatibility closure",
+    "future command activation",
+    "plugin projection adoption",
     "CL-SOURCE",
     "CL-PACKAGE",
     "CL-INSTALL",
@@ -156,6 +101,5 @@
     "CL-RELEASE",
     "CL-COMPLETION"
   ],
-  "next_reconciliation": "Advance dependency-legal HCT-CAPTURE and HCT-STATE implementation while root preserves public catalog and migration authority; then retire or route every detected parallel authority before closing N02.",
-  "root_acceptance_limit": "HCT-INVENTORY tool implementation only; no N02 node, product, package, readiness, release, or completion claim."
+  "root_acceptance_limit": "N02 dependency-frontier source closure only; downstream claims remain withheld."
 }

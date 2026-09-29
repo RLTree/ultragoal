@@ -1,5 +1,6 @@
 use std::ffi::CStr;
 use std::fs::File;
+use std::mem::MaybeUninit;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Component, Path, PathBuf};
 
@@ -27,18 +28,28 @@ pub(super) fn validate_directory_link(
     name: &CStr,
     expected: FileIdentity,
 ) -> Result<(), String> {
-    let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
-    let result =
-        unsafe { libc::fstatat(parent, name.as_ptr(), &mut stat, libc::AT_SYMLINK_NOFOLLOW) };
+    let mut stat = MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: `parent` is a caller-held directory descriptor, `name` is a
+    // NUL-terminated C string, and `stat` is valid writable storage.
+    let result = unsafe {
+        libc::fstatat(
+            parent,
+            name.as_ptr(),
+            stat.as_mut_ptr(),
+            libc::AT_SYMLINK_NOFOLLOW,
+        )
+    };
     if result != 0 {
         return Err("observe-store-path-denied: ancestor substitution detected".to_owned());
     }
+    // SAFETY: successful `fstatat` initialized the complete `libc::stat`.
+    let stat = unsafe { stat.assume_init() };
     if (stat.st_mode & libc::S_IFMT) == libc::S_IFLNK {
         return Err("observe-store-path-denied: ancestor symlink rejected".to_owned());
     }
     if (stat.st_mode & libc::S_IFMT) != libc::S_IFDIR
         || (FileIdentity {
-            device: stat.st_dev as u64,
+            device: stat_device(stat.st_dev)?,
             inode: stat.st_ino,
         }) != expected
     {
@@ -69,9 +80,14 @@ pub(super) fn validate_stat(stat: &libc::stat) -> Result<(), String> {
     }
 }
 
-pub(super) fn identity_stat(stat: &libc::stat) -> FileIdentity {
-    FileIdentity {
-        device: stat.st_dev as u64,
+pub(super) fn identity_stat(stat: &libc::stat) -> Result<FileIdentity, String> {
+    Ok(FileIdentity {
+        device: stat_device(stat.st_dev)?,
         inode: stat.st_ino,
-    }
+    })
+}
+
+fn stat_device(value: libc::dev_t) -> Result<u64, String> {
+    u64::try_from(value)
+        .map_err(|_| "observe-store-path-denied: filesystem identity is invalid".to_owned())
 }

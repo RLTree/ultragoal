@@ -27,7 +27,7 @@
     },
     {
       "standard_id": "workspace-artifact-cache-garbage-collection",
-      "audit_status": "pass",
+      "audit_status": "pending",
       "evidence_path": "validator/src/audit/rust/developer.rs",
       "evidence_digest": "sha256:6d8078c3a4735c6fb9fcc855d24bfb310def1575fb85cf78cd51e399ae22925b",
       "audited_at": "2026-06-29T00:00:00Z",

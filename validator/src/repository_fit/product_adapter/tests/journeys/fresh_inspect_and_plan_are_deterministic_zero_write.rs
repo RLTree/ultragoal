@@ -14,7 +14,7 @@ pub(crate) fn fresh_inspect_and_plan_are_deterministic_zero_write() {
     assert_eq!(inspect.classification(), "fresh");
     assert!(inspect.compatible());
     assert_eq!(first, second);
-    assert_eq!(first.mutation_count(), CANONICAL_TEMPLATES.len());
+    assert_eq!(first.mutation_count(), CANONICAL_TEMPLATES.len() + 1);
     assert_eq!(first.conflict_count(), 0);
     let machine = first.to_machine_bytes().unwrap();
     assert!(!String::from_utf8_lossy(&machine).contains(&*fixture.root.to_string_lossy()));
@@ -32,7 +32,7 @@ pub(crate) fn partial_retrofit_is_compatible_and_preserves_unrelated_dirty_state
     let plan = assert_zero_write(&fixture, || plan_target(&context).unwrap());
     assert_eq!(inspect.classification(), "partial");
     assert!(inspect.compatible());
-    assert_eq!(plan.mutation_count(), CANONICAL_TEMPLATES.len() - 1);
+    assert_eq!(plan.mutation_count(), CANONICAL_TEMPLATES.len());
     assert_eq!(plan.conflict_count(), 0);
     assert_eq!(
         fs::read(fixture.root.join("user-notes/private.txt")).unwrap(),
@@ -74,7 +74,7 @@ pub(crate) fn dirty_repository_identity_is_projected_without_blocking_a_safe_pla
     let record = assert_zero_write(&fixture, || plan_target(&context).unwrap());
     assert!(record.target.candidate.dirty);
     assert_eq!(record.conflict_count(), 0);
-    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len());
+    assert_eq!(record.mutation_count(), CANONICAL_TEMPLATES.len() + 1);
 }
 
 #[test]
@@ -101,7 +101,7 @@ pub(crate) fn accepted_plan_preparation_is_zero_write_and_emits_only_one_opaque_
     assert_eq!(prepared.projection().claim_effect, "none");
     assert_eq!(
         prepared.projection().mutation_count,
-        CANONICAL_TEMPLATES.len()
+        CANONICAL_TEMPLATES.len() + 1
     );
 }
 

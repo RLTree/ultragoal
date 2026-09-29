@@ -1,0 +1,154 @@
+{
+  "schema_version": "RootOrchestrationDecision-v1",
+  "decision_id": "AGENTIC-ENGINEERING-V3-BOUNDED-INTEGRATION-001",
+  "candidate": {
+    "head": "92d34cbf45e6e063ac935635a35170ba5dd4afbe",
+    "tree": "2d0b5fc59bc16f4b62e36566e6487b56d9ef56fe"
+  },
+  "decision": "bounded_projection_integration",
+  "sole_executable_and_claim_authority": "harness-ultragoal",
+  "sole_implicit_front_door": "harness-ultragoal",
+  "agentic_engineering_role": "explicit_advisory_candidate_artifacts_only",
+  "contract_lineage": {
+    "goal_contract": "GOAL_CONTRACT.md",
+    "latest_amendment": "AMEND-004",
+    "new_amendment_required": false,
+    "reason": "The change implements AMEND-004 evidence-led sequencing and the existing CL-EVAL-IMPROVEMENT boundary without changing required claims or ceilings."
+  },
+  "artifact_decisions": [
+    {
+      "artifact": "Agentic Architecture Brief",
+      "decision": "map_as_projection",
+      "owner": "ARCHITECTURE.md and root decisions",
+      "boundary": "proposal_only_no_claim"
+    },
+    {
+      "artifact": "Codex execution contract",
+      "decision": "reuse",
+      "owner": "Goal Contract, active ExecPlan, WorkPackage, LeaseSpec",
+      "boundary": "no_peer_plan_or_task_authority"
+    },
+    {
+      "artifact": "NoChangeDecision-v1",
+      "decision": "extend",
+      "owner": "state next projection plus repository-fit and routine evidence",
+      "boundary": "candidate_bound_no_effect_no_claim"
+    },
+    {
+      "artifact": "VerificationModeContract-v1",
+      "decision": "extend",
+      "owner": "root-issued dependency action catalog and prove authority",
+      "boundary": "risk_oracle_truth_surface_selected_no_universal_tdd"
+    },
+    {
+      "artifact": "TaskEvidencePacket-v1",
+      "decision": "map_as_projection",
+      "owner": "WorkPackage, OwnedScope, LeaseSpec",
+      "boundary": "WorkerResult-v1_remains_the_single_lane_result"
+    },
+    {
+      "artifact": "ReviewVerdict-v1",
+      "decision": "map_as_projection",
+      "owner": "ReviewRecord, materiality gate, root AcceptanceProposal",
+      "boundary": "reviewer_cannot_accept_integrate_or_promote"
+    },
+    {
+      "artifact": "RepairLoopContract-v1",
+      "decision": "extend",
+      "owner": "orchestration retry journal and improvement-loop authority",
+      "boundary": "semantic_circuit_decision_only_no_parallel_counter"
+    },
+    {
+      "artifact": "LearningAdoptionRecord-v1",
+      "decision": "extend_after_p0",
+      "owner": "docs/improvement-loop-registry.json",
+      "boundary": "one_learning_per_record_no_peer_knowledge_store"
+    },
+    {
+      "artifact": "SkillEvalCase-v1",
+      "decision": "extend_after_p0",
+      "owner": "evaluation task and specification authority",
+      "boundary": "behavior_evidence_not_claim_promotion"
+    },
+    {
+      "artifact": "Product Fitness Field Pulse",
+      "decision": "map_as_read_only_projection_after_p0",
+      "owner": "Product Fitness v2",
+      "boundary": "no_new_receipt_no_fitness_promotion"
+    },
+    {
+      "artifact": "Product Journey Review",
+      "decision": "reuse",
+      "owner": "product-journey-review and Product Fitness authorities",
+      "boundary": "one_journey_cannot_prove_broad_or_human_fit"
+    },
+    {
+      "artifact": "Lifecycle Assurance Plan",
+      "decision": "reject",
+      "owner": "Goal Contract, amendments, ExecPlan, migration and claim registries",
+      "boundary": "no_parallel_lifecycle"
+    },
+    {
+      "artifact": "Knowledge Projection Card",
+      "decision": "map_as_generated_projection_after_p0",
+      "owner": "improvement-loop registry",
+      "boundary": "digest_linked_read_only_projection"
+    },
+    {
+      "artifact": "Agentic Rust modules",
+      "decision": "reject_direct_adoption",
+      "owner": "current UltraGoal Rust domains",
+      "boundary": "adapt_concepts_only_after_current_type_review"
+    },
+    {
+      "artifact": "Compound Engineering and Superpowers",
+      "decision": "reject_runtime_dependency",
+      "owner": "none",
+      "boundary": "mechanism_and_failure_evidence_only"
+    }
+  ],
+  "p0_integration_units": [
+    {
+      "unit": "combined_skill_discovery_and_front_door",
+      "paths": "plugin product skill-catalog projection and focused tests",
+      "root_wiring": "public capabilities, package and installed profile lifecycle"
+    },
+    {
+      "unit": "evidence_decision_controls",
+      "paths": "state next, root-issued verification selection, advisory mappings, focused tests",
+      "root_wiring": "schemas, migrations, public projections and claim ceilings"
+    }
+  ],
+  "measured_current_failure": {
+    "installed_enabled_skills": 38,
+    "estimated_discovery_characters": 7670,
+    "adopted_limit": 8000,
+    "headroom": 330,
+    "implicit_gateways": [
+      "harness-ultragoal",
+      "agentic-engineering"
+    ],
+    "required_profile": "agentic-engineering:ultragoal",
+    "expected_profile_enabled_skills": 16,
+    "expected_profile_estimate": 3956,
+    "expected_profile_headroom": 4044
+  },
+  "claim_ceiling": {
+    "supported": [
+      "root_authority_overlap_decision",
+      "source_local_combined_catalog_measurement"
+    ],
+    "withheld": [
+      "installed_profile_activation",
+      "fresh_task_single_front_door_discovery",
+      "runtime_routing",
+      "empirical_product_improvement",
+      "human_use",
+      "readiness",
+      "release",
+      "completion"
+    ]
+  },
+  "rollback": "Remove only the additive projections and restore the prior root-issued catalog shape; retain UltraGoal authorities and AMEND-004.",
+  "no_claim_statement": "This decision adopts integration boundaries only. Agentic advice, schemas, tests, package presence, and reviewer agreement cannot promote an UltraGoal claim."
+}

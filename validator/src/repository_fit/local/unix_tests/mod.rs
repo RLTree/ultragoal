@@ -9,5 +9,4 @@ mod atomic_swap_before_binding_fails_but_post_binding_mutation_is_outside_the_re
 #[path = "baseline_cases.rs"]
 mod baseline_cases;
 
-pub(crate) use atomic_swap_before_binding_fails_but_post_binding_mutation_is_outside_the_read::*;
 pub(crate) use baseline_cases::*;

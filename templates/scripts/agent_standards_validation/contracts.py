@@ -7,7 +7,9 @@ from dataclasses import dataclass
 from enum import Enum
 import io
 import json
+import os
 from pathlib import Path
+import stat
 
 
 class EnforcementStatus(str, Enum):
@@ -65,12 +67,69 @@ AUDIT_FIELDS = (
     "audited_at",
     "claim_ceiling_impact",
 )
+MAX_REGULAR_BYTES = 4 * 1024 * 1024
+
+
+def file_identity(metadata: os.stat_result) -> tuple[int, int, int, int, int, int]:
+    return (
+        metadata.st_dev, metadata.st_ino, metadata.st_nlink,
+        metadata.st_size, metadata.st_mtime_ns, metadata.st_ctime_ns,
+    )
+
+
+def open_absolute_directory(path: Path) -> int:
+    if not path.is_absolute():
+        raise ValueError(f"directory path is not absolute: {path}")
+    if not hasattr(os, "O_DIRECTORY") or not hasattr(os, "O_NOFOLLOW"):
+        raise ValueError("descriptor-relative no-follow directory reads are unsupported")
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    current = os.open(os.path.sep, flags)
+    try:
+        for part in path.parts[1:]:
+            opened = os.open(part, flags, dir_fd=current)
+            os.close(current)
+            current = opened
+            if not stat.S_ISDIR(os.fstat(current).st_mode):
+                raise ValueError(f"required directory missing: {path}")
+        return current
+    except BaseException:
+        os.close(current)
+        raise
 
 
 def regular_bytes(path: Path) -> bytes:
-    if not path.is_file() or path.is_symlink():
-        raise ValueError(f"required regular file missing: {path}")
-    return path.read_bytes()
+    absolute = path.absolute()
+    parent = open_absolute_directory(absolute.parent)
+    descriptor = -1
+    try:
+        if not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_NONBLOCK"):
+            raise ValueError("nonblocking no-follow regular-file reads are unsupported")
+        flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
+        descriptor = os.open(absolute.name, flags, dir_fd=parent)
+        before = os.fstat(descriptor)
+        if (
+            not stat.S_ISREG(before.st_mode)
+            or before.st_nlink != 1
+            or before.st_size > MAX_REGULAR_BYTES
+        ):
+            raise ValueError(f"required bounded single-link regular file missing: {path}")
+        chunks: list[bytes] = []
+        remaining = MAX_REGULAR_BYTES + 1
+        while remaining:
+            chunk = os.read(descriptor, min(64 * 1024, remaining))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            remaining -= len(chunk)
+        content = b"".join(chunks)
+        after = os.fstat(descriptor)
+        if len(content) != before.st_size or file_identity(after) != file_identity(before):
+            raise ValueError(f"required regular file changed while reading: {path}")
+        return content
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+        os.close(parent)
 
 
 def load_enforcement_rows(path: Path) -> list[EnforcementRow]:

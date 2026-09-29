@@ -15,6 +15,7 @@
     "time_to_value_path",
     "adoption_loop",
     "continuance_signal",
+    "behavior_evaluation",
     "claim_ceiling"
   ],
   "properties": {
@@ -77,9 +78,76 @@
       "type": "string",
       "minLength": 1
     },
+    "behavior_evaluation": {
+      "$ref": "#/$defs/behavior_evaluation"
+    },
     "claim_ceiling": {
       "type": "string",
       "minLength": 1
+    }
+  },
+  "$defs": {
+    "non_empty_strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "behavior_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_families", "dimensions", "splits", "repair_budget", "claim_ceiling"],
+      "properties": {
+        "case_families": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["baseline", "negative", "overlap", "already_specified", "no_change", "held_out", "semantic_mutation", "specification_evolution"]
+          }
+        },
+        "dimensions": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["activation", "instruction_following", "authority_composition", "verified_outcome", "trajectory_recovery", "no_change_judgment", "effect_security", "evidence_honesty", "supervisory_burden", "cost_latency"]
+          }
+        },
+        "splits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseline", "negative", "overlap", "already_specified", "no_change", "held_out", "semantic_mutation", "specification_evolution"],
+          "properties": {
+            "baseline": { "$ref": "#/$defs/non_empty_strings" },
+            "negative": { "$ref": "#/$defs/non_empty_strings" },
+            "overlap": { "$ref": "#/$defs/non_empty_strings" },
+            "already_specified": { "$ref": "#/$defs/non_empty_strings" },
+            "no_change": { "$ref": "#/$defs/non_empty_strings" },
+            "held_out": { "$ref": "#/$defs/non_empty_strings" },
+            "semantic_mutation": { "$ref": "#/$defs/non_empty_strings" },
+            "specification_evolution": { "$ref": "#/$defs/non_empty_strings" }
+          }
+        },
+        "repair_budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["task_family", "operating_envelope", "max_repair_attempts", "calibration_basis", "universal_count"],
+          "properties": {
+            "task_family": { "type": "string", "minLength": 1 },
+            "operating_envelope": { "type": "string", "minLength": 1 },
+            "max_repair_attempts": { "type": "integer", "minimum": 1 },
+            "calibration_basis": { "type": "string", "minLength": 1 },
+            "universal_count": { "const": false }
+          }
+        },
+        "claim_ceiling": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }

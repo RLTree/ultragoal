@@ -3,7 +3,9 @@ use super::model::{
     SupportedAgentAuthorityObservation,
 };
 use super::state::{ReportState, lock_report};
-use crate::plugin_product::agent_discovery::filesystem::parse_descriptor;
+use crate::plugin_product::agent_discovery::filesystem::{
+    parse_descriptor, parse_global_descriptor,
+};
 use crate::plugin_product::agent_discovery::model::{
     AgentAuthorityLayer, PLUGIN_NAME, RawAgentRow,
 };
@@ -43,9 +45,15 @@ pub(in super::super) fn record_layer(
         ));
     }
     for row in agents {
-        let sandbox_mode = parse_descriptor(row.descriptor_toml.as_bytes())
-            .ok()
-            .map(|descriptor| descriptor.sandbox_mode);
+        let sandbox_mode = if layer == AgentAuthorityLayer::Global {
+            parse_global_descriptor(row.descriptor_toml.as_bytes())
+                .ok()
+                .and_then(|descriptor| descriptor.sandbox_mode)
+        } else {
+            parse_descriptor(row.descriptor_toml.as_bytes())
+                .ok()
+                .map(|descriptor| descriptor.sandbox_mode)
+        };
         state.insert_observation(SupportedAgentAuthorityObservation {
             layer,
             authority_root_sha256: files.authority_root_sha256().to_owned(),
@@ -62,13 +70,8 @@ pub(in super::super) fn record_layer(
                 &row.name,
             ));
         }
-        if harness_agent_authority_namespace(&row.name) {
-            state.insert_finding(finding(
-                layer,
-                SupportedAgentAuthorityFindingKind::LegacyAuthority,
-                &row.name,
-            ));
-        } else if layer == AgentAuthorityLayer::Global && canonical_normalized.contains(&normalized)
+        if layer == AgentAuthorityLayer::Global
+            && (canonical_normalized.contains(&normalized) || closed_wrapper_alias(&normalized))
         {
             state.insert_finding(finding(
                 layer,
@@ -82,8 +85,9 @@ pub(in super::super) fn record_layer(
                 &row.name,
             ));
         }
-        match sandbox_mode.as_deref() {
-            None => {
+        match (layer, sandbox_mode.as_deref()) {
+            (AgentAuthorityLayer::Global, _) => {}
+            (_, None) => {
                 state.insert_finding(finding(
                     layer,
                     SupportedAgentAuthorityFindingKind::SandboxPolicyMissing,
@@ -95,8 +99,8 @@ pub(in super::super) fn record_layer(
                     &row.name,
                 ));
             }
-            Some("read-only") => {}
-            Some(_) => state.insert_finding(finding(
+            (_, Some("read-only")) => {}
+            (_, Some(_)) => state.insert_finding(finding(
                 layer,
                 SupportedAgentAuthorityFindingKind::WriteCapableSandbox,
                 &row.name,
@@ -134,16 +138,6 @@ fn normalized_name(value: &str) -> String {
         .collect()
 }
 
-fn harness_agent_authority_namespace(value: &str) -> bool {
-    value
-        .strip_prefix("harness")
-        .and_then(|suffix| suffix.strip_prefix(['-', '_']))
-        .is_some_and(|suffix| {
-            !suffix.is_empty()
-                && suffix.bytes().all(|byte| {
-                    byte.is_ascii_lowercase()
-                        || byte.is_ascii_digit()
-                        || matches!(byte, b'-' | b'_')
-                })
-        })
+fn closed_wrapper_alias(normalized: &str) -> bool {
+    matches!(normalized, "harness" | "ultragoal" | "harnessultragoal")
 }

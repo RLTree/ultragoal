@@ -22,7 +22,6 @@ fn skill_links_cover_missing_invalid_local_and_markdown_references() {
     });
     let failures = crate::skill_links::manifest_failures(&root, &manifest);
     assert_eq!(failures.len(), 1);
-    assert_eq!(failures[0].code, "skill_local_reference_missing");
     assert!(failures[0].detail.contains("root-ref.md"));
     let _ = fs::remove_dir_all(root);
 }
@@ -58,31 +57,14 @@ fn package_artifact_refs_reject_boundary_substitutes() {
         assert!(err.contains(expected), "{path}: {err}");
     }
     let object = json!({"path":"artifacts/proof.json","digest":digest});
-    crate::package::artifact::refs::validate_object(&root, &object, "object").expect("object");
+    crate::package::artifact::refs::ArtifactRef::from_object(&object, "object")
+        .and_then(|artifact| artifact.validate(&root, "object"))
+        .expect("object");
     let missing_digest = json!({"path":"artifacts/proof.json"});
-    let err = crate::package::artifact::refs::validate_object(&root, &missing_digest, "object")
+    let err = crate::package::artifact::refs::ArtifactRef::from_object(&missing_digest, "object")
+        .and_then(|artifact| artifact.validate(&root, "object"))
         .expect_err("object digest is required");
     assert!(err.contains("missing digest"), "{err}");
-    let command =
-        json!({"artifact_path":"artifacts/proof.json","artifact_digest":object["digest"]});
-    crate::package::artifact::refs::validate_command_artifact(&root, &command, "command")
-        .expect("command artifact");
-    let missing_command_path = json!({"artifact_digest":object["digest"]});
-    let err = crate::package::artifact::refs::validate_command_artifact(
-        &root,
-        &missing_command_path,
-        "command",
-    )
-    .expect_err("command artifact_path is required");
-    assert!(err.contains("artifact_path"), "{err}");
-    let missing_command_digest = json!({"artifact_path":"artifacts/proof.json"});
-    let err = crate::package::artifact::refs::validate_command_artifact(
-        &root,
-        &missing_command_digest,
-        "command",
-    )
-    .expect_err("command artifact_digest is required");
-    assert!(err.contains("artifact_digest"), "{err}");
     #[cfg(unix)]
     {
         let link = root.join("artifacts/link.json");

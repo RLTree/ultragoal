@@ -56,6 +56,11 @@ impl PinnedLeaseRoot {
         }
         Ok(())
     }
+
+    fn snapshot_provisioned_entries(&mut self) -> io::Result<()> {
+        self.initial_entries.clear();
+        snapshot_initial_tree(self.root.as_raw_fd(), Path::new(""), &mut self.initial_entries)
+    }
 }
 
 #[cfg(unix)]

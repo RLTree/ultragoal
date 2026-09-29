@@ -124,7 +124,11 @@ pub struct TestRoot(PathBuf);
 impl TestRoot {
     pub fn new(label: &str) -> Self {
         let serial = NEXT_ROOT.fetch_add(1, Ordering::Relaxed);
-        let path = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!(
+        let base = std::env::var_os("CARGO_TARGET_TMPDIR")
+            .or_else(|| std::env::var_os("TMPDIR"))
+            .map(PathBuf::from)
+            .unwrap_or_else(std::env::temp_dir);
+        let path = base.join(format!(
             "orchestration-product-{label}-{}-{serial}",
             std::process::id()
         ));

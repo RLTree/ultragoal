@@ -3,8 +3,13 @@ use super::*;
 pub(crate) const SOURCE_ID: &str = "successor-runtime";
 pub(crate) const MISSING_EVENT_ID: &str = "diagnose-missing-event";
 
-pub(crate) fn evaluate(root: &Path, context: &LiveContext, finding: &Finding) -> Value {
-    let store = match LocalStore::open(root, context, SOURCE_ID) {
+pub(crate) fn evaluate(
+    home: Option<&Path>,
+    root: &Path,
+    context: &LiveContext,
+    finding: &Finding,
+) -> Value {
+    let store = match LocalStore::open(home, root, context, SOURCE_ID) {
         Ok(store) => store,
         Err(failure) => return unavailable(failure, EventSelection::empty()),
     };
@@ -87,16 +92,16 @@ pub(crate) fn corruption_projection(
         Ok(Some(explanation)) => serde_json::to_value(explanation).ok(),
         _ => None,
     };
-    if let Some(explanation) = explanation {
-        if store.revalidate().is_ok() {
-            return projection(
-                "available",
-                explanation,
-                EventSelection::empty(),
-                QueryWindow::unavailable(),
-                Some(failure),
-            );
-        }
+    if let Some(explanation) = explanation
+        && store.revalidate().is_ok()
+    {
+        return projection(
+            "available",
+            explanation,
+            EventSelection::empty(),
+            QueryWindow::unavailable(),
+            Some(failure),
+        );
     }
     unavailable(failure, EventSelection::empty())
 }

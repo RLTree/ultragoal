@@ -10,20 +10,16 @@ pub(crate) fn apply_with_root_permit<E: RepositoryFitPermitEffects>(
     mut lease: Option<RepositoryFitMutationLease<E>>,
     now_tick: u64,
 ) -> Result<RepositoryFitApplyOutcome, RepositoryFitApplyFailure<E>> {
-    let preflight = preflight(
-        context,
-        &request,
-        permit.as_mut(),
-        lease.as_mut().map(|lease| lease),
-        now_tick,
-    );
+    let preflight = preflight(context, &request, permit.as_mut(), lease.as_mut(), now_tick);
     if let Err(error) = preflight {
-        return Err(RepositoryFitApplyFailure::PreEffect(PreEffectFailure {
-            error,
-            request,
-            permit,
-            lease,
-        }));
+        return Err(RepositoryFitApplyFailure::PreEffect(Box::new(
+            PreEffectFailure {
+                error,
+                request,
+                permit,
+                lease,
+            },
+        )));
     }
     let permit = permit.expect("preflight requires a permit");
     let mut lease = lease.expect("preflight requires a lease");
@@ -35,7 +31,7 @@ pub(crate) fn apply_with_root_permit<E: RepositoryFitPermitEffects>(
         }));
     }
 
-    let mutation_count = request.plan.mutations.len();
+    let mutation_count = request.all_mutations().len();
     match apply(&request.plan, &request.authorization, &mut lease.effects) {
         Ok(transaction) => {
             let postflight = postflight(context, &request, &permit, &mut lease.effects);

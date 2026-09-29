@@ -16,6 +16,7 @@ use std::sync::Arc;
 pub(super) fn open_directory_path(path: &Path) -> Result<AnchoredDirectory, AgentDiscoveryError> {
     let path = CString::new(path.as_os_str().as_bytes()).map_err(|_| unsafe_entry())?;
     let raw = identity_syscall_adapter::open_root(&path).map_err(|_| unsafe_entry())?;
+    // SAFETY: `open_root` returned this owned, open file descriptor exactly once.
     let file = unsafe { File::from_raw_fd(raw) };
     anchored_directory(file)
 }

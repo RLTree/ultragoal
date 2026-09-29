@@ -16,15 +16,15 @@ pub fn effect() -> EffectGrant {
 
 fn owned_scope() -> OwnedScope {
     OwnedScope {
-        paths: BTreeSet::new(),
-        semantic_symbols: BTreeSet::new(),
+        paths: BTreeSet::from([CanonicalPath::parse("work/node-a").unwrap()]),
+        semantic_symbols: BTreeSet::from(["orchestration::product::node-a".to_owned()]),
         generated_outputs: BTreeSet::new(),
         fixtures: BTreeSet::new(),
         effects: BTreeSet::from([effect()]),
     }
 }
 
-fn graph() -> WorkGraph {
+pub(super) fn graph() -> WorkGraph {
     WorkGraph::derive(vec![WorkPackage {
         node_id: "node-a".to_owned(),
         dependencies: BTreeSet::new(),
@@ -40,8 +40,10 @@ fn graph() -> WorkGraph {
     .unwrap()
 }
 
-fn policy() -> ScopePolicy {
+pub(super) fn policy() -> ScopePolicy {
     ScopePolicy {
+        allowed_paths: BTreeSet::from([CanonicalPath::parse("work").unwrap()]),
+        allowed_semantic_prefixes: BTreeSet::from(["orchestration::product".to_owned()]),
         allowed_effects: BTreeSet::from([effect()]),
         ..ScopePolicy::default()
     }
@@ -78,6 +80,15 @@ fn engine(root: &TestRoot) -> Orchestrator<NoEffect> {
     .unwrap()
 }
 
+pub fn running_lease(label: &str, deadline: u64) -> (TestRoot, JournalHead) {
+    let root = TestRoot::new(label, 0o700);
+    let mut orchestrator = engine(&root);
+    orchestrator.grant_lease(1, lease(deadline)).unwrap();
+    orchestrator.start(2, "lease-001").unwrap();
+    let head = orchestrator.journal_head().unwrap().clone();
+    (root, head)
+}
+
 pub fn interrupted_root(label: &str) -> (TestRoot, JournalHead) {
     let root = TestRoot::new(label, 0o700);
     let mut engine = engine(&root);
@@ -111,7 +122,7 @@ pub fn ambiguous_effect(label: &str) -> (TestRoot, JournalHead) {
     (root, engine.journal_head().unwrap().clone())
 }
 
-fn lease(deadline: u64) -> LeaseSpec {
+pub(super) fn lease(deadline: u64) -> LeaseSpec {
     LeaseSpec {
         lease_id: "lease-001".to_owned(),
         run_id: "run-001".to_owned(),

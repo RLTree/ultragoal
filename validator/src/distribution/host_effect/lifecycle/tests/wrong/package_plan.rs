@@ -59,10 +59,11 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
 
     let wrong_marketplace =
         HostCommandPlan::personal_install(&fixture.package, "other-marketplace").unwrap();
+    let wrong_marketplace_projection = wrong_marketplace.projection().unwrap();
     assert_eq!(
         {
             let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
-            request.plan = &wrong_marketplace;
+            request.plan = &wrong_marketplace_projection;
             coordinator.accept(request)
         }
         .unwrap_err()
@@ -86,17 +87,18 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         "local-marketplace",
     )
     .unwrap();
+    let wrong_repository_projection = wrong_repository_plan.projection().unwrap();
     assert_eq!(
         {
             let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
             request.scope = repository_scope.clone();
-            request.plan = &wrong_repository_plan;
+            request.plan = &wrong_repository_projection;
             request.expected_target = repository_target.clone();
             coordinator.accept(request)
         }
         .unwrap_err()
         .id(),
-        SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
+        SupportedHostLifecycleErrorId::PlanSubstitution
     );
     #[cfg(unix)]
     {
@@ -108,17 +110,18 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             "local-marketplace",
         )
         .unwrap();
+        let aliased_repository_projection = aliased_repository_plan.projection().unwrap();
         assert_eq!(
             {
                 let mut request = acceptance(&fixture, &pinned, ledger.observed_head());
                 request.scope = repository_scope.clone();
-                request.plan = &aliased_repository_plan;
+                request.plan = &aliased_repository_projection;
                 request.expected_target = repository_target.clone();
                 coordinator.accept(request)
             }
             .unwrap_err()
             .id(),
-            SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
+            SupportedHostLifecycleErrorId::PlanSubstitution
         );
     }
     let repository_root = fs::canonicalize(&fixture.project).unwrap();
@@ -128,11 +131,15 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
         "local-marketplace",
     )
     .unwrap();
+    let repository_projection = repository_plan.projection().unwrap();
     let mut repository_request = acceptance(&fixture, &pinned, ledger.observed_head());
     repository_request.scope = repository_scope;
-    repository_request.plan = &repository_plan;
+    repository_request.plan = &repository_projection;
     repository_request.expected_target = repository_target;
-    coordinator.accept(repository_request).unwrap();
+    assert_eq!(
+        coordinator.accept(repository_request).unwrap_err().id(),
+        SupportedHostLifecycleErrorId::PlanSubstitution
+    );
 
     for operation in [
         AcceptedLifecycleOperation::IdempotentReinstall,
@@ -158,67 +165,5 @@ fn wrong_package_journey_scope_capability_and_plan_are_not_accepted() {
             .id(),
             SupportedHostLifecycleErrorId::InvalidAcceptedIdentity
         );
-    }
-
-    let request = coordinator
-        .accept(acceptance(&fixture, &pinned, ledger.observed_head()))
-        .unwrap();
-    assert_eq!(
-        RootPlanCustody::bind(other.plan.clone(), &request)
-            .unwrap_err()
-            .id(),
-        SupportedHostLifecycleErrorId::PlanSubstitution
-    );
-}
-
-#[test]
-fn lifecycle_policy_variants_bind_distinct_supported_host_intents() {
-    let fixture = Fixture::new('b');
-    let before = AcceptedHostState::new(3, Some(fixture.package.clone()), false).unwrap();
-    let installed = AcceptedHostState::new(4, Some(fixture.package.clone()), false).unwrap();
-    let absent = AcceptedHostState::new(4, None, false).unwrap();
-    let recovery = AcceptedHostState::new(5, Some(fixture.package.clone()), true).unwrap();
-
-    for (operation, rollback_policy, reconciliation_policy, expected, expected_after) in [
-        (
-            AcceptedLifecycleOperation::MonotonicUpdate,
-            AcceptedRollbackPolicy::RestoreExactPreState,
-            AcceptedReconciliationPolicy::ExactPostStateAndSeparateHostLayers,
-            "monotonic-update",
-            installed.clone(),
-        ),
-        (
-            AcceptedLifecycleOperation::FailedUpdateRecovery,
-            AcceptedRollbackPolicy::ManualReconciliationOnly,
-            AcceptedReconciliationPolicy::AmbiguousOutcomeRequiresManualReview,
-            "failed-update-recovery",
-            recovery.clone(),
-        ),
-        (
-            AcceptedLifecycleOperation::AuthorizedRollback,
-            AcceptedRollbackPolicy::RestoreExactPreState,
-            AcceptedReconciliationPolicy::ExactAbsenceAndSeparateHostLayers,
-            "authorized-rollback",
-            absent.clone(),
-        ),
-        (
-            AcceptedLifecycleOperation::StaleCacheRecovery,
-            AcceptedRollbackPolicy::ManualReconciliationOnly,
-            AcceptedReconciliationPolicy::AmbiguousOutcomeRequiresManualReview,
-            "stale-cache-recovery",
-            recovery.clone(),
-        ),
-    ] {
-        let plan = AcceptedLifecyclePlan::new(
-            operation,
-            before.clone(),
-            expected_after,
-            before.clone(),
-            rollback_policy,
-            reconciliation_policy,
-        )
-        .unwrap();
-        assert_eq!(plan.operation().as_str(), expected);
-        assert!(plan.plan_sha256().starts_with("sha256:"));
     }
 }

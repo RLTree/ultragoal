@@ -1,7 +1,8 @@
 use super::fixture::*;
 use crate::context::EffectClass;
 use crate::state::catalog::{
-    ActionDefinition, ActionKind, DependencyFact, DependencyStatus, FactAuthority,
+    ActionDefinition, ActionKind, ActionPriorityClass, DependencyFact, DependencyStatus,
+    EvidenceLedActionBinding, FactAuthority,
 };
 use crate::state::engine::derive_bound;
 use crate::state::product_state::{AuthorityRequest, AuthorityRequirement, NextActionKind};
@@ -77,6 +78,7 @@ fn a_blocked_fact_cannot_route_to_a_command_even_if_the_command_has_higher_prior
             authority: AuthorityRequirement::Root,
             command_id: None,
             authority_request: Some(decision),
+            evidence_led: None,
         },
     ];
     let state = derive_bound(inputs(), &catalog(spec)).unwrap();
@@ -102,4 +104,74 @@ fn semantically_identical_catalog_order_has_one_identity_and_one_state() {
     let right_state = derive_bound(inputs(), &right).unwrap();
     assert_eq!(left_state.state_id(), right_state.state_id());
     assert_eq!(left_state.next_action(), right_state.next_action());
+}
+
+#[test]
+fn evidence_class_outranks_numeric_priority_without_bypassing_dependencies() {
+    let mut spec = spec();
+    spec.dependencies = vec![missing("loop"), missing("speculation")];
+    let mut speculation = command("speculative-action", "repair-speculation", 1);
+    speculation.evidence_led = Some(binding(ActionPriorityClass::Speculative));
+    let mut loop_action = command("loop-action", "repair-loop", 999);
+    loop_action.evidence_led = Some(EvidenceLedActionBinding {
+        class: ActionPriorityClass::ActiveTruthLoopTransition,
+        brief_digest: brief_digest(),
+        transition_id: Some("transition-2".to_owned()),
+        transition_order: Some(2),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
+    });
+    spec.actions = vec![speculation, loop_action];
+    let state = derive_bound(inputs(), &catalog(spec)).unwrap();
+    assert_eq!(state.next_action().action_id, "loop-action");
+    assert_eq!(
+        state.next_action().priority_class,
+        Some(ActionPriorityClass::ActiveTruthLoopTransition)
+    );
+}
+
+#[test]
+fn earliest_active_truth_loop_transition_wins_deterministically() {
+    let mut spec = spec();
+    spec.dependencies = vec![missing("first"), missing("second")];
+    let mut second = command("second-action", "repair-second", 1);
+    second.evidence_led = Some(EvidenceLedActionBinding {
+        class: ActionPriorityClass::ActiveTruthLoopTransition,
+        brief_digest: brief_digest(),
+        transition_id: Some("transition-2".to_owned()),
+        transition_order: Some(2),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
+    });
+    let mut first = command("first-action", "repair-first", 999);
+    first.evidence_led = Some(EvidenceLedActionBinding {
+        class: ActionPriorityClass::ActiveTruthLoopTransition,
+        brief_digest: brief_digest(),
+        transition_id: Some("transition-1".to_owned()),
+        transition_order: Some(1),
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
+    });
+    spec.actions = vec![second, first];
+    let state = derive_bound(inputs(), &catalog(spec)).unwrap();
+    assert_eq!(state.next_action().action_id, "first-action");
+    assert_eq!(
+        state.next_action().active_transition.as_deref(),
+        Some("transition-1")
+    );
+}
+
+fn binding(class: ActionPriorityClass) -> EvidenceLedActionBinding {
+    EvidenceLedActionBinding {
+        class,
+        brief_digest: brief_digest(),
+        transition_id: None,
+        transition_order: None,
+        active_trigger_ids: Vec::new(),
+        parked_trigger_ids: Vec::new(),
+    }
+}
+
+fn brief_digest() -> String {
+    format!("sha256:{}", "1".repeat(64))
 }

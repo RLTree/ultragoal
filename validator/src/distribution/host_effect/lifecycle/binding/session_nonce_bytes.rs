@@ -14,6 +14,7 @@ pub(crate) enum AcceptedLifecycleOperation {
 }
 
 impl AcceptedLifecycleOperation {
+    #[cfg(test)]
     pub(crate) const fn as_str(self) -> &'static str {
         match self {
             Self::FreshInstall => "fresh-install",
@@ -35,8 +36,19 @@ impl AcceptedLifecycleOperation {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub(crate) struct AcceptedHostState {
     generation: u64,
-    package: Option<PackageIdentity>,
+    package: Option<AcceptedPackageIdentity>,
     recovery_required: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[serde(
+    rename_all = "kebab-case",
+    tag = "authority_kind",
+    content = "authority"
+)]
+enum AcceptedPackageIdentity {
+    TargetPackage(PackageIdentity),
+    ObservedPrior(crate::plugin_product::lifecycle::PriorInstalledAuthority),
 }
 
 impl AcceptedHostState {
@@ -50,7 +62,20 @@ impl AcceptedHostState {
         }
         Ok(Self {
             generation,
-            package,
+            package: package.map(AcceptedPackageIdentity::TargetPackage),
+            recovery_required,
+        })
+    }
+
+    pub(in crate::distribution::host_effect) fn observed_prior(
+        generation: u64,
+        prior: crate::plugin_product::lifecycle::PriorInstalledAuthority,
+        recovery_required: bool,
+    ) -> Result<Self, SupportedHostLifecycleError> {
+        prior.validate().map_err(|_| invalid())?;
+        Ok(Self {
+            generation,
+            package: Some(AcceptedPackageIdentity::ObservedPrior(prior)),
             recovery_required,
         })
     }
@@ -73,7 +98,6 @@ pub(crate) enum AcceptedRollbackPolicy {
 pub(crate) enum AcceptedReconciliationPolicy {
     ExactPostStateAndSeparateHostLayers,
     ExactAbsenceAndSeparateHostLayers,
-    AmbiguousOutcomeRequiresManualReview,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -96,13 +120,14 @@ impl AcceptedLifecyclePlan {
         rollback_policy: AcceptedRollbackPolicy,
         reconciliation_policy: AcceptedReconciliationPolicy,
     ) -> Result<Self, SupportedHostLifecycleError> {
-        if before.generation() > expected_after.generation()
-            || rollback_state.generation() < before.generation()
-            || (operation == AcceptedLifecycleOperation::UninstallTeardown
-                && expected_after.package.is_some())
-            || (operation == AcceptedLifecycleOperation::FreshInstall
-                && expected_after.package.is_none())
-        {
+        if !matches_lifecycle_operation(
+            operation,
+            &before,
+            &expected_after,
+            &rollback_state,
+            rollback_policy,
+            reconciliation_policy,
+        ) {
             return Err(invalid());
         }
         #[derive(Serialize)]
@@ -116,7 +141,7 @@ impl AcceptedLifecyclePlan {
             reconciliation_policy: AcceptedReconciliationPolicy,
         }
         let plan_sha256 = digest_json(&Plan {
-            schema: "harness-ultragoal.accepted-host-lifecycle-plan.v1",
+            schema: "harness-ultragoal.accepted-host-lifecycle-plan.v2",
             operation,
             before: &before,
             expected_after: &expected_after,
@@ -144,9 +169,83 @@ impl AcceptedLifecyclePlan {
     }
 }
 
+fn matches_lifecycle_operation(
+    operation: AcceptedLifecycleOperation,
+    before: &AcceptedHostState,
+    expected_after: &AcceptedHostState,
+    rollback_state: &AcceptedHostState,
+    rollback_policy: AcceptedRollbackPolicy,
+    reconciliation_policy: AcceptedReconciliationPolicy,
+) -> bool {
+    use AcceptedLifecycleOperation::*;
+    use AcceptedReconciliationPolicy::*;
+    use AcceptedRollbackPolicy::*;
+
+    let increments_once = before.generation().checked_add(1) == Some(expected_after.generation());
+    let restores_before = rollback_state == before;
+    let before_has_package = before.package.is_some();
+    let after_has_package = expected_after.package.is_some();
+    let package_changed = before.package != expected_after.package;
+    let recovery_cleared = before.recovery_required && !expected_after.recovery_required;
+    match operation {
+        FreshInstall => {
+            !before_has_package
+                && !before.recovery_required
+                && after_has_package
+                && !expected_after.recovery_required
+                && increments_once
+                && restores_before
+                && rollback_policy == RemoveOnlyNewTarget
+                && reconciliation_policy == ExactPostStateAndSeparateHostLayers
+        }
+        MonotonicUpdate => {
+            before_has_package
+                && !before.recovery_required
+                && after_has_package
+                && !expected_after.recovery_required
+                && package_changed
+                && increments_once
+                && restores_before
+                && rollback_policy == RestoreExactPreState
+                && reconciliation_policy == ExactPostStateAndSeparateHostLayers
+        }
+        FailedUpdateRecovery => {
+            before_has_package
+                && recovery_cleared
+                && before.package == expected_after.package
+                && increments_once
+                && restores_before
+                && rollback_policy == ManualReconciliationOnly
+                && reconciliation_policy == ExactPostStateAndSeparateHostLayers
+        }
+        IdempotentReinstall | RepeatUse => {
+            before_has_package
+                && !before.recovery_required
+                && expected_after == before
+                && restores_before
+                && rollback_policy == RestoreExactPreState
+                && reconciliation_policy == ExactPostStateAndSeparateHostLayers
+        }
+        UninstallTeardown => {
+            before_has_package
+                && !before.recovery_required
+                && !after_has_package
+                && !expected_after.recovery_required
+                && increments_once
+                && restores_before
+                && rollback_policy == RemoveOnlyNewTarget
+                && reconciliation_policy == ExactAbsenceAndSeparateHostLayers
+        }
+        // This state has neither an approved predecessor nor a cache identity.
+        // Do not turn either ambiguous recovery intent into host authority.
+        AuthorizedRollback | StaleCacheRecovery => false,
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "kebab-case")]
 pub(crate) enum AcceptedHostScope {
+    #[cfg(test)]
     Personal {
         home_id: String,
         host_id: String,

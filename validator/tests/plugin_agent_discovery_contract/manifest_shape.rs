@@ -1,5 +1,5 @@
-use crate::agent_discovery::{AgentDiscoveryErrorId, SourceAgentCatalog};
-use crate::authority_fixtures::{CANDIDATE, SESSION, TempRepo};
+use super::super::{AgentDiscoveryErrorId, SourceAgentCatalog};
+use super::authority_fixtures::{CANDIDATE, SESSION, TempRepo};
 use serde_json::json;
 use std::fs;
 

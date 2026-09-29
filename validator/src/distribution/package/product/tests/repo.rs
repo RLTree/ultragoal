@@ -12,10 +12,12 @@ impl OutputRoot {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap_or_default()
             .as_nanos();
-        let root = PathBuf::from("/tmp").join(format!(
-            "hul-distribution-{label}-{}-{nonce}",
-            std::process::id()
-        ));
+        let root = crate::distribution::canonical_temporary_parent()
+            .expect("canonical temporary parent")
+            .join(format!(
+                "hul-distribution-{label}-{}-{nonce}",
+                std::process::id()
+            ));
         fs::create_dir(&root).expect("confined output root");
         Self { root }
     }
@@ -55,9 +57,14 @@ impl Repo {
     fn new(label: &str) -> Self {
         let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
         fs::create_dir_all(root.join(".codex-plugin")).expect("plugin manifest directory");
+        fs::create_dir_all(root.join(".codex/agents")).expect("root agent directory");
+        fs::create_dir_all(root.join(".agents/plugins")).expect("marketplace catalog directory");
         fs::create_dir_all(root.join("schemas")).expect("schema directory");
+        fs::create_dir_all(root.join("runtime")).expect("runtime directory");
         fs::write(root.join("schemas/catalog.json"), "{}\n").expect("schema catalog");
         write_supported_manifest(&root, SUPPORTED_VERSION);
+        write_marketplace_catalog(&root);
+        write_runtime_probe(&root);
         for name in CANONICAL_SKILLS {
             let root = root.join("skills").join(name);
             fs::create_dir_all(root.join("agents")).expect("skill metadata directory");
@@ -68,6 +75,13 @@ impl Repo {
             )
             .expect("skill metadata");
         }
+        for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+            fs::write(
+                root.join(role.manifest_path),
+                format!("name = {:?}\n", role.name),
+            )
+            .expect("root agent manifest");
+        }
         write_draft(&root, SUPPORTED_VERSION);
         let status = Command::new("git")
             .args(["init", "--quiet"])
@@ -75,6 +89,7 @@ impl Repo {
             .status()
             .expect("git init");
         assert!(status.success());
+        fs::write(root.join(".git/info/exclude"), "target/\n").expect("git output exclusion");
         Self { root }
     }
 
@@ -86,6 +101,35 @@ impl Repo {
         )
         .expect("live context")
     }
+
+    fn workspace_context(&self) -> LiveContext {
+        LiveContext::build(
+            BuildRequest::new(&self.root)
+                .expect_repository_root(&self.root)
+                .expect_worktree_root(&self.root)
+                .with_root_workspace_grant(&self.root),
+        )
+        .expect("workspace-write live context")
+    }
+}
+
+fn write_runtime_probe(root: &Path) {
+    let probe = root.join("runtime/runtime-probe-bin");
+    fs::write(
+        &probe,
+        include_bytes!("../../../../../../runtime/runtime-probe-bin"),
+    )
+    .expect("runtime probe");
+    #[cfg(unix)]
+    fs::set_permissions(&probe, fs::Permissions::from_mode(0o755)).expect("runtime probe mode");
+}
+
+fn write_marketplace_catalog(root: &Path) {
+    fs::write(
+        root.join(MARKETPLACE_CATALOG_PATH),
+        include_bytes!("../../../../../../.agents/plugins/marketplace.json"),
+    )
+    .expect("marketplace catalog");
 }
 
 impl Drop for Repo {
@@ -130,10 +174,19 @@ fn write_draft(root: &Path, version: &str) {
             })
         })
         .collect::<Vec<_>>();
+    let agents = crate::agent_roles::CANONICAL_AGENT_ROLES
+        .iter()
+        .map(|role| {
+            json!({
+                "name": role.name,
+                "path": role.manifest_path
+            })
+        })
+        .collect::<Vec<_>>();
     fs::write(
         root.join("plugin-manifest-draft.json"),
         serde_json::to_vec(&json!({
-            "agents": [],
+            "agents": agents,
             "authorable_templates": [],
             "fixtures": [],
             "generated_examples": [],
@@ -141,7 +194,7 @@ fn write_draft(root: &Path, version: &str) {
             "non_goals": [],
             "optional_connectors": [],
             "purpose": "test",
-            "resources": ["plugin-manifest-draft.json"],
+            "resources": [".agents/plugins/marketplace.json", "plugin-manifest-draft.json"],
             "schema_catalog": "schemas/catalog.json",
             "schemas": [],
             "skills": skills,

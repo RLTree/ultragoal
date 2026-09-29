@@ -1,5 +1,6 @@
 mod builder_contract;
 pub(crate) mod changed_files;
+pub(crate) mod digests;
 mod dimensions;
 pub(crate) mod exclusions;
 pub(crate) mod roots;
@@ -156,7 +157,7 @@ fn scope_authority_failures(value: &Value, root: Option<&Path>) -> Vec<String> {
     let mut out = Vec::new();
     out.extend(builder_contract::manifest_dependency_failures(value));
     if let Some(root) = root {
-        match crate::claim_semantics::coverage::digests::source_tree_digest(root, value) {
+        match digests::source_tree_digest(root, value) {
             Ok(actual) if str_field(value, "repo_root_digest") == actual => {}
             _ => out.push("coverage_receipt_source_digest_mismatch".to_string()),
         }
@@ -187,7 +188,7 @@ fn scope_authority_failures(value: &Value, root: Option<&Path>) -> Vec<String> {
         root, policy,
     ));
     if let Some(root) = root {
-        match crate::claim_semantics::coverage::digests::changed_files_digest(root, value) {
+        match digests::changed_files_digest(root, value) {
             Ok(actual) if str_field(policy, "changed_files_digest") == actual => {}
             _ => out.push("coverage_receipt_changed_files_digest_mismatch".to_string()),
         }

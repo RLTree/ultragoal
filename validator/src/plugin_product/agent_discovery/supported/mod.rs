@@ -1,16 +1,14 @@
 mod reader;
 #[cfg(test)]
 mod report;
+mod root_distinctness;
 mod root_identity_codec;
 mod roots;
 mod transaction;
 
 pub use reader::SupportedHostAgentAuthorityReader;
 #[cfg(test)]
-pub use report::{
-    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
-    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReport,
-};
+pub use report::SupportedAgentAuthorityFindingKind;
 pub use roots::SupportedHostAgentRoots;
 
 use super::error::{AgentDiscoveryError, AgentDiscoveryErrorId};

@@ -71,6 +71,7 @@ fn execute(
     match request {
         ScannerSyscallRequest::Open { directory_fd } => {
             let current = c".";
+            // SAFETY: `directory_fd` is supplied by the anchored directory and `current` is NUL-terminated.
             let duplicate = unsafe {
                 libc::openat(
                     directory_fd,
@@ -81,8 +82,10 @@ fn execute(
             if duplicate < 0 {
                 return Err(ScannerSyscallError::OpenRejected);
             }
+            // SAFETY: `duplicate` is an owned, open directory descriptor on this path.
             let raw = unsafe { libc::fdopendir(duplicate) };
             if raw.is_null() {
+                // SAFETY: `fdopendir` failed, so ownership of `duplicate` remains with this function.
                 unsafe { libc::close(duplicate) };
                 return Err(ScannerSyscallError::OpenRejected);
             }
@@ -103,6 +106,7 @@ fn execute(
                 set_errno(error)?;
                 std::ptr::null_mut()
             } else {
+                // SAFETY: `stream.raw` is live while `closed` is false and this call has exclusive access.
                 unsafe { libc::readdir(stream.raw) }
             };
             if entry.is_null() {
@@ -111,6 +115,7 @@ fn execute(
                     _ => Err(ScannerSyscallError::ReadRejected),
                 };
             }
+            // SAFETY: non-null `readdir` entries contain a NUL-terminated `d_name` for this stream.
             let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }
                 .to_bytes()
                 .to_vec();
@@ -121,6 +126,7 @@ fn execute(
                 return Err(ScannerSyscallError::AlreadyClosed);
             }
             stream.closed = true;
+            // SAFETY: this is the sole close after marking the live stream closed.
             if unsafe { libc::closedir(stream.raw) } != 0 {
                 Err(ScannerSyscallError::CloseRejected)
             } else {
@@ -134,6 +140,7 @@ impl Drop for DirectoryStream {
     fn drop(&mut self) {
         if !self.closed {
             self.closed = true;
+            // SAFETY: this fallback owns the still-live stream and prevents a second close.
             unsafe { libc::closedir(self.raw) };
         }
     }
@@ -144,6 +151,7 @@ fn set_errno(value: i32) -> Result<(), ScannerSyscallError> {
     if pointer.is_null() {
         return Err(ScannerSyscallError::ReadRejected);
     }
+    // SAFETY: `errno_pointer` returned a non-null thread-local errno location.
     unsafe { *pointer = value };
     Ok(())
 }
@@ -153,11 +161,13 @@ fn get_errno() -> Result<i32, ScannerSyscallError> {
     if pointer.is_null() {
         return Err(ScannerSyscallError::ReadRejected);
     }
+    // SAFETY: `errno_pointer` returned a non-null thread-local errno location.
     Ok(unsafe { *pointer })
 }
 
 #[cfg(any(target_vendor = "apple", target_os = "freebsd"))]
 fn errno_pointer() -> *mut libc::c_int {
+    // SAFETY: the platform errno accessor returns this thread's valid errno location.
     unsafe { libc::__error() }
 }
 
@@ -169,6 +179,7 @@ fn errno_pointer() -> *mut libc::c_int {
     target_os = "redox"
 ))]
 fn errno_pointer() -> *mut libc::c_int {
+    // SAFETY: the platform errno accessor returns this thread's valid errno location.
     unsafe { libc::__errno_location() }
 }
 
@@ -180,11 +191,13 @@ fn errno_pointer() -> *mut libc::c_int {
     target_os = "nuttx"
 ))]
 fn errno_pointer() -> *mut libc::c_int {
+    // SAFETY: the platform errno accessor returns this thread's valid errno location.
     unsafe { libc::__errno() }
 }
 
 #[cfg(any(target_os = "illumos", target_os = "solaris"))]
 fn errno_pointer() -> *mut libc::c_int {
+    // SAFETY: the platform errno accessor returns this thread's valid errno location.
     unsafe { libc::___errno() }
 }
 

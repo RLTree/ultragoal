@@ -113,7 +113,7 @@ fn descriptor_reads_reject_ancestor_symlink_substitution_for_input() {
     fs::write(outside.join("source.txt"), super::SECRET).expect("secret");
     let inputs = root.join("inputs");
     let owned = root.join("inputs-owned");
-    anchored::set_before_component_open(move || {
+    super::super::super::anchored::test_hooks::set_before_component(INPUT, 0, move || {
         fs::rename(&inputs, &owned).expect("move inputs");
         std::os::unix::fs::symlink(&outside, &inputs).expect("substitute inputs");
     });

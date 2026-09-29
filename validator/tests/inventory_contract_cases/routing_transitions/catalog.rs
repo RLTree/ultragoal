@@ -13,35 +13,28 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
         .iter()
         .filter(|finding| finding.code == "sole_current_authority_pending_migration")
         .collect::<Vec<_>>();
-
-    assert_eq!(pending.len(), 33);
+    assert_eq!(pending.len(), 15);
     let serialized_before = catalog.to_canonical_json().unwrap();
     let closure = catalog.closure_status();
     assert_eq!(catalog.to_canonical_json().unwrap(), serialized_before);
-    assert!(!closure.is_closed());
-    assert_eq!(catalog.findings().len(), 81);
-    assert_eq!(closure.blocker_count(), 34);
+    assert!(closure.is_closed());
+    assert_eq!(catalog.findings().len(), 49);
+    assert_eq!(closure.blocker_count(), 0);
     assert_eq!(
         closure
             .open_obligations_by_code()
             .get("sole_current_authority_pending_migration"),
-        Some(&33)
+        Some(&15)
     );
-    assert_eq!(closure.open_obligation_count(), 47);
-    assert_eq!(
-        closure.blockers_by_code(),
-        &std::collections::BTreeMap::from([
-            ("candidate_component_not_active".to_owned(), 10),
-            ("missing_required_component".to_owned(), 9),
-            ("parallel_authority".to_owned(), 14),
-            ("projection_requires_canonical_reconciliation".to_owned(), 1,),
-        ])
-    );
+    assert_eq!(closure.open_obligation_count(), 35);
+    assert!(closure.blockers_by_code().is_empty());
     assert_eq!(
         closure.open_obligations_by_code(),
         &std::collections::BTreeMap::from([
             ("compatibility_route_retained".to_owned(), 14),
-            ("sole_current_authority_pending_migration".to_owned(), 33),
+            ("candidate_component_not_active".to_owned(), 5),
+            ("projection_requires_canonical_reconciliation".to_owned(), 1),
+            ("sole_current_authority_pending_migration".to_owned(), 15),
         ])
     );
     assert!(
@@ -69,6 +62,57 @@ fn live_exact_sources_are_sole_current_and_pending_migration() {
                 && candidate.entry_id.as_deref() == Some(stable_id)
         }));
     }
+    assert!(
+        !catalog
+            .findings()
+            .iter()
+            .any(|finding| finding.code == "verified_od008_archive_context")
+    );
+}
+
+#[test]
+fn od009_cleanup_is_exact_and_does_not_open_generic_deletion_authority() {
+    let root = crate::repository_fixture::live_root();
+    let decision_path = root.join(
+        "docs/ultragoal-successor-live/root-decisions/OD-009-SCOPED-DEAD-AUTHORITY-CLEANUP.json",
+    );
+    let decision: serde_json::Value =
+        serde_json::from_slice(&fs::read(decision_path).unwrap()).unwrap();
+    assert_eq!(decision["decision_id"], "OD-009");
+    assert_eq!(
+        decision["authorized_base"]["commit"],
+        "ba04b09e9858c524dafeed3e27514eccc2e61354"
+    );
+    assert_eq!(decision["authorized_cohorts"][0]["tracked_path_count"], 14);
+    assert_eq!(decision["authorized_cohorts"][1]["tracked_path_count"], 103);
+
+    for path in [
+        "validator/src/claim_semantics/lane",
+        "validator/src/claim_semantics/ready/mod.rs",
+        "validator/src/claim_semantics/ready/receipt.rs",
+        "validator/src/plugin_product/host_lifecycle",
+        "validator/tests/plugin_host_lifecycle_contract.rs",
+        "validator/tests/plugin_host_lifecycle_contract",
+        "validator/tests/supported_host_lifecycle_adapter_contract.rs",
+        "validator/tests/supported_host_lifecycle_adapter_contract",
+        "validator/tests/supported_host_plugin_transaction_contract.rs",
+        "validator/tests/supported_host_plugin_transaction_contract",
+        "fixtures/plugin-host-lifecycle",
+    ] {
+        assert!(!root.join(path).exists(), "retired path survived: {path}");
+    }
+    assert!(root.join("validator/src/distribution/host_effect").is_dir());
+
+    let registry: serde_json::Value =
+        serde_json::from_slice(&fs::read(root.join("migration/authority-routes.json")).unwrap())
+            .unwrap();
+    assert_eq!(registry["destructive_cleanup_authorized"], false);
+    assert!(registry["routes"].as_array().unwrap().iter().all(|route| {
+        let path = route["match"]["relative_path"].as_str().unwrap_or_default();
+        !path.starts_with("validator/src/claim_semantics/lane/")
+            && path != "validator/src/claim_semantics/ready/mod.rs"
+            && path != "validator/src/claim_semantics/ready/receipt.rs"
+    }));
 }
 
 #[test]

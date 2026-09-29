@@ -24,6 +24,8 @@ impl PersistedReservation {
             expected_head_sha256: value.expected_head_sha256.clone(),
             issued_at_unix_ms: value.issued_at_unix_ms,
             expires_at_unix_ms: value.expires_at_unix_ms,
+            lifecycle_record: value.lifecycle_record.clone(),
+            lifecycle_record_sha256: value.lifecycle_record_sha256.clone(),
         }
     }
 
@@ -40,6 +42,8 @@ impl PersistedReservation {
             expected_head_sha256: self.expected_head_sha256.clone(),
             issued_at_unix_ms: self.issued_at_unix_ms,
             expires_at_unix_ms: self.expires_at_unix_ms,
+            lifecycle_record: self.lifecycle_record.clone(),
+            lifecycle_record_sha256: self.lifecycle_record_sha256.clone(),
         })
     }
 }

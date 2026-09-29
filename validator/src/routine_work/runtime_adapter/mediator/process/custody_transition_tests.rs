@@ -1,6 +1,6 @@
 use super::super::filesystem::{PinnedExecutable, RootAnchor};
 use super::super::outcome::RoutineCancellation;
-use super::process_termination_tests::ProcessFixture;
+use super::termination_tests::ProcessFixture;
 use super::*;
 use std::collections::BTreeMap;
 use std::sync::Arc;

@@ -6,8 +6,7 @@ mod route_contract;
 mod source_contract;
 mod zero_write;
 
-#[path = "../../src/plugin_product/mod.rs"]
-mod plugin_product;
+use ultragoal::plugin_product;
 
 use std::path::PathBuf;
 
@@ -15,8 +14,10 @@ pub fn root() -> PathBuf {
     let root = std::env::var_os("HUL_REPO_ROOT")
         .map(PathBuf::from)
         .unwrap_or_else(|| {
-            std::env::current_dir()
-                .unwrap_or_else(|error| panic!("current directory unavailable: {error}"))
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .parent()
+                .expect("validator package must have a repository parent")
+                .to_path_buf()
         });
     assert!(root.join(".codex-plugin/plugin.json").is_file());
     root

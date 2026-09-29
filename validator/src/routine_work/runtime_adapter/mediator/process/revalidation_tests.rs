@@ -3,7 +3,7 @@ use super::super::filesystem::{OutputConfinement, PinnedExecutable, ReadConfinem
 #[cfg(target_os = "macos")]
 use super::super::outcome::RoutineCancellation;
 #[cfg(target_os = "macos")]
-use super::process_termination_tests::{ProcessFixture, observe_prepared};
+use super::termination_tests::{ProcessFixture, observe_prepared};
 #[cfg(target_os = "macos")]
 use super::*;
 #[cfg(target_os = "macos")]

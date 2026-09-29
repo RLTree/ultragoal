@@ -11,5 +11,5 @@ pub(crate) use sealed_authority::{ProductionExecutionOutcome, ReservationObserva
 
 #[cfg(test)]
 pub(crate) use sealed_authority::{
-    RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance, root_authority_for_test,
+    RootActionPermitIssuance, RootAuthority, root_authority_for_test,
 };

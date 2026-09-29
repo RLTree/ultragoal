@@ -35,10 +35,11 @@ impl RetainedDescriptorProcessBackend for ScriptedBackend {
     fn execute(
         &mut self,
         _capability: &DescriptorExecutionCapability,
-        _executable: &PinnedHostExecutable,
+        _executable: &SelectedCodexExecutable,
         _command: &crate::distribution::HostCommand,
         _policy: &HostEffectExecutionPolicy,
         _cancellation: &HostEffectCancellation,
+        _cwd: std::os::fd::RawFd,
     ) -> Result<CommandCapture, BackendFailure> {
         self.calls += 1;
         match self.replies.pop_front().unwrap() {

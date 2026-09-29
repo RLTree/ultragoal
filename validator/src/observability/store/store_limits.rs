@@ -1,6 +1,21 @@
 use super::*;
 
 impl EventStore {
+    pub fn binding_leaf_name(
+        context_id: &str,
+        candidate_id: &str,
+        source_id: &str,
+    ) -> Result<String, String> {
+        privacy::validate_identifier("context-id", context_id)?;
+        privacy::validate_identifier("candidate-id", candidate_id)?;
+        privacy::validate_identifier("source-id", source_id)?;
+        let mut digest = Sha256::new();
+        for value in [context_id, candidate_id, source_id] {
+            digest.update((value.len() as u64).to_be_bytes());
+            digest.update(value.as_bytes());
+        }
+        Ok(format!("successor-events-{:x}.jsonl", digest.finalize()))
+    }
     pub const fn supported_store_limit_bytes() -> u64 {
         HARD_MAX_STORE_BYTES
     }
@@ -44,6 +59,38 @@ impl EventStore {
             max_scan_rows: HARD_MAX_SCAN_ROWS,
             max_results: HARD_MAX_RESULTS,
             identity: BoundStoreIdentity::new(initial_identity, parent),
+        })
+    }
+
+    pub(crate) fn open_descriptor_bound(
+        parent: std::fs::File,
+        leaf: &str,
+        opened: &std::fs::File,
+        owner: u32,
+        mode: u32,
+        context_id: impl Into<String>,
+        candidate_id: impl Into<String>,
+        source_id: impl Into<String>,
+    ) -> Result<Self, String> {
+        let context_id = context_id.into();
+        let candidate_id = candidate_id.into();
+        let source_id = source_id.into();
+        privacy::validate_identifier("context-id", &context_id)?;
+        privacy::validate_identifier("candidate-id", &candidate_id)?;
+        privacy::validate_identifier("source-id", &source_id)?;
+        let parent = filesystem::bind_descriptor_parent(parent, leaf, owner, mode)?;
+        let initial_identity = filesystem::file_identity(opened)?;
+        filesystem::validate_bound_parent(&parent, opened, Some(initial_identity))?;
+        Ok(Self {
+            path: PathBuf::from(leaf),
+            context_id,
+            candidate_id,
+            source_id,
+            max_store_bytes: HARD_MAX_STORE_BYTES,
+            max_events: HARD_MAX_EVENTS,
+            max_scan_rows: HARD_MAX_SCAN_ROWS,
+            max_results: HARD_MAX_RESULTS,
+            identity: BoundStoreIdentity::new(Some(initial_identity), parent),
         })
     }
     pub fn for_context(
@@ -139,8 +186,16 @@ impl EventStore {
         Ok(true)
     }
     pub fn query(&self, query: &EventQuery) -> Result<Vec<SemanticEvent>, String> {
+        self.query_validated(query, |_| Ok(()))
+    }
+    pub(crate) fn query_validated(
+        &self,
+        query: &EventQuery,
+        validate: impl FnOnce(&[SemanticEvent]) -> Result<(), String>,
+    ) -> Result<Vec<SemanticEvent>, String> {
         self.validate_query_binding(query)?;
         let mut events = self.read_events()?;
+        validate(&events)?;
         events.retain(|event| query.matches(event));
         stable_sort(&mut events);
         let limit = query.limit.min(self.max_results);
@@ -155,6 +210,14 @@ impl EventStore {
         target_event_id: &str,
     ) -> Result<CausalExplanation, String> {
         super::super::explain::explain(self, query, target_event_id)
+    }
+    pub(crate) fn explain_validated(
+        &self,
+        query: &EventQuery,
+        target_event_id: &str,
+        validate: impl FnOnce(&[SemanticEvent]) -> Result<(), String>,
+    ) -> Result<CausalExplanation, String> {
+        super::super::explain::explain_validated(self, query, target_event_id, validate)
     }
     pub fn path(&self) -> &Path {
         &self.path

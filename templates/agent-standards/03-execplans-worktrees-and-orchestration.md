@@ -21,6 +21,12 @@ working tree, state roots, artifact roots, ports, caches, scratch paths,
 credentials, and mutable runtime state.
 
 - Agents preserve user changes and never sweep unrelated files into their work.
+- Resource limits, build concurrency, and process cleanup are lane-local unless
+  the user explicitly establishes a host-global coordination contract. No
+  session may invent a host-global build or test slot, require permission
+  handshakes from unrelated sessions, or block their independent execution.
+  Concurrent isolated builds are permitted; each lane bounds and cleans up only
+  the processes and artifacts it owns.
 - Dirty worktrees, foreign edits, and stale state roots are blockers or
   coordination points, not reasons to widen scope.
 - Teardown preserves only irreproducible evidence that still anchors an active
@@ -84,10 +90,11 @@ Organize substantial work around deliverables and proof, not chat sessions.
 - If advancing a dependent worktree would overwrite dirty scoped work, create
   conflicts, or require semantic choices, classify it as lane-local
   reconciliation and steer the lane owner to resolve it in lane context.
-- `PLANS.md` is stable ExecPlan law, not active project state. Worker ids,
-  phase progress, backlog rows, receipt state, and completion claims belong in
-  active ExecPlans, lane registries, verification backlogs, receipts, or
-  completion manifests.
+- `PLANS.md` is stable ExecPlan law, not active project state. The single active
+  ExecPlan owns current lanes, progress, blockers, decisions, and claim ceiling.
+  Add a separate registry, backlog, or completion manifest only when a
+  cross-process consumer requires a machine contract that the plan cannot
+  safely supply.
 
 ## Lane Completion Message
 
@@ -99,7 +106,7 @@ Required fields:
 - changed owned paths and confirmation that forbidden/shared paths were not
   modified;
 - commands run, exit codes, and only the artifact paths that remain necessary;
-- the minimal current proof anchor and claim ceiling; name `none` when no
-  durable receipt is required;
+- the minimal current evidence and claim ceiling; name `none` when no durable
+  artifact is required;
 - dirty worktree status or explicit preserved uncommitted paths;
 - blockers, withheld claims, and next recommended parent action.

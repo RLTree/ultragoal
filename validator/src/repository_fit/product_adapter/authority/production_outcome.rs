@@ -1,5 +1,15 @@
 use super::*;
 
+struct OutcomeFields {
+    status: &'static str,
+    adapter_error_id: Option<AdapterErrorId>,
+    ledger_state: &'static str,
+    effect_started: bool,
+    rollback_complete: bool,
+    apply_outcome: Option<RepositoryFitApplyOutcome>,
+    effect: &'static str,
+}
+
 impl RepositoryFitProductionOutcome {
     pub(crate) fn result_id(&self) -> &str {
         &self.result_id
@@ -40,13 +50,15 @@ impl RepositoryFitProductionOutcome {
     pub(crate) fn refusal(request_id: String, error: FitAdapterError) -> Self {
         Self::new(
             request_id,
-            "refused",
-            Some(error.id()),
-            "absent",
-            false,
-            false,
-            None,
-            "none",
+            OutcomeFields {
+                status: "refused",
+                adapter_error_id: Some(error.id()),
+                ledger_state: "absent",
+                effect_started: false,
+                rollback_complete: false,
+                apply_outcome: None,
+                effect: "none",
+            },
         )
     }
 
@@ -58,13 +70,15 @@ impl RepositoryFitProductionOutcome {
     ) -> Self {
         Self::new(
             request_id,
-            "refused",
-            Some(error.id()),
-            state.name(),
-            effect_started,
-            false,
-            None,
-            "none",
+            OutcomeFields {
+                status: "refused",
+                adapter_error_id: Some(error.id()),
+                ledger_state: state.name(),
+                effect_started,
+                rollback_complete: false,
+                apply_outcome: None,
+                effect: "none",
+            },
         )
     }
 
@@ -86,16 +100,18 @@ impl RepositoryFitProductionOutcome {
         };
         Self::new(
             request_id,
-            status,
-            Some(error.id()),
-            state.name(),
-            effect_started,
-            rollback_complete,
-            None,
-            if effect_started {
-                "workspace_write"
-            } else {
-                "none"
+            OutcomeFields {
+                status,
+                adapter_error_id: Some(error.id()),
+                ledger_state: state.name(),
+                effect_started,
+                rollback_complete,
+                apply_outcome: None,
+                effect: if effect_started {
+                    "workspace_write"
+                } else {
+                    "none"
+                },
             },
         )
     }
@@ -108,13 +124,15 @@ impl RepositoryFitProductionOutcome {
         };
         Self::new(
             request_id,
-            status,
-            None,
-            RepositoryFitLedgerState::Committed.name(),
-            true,
-            false,
-            Some(apply),
-            "workspace_write",
+            OutcomeFields {
+                status,
+                adapter_error_id: None,
+                ledger_state: RepositoryFitLedgerState::Committed.name(),
+                effect_started: true,
+                rollback_complete: false,
+                apply_outcome: Some(apply),
+                effect: "workspace_write",
+            },
         )
     }
 
@@ -135,40 +153,33 @@ impl RepositoryFitProductionOutcome {
         };
         Self::new(
             request_id,
-            status,
-            error_id,
-            state.name(),
-            effect_started,
-            false,
-            None,
-            "none",
+            OutcomeFields {
+                status,
+                adapter_error_id: error_id,
+                ledger_state: state.name(),
+                effect_started,
+                rollback_complete: false,
+                apply_outcome: None,
+                effect: "none",
+            },
         )
     }
 
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        request_id: String,
-        status: &'static str,
-        adapter_error_id: Option<AdapterErrorId>,
-        ledger_state: &'static str,
-        effect_started: bool,
-        rollback_complete: bool,
-        apply_outcome: Option<RepositoryFitApplyOutcome>,
-        effect: &'static str,
-    ) -> Self {
+    fn new(request_id: String, fields: OutcomeFields) -> Self {
         let result_id = digest(
             &serde_json::to_vec(&(
                 "repository-fit-production-outcome-v1",
                 &request_id,
-                status,
-                adapter_error_id,
-                ledger_state,
-                effect_started,
-                rollback_complete,
-                apply_outcome
+                fields.status,
+                fields.adapter_error_id,
+                fields.ledger_state,
+                fields.effect_started,
+                fields.rollback_complete,
+                fields
+                    .apply_outcome
                     .as_ref()
                     .map(RepositoryFitApplyOutcome::outcome_id),
-                effect,
+                fields.effect,
                 "none",
                 SUPPORT_LIMIT,
             ))
@@ -178,13 +189,13 @@ impl RepositoryFitProductionOutcome {
             schema_version: "RepositoryFitProductionOutcome-v1",
             result_id,
             request_id,
-            status,
-            adapter_error_id,
-            ledger_state,
-            effect_started,
-            rollback_complete,
-            apply_outcome,
-            effect,
+            status: fields.status,
+            adapter_error_id: fields.adapter_error_id,
+            ledger_state: fields.ledger_state,
+            effect_started: fields.effect_started,
+            rollback_complete: fields.rollback_complete,
+            apply_outcome: fields.apply_outcome,
+            effect: fields.effect,
             claim_effect: "none",
             support_limit: SUPPORT_LIMIT,
         }

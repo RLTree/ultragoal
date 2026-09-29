@@ -1,8 +1,11 @@
 use super::*;
 
-pub(crate) const BASE: &str = "/tmp/hul-repository-fit-apply-mediation-058";
 pub(crate) const SECRET: &[u8] = b"repository-fit-test-root-authority-secret-material-v1";
 pub(crate) static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
+
+fn base() -> PathBuf {
+    std::env::temp_dir().join("hul-repository-fit-apply-mediation-058")
+}
 
 pub(crate) struct Fixture {
     pub(crate) container: PathBuf,
@@ -12,7 +15,7 @@ pub(crate) struct Fixture {
 impl Fixture {
     pub(crate) fn new(label: &str) -> Self {
         let serial = NEXT_FIXTURE.fetch_add(1, Ordering::Relaxed);
-        let container = PathBuf::from(BASE).join(format!(
+        let container = base().join(format!(
             "{}-{}-{serial}",
             label.replace(|character: char| !character.is_ascii_alphanumeric(), "-"),
             std::process::id()
@@ -75,8 +78,10 @@ impl Fixture {
 
 impl Drop for Fixture {
     fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(BASE));
+        let base = base();
+        debug_assert!(self.container.starts_with(&base));
         let _ = fs::remove_dir_all(&self.container);
+        let _ = fs::remove_dir(base);
     }
 }
 

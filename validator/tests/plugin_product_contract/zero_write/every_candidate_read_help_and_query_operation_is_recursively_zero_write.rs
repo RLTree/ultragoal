@@ -17,7 +17,12 @@ fn every_candidate_read_help_and_query_operation_is_recursively_zero_write() {
             .code()
             .unwrap_or_else(|| panic!("{} terminated without a process exit code", operation.id));
         assert!(
-            matches!(code, 0 | 1 | 3 | 4),
+            // A read/query route may reject malformed or incomplete input at
+            // parse/admission time. That invalid-invocation outcome must be
+            // held to the same recursive zero-write guarantee as a successful
+            // read; the operation catalog includes `eval audit`, whose typed
+            // specification is intentionally required.
+            matches!(code, 0 | 1 | 2 | 3 | 4),
             "{}: {output:?}",
             operation.id
         );

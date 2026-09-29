@@ -1,6 +1,6 @@
 use crate::lifecycle_fixture::{Fixture, lifecycle, request};
+use crate::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
 use std::fs;
-use ultragoal::plugin_product::lifecycle::{LifecycleIntent, LifecycleState};
 
 #[test]
 fn symlink_substitution_and_attacker_value_fail_closed_without_outside_write() {

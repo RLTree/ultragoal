@@ -1,7 +1,6 @@
-use super::successor::{ParseErrorId, ParseOutcome, ParsedValue, parse_args};
+use super::successor::{MAX_ARGUMENT_BYTES, ParseErrorId, ParseOutcome, ParsedValue, parse_args};
 
 const MAX_ARGUMENTS: usize = 256;
-const MAX_ARGUMENT_BYTES: usize = 8192;
 const MAX_IDENTIFIER_BYTES: usize = 128;
 const MAX_PATH_BYTES: usize = 4096;
 

@@ -1,5 +1,5 @@
 use super::CONTRACT_DIR;
-use super::{id, registry_entry, required_entry, rows, safe_identifier};
+use super::{id, registry_entry, required_entry, rows};
 use crate::inventory::types::{ActiveStatus, AuthorityState, InventoryEntry, InventoryError};
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -8,34 +8,17 @@ pub(super) fn load(
     product: &Value,
     entries: &mut Vec<InventoryEntry>,
     counts: &mut BTreeMap<String, usize>,
-) -> Result<BTreeMap<String, String>, InventoryError> {
+) -> Result<(), InventoryError> {
     let topology = product
         .get("component_topology")
         .ok_or_else(|| InventoryError::InvalidRegistry("missing component_topology".to_owned()))?;
-    let mut legacy_skills = BTreeMap::new();
     for row in rows(topology, "canonical_skills")? {
         let name = id(row, "canonical")?;
-        let mut legacy = Vec::new();
-        for route in row
-            .get("legacy_routes")
-            .and_then(Value::as_array)
-            .into_iter()
-            .flatten()
-            .filter_map(Value::as_str)
-        {
-            if !safe_identifier(route) {
-                return Err(InventoryError::InvalidRegistry(
-                    "legacy skill route has a noncanonical identifier".to_owned(),
-                ));
-            }
-            legacy.push(route.to_owned());
-            legacy_skills.insert(route.to_owned(), name.clone());
-        }
         entries.push(required_entry(
             format!("SKILL:{name}"),
             "skill",
             format!("skills/{name}/SKILL.md"),
-            legacy,
+            Vec::new(),
         ));
     }
     let mut expected_agents = std::collections::BTreeSet::new();
@@ -106,7 +89,7 @@ pub(super) fn load(
                 "validator/src/command_witness.rs".to_owned(),
                 "validator/src/cli/successor/catalog/mod.rs".to_owned(),
                 "validator/src/cli/successor/catalog/evaluation_and_migration.rs".to_owned(),
-                "validator/src/cli/successor/catalog/fitting_and_validation.rs".to_owned(),
+                "validator/src/cli/successor/catalog/repository_fit_and_checks.rs".to_owned(),
                 "validator/src/cli/successor/catalog/inspection.rs".to_owned(),
                 "validator/src/cli/successor/catalog/observability_and_package.rs".to_owned(),
                 "validator/src/cli/successor/catalog/options.rs".to_owned(),
@@ -135,5 +118,5 @@ pub(super) fn load(
         "cli_command_groups".to_owned(),
         rows(topology, "cli_command_groups")?.len(),
     );
-    Ok(legacy_skills)
+    Ok(())
 }

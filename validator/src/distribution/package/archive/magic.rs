@@ -82,7 +82,12 @@ pub(crate) fn decode(bytes: &[u8]) -> Result<DecodedArchive, DistributionError> 
         let byte_length = usize::try_from(reader.u64()?)
             .map_err(|_| error(DistributionErrorId::ObjectTooLarge))?;
         let declared_sha256 = reader.string(128)?;
-        if byte_length > ENTRY_LIMIT {
+        if byte_length > ENTRY_LIMIT
+            && !(path == "runtime/ultragoal"
+                && role == PackageRole::Executable
+                && mode == 0o755
+                && byte_length <= CLI_ENTRY_LIMIT)
+        {
             return Err(error(DistributionErrorId::ObjectTooLarge));
         }
         if prior.as_deref().is_some_and(|value| value >= path.as_str())

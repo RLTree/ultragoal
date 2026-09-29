@@ -26,17 +26,31 @@ pub enum LifecycleEffect {
     ProbeRuntime,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Version {
     pub major: u64,
     pub minor: u64,
     pub patch: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    prerelease: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    build_metadata: Option<String>,
 }
 
 impl Version {
     pub fn parse(value: &str) -> Result<Self, LifecycleError> {
-        let mut parts = value.split('.');
+        crate::plugin_manifest::Version::parse_codex_plugin(value)
+            .ok_or(LifecycleError::InvalidVersion)?;
+        let (core_prerelease, build_metadata) = value
+            .split_once('+')
+            .map_or((value, None), |(core, build)| (core, Some(build)));
+        let (core, prerelease) = core_prerelease
+            .split_once('-')
+            .map_or((core_prerelease, None), |(core, prerelease)| {
+                (core, Some(prerelease))
+            });
+        let mut parts = core.split('.');
         let major = number(parts.next())?;
         let minor = number(parts.next())?;
         let patch = number(parts.next())?;
@@ -47,19 +61,36 @@ impl Version {
             major,
             minor,
             patch,
+            prerelease: prerelease.map(str::to_owned),
+            build_metadata: build_metadata.map(str::to_owned),
         })
     }
-}
 
-impl Ord for Version {
-    fn cmp(&self, other: &Self) -> Ordering {
-        (self.major, self.minor, self.patch).cmp(&(other.major, other.minor, other.patch))
+    pub fn precedence_cmp(&self, other: &Self) -> Result<Ordering, LifecycleError> {
+        let left = crate::plugin_manifest::Version::parse_codex_plugin(&self.to_string())
+            .ok_or(LifecycleError::InvalidVersion)?;
+        let right = crate::plugin_manifest::Version::parse_codex_plugin(&other.to_string())
+            .ok_or(LifecycleError::InvalidVersion)?;
+        Ok(left.precedence_cmp(&right))
+    }
+
+    fn validate(&self) -> Result<(), LifecycleError> {
+        (Self::parse(&self.to_string())? == *self)
+            .then_some(())
+            .ok_or(LifecycleError::InvalidVersion)
     }
 }
 
-impl PartialOrd for Version {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
+impl fmt::Display for Version {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "{}.{}.{}", self.major, self.minor, self.patch)?;
+        if let Some(prerelease) = &self.prerelease {
+            write!(formatter, "-{prerelease}")?;
+        }
+        if let Some(build_metadata) = &self.build_metadata {
+            write!(formatter, "+{build_metadata}")?;
+        }
+        Ok(())
     }
 }
 
@@ -82,6 +113,7 @@ pub struct PackageAuthority {
 
 impl PackageAuthority {
     pub fn validate(&self) -> Result<(), LifecycleError> {
+        self.version.validate()?;
         for digest in [
             &self.package_sha256,
             &self.inventory_sha256,
@@ -90,6 +122,35 @@ impl PackageAuthority {
             validate_digest(digest)?;
         }
         Ok(())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct PriorInstalledAuthority {
+    authority: PackageAuthority,
+    observation_sha256: String,
+}
+
+impl PriorInstalledAuthority {
+    pub(crate) fn new(
+        authority: PackageAuthority,
+        observation_sha256: String,
+    ) -> Result<Self, LifecycleError> {
+        authority.validate()?;
+        validate_digest(&observation_sha256)?;
+        Ok(Self {
+            authority,
+            observation_sha256,
+        })
+    }
+
+    pub(crate) fn authority(&self) -> &PackageAuthority {
+        &self.authority
+    }
+
+    pub(crate) fn validate(&self) -> Result<(), LifecycleError> {
+        Self::new(self.authority.clone(), self.observation_sha256.clone()).map(|_| ())
     }
 }
 
@@ -161,37 +222,46 @@ pub struct LifecyclePlan {
 
 static NEXT_PLAN_ISSUANCE: AtomicU64 = AtomicU64::new(1);
 
+pub(super) type LifecycleActionAuthority = Arc<AtomicU8>;
+pub(super) type RecoveryStateAuthority = Arc<Mutex<Option<LifecycleState>>>;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u8)]
 pub(super) enum LifecycleActionState {
     Planned = 0,
-    Applying = 1,
-    RecoveryAvailable = 2,
-    Recovering = 3,
-    Closed = 4,
+    Transferred = 1,
+    Applying = 2,
+    RecoveryAvailable = 3,
+    Recovering = 4,
+    Closed = 5,
 }
 
 impl LifecycleActionState {
     fn decode(value: u8) -> Result<Self, LifecycleError> {
         match value {
             0 => Ok(Self::Planned),
-            1 => Ok(Self::Applying),
-            2 => Ok(Self::RecoveryAvailable),
-            3 => Ok(Self::Recovering),
-            4 => Ok(Self::Closed),
+            1 => Ok(Self::Transferred),
+            2 => Ok(Self::Applying),
+            3 => Ok(Self::RecoveryAvailable),
+            4 => Ok(Self::Recovering),
+            5 => Ok(Self::Closed),
             _ => Err(LifecycleError::InvalidTransition),
         }
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub(super) enum PlanAuthorizationSeal {
+    #[default]
     Unsealed,
-    Sealed {
-        issuance_id: u64,
-        observed: LifecycleState,
-        request: LifecycleRequest,
-        action_state: Arc<AtomicU8>,
-        recovery_state: Arc<Mutex<Option<LifecycleState>>>,
-    },
+    Sealed(Box<PlanAuthorizationSealData>),
+}
+
+#[derive(Clone)]
+pub(super) struct PlanAuthorizationSealData {
+    issuance_id: u64,
+    observed: LifecycleState,
+    request: LifecycleRequest,
+    action_state: LifecycleActionAuthority,
+    recovery_state: RecoveryStateAuthority,
 }

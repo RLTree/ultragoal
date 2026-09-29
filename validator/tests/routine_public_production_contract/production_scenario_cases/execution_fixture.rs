@@ -71,9 +71,9 @@ impl Fixture {
         fs::create_dir_all(binary.parent().unwrap()).unwrap();
         fs::copy(Self::source_binary(), &binary).unwrap();
         set_mode(&binary, 0o555);
-        set_mode(&home, 0o700);
+        set_mode(&home, 0o755);
         fs::write(root.join("src/lib.rs"), b"pub fn value() -> u8 { 1 }\n").unwrap();
-        fs::write(root.join(".gitignore"), b"target/\n").unwrap();
+        fs::write(root.join(".gitignore"), b"target/\nvalidation_artifacts/\n").unwrap();
 
         let graph = graph(nodes, routes);
         let catalog = catalog_bytes(nodes, graph.graph_id());
@@ -156,6 +156,38 @@ impl Fixture {
         self.state_root().join("adapter/adapter.lock")
     }
 
+    pub fn checkpoint_path(&self) -> PathBuf {
+        super::continuation_paths::checkpoint_path(&self.state_root())
+    }
+
+    pub fn continuations_root(&self) -> PathBuf {
+        super::continuation_paths::continuations_root(&self.state_root())
+    }
+
+    pub fn checkpoint_stage_path(&self) -> PathBuf {
+        super::continuation_paths::checkpoint_stage_path(&self.state_root())
+    }
+
+    pub fn event_leaf(&self) -> PathBuf {
+        let leaves = fs::read_dir(self.state_root().join("adapter"))
+            .unwrap()
+            .map(|entry| entry.unwrap().path())
+            .filter(|path| {
+                path.file_name()
+                    .and_then(|name| name.to_str())
+                    .is_some_and(|name| {
+                        name.starts_with("routine-events-") && name.ends_with(".jsonl")
+                    })
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            leaves.len(),
+            1,
+            "expected one authenticated host event leaf"
+        );
+        leaves.into_iter().next().unwrap()
+    }
+
     pub(crate) fn binary_path(&self) -> &Path {
         &self.binary
     }
@@ -220,9 +252,7 @@ impl Fixture {
     }
 
     fn source_binary() -> PathBuf {
-        std::env::var_os("HUL_ROUTINE_IMMUTABLE_BINARY")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| PathBuf::from(env!("CARGO_BIN_EXE_ultragoal")))
+        PathBuf::from(env!("CARGO_BIN_EXE_ultragoal"))
     }
 
     fn fixture_parent() -> PathBuf {

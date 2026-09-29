@@ -38,19 +38,15 @@ pub(crate) fn fit_apply_runs_the_public_production_route_and_retires_recovery_st
         .as_str()
         .unwrap()
         .to_owned();
-    fs::create_dir_all(repo.root.join("validation_artifacts")).unwrap();
-    fs::write(
-        repo.root.join("validation_artifacts/fit-plan.json"),
-        &plan.stdout,
-    )
-    .unwrap();
+    let plan_path = home.join("fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
 
     let ParseOutcome::Invocation(apply_invocation) = parse_args([
         "--json",
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ])
@@ -95,6 +91,140 @@ pub(crate) fn fit_apply_runs_the_public_production_route_and_retires_recovery_st
 
 #[cfg(target_vendor = "apple")]
 #[test]
+pub(crate) fn authenticated_legacy_device_drift_migrates_during_exact_apply_without_quarantine() {
+    use std::os::unix::fs::{MetadataExt, PermissionsExt};
+
+    let repo = Repository::new("fit-device-neutral-ledger-migration");
+    let home = repo.root.with_extension("fit-device-neutral-home");
+    let state = home.join(".codex/state/harness-ultragoal/repository-fit");
+    let authority = state.join("authority");
+    let pending = state.join("pending");
+    fs::create_dir_all(&authority).unwrap();
+    fs::create_dir_all(&pending).unwrap();
+    for path in [
+        &home,
+        &home.join(".codex"),
+        &home.join(".codex/state"),
+        &home.join(".codex/state/harness-ultragoal"),
+        &state,
+        &authority,
+        &pending,
+    ] {
+        fs::set_permissions(path, fs::Permissions::from_mode(0o700)).unwrap();
+    }
+    let home = fs::canonicalize(&home).unwrap();
+
+    let ParseOutcome::Invocation(first_plan_invocation) =
+        parse_args(["--json", "fit", "plan"]).unwrap()
+    else {
+        panic!("expected fit plan invocation")
+    };
+    let first_plan = execute_invocation_with_home(&repo.root, first_plan_invocation, Some(&home))
+        .render(OutputMode::Json);
+    assert_eq!(first_plan.exit_code, 0);
+    let first_value: serde_json::Value = serde_json::from_slice(&first_plan.stdout).unwrap();
+    let first_sha = first_value["plan"]["plan_sha256"].as_str().unwrap();
+    let first_path = home.join("first-fit-plan.json");
+    fs::write(&first_path, &first_plan.stdout).unwrap();
+    let ParseOutcome::Invocation(first_apply) = parse_args([
+        "--json",
+        "fit",
+        "apply",
+        "--plan",
+        first_path.to_str().unwrap(),
+        "--accept-plan",
+        first_sha,
+    ])
+    .unwrap() else {
+        panic!("expected fit apply invocation")
+    };
+    assert_eq!(
+        execute_invocation_with_home(&repo.root, first_apply, Some(&home))
+            .render(OutputMode::Json)
+            .exit_code,
+        0
+    );
+
+    fs::remove_file(repo.root.join("AGENTS.md")).unwrap();
+    fs::write(repo.root.join("operator-note.txt"), b"preserve me\n").unwrap();
+    let note = fs::read(repo.root.join("operator-note.txt")).unwrap();
+    let current_device = fs::metadata(&authority).unwrap().dev();
+    crate::repository_fit::write_legacy_v3_device_number_for_test(&authority, current_device + 1)
+        .unwrap();
+    let legacy = fs::read(authority.join("authority-ledger.json")).unwrap();
+
+    let ParseOutcome::Invocation(second_plan_invocation) =
+        parse_args(["--json", "fit", "plan"]).unwrap()
+    else {
+        panic!("expected second fit plan invocation")
+    };
+    let second_plan = execute_invocation_with_home(&repo.root, second_plan_invocation, Some(&home))
+        .render(OutputMode::Json);
+    assert_eq!(second_plan.exit_code, 0);
+    assert_eq!(
+        fs::read(authority.join("authority-ledger.json")).unwrap(),
+        legacy
+    );
+    let second_value: serde_json::Value = serde_json::from_slice(&second_plan.stdout).unwrap();
+    let second_sha = second_value["plan"]["plan_sha256"].as_str().unwrap();
+    let second_path = home.join("second-fit-plan.json");
+    fs::write(&second_path, &second_plan.stdout).unwrap();
+
+    let ParseOutcome::Invocation(second_apply) = parse_args([
+        "--json",
+        "fit",
+        "apply",
+        "--plan",
+        second_path.to_str().unwrap(),
+        "--accept-plan",
+        second_sha,
+    ])
+    .unwrap() else {
+        panic!("expected second fit apply invocation")
+    };
+    let applied = execute_invocation_with_home(&repo.root, second_apply, Some(&home))
+        .render(OutputMode::Json);
+    assert_eq!(
+        applied.exit_code,
+        0,
+        "{}",
+        String::from_utf8_lossy(&applied.stderr)
+    );
+    assert_eq!(fs::read(repo.root.join("operator-note.txt")).unwrap(), note);
+    assert!(repo.root.join("AGENTS.md").is_file());
+    assert!(fs::read_dir(&state).unwrap().all(|entry| {
+        !entry
+            .unwrap()
+            .file_name()
+            .to_string_lossy()
+            .contains("quarantine")
+    }));
+
+    let migrated: serde_json::Value =
+        serde_json::from_slice(&fs::read(authority.join("authority-ledger.json")).unwrap())
+            .unwrap();
+    assert_eq!(
+        migrated["schema_version"],
+        "harness-ultragoal.repository-fit-authority-ledger-envelope.v4"
+    );
+    assert_eq!(
+        migrated["payload"]["schema_version"],
+        "harness-ultragoal.repository-fit-authority-ledger.v4"
+    );
+    assert!(migrated["payload"]["root_identity"].get("device").is_none());
+    assert!(migrated["payload"]["lock_identity"].get("device").is_none());
+    assert!(
+        migrated["payload"]["predecessor_envelope_sha256"]
+            .as_str()
+            .unwrap()
+            .starts_with("sha256:")
+    );
+
+    fs::remove_dir_all(home).unwrap();
+}
+
+#[cfg(target_vendor = "apple")]
+#[test]
 pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_block_it() {
     use std::os::unix::fs::PermissionsExt;
 
@@ -130,12 +260,8 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
         .as_str()
         .unwrap()
         .to_owned();
-    fs::create_dir_all(repo.root.join("validation_artifacts")).unwrap();
-    fs::write(
-        repo.root.join("validation_artifacts/fit-plan.json"),
-        &plan.stdout,
-    )
-    .unwrap();
+    let plan_path = home.join("fit-plan.json");
+    fs::write(&plan_path, &plan.stdout).unwrap();
 
     crate::repository_fit::after_effect_before_terminal_for_test(|| {
         panic!("simulated public process interruption after the workspace effect")
@@ -146,7 +272,7 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
             "fit",
             "apply",
             "--plan",
-            "validation_artifacts/fit-plan.json",
+            plan_path.to_str().unwrap(),
             "--accept-plan",
             &plan_sha256,
         ])
@@ -170,7 +296,7 @@ pub(crate) fn fit_apply_services_pending_recovery_before_a_conflicting_plan_can_
         "fit",
         "apply",
         "--plan",
-        "validation_artifacts/fit-plan.json",
+        plan_path.to_str().unwrap(),
         "--accept-plan",
         &plan_sha256,
     ])

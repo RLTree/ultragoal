@@ -1,21 +1,11 @@
 {
   "schema": "harness-ultragoal.product-success-contract.v1",
-  "source_spec": {
-    "generated_from": "GOAL_CONTRACT.md",
-    "generator_command": "root-authored live successor contract amendment AMEND-001",
-    "input_artifacts": [
-      "GOAL_CONTRACT.md",
-      "docs/ultragoal-contract-2026-07-successor-v2/FINAL-CONTRACT/CLAIM_REGISTRY.json",
-      "schemas/product-success-contract.schema.json"
-    ],
-    "claim_ceiling": "contract_authority_only_until_current_source_installed_journeys_and_product_fitness_pass"
-  },
   "product_success_contract_id": "PSC-HARNESS-ULTRAGOAL-SUCCESSOR-LIVE-001",
-  "contract_version": "2.1.0",
+  "contract_version": "2.3.0",
   "goal_id": "harness-ultragoal-successor-contract-v2-live",
   "target_revision": {
     "path": "GOAL_CONTRACT.md",
-    "digest": "sha256:bc0080163641a33a781d5bd14dd4b40bdba507909a88bbba52303ec3a8295071"
+    "digest": "sha256:6488e75196f28582adac4ea6079ce0878a6ad7059b720eaea68b08b780874b7a"
   },
   "claim_ids": [
     "CL-SOURCE",
@@ -35,19 +25,22 @@
   ],
   "product_surface_classification": "developer_tool_plugin_and_typed_cli_installed_product",
   "target_user_or_operator": "Repository operator using Harness Ultragoal to deliver ambitious work with bounded supervision",
-  "job_to_be_done": "Turn a falsifiable repository outcome into a reversible, inspectable, recoverable delivery using the smallest sufficient harness",
+  "job_to_be_done": "Turn a falsifiable repository outcome into a reversible, inspectable, recoverable delivery using the smallest sufficient harness and the smallest useful design or decision lens",
   "context_of_use": "Current-source Codex plugin and Rust CLI use in established dirty and materially different real repositories",
-  "desired_user_outcome": "Reach a useful verified repository outcome while preserving unrelated work and understanding failures, recovery, evidence, and remaining claim limits",
+  "desired_user_outcome": "Reach a useful verified repository outcome while preserving unrelated work, receiving relevant design and decision help without learning internal disciplines, and understanding failures, recovery, evidence, and remaining claim limits",
   "business_or_mission_outcome": "Improve trustworthy delivery while reducing human attention, repeated review loops, and non-product proof or artifact cost",
   "critical_journey_id": "harness-ultragoal-current-source-installed-daily-driver-v1",
   "critical_journey_steps": [
     "build an exact current-source package",
     "install and identify exact installed bytes",
     "observe host discovery in a new supported session",
+    "enter through the single Harness front door and automatically select the smallest sufficient Agentic advisory lens or an honest no-change disposition",
     "fit a real repository while preserving unrelated state",
     "perform dirty-tree routine work",
     "encounter and diagnose a representative failure",
+    "reactivate advisory reasoning only when changed evidence, risk, lifecycle, or failure mechanism requires it",
     "recover through parent-observed settlement and explicit cleanup",
+    "inspect or explicitly request an expert lens without bypassing Harness authority",
     "repeat useful work without stale custody or hidden writes",
     "reconcile operator value, attention cost, retained artifacts, and claim ceiling"
   ],
@@ -60,10 +53,10 @@
     "context_coverage"
   ],
   "accessibility_gate": "Commands, decisions, failures, recovery actions, and claim limits remain text-first and inspectable without hidden visual-only state",
-  "cognitive_load_gate": "One lean outcome contract, one canonical current state, batched reviews, and exact next actions minimize operator interpretation burden",
+  "cognitive_load_gate": "One lean outcome contract, one canonical current state, automatic smallest-sufficient advisory selection, plain-language results, batched reviews, and exact next actions minimize operator interpretation burden",
   "recovery_burden_gate": "Interruption and failure preserve unrelated state and expose diagnosis, parent-observed settlement, explicit cleanup, and repeat-use recovery",
   "trust_burden_gate": "Package, install, discovery, runtime, repository behavior, Product Fitness, release, and completion remain separate claims bound to exact identities",
-  "human_attention_policy": "Use the lowest sufficient model and focused deterministic checks; request human judgment only for material product or authority decisions without a safe default",
+  "human_attention_policy": "Use the lowest sufficient model, advisory lens, and focused deterministic checks; request human judgment only for material product or authority decisions without a safe default",
   "continuance_required": true,
   "evidence_ladder_required_level": "Known",
   "forbidden_substitutions": [
@@ -73,6 +66,7 @@
     "discovery for runtime behavior",
     "unit or fixture tests for real repository use",
     "receipts, manifests, logs, signatures, or generated output for behavior",
+    "Agentic advice, reviewer agreement, upstream confidence, or structural skill coverage for an UltraGoal product claim",
     "one repository journey for broad reuse or mastery",
     "artifact existence for readiness, release, or completion"
   ],
@@ -82,9 +76,9 @@
     "broadly reusable or mastery-level performance before two materially different real-repository journeys",
     "autonomous external publication or destructive cleanup"
   ],
-  "claim_ceiling": "Contract authority only. N06, current-source installed behavior, Product Fitness, real-repository journeys, readiness, release, completion, and mastery remain withheld pending exact same-surface evidence.",
+  "claim_ceiling": "Contract authority only. Full Agentic advisory integration is normative but automatic selection, reactivation, package, install, discovery, runtime, Product Fitness, real-repository journeys, human use, readiness, release, completion, and mastery remain withheld pending exact same-surface evidence. N11 positive execution and CL-EVAL-IMPROVEMENT remain externally blocked.",
   "producer_actor_id": "OWN-ULTRA-ROOT",
   "review_owner": "OWN-INDEPENDENT-REVIEW",
-  "generated_at": "2026-07-15T23:30:48Z",
+  "generated_at": "2026-07-23T17:07:22Z",
   "receipt_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
 }

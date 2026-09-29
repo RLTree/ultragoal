@@ -1,9 +1,9 @@
 impl PromotionDecision {
-    pub(crate) fn reconcile<A: PromotionReviewAuthority>(
+    pub(crate) fn reconcile(
         baseline: &EvaluationRun,
         candidate: &EvaluationRun,
         review: &PromotionReview,
-        authority: &mut A,
+        authority: &mut PromotionReviewAuthority,
     ) -> Self {
         let mut reasons = Vec::new();
         let pair_is_current = runs_comparable(baseline, candidate)

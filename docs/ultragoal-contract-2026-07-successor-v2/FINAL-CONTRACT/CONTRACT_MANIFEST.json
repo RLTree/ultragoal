@@ -262,8 +262,8 @@
       "path": "FINAL-CONTRACT/PRODUCT_SURFACE_INVENTORY.json",
       "role": "owned product surfaces and dispositions",
       "media_type": "application/json",
-      "sha256": "410fa8b0ff620d085e37ee83aae8e7c7407bb702f88afe51abe89dc5b8c1d0fb",
-      "bytes": 36878,
+      "sha256": "e90a8c55a5b449cd20182dfbad5277751b60cf387965164fbf15e6271a0cfe8f",
+      "bytes": 36136,
       "normative": true
     },
     {

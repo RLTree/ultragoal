@@ -3,14 +3,12 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 static TEST_PREOPEN_PAUSE_MS: AtomicU64 = AtomicU64::new(0);
 static TEST_PREOPEN_PAUSED: AtomicBool = AtomicBool::new(false);
 
-#[allow(dead_code)]
-pub(crate) fn set_test_preopen_pause_ms(milliseconds: u64) {
+pub fn set_test_preopen_pause_ms(milliseconds: u64) {
     TEST_PREOPEN_PAUSED.store(false, Ordering::SeqCst);
     TEST_PREOPEN_PAUSE_MS.store(milliseconds, Ordering::SeqCst);
 }
 
-#[allow(dead_code)]
-pub(crate) fn test_preopen_is_paused() -> bool {
+pub fn test_preopen_is_paused() -> bool {
     TEST_PREOPEN_PAUSED.load(Ordering::SeqCst)
 }
 

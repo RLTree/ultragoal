@@ -1,1 +1,0 @@
-Issue composer state: route preview is visible, human attention is not the default path, and proof owed is named before execution.

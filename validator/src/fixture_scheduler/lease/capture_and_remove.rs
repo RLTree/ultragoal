@@ -1,3 +1,58 @@
+#[cfg(all(test, unix))]
+thread_local! {
+    static BEFORE_CAPTURE_HOOK: std::cell::RefCell<Option<Box<dyn FnMut(&OsStr)>>> =
+        std::cell::RefCell::new(None);
+}
+
+#[cfg(all(test, unix))]
+pub(crate) fn set_before_capture_hook(hook: Option<Box<dyn FnMut(&OsStr)>>) {
+    BEFORE_CAPTURE_HOOK.with(|slot| *slot.borrow_mut() = hook);
+}
+
+#[cfg(all(test, unix))]
+fn run_before_capture_hook(name: &CStr) {
+    let name = OsStr::from_bytes(name.to_bytes());
+    BEFORE_CAPTURE_HOOK.with(|slot| {
+        if let Some(hook) = slot.borrow_mut().as_mut() {
+            hook(name);
+        }
+    });
+}
+
+#[cfg(all(not(test), unix))]
+fn run_before_capture_hook(_name: &CStr) {}
+
+#[cfg(all(test, unix))]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum LeaseAcquisitionStage {
+    Pin,
+    Marker,
+    ResourceDirectory,
+    PortBind,
+    PortAddress,
+    ReservationWrite,
+    BeforeInsertion,
+}
+
+#[cfg(all(test, unix))]
+thread_local! { static LEASE_ACQUISITION_HOOK: std::cell::RefCell<Option<Box<dyn FnMut(LeaseAcquisitionStage, &Path)>>> = std::cell::RefCell::new(None); }
+
+#[cfg(all(test, unix))]
+pub(crate) fn set_lease_acquisition_hook(
+    hook: Option<Box<dyn FnMut(LeaseAcquisitionStage, &Path)>>,
+) {
+    LEASE_ACQUISITION_HOOK.with(|slot| *slot.borrow_mut() = hook);
+}
+
+#[cfg(all(test, unix))]
+pub(crate) fn run_lease_acquisition_hook(stage: LeaseAcquisitionStage, root: &Path) {
+    LEASE_ACQUISITION_HOOK.with(|slot| {
+        if let Some(hook) = slot.borrow_mut().as_mut() {
+            hook(stage, root)
+        }
+    });
+}
+
 #[cfg(unix)]
 fn capture_and_remove(
     parent_fd: RawFd,
@@ -130,12 +185,14 @@ fn unused_quarantine_name(parent_fd: RawFd) -> io::Result<CString> {
 
 #[cfg(target_os = "macos")]
 fn fill_random(output: &mut [u8]) -> io::Result<()> {
+    // SAFETY: `output` supplies a writable buffer of exactly `output.len()` bytes.
     unsafe { libc::arc4random_buf(output.as_mut_ptr().cast(), output.len()) };
     Ok(())
 }
 
 #[cfg(target_os = "linux")]
 fn fill_random(output: &mut [u8]) -> io::Result<()> {
+    // SAFETY: `output` supplies a writable buffer of exactly `output.len()` bytes.
     let written = unsafe { libc::getrandom(output.as_mut_ptr().cast(), output.len(), 0) };
     if written == output.len() as isize {
         Ok(())
@@ -159,6 +216,8 @@ fn fill_random(_output: &mut [u8]) -> io::Result<()> {
 
 #[cfg(target_os = "macos")]
 fn rename_noreplace(from_fd: RawFd, from: &CStr, to_fd: RawFd, to: &CStr) -> io::Result<()> {
+    // SAFETY: both descriptors and NUL-terminated names are borrowed from the
+    // pinned lease namespace; `RENAME_EXCL` preserves no-replace semantics.
     let result = unsafe {
         libc::renameatx_np(
             from_fd,

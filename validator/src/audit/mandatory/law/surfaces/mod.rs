@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
 mod current_law;
-mod dependencies;
+pub(crate) mod dependencies;
 mod independent;
 mod production;
 mod registry;
@@ -27,6 +27,7 @@ pub fn package_failures(root: &Path) -> Vec<String> {
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
+        .filter(|row| !retained_law_row(row))
     {
         out.extend(receipt_value_failures_with_candidate(
             root,
@@ -54,6 +55,7 @@ pub fn package_failures_with_current(
         .and_then(Value::as_array)
         .into_iter()
         .flatten()
+        .filter(|row| !retained_law_row(row))
     {
         let law = receipt
             .get("law_id")
@@ -77,20 +79,16 @@ pub(crate) fn current_check_failures_for_test(
     production::current_check_failures(value, law, failures)
 }
 
-pub(crate) fn anti_theater_dependency_failures(
-    root: &Path,
-    store: &crate::schema_catalog::SchemaStore,
-    law: &str,
-) -> Vec<String> {
-    dependencies::anti_theater_failures(root, store, law)
-}
-
 pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
     let Some(rows) = value.get("laws").and_then(Value::as_array) else {
         return vec!["mandatory_law_registry_missing_laws".to_string()];
     };
     let mut out = Vec::new();
-    let seen = rows
+    let current_rows = rows
+        .iter()
+        .filter(|row| !retained_law_row(row))
+        .collect::<Vec<_>>();
+    let seen = current_rows
         .iter()
         .filter_map(|row| row.get("law_id").and_then(Value::as_str))
         .collect::<BTreeSet<_>>();
@@ -100,7 +98,7 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         }
     }
     let red_ids = registry::red_fixture_ids(root);
-    for row in rows {
+    for row in current_rows {
         let law = row
             .get("law_id")
             .and_then(Value::as_str)
@@ -117,10 +115,10 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         if !registry::trace_entry_exists(root, law) {
             out.push(format!("mandatory_law_missing_foundational_trace:{law}"));
         }
-        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str) {
-            if !root.join(path).is_file() {
-                out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
-            }
+        if let Some(path) = row.get("valid_fixture_path").and_then(Value::as_str)
+            && !root.join(path).is_file()
+        {
+            out.push(format!("mandatory_law_missing_valid_fixture:{law}"));
         }
         for red in row
             .get("red_fixture_ids")
@@ -135,6 +133,12 @@ pub fn value_failures(root: &Path, value: &Value) -> Vec<String> {
         }
     }
     out
+}
+
+fn retained_law_row(row: &Value) -> bool {
+    row.get("law_id")
+        .and_then(Value::as_str)
+        .is_some_and(crate::contract_check_ids::is_retained_compatibility_id)
 }
 
 #[cfg(test)]
@@ -230,4 +234,46 @@ pub fn receipt_value_failures_with_candidate(
     }
     out.extend(production::binding_failures(root, value, law));
     out
+}
+
+#[cfg(test)]
+mod retained_compatibility_tests {
+    use super::{receipt_value_failures_with_candidate, value_failures};
+    use serde_json::json;
+    use std::path::Path;
+
+    #[test]
+    fn current_registry_ignores_retained_rows_while_direct_receipt_parsing_stays_strict() {
+        let root = Path::new("retained-compatibility-test-root");
+        let registry = json!({"laws":[
+            {"law_id":"research-source-authority-article-to-law-integration"},
+            {"law_id":"source-card-freshness-ceiling"},
+            {"law_id":"ordinary-current-row","claim_ceiling_guard":"backlog"}
+        ]});
+        let failures = value_failures(root, &registry);
+        for retained in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(
+                failures.iter().all(|failure| !failure.contains(retained)),
+                "{retained}: {failures:?}"
+            );
+        }
+        assert!(
+            failures.contains(&"mandatory_law_weak_disposition:ordinary-current-row".to_string()),
+            "{failures:?}"
+        );
+
+        let direct = receipt_value_failures_with_candidate(
+            root,
+            &json!({"law_id":"source-card-freshness-ceiling"}),
+            "sha256:test",
+        );
+        assert!(
+            direct
+                .contains(&"mandatory_law_wrong_schema:source-card-freshness-ceiling".to_string()),
+            "{direct:?}"
+        );
+    }
 }

@@ -1,5 +1,3 @@
-#[cfg(test)]
-pub(crate) const AUTHORITY_CLASSIFICATION: &str = "sole-current-authority-pending-migration";
 pub(crate) const COMPATIBILITY_BEHAVIOR: &str = "unverified";
 pub(crate) const COMPATIBILITY_BOUNDARY: &str = "blocked-by-OD-008";
 pub(crate) const REPLACEMENT_STATE: &str = "unverified";

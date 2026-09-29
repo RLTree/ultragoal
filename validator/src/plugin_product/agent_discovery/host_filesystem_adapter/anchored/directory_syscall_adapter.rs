@@ -57,6 +57,7 @@ fn execute(
             libc::O_RDONLY | libc::O_NOFOLLOW | libc::O_CLOEXEC | libc::O_NONBLOCK
         }
     };
+    // SAFETY: the caller supplies a live directory descriptor and a NUL-terminated component.
     let descriptor = unsafe { libc::openat(request.directory_fd, request.name.as_ptr(), flags) };
     if descriptor < 0 {
         Err(DirectorySyscallError::OpenRejected)

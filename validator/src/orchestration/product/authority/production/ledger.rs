@@ -1,4 +1,4 @@
-use super::{ProductError, checkpoint::LedgerCheckpoint, store::Store};
+use super::{ProductError, ledger_observation::LedgerObservation, store::Store};
 use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -34,7 +34,7 @@ struct LedgerRecord {
 
 pub(super) struct Ledger {
     store: Store,
-    checkpoint: Mutex<LedgerCheckpoint>,
+    observation: Mutex<LedgerObservation>,
 }
 
 impl Ledger {
@@ -87,7 +87,7 @@ impl Ledger {
         let _lock = self.store.lock()?;
         self.store.verify()?;
         let records = self.read_records()?;
-        self.require_current_checkpoint(&records)?;
+        self.require_current_observation(&records)?;
         Ok(latest_states(&records).get(permit_id).copied())
     }
 
@@ -112,7 +112,7 @@ impl Ledger {
         let _lock = self.store.lock()?;
         self.store.verify()?;
         let mut records = self.read_records()?;
-        self.require_current_checkpoint(&records)?;
+        self.require_current_observation(&records)?;
         require_state(&records, permit_id, expected)?;
         let causal_slot_id = match new_causal_slot_id {
             Some(value) => {
@@ -156,7 +156,7 @@ impl Ledger {
             &serde_json::to_vec(&record).map_err(|_| ProductError::AuthorityStoreInvalid)?,
         )?;
         records.push(record);
-        *self.checkpoint_lock()? = checkpoint_for(records, self.store.ledger_stamp()?);
+        *self.observation_lock()? = observe_ledger(records, self.store.ledger_stamp()?);
         Ok(())
     }
 
@@ -185,7 +185,7 @@ impl Ledger {
     }
 }
 
-include!("ledger_checkpoint.rs");
+include!("ledger_integrity.rs");
 include!("ledger_record.rs");
 
 fn require_state(

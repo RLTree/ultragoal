@@ -6,6 +6,7 @@ use crate::distribution::{
     DiscoveryObservation, DistributionReport, InstallPlan, InstallSnapshot, MarketplaceSnapshot,
     PackageIdentity, PackagePlan, PackageSnapshot, RuntimeObservation, SurfaceIdentity,
 };
+use crate::fixture_scheduler::{ExpectedOutcome, FixtureScheduler, FixtureSpec, IsolationLease};
 use crate::inventory::{AuthorityCatalog, GeneratedSurfaceIndex, InventoryBuilder};
 use crate::observability::{
     CausalExplanation, EventQuery, EventStore, ExportAdapter, SemanticEvent,
@@ -30,7 +31,9 @@ impl EffectSink for WitnessEffectSink {
     }
 }
 
-pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
+/// Compile compatibility witness only. Product activation is issued by the
+/// private successor dispatcher binding, never by these reexports or types.
+pub(crate) fn compatible_public_apis() -> &'static [&'static str] {
     let _: fn(BuildRequest) -> Result<LiveContext, ContextError> = LiveContext::build;
     require_type::<EffectClass>();
     require_type::<CapabilitySet>();
@@ -53,6 +56,10 @@ pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
     require_type::<SurfaceIdentity>();
     require_type::<PackagePlan>();
     require_type::<InstallPlan>();
+    require_type::<FixtureSpec>();
+    require_type::<FixtureScheduler>();
+    require_type::<IsolationLease>();
+    require_type::<ExpectedOutcome>();
     require_type::<Orchestrator<WitnessEffectSink>>();
     require_type::<WorkGraph>();
     require_type::<WorkerResultV1>();
@@ -100,6 +107,10 @@ pub(crate) fn implemented_public_apis() -> &'static [&'static str] {
         "MarketplaceSnapshot",
         "DiscoveryObservation",
         "RuntimeObservation",
+        "FixtureSpec",
+        "FixtureScheduler",
+        "IsolationLease",
+        "ExpectedOutcome",
         "FitInspection",
         "FitPlan",
         "Mutation",

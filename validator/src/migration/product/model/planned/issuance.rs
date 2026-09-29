@@ -58,10 +58,12 @@ impl PlannedMigrationEffect {
         &self.effect_id
     }
 
+    #[cfg(test)]
     pub(crate) fn semantic_key(&self) -> &str {
         &self.semantic_key
     }
 
+    #[cfg(test)]
     pub(crate) fn route_id(&self) -> &str {
         &self.route_id
     }
@@ -70,6 +72,7 @@ impl PlannedMigrationEffect {
         self.disposition
     }
 
+    #[cfg(test)]
     pub(crate) fn before(&self) -> &AuthoritySnapshot {
         &self.before
     }
@@ -78,6 +81,7 @@ impl PlannedMigrationEffect {
         &self.after
     }
 
+    #[cfg(test)]
     pub(crate) fn compatibility_prerequisites_sha256(&self) -> Option<&str> {
         self.compatibility_prerequisites_sha256.as_deref()
     }

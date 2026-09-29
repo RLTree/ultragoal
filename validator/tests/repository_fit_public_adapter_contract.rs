@@ -47,7 +47,7 @@ fn fixture_catalog_covers_the_exact_representative_and_false_pass_matrix() {
     );
     assert_eq!(
         value["temporary_root"],
-        "/tmp/hul-repository-fit-public-adapter-056"
+        "$TMPDIR/hul-repository-fit-public-adapter-056"
     );
     let ids = value["cases"]
         .as_array()

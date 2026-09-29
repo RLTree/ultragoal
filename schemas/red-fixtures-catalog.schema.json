@@ -16162,132 +16162,6 @@
       "contains": {
         "properties": {
           "id": {
-            "const": "target-repo-audit-capability-fixture-used-as-live-target-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-generic-repo-support-overclaim-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-mode-substitution-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-source-obligation-parity-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-target-classification-missing-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-target-command-missing-success-emitted-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-unknown-language-runtime-accepted-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
-            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
-      "maxContains": 1,
-      "minContains": 1
-    },
-    {
-      "contains": {
-        "properties": {
-          "id": {
             "const": "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red"
           }
         },
@@ -17926,8 +17800,8 @@
   "items": {
     "$ref": "red-fixture.schema.json"
   },
-  "maxItems": 1280,
-  "minItems": 1280,
+  "maxItems": 1271,
+  "minItems": 1271,
   "title": "Harness Ultragoal Red Fixtures Catalog",
   "type": "array"
 }

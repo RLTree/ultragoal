@@ -8,7 +8,7 @@
   "context_id": "sha256:22ba1bd411e17e821869bbc872fb8f88fbf65a94cc29ab85578f5f67502bf402",
   "context_note": "Fresh live context observed after the final source, integration, provenance, and formatting sweeps and immediately before this self-referential WorkerResult was written. Shared source writes were paused for the capture.",
   "candidate_identity": {
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
     "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",

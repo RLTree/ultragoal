@@ -43,6 +43,15 @@ pub(super) fn current_check_failures(
         .get("validator_check_id")
         .and_then(Value::as_str)
         .unwrap_or("");
+    if crate::contract_check_ids::is_retained_compatibility_id(check_id) {
+        return if crate::contract_check_ids::is_retained_compatibility_id(law) {
+            Vec::new()
+        } else {
+            vec![format!(
+                "mandatory_law_current_check_retained_compatibility:{law}:{check_id}"
+            )]
+        };
+    }
     if !crate::contract_check_ids::CHECK_IDS.contains(&check_id) {
         return Vec::new();
     }
@@ -75,11 +84,11 @@ fn specific_guard_red_fixture_failures(
 ) -> Vec<String> {
     fields
         .iter()
-        .filter_map(|(field, enabled)| {
-            (enabled.as_bool() == Some(true)
-                && !specific_guard_has_red_fixture(root, value, law, field))
-            .then(|| format!("mandatory_law_specific_guard_missing_red_fixture:{law}:{field}"))
+        .filter(|(field, enabled)| {
+            enabled.as_bool() == Some(true)
+                && !specific_guard_has_red_fixture(root, value, law, field)
         })
+        .map(|(field, _)| format!("mandatory_law_specific_guard_missing_red_fixture:{law}:{field}"))
         .collect()
 }
 
@@ -94,20 +103,5 @@ fn specific_guard_has_red_fixture(root: &Path, value: &Value, law: &str, field: 
 }
 
 fn red_fixture_enforces_guard(root: &Path, id: &str, law: &str, field: &str) -> bool {
-    let path = root.join("fixtures/red").join(format!("{id}.json"));
-    let Ok(value) = crate::json_boundary::read_json(&path) else {
-        return false;
-    };
-    if value.get("id").and_then(Value::as_str) != Some(id) {
-        return false;
-    }
-    let Some(expected) = value
-        .get("expected_failure")
-        .and_then(|failure| failure.get("error"))
-        .and_then(Value::as_str)
-    else {
-        return false;
-    };
-    expected == format!("mandatory_law_specific_guard_not_enforced:{law}:{field}")
-        || expected == field
+    crate::audit::red::catalog::law_guard_behavior_verified(root, id, law, field)
 }

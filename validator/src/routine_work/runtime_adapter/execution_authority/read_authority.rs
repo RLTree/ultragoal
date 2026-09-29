@@ -56,18 +56,6 @@ impl RoutineInvocationSpec {
     }
 
     #[cfg(test)]
-    pub(crate) fn test_with_node_id(mut self, node_id: impl Into<String>) -> Self {
-        self.node_id = node_id.into();
-        self
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_with_tool_identity(mut self, identity: impl Into<String>) -> Self {
-        self.tool_identity_sha256 = identity.into();
-        self
-    }
-
-    #[cfg(test)]
     pub(crate) fn test_with_program_sha256(mut self, identity: impl Into<String>) -> Self {
         self.program_sha256 = identity.into();
         self
@@ -98,35 +86,8 @@ impl RoutineInvocationSpec {
     }
 
     #[cfg(test)]
-    pub(crate) fn test_with_read_sources(mut self, read_sources: Vec<RoutineReadSource>) -> Self {
-        self.read_sources = read_sources;
-        self
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_with_read_authority_sha256(
-        mut self,
-        read_authority_sha256: impl Into<String>,
-    ) -> Self {
-        self.read_authority_sha256 = read_authority_sha256.into();
-        self
-    }
-
-    #[cfg(test)]
     pub(crate) fn test_with_timeout_ms(mut self, timeout_ms: u64) -> Self {
         self.timeout_ms = timeout_ms;
-        self
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_with_output_budget_bytes(mut self, output_budget_bytes: u64) -> Self {
-        self.output_budget_bytes = output_budget_bytes;
-        self
-    }
-
-    #[cfg(test)]
-    pub(crate) fn test_with_output_scopes(mut self, scopes: Vec<RepoPath>) -> Self {
-        self.declared_output_scopes = scopes;
         self
     }
 }

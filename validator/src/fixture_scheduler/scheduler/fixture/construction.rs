@@ -22,10 +22,15 @@ impl FixtureScheduler {
                 return Err(FixtureScheduleError::Collision(spec.id.clone()));
             }
         }
-        let mut ids = Vec::with_capacity(ordered.len());
+        let mut acquired = Vec::with_capacity(ordered.len());
         for spec in ordered {
-            ids.push(self.acquire(spec)?);
+            match self.acquire(spec) {
+                Ok(run) => acquired.push(run),
+                Err(source) => return Err(self.rollback_acquisition(acquired, source)),
+            }
         }
+        let ids = acquired.iter().map(|(lease_id, _)| lease_id.clone()).collect();
+        self.active.extend(acquired);
         Ok(ids)
     }
 
@@ -86,6 +91,7 @@ impl FixtureScheduler {
         Ok(disposition)
     }
 
+    #[cfg(test)]
     pub(crate) fn execute<E: FixtureExecutor>(
         &mut self,
         lease_id: &str,
@@ -96,6 +102,11 @@ impl FixtureScheduler {
                 .active
                 .get(lease_id)
                 .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            if !run.is_active() {
+                return Err(FixtureScheduleError::Integrity(
+                    "fixture execution requires an active lease".to_owned(),
+                ));
+            }
             (
                 run.fixture.clone(),
                 run.lease.root().to_path_buf(),
@@ -135,6 +146,11 @@ impl FixtureScheduler {
                 .active
                 .get(lease_id)
                 .ok_or_else(|| FixtureScheduleError::UnknownLease(lease_id.to_owned()))?;
+            if !run.is_active() {
+                return Err(FixtureScheduleError::Integrity(
+                    "fixture execution requires an active lease".to_owned(),
+                ));
+            }
             (
                 run.fixture.clone(),
                 run.lease.root().to_path_buf(),

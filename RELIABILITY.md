@@ -17,6 +17,11 @@ revalidated.
   reuse verified state or produce the same supported outcome without duplicate
   effects.
 
+Routine snapshot stability is measured over the bound Git-visible repository
+state. Ignored build output is outside dirty-state authority; selected inputs
+and declared output scopes are still independently revalidated before and
+after effects.
+
 ## State And Recovery
 
 Product state is owned by the typed stores under `state/`, `orchestration/`,
@@ -38,6 +43,15 @@ output ambiguity stays nonterminal until the owner proves that no child or
 staged custody remains. Reuse is a new durable attempt bound to the prior
 committed record; it is not a read-only shortcut to completion.
 
+The same private routine `HostState` owner appends descriptor-bound semantic
+events and authenticated terminal checkpoints for the exact candidate, target,
+context, and source. A checkpoint projection joins those records; an
+interruption in the append window may therefore leave a pending append absent
+or present. Reads never bootstrap missing state. Historical read-only access
+under stale authority may expose only settled `Complete`, `Failed`,
+`Cancelled`, or `Incomplete` states and must never project `Ambiguous` as a
+settled result; every mutation revalidates the exact current head.
+
 An interrupted operation follows this sequence:
 
 1. reopen the exact state root without initializing missing authority;
@@ -50,7 +64,8 @@ A mutable local store cannot independently prove that its own complete history
 was not rolled back. Until an external monotonic head is available, a nonempty
 routine-authority store refuses fresh-process open, takeover, reuse, and
 mutation. Same-process evidence cannot promote cross-process recovery or
-installed interruption/recovery claims.
+installed interruption/recovery claims. The local store also provides no
+cross-process rollback or recovery proof.
 
 ## Concurrency
 
@@ -63,17 +78,23 @@ closed.
 
 ## Feedback Gates
 
-- Fast source gate: `python3 scripts/check-python-source-laws .`.
-- Focused Rust gate: `cargo test -p ultragoal <filter> --offline --jobs 16 --
-  --test-threads 16` with a lane-local target directory.
-- Rust warning gate: `RUSTFLAGS=-Dwarnings cargo check -p ultragoal
-  --all-targets --offline --jobs 16`.
-- Full repository gate: `scripts/check .`.
-- Public self-law gate: built `ultragoal --root . check strict --claim
-  cli-self-law-compliance`, with a recursive before/after snapshot.
+- Product boundary gate: `scripts/check-product .` for source/package-local
+  compilation and exact focused product-boundary checks.
+- Governance projection gate: `scripts/check-governance .` for current
+  source-law and standards projections only.
+- Compatibility aggregate: `scripts/check .` runs product plus governance;
+  it is neither a coverage nor a full-repository proof route.
+- Release preflight: `scripts/check-release .` requires a clean exact
+  committed candidate, then stops at authority HOLD. A later release-surface
+  action requires separate Tree approval and an explicit implementation
+  change.
+- Public self-law compatibility adapter: built `ultragoal --root . check strict
+  --claim cli-self-law-compliance`, with a recursive before/after snapshot;
+  it is not an ordinary product gate.
 
-Broad gates run only on a dependency-closed freeze. A stale binary, cached
-target, old receipt, or prior digest is not current evidence.
+None of these proves package, installation, discovery, runtime, journey, or
+release. A stale binary, cached target, old receipt, or prior digest is not
+current evidence.
 
 ## Observability
 

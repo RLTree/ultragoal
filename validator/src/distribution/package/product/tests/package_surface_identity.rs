@@ -17,6 +17,11 @@ fn package_surface_identity_rejects_a_different_publication_transaction() {
         .unwrap();
 
     let second = Repo::new("package-surface-second");
+    fs::write(
+        second.root.join("skills/prove/SKILL.md"),
+        "---\nname: prove\n---\nchanged source\n",
+    )
+    .unwrap();
     let second_context = second.context();
     let second_catalog = catalog(&second_context);
     let second_artifact = capture_product_package(&second_context, &second_catalog).unwrap();

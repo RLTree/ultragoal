@@ -31,14 +31,12 @@ pub(super) fn prepare(
         return Ok(ProvisionStep::Ready(expected));
     }
     match component.staged {
-        Some(expected) => {
-            return Ok(
-                match recover_staged(parent, &stage_name, final_name, expected, root_device)? {
-                    StageState::Present(identity) => ProvisionStep::StagePresent(identity),
-                    StageState::Published(identity) => ProvisionStep::Published(identity),
-                },
-            );
-        }
+        Some(expected) => Ok(
+            match recover_staged(parent, &stage_name, final_name, expected, root_device)? {
+                StageState::Present(identity) => ProvisionStep::StagePresent(identity),
+                StageState::Published(identity) => ProvisionStep::Published(identity),
+            },
+        ),
         None => {
             if final_observed.is_some() {
                 return Err(error("routine-production-output-final-without-custody"));
@@ -50,7 +48,7 @@ pub(super) fn prepare(
                 }));
             }
             mkdir_at(parent, &stage_name)?;
-            return observe_created_stage(parent, &stage_name, root_device).map_or_else(
+            observe_created_stage(parent, &stage_name, root_device).map_or_else(
                 |_| {
                     Ok(ProvisionStep::UnrecordedStage(OutputStageAmbiguity {
                         relative_path: component.relative_path.clone(),
@@ -58,7 +56,7 @@ pub(super) fn prepare(
                     }))
                 },
                 |identity| Ok(ProvisionStep::StageCreated(identity)),
-            );
+            )
         }
     }
 }
@@ -141,6 +139,8 @@ fn publish(
     validate_exact(parent, stage_name, expected, root_device, true)?;
     let stage_c = validate_name(stage_name)?;
     let final_c = validate_name(final_name)?;
+    // SAFETY: `parent` is a live directory descriptor and both validated names
+    // are NUL-terminated single components; exclusive rename preserves custody.
     let result = unsafe {
         libc::renameatx_np(
             parent.as_raw_fd(),
@@ -170,7 +170,7 @@ fn validate_exact(
     require_empty: bool,
 ) -> Result<(), RoutineError> {
     validate_directory(expected, root_device)?;
-    if expected.owner != unsafe { libc::geteuid() } || expected.mode & 0o7777 != 0o700 {
+    if expected.owner != super::observation::current_user_id() || expected.mode & 0o7777 != 0o700 {
         return Err(error("routine-production-output-unowned-state"));
     }
     let opened = open_at(parent, name)?;
@@ -189,6 +189,7 @@ fn validate_exact(
 
 fn mkdir_at(parent: &File, name: &str) -> Result<(), RoutineError> {
     let name = validate_name(name)?;
+    // SAFETY: `parent` is a live directory descriptor and `name` is validated.
     if unsafe { libc::mkdirat(parent.as_raw_fd(), name.as_ptr(), 0o700) } != 0 {
         return Err(error("routine-production-output-stage-create-failed"));
     }

@@ -1,6 +1,6 @@
 use crate::distribution::{
-    CacheExpectation, DistributionErrorId, HostCommandPlan, Layer, MarketplaceExpectation,
-    MarketplaceScope, PackageIdentity, SourceIdentity, reject_stale_version_reuse, verify,
+    CacheExpectation, DistributionErrorId, Layer, MarketplaceExpectation, MarketplaceScope,
+    PackageIdentity, SourceIdentity, reject_stale_version_reuse, verify,
 };
 use crate::distribution_fixture::{CANDIDATE_ID, CONTEXT_ID, Fixture};
 
@@ -159,7 +159,7 @@ fn every_distribution_version_boundary_uses_the_shared_grammar() {
 }
 
 #[test]
-fn deserialized_invalid_identity_cannot_enter_package_or_host_plans() {
+fn deserialized_invalid_identity_cannot_enter_package_boundaries() {
     let source: SourceIdentity = serde_json::from_value(serde_json::json!({
         "context_id": CONTEXT_ID,
         "candidate_id": CANDIDATE_ID,
@@ -190,7 +190,7 @@ fn deserialized_invalid_identity_cannot_enter_package_or_host_plans() {
     }))
     .unwrap();
     assert_eq!(
-        HostCommandPlan::personal_install(&package, "local-harness-plugins")
+        reject_stale_version_reuse(&package("1.2.2", A, B), &package)
             .unwrap_err()
             .id(),
         DistributionErrorId::InvalidSpec

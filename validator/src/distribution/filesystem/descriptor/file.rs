@@ -19,6 +19,7 @@ pub(crate) fn read_file(
         .map_err(|_| error(DistributionErrorId::InvalidPath))?;
     hooks::before(EffectPoint::OpenFile, &joined(parent.relative(), text));
     let directory = parent.mutation_descriptor()?;
+    // SAFETY: `directory` is live and `name` is NUL-terminated for this call.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -32,6 +33,7 @@ pub(crate) fn read_file(
             _ => Err(open_error()),
         };
     }
+    // SAFETY: openat returned this unique, owned file descriptor.
     let mut file = unsafe { File::from_raw_fd(descriptor) };
     let before = file
         .metadata()
@@ -85,6 +87,7 @@ pub(crate) fn create_file(
         .map_err(|_| error(DistributionErrorId::InvalidPath))?;
     hooks::before(EffectPoint::CreateFile, &joined(parent.relative(), text));
     let directory = parent.mutation_descriptor()?;
+    // SAFETY: `directory` is live and `name` is NUL-terminated for this call.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -96,6 +99,7 @@ pub(crate) fn create_file(
     if descriptor < 0 {
         return Err(error(DistributionErrorId::EffectFailed));
     }
+    // SAFETY: openat returned this unique, owned file descriptor.
     let mut file = unsafe { File::from_raw_fd(descriptor) };
     let metadata = file
         .metadata()
@@ -103,6 +107,7 @@ pub(crate) fn create_file(
     if !metadata.is_file() || metadata.nlink() != 1 || metadata.dev() != parent.root_device() {
         return Err(error(DistributionErrorId::UnsafeObject));
     }
+    // SAFETY: `file` owns a live descriptor; `mode` is a valid mode_t value.
     if unsafe { libc::fchmod(file.as_raw_fd(), mode as libc::mode_t) } != 0 {
         return Err(error(DistributionErrorId::EffectFailed));
     }

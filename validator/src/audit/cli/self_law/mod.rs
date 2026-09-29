@@ -27,14 +27,16 @@ pub(crate) fn check(
             format!("schema_catalog:{failure}"),
         );
     }
-    let schema =
-        crate::audit::package::checks::schema_validation_results(request.root, &store, scheduler);
-    for failure in schema.failures {
-        push(&mut failures, "schema-valid", failure);
+    let check_ids = current_check_ids();
+    let package = crate::audit::package::checks::checks_with_scheduler(
+        request.root,
+        &store,
+        &check_ids,
+        scheduler,
+    );
+    for (check, details) in package.failures {
+        failures.entry(check).or_default().extend(details);
     }
-    inventory::append(request.root, &mut failures);
-    crate::audit::red::catalog::check(request.root, &store, &mut failures);
-    composition::append_base_checks(request.root, &store, &mut failures);
 
     let current_details = failures
         .iter()
@@ -53,6 +55,15 @@ pub(crate) fn check(
         push(&mut failures, CLAIM_ID, failure);
     }
     Ok(stable_response(failures))
+}
+
+fn current_check_ids() -> Vec<String> {
+    crate::contract_check_ids::CHECK_IDS
+        .iter()
+        .copied()
+        .filter(|id| !crate::contract_check_ids::is_retained_compatibility_id(id))
+        .map(str::to_string)
+        .collect()
 }
 
 fn stable_response(failures: BTreeMap<String, Vec<String>>) -> CliSelfLawCheckResponse {

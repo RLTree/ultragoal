@@ -1,4 +1,3 @@
-use super::compatibility::RETAINED_KIND;
 use super::routing::RoutingData;
 use super::types::{
     ActiveStatus, AuthorityCatalog, AuthorityState, InventoryClosureStatus, InventoryEntry,
@@ -64,12 +63,12 @@ mod closure_tests {
             BTreeMap::new(),
             BTreeMap::from([
                 ("compatibility_route_retained".to_owned(), 14),
-                ("sole_current_authority_pending_migration".to_owned(), 33),
+                ("sole_current_authority_pending_migration".to_owned(), 16),
             ]),
         );
         assert_eq!(status.state(), InventoryClosureState::Closed);
         assert!(status.is_closed());
         assert_eq!(status.blocker_count(), 0);
-        assert_eq!(status.open_obligation_count(), 47);
+        assert_eq!(status.open_obligation_count(), 30);
     }
 }

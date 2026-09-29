@@ -1,5 +1,6 @@
 use super::filesystem::FileIdentity;
 use super::{HostContext, HostError, MAX_SOURCE_FILE_BYTES, digest_bytes};
+use crate::inventory::{MAX_MIGRATION_REGISTRY_BYTES, MIGRATION_REGISTRY_PATH};
 use crate::migration::{MigrationInventory, SurfaceFileKind};
 use serde::Deserialize;
 use std::sync::Arc;
@@ -9,9 +10,7 @@ use super::super::{
     ProductMigrationError,
 };
 
-const REGISTRY_PATH: &str = "migration/authority-routes.json";
 const REGISTRY_SOURCE_DOMAIN: &str = "harness-ultragoal.migration-registry-source.v1";
-const MAX_REGISTRY_BYTES: u64 = 2 * 1024 * 1024;
 
 #[derive(Deserialize)]
 struct SurfaceAnchor {
@@ -42,15 +41,16 @@ impl DarwinMigrationSource {
     fn capture_exact(&self) -> Result<ProductInputSnapshot, HostError> {
         self.context.verify_static()?;
         self.verify_inventory_surfaces()?;
-        let registry =
-            self.context
-                .repository()
-                .read_regular(REGISTRY_PATH, false, MAX_REGISTRY_BYTES)?;
+        let registry = self.context.repository().read_regular(
+            MIGRATION_REGISTRY_PATH,
+            false,
+            MAX_MIGRATION_REGISTRY_BYTES,
+        )?;
         let registry_digest = digest_bytes(&registry.bytes);
         let source_identity =
             registry_source_identity(self.context.scope_id(), registry.identity, &registry_digest);
         let snapshot = AdoptedRegistrySnapshot::observed(
-            REGISTRY_PATH,
+            MIGRATION_REGISTRY_PATH,
             SurfaceFileKind::Regular,
             registry.identity.links,
             source_identity,

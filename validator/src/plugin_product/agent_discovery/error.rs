@@ -11,7 +11,6 @@ pub enum AgentDiscoveryErrorId {
     ObservationChanged,
     ObservationConflict,
     IdentityMismatch,
-    LegacyAuthorityActive,
     CollidingAuthorityActive,
     SandboxPolicyRejected,
     SessionStateRejected,
@@ -44,7 +43,6 @@ impl AgentDiscoveryErrorId {
             Self::ObservationChanged => "observation-changed",
             Self::ObservationConflict => "observation-conflict",
             Self::IdentityMismatch => "identity-mismatch",
-            Self::LegacyAuthorityActive => "legacy-authority-active",
             Self::CollidingAuthorityActive => "colliding-authority-active",
             Self::SandboxPolicyRejected => "sandbox-policy-rejected",
             Self::SessionStateRejected => "session-state-rejected",
@@ -76,7 +74,6 @@ impl fmt::Display for AgentDiscoveryError {
             AgentDiscoveryErrorId::IdentityMismatch => {
                 "host agent observation does not match the bound candidate"
             }
-            AgentDiscoveryErrorId::LegacyAuthorityActive => "legacy agent authority remains active",
             AgentDiscoveryErrorId::CollidingAuthorityActive => {
                 "colliding agent authority remains active"
             }

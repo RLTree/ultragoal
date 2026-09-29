@@ -31,7 +31,7 @@ impl LockDeadline {
 
 #[derive(Clone, Copy)]
 enum LockKind {
-    Shared,
+    Reader,
     Exclusive,
 }
 
@@ -60,7 +60,7 @@ pub(super) fn lock_identity<'a, T>(
 }
 
 pub(super) fn lock_shared(file: &File, deadline: &LockDeadline) -> Result<(), String> {
-    lock_file_with_deadline(file, LockKind::Shared, deadline)
+    lock_file_with_deadline(file, LockKind::Reader, deadline)
 }
 
 pub(super) fn lock_exclusive(file: &File, deadline: &LockDeadline) -> Result<(), String> {
@@ -79,7 +79,7 @@ fn lock_file_with_deadline(
             return Err(lock_timeout());
         }
         let attempt = match kind {
-            LockKind::Shared => file.try_lock_shared(),
+            LockKind::Reader => file.try_lock_shared(),
             LockKind::Exclusive => file.try_lock(),
         };
         match attempt {

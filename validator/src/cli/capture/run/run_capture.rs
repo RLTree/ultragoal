@@ -74,10 +74,6 @@ impl CapturedRun {
         &self.candidate_after.candidate_id
     }
 
-    pub fn authority_candidate_id(&self) -> &str {
-        &self.candidate_before.candidate_id
-    }
-
     pub fn interrupted(&self) -> bool {
         matches!(self.termination, Termination::Interrupted)
     }

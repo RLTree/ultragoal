@@ -10,7 +10,7 @@ impl Effects {
                     surface,
                     transaction,
                 } => {
-                    match rollback_install(transaction, &mut ScopedInstall::new(self.root.clone()))
+                    match rollback_install(*transaction, &mut ScopedInstall::new(self.root.clone()))
                     {
                         Ok(()) => {}
                         Err(RollbackInstallError::Refused { error, transaction }) => {

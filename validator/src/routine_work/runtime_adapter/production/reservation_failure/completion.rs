@@ -14,19 +14,19 @@ pub(in crate::routine_work::runtime_adapter::production) fn finish_execution<T>(
     }
 }
 
-fn resume<T>(result: Result<(), LifecycleFailure>) -> Result<T, RoutineError> {
+fn resume<T>(result: Result<(), Box<LifecycleFailure>>) -> Result<T, RoutineError> {
     match result {
         Ok(()) => Err(super::super::production_mediation::error(
             "routine-process-transition-missing",
         )),
-        Err(failure) => std::panic::resume_unwind(Box::new(failure)),
+        Err(failure) => std::panic::resume_unwind(failure),
     }
 }
 
 fn combine(
     primary: std::thread::Result<Result<(), RoutineError>>,
     cleanup: ObservedLaunchCleanup,
-) -> Result<(), LifecycleFailure> {
+) -> Result<(), Box<LifecycleFailure>> {
     let (outcome, evidence) = cleanup.into_parts();
     match primary {
         Ok(Ok(())) => match outcome {
@@ -42,9 +42,9 @@ fn combine(
 fn observed_error(
     error: RoutineError,
     launch: LaunchCleanupEvidence,
-) -> Result<(), LifecycleFailure> {
+) -> Result<(), Box<LifecycleFailure>> {
     let (primary, process_cleanup, observed_launch) = error_parts(&error);
-    Err(LifecycleFailure::Error(
+    Err(Box::new(LifecycleFailure::Error(
         error,
         FailureParts {
             primary,
@@ -52,15 +52,15 @@ fn observed_error(
             launch_cleanup: observed_launch.or(Some(launch.into_cleanup())),
             output_cleanup: CleanupEvidence::NotRequired,
         },
-    ))
+    )))
 }
 
 fn observed_panic(
     payload: PanicPayload,
     launch: LaunchCleanupEvidence,
-) -> Result<(), LifecycleFailure> {
+) -> Result<(), Box<LifecycleFailure>> {
     let (payload, primary, process_cleanup) = panic_parts(payload);
-    Err(LifecycleFailure::Panic(
+    Err(Box::new(LifecycleFailure::Panic(
         payload,
         FailureParts {
             primary,
@@ -68,7 +68,7 @@ fn observed_panic(
             launch_cleanup: Some(launch.into_cleanup()),
             output_cleanup: CleanupEvidence::NotRequired,
         },
-    ))
+    )))
 }
 
 pub(in crate::routine_work::runtime_adapter::production) fn finish_error<T>(

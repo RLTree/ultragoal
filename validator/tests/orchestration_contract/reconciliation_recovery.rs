@@ -1,7 +1,7 @@
-use crate::durable_journal_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
+use super::reconciliation::reviewed_engine;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
-use crate::reconciliation::reviewed_engine;
 
 #[test]
 fn reviewed_commitment_survives_interrupted_restart_byte_identically() {

@@ -18,6 +18,7 @@ pub(in crate::routine_work::runtime_adapter::production::custody) struct Reserva
     request_id: String,
     grant_id: String,
     recovery_marker: String,
+    predecessor_continuations: Vec<String>,
     owner: OwnerObservation,
     output_journal: OutputProvisionJournal,
     intents: Vec<IntentObservation>,
@@ -40,6 +41,11 @@ impl ReservationSpec {
     ) -> &str {
         &self.recovery_marker
     }
+    pub(in crate::routine_work::runtime_adapter::production::custody) fn predecessor_continuations(
+        &self,
+    ) -> &[String] {
+        &self.predecessor_continuations
+    }
     pub(in crate::routine_work::runtime_adapter::production::custody) fn owner(
         &self,
     ) -> &OwnerObservation {
@@ -59,10 +65,11 @@ impl ReservationSpec {
 
 impl ReservationOwner {
     pub(super) fn reserve(
-        authority_root: &Path,
+        custody: &RoutineCustodyCapability,
         request: &RoutineEffectRequest,
         binding: AuthorityBinding,
         output_journal: OutputProvisionJournal,
+        predecessor_continuations: &[String],
     ) -> Result<Self, RoutineError> {
         let scopes = allowed_output_scopes(request);
         let session_id = random_session_id(&binding)?;
@@ -83,11 +90,12 @@ impl ReservationOwner {
             request_id: request.request_id().to_owned(),
             grant_id,
             recovery_marker,
+            predecessor_continuations: predecessor_continuations.to_vec(),
             owner,
             output_journal,
             intents,
         };
-        let ledger = DurableCustody::reserve(authority_root, &spec)?;
+        let ledger = DurableCustody::reserve(custody, &spec)?;
         Ok(Self {
             ledger,
             started: Cell::new(false),
@@ -107,6 +115,31 @@ impl ReservationOwner {
             grant_id,
             recovery_marker,
         }
+    }
+
+    pub(super) fn continuation_id(&self) -> Result<String, RoutineError> {
+        let binding = self.failure_binding();
+        Ok(format!(
+            "routine-cont-{}",
+            crate::routine_work::digest::digest_of(&(
+                "routine-public-continuation-v1",
+                binding.protocol_id,
+                binding.grant_id,
+                binding.recovery_marker,
+            ))?
+        ))
+    }
+
+    pub(super) fn recovery_marker(&self) -> String {
+        self.failure_binding().recovery_marker.to_owned()
+    }
+
+    pub(super) fn attempt_grant(&self) -> String {
+        self.failure_binding().grant_id.to_owned()
+    }
+
+    pub(super) fn authenticated_head(&self) -> String {
+        self.ledger.authenticated_head()
     }
 
     pub(super) fn started(&self) -> bool {
@@ -181,14 +214,13 @@ impl ReservationOwner {
         result: &RoutineMediationResult,
         artifacts: &BTreeMap<String, String>,
     ) -> Result<(), RoutineError> {
-        let terminal = TerminalObservation {
+        let terminal = TerminalObservation::mediated(
             outcome,
-            result_sha256: digest_of(result)?,
-            artifacts: artifacts.clone(),
-            process_cleanup: cleanup_state(self.started.get()),
-            staged_cleanup: cleanup_state(self.launch_cleaned.get()),
-            failure_evidence: None,
-        };
+            result,
+            artifacts.clone(),
+            cleanup_state(self.started.get()),
+            cleanup_state(self.launch_cleaned.get()),
+        )?;
         self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 
@@ -204,14 +236,7 @@ impl ReservationOwner {
                 })),
             );
         }
-        let terminal = TerminalObservation {
-            outcome: DurableSettlement::Failed,
-            result_sha256: digest_of(evidence)?,
-            artifacts: BTreeMap::new(),
-            process_cleanup: evidence.process_cleanup.clone(),
-            staged_cleanup: evidence.staged_cleanup.clone(),
-            failure_evidence: Some(evidence.clone()),
-        };
+        let terminal = TerminalObservation::failed(digest_of(evidence)?, evidence);
         self.resolve(self.ledger.settle_terminal(terminal)?)
     }
 

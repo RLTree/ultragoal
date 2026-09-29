@@ -143,6 +143,7 @@ pub(crate) fn directory_temp_name() -> Result<String, FitError> {
 
 pub(crate) fn random_name(prefix: &str) -> Result<String, FitError> {
     let mut random = [0u8; 16];
+    // SAFETY: `random` is valid writable memory for exactly the requested byte count.
     if unsafe {
         libc::getentropy(
             random.as_mut_ptr().cast::<libc::c_void>(),

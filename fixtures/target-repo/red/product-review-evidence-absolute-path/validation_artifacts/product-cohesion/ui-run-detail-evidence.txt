@@ -1,1 +1,0 @@
-Run detail state: route, runtime status, claim ceiling, receipt locations, and justified human-attention status are visible together.

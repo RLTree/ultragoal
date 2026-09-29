@@ -35,26 +35,6 @@ impl AuthorizationRecord {
         &self.authorization_id
     }
 
-    pub(crate) fn binding_sha256(&self) -> &str {
-        &self.binding_sha256
-    }
-
-    pub(crate) fn seal_sha256(&self) -> &str {
-        &self.seal_sha256
-    }
-
-    pub(crate) fn plan_sha256(&self) -> &str {
-        &self.plan_sha256
-    }
-
-    pub(crate) fn input_binding(&self) -> &MigrationInputBinding {
-        &self.input_binding
-    }
-
-    pub(crate) fn expires_at_unix_ms(&self) -> u64 {
-        self.expires_at_unix_ms
-    }
-
     pub(crate) fn validate_shape(&self) -> bool {
         self.schema_version == "MigrationApplyAuthorizationRecord-v2"
             && valid_sha256(&self.authorization_id)
@@ -124,10 +104,6 @@ pub(crate) struct StoreFault {
 impl StoreFault {
     pub(crate) const fn new(code: &'static str) -> Self {
         Self { code }
-    }
-
-    pub(crate) const fn code(&self) -> &'static str {
-        self.code
     }
 }
 

@@ -1,5 +1,4 @@
-use super::{CHECK_ID, proof_binding, role, source::SourceSymbol};
-use serde_json::{Value, json};
+use super::{proof_binding, role, source::SourceSymbol};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct PackageSurfaceRow {
@@ -96,6 +95,16 @@ pub(super) fn retained_context(rel: &str, replacement_targets: &[String]) -> Pac
     row
 }
 
+pub(super) fn adopted_schema_contract(rel: &str) -> PackageSurfaceRow {
+    from_parts(
+        "adopted_schema_contract",
+        rel,
+        "adopted package-visible product contract",
+        "adopted_contract_authority_only",
+        None,
+    )
+}
+
 pub(super) fn invalid_generated_authority(rel: &str) -> PackageSurfaceRow {
     from_parts(
         "generated_artifact",
@@ -104,39 +113,6 @@ pub(super) fn invalid_generated_authority(rel: &str) -> PackageSurfaceRow {
         "invalid_generated_authority",
         None,
     )
-}
-
-pub(super) fn value(row: PackageSurfaceRow) -> Value {
-    let fixture_ids = proof_binding::fixture_ids(&row);
-    let receipt_ids = proof_binding::receipt_ids(&row);
-    json!({
-        "surface_id": row.surface_id,
-        "surface_kind": row.surface_kind,
-        "path_or_symbol": row.path_or_symbol,
-        "product_role": row.product_role,
-        "canonical_owner": row.canonical_owner,
-        "authority_level": row.authority_level,
-        "canonical_surface_id": row.canonical_surface_id,
-        "compatibility_contract_id": row.compatibility_contract_id,
-        "sunset_condition": row.sunset_condition,
-        "claim_surfaces_allowed": claim_surfaces(&row.proof_surface),
-        "proof_surface": row.proof_surface,
-        "law_ids": [CHECK_ID],
-        "validator_check_ids": [CHECK_ID],
-        "fixture_ids": fixture_ids,
-        "receipt_ids": receipt_ids,
-        "package_inventory_binding": row.package_inventory_binding,
-        "setup_retrofit_output_binding": "not_applicable_unless_setup_surface",
-        "claim_guard_ids": ["claim-ceiling-package-surface-guard"],
-        "final_packet_blockers": ["package_surface_violation"],
-        "update_goal_blockers": ["package_surface_violation"],
-        "provenance": {
-            "generator_owner": "ultragoal package surface scanner",
-            "product_role_source": "package path and Rust symbol taxonomy",
-            "manual_edit_status": "generated_rows_must_be_recomputed_not_hand_edited"
-        },
-        "stale_evidence_rules": ["recompute when package source or manifest changes"]
-    })
 }
 
 pub(super) fn contract_failure(row: &PackageSurfaceRow) -> Option<&'static str> {

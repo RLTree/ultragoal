@@ -31,7 +31,6 @@ pub(crate) struct ScheduledFixtureEvaluationBridge {
     pub(crate) scheduler: FixtureScheduler,
     pub(crate) invocations: BTreeMap<String, ScheduledFixtureInvocation>,
     pub(crate) recovery_required: BTreeSet<String>,
-    pub(crate) recovery_records: BTreeMap<String, crate::fixture_scheduler::FixtureExecutionRecord>,
 }
 
 impl ScheduledFixtureEvaluationBridge {
@@ -43,17 +42,10 @@ impl ScheduledFixtureEvaluationBridge {
             scheduler: FixtureScheduler::new(root),
             invocations,
             recovery_required: BTreeSet::new(),
-            recovery_records: BTreeMap::new(),
         }
     }
 
     pub(crate) fn recovery_required(&self) -> &BTreeSet<String> {
         &self.recovery_required
-    }
-
-    pub(crate) fn recovery_records(
-        &self,
-    ) -> &BTreeMap<String, crate::fixture_scheduler::FixtureExecutionRecord> {
-        &self.recovery_records
     }
 }

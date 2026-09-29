@@ -1,9 +1,9 @@
-use crate::agent_discovery::{
+use super::super::{
     AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession, ReaddirTestFault,
     SourceAgentCatalog, reset_test_io_counts, set_test_readdir_fault, test_io_counts,
     test_readdir_fault_triggered,
 };
-use crate::authority_fixtures::{
+use super::authority_fixtures::{
     CANDIDATE, FixtureReader, SESSION, TempRepo, descriptor, tree_snapshot,
 };
 use std::fs;

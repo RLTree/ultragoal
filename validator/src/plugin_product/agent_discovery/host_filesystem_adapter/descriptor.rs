@@ -2,6 +2,11 @@ use super::{descriptor_parser, invalid_source, too_large};
 use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
 use crate::plugin_product::agent_discovery::model::{MAX_DESCRIPTOR_BYTES, ProjectAgentDescriptor};
 
+pub(crate) struct GlobalAgentDescriptor {
+    pub(crate) name: String,
+    pub(crate) sandbox_mode: Option<String>,
+}
+
 pub(crate) fn parse_descriptor(
     bytes: &[u8],
 ) -> Result<ProjectAgentDescriptor, AgentDiscoveryError> {
@@ -18,6 +23,34 @@ pub(crate) fn parse_descriptor(
         return Err(invalid_source());
     }
     Ok(descriptor)
+}
+
+pub(crate) fn parse_global_descriptor(
+    bytes: &[u8],
+) -> Result<GlobalAgentDescriptor, AgentDiscoveryError> {
+    if bytes.len() > MAX_DESCRIPTOR_BYTES {
+        return Err(too_large());
+    }
+    let text = std::str::from_utf8(bytes).map_err(|_| invalid_source())?;
+    let value: toml::Value = toml::from_str(text).map_err(|_| invalid_source())?;
+    let table = value.as_table().ok_or_else(invalid_source)?;
+    let name = table
+        .get("name")
+        .and_then(toml::Value::as_str)
+        .filter(|name| safe_name(name))
+        .ok_or_else(invalid_source)?
+        .to_owned();
+    let sandbox_mode = match table.get("sandbox_mode") {
+        Some(value) => Some(
+            value
+                .as_str()
+                .filter(|value| safe_text(value, 80, false))
+                .ok_or_else(invalid_source)?
+                .to_owned(),
+        ),
+        None => None,
+    };
+    Ok(GlobalAgentDescriptor { name, sandbox_mode })
 }
 
 fn safe_name(value: &str) -> bool {

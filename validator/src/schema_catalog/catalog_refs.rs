@@ -3,6 +3,12 @@ use serde_json::Value;
 use std::collections::BTreeSet;
 use std::path::Path;
 
+const RETAINED_RESEARCH_SCHEMAS: &[&str] = &[
+    "schemas/research-article-to-law-trace.schema.json",
+    "schemas/research-source-cards.schema.json",
+    "schemas/research-source-registry.schema.json",
+];
+
 pub fn catalog_completeness_errors(root: &Path, rows: &[Value]) -> Vec<String> {
     let mut errors = Vec::new();
     let catalog_paths = rows
@@ -64,16 +70,25 @@ fn expected_schema_paths(root: &Path) -> BTreeSet<String> {
                     .is_some_and(|name| name.ends_with(".schema.json"))
                 && let Some(name) = path.file_name()
             {
-                out.insert(format!("schemas/{}", name.to_string_lossy()));
+                let relative = format!("schemas/{}", name.to_string_lossy());
+                if !retained_research_schema(&relative) {
+                    out.insert(relative);
+                }
             }
         }
     }
     if let Ok(manifest) = json_boundary::read_json(&root.join("plugin-manifest-draft.json")) {
         for path in json_boundary::string_array(&manifest, "schemas") {
-            out.insert(path);
+            if !retained_research_schema(&path) {
+                out.insert(path);
+            }
         }
     }
     out
+}
+
+fn retained_research_schema(path: &str) -> bool {
+    RETAINED_RESEARCH_SCHEMAS.contains(&path)
 }
 
 fn visit_refs(node: &Value, allowed: &BTreeSet<String>, errors: &mut Vec<String>) {

@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-touch validation_artifacts/observability/side-effect-created
-printf '{"schema":"harness-ultragoal.observability-query.v1","status":"pass"}\n'

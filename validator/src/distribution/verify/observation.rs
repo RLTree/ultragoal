@@ -156,10 +156,10 @@ fn observation_verdict(
     {
         return LayerVerdict::StaleIdentity;
     }
-    if let Some(payload) = row.payload_sha256.as_deref() {
-        if envelope.artifact_sha256.as_deref() != Some(payload) {
-            return LayerVerdict::PayloadMismatch;
-        }
+    if let Some(payload) = row.payload_sha256.as_deref()
+        && envelope.artifact_sha256.as_deref() != Some(payload)
+    {
+        return LayerVerdict::PayloadMismatch;
     }
     if layer != Layer::SourcePluginMetadata
         && artifact.is_some()

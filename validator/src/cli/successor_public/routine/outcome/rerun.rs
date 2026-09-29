@@ -9,6 +9,7 @@ pub(crate) enum PublicFailure {
     Context,
     Routine(RoutineError),
     Host(HostFailure),
+    ContinuationUnavailable,
     PersistenceAfterEffect,
 }
 
@@ -29,6 +30,7 @@ pub(crate) struct PublicOutcome<'a> {
     pub(crate) nodes: Vec<PublicNode<'a>>,
     pub(crate) fallback_tool_count: usize,
     pub(crate) recovery_required: bool,
+    pub(crate) continuation: Option<&'a str>,
     pub(crate) claim_effect: &'static str,
     pub(crate) support_limit: &'static str,
 }
@@ -55,17 +57,18 @@ pub(crate) fn mediation(
     result: &RoutineMediationResult,
     context: MediationContext<'_>,
 ) -> RuntimeOutcome {
+    let reused = result.status() == RoutineMediatorStatus::CompleteExecution
+        && result
+            .nodes()
+            .iter()
+            .all(|node| node.disposition() == RoutineNodeDisposition::Reused);
     let status = match result.status() {
         RoutineMediatorStatus::CompleteNoOp => "clean-no-op",
-        RoutineMediatorStatus::CompleteExecution
-            if result
-                .nodes()
-                .iter()
-                .all(|node| node.disposition() == RoutineNodeDisposition::Reused) =>
-        {
-            "reused"
-        }
+        RoutineMediatorStatus::CompleteExecution if reused => "reused",
         RoutineMediatorStatus::CompleteExecution => "executed",
+        RoutineMediatorStatus::IncompleteExecution if result.recovery_marker().is_some() => {
+            "interrupted-reservation"
+        }
         RoutineMediatorStatus::IncompleteExecution => "incomplete",
         RoutineMediatorStatus::Cancelled => "cancelled",
     };
@@ -88,10 +91,13 @@ pub(crate) fn mediation(
         })
         .collect();
     let payload = PublicOutcome {
-        schema_version: "RoutinePublicProductionOutcome-v1",
+        schema_version: "RoutinePublicProductionOutcome-v2",
         command: "check-routine",
         status,
-        effect: if result.status() == RoutineMediatorStatus::CompleteNoOp {
+        effect: if result.status() == RoutineMediatorStatus::CompleteNoOp
+            || result.recovery_marker().is_some()
+            || reused
+        {
             "none"
         } else {
             "workspace_write"
@@ -107,6 +113,7 @@ pub(crate) fn mediation(
         nodes,
         fallback_tool_count: context.fallback_tool_count,
         recovery_required: result.recovery_required(),
+        continuation: result.continuation(),
         claim_effect: "none",
         support_limit: result.support_limit(),
     };

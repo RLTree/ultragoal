@@ -7,6 +7,3 @@ use super::scenario::{MemoryRepo, authorization, desired, file, managed_proof, s
 mod inspection_race_rejection;
 #[path = "engine_cases/lifecycle_journey.rs"]
 mod lifecycle_journey;
-
-pub(crate) use inspection_race_rejection::*;
-pub(crate) use lifecycle_journey::*;

@@ -20,6 +20,7 @@ pub(crate) struct EffectOwner<'a> {
 
 impl Drop for ProcessLock {
     fn drop(&mut self) {
+        // SAFETY: the owned file descriptor remains live until this `Drop` implementation returns.
         let _ = unsafe { libc::flock(self.0.as_raw_fd(), libc::LOCK_UN) };
     }
 }

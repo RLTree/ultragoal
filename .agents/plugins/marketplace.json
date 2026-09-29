@@ -1,0 +1,20 @@
+{
+  "name": "harness-ultragoal-local",
+  "interface": {
+    "displayName": "Harness Ultragoal Local"
+  },
+  "plugins": [
+    {
+      "name": "harness-ultragoal",
+      "source": {
+        "source": "local",
+        "path": "./plugins/harness-ultragoal"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

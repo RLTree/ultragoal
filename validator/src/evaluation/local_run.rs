@@ -1,4 +1,5 @@
 impl EvaluationRun {
+    #[cfg(test)]
     pub(crate) fn execute_local<E: EvaluationExecutor>(
         spec: &EvaluationSpec,
         audit: &TaskAudit,

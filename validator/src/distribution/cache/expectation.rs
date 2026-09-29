@@ -39,6 +39,28 @@ impl CacheExpectation {
             package_tree_sha256,
         })
     }
+
+    pub(crate) fn context_id(&self) -> &str {
+        &self.context_id
+    }
+    pub(crate) fn candidate_id(&self) -> &str {
+        &self.candidate_id
+    }
+    pub(crate) fn cache_root_id(&self) -> &str {
+        &self.cache_root_id
+    }
+    pub(crate) fn marketplace(&self) -> &str {
+        &self.marketplace
+    }
+    pub(crate) fn plugin_id(&self) -> &str {
+        &self.plugin_id
+    }
+    pub(crate) fn version(&self) -> &str {
+        &self.version
+    }
+    pub(crate) fn package_tree_sha256(&self) -> &str {
+        &self.package_tree_sha256
+    }
 }
 
 fn safe_cache_name(value: &str) -> bool {

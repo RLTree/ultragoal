@@ -1,5 +1,5 @@
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 
 fn permit_read(policy: &mut ScopePolicy, lease: &LeaseSpec) {
     policy.allowed_read_paths.extend(lease.read_paths.clone());

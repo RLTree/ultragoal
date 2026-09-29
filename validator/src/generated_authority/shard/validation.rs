@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 
 const SCHEMA_VERSION: &str = "GeneratedSurfaceAuthorityShard-v1";
 const CONTRACT_ID: &str = "harness-ultragoal-successor-contract-v2";
-const MAX_DEFINITIONS: usize = 512;
+const MAX_DEFINITIONS: usize = 256;
 
 pub(super) fn validate(
     raw: RawShard,
@@ -38,6 +38,44 @@ pub(super) fn validate(
 
 fn definition(raw: RawDefinition) -> Result<GeneratedSurfaceDefinition, &'static str> {
     match raw {
+        RawDefinition::AdoptedSchemaContract {
+            output,
+            sha256,
+            schema,
+            schema_sha256,
+            source_contract,
+            source_contract_sha256,
+            amendment_log,
+            amendment_id,
+            amendment_hash,
+            claim_ceiling,
+        } => {
+            let fields = super::super::validation::adopted_schema_contract::validate(
+                super::super::validation::adopted_schema_contract::AdoptedSchemaInput {
+                    output,
+                    sha256,
+                    schema,
+                    schema_sha256,
+                    source_contract,
+                    source_contract_sha256,
+                    amendment_log,
+                    amendment_id,
+                    amendment_hash,
+                    claim_ceiling,
+                },
+            )?;
+            Ok(GeneratedSurfaceDefinition::AdoptedSchemaContract {
+                output: fields.output,
+                sha256: fields.sha256,
+                schema: fields.schema,
+                schema_sha256: fields.schema_sha256,
+                source_contract: fields.source_contract,
+                source_contract_sha256: fields.source_contract_sha256,
+                amendment_log: fields.amendment_log,
+                amendment_id: fields.amendment_id,
+                amendment_hash: fields.amendment_hash,
+            })
+        }
         RawDefinition::CanonicalProjection {
             output,
             generator,
@@ -114,7 +152,7 @@ fn retained(
         || deletion
         || reason.trim().is_empty()
         || reason.len() > 1024
-        || !value::sorted_strings(&replacement_targets)
+        || !value::replacement_targets(&replacement_targets)
     {
         return Err("generated_authority_shard_retained_context_invalid");
     }

@@ -1,0 +1,38 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  harness:
+    name: Claim-neutral candidate smoke
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Confirm checkout retained no GitHub credential
+        shell: bash
+        run: |
+          if git -c core.fsmonitor=false config --local --get-regexp '^http\..*\.extraheader$' >/dev/null; then
+            echo "checkout retained an HTTP authorization header" >&2
+            exit 1
+          fi
+
+      - name: Run source-local product contract gate
+        shell: bash
+        run: scripts/check-product

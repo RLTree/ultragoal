@@ -29,6 +29,10 @@ pub(crate) fn mediate_noop(
         status: RoutineMediatorStatus::CompleteNoOp,
         nodes: Vec::new(),
         recovery_marker: None,
+        continuation: None,
+        attempt_grant: None,
+        checkpoint_head: None,
+        terminal_outcome: None,
         support_limit: MEDIATOR_SUPPORT_LIMIT,
     })
 }

@@ -86,9 +86,9 @@ pub(crate) fn require_postconditions(
             &check.path,
             super::super::repository_contract::MAX_FILE_BYTES,
         )?;
-        if !observed
+        if observed
             .as_deref()
-            .is_some_and(|bytes| digest(bytes) == check.desired_sha256)
+            .is_none_or(|bytes| digest(bytes) != check.desired_sha256)
         {
             return Err(error(FitErrorId::VerificationFailed));
         }

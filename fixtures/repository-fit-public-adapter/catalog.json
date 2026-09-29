@@ -1,6 +1,6 @@
 {
   "schema_version": "RepositoryFitPublicAdapterFixtureCatalog-v1",
-  "temporary_root": "/tmp/hul-repository-fit-public-adapter-056",
+  "temporary_root": "$TMPDIR/hul-repository-fit-public-adapter-056",
   "claim_effect": "none",
   "cases": [
     {"id": "fresh-repository", "expect": "fresh compatible 68 mutations"},

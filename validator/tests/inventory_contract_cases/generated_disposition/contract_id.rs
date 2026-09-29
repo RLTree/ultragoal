@@ -7,8 +7,13 @@ fn sha256(bytes: &[u8]) -> String {
 
 fn registry(surfaces: Vec<Value>) -> Vec<u8> {
     serde_json::to_vec(&json!({
-        "schema_version": "GeneratedSurfaceAuthority-v2",
+        "schema_version": "GeneratedSurfaceAuthority-v3",
         "contract_id": CONTRACT_ID,
+        "registry_projection": {
+            "generator": REGISTRY,
+            "canonical_sources": [REGISTRY],
+            "regeneration_command": format!("{REGISTRY} write")
+        },
         "surfaces": surfaces
     }))
     .unwrap()
@@ -21,6 +26,18 @@ fn retained(output: &str, digest: &str) -> Value {
         "sha256": digest,
         "reason": "Preserved only as bound migration context.",
         "replacement_targets": ["HCT-CLAIMS", "HCT-INVENTORY"],
+        "preserve": true,
+        "physical_deletion_authorized": false
+    })
+}
+
+fn retained_target(output: &str, digest: &str, target: &str) -> Value {
+    json!({
+        "disposition": "retained_context",
+        "output": output,
+        "sha256": digest,
+        "reason": "Preserved only as bound migration context.",
+        "replacement_targets": [target],
         "preserve": true,
         "physical_deletion_authorized": false
     })
@@ -67,7 +84,7 @@ fn retained_context_is_digest_bound_context_without_generator_authority() {
 }
 
 #[test]
-fn generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
+fn generated_authority_v3_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
     let digest = "a".repeat(64);
     let canonical = json!({
         "disposition":"canonical_projection",
@@ -125,6 +142,26 @@ fn generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
             "replacement_targets":["foo"], "preserve":true,
             "physical_deletion_authorized":false
         })]),
+        registry(vec![retained_target(
+            "generated/empty-hct.json",
+            &digest,
+            "HCT-",
+        )]),
+        registry(vec![retained_target(
+            "generated/empty-ps.json",
+            &digest,
+            "PS-",
+        )]),
+        registry(vec![retained_target(
+            "generated/lower-hct.json",
+            &digest,
+            "HCT-lower",
+        )]),
+        registry(vec![retained_target(
+            "generated/hyphen-ps.json",
+            &digest,
+            "PS--X",
+        )]),
         registry(vec![json!({
             "disposition":"canonical_projection", "output":"generated//x.json",
             "generator":"HCT-INVENTORY", "recipe":"input-digest-index-v1",
@@ -143,11 +180,11 @@ fn generated_authority_v2_rejects_mixed_unknown_duplicate_and_unsafe_rows() {
             "preserve":true, "physical_deletion_authorized":false
         })]),
         format!(
-            "{{\"schema_version\":\"GeneratedSurfaceAuthority-v2\",\"contract_id\":\"{CONTRACT_ID}\",\"surfaces\":[{{\"disposition\":\"retained_context\",\"output\":\"generated/duplicate.json\",\"sha256\":\"{digest}\",\"sha256\":\"{digest}\",\"reason\":\"context\",\"replacement_targets\":[\"HCT-CLAIMS\"],\"preserve\":true,\"physical_deletion_authorized\":false}}]}}"
+            "{{\"schema_version\":\"GeneratedSurfaceAuthority-v3\",\"contract_id\":\"{CONTRACT_ID}\",\"registry_projection\":{{\"generator\":\"{REGISTRY}\",\"canonical_sources\":[\"{REGISTRY}\"],\"regeneration_command\":\"{REGISTRY} write\"}},\"surfaces\":[{{\"disposition\":\"retained_context\",\"output\":\"generated/duplicate.json\",\"sha256\":\"{digest}\",\"sha256\":\"{digest}\",\"reason\":\"context\",\"replacement_targets\":[\"HCT-CLAIMS\"],\"preserve\":true,\"physical_deletion_authorized\":false}}]}}"
         )
         .into_bytes(),
     ];
     for (index, bytes) in invalid.iter().enumerate() {
-        rejects(&format!("generated-invalid-v2-{index}"), bytes);
+        rejects(&format!("generated-invalid-v3-{index}"), bytes);
     }
 }

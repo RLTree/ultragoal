@@ -80,6 +80,7 @@ impl LocalEffects {
             return Err(error(FitErrorId::UnsafeObject));
         }
         let mut file = create_file_at(&parent.directory, &temp_name, mode)?;
+        // SAFETY: `file` owns the newly created descriptor and `mode` is the requested permission mask.
         let write_succeeded = unsafe { libc::fchmod(file.as_raw_fd(), mode as libc::mode_t) } == 0
             && file.write_all(bytes).and_then(|()| file.sync_all()).is_ok();
         let metadata = file

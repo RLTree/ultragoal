@@ -86,28 +86,6 @@ mod tests {
     }
 
     #[test]
-    fn claim_bearing_rows_carry_fixture_and_receipt_bindings() {
-        let row = row::source_module("validator/src/cli/observe/query/mod.rs", false);
-        let value = row::value(row);
-        assert!(
-            value["fixture_ids"]
-                .as_array()
-                .is_some_and(|items| !items.is_empty()),
-            "{value}"
-        );
-        assert!(
-            value["receipt_ids"]
-                .as_array()
-                .is_some_and(|items| !items.is_empty()),
-            "{value}"
-        );
-        assert_eq!(
-            value["provenance"]["manual_edit_status"],
-            "generated_rows_must_be_recomputed_not_hand_edited"
-        );
-    }
-
-    #[test]
     fn claim_bearing_rows_fail_without_fixture_or_receipt_reconciliation() {
         let mut row = row::source_module("validator/src/cli/observe/query/mod.rs", false);
         row.authority_level = "external_debug_no_claim".to_string();

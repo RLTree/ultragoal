@@ -22,11 +22,9 @@ pub use authority::{
 };
 pub(crate) use authority::{ProductionExecutionOutcome, ReservationObservation};
 #[cfg(test)]
-pub(crate) use authority::{RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance};
+pub(crate) use authority::{RootActionPermitIssuance, RootAuthority};
 #[cfg(test)]
-pub(crate) use authority::{
-    issue_action_permit_for_test, issue_reconcile_permit_for_test, root_authority_for_test,
-};
+pub(crate) use authority::{issue_action_permit_for_test, root_authority_for_test};
 pub use context::{ProductContext, ProductWorkspace, journal_head_identity};
 pub(crate) use context::{ReadOnlySink, open_engine};
 pub use error::ProductError;

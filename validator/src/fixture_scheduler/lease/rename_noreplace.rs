@@ -1,5 +1,32 @@
+#[cfg(unix)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct EntryIdentity {
+    device: u64,
+    inode: u64,
+    kind: EntryKind,
+}
+
+#[cfg(unix)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum EntryKind {
+    Directory,
+    RegularFile,
+}
+
+#[cfg(unix)]
+#[derive(Debug)]
+struct PinnedLeaseRoot {
+    parent: fs::File,
+    root: OwnedFd,
+    name: CString,
+    identity: EntryIdentity,
+    initial_entries: BTreeMap<PathBuf, EntryIdentity>,
+}
+
 #[cfg(target_os = "linux")]
 fn rename_noreplace(from_fd: RawFd, from: &CStr, to_fd: RawFd, to: &CStr) -> io::Result<()> {
+    // SAFETY: the directory descriptors and NUL-terminated names come from
+    // pinned custody; the syscall performs the required atomic no-replace move.
     let result = unsafe {
         libc::syscall(
             libc::SYS_renameat2,
@@ -58,10 +85,12 @@ fn open_entry_at(parent_fd: RawFd, name: &CStr, kind: EntryKind) -> io::Result<O
 
 #[cfg(unix)]
 fn open_at(parent_fd: RawFd, name: &CStr, flags: libc::c_int) -> io::Result<OwnedFd> {
+    // SAFETY: `name` is NUL-terminated and `parent_fd` is a live pinned directory.
     let descriptor = unsafe { libc::openat(parent_fd, name.as_ptr(), flags) };
     if descriptor < 0 {
         Err(io::Error::last_os_error())
     } else {
+        // SAFETY: a successful `openat` returns one owned descriptor.
         Ok(unsafe { OwnedFd::from_raw_fd(descriptor) })
     }
 }
@@ -69,15 +98,18 @@ fn open_at(parent_fd: RawFd, name: &CStr, flags: libc::c_int) -> io::Result<Owne
 #[cfg(unix)]
 fn identity_for_fd(fd: RawFd) -> io::Result<EntryIdentity> {
     let mut stat = MaybeUninit::<libc::stat>::zeroed();
+    // SAFETY: `stat` has allocated storage and `fd` is supplied by pinned custody.
     if unsafe { libc::fstat(fd, stat.as_mut_ptr()) } != 0 {
         return Err(io::Error::last_os_error());
     }
+    // SAFETY: the successful `fstat` call initialized `stat`.
     identity_from_stat(unsafe { stat.assume_init() })
 }
 
 #[cfg(unix)]
 fn entry_identity(parent_fd: RawFd, name: &CStr) -> io::Result<Option<EntryIdentity>> {
     let mut stat = MaybeUninit::<libc::stat>::zeroed();
+    // SAFETY: `name` is NUL-terminated and `stat` has storage for `fstatat`.
     let result = unsafe {
         libc::fstatat(
             parent_fd,
@@ -87,6 +119,7 @@ fn entry_identity(parent_fd: RawFd, name: &CStr) -> io::Result<Option<EntryIdent
         )
     };
     if result == 0 {
+        // SAFETY: successful `fstatat` initialized `stat`.
         identity_from_stat(unsafe { stat.assume_init() }).map(Some)
     } else {
         let error = io::Error::last_os_error();
@@ -112,7 +145,7 @@ fn identity_from_stat(stat: libc::stat) -> io::Result<EntryIdentity> {
     };
     Ok(EntryIdentity {
         device: stat.st_dev as u64,
-        inode: stat.st_ino as u64,
+        inode: stat.st_ino,
         kind,
     })
 }
@@ -131,29 +164,37 @@ fn require_entry_identity(
 
 #[cfg(unix)]
 fn read_directory_names(directory_fd: RawFd) -> io::Result<Vec<OsString>> {
+    // SAFETY: `directory_fd` is a live directory descriptor from pinned custody.
     let descriptor = unsafe { libc::dup(directory_fd) };
     if descriptor < 0 {
         return Err(io::Error::last_os_error());
     }
+    // SAFETY: `descriptor` is a newly owned directory descriptor; `fdopendir`
+    // takes ownership only when it returns a non-null stream.
     let directory = unsafe { libc::fdopendir(descriptor) };
     if directory.is_null() {
         let error = io::Error::last_os_error();
+        // SAFETY: `fdopendir` failed, so this branch still owns `descriptor`.
         unsafe { libc::close(descriptor) };
         return Err(error);
     }
+    // SAFETY: `directory` is the non-null stream returned by `fdopendir`.
     unsafe { libc::rewinddir(directory) };
 
     let mut names = Vec::new();
     loop {
+        // SAFETY: `directory` remains valid until the final `closedir` call.
         let entry = unsafe { libc::readdir(directory) };
         if entry.is_null() {
             break;
         }
+        // SAFETY: a non-null `readdir` result provides a NUL-terminated `d_name`.
         let name = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
         if name != b"." && name != b".." {
             names.push(OsString::from_vec(name.to_vec()));
         }
     }
+    // SAFETY: this call consumes the live directory stream exactly once.
     if unsafe { libc::closedir(directory) } != 0 {
         return Err(io::Error::last_os_error());
     }

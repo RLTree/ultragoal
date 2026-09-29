@@ -47,14 +47,22 @@ fn two_concurrent_publishers_yield_one_exact_winner() {
     );
 }
 
+fn supported_output_prefix() -> String {
+    format!(
+        "{PLUGIN_ID}-{}",
+        crate::distribution::package::output_filename_version(SUPPORTED_VERSION)
+    )
+}
+
 #[test]
 fn partial_pair_and_failed_output_reconciliation_never_publish() {
     let repo = Repo::new("supported-package-product-output-false-pass");
     let context = repo.context();
     let authority_catalog = catalog(&context);
     let artifact = capture_product_package(&context, &authority_catalog).expect("package");
+    let prefix = supported_output_prefix();
     let partial = vec![TreeObject::regular(
-        format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.hugpkg"),
+        format!("{prefix}.hugpkg"),
         0o644,
         artifact.snapshot().archive().to_vec(),
     )];
@@ -65,7 +73,7 @@ fn partial_pair_and_failed_output_reconciliation_never_publish() {
         .join("repository/packages/harness-ultragoal");
     fs::create_dir_all(&partial_dir).unwrap();
     fs::write(
-        partial_dir.join(format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.hugpkg")),
+        partial_dir.join(format!("{prefix}.hugpkg")),
         artifact.snapshot().archive(),
     )
     .unwrap();
@@ -88,13 +96,13 @@ fn partial_pair_and_failed_output_reconciliation_never_publish() {
     fs::remove_dir_all(&partial_dir).unwrap();
     fs::create_dir_all(&partial_dir).unwrap();
     let inventory_only = vec![TreeObject::regular(
-        format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.inventory.json"),
+        format!("{prefix}.inventory.json"),
         0o644,
         artifact.snapshot().inventory().to_vec(),
     )];
     let inventory_only_sha256 = tree_sha256(&inventory_only).expect("inventory-only digest");
     fs::write(
-        partial_dir.join(format!("{PLUGIN_ID}-{SUPPORTED_VERSION}.inventory.json")),
+        partial_dir.join(format!("{prefix}.inventory.json")),
         artifact.snapshot().inventory(),
     )
     .unwrap();

@@ -9,6 +9,9 @@ use ultragoal::distribution::{
 use ultragoal::evaluation::{
     EvaluationRun, EvaluationSpec, FailureCase, PromotionDecision, TaskAudit,
 };
+use ultragoal::fixture_scheduler::{
+    ExpectedOutcome, FixtureScheduler, FixtureSpec, IsolationLease,
+};
 use ultragoal::inventory::{AuthorityCatalog, GeneratedSurfaceIndex, InventoryBuilder};
 use ultragoal::migration::{
     CompatibilityRoute, MigrationPlan, MigrationPlanProjection, RetirementDecision,
@@ -61,6 +64,10 @@ fn contract_public_api_witness_compiles_outside_the_library_crate() {
     require_public_type::<SurfaceIdentity>();
     require_public_type::<PackagePlan>();
     require_public_type::<InstallPlan>();
+    require_public_type::<FixtureSpec>();
+    require_public_type::<FixtureScheduler>();
+    require_public_type::<IsolationLease>();
+    require_public_type::<ExpectedOutcome>();
     require_public_type::<Orchestrator<PublicWitnessEffectSink>>();
     require_public_type::<WorkGraph>();
     require_public_type::<WorkerResultV1>();

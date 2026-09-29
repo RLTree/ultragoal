@@ -10,6 +10,7 @@ mod orchestration_production_authority_contract {
     mod reconciliation_race;
     mod recovery;
     mod recovery_binding;
+    mod resume_submission;
     mod rollback_security;
     mod same_crate_mutant;
     mod security;

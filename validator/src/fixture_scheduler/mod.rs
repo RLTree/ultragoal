@@ -16,19 +16,21 @@ pub use confinement::ConfinementPolicy;
 #[cfg(test)]
 pub use confinement::NetworkIsolation;
 pub use error::FixtureScheduleError;
-#[cfg(test)]
-pub use lease::ResourceBinding;
 #[cfg(all(test, unix))]
 pub(crate) use lease::set_before_capture_hook;
 pub use lease::{IsolationLease, LeaseDisposition};
+pub(crate) use lease::LeaseAcquisitionFailure;
+#[cfg(all(test, unix))]
+pub(crate) use lease::{LeaseAcquisitionStage, run_lease_acquisition_hook, set_lease_acquisition_hook};
 pub(crate) use outcome::{ExecutedFixture, FixtureExecutionRecordCapture};
 pub use outcome::{
     ExpectedOutcome, FixtureExecutionBinding, FixtureExecutionRecord, ObservedOutcome,
     OutcomeVerdict,
 };
 #[cfg(test)]
+pub(crate) use scheduler::FixtureExecutor;
 pub use scheduler::FixtureRun;
-pub(crate) use scheduler::{FixtureExecutor, RecordedFixtureExecutor};
+pub(crate) use scheduler::RecordedFixtureExecutor;
 pub use scheduler::{FixtureScheduler, RunDisposition};
 pub(crate) use spec::stable_digest;
 pub use spec::{FixtureKind, FixtureSpec, ResourceKind};

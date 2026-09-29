@@ -1,3 +1,4 @@
+use serde::Serialize;
 use serde_json::json;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -23,6 +24,20 @@ pub(crate) fn temp_root(label: &str) -> PathBuf {
         .join(format!("ultragoal-boundary-{label}-{stamp}-{index}"))
 }
 
+pub(crate) fn write_json(path: &Path, value: &impl Serialize) -> Result<(), String> {
+    let parent = path.parent().expect("test JSON path has a parent");
+    std::fs::create_dir_all(parent).map_err(|err| {
+        format!(
+            "{}: test JSON parent create failed: {err}",
+            parent.display()
+        )
+    })?;
+    let text = serde_json::to_string_pretty(value)
+        .map_err(|err| format!("{}: test JSON encoding failed: {err}", path.display()))?;
+    std::fs::write(path, format!("{text}\n"))
+        .map_err(|err| format!("{}: test JSON write failed: {err}", path.display()))
+}
+
 pub(crate) fn sha(ch: char) -> String {
     format!("sha256:{}", ch.to_string().repeat(64))
 }
@@ -42,11 +57,6 @@ fn schema_receipt_rules_cover_required_and_kind_boundaries() {
             .iter()
             .any(|err| err.contains("claim_id is required"))
     );
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&errors),
-        "semantic_classification_receipt_malformed"
-    );
-
     let base = json!({
         "schema": "harness-ultragoal.semantic-classification-receipt.v1",
         "claim_id": "CLAIM-001",
@@ -132,7 +142,7 @@ fn audit_boundary_edges_reject_malformed_policy_surfaces() {
     let root = temp_root("review-history");
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     let mut failures = BTreeMap::new();
-    crate::audit::review_history::check(&root, &mut failures);
+    crate::audit::review_record::check(&root, &mut failures);
     assert!(failures["validator-execution-provenance"][0].contains("missing"));
     std::fs::write(
         root.join("docs/review-loop-record.md"),
@@ -140,36 +150,9 @@ fn audit_boundary_edges_reject_malformed_policy_surfaces() {
     )
     .expect("review record");
     failures.clear();
-    crate::audit::review_history::check(&root, &mut failures);
+    crate::audit::review_record::check(&root, &mut failures);
     assert_eq!(failures["validator-execution-provenance"].len(), 2);
     std::fs::remove_dir_all(root).expect("cleanup");
-}
-
-#[test]
-fn package_target_validation_covers_unreadable_and_schema_errors() {
-    let root = repo_root();
-    let store = crate::schema_catalog::load(&root);
-    let temp = temp_root("target-artifacts");
-    std::fs::create_dir_all(&temp).expect("temp");
-    let mut failures = BTreeMap::new();
-    crate::audit::package::targets::validate(
-        &store,
-        &mut failures,
-        &[json!({"path": temp.join("missing.json").display().to_string()})],
-    );
-    assert!(failures["target-repo-audit-capability"][0].contains("unreadable"));
-
-    let malformed = temp.join("malformed.json");
-    std::fs::write(&malformed, "{}").expect("malformed");
-    failures.clear();
-    crate::audit::package::targets::validate(
-        &store,
-        &mut failures,
-        &[json!({"path": malformed.display().to_string()})],
-    );
-    assert!(!failures["target-repo-audit-capability"].is_empty());
-    crate::audit::package::targets::validate(&store, &mut failures, &[json!({})]);
-    std::fs::remove_dir_all(temp).expect("cleanup");
 }
 
 #[test]

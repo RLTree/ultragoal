@@ -5,6 +5,6 @@ pub(super) const ROUTES: [RouteSpec; 1] = [spec(
     "LEGACY-MANIFEST-PROJECTION:plugin-manifest-draft.json",
     "legacy-manifest-projection-authority",
     "plugin-manifest-draft.json",
-    "46bc8a5fe6362d85f2ef3890b18df8623625d30af233556acbae5a6dd1dd760f",
+    "f40c0bf21d87a72fc819af278501a0822a0e1c06f211794bcafbd0ffc8596d17",
     &PS_PLUGIN_MANIFEST,
 )];

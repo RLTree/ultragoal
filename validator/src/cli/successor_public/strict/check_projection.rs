@@ -1,4 +1,3 @@
-use super::SELF_LAW_CLAIM;
 use crate::cli::successor::ExitClass;
 use crate::cli::successor::runtime::RuntimeOutcome;
 use crate::context::{CandidateIdentity, LiveContext};
@@ -17,8 +16,8 @@ struct StrictCheckResult<'a> {
     status: &'static str,
     checks: Vec<CheckResult>,
     findings: Vec<LawFinding>,
-    supported_claims: Vec<&'static str>,
-    unsupported_claims: Vec<&'static str>,
+    supported_claims: Vec<&'a str>,
+    unsupported_claims: Vec<&'a str>,
 }
 
 #[derive(Serialize)]
@@ -51,16 +50,8 @@ pub(super) fn result(
         status: if passed { "pass" } else { "fail" },
         checks,
         findings,
-        supported_claims: if passed {
-            vec![SELF_LAW_CLAIM]
-        } else {
-            Vec::new()
-        },
-        unsupported_claims: if passed {
-            Vec::new()
-        } else {
-            vec![SELF_LAW_CLAIM]
-        },
+        supported_claims: if passed { vec![claim_id] } else { Vec::new() },
+        unsupported_claims: if passed { Vec::new() } else { vec![claim_id] },
     };
     match serde_json::to_vec(&payload) {
         Ok(machine) if super::super::public_output_allowed(machine.len()) => {

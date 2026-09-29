@@ -50,6 +50,8 @@ impl Group {
 pub enum InspectTarget {
     Summary,
     Context,
+    Orchestration,
+    Inception,
     Inventory,
     Capabilities,
     Findings,
@@ -82,6 +84,8 @@ pub enum PackageAction {
     Build,
     Verify,
     InstallTest,
+    InstallPlan,
+    InstallVerify,
     Publish,
 }
 
@@ -97,6 +101,7 @@ pub enum EvalAction {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MigrateAction {
     Plan,
+    Abandon,
     Apply,
     Verify,
     Retire,

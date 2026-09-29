@@ -1,9 +1,9 @@
 use crate::migration::product::{
     AdoptedRegistrySnapshot, ApplyAuthorizationAuthority, AuthoritySnapshot,
-    ConfinedMigrationEffect, DurableMigrationStore, EffectFault, EffectObservation, JournalPhase,
-    MigrationInputBinding, MigrationInputSource, MigrationOperation, PlanDisposition,
-    PlannedMigrationEffect, ProductInputSnapshot, ProductMigrationError, ProductMigrationPlan,
-    ReservationRequest, ReservationResult, StoreFault, derive_product_plan,
+    ConfinedMigrationEffect, DurableMigrationStore, EffectFault, EffectObservation,
+    MigrationInputBinding, MigrationInputSource, MigrationOperation, PlannedMigrationEffect,
+    ProductInputSnapshot, ProductMigrationError, ProductMigrationPlan, ReservationRequest,
+    ReservationResult, StoreFault, derive_product_plan,
 };
 use crate::migration::{
     InventorySurface, InventorySurfaceObservation, MigrationInventory, SurfaceFileKind,

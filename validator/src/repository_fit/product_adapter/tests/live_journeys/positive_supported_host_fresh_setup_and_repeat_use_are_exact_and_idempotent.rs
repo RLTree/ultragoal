@@ -22,6 +22,11 @@ pub(crate) fn positive_supported_host_fresh_setup_and_repeat_use_are_exact_and_i
         );
     }
 
+    assert!(
+        !fixture.root.join(".gitignore").exists(),
+        "the current complete-repository scope cannot recreate legacy target operation state"
+    );
+
     let repeated_context = fixture.context();
     let repeated_record = assert_zero_write(&fixture, || plan_target(&repeated_context).unwrap());
     assert_eq!(repeated_record.mutation_count(), 0);

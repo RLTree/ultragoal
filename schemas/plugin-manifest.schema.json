@@ -39,8 +39,9 @@
       "minLength": 1
     },
     "skills": {
-      "type": "array",
-      "minItems": 10,
+  "type": "array",
+  "minItems": 8,
+  "maxItems": 8,
       "items": {
         "type": "object",
         "required": [
@@ -65,15 +66,15 @@
         "additionalProperties": false
       },
       "uniqueItems": true,
-      "allOf": [
+  "allOf": [
         {
           "contains": {
             "properties": {
               "name": {
-                "const": "ultragoal"
+                "const": "harness-ultragoal"
               },
               "path": {
-                "const": "skills/ultragoal/SKILL.md"
+                "const": "skills/harness-ultragoal/SKILL.md"
               }
             },
             "required": [
@@ -86,10 +87,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "harness-engineering"
+                "const": "repository-fit"
               },
               "path": {
-                "const": "skills/harness-engineering/SKILL.md"
+                "const": "skills/repository-fit/SKILL.md"
               }
             },
             "required": [
@@ -102,10 +103,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "agent-first-repo-init"
+                "const": "routine-work"
               },
               "path": {
-                "const": "skills/agent-first-repo-init/SKILL.md"
+                "const": "skills/routine-work/SKILL.md"
               }
             },
             "required": [
@@ -118,10 +119,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "agent-first-repo-retrofit"
+                "const": "diagnose-and-observe"
               },
               "path": {
-                "const": "skills/agent-first-repo-retrofit/SKILL.md"
+                "const": "skills/diagnose-and-observe/SKILL.md"
               }
             },
             "required": [
@@ -134,10 +135,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "agent-runtime-legibility"
+                "const": "goal-run"
               },
               "path": {
-                "const": "skills/agent-runtime-legibility/SKILL.md"
+                "const": "skills/goal-run/SKILL.md"
               }
             },
             "required": [
@@ -150,10 +151,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "agent-observability-stack"
+                "const": "product-journey-review"
               },
               "path": {
-                "const": "skills/agent-observability-stack/SKILL.md"
+                "const": "skills/product-journey-review/SKILL.md"
               }
             },
             "required": [
@@ -166,10 +167,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "execplan-lane"
+                "const": "prove"
               },
               "path": {
-                "const": "skills/execplan-lane/SKILL.md"
+                "const": "skills/prove/SKILL.md"
               }
             },
             "required": [
@@ -182,58 +183,10 @@
           "contains": {
             "properties": {
               "name": {
-                "const": "orchestrator-reconciler"
+                "const": "improve-and-maintain"
               },
               "path": {
-                "const": "skills/orchestrator-reconciler/SKILL.md"
-              }
-            },
-            "required": [
-              "name",
-              "path"
-            ]
-          }
-        },
-        {
-          "contains": {
-            "properties": {
-              "name": {
-                "const": "proof-gate"
-              },
-              "path": {
-                "const": "skills/proof-gate/SKILL.md"
-              }
-            },
-            "required": [
-              "name",
-              "path"
-            ]
-          }
-        },
-        {
-          "contains": {
-            "properties": {
-              "name": {
-                "const": "standards-gardener"
-              },
-              "path": {
-                "const": "skills/standards-gardener/SKILL.md"
-              }
-            },
-            "required": [
-              "name",
-              "path"
-            ]
-          }
-        },
-        {
-          "contains": {
-            "properties": {
-              "name": {
-                "const": "product-cohesion-gate"
-              },
-              "path": {
-                "const": "skills/product-cohesion-gate/SKILL.md"
+                "const": "skills/improve-and-maintain/SKILL.md"
               }
             },
             "required": [
@@ -242,7 +195,32 @@
             ]
           }
         }
-      ]
+      ],
+      "not": {
+        "contains": {
+          "properties": {
+            "name": {
+              "enum": [
+                "agent-first-repo-init",
+                "agent-first-repo-retrofit",
+                "agent-improvement-loop",
+                "agent-observability-stack",
+                "agent-runtime-legibility",
+                "execplan-lane",
+                "fit-repo",
+                "harness-engineering",
+                "orchestrator-reconciler",
+                "product-cohesion-gate",
+                "product-fitness-gate",
+                "proof-gate",
+                "standards-gardener",
+                "ultragoal"
+              ]
+            }
+          },
+          "required": ["name"]
+        }
+      }
     },
     "agents": {
       "type": "array",

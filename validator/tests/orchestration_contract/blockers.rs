@@ -1,5 +1,5 @@
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 
 fn blocker(id: &str, node: &str, class: BlockerClass) -> Blocker {
     Blocker {

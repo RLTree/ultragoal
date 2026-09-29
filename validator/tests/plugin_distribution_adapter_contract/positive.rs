@@ -1,7 +1,5 @@
 use crate::lifecycle_fixture::{Fixture, installed, lifecycle, request};
-use ultragoal::plugin_product::lifecycle::{
-    ApplyDisposition, LifecycleIntent, LifecycleState, verify,
-};
+use crate::plugin_product::lifecycle::{ApplyDisposition, LifecycleIntent, LifecycleState, verify};
 
 #[test]
 fn real_adapter_completes_all_eight_lifecycle_intents_in_one_isolated_root() {

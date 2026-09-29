@@ -1,0 +1,8 @@
+[
+  {"path":"Cargo.toml","class":"manifest","owner":"src/lib.rs","purpose":"Receiving package identity"},
+  {"path":"Cargo.lock","class":"verified_generated_lock","owner":"Cargo.toml","purpose":"Cargo metadata lock"},
+  {"path":"src/lib.rs","class":"rust_source","owner":"src/lib.rs","purpose":"Pure bounded addition"},
+  {"path":"docs/legibility/registry.json","class":"governance","owner":"Cargo.toml","purpose":"Exact reviewed records"},
+  {"path":"docs/legibility/sources.json","class":"governance","owner":"Cargo.toml","purpose":"Complete source ownership"},
+  {"path":"docs/legibility/commands.json","class":"governance","owner":"Cargo.toml","purpose":"Receiving check command"}
+]

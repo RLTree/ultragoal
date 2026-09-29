@@ -15,20 +15,6 @@ pub(crate) fn failures(root: &Path, receipt: &Value) -> Vec<String> {
     out
 }
 
-pub(crate) fn failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    let parsed = FitRepoReceipt::from_value(receipt);
-    let mut out = base_failures_with_candidate(root, &parsed, Ok(target_digest.to_string()));
-    out.extend(classification_failures(&parsed));
-    out.extend(check_artifact_failures(root, &parsed));
-    out.extend(blocker_failures(&parsed));
-    out.extend(digest_failures(receipt, &parsed));
-    out
-}
-
 pub(crate) fn canonical_digest(receipt: &Value) -> String {
     let mut canonical = receipt.clone();
     if let Some(obj) = canonical.as_object_mut() {
@@ -97,7 +83,7 @@ fn version_failures(root: &Path, receipt: &FitRepoReceipt) -> Vec<String> {
 }
 
 fn authority_failures(receipt: &FitRepoReceipt) -> Vec<String> {
-    let mut out = Vec::new();
+    let mut out = vec!["fit_repo_receipt_independent_authority_unavailable".to_string()];
     if receipt.producer_actor_id == "fixture-author" || receipt.producer_actor_id.is_empty() {
         out.push("fit_repo_receipt_placeholder_actor".to_string());
     }
@@ -108,6 +94,24 @@ fn authority_failures(receipt: &FitRepoReceipt) -> Vec<String> {
         out.push("fit_repo_receipt_placeholder_digest".to_string());
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    #[test]
+    fn arbitrary_actor_and_self_hash_cannot_mint_fit_authority() {
+        let receipt = super::FitRepoReceipt::from_value(&json!({
+            "producer_actor_id": "plausible-production-actor",
+            "receipt_digest": crate::self_tests::boundaries::workspace_fixtures::sha('a')
+        }));
+        let failures = super::authority_failures(&receipt);
+        assert!(
+            failures.contains(&"fit_repo_receipt_independent_authority_unavailable".to_string()),
+            "{failures:?}"
+        );
+    }
 }
 
 fn producer_actor_lacks_product_authority(actor: &str) -> bool {

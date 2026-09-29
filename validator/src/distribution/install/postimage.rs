@@ -38,4 +38,8 @@ impl InstalledPostimage {
     pub(crate) fn object_sha256(&self) -> &str {
         &self.object_sha256
     }
+
+    pub(crate) const fn mode(&self) -> u32 {
+        self.mode
+    }
 }

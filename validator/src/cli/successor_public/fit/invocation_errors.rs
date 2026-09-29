@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 
 pub(crate) fn invalid_invocation() -> RuntimeOutcome {
     RuntimeOutcome::failure(
@@ -6,12 +7,14 @@ pub(crate) fn invalid_invocation() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::UnexpectedArguments,
             ExitClass::InvalidInvocation,
-            "the fit adapter received arguments outside the canonical typed route",
-            "HCT-FIT public adapter",
-            "reparse the exact fit command through the successor grammar",
-            "read",
-            "ultragoal --json fit inspect",
-            "repository-fit and dependent claims remain unchanged",
+            DiagnosticDetails {
+                cause: "the fit adapter received arguments outside the canonical typed route",
+                affected_surface: "HCT-FIT public adapter",
+                repair: "reparse the exact fit command through the successor grammar",
+                effect: "read",
+                rerun: "ultragoal --json fit inspect",
+                ceiling: "repository-fit and dependent claims remain unchanged",
+            },
         ),
     )
 }
@@ -22,12 +25,14 @@ pub(crate) fn invalid_plan() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::UnexpectedArguments,
             ExitClass::InvalidInvocation,
-            "the plan path is not one bounded descriptor-anchored regular file",
-            "HCT-FIT accepted plan",
-            "write the exact canonical fit plan projection to a confined regular file",
-            "read",
-            "ultragoal --json fit plan",
-            "no workspace effect is authorized or performed",
+            DiagnosticDetails {
+                cause: "the plan path is not one bounded descriptor-anchored regular file",
+                affected_surface: "HCT-FIT accepted plan",
+                repair: "write the exact canonical fit plan projection to one immutable external regular file",
+                effect: "read",
+                rerun: "ultragoal --json fit plan",
+                ceiling: "no workspace effect is authorized or performed",
+            },
         ),
     )
 }
@@ -38,12 +43,14 @@ pub(crate) fn stale_context() -> RuntimeOutcome {
         Diagnostic::new(
             DiagnosticId::StaleContext,
             ExitClass::ActionableFinding,
-            "the target candidate changed during fit plan observation",
-            "HCT-FIT target binding",
-            "rebuild one target LiveContext and recompute the fit plan",
-            "read",
-            "ultragoal --json fit plan",
-            "no workspace effect is authorized or performed",
+            DiagnosticDetails {
+                cause: "the target candidate changed during fit plan observation",
+                affected_surface: "HCT-FIT target binding",
+                repair: "rebuild one target LiveContext and recompute the fit plan",
+                effect: "read",
+                rerun: "ultragoal --json fit plan",
+                ceiling: "no workspace effect is authorized or performed",
+            },
         ),
     )
 }
@@ -87,12 +94,14 @@ pub(crate) fn adapter_failure(failure: FitAdapterError) -> RuntimeOutcome {
         Diagnostic::new(
             diagnostic,
             class,
-            failure.cause(),
-            "HCT-FIT candidate adapter",
-            "rebuild the current target context and exact canonical template-bound fit plan",
-            "read_or_unexecuted_workspace_request",
-            "ultragoal --json fit plan",
-            "no live-repository, readiness, release, or completion claim is raised",
+            DiagnosticDetails {
+                cause: failure.cause(),
+                affected_surface: "HCT-FIT candidate adapter",
+                repair: "rebuild the current target context and exact canonical template-bound fit plan",
+                effect: "read_or_unexecuted_workspace_request",
+                rerun: "ultragoal --json fit plan",
+                ceiling: "no live-repository, readiness, release, or completion claim is raised",
+            },
         ),
     )
 }

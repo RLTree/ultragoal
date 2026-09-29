@@ -43,40 +43,20 @@ pub(super) fn source_name_violation_label(
     None
 }
 
-pub(super) fn repo_entrypoint_context_label(tokens: &[String]) -> Option<&'static str> {
-    let entrypoint_index = tokens.iter().position(|token| token == "fit")?;
-    let has_repo_neighbor = entrypoint_index
-        .checked_sub(1)
-        .and_then(|index| tokens.get(index))
-        .is_some_and(|token| token == "repo")
-        || tokens
-            .get(entrypoint_index + 1)
-            .is_some_and(|token| token == "repo");
-    if has_repo_neighbor { None } else { Some("fit") }
-}
-
 pub(super) fn generic_bucket_label(value: &str, source_leaf: bool) -> Option<&'static str> {
     let lower = value.to_ascii_lowercase();
     let tokens = super::semantic_tokens::semantic_tokens(value);
-    if tokens.iter().any(|token| token == "support") {
-        return Some("support");
-    }
-    if tokens
-        .iter()
-        .any(|token| matches!(token.as_str(), "helper" | "helpers"))
-    {
-        return Some("helper");
-    }
-    if tokens
-        .iter()
-        .any(|token| matches!(token.as_str(), "utils" | "utility" | "utilities"))
-    {
-        return Some("utils");
-    }
-    for &(exact, label) in &[("common", "common"), ("shared", "shared"), ("misc", "misc")] {
-        if lower == exact || (exact == "common" && tokens.iter().any(|token| token == exact)) {
-            return Some(label);
-        }
+    let generic_label = |token: &str| match token {
+        "support" => Some("support"),
+        "helper" | "helpers" => Some("helper"),
+        "utils" | "utility" | "utilities" => Some("utils"),
+        "common" => Some("common"),
+        "shared" => Some("shared"),
+        "misc" => Some("misc"),
+        _ => None,
+    };
+    if tokens.iter().all(|token| generic_label(token).is_some()) {
+        return tokens.first().and_then(|token| generic_label(token));
     }
     if source_leaf && lower == "nodes" {
         return Some("nodes");

@@ -1,4 +1,7 @@
-use super::{EvaluationError, EvaluationRun, EvaluationTaskResult, FailureCase, PromotionDecision};
+#[cfg(test)]
+use super::EvaluationRun;
+use super::{EvaluationError, EvaluationTaskResult, FailureCase, PromotionDecision};
+#[cfg(test)]
 use crate::fixture_scheduler::FixtureExecutionRecord;
 use serde::Serialize;
 use sha2::{Digest, Sha256};

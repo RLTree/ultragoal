@@ -17,10 +17,13 @@ struct Sink {
 }
 
 impl PackageEffects for Sink {
-    fn read_package(&mut self, _maximum: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_package(
+        &mut self,
+        _maximum: usize,
+    ) -> Result<Option<Vec<u8>>, crate::distribution::EffectFailure> {
         self.reads += 1;
         if self.fail_read_at == Some(self.reads) {
-            return Err(());
+            return Err(crate::distribution::EffectFailure);
         }
         let mut bytes = self.bytes.clone();
         if self.corrupt_read_at == Some(self.reads)
@@ -35,7 +38,7 @@ impl PackageEffects for Sink {
         &mut self,
         expected_sha256: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, crate::distribution::EffectFailure> {
         self.transitions += 1;
         if self
             .mutate_before_transition
@@ -54,7 +57,7 @@ impl PackageEffects for Sink {
             }
         }
         if self.fail_transition_at == Some(self.transitions) {
-            return Err(());
+            return Err(crate::distribution::EffectFailure);
         }
         let current_sha256 = self.bytes.as_deref().map(digest);
         if self.special || current_sha256.as_deref() != expected_sha256 {

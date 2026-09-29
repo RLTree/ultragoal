@@ -34,8 +34,7 @@ impl BuildClosureV1 {
         let mut total_bytes = 0_u64;
         for (index, input) in policy.required_inputs.iter().enumerate() {
             let relative = filesystem::checked_relative(&input.path)?;
-            let path = filesystem::checked_file(&root, &relative)?;
-            let (sha256, byte_length, identity) = filesystem::hash_stable(&path)?;
+            let (sha256, byte_length, identity) = filesystem::hash_stable(&root, &relative)?;
             if !identities.insert(identity) {
                 return Err(ClosureError::DuplicateOrAlias);
             }
@@ -46,7 +45,7 @@ impl BuildClosureV1 {
                 sha256,
                 byte_length,
             });
-            after_read(index, &path);
+            after_read(index, &root.path().join(&relative));
         }
         rows.sort_by(|left, right| left.path.cmp(&right.path));
         let closure = Self {
@@ -65,7 +64,11 @@ impl BuildClosureV1 {
         self.verify_at(&filesystem::checked_root(root)?, policy)
     }
 
-    fn verify_at(&self, root: &Path, policy: &BuildClosurePolicy) -> Result<(), ClosureError> {
+    fn verify_at(
+        &self,
+        root: &filesystem::CheckedRoot,
+        policy: &BuildClosurePolicy,
+    ) -> Result<(), ClosureError> {
         policy::validate(policy)?;
         if self.schema_version != "BuildClosure-v1" || !self.final_session_revalidated {
             return Err(ClosureError::FinalSessionDrift);
@@ -89,8 +92,8 @@ impl BuildClosureV1 {
             if !seen.insert(row.path.to_ascii_lowercase()) {
                 return Err(ClosureError::DuplicateOrAlias);
             }
-            let path = filesystem::checked_file(root, &filesystem::checked_relative(&row.path)?)?;
-            let (sha256, byte_length, identity) = filesystem::hash_stable(&path)?;
+            let relative = filesystem::checked_relative(&row.path)?;
+            let (sha256, byte_length, identity) = filesystem::hash_stable(root, &relative)?;
             if !identities.insert(identity) {
                 return Err(ClosureError::DuplicateOrAlias);
             }

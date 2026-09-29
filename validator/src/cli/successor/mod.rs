@@ -21,8 +21,6 @@ mod value;
 pub use crate::context::EffectClass;
 pub use catalog::catalog;
 #[cfg(test)]
-pub use command_contract::LegacyCommand;
-#[cfg(test)]
 pub use command_contract::OptionArgument;
 pub use command_contract::{
     CheckProfile, ExitClass, FitAction, Group, InspectTarget, ObserveAction, OptionName,
@@ -33,8 +31,6 @@ pub use command_contract::{
 pub use error::ParseErrorId;
 pub use error::ParseFailure;
 pub use help::{render_help, version_text};
-#[cfg(test)]
-pub(crate) use input::MAX_ARGUMENT_BYTES;
 #[cfg(test)]
 pub use parser::parse_args;
 pub use parser::parse_command_line;

@@ -8,6 +8,7 @@
 mod authority;
 mod catalog;
 mod ledger;
+mod plan_scope;
 mod projection;
 mod protocol;
 mod root_permit;
@@ -24,9 +25,12 @@ pub(crate) use authority::{
     RepositoryFitTrustedClock, execute_prepared_apply, prepare_recovery_intent,
     recover_prepared_apply,
 };
+#[cfg(all(test, target_vendor = "apple"))]
+pub(crate) use ledger::write_legacy_v3_device_number_for_test;
+pub(crate) use plan_scope::FitPlanScope;
 pub(crate) use protocol::{
-    OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, prepare_apply_request,
-    verify_target,
+    OpaqueFitApplyRequest, PreparedFitApply, inspect_target, plan_target, plan_target_for_scope,
+    prepare_apply_request, verify_target,
 };
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]

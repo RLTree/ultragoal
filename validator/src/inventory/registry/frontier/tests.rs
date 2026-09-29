@@ -1,0 +1,248 @@
+use super::{scheduler_nodes, source_dependency};
+use serde_json::json;
+use std::collections::BTreeSet;
+
+fn registry(states: &[(&str, &str)], eligible: &[&str]) -> serde_json::Value {
+    json!({
+        "pre_adoption_source": {
+            "epoch": "ADOPTED-CURRENT",
+            "frontier": "N00_ADOPTION_BOUNDARY",
+            "eligible_scheduler_nodes": eligible,
+        },
+        "defaults": {"consumed": {"status": "resolved_current"}},
+        "lanes": states
+            .iter()
+            .map(|(id, state)| json!({"id": id, "state": state}))
+            .collect::<Vec<_>>(),
+    })
+}
+
+#[test]
+fn ready_lane_is_schedulable_without_becoming_production_authority() {
+    let active = scheduler_nodes(&registry(
+        &[("N00", "integrated"), ("N01", "ready")],
+        &["N01"],
+    ))
+    .unwrap();
+
+    assert_eq!(active.integrated, BTreeSet::from(["N00".to_owned()]));
+}
+
+#[test]
+fn unexpected_active_lifecycle_states_fail_the_frontier_closed() {
+    let error = scheduler_nodes(&registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "ready"),
+            ("N02", "leased"),
+            ("N03", "candidate"),
+            ("N04", "under_review"),
+            ("N05", "accepted"),
+            ("N06", "integrating"),
+        ],
+        &["N01"],
+    ))
+    .unwrap_err();
+
+    assert_eq!(
+        error.to_string(),
+        "invalid registry: scheduler frontier has unexpected active worktree lanes"
+    );
+}
+
+#[test]
+fn scheduler_eligibility_must_still_match_ready_lanes_exactly() {
+    let error = scheduler_nodes(&registry(&[("N00", "integrated"), ("N01", "ready")], &[]))
+        .err()
+        .expect("mismatched eligibility must fail");
+
+    assert_eq!(
+        error.to_string(),
+        "invalid registry: scheduler eligibility disagrees with ready lanes"
+    );
+}
+
+#[test]
+fn only_exact_n11_external_blocker_satisfies_n12_source_dependency() {
+    let mut value = json!({
+        "pre_adoption_source": {
+            "frontier": "N02_REOBSERVED_N12_INTEGRATED_N14_READY_SOURCE_FRONTIER"
+        },
+        "lanes": [{
+            "id": "N11",
+            "state": "blocked",
+            "ceiling": "source_accepted",
+            "outcome": {
+                "source_acceptance": "accepted",
+                "execution_outcome": "external_blocked",
+                "claim_availability": "withheld"
+            }
+        }]
+    });
+
+    assert!(source_dependency::satisfies(&value, "N12", "N11"));
+    assert!(!source_dependency::satisfies(&value, "N14", "N11"));
+    value["lanes"][0]["outcome"]["claim_availability"] = json!("available");
+    assert!(!source_dependency::satisfies(&value, "N12", "N11"));
+}
+
+#[test]
+fn integrated_distribution_advances_only_the_remaining_ready_lanes() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "ready"),
+            ("N06", "ready"),
+            ("N07", "ready"),
+        ],
+        &["N05", "N06", "N07"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N05_N07_READY_N04_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N04"));
+    assert_eq!(
+        nodes.ready,
+        BTreeSet::from(["N05", "N06", "N07"].map(str::to_owned))
+    );
+}
+
+#[test]
+fn integrated_repository_fit_preserves_the_two_actively_leased_core_lanes() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "ready"),
+            ("N07", "ready"),
+        ],
+        &["N06", "N07"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N06_N07_READY_N04_N05_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N05"));
+    assert_eq!(
+        nodes.ready,
+        BTreeSet::from(["N06", "N07"].map(str::to_owned))
+    );
+}
+
+#[test]
+fn integrated_routine_leaves_only_observability_scheduler_ready() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "ready"),
+        ],
+        &["N07"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N07_READY_N04_N06_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N06"));
+    assert_eq!(nodes.ready, BTreeSet::from(["N07".to_owned()]));
+}
+
+#[test]
+fn integrated_observability_opens_only_plugin_and_agent_adoption() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "ready"),
+            ("N09", "ready"),
+        ],
+        &["N08", "N09"],
+    );
+    value["pre_adoption_source"]["frontier"] =
+        json!("N08_N09_READY_N07_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N07"));
+    assert_eq!(
+        nodes.ready,
+        BTreeSet::from(["N08", "N09"].map(str::to_owned))
+    );
+}
+
+#[test]
+fn integrated_agent_adoption_leaves_only_plugin_product_ready() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "ready"),
+            ("N09", "integrated"),
+            ("N10", "blocked"),
+        ],
+        &["N08"],
+    );
+    value["pre_adoption_source"]["frontier"] = json!("N08_READY_N09_INTEGRATED_SOURCE_FRONTIER");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N09"));
+    assert_eq!(nodes.ready, BTreeSet::from(["N08".to_owned()]));
+}
+
+#[test]
+fn integrated_plugin_product_and_agent_adoption_enter_the_debt_checkpoint() {
+    let mut value = registry(
+        &[
+            ("N00", "integrated"),
+            ("N01", "integrated"),
+            ("N02", "integrated"),
+            ("N03", "integrated"),
+            ("N04", "integrated"),
+            ("N05", "integrated"),
+            ("N06", "integrated"),
+            ("N07", "integrated"),
+            ("N08", "integrated"),
+            ("N09", "integrated"),
+            ("N10", "blocked"),
+            ("N11", "blocked"),
+        ],
+        &[],
+    );
+    value["pre_adoption_source"]["frontier"] = json!("N08_N09_INTEGRATED_DEBT_CHECKPOINT");
+
+    let nodes = scheduler_nodes(&value).unwrap();
+
+    assert!(nodes.integrated.contains("N08"));
+    assert!(nodes.integrated.contains("N09"));
+    assert!(nodes.ready.is_empty());
+}

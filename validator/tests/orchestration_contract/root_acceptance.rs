@@ -1,6 +1,6 @@
-use crate::durable_journal_fixture::*;
+use super::durable_journal_fixture::*;
+use super::orchestration_fixture::*;
 use crate::orchestration::*;
-use crate::orchestration_fixture::*;
 
 #[test]
 fn full_reviewed_flow_requires_root_acceptance_before_completion() {

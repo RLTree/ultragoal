@@ -66,12 +66,20 @@ fn derive_product_plan_parts(
                 None => {
                     if source.status == SurfaceStatus::Active
                         && canonical.status == SurfaceStatus::Active
+                        && source.file_kind == SurfaceFileKind::Regular
+                        && source.link_count == 1
+                        && canonical.file_kind == SurfaceFileKind::Regular
+                        && canonical.link_count == 1
                     {
                         return Err(ProductMigrationError::new(
                             "migration-product-active-parallel-authority",
                         ));
                     }
-                    let reason = if matches.len() == 1
+                    let reason = if source.status == SurfaceStatus::Active
+                        && canonical.status == SurfaceStatus::Active
+                    {
+                        "semantic_parallel_authority_requires_exact_adoption_observation"
+                    } else if matches.len() == 1
                         && source.status == SurfaceStatus::Active
                         && canonical.status == SurfaceStatus::Definition
                     {
@@ -141,6 +149,7 @@ fn derive_product_plan_parts(
     })
 }
 
+#[cfg(test)]
 pub(crate) fn validate_adopted_registry_bytes(
     bytes: &[u8],
 ) -> Result<String, ProductMigrationError> {
@@ -148,7 +157,7 @@ pub(crate) fn validate_adopted_registry_bytes(
 }
 
 fn parse_adopted_registry(bytes: &[u8]) -> Result<AuthorityRoutingRegistry, ProductMigrationError> {
-    if bytes.is_empty() || bytes.len() > super::model::MAX_REGISTRY_BYTES {
+    if bytes.is_empty() || bytes.len() as u64 > MAX_MIGRATION_REGISTRY_BYTES {
         return Err(ProductMigrationError::new(
             "migration-product-registry-size-refused",
         ));

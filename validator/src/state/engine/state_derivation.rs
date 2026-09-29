@@ -3,22 +3,35 @@ use super::*;
 pub struct StateEngine;
 
 impl StateEngine {
+    /// Public compatibility entrypoint for explicit retained inventory users.
+    /// Current product state uses `derive_with_catalog` with its typed source
+    /// authority catalog instead.
     pub fn derive(
         context: &LiveContext,
         authority_catalog: &AuthorityCatalog,
         dependency_actions: &DependencyActionCatalog,
     ) -> Result<ProductState, StateError> {
+        Self::derive_with_catalog(context, authority_catalog, dependency_actions)
+    }
+
+    pub(crate) fn derive_with_catalog<C: super::super::snapshot::StateAuthorityCatalog + ?Sized>(
+        context: &LiveContext,
+        authority_catalog: &C,
+        dependency_actions: &DependencyActionCatalog,
+    ) -> Result<ProductState, StateError> {
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         policy_authority::verify_live(dependency_actions, context, authority_catalog)?;
         let state = derive_bound(
-            BoundInputs::from_live(context, authority_catalog),
+            BoundInputs::from_live(context, authority_catalog)?,
             dependency_actions,
         )?;
         context
             .revalidate()
             .map_err(|error| StateError::StaleContext(error.to_string()))?;
+        authority_catalog.revalidate(context)?;
         policy_authority::verify_live(dependency_actions, context, authority_catalog)?;
         Ok(state)
     }
@@ -39,7 +52,7 @@ pub(crate) fn derive_bound(
         &inputs.context_id,
         &inputs.authority_catalog_id,
         &inputs.authority_catalog_context_id,
-        None,
+        Some(&inputs.candidate_id),
         &inventory_codes,
     )?;
     let spec = catalog.spec();
@@ -72,6 +85,8 @@ pub(crate) fn derive_bound(
         &findings,
         &dependency_states,
         &inputs.capabilities,
+        &inputs.candidate_id,
+        catalog.verification_modes(),
         !fatal.is_empty(),
     );
     let product_goal = match next_action.kind {
@@ -87,13 +102,16 @@ pub(crate) fn derive_bound(
         }
         NextActionKind::Command => ProductGoalState::Operating,
     };
+    let current_behavior = current_behavior_disposition(&findings, &next_action);
     let host_goal = spec.host_goal.clone();
     let state_id = identity::state_id(identity::StateIdentity {
         schema_version: "ProductState-v1",
         context_id: &inputs.context_id,
         authority_catalog_id: &inputs.authority_catalog_id,
+        candidate_id: &inputs.candidate_id,
         dependency_action_catalog_id: catalog.catalog_id(),
         product_goal,
+        current_behavior,
         runtime_metadata: &spec.runtime_metadata,
         findings: &findings,
         repairs: &repairs,
@@ -105,15 +123,49 @@ pub(crate) fn derive_bound(
         state_id,
         context_id: inputs.context_id,
         authority_catalog_id: inputs.authority_catalog_id,
+        candidate_id: inputs.candidate_id,
         dependency_action_catalog_id: catalog.catalog_id().to_owned(),
         product_goal,
+        current_behavior,
         host_goal,
         runtime_metadata: spec.runtime_metadata.clone(),
         findings,
         repairs,
         claim_ceilings,
         next_action,
+        routine_observations: Vec::new(),
+        routine_observation_window:
+            super::super::product_state::RoutineObservationWindow::NotQueried,
     })
+}
+
+fn current_behavior_disposition(
+    findings: &[Finding],
+    next_action: &super::super::product_state::NextAction,
+) -> super::super::product_state::CurrentBehaviorDisposition {
+    use super::super::product_state::{CurrentBehaviorDisposition, NextActionKind};
+    if findings.is_empty() {
+        return CurrentBehaviorDisposition::NoChange;
+    }
+    if matches!(
+        next_action.kind,
+        NextActionKind::AuthorityRequest | NextActionKind::NoLegalRoute
+    ) || findings
+        .iter()
+        .any(|finding| finding.severity == FindingSeverity::Blocked)
+    {
+        return CurrentBehaviorDisposition::Blocked;
+    }
+    let selected = next_action.repair_id.as_deref();
+    if selected.is_some_and(|repair| {
+        findings
+            .iter()
+            .any(|finding| finding.repair.repair_id != repair)
+    }) {
+        CurrentBehaviorDisposition::PartialChange
+    } else {
+        CurrentBehaviorDisposition::ChangeRequired
+    }
 }
 
 pub(crate) fn initial_ceilings(
@@ -143,19 +195,19 @@ pub(crate) fn policy_finding(
     code: &str,
     reductions: &[CeilingReduction],
 ) -> Finding {
-    finding(
-        "invalid-state-policy",
-        FindingSeverity::Error,
-        FindingSource::StatePolicy {
+    finding(FindingInput {
+        code: "invalid-state-policy".to_owned(),
+        severity: FindingSeverity::Error,
+        source: FindingSource::StatePolicy {
             catalog_id: catalog.catalog_id().to_owned(),
         },
-        Scope {
+        scope: Scope {
             surface: "authority-kernel".to_owned(),
             relative_path: None,
         },
-        BTreeSet::new(),
-        format!("dependency/action catalog defect: {code}"),
-        policy_repair(code),
-        reductions.to_vec(),
-    )
+        dependency_ids: BTreeSet::new(),
+        cause: format!("dependency/action catalog defect: {code}"),
+        repair: policy_repair(code),
+        reductions: reductions.to_vec(),
+    })
 }

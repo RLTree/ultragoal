@@ -20,7 +20,19 @@ macro_rules! source {
     };
 }
 
+macro_rules! registry_source {
+    ($file:literal, $responsibility:literal) => {
+        WitnessSource {
+            relative: concat!("validator/src/inventory/registry/", $file),
+            embedded: include_bytes!(concat!("../", $file)),
+            responsibility: $responsibility,
+        }
+    };
+}
+
 include!("witness_sources.rs");
+
+include!("activation_rows.rs");
 
 include!("exact_source_manifest.rs");
 
@@ -132,13 +144,32 @@ mod tests {
     }
 
     #[test]
-    fn final_source_reread_rejects_semantic_and_root_export_mutate_restore() {
+    fn final_source_reread_rejects_authority_source_mutate_restore() {
         for (label, relative) in [
             (
                 "semantic-mutate-restore",
                 "validator/src/inventory/registry/semantic.rs",
             ),
-            ("lib-mutate-restore", "validator/src/lib.rs"),
+            (
+                "dispatcher-mutate-restore",
+                "validator/src/cli/successor_public/output_limit.rs",
+            ),
+            (
+                "P0-lease-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/mod.rs",
+            ),
+            (
+                "P0-diagnostic-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/debt_worktree/diagnostic_source.rs",
+            ),
+            (
+                "worktree-identity-mutate-restore",
+                "validator/src/inventory/registry/frontier/lease_issuance/worktree_identity.rs",
+            ),
+            (
+                "lifecycle-mutate-restore",
+                "validator/src/inventory/registry/frontier/lifecycle.rs",
+            ),
         ] {
             assert_mutate_restore_rejected(label, relative);
         }

@@ -7,74 +7,50 @@ macro_rules! include_production_package_module {
 mod agent_manifest;
 mod agent_roles;
 mod api_witness;
-#[cfg(test)]
-mod archive;
 mod argument_parser;
 mod audit;
-mod claim;
-mod claim_semantics;
-#[cfg(test)]
-mod claims;
 mod cli;
 pub use cli::capture;
-#[cfg(test)]
-mod command;
 mod command_run;
 mod command_witness;
 pub mod context;
+mod contract_amendment;
 mod contract_check_ids;
 mod digest;
 pub mod distribution;
-#[cfg(test)]
+pub mod engineering_advisory;
 pub mod evaluation;
+pub mod fixture_scheduler;
 #[cfg(test)]
-mod fixture_scheduler;
+#[path = "fixture_scheduler/tests/mod.rs"]
+mod fixture_scheduler_tests;
 mod generated_authority;
 pub mod inventory;
 mod json_boundary;
 #[cfg(test)]
-pub mod migration;
+#[path = "../tests/plugin_distribution_adapter_contract/lifecycle_fixture.rs"]
+mod lifecycle_fixture;
+pub(crate) mod migration;
 pub mod observability;
 pub mod orchestration;
 mod output_path;
 mod package;
 mod plugin_manifest;
 pub mod plugin_product;
+mod process_custody;
+pub(crate) mod product_inception;
 mod red;
 pub mod repository_fit;
-mod review;
 pub mod routine_work;
 mod scheduler;
 mod schema_catalog;
 #[cfg(test)]
 pub(crate) mod self_tests;
-mod semantic;
 mod skill_links;
 pub mod state;
-mod target_fixtures;
-mod target_repo;
-#[cfg(not(test))]
 pub(crate) struct Args {
     pub(crate) root: std::path::PathBuf,
     pub(crate) outcome: cli::successor::ParseOutcome,
-}
-
-#[cfg(test)]
-pub(crate) use command::{Args, Command};
-
-#[cfg(test)]
-pub(crate) fn parse_args_from(raw: Vec<String>) -> Result<Args, String> {
-    argument_parser::parse_args_from(raw)
-}
-
-#[cfg(test)]
-pub(crate) fn parse_command(raw: &[String]) -> Result<Command, String> {
-    argument_parser::parse_command(raw)
-}
-
-#[cfg(test)]
-pub(crate) fn usage() -> String {
-    argument_parser::usage()
 }
 
 pub fn main_entry() -> i32 {

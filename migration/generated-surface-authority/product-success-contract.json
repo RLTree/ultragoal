@@ -1,0 +1,17 @@
+{
+  "schema_version": "GeneratedSurfaceAuthorityShard-v1",
+  "contract_id": "harness-ultragoal-successor-contract-v2",
+  "surfaces": [
+    {
+      "disposition": "retained_context",
+      "output": "examples/generated/PRODUCT_SUCCESS_CONTRACT.json",
+      "sha256": "0cbaa1ba5ff32448f9be306ee8bcf5a26c878ee4ec77a1b3b238eb231e0334a3",
+      "reason": "Retained predecessor product-contract example; the current GOAL_CONTRACT.md and active ExecPlan own product intent and milestone state.",
+      "replacement_targets": [
+        "HCT-CLAIMS"
+      ],
+      "preserve": true,
+      "physical_deletion_authorized": false
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 {
-  "schema_version": "HarnessPluginLifecycleCases-v1",
+  "schema_version": "HarnessPluginLifecycleCases-v2",
+  "scope": "disposable_non_personal_verifier_fixture",
+  "public_authority": false,
   "cases": [
     {"id":"fresh-install","intent":"fresh_install","expected_effects":["install_package","refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},
     {"id":"monotonic-update","intent":"monotonic_update","expected_effects":["install_package","refresh_cache","probe_runtime"],"prior_authority_preserved_on_failure":true},

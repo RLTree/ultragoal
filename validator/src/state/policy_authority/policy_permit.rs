@@ -8,6 +8,7 @@ impl PolicyPermit {
         authority_catalog_id: &str,
         candidate_id: &str,
         spec_id: &str,
+        inventory_coverage: InventoryCoverage,
     ) -> Result<Self, StateError> {
         let mut permit = Self {
             schema_version: "PolicyPermit-v1",
@@ -17,6 +18,7 @@ impl PolicyPermit {
             authority_catalog_id: authority_catalog_id.to_owned(),
             candidate_id: candidate_id.to_owned(),
             spec_id: spec_id.to_owned(),
+            inventory_coverage,
             permit_id: String::new(),
         };
         permit.permit_id = permit.identity_id()?;
@@ -64,6 +66,7 @@ impl PolicyPermit {
             &self.authority_catalog_id,
             &self.candidate_id,
             &self.spec_id,
+            self.inventory_coverage,
         ))
     }
 
@@ -79,14 +82,14 @@ impl PolicyPermit {
     }
 }
 
-pub(crate) fn verify_live(
+pub(crate) fn verify_live<C: super::super::snapshot::StateAuthorityCatalog + ?Sized>(
     catalog: &DependencyActionCatalog,
     context: &LiveContext,
-    authority_catalog: &AuthorityCatalog,
+    authority_catalog: &C,
 ) -> Result<(), StateError> {
     let candidate_id = candidate_identity_id(context)?;
     let observed_codes = authority_catalog
-        .findings()
+        .inventory_findings()
         .iter()
         .map(|finding| finding.code.clone())
         .collect();
@@ -122,7 +125,13 @@ pub(crate) fn verify_bound(
         authority_catalog_id,
         authority_catalog_context_id,
     )?;
-    verify_inventory_coverage(catalog.spec(), observed_codes)
+    if permit.inventory_coverage == InventoryCoverage::Exact {
+        verify_inventory_coverage(catalog.spec(), observed_codes)
+    } else if !catalog.spec().inventory_policies.is_empty() {
+        invalid("policy-current-authority-contains-inventory-coverage")
+    } else {
+        Ok(())
+    }
 }
 
 pub(crate) fn verify_expected_bindings(

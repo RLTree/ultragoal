@@ -8,6 +8,7 @@ mod error;
 #[path = "host_filesystem_adapter/mod.rs"]
 mod filesystem;
 mod host;
+mod host_registry_observation;
 mod local_authority;
 mod model;
 mod protocol_codec;
@@ -15,10 +16,54 @@ mod session;
 mod source;
 mod supported;
 
+/// Read-only source-integrity capture used by the current product authority.
+///
+/// The current-state path needs only the source catalog identity and a
+/// revalidation boundary; it must not acquire a host-discovery transaction or
+/// any retained inventory authority.
+pub(crate) struct CurrentSourceCapture(source::SourceAgentCatalog);
+
+impl CurrentSourceCapture {
+    pub(crate) fn catalog_sha256(&self) -> &str {
+        self.0.catalog_sha256()
+    }
+
+    pub(crate) fn revalidate(&self) -> Result<(), error::AgentDiscoveryError> {
+        self.0.revalidate()
+    }
+
+    pub(crate) fn plugin_version(&self) -> &str {
+        self.0.plugin_version()
+    }
+}
+
+pub(crate) fn capture_current_source(
+    root: &std::path::Path,
+    candidate_id: &str,
+    session_id: &str,
+) -> Result<CurrentSourceCapture, error::AgentDiscoveryError> {
+    source::SourceAgentCatalog::capture(root, candidate_id, session_id).map(CurrentSourceCapture)
+}
+
+pub(crate) fn capture_installed_source_authority(
+    root: &std::path::Path,
+    candidate_id: &str,
+    session_id: &str,
+) -> Result<source::InstalledSourceAuthorityCapture, error::AgentDiscoveryError> {
+    source::InstalledSourceAuthorityCapture::capture(root, candidate_id, session_id)
+}
+
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
+#[cfg(test)]
+pub(crate) use error::AgentDiscoveryErrorId;
+pub(crate) use host_registry_observation::HostPluginRegistryObservation;
 pub(crate) use local_authority::{
-    LocalAgentAuthorityObservation, LocalAgentAuthorityRequest, LocalAgentRoleObservation,
-    observe_local_authority,
+    AgentRepositoryAdoption, AgentRepositoryAdoptionRequest, adopt_agent_repository,
 };
+pub(crate) use source::InstalledSourceAuthorityCapture;
 
 #[cfg(all(test, unix))]
 pub(crate) use filesystem::{
@@ -27,24 +72,19 @@ pub(crate) use filesystem::{
 };
 
 #[cfg(test)]
-pub use error::{AgentDiscoveryError, AgentDiscoveryErrorId};
+pub use error::AgentDiscoveryError;
 #[cfg(test)]
 pub use host::{
     HostAgentAuthorityReader, HostAgentAuthorityRequest, HostAgentAuthorityTransaction,
     HostAgentAuthorityTransactionError, ReadOnlyEffectEnforcement, ReadOnlyEffectRequest,
 };
 #[cfg(test)]
-pub use model::{
-    AgentAuthorityLayer, AgentLayerObservation, AgentRouteEligibility, CanonicalAgentObservation,
-    HostFileKind,
-};
+pub use model::AgentAuthorityLayer;
 #[cfg(test)]
 pub use session::AgentDiscoverySession;
 #[cfg(test)]
 pub use source::SourceAgentCatalog;
 #[cfg(test)]
 pub use supported::{
-    SupportedAgentAuthorityFinding, SupportedAgentAuthorityFindingKind,
-    SupportedAgentAuthorityObservation, SupportedHostAgentAuthorityReader,
-    SupportedHostAgentAuthorityReport, SupportedHostAgentRoots,
+    SupportedAgentAuthorityFindingKind, SupportedHostAgentAuthorityReader, SupportedHostAgentRoots,
 };

@@ -11,11 +11,13 @@ impl FixtureCaptureAdapter {
         let binding = FixtureExecutionBinding::standalone(&fixture.id, &fixture.metadata_digest);
         Self::issue_bound(
             fixture,
-            executable,
-            arguments,
-            output_limit,
-            required_output,
-            binding,
+            FixtureCaptureRequest {
+                executable,
+                arguments,
+                output_limit,
+                required_output,
+                binding,
+            },
             None,
             ExecutableIssuancePolicy::Production,
         )
@@ -32,24 +34,22 @@ impl FixtureCaptureAdapter {
         let binding = FixtureExecutionBinding::standalone(&fixture.id, &fixture.metadata_digest);
         Self::issue_bound(
             fixture,
-            executable,
-            arguments,
-            output_limit,
-            required_output,
-            binding,
+            FixtureCaptureRequest {
+                executable,
+                arguments,
+                output_limit,
+                required_output,
+                binding,
+            },
             None,
             ExecutableIssuancePolicy::TestNativeSnapshot,
         )
     }
 
-    #[allow(clippy::too_many_arguments)]
+    #[cfg(test)]
     pub(crate) fn issue_evaluation(
         fixture: &FixtureSpec,
-        executable: PathBuf,
-        arguments: Vec<OsString>,
-        output_limit: usize,
-        required_output: Vec<u8>,
-        binding: FixtureExecutionBinding,
+        request: FixtureCaptureRequest,
         artifact_name: impl Into<String>,
     ) -> Result<Self, FixtureScheduleError> {
         let artifact_name = artifact_name.into();
@@ -68,28 +68,26 @@ impl FixtureCaptureAdapter {
         }
         Self::issue_bound(
             fixture,
-            executable,
-            arguments,
-            output_limit,
-            required_output,
-            binding,
+            request,
             Some(artifact_name),
             ExecutableIssuancePolicy::Production,
         )
     }
 
-    #[allow(clippy::too_many_arguments)]
     pub(crate) fn issue_bound(
         fixture: &FixtureSpec,
-        executable: PathBuf,
-        arguments: Vec<OsString>,
-        output_limit: usize,
-        required_output: Vec<u8>,
-        binding: FixtureExecutionBinding,
+        request: FixtureCaptureRequest,
         artifact_name: Option<String>,
         issuance_policy: ExecutableIssuancePolicy,
     ) -> Result<Self, FixtureScheduleError> {
         fixture.validate()?;
+        let FixtureCaptureRequest {
+            executable,
+            arguments,
+            output_limit,
+            required_output,
+            binding,
+        } = request;
         if !executable.is_absolute()
             || executable
                 .components()
@@ -192,6 +190,7 @@ impl FixtureCaptureAdapter {
         TEST_ISSUE_PAUSED.load(Ordering::SeqCst)
     }
 
+    #[cfg(test)]
     pub(crate) fn interrupt(&self) {
         self.interrupt.store(true, Ordering::SeqCst);
     }

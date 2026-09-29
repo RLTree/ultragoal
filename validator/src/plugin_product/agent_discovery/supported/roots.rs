@@ -1,8 +1,9 @@
+use super::root_distinctness::require_distinct_authority_roots;
 use super::root_identity_codec::{RootIdentityCodecRequest, encode};
 use super::{MAX_HOST_AGENT_ENTRIES, conflict};
 use crate::plugin_product::agent_discovery::error::AgentDiscoveryError;
 use crate::plugin_product::agent_discovery::filesystem::{
-    AnchoredDirectory, AnchoredRoot, SecureFile,
+    AnchoredDirectory, AnchoredRoot, SecureFile, valid_sha256,
 };
 use crate::plugin_product::agent_discovery::model::{
     AgentAuthorityLayer, MAX_DESCRIPTOR_BYTES, MAX_MANIFEST_BYTES,
@@ -10,7 +11,6 @@ use crate::plugin_product::agent_discovery::model::{
 use std::collections::BTreeSet;
 use std::ffi::{OsStr, OsString};
 use std::path::{Path, PathBuf};
-
 /// Explicit roots for one source-local supported-host observation transaction.
 #[derive(Clone, Debug)]
 pub struct SupportedHostAgentRoots {
@@ -19,8 +19,8 @@ pub struct SupportedHostAgentRoots {
     cache_root: PathBuf,
     global_root: PathBuf,
     project_root: PathBuf,
+    registry_observation_sha256: String,
 }
-
 impl SupportedHostAgentRoots {
     pub fn new(
         package_root: impl Into<PathBuf>,
@@ -28,6 +28,7 @@ impl SupportedHostAgentRoots {
         cache_root: impl Into<PathBuf>,
         global_root: impl Into<PathBuf>,
         project_root: impl Into<PathBuf>,
+        registry_observation_sha256: impl Into<String>,
     ) -> Self {
         Self {
             package_root: package_root.into(),
@@ -35,10 +36,10 @@ impl SupportedHostAgentRoots {
             cache_root: cache_root.into(),
             global_root: global_root.into(),
             project_root: project_root.into(),
+            registry_observation_sha256: registry_observation_sha256.into(),
         }
     }
 }
-
 #[derive(Clone)]
 pub(super) struct SupportedRootSet {
     package: PluginAuthorityRoot,
@@ -46,19 +47,32 @@ pub(super) struct SupportedRootSet {
     cache: PluginAuthorityRoot,
     global: GlobalAuthorityRoot,
     project: PluginAuthorityRoot,
+    registry_observation_sha256: String,
 }
-
 impl SupportedRootSet {
     pub(super) fn open(roots: &SupportedHostAgentRoots) -> Result<Self, AgentDiscoveryError> {
-        Ok(Self {
+        if !valid_sha256(&roots.registry_observation_sha256) {
+            return Err(crate::plugin_product::agent_discovery::error::AgentDiscoveryError::new(
+                crate::plugin_product::agent_discovery::error::AgentDiscoveryErrorId::InvalidBinding,
+            ));
+        }
+        let roots = Self {
             package: PluginAuthorityRoot::open(&roots.package_root)?,
             installed: PluginAuthorityRoot::open(&roots.installed_root)?,
             cache: PluginAuthorityRoot::open(&roots.cache_root)?,
             global: GlobalAuthorityRoot::open(&roots.global_root)?,
             project: PluginAuthorityRoot::open(&roots.project_root)?,
-        })
+            registry_observation_sha256: roots.registry_observation_sha256.clone(),
+        };
+        require_distinct_authority_roots(
+            &roots.package,
+            &roots.installed,
+            &roots.cache,
+            &roots.global,
+            &roots.project,
+        )?;
+        Ok(roots)
     }
-
     pub(super) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
         self.package.revalidate()?;
         self.installed.revalidate()?;
@@ -66,7 +80,6 @@ impl SupportedRootSet {
         self.global.revalidate()?;
         self.project.revalidate()
     }
-
     pub(super) fn identity_sha256(&self) -> String {
         let package = self.package.identity_sha256();
         let installed = self.installed.identity_sha256();
@@ -79,11 +92,11 @@ impl SupportedRootSet {
             cache: &cache,
             global: &global,
             project: &project,
+            registry_observation_sha256: &self.registry_observation_sha256,
         })
         .expect("fixed root identity tuple serializes")
         .sha256()
     }
-
     pub(super) fn capture(
         &self,
         layer: AgentAuthorityLayer,
@@ -97,10 +110,9 @@ impl SupportedRootSet {
         }
     }
 }
-
 #[derive(Clone)]
-struct PluginAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct PluginAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
     plugin: AnchoredDirectory,
 }
@@ -160,8 +172,8 @@ impl PluginAuthorityRoot {
 }
 
 #[derive(Clone)]
-struct GlobalAuthorityRoot {
-    root: AnchoredRoot,
+pub(super) struct GlobalAuthorityRoot {
+    pub(super) root: AnchoredRoot,
     agents: AnchoredDirectory,
 }
 
@@ -190,12 +202,55 @@ impl GlobalAuthorityRoot {
 
     fn capture(&self) -> Result<LayerFiles, AgentDiscoveryError> {
         self.revalidate()?;
-        let agents = self
+        let entries = self
             .agents
             .bounded_regular_files(MAX_HOST_AGENT_ENTRIES, MAX_DESCRIPTOR_BYTES)?;
+        let agents = select_global_agent_descriptors(&entries)?;
         self.revalidate()?;
-        Ok(LayerFiles::new(self.identity_sha256(), None, agents))
+        Ok(LayerFiles::new_with_entries(
+            self.identity_sha256(),
+            None,
+            agents,
+            entries,
+        ))
     }
+}
+
+fn select_global_agent_descriptors(
+    entries: &[(OsString, SecureFile)],
+) -> Result<Vec<(OsString, SecureFile)>, AgentDiscoveryError> {
+    let mut case_folded = BTreeSet::new();
+    let mut agents = Vec::new();
+    for (name, file) in entries {
+        let bytes = name.as_encoded_bytes();
+        if !case_folded.insert(bytes.iter().map(u8::to_ascii_lowercase).collect::<Vec<_>>()) {
+            return Err(conflict());
+        }
+        let Some(text) = name.to_str() else {
+            if bytes.ends_with(b".toml") || bytes.ends_with(b".TOML") {
+                return Err(conflict());
+            }
+            continue;
+        };
+        let lower = text.to_ascii_lowercase();
+        if lower.ends_with(".toml") {
+            if text != lower {
+                return Err(conflict());
+            }
+            let stem = text.strip_suffix(".toml").ok_or_else(conflict)?;
+            if stem.is_empty()
+                || !stem.bytes().all(|byte| {
+                    byte.is_ascii_lowercase()
+                        || byte.is_ascii_digit()
+                        || matches!(byte, b'-' | b'_')
+                })
+            {
+                return Err(conflict());
+            }
+            agents.push((name.clone(), file.clone()));
+        }
+    }
+    Ok(agents)
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -203,6 +258,7 @@ pub(super) struct LayerFiles {
     authority_root_sha256: String,
     manifest: Option<SecureFile>,
     agents: Vec<(OsString, SecureFile)>,
+    entries: Vec<(OsString, SecureFile)>,
 }
 
 impl LayerFiles {
@@ -211,10 +267,21 @@ impl LayerFiles {
         manifest: Option<SecureFile>,
         agents: Vec<(OsString, SecureFile)>,
     ) -> Self {
+        let entries = agents.clone();
+        Self::new_with_entries(authority_root_sha256, manifest, agents, entries)
+    }
+
+    fn new_with_entries(
+        authority_root_sha256: String,
+        manifest: Option<SecureFile>,
+        agents: Vec<(OsString, SecureFile)>,
+        entries: Vec<(OsString, SecureFile)>,
+    ) -> Self {
         Self {
             authority_root_sha256,
             manifest,
             agents,
+            entries,
         }
     }
 
@@ -232,15 +299,15 @@ impl LayerFiles {
 
     pub(super) fn content_sha256(&self) -> String {
         let manifest = self.manifest.as_ref().map(|file| file.sha256.as_str());
-        let agents = self
-            .agents
+        let entries = self
+            .entries
             .iter()
             .map(|(name, file)| (name.as_encoded_bytes().to_vec(), file.sha256.as_str()))
             .collect::<Vec<_>>();
         encode(RootIdentityCodecRequest::LayerFiles {
             authority_root_sha256: &self.authority_root_sha256,
             manifest_sha256: manifest,
-            agents: &agents,
+            agents: &entries,
         })
         .expect("fixed layer tuple serializes")
         .sha256()

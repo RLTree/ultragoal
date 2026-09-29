@@ -32,7 +32,6 @@ pub enum LegacyCommand {
     SemanticReceipts,
     Session,
     SourceObligations,
-    Standards,
     TransactionalFinalization,
     TypedBoundaries,
 }
@@ -72,7 +71,6 @@ impl LegacyCommand {
             Self::SemanticReceipts => "SemanticReceipts",
             Self::Session => "Session",
             Self::SourceObligations => "SourceObligations",
-            Self::Standards => "Standards",
             Self::TransactionalFinalization => "TransactionalFinalization",
             Self::TypedBoundaries => "TypedBoundaries",
         }
@@ -110,7 +108,6 @@ impl LegacyCommand {
             Self::SemanticReceipts => "inspect projection; receipt authority retired",
             Self::Session => "inspect/observe",
             Self::SourceObligations => "inspect/prove",
-            Self::Standards => "inspect/eval/migrate",
             Self::TransactionalFinalization => "prove; finalizer authority retired",
             Self::TypedBoundaries => "check/prove",
         }

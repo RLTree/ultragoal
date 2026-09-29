@@ -14,7 +14,7 @@ use std::sync::Arc;
 
 #[cfg(test)]
 pub(crate) use test_instrumentation::{
-    ReaddirTestFault, TestIoCounts, reset_test_io_counts, set_test_readdir_fault, test_io_counts,
+    ReaddirTestFault, reset_test_io_counts, set_test_readdir_fault, test_io_counts,
     test_readdir_fault_triggered,
 };
 #[cfg(test)]

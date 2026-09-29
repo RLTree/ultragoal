@@ -112,7 +112,11 @@ struct SignatureEnvelope {
 }
 
 pub trait SignatureVerifierEffects {
-    fn verify_signature(&mut self, envelope: &[u8], subject_sha256: &str) -> Result<bool, ()>;
+    fn verify_signature(
+        &mut self,
+        envelope: &[u8],
+        subject_sha256: &str,
+    ) -> Result<bool, crate::distribution::EffectFailure>;
 }
 
 pub fn verify_signature(

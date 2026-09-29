@@ -18,6 +18,8 @@ impl JournalLock {
 #[cfg(unix)]
 fn acquire(store: &Store) -> Result<JournalLock, OrchestrationError> {
     let file = store.open_lock()?;
+    // SAFETY: `file` remains open for the entire lock lifetime and its file
+    // descriptor is valid for `flock`.
     if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) } != 0 {
         return Err(OrchestrationError::JournalIo);
     }
@@ -35,6 +37,8 @@ fn acquire(_: &Store) -> Result<JournalLock, OrchestrationError> {
 impl Drop for JournalLock {
     fn drop(&mut self) {
         #[cfg(unix)]
+        // SAFETY: `self.file` still owns the descriptor acquired by `flock`;
+        // unlock is best-effort during drop and cannot outlive that descriptor.
         unsafe {
             libc::flock(self.file.as_raw_fd(), libc::LOCK_UN);
         }

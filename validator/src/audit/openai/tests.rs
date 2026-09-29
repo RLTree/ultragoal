@@ -3,7 +3,7 @@ use serde_json::json;
 fn root(label: &str) -> std::path::PathBuf {
     let root = crate::self_tests::boundaries::workspace_fixtures::temp_root(label);
     std::fs::create_dir_all(root.join("validation_artifacts/openai")).expect("openai dir");
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join("plugin-manifest-draft.json"),
         &json!({"resources":[]}),
     )
@@ -22,7 +22,7 @@ fn openai_receipt_audit_rejects_missing_wrong_schema_and_secret_shapes() {
         "{out:#?}"
     );
 
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(super::RECEIPT_REL),
         &json!({
             "schema":"wrong",
@@ -48,8 +48,11 @@ fn openai_receipt_audit_rejects_missing_wrong_schema_and_secret_shapes() {
     failing_config["redaction_status"] = json!("fail");
     failing_config["secret_material_serialized"] = json!(true);
     failing_config["claim_ceiling"] = json!("completion");
-    crate::json_boundary::write_json(&root.join(super::RECEIPT_REL), &failing_config)
-        .expect("failing config");
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
+        &root.join(super::RECEIPT_REL),
+        &failing_config,
+    )
+    .expect("failing config");
     let mut failing = Vec::new();
     super::check_receipt(&root, &mut failing);
     assert!(failing.contains(&"openai_config_receipt_not_passing".to_string()));
@@ -66,7 +69,7 @@ fn openai_receipt_audit_rejects_missing_wrong_schema_and_secret_shapes() {
             .any(|failure| failure.starts_with("openai_call_receipt_missing_or_malformed")),
         "{call:#?}"
     );
-    crate::json_boundary::write_json(
+    crate::self_tests::boundaries::workspace_fixtures::write_json(
         &root.join(super::CALL_RECEIPT_REL),
         &json!({
             "schema":"wrong",

@@ -87,12 +87,20 @@ fn disposition(
             "documentation_only".to_owned(),
             "fixture_pass".to_owned(),
             "install_success".to_owned(),
+            "legacy_dogfood_receipt".to_owned(),
             "package_publication".to_owned(),
             "receipt_only".to_owned(),
             "reviewer_agreement".to_owned(),
             "smoke_test".to_owned(),
         ]),
         overall,
+        operator_kind: None,
+        evidence_class: None,
+        surface_identities: None,
+        public_entry_observation: None,
+        real_work_observation: None,
+        manual_journey_row: None,
+        claimed_surface: None,
     }
 }
 

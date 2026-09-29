@@ -1,12 +1,11 @@
 use crate::context::LiveContext;
 use crate::inventory::{AuthorityCatalog, InventoryBuilder};
-use crate::repository_fixture::{TestRepo, inventory_request};
+use crate::repository_fixture::{inventory_request, TestRepo};
 
 fn catalog(repo: &TestRepo) -> AuthorityCatalog {
     let context = LiveContext::build(inventory_request(&repo.root)).unwrap();
     InventoryBuilder::new(&context).build().unwrap()
 }
-
 fn legacy_entry<'a>(
     catalog: &'a AuthorityCatalog,
     path: &str,
@@ -16,7 +15,6 @@ fn legacy_entry<'a>(
         .iter()
         .find(|entry| entry.relative_path == path && entry.stable_id.starts_with("LEGACY-"))
 }
-
 fn assert_absent(catalog: &AuthorityCatalog, path: &str) {
     assert!(
         legacy_entry(catalog, path).is_none(),
@@ -127,8 +125,6 @@ fn active_authority_negative_controls_remain_flagged() {
             "validator/src/claim_semantics/lane/policy.rs",
             "pub fn lane_policy() {}\n",
         ),
-        ("LANE_REGISTRY.json", "{}\n"),
-        ("templates/LANE_REGISTRY.json", "{}\n"),
         (
             "validator/src/audit/final_packet/mod.rs",
             "pub fn audit() {}\n",
@@ -137,38 +133,42 @@ fn active_authority_negative_controls_remain_flagged() {
             "validator/src/cli/final_packet/mod.rs",
             "pub fn print() {}\n",
         ),
+        (
+            "validator/src/plugin_product/lifecycle/host_custody/finalization.rs",
+            "pub fn terminal_custody() {}\n",
+        ),
+        ("legacy/finalization.rs", "pub fn obsolete() {}\n"),
         ("plugin-manifest-draft.json", "{}\n"),
         ("agents/current.md", "active agent prompt\n"),
         ("docs/public-model.md", "required model gpt-5.5\n"),
         ("templates/AGENT.md", "required model gpt-5.5\n"),
-        (
-            "validator/src/review/round/config.rs",
-            "const MODEL: &str = \"gpt-5.5\";\n",
-        ),
     ] {
         repo.write(path, content.as_bytes());
     }
     repo.commit();
     let catalog = catalog(&repo);
-
     for (path, kind) in [
         ("docs/ultragoal-contract-2026-07/active.md", "contract"),
         ("validator/src/argument_parser/mod.rs", "command"),
         ("validator/src/command/mod.rs", "command"),
         ("validator/src/command/tests.rs", "command"),
         ("validator/src/claim_semantics/lane/policy.rs", "lane"),
-        ("LANE_REGISTRY.json", "lane"),
-        ("templates/LANE_REGISTRY.json", "lane"),
         ("validator/src/audit/final_packet/mod.rs", "finalizer"),
         ("validator/src/cli/final_packet/mod.rs", "finalizer"),
+        ("legacy/finalization.rs", "finalizer"),
         ("plugin-manifest-draft.json", "manifest-projection"),
         ("agents/current.md", "agent"),
         ("docs/public-model.md", "model"),
         ("templates/AGENT.md", "model"),
-        ("validator/src/review/round/config.rs", "model"),
     ] {
         assert_kind(&catalog, path, kind);
     }
+    assert_absent(
+        &catalog,
+        "validator/src/plugin_product/lifecycle/host_custody/finalization.rs",
+    );
+    assert_absent(&catalog, "LANE_REGISTRY.json");
+    assert_absent(&catalog, "templates/LANE_REGISTRY.json");
 }
 
 #[test]

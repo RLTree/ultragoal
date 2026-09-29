@@ -5,6 +5,7 @@ use crate::inventory::types::{ActiveStatus, AuthorityState, InventoryEntry, Inve
 use std::collections::BTreeMap;
 use std::path::Path;
 
+mod adopted_schema_contract;
 mod verification;
 
 pub(super) use crate::generated_authority::GeneratedSurface as SurfaceSpec;

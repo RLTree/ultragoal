@@ -37,6 +37,10 @@ mod transition;
 mod worker;
 mod workspace;
 
+#[cfg(test)]
+#[path = "tests/mod.rs"]
+mod tests;
+
 pub use artifact::{ArtifactRecord, ArtifactWorkspace, VerifiedArtifactSet};
 pub use effect::{EffectOutcome, EffectReceipt, EffectRequest, EffectResolution, EffectSink};
 pub use engine::Orchestrator;

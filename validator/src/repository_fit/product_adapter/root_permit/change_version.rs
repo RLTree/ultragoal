@@ -57,7 +57,10 @@ impl RepositoryFitApplyOutcome {
 }
 
 pub(crate) enum RepositoryFitApplyFailure<E: RepositoryFitPermitEffects> {
-    PreEffect(PreEffectFailure<E>),
+    // Pre-effect refusal retains the request, permit, and lease so callers can
+    // recover custody without minting replacement authority. Boxing keeps that
+    // recovery-only payload out of the normal terminal error representation.
+    PreEffect(Box<PreEffectFailure<E>>),
     Terminal(TerminalApplyFailure),
 }
 
@@ -83,19 +86,20 @@ impl<E: RepositoryFitPermitEffects> RepositoryFitApplyFailure<E> {
     #[cfg(test)]
     pub(crate) fn into_pre_effect(self) -> Option<PreEffectFailure<E>> {
         match self {
-            Self::PreEffect(failure) => Some(failure),
+            Self::PreEffect(failure) => Some(*failure),
             Self::Terminal(_) => None,
         }
     }
 
     pub(crate) fn into_settlement(self) -> (FitAdapterError, bool, bool) {
         match self {
-            Self::PreEffect(PreEffectFailure {
-                error,
-                request,
-                permit,
-                lease,
-            }) => {
+            Self::PreEffect(failure) => {
+                let PreEffectFailure {
+                    error,
+                    request,
+                    permit,
+                    lease,
+                } = *failure;
                 drop((request, permit, lease));
                 (error, false, false)
             }

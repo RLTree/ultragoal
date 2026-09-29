@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "source_maps": [
+    "docs/legibility/sources.json"
+  ],
+  "dependency_registries": [
+    "docs/legibility/dependencies.json"
+  ],
+  "boundary_registries": [
+    "docs/legibility/boundaries.json"
+  ],
+  "command_registries": [
+    "docs/legibility/commands.json"
+  ],
+  "output_registries": []
+}

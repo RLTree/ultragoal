@@ -11,17 +11,12 @@ fn copy_live(repo: &TestRepo, path: &str) {
 
 fn copy_reader_evidence(repo: &TestRepo) {
     let receipt = fs::read(live_root().join(READER_PROOF)).unwrap();
-    let value: Value = serde_json::from_slice(&receipt).unwrap();
-    for row in value["artifacts"].as_array().unwrap() {
-        copy_live(repo, row["path"].as_str().unwrap());
-    }
-    copy_live(
-        repo,
-        "validator/src/inventory/agent_reader_guard_digests.rs",
+    crate::fixture_copy::copy_tree(
+        &live_root().join("validator/src"),
+        &repo.root.join("validator/src"),
     );
-    for path in READER_SOURCES {
-        copy_live(repo, path);
-    }
+    copy_live(repo, "validator/examples/hct_inventory.rs");
+    copy_live(repo, "validator/tests/public_api_witness.rs");
     copy_live(repo, "plugin-manifest-draft.json");
     for path in AGENT_MANIFESTS {
         copy_live(repo, path);
@@ -38,7 +33,17 @@ pub(super) fn prepare(repo: &TestRepo, cases: &[Case], reader_proof: bool) {
     }
     let mut value = registry(repo);
     let routes = value["routes"].as_array_mut().unwrap();
-    routes.retain(|row| row["route_id"] != BROAD_ROUTE);
+    let replaced = cases
+        .iter()
+        .copied()
+        .map(route_id)
+        .collect::<std::collections::BTreeSet<_>>();
+    routes.retain(|row| {
+        row["route_id"] != BROAD_ROUTE
+            && row["route_id"]
+                .as_str()
+                .is_none_or(|route_id| !replaced.contains(route_id))
+    });
     routes.extend(cases.iter().copied().map(route));
     write_registry(repo, &value);
 }

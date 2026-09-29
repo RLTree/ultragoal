@@ -148,6 +148,10 @@ fn verify_snapshot(
         || snapshot.payload.core.lock_identity != lock_identity
         || snapshot.payload.core.anchor_authority != anchor_authority
         || snapshot.payload.core.binding != *binding
+        || !snapshot_reservation_identity_valid(
+            &snapshot.payload.core.state,
+            snapshot.payload.core.reservation_id_sha256.as_deref(),
+        )
         || snapshot.payload.anchor_observation.authority() != anchor_authority
         || snapshot.payload.anchor_length != snapshot.payload.anchor_observation.length
         || !super::valid_sha256(&snapshot.payload.anchor_head_sha256)
@@ -160,6 +164,13 @@ fn verify_snapshot(
         ));
     }
     Ok(())
+}
+
+fn snapshot_reservation_identity_valid(state: &EvaluationLedgerState, value: Option<&str>) -> bool {
+    match state {
+        EvaluationLedgerState::Initialized => value.is_none(),
+        _ => value.is_some_and(super::valid_sha256),
+    }
 }
 
 fn authenticate_anchor_record(

@@ -1,155 +1,106 @@
-# Harness Ultragoal Successor Live Goal Contract
+# Harness UltraGoal Usable Product Goal
 
-## Authority
+## Current authorization — UltraGoal Next implementation
 
-This is the current readable projection of the adopted
-`harness-ultragoal-successor-contract-v2`. The immutable adopted base remains
-the bundle rooted at
-`docs/ultragoal-contract-2026-07-successor-v2/FINAL-HANDOFF-MANIFEST.sha256`.
-Post-adoption requirements are authoritative only when an append-only row in
-`AMENDMENTS.jsonl` binds this projection and its affected required claim IDs.
+Terry authorized full implementation of the five-document PRD at
+`docs/proposals/ultragoal-next-2026-09-21/`, using Conduct Agent Cadence.
+This supersedes that proposal's planning-only pause and the older milestone's
+scope for new work. TypeSafe Jev API spending is explicitly authorized for
+development, evaluation/testing and production; do not ask again for that
+spending authority. Minimize disclosed project evidence and never disclose
+credentials or raw personal histories. The primary target remains gpt-6-astra;
+Bend development uses the newest official release with exact per-run identity.
 
-The base contract hash is the SHA-256 of the exact handoff-manifest bytes. A
-current contract hash is the SHA-256 of the exact `GOAL_CONTRACT.md` bytes.
-Each amendment hash is SHA-256 over the repository's canonical JSON for that
-row with `amendment_hash` omitted: object keys sorted recursively, arrays
-preserved, UTF-8 compact JSON, and a `sha256:` prefix. The amendment-log digest is the
-SHA-256 of the exact `AMENDMENTS.jsonl` bytes. The first row uses the all-zero
-SHA-256 as `previous_amendment_hash`; later rows use the preceding row's
-`amendment_hash`.
+Deliver the complete Bend-first product, bounded internal Jev assessments,
+necessary Rust adapters, meaningful proofs/tests, native observation,
+incremental reuse, usable CLI/plugin integration and the specified evaluation
+and migration support. The existing active ExecPlan remains the sole execution
+record. Preserve unrelated dirty/untracked work. Commits, pushes, publication,
+global installation/configuration changes and destructive EJ retirement still
+require their own authority; prepare their concrete verified transition first.
+The older milestone and observations below remain historical constraints and
+evidence, not a restriction to the old syntax-only engine.
 
-## Objective
+## Authority and history
 
-Complete Harness Ultragoal as the smallest calibrated agentic-engineering
-harness that makes ambitious repository work executable, inspectable,
-recoverable, and cheaper to supervise.
+This contract is the current product-goal authority for Harness UltraGoal. It
+supersedes the recursive `harness-ultragoal-successor-contract-v2` delivery
+loop and its claim graph for current work. The v2 handoff bundle, lane registry,
+verification backlog, completion manifest, historical research graph,
+mandatory-law projections, and prior receipts remain frozen compatibility
+inputs. They do not schedule work, require refresh, or raise a current claim.
 
-The product loop is:
+The sole executable state owner is
+`docs/exec-plans/active/usable-product-milestone.md`. Architecture belongs in
+`ARCHITECTURE.md`; planning, evidence, recovery, and stopping rules belong in
+`PLANS.md`.
 
-1. choose a falsifiable problem;
-2. write one lean outcome contract;
-3. select the lowest sufficient model, reasoning effort, and orchestration
-   route;
-4. account for important alternatives and failure states;
-5. verify each claim on its real surface;
-6. ship reversibly; and
-7. use real-world evidence to improve, narrow, or retire the harness.
+## User, job, and outcome
 
-## Required Claim IDs
+- **User:** a repository operator using the Harness UltraGoal Codex plugin and
+  typed Rust CLI.
+- **Job:** safely fit a repository, run useful affected work on a dirty tree,
+  diagnose a representative failure, recover, and continue without losing
+  unrelated work.
+- **Product outcome:** one understandable flow reaches a useful verified result
+  with bounded human supervision.
+- **Mission outcome:** reduce operator attention and delivery risk without
+  substituting governance or evidence maintenance for product work.
 
-The adopted claim graph remains closed and unchanged:
+## `CL-USABLE-LOOP`
 
-- `CL-SOURCE`
-- `CL-PACKAGE`
-- `CL-INSTALL`
-- `CL-DISCOVERY`
-- `CL-RUNTIME`
-- `CL-FIT`
-- `CL-ROUTINE`
-- `CL-OBSERVABILITY`
-- `CL-STRICT`
-- `CL-ORCHESTRATION`
-- `CL-EVAL-IMPROVEMENT`
-- `CL-REAL-JOURNEY`
-- `CL-RELEASE`
-- `CL-COMPLETION`
+One exact integrated candidate must complete this authorized journey:
 
-No amendment may remove, merge, hide, or weaken one of these claims without an
-explicitly approved weakening amendment, blocking backlog, and lowered claim
-ceiling.
+1. build the current plugin package and CLI;
+2. install the exact package in an explicitly authorized local scope;
+3. observe the same bytes through supported host discovery and runtime;
+4. enter through the documented front door;
+5. inspect, plan, apply, and verify one representative repository while
+   preserving unrelated tracked and untracked state;
+6. run useful dirty-tree affected work;
+7. encounter one deterministic representative failure;
+8. receive a causal diagnosis and one exact legal next action;
+9. recover or refuse safely with custody understandable; and
+10. repeat unchanged useful work without stale reuse or hidden writes.
 
-## Strengthened Requirements
+The external evaluator, not UltraGoal's prose, tests, or receipts, decides the
+journey. Product Fitness and Product Cohesion observations must use the same
+surface and exact candidate.
 
-### Custody and convergence
+## Non-goals
 
-- N06 custody safety is enforced primarily through typed state, ownership,
-  module privacy, opaque leaves, and explicit transitions. Partial source-text,
-  alias, or control-flow inference cannot carry the custody claim.
-- Illegal custody mutation, implicit destructive cleanup, caller-forged cleanup
-  evidence, premature settlement, and release with live custody must be
-  structurally prevented and behaviorally exercised across failure, panic,
-  interruption, replay, recovery, cleanup, and false-pass routes.
-- After materially distinct bypass classes recur against the same enforcement
-  mechanism, root must record one decision before further patches: retain it
-  with new evidence, replace it, or narrow the affected claim. This decision
-  reuses existing authority; it does not create a counter, validator, receipt,
-  tracker, or review subsystem.
+This goal does not establish public release, marketplace publication,
+universal repository or host support, repeated adoption, daily-driver fitness,
+autonomous destructive action, a UI, a telemetry platform, or every historical
+v2 claim.
 
-### Review and proof economy
+## Protected invariants
 
-- Repair-loop checks stay focused and ephemeral. One independent source review
-  exhaustively falsifies the complete named invariant and batches all material
-  sibling, descendant, rollback, recovery, reconciliation, cleanup, replay,
-  security, and false-pass defects into one decision.
-- One material defect still means REWORK, but review does not stop at the first
-  defect. A fresh review follows an exact new freeze.
-- `WorkerResult-v1` remains the single lane handoff receipt and is generated
-  once only after source acceptance. Rejected candidates do not regenerate it.
-- Logs, targets, caches, scratch trees, compiler output, reproducible test
-  output, and duplicate receipts remain ephemeral. Durable evidence is retained
-  only for a named current claim, cross-process custody, irreproducible
-  observation, or recovery need, with one owner, invalidation trigger, retention
-  boundary, and deletion path.
-- Full multi-persona and same-surface proof runs only at material integration,
-  product, release, and completion boundaries where it can support or block a
-  current claim.
+- authorize before consequential effects;
+- parse untrusted input before behavior;
+- preserve unrelated user work and exact target/root custody;
+- keep help, inspect, plan, verify, diagnose, and next-action routes free of
+  hidden writes;
+- bind effects to explicit candidate, target, scope, and current authority;
+- fail closed on path escape, ambiguous ownership, stale identity, duplicate
+  effect, or post-effect ambiguity;
+- keep interruption, cancellation, retry, and recovery explicit where touched;
+- keep source, package, install, discovery, runtime, journey, and release proof
+  surfaces separate; and
+- never let generated rows, receipts, agents, reviewers, research, or model
+  output mint root authority or raise a claim ceiling.
 
-### Current-source product value
+## Human decisions
 
-- After N06 integration, the next product milestone is the smallest
-  dependency-closed current-source installed journey. Package, install,
-  discovery, and runtime identities are measured separately.
-- That journey must exercise repository fit, dirty-tree routine work, a
-  representative failure, diagnosis, recovery, preserved unrelated state, and
-  a useful operator outcome on a real non-toy repository.
-- Before any mastery-level or broadly reusable claim, repeat the critical
-  journey on two materially different real repositories: one established and
-  dirty, and one fresh or substantially different. If unavailable, keep the
-  claim narrow and name the blocker.
-- Product Fitness records one minimal manual-first row per journey: time to
-  verified value, human interventions, review rounds, recovery outcome,
-  retained artifact/cache cost, and any observed false pass or false rejection.
-  No telemetry platform is added solely for these measurements.
+Terry retains authority over branch/default/ruleset changes, representative
+real target selection, real host install or write scope, credentials, external
+services, publication, release, licensing, destructive retirement with
+ambiguous readers, and any expansion beyond this one journey.
 
-### Calibrated enforcement
+## Claim ceiling
 
-- Security, privacy, destructive-effect, and authority boundaries remain
-  mandatory regardless of observed frequency.
-- Other rules become universal only when recurrence or strong cross-repository
-  evidence shows lower correctness or attention cost and the check is precise,
-  inexpensive, and actionable.
-- Guidance, checks, agents, workflows, and proof machinery that do not earn
-  their maintenance and attention cost are simplified, made repository-fit
-  specific, or retired without weakening a protected claim boundary.
-- Active plans, worktrees, caches, candidate identities, amendment lineage, and
-  claim ceilings are reconciled at integration boundaries. Reproducible
-  artifacts and disposable caches are removed when no active claim or recovery
-  need depends on them.
-
-## Current Claim Ceiling
-
-This amendment promotes no claim. The adopted contract and accepted bounded
-source increments remain preserved. N06, its dependent N10/N11 increments,
-current-source package/install/discovery/runtime behavior, Product Fitness,
-real-repository journeys, readiness, release, completion, and mastery remain
-withheld until their exact dependency-closed, same-surface evidence passes.
-
-## Product Success Lineage
-
-`examples/generated/PRODUCT_SUCCESS_CONTRACT.json` is the current schema-bound,
-package-visible product-success authority for this live goal. Its claims map
-one-to-one to the adopted claim IDs above. Product Fitness, Product Cohesion,
-journey, readiness, release, and completion evidence must bind its current
-contract ID and exact target digest. Its zero receipt digest is an explicit
-contract-only sentinel; root issues the single current receipt only at the
-product proof boundary.
-
-## Prompting Basis
-
-- https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6
-- https://developers.openai.com/api/docs/guides/latest-model
-- https://learn.chatgpt.com/docs/models
-
-These sources support lean prompts, representative evaluation, lowest
-sufficient reasoning, and Ultra only for meaningfully separable work. They do
-not replace repository behavior or same-surface proof.
+`CL-USABLE-LOOP` may be claimed only at the tested envelope after the exact
+installed candidate completes the same-surface journey and the evaluator
+reports no prohibited outcome. Before that, the active ExecPlan must state one
+of `partial`, `blocked_by_product`, `blocked_by_environment_or_authority`, or
+`inconclusive`. Lower-surface success never implies a higher-surface claim.

@@ -112,7 +112,7 @@ fn concurrent_replay_of_one_sealed_plan_authorizes_exactly_one_transition() {
     let first = fixture.operation(&v11, &plan);
     let second = fixture.operation(&v11, &plan);
     let start = Arc::new(Barrier::new(3));
-    let run = |mut operation: ultragoal::plugin_product::distribution_adapter::DistributionLifecycleOperation| {
+    let run = |mut operation: crate::plugin_product::distribution_adapter::DistributionLifecycleOperation| {
         let start = Arc::clone(&start);
         let plan = plan.clone();
         let empty = empty.clone();

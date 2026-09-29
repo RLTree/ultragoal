@@ -1,6 +1,0 @@
-interface:
-  display_name: "Standards Gardener (Legacy Alias)"
-  short_description: "Route this legacy alias to its canonical skill"
-  default_prompt: "Use $harness-ultragoal:standards-gardener to preserve and route my unchanged request through its canonical skill."
-policy:
-  allow_implicit_invocation: false

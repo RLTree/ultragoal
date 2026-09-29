@@ -45,4 +45,4 @@ pub(crate) fn concurrent(cause: &'static str) -> RoutineError {
 }
 
 #[cfg(test)]
-pub(crate) use filesystem::{set_test_output_capture_hook, set_test_read_source_capture_hook};
+pub(crate) use filesystem::set_test_output_capture_hook;

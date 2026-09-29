@@ -10,6 +10,3 @@ pub(crate) fn root_id(context_id: &str, role: &str, absolute: &str) -> String {
     hasher.update(absolute.as_bytes());
     format!("sha256:{:x}", hasher.finalize())
 }
-
-#[allow(dead_code)]
-pub(crate) fn _assert_serializable<T: Serialize>(_value: &T) {}

@@ -5,7 +5,7 @@
   "candidate_identity": {
     "candidate_id": "sha256:48d01c461b14a1b424b704ee48c2355d349d7349c4f539f7ea112832c5ecf001",
     "context_id": "sha256:d22c99c02f9bcaee1d92cf72eda2ae14c3c8afa3d34e0fbaee5c88dda0171b9d",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "freeze_head_commit": "117c6f76d49754567af221a70a455bd4c50ef0f0",
     "freeze_head_tree": "eed77a4dabc4d19d643df12a13f7c2327e46d12e",

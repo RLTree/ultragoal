@@ -39,6 +39,7 @@ impl AuthoritySnapshot {
         &self.stable_id
     }
 
+    #[cfg(test)]
     pub(crate) fn status(&self) -> SurfaceStatus {
         self.status
     }
@@ -59,10 +60,12 @@ impl AuthoritySnapshot {
         &self.generated_outputs
     }
 
+    #[cfg(test)]
     pub(crate) fn digest_sha256(&self) -> &str {
         &self.digest_sha256
     }
 
+    #[cfg(test)]
     pub(super) fn semantic_sha256(&self) -> Result<String, ProductMigrationError> {
         let bytes = serde_json::to_vec(&("MigrationAuthoritySnapshot-v1", self)).map_err(|_| {
             ProductMigrationError::new("migration-product-authority-snapshot-invalid")

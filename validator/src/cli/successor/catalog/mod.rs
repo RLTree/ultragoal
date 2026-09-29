@@ -1,15 +1,15 @@
 mod evaluation_and_migration;
-mod fitting_and_validation;
 mod inspection;
 mod observability_and_package;
 mod options;
+mod repository_fit_and_checks;
 
 use super::command_contract::{CommandDescriptor, Group};
 use std::sync::OnceLock;
 
 const CATALOG_GROUPS: &[&[CommandDescriptor]] = &[
     inspection::COMMANDS,
-    fitting_and_validation::COMMANDS,
+    repository_fit_and_checks::COMMANDS,
     observability_and_package::COMMANDS,
     evaluation_and_migration::COMMANDS,
 ];

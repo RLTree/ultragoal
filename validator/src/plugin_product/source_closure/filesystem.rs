@@ -1,21 +1,41 @@
 use super::model::ClosureError;
 use sha2::{Digest, Sha256};
-use std::fs::{self, File, Metadata};
+#[cfg(not(unix))]
+use std::fs;
+use std::fs::Metadata;
 use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 
-const MAX_INPUT_BYTES: u64 = 64 * 1024 * 1024;
+#[cfg(unix)]
+#[path = "source_closure_filesystem_descriptor.rs"]
+mod descriptor;
+#[cfg(not(unix))]
+mod descriptor {
+    use super::{ClosureError, Path, PathBuf};
+    use std::fs::File;
 
-pub(super) fn checked_root(root: &Path) -> Result<PathBuf, ClosureError> {
-    let metadata = fs::symlink_metadata(root).map_err(|_| ClosureError::Missing)?;
-    if metadata.file_type().is_symlink() || !metadata.is_dir() {
-        return Err(ClosureError::SpecialFile);
+    pub(super) struct CheckedRoot {
+        path: PathBuf,
     }
-    fs::canonicalize(root).map_err(|_| ClosureError::Unreadable)
+    impl CheckedRoot {
+        pub(super) fn path(&self) -> &Path {
+            &self.path
+        }
+    }
+    pub(super) fn checked_root(_: &Path) -> Result<CheckedRoot, ClosureError> {
+        Err(ClosureError::Unreadable)
+    }
+    pub(super) fn open_confined(_: &CheckedRoot, _: &Path) -> Result<File, ClosureError> {
+        Err(ClosureError::Unreadable)
+    }
 }
+
+pub(super) use descriptor::{CheckedRoot, checked_root};
+
+const MAX_INPUT_BYTES: u64 = 64 * 1024 * 1024;
 
 pub(super) fn checked_relative(value: &str) -> Result<PathBuf, ClosureError> {
     let path = Path::new(value);
@@ -39,31 +59,6 @@ pub(super) fn slash_path(path: &Path) -> Result<String, ClosureError> {
     Ok(value.to_owned())
 }
 
-pub(super) fn checked_file(root: &Path, relative: &Path) -> Result<PathBuf, ClosureError> {
-    let mut current = root.to_path_buf();
-    let components = relative.components().collect::<Vec<_>>();
-    for (index, component) in components.iter().enumerate() {
-        let Component::Normal(component) = component else {
-            return Err(ClosureError::InvalidPath);
-        };
-        current.push(component);
-        let metadata = fs::symlink_metadata(&current).map_err(|_| ClosureError::Missing)?;
-        if metadata.file_type().is_symlink() || (index + 1 < components.len() && !metadata.is_dir())
-        {
-            return Err(ClosureError::SpecialFile);
-        }
-    }
-    let metadata = fs::symlink_metadata(&current).map_err(|_| ClosureError::Missing)?;
-    if !metadata.is_file() || metadata.len() > MAX_INPUT_BYTES || hard_link_count(&metadata) != 1 {
-        return Err(ClosureError::SpecialFile);
-    }
-    let canonical = fs::canonicalize(&current).map_err(|_| ClosureError::Unreadable)?;
-    if !canonical.starts_with(root) || canonical != current {
-        return Err(ClosureError::OutsideRoot);
-    }
-    Ok(current)
-}
-
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) struct FileIdentity {
     #[cfg(unix)]
@@ -74,13 +69,13 @@ pub(super) struct FileIdentity {
     canonical: PathBuf,
 }
 
-pub(super) fn hash_stable(path: &Path) -> Result<(String, u64, FileIdentity), ClosureError> {
-    let before = fs::symlink_metadata(path).map_err(|_| ClosureError::Missing)?;
-    let mut file = File::open(path).map_err(|_| ClosureError::Unreadable)?;
+pub(super) fn hash_stable(
+    root: &CheckedRoot,
+    relative: &Path,
+) -> Result<(String, u64, FileIdentity), ClosureError> {
+    let mut file = descriptor::open_confined(root, relative)?;
     let opened = file.metadata().map_err(|_| ClosureError::Unreadable)?;
-    if identity(path, &before)? != identity(path, &opened)? {
-        return Err(ClosureError::FinalSessionDrift);
-    }
+    validate_regular(&opened, MAX_INPUT_BYTES)?;
     let mut hasher = Sha256::new();
     let mut bytes = 0_u64;
     let mut buffer = [0_u8; 64 * 1024];
@@ -100,11 +95,14 @@ pub(super) fn hash_stable(path: &Path) -> Result<(String, u64, FileIdentity), Cl
         hasher.update(&buffer[..read]);
     }
     let after_handle = file.metadata().map_err(|_| ClosureError::Unreadable)?;
-    let after_path = fs::symlink_metadata(path).map_err(|_| ClosureError::FinalSessionDrift)?;
-    let file_identity = identity(path, &opened)?;
-    if file_identity != identity(path, &after_handle)?
-        || file_identity != identity(path, &after_path)?
-        || before.len() != bytes
+    let after_path = descriptor::open_confined(root, relative)
+        .map_err(|_| ClosureError::FinalSessionDrift)?
+        .metadata()
+        .map_err(|_| ClosureError::FinalSessionDrift)?;
+    let file_identity = identity(relative, &opened)?;
+    if metadata_tuple(&opened) != metadata_tuple(&after_handle)
+        || metadata_tuple(&opened) != metadata_tuple(&after_path)
+        || opened.len() != bytes
         || after_handle.len() != bytes
         || after_path.len() != bytes
     {
@@ -115,6 +113,41 @@ pub(super) fn hash_stable(path: &Path) -> Result<(String, u64, FileIdentity), Cl
         bytes,
         file_identity,
     ))
+}
+
+pub(super) fn read_stable(
+    root: &CheckedRoot,
+    relative: &Path,
+    maximum: u64,
+) -> Result<String, ClosureError> {
+    let mut file = descriptor::open_confined(root, relative)?;
+    let before = file.metadata().map_err(|_| ClosureError::Unreadable)?;
+    validate_regular(&before, maximum)?;
+    let mut bytes = Vec::new();
+    file.by_ref()
+        .take(maximum.saturating_add(1))
+        .read_to_end(&mut bytes)
+        .map_err(|_| ClosureError::Unreadable)?;
+    let after = file.metadata().map_err(|_| ClosureError::Unreadable)?;
+    let after_path = descriptor::open_confined(root, relative)
+        .map_err(|_| ClosureError::FinalSessionDrift)?
+        .metadata()
+        .map_err(|_| ClosureError::FinalSessionDrift)?;
+    if bytes.len() as u64 > maximum
+        || bytes.len() as u64 != before.len()
+        || metadata_tuple(&before) != metadata_tuple(&after)
+        || metadata_tuple(&before) != metadata_tuple(&after_path)
+    {
+        return Err(ClosureError::FinalSessionDrift);
+    }
+    String::from_utf8(bytes).map_err(|_| ClosureError::Unreadable)
+}
+
+fn validate_regular(metadata: &Metadata, maximum: u64) -> Result<(), ClosureError> {
+    if !metadata.is_file() || metadata.len() > maximum || hard_link_count(metadata) != 1 {
+        return Err(ClosureError::SpecialFile);
+    }
+    Ok(())
 }
 
 fn identity(path: &Path, metadata: &Metadata) -> Result<FileIdentity, ClosureError> {
@@ -135,6 +168,26 @@ fn identity(path: &Path, metadata: &Metadata) -> Result<FileIdentity, ClosureErr
 }
 
 #[cfg(unix)]
+fn metadata_tuple(metadata: &Metadata) -> (u64, u64, u32, u64, u64, i64, i64, i64, i64) {
+    (
+        metadata.dev(),
+        metadata.ino(),
+        metadata.mode(),
+        metadata.nlink(),
+        metadata.len(),
+        metadata.mtime(),
+        metadata.mtime_nsec(),
+        metadata.ctime(),
+        metadata.ctime_nsec(),
+    )
+}
+
+#[cfg(not(unix))]
+fn metadata_tuple(metadata: &Metadata) -> (u64, bool) {
+    (metadata.len(), metadata.permissions().readonly())
+}
+
+#[cfg(unix)]
 fn hard_link_count(metadata: &Metadata) -> u64 {
     metadata.nlink()
 }
@@ -143,3 +196,7 @@ fn hard_link_count(metadata: &Metadata) -> u64 {
 fn hard_link_count(_: &Metadata) -> u64 {
     1
 }
+
+#[cfg(all(test, unix))]
+#[path = "source_closure_filesystem_tests.rs"]
+mod tests;

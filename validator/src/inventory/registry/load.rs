@@ -36,6 +36,8 @@ pub(crate) fn load(
     let mut contract_id = None;
     let mut product = None;
     let mut required_apis: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let frontier = frontier::load(reads, root)?;
+    entries.extend(frontier.entries);
     for (name, array, id_key, kind) in specifications {
         let (path, value) = json(reads, root, name)?;
         let observed_contract = value
@@ -102,16 +104,16 @@ pub(crate) fn load(
         root,
         product: &product,
         required_apis,
+        active_tools: frontier.active_tools,
         entries: &mut entries,
         counts: &mut counts,
         findings: &mut findings,
     })?;
-    let legacy_skills = topology::load(&product, &mut entries, &mut counts)?;
+    topology::load(&product, &mut entries, &mut counts)?;
     Ok(RegistryData {
         contract_id: contract_id.unwrap_or_default(),
         counts,
         entries,
         findings,
-        legacy_skills,
     })
 }

@@ -10,7 +10,7 @@ mod standards_integrity;
 
 #[cfg(test)]
 pub(crate) use inventory::capture;
-pub(crate) use inventory::{GovernedInventory, GovernedSource, audit};
+pub(crate) use inventory::{GovernedInventory, GovernedSource, audit, capture_namespace_sources};
 pub(crate) use line_cap::failures as line_cap_failures;
 
 #[cfg(test)]

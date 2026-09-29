@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-head -c 70000 /dev/zero | tr '\0' 'x'

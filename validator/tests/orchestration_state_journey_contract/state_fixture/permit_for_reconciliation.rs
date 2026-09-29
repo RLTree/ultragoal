@@ -1,26 +1,3 @@
-pub fn permit_for_reconciliation(
-    action: &command::RootActionRequest,
-    tick: u64,
-    resolution: &EffectResolution,
-) -> (RootAuthority, RootPermit) {
-    let authority = authority();
-    let permit = issue_reconcile_permit_for_test(
-        &authority,
-        RootReconcilePermitIssuance {
-            binding: action.authority_binding.clone(),
-            workspace_identity: &action.workspace_identity,
-            journal_head_identity: &action.journal_head_identity,
-            issued_tick: tick.saturating_sub(1),
-            expires_tick: tick + 10,
-            nonce: b"journey-reconcile-nonce-012345",
-            target: action.target.clone(),
-            resolution,
-        },
-    )
-    .unwrap();
-    (authority, permit)
-}
-
 pub fn state_request(head: JournalHead, tick: u64) -> command::OrchestrationStateRequest {
     command::OrchestrationStateRequest {
         expected_head: head,

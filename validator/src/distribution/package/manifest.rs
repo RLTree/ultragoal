@@ -34,6 +34,7 @@ pub(super) fn validate(
         return Err(error(DistributionErrorId::InvalidPath));
     }
     add_root(skills, PackageRole::Skill, true, &mut roots, &mut seen)?;
+    add_canonical_agent_roots(entries, &mut roots, &mut seen)?;
     if let Some(path) = manifest.apps.as_deref() {
         let path = component(path, false)?;
         if path != ".app.json" {
@@ -48,6 +49,31 @@ pub(super) fn validate(
         validate_interface(interface, &mut roots, &mut seen)?;
     }
     bind(entries, &roots)
+}
+
+fn add_canonical_agent_roots(
+    entries: &[PackageEntry],
+    roots: &mut Vec<Root>,
+    seen: &mut BTreeSet<String>,
+) -> Result<(), DistributionError> {
+    if !entries.iter().any(|entry| {
+        entry
+            .path
+            .to_ascii_lowercase()
+            .starts_with(".codex/agents/")
+    }) {
+        return Ok(());
+    }
+    for role in crate::agent_roles::CANONICAL_AGENT_ROLES {
+        add_root(
+            role.manifest_path.to_owned(),
+            PackageRole::Agent,
+            false,
+            roots,
+            seen,
+        )?;
+    }
+    Ok(())
 }
 
 fn manifest_error(error_kind: DecodeError) -> DistributionError {
@@ -152,4 +178,70 @@ fn component(value: &str, subtree: bool) -> Result<String, DistributionError> {
     }
     validate_relative_path(path)?;
     Ok(path.to_owned())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const VERSION: &str = "0.0.42+codex.20260828085546";
+
+    fn entry(path: &str, role: PackageRole, bytes: &[u8]) -> PackageEntry {
+        PackageEntry {
+            path: path.to_owned(),
+            mode: 0o644,
+            role,
+            sha256: String::new(),
+            bytes: bytes.to_vec(),
+        }
+    }
+
+    fn entries() -> Vec<PackageEntry> {
+        let mut entries = vec![
+            entry(
+                ".codex-plugin/plugin.json",
+                PackageRole::Manifest,
+                br#"{"name":"harness-ultragoal","version":"0.0.42+codex.20260828085546","description":"valid","skills":"./skills/"}"#,
+            ),
+            entry(
+                "skills/harness-ultragoal/SKILL.md",
+                PackageRole::Skill,
+                b"---\nname: harness-ultragoal\n---\n",
+            ),
+        ];
+        entries.extend(
+            crate::agent_roles::CANONICAL_AGENT_ROLES
+                .iter()
+                .map(|role| entry(role.manifest_path, PackageRole::Agent, role.name.as_bytes())),
+        );
+        entries
+    }
+
+    #[test]
+    fn canonical_root_agents_are_exact_non_subtree_agent_roots() {
+        let entries = entries();
+        validate(&entries, "harness-ultragoal", VERSION).expect("canonical root agents");
+
+        let mut missing = entries.clone();
+        missing.retain(|entry| {
+            entry.path != crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path
+        });
+        assert!(validate(&missing, "harness-ultragoal", VERSION).is_err());
+
+        let mut nested = entries.clone();
+        nested.push(entry(
+            ".codex/agents/nested/member.toml",
+            PackageRole::Agent,
+            b"unknown",
+        ));
+        assert!(validate(&nested, "harness-ultragoal", VERSION).is_err());
+
+        let mut wrong_role = entries;
+        wrong_role
+            .iter_mut()
+            .find(|entry| entry.path == crate::agent_roles::CANONICAL_AGENT_ROLES[0].manifest_path)
+            .expect("canonical agent")
+            .role = PackageRole::Data;
+        assert!(validate(&wrong_role, "harness-ultragoal", VERSION).is_err());
+    }
 }

@@ -45,7 +45,9 @@ fn monotonic_update(
     require_write(&request.authorization)?;
     let current = current(observed)?;
     let target = required_target(request)?;
-    if target.version <= current.version || target.package_sha256 == current.package_sha256 {
+    if target.version.precedence_cmp(&current.version)? != std::cmp::Ordering::Greater
+        || target.package_sha256 == current.package_sha256
+    {
         return Err(LifecycleError::InvalidTransition);
     }
     Ok(update_effects(installed_state(observed, target)))
@@ -56,6 +58,9 @@ fn failed_update_recovery(
     request: &LifecycleRequest,
 ) -> Result<(LifecycleState, Vec<LifecycleEffect>), LifecycleError> {
     require_write(&request.authorization)?;
+    if !observed.recovery_required {
+        return Err(LifecycleError::InvalidTransition);
+    }
     let prior = request
         .prior_authority
         .clone()
@@ -84,7 +89,9 @@ fn authorized_rollback(
     }
     let current = current(observed)?;
     let target = required_target(request)?;
-    if target.version >= current.version || target.package_sha256 == current.package_sha256 {
+    if target.version.precedence_cmp(&current.version)? != std::cmp::Ordering::Less
+        || target.package_sha256 == current.package_sha256
+    {
         return Err(LifecycleError::InvalidTransition);
     }
     Ok(update_effects(installed_state(observed, target)))

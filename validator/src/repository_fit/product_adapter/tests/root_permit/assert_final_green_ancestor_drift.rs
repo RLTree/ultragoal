@@ -61,7 +61,7 @@ pub(crate) fn fresh_partial_dirty_and_idempotent_apply_are_exact_and_causal() {
         10,
     ));
     assert_eq!(outcome.status(), "applied");
-    assert_eq!(outcome.mutation_count(), CANONICAL_TEMPLATES.len());
+    assert_eq!(outcome.mutation_count(), CANONICAL_TEMPLATES.len() + 1);
     assert!(outcome.outcome_id().starts_with("sha256:"));
     assert!(verify_target(&fresh.context()).unwrap().idempotent());
 

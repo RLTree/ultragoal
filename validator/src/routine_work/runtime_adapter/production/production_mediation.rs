@@ -83,6 +83,8 @@ pub(super) fn owner_process_identity() -> Result<(i32, u64, u64, String), Routin
         let process_id = std::process::id() as i32;
         let mut info = std::mem::MaybeUninit::<libc::proc_bsdinfo>::zeroed();
         let size = std::mem::size_of::<libc::proc_bsdinfo>() as i32;
+        // SAFETY: `info` is correctly sized writable `proc_bsdinfo` storage and
+        // the current process identifier is valid for this process inspection.
         let observed = unsafe {
             libc::proc_pidinfo(
                 process_id,
@@ -95,6 +97,7 @@ pub(super) fn owner_process_identity() -> Result<(i32, u64, u64, String), Routin
         if observed != size {
             return Err(error("routine-production-owner-identity-unavailable"));
         }
+        // SAFETY: matching the requested structure size proves `proc_pidinfo` filled `info`.
         let info = unsafe { info.assume_init() };
         let mut nonce = [0_u8; 32];
         getrandom::fill(&mut nonce)

@@ -73,7 +73,6 @@ pub(crate) const REQUIRED_LAWS: &[&str] = &[
     "purpose-backed-active-files",
     "quality-score-taste-gates",
     "raw-private-artifact-handling-category-only-evidence",
-    "research-source-authority-article-to-law-integration",
     "repo-knowledge-index-core-beliefs",
     "restartable-execplans",
     "review-disagreement-override-judgment-boundary-governance",
@@ -93,14 +92,12 @@ pub(crate) const REQUIRED_LAWS: &[&str] = &[
     "skill-catalog-context-budget-omission-warning",
     "skill-local-reference-closure",
     "skill-progressive-disclosure-metadata",
-    "source-card-freshness-ceiling",
     "source-installed-cache-alignment",
     "source-obligation-parity-anti-bundling",
     "stable-identifier-normalization-collision",
     "standards-gardener-promotion",
     "subagent-custom-agent-sandbox-approval-inheritance",
     "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-    "target-repo-audit-capability",
     "targeted-refactor-debt-removal-standards-gardener-cadence",
     "template-generation-governance-template-creator-boundary",
     "third-party-dependency-legibility-typed-adapters",
@@ -115,3 +112,18 @@ pub(crate) const REQUIRED_LAWS: &[&str] = &[
     "workspace-command-confinement-lifecycle-cleanup",
     "worktree-lane-owner-cost-policy",
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::REQUIRED_LAWS;
+
+    #[test]
+    fn retained_compatibility_laws_are_not_current_requirements() {
+        for id in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(!REQUIRED_LAWS.contains(&id), "{id}");
+        }
+    }
+}

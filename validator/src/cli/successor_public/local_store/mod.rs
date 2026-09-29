@@ -1,41 +1,63 @@
+use crate::cli::successor_public::routine::{HostEventStore, HostState};
 use crate::context::LiveContext;
 use crate::observability::{CausalExplanation, EventQuery, EventStore, SemanticEvent};
 use serde_json::{Value, json};
-use std::ffi::OsString;
 use std::path::{Path, PathBuf};
 
-#[cfg(unix)]
-use std::os::unix::fs::MetadataExt;
-
-const STORE_PATH: &str = "validation_artifacts/observability/spool/successor-events.jsonl";
+pub(super) const RUNTIME_SOURCE_ID: &str = "successor-runtime";
 
 mod failure;
+mod terminal;
 pub(super) use failure::LocalStoreFailure;
+#[allow(unused_imports)]
+pub(super) use terminal::{append_routine_terminal, routine_observations_from_events};
 
 pub(super) struct LocalStore {
-    root: PathBuf,
-    before: StoreState,
-    store: Option<EventStore>,
+    home: PathBuf,
+    target: PathBuf,
+    context_id: String,
+    candidate_id: String,
+    source_id: String,
+    state: Option<HostState>,
+    store: Option<HostEventStore>,
 }
 
 impl LocalStore {
     pub(super) fn open(
-        root: &Path,
+        home: Option<&Path>,
+        target: &Path,
         context: &LiveContext,
         source_id: &str,
     ) -> Result<Self, LocalStoreFailure> {
-        let path = store_path(root);
-        let before = store_state(root, &path).ok_or_else(LocalStoreFailure::open_boundary)?;
-        let store = match before.leaf {
-            LeafState::Absent { .. } => None,
-            LeafState::Present { .. } => Some(
-                EventStore::for_context(path, context, source_id)
-                    .map_err(|error| LocalStoreFailure::open(&error))?,
-            ),
+        let home = home.ok_or_else(LocalStoreFailure::open_boundary)?;
+        let binding = SemanticEvent::for_context(
+            context,
+            source_id,
+            "host-event-store-observation",
+            0,
+            0,
+            "observe.store",
+            "unknown",
+        )
+        .map_err(|_| LocalStoreFailure::binding())?;
+        let state = match HostState::open_existing_for_target(home, target) {
+            Ok(state) => Some(state),
+            Err(super::routine::HostFailure::Unavailable) => None,
+            Err(_) => return Err(LocalStoreFailure::open_boundary()),
+        };
+        let store = match state.as_ref() {
+            Some(state) => state
+                .open_event_store_existing(target, context, source_id)
+                .map_err(|_| LocalStoreFailure::open_boundary())?,
+            None => None,
         };
         Ok(Self {
-            root: root.to_path_buf(),
-            before,
+            home: home.to_path_buf(),
+            target: target.to_path_buf(),
+            context_id: binding.context_id().to_owned(),
+            candidate_id: binding.candidate_id().to_owned(),
+            source_id: binding.source_id().to_owned(),
+            state,
             store,
         })
     }
@@ -75,15 +97,32 @@ impl LocalStore {
     }
 
     pub(super) fn revalidate(&self) -> Result<(), LocalStoreFailure> {
-        match store_state(&self.root, &store_path(&self.root)) {
-            Some(state) if state == self.before => Ok(()),
+        match (&self.state, &self.store) {
+            (Some(state), Some(store)) => state
+                .verify_event_store(store)
+                .map_err(|_| LocalStoreFailure::changed()),
+            (Some(state), None) => {
+                if state
+                    .event_store_absent(
+                        &self.target,
+                        &self.context_id,
+                        &self.candidate_id,
+                        &self.source_id,
+                    )
+                    .unwrap_or(false)
+                {
+                    Ok(())
+                } else {
+                    Err(LocalStoreFailure::changed())
+                }
+            }
+            (None, None) => match HostState::open_existing_for_target(&self.home, &self.target) {
+                Err(super::routine::HostFailure::Unavailable) => Ok(()),
+                _ => Err(LocalStoreFailure::changed()),
+            },
             _ => Err(LocalStoreFailure::changed()),
         }
     }
-}
-
-pub(super) fn store_path(root: &Path) -> PathBuf {
-    root.join(STORE_PATH)
 }
 
 pub(super) fn local_policy() -> Value {
@@ -100,101 +139,4 @@ pub(super) fn local_policy() -> Value {
         "configured_export_on_read": "refused-no-external-effect",
         "export_requires": "explicit-config-consent-authorized-external-write-roundtrip"
     })
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-struct StoreState {
-    directories: Vec<PathIdentity>,
-    leaf: LeafState,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-struct PathIdentity {
-    name: OsString,
-    device: u64,
-    inode: u64,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-enum LeafState {
-    Absent {
-        missing_component: usize,
-    },
-    Present {
-        device: u64,
-        inode: u64,
-        byte_length: u64,
-        modified_seconds: i64,
-        modified_nanoseconds: i64,
-        changed_seconds: i64,
-        changed_nanoseconds: i64,
-    },
-}
-
-#[cfg(unix)]
-fn store_state(root: &Path, path: &Path) -> Option<StoreState> {
-    let relative = path.strip_prefix(root).ok()?;
-    let root_metadata = std::fs::symlink_metadata(root).ok()?;
-    if root_metadata.file_type().is_symlink() || !root_metadata.is_dir() {
-        return None;
-    }
-    let mut directories = vec![PathIdentity {
-        name: root.as_os_str().to_os_string(),
-        device: root_metadata.dev(),
-        inode: root_metadata.ino(),
-    }];
-    let components = relative.components().collect::<Vec<_>>();
-    let mut current = root.to_path_buf();
-    for (index, component) in components.iter().enumerate() {
-        let std::path::Component::Normal(name) = component else {
-            return None;
-        };
-        current.push(name);
-        let metadata = match std::fs::symlink_metadata(&current) {
-            Ok(metadata) => metadata,
-            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
-                return Some(StoreState {
-                    directories,
-                    leaf: LeafState::Absent {
-                        missing_component: index,
-                    },
-                });
-            }
-            Err(_) => return None,
-        };
-        if metadata.file_type().is_symlink() {
-            return None;
-        }
-        if index + 1 == components.len() {
-            if !metadata.is_file() || metadata.nlink() != 1 {
-                return None;
-            }
-            return Some(StoreState {
-                directories,
-                leaf: LeafState::Present {
-                    device: metadata.dev(),
-                    inode: metadata.ino(),
-                    byte_length: metadata.len(),
-                    modified_seconds: metadata.mtime(),
-                    modified_nanoseconds: metadata.mtime_nsec(),
-                    changed_seconds: metadata.ctime(),
-                    changed_nanoseconds: metadata.ctime_nsec(),
-                },
-            });
-        }
-        if !metadata.is_dir() {
-            return None;
-        }
-        directories.push(PathIdentity {
-            name: name.to_os_string(),
-            device: metadata.dev(),
-            inode: metadata.ino(),
-        });
-    }
-    None
-}
-
-#[cfg(not(unix))]
-fn store_state(_: &Path, _: &Path) -> Option<StoreState> {
-    None
 }

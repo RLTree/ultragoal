@@ -24,7 +24,6 @@ macro_rules! reader {
 // compile-time bytes before trusting any row below.
 include!("foundational_authority_readers.rs");
 include!("plugin_product_review_readers.rs");
-include!("compatibility_witness_readers.rs");
 include!("runtime_routing_readers.rs");
 
 #[path = "../agent/manifest_digests.rs"]
@@ -38,7 +37,6 @@ pub(crate) fn all_readers() -> impl Iterator<Item = &'static ReaderSpec> {
     FOUNDATIONAL_AUTHORITY_READERS
         .iter()
         .chain(PLUGIN_PRODUCT_REVIEW_READERS)
-        .chain(COMPATIBILITY_WITNESS_READERS)
         .chain(RUNTIME_ROUTING_READERS)
         .chain(PACKAGE_READERS)
 }

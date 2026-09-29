@@ -1,10 +1,10 @@
-use super::observability::{
+use super::scenario::{TestDir, event, query, store, tree_snapshot};
+use ultragoal::observability::{
     CausalExplanation, EventQuery, EventStore, ExportAdapter, SemanticEvent,
 };
-use super::scenario::{TestDir, event, query, store, tree_snapshot};
 
 #[test]
-fn public_contract_names_compile_from_the_owned_wrapper() {
+fn public_contract_names_compile_from_library_export() {
     fn witness<T: ExportAdapter>(
         _: &SemanticEvent,
         _: &EventStore,

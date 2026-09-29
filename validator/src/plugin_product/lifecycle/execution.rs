@@ -1,10 +1,17 @@
+#[cfg(test)]
+use super::host_custody::recovery_state_after_completed_prefix;
+#[cfg(test)]
+use super::model::{ApplyDisposition, ApplyReport};
 use super::model::{
-    ApplyDisposition, ApplyReport, LifecycleEffectAdapter, LifecycleError, LifecyclePlan,
-    LifecycleState, RecoveryAuthorizationSeal, RecoveryToken, validate_digest,
+    LifecycleEffectAdapter, LifecycleError, LifecyclePlan, LifecycleState,
+    RecoveryAuthorizationSeal, RecoveryToken, validate_digest,
 };
-use super::plan::{consume_plan, validate_plan};
+#[cfg(test)]
+use super::plan::consume_plan;
+use super::plan::validate_plan;
 
-pub fn apply<A: LifecycleEffectAdapter>(
+#[cfg(test)]
+pub(crate) fn apply<A: LifecycleEffectAdapter>(
     observed: &LifecycleState,
     plan: &LifecyclePlan,
     adapter: &mut A,
@@ -68,16 +75,7 @@ pub fn apply<A: LifecycleEffectAdapter>(
     })
 }
 
-pub fn verify(actual: &LifecycleState, plan: &LifecyclePlan) -> Result<(), LifecycleError> {
-    validate_plan(plan)?;
-    actual.validate()?;
-    if actual != &plan.expected_after {
-        return Err(LifecycleError::VerificationFailed);
-    }
-    Ok(())
-}
-
-pub fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleError> {
+pub(crate) fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleError> {
     validate_plan(plan)?;
     if !plan.writes_host_state {
         return Err(LifecycleError::InvalidTransition);
@@ -98,7 +96,7 @@ pub fn recovery_token(plan: &LifecyclePlan) -> Result<RecoveryToken, LifecycleEr
     })
 }
 
-pub fn recover<A: LifecycleEffectAdapter>(
+pub(crate) fn recover<A: LifecycleEffectAdapter>(
     observed: &LifecycleState,
     token: &RecoveryToken,
     adapter: &mut A,
@@ -110,53 +108,6 @@ pub fn recover<A: LifecycleEffectAdapter>(
     token.authorization_seal.close()?;
     result.map_err(LifecycleError::RecoveryFailed)?;
     Ok(token.prior.clone())
-}
-
-fn recovery_state_after_completed_prefix(
-    plan: &LifecyclePlan,
-    completed_effects: &[super::model::LifecycleEffect],
-) -> Result<LifecycleState, LifecycleError> {
-    use super::model::LifecycleEffect;
-
-    if !plan.effects.starts_with(completed_effects) {
-        return Err(LifecycleError::InvalidTransition);
-    }
-    let mut state = plan.before.clone();
-    let mut host_write_completed = false;
-    for effect in completed_effects {
-        match effect {
-            LifecycleEffect::InstallPackage => {
-                state.installed = plan.expected_after.installed.clone();
-                host_write_completed = true;
-            }
-            LifecycleEffect::RefreshCache => {
-                state.cache = plan.expected_after.cache.clone();
-                host_write_completed = true;
-            }
-            LifecycleEffect::RestorePriorAuthority => {
-                state.installed = plan.expected_after.installed.clone();
-                state.cache = plan.expected_after.cache.clone();
-                host_write_completed = true;
-            }
-            LifecycleEffect::RemoveInstalledPackage => {
-                state.installed = None;
-                host_write_completed = true;
-            }
-            LifecycleEffect::RemoveCache => {
-                state.cache = None;
-                host_write_completed = true;
-            }
-            LifecycleEffect::VerifyInstalledBytes
-            | LifecycleEffect::VerifyTeardown
-            | LifecycleEffect::ProbeRuntime => {}
-        }
-    }
-    if host_write_completed {
-        state.generation = plan.expected_after.generation;
-    }
-    state.recovery_required = true;
-    state.validate()?;
-    Ok(state)
 }
 
 fn validate_recovery_token(token: &RecoveryToken) -> Result<(), LifecycleError> {

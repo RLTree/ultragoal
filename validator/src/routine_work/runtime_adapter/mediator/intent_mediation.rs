@@ -1,4 +1,5 @@
 use super::super::RUST_SOURCE_SYNTAX_BEHAVIOR;
+use super::outcome::ExecutedIntentProjection;
 use super::*;
 
 #[must_use = "the exact prepared intent must receive one process observation"]
@@ -166,7 +167,12 @@ impl IntentExecutionRequest {
             ProcessTermination::CleanupFailed => {
                 return Err(mediator_error("mediator-process-cleanup-failed"));
             }
-            ProcessTermination::Exited(_) | ProcessTermination::Signaled(_) => {
+            ProcessTermination::Exited(_) => Some((
+                RoutineNodeDisposition::Failed,
+                crate::routine_work::trusted_refusal_failure_code(&observation.stdout)
+                    .unwrap_or("MEDIATOR-CHECK-FAILED"),
+            )),
+            ProcessTermination::Signaled(_) => {
                 Some((RoutineNodeDisposition::Failed, "MEDIATOR-CHECK-FAILED"))
             }
         };
@@ -213,11 +219,13 @@ impl IntentExecutionRequest {
             context,
             plan,
             &self.token,
-            &self.snapshot_id,
-            &self.dependencies,
-            &self.framed_input_sha256,
-            &observation,
-            output_files,
+            ExecutedIntentProjection {
+                snapshot_id: &self.snapshot_id,
+                dependencies: &self.dependencies,
+                framed_input_sha256: &self.framed_input_sha256,
+                observation: &observation,
+                output_files,
+            },
         )?;
         self.token.advance()?;
         Ok(IntentResult::Executed(result))

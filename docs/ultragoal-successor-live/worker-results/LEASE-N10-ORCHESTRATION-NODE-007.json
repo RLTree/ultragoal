@@ -5,7 +5,7 @@
   "candidate_identity": {
     "candidate_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
     "context_id": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "artifact_set_sha256": "sha256:f64ad0bc814facfce5f4334495ae4fc2f3539c9bb2c60e9a79cdb00ab9bd7a35",
     "artifact_count_excluding_result": 34,
     "parent_result_path": "docs/ultragoal-successor-live/worker-results/LEASE-N10-ORCHESTRATION-NODE-006.json",

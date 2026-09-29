@@ -65,10 +65,12 @@ impl CompatibilityBoundaryBinding {
         &self.binding_sha256
     }
 
+    #[cfg(test)]
     pub(super) fn initial_observation(&self) -> &CompatibilityBoundaryObservation {
         &self.initial_observation
     }
 
+    #[cfg(test)]
     pub(super) fn observation_follows_source_history(
         &self,
         observation: &CompatibilityBoundaryObservation,
@@ -78,6 +80,7 @@ impl CompatibilityBoundaryBinding {
             && observation.is_same_source_and_monotonic_after(prior)
     }
 
+    #[cfg(test)]
     pub(super) fn effect_is_open_at(
         &self,
         effect: &PlannedMigrationEffect,
@@ -96,6 +99,7 @@ impl CompatibilityBoundaryBinding {
             })
     }
 
+    #[cfg(test)]
     pub(super) fn all_effects_open_at(
         &self,
         effects: &[PlannedMigrationEffect],

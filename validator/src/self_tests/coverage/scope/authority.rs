@@ -63,9 +63,9 @@ fn valid_manifest(root: &std::path::Path) -> Value {
             "install_cache_package": ["artifact"]
         }
     });
-    let source = crate::claim_semantics::coverage::digests::source_tree_digest(root, &manifest)
+    let source = crate::audit::coverage::scope::digests::source_tree_digest(root, &manifest)
         .expect("source digest");
-    let changed = crate::claim_semantics::coverage::digests::changed_files_digest(root, &manifest)
+    let changed = crate::audit::coverage::scope::digests::changed_files_digest(root, &manifest)
         .expect("changed digest");
     manifest["repo_root_digest"] = json!(source);
     manifest["changed_file_coupling_policy"]["changed_files_digest"] = json!(changed);
@@ -202,7 +202,7 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
         "source_discovery_rules":{"ignore":["src/generated/**", "src/exact-ignore.rs"]},
         "changed_file_coupling_policy":{"changed_files":["src/lib.rs"]}
     });
-    let before = crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)
+    let before = crate::audit::coverage::scope::digests::source_tree_digest(&root, &manifest)
         .expect("source digest");
     std::fs::write(
         root.join("src/generated/out.rs"),
@@ -232,13 +232,13 @@ fn coverage_digests_ignore_manifest_surfaces_and_prefix_patterns() {
     )
     .expect("modular contract change");
     let after_ignored =
-        crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)
+        crate::audit::coverage::scope::digests::source_tree_digest(&root, &manifest)
             .expect("source digest after ignored");
     assert_eq!(before, after_ignored);
 
     std::fs::write(root.join("src/lib.rs"), "included change").expect("included change");
     let after_included =
-        crate::claim_semantics::coverage::digests::source_tree_digest(&root, &manifest)
+        crate::audit::coverage::scope::digests::source_tree_digest(&root, &manifest)
             .expect("source digest after included");
     assert_ne!(before, after_included);
     std::fs::remove_dir_all(root).expect("cleanup coverage digest ignore");

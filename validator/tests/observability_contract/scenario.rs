@@ -1,51 +1,15 @@
-use super::observability::{EventQuery, EventStore, ExportAdapter, SemanticEvent};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::fs;
-use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::path::Path;
 use std::time::Duration;
+use ultragoal::observability::{
+    EventQuery, EventStore, ExportAdapter, SemanticEvent, SemanticEventInput,
+};
 
-static NEXT_DIR: AtomicU64 = AtomicU64::new(1);
-
-pub struct TestDir {
-    path: PathBuf,
-}
-
-impl TestDir {
-    pub fn new(label: &str) -> Self {
-        let serial = NEXT_DIR.fetch_add(1, Ordering::Relaxed);
-        let requested_root = PathBuf::from("/tmp/hul-observability-node-fixtures");
-        fs::create_dir_all(&requested_root).expect("create observability fixture root");
-        let root = fs::canonicalize(&requested_root).expect("resolve observability fixture root");
-        let path = root.join(format!(
-            "{}-{}-{serial}",
-            std::process::id(),
-            safe_label(label)
-        ));
-        fs::create_dir_all(&path).expect("create bounded observability fixture");
-        Self { path }
-    }
-
-    pub fn path(&self) -> &Path {
-        &self.path
-    }
-    pub fn store_path(&self) -> PathBuf {
-        self.path.join("events.jsonl")
-    }
-}
-
-impl Drop for TestDir {
-    fn drop(&mut self) {
-        let requested_root = Path::new("/tmp/hul-observability-node-fixtures");
-        let Ok(allowed) = fs::canonicalize(requested_root) else {
-            return;
-        };
-        if self.path.starts_with(allowed) {
-            let _ = fs::remove_dir_all(&self.path);
-        }
-    }
-}
+#[path = "fixture_custody.rs"]
+mod fixture_custody;
+pub use fixture_custody::TestDir;
 
 pub fn store(dir: &TestDir) -> EventStore {
     EventStore::open_bound(dir.store_path(), "ctx-1", "cand-1", "source-1")
@@ -57,16 +21,16 @@ pub fn query() -> EventQuery {
 }
 
 pub fn event(id: &str, at: u64, sequence: u64, outcome: &str) -> SemanticEvent {
-    SemanticEvent::new(
-        "ctx-1",
-        "cand-1",
-        "source-1",
-        id,
-        at,
+    SemanticEvent::new(SemanticEventInput {
+        context_id: "ctx-1".to_owned(),
+        candidate_id: "cand-1".to_owned(),
+        source_id: "source-1".to_owned(),
+        event_id: id.to_owned(),
+        observed_at_unix_ms: at,
         sequence,
-        "check.run",
-        outcome,
-    )
+        operation: "check.run".to_owned(),
+        outcome: outcome.to_owned(),
+    })
     .expect("bounded event")
 }
 
@@ -191,12 +155,5 @@ fn ids(events: &[SemanticEvent]) -> Vec<String> {
     events
         .iter()
         .map(|event| event.event_id().to_owned())
-        .collect()
-}
-
-fn safe_label(label: &str) -> String {
-    label
-        .chars()
-        .filter(|character| character.is_ascii_alphanumeric() || *character == '-')
         .collect()
 }

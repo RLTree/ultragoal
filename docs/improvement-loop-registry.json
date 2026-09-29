@@ -11,6 +11,159 @@
     "checklist_prose_as_loop_closure",
     "hand_authored_receipt_as_loop_closure"
   ],
+  "learning_adoption": {
+    "schema": "harness-ultragoal.learning-adoption.v1",
+    "one_learning_at_a_time": true,
+    "records": [
+      {
+        "record_id": "knowledge-projection-stale-mismatch",
+        "version": "1.0.0",
+        "owner": "improvement-loop-audit",
+        "status": "adopted",
+        "observation": "A human-readable learning card can drift from the canonical improvement-loop registry unless its bytes are checked against the source registry.",
+        "provenance": [
+          "docs/improvement-loop-registry.json",
+          "schemas/improvement-loop-registry.schema.json",
+          "validator/src/audit/improvement_loop/mod.rs"
+        ],
+        "operating_envelope": "source-local improvement-loop registry and generated Markdown projection on a clean candidate",
+        "evidence_class": "causal",
+        "facts": [
+          "The registry is the existing authority for improvement-loop state.",
+          "The projection is a reader-facing view and must not become a second authority."
+        ],
+        "interpretations": [
+          "A digest-linked deterministic projection makes stale or hand-edited learning guidance observable without adding a knowledge store."
+        ],
+        "hypotheses": [
+          "Recomputing projection bytes from the exact registry bytes will reject stale and hand-edited guidance before package claims are considered."
+        ],
+        "counterevidence": [
+          "The projection check does not prove that an adopted learning improves installed runtime or human use."
+        ],
+        "responsible_layer": "harness",
+        "mechanism_hypothesis": "The existing improvement-loop audit can own a pure byte-and-digest comparison for the projection.",
+        "recurrence": "Any future learning record that exposes a human-readable projection can otherwise drift silently.",
+        "severity": "material authority-integrity risk",
+        "intervention_burden": "one deterministic read-only comparison during the existing package check",
+        "proposed_intervention": "Generate the Markdown projection from registry bytes and reject any digest or byte mismatch.",
+        "rejected_alternatives": [
+          "A peer knowledge store with independent status.",
+          "A hand-authored receipt or reviewer attestation as projection authority."
+        ],
+        "evaluation": {
+          "baseline": ["Current registry loop closes without a learning adoption or projection check."],
+          "visible": ["Adopted record renders the use condition, mechanism, evidence, owner, and rollback."],
+          "held_out": ["A second record with a different disposition renders without changing the adopted card."],
+          "negative_controls": ["A missing projection, stale registry digest, or altered line fails closed."],
+          "overlap": ["The registry remains the only learning authority; no second store or lifecycle is introduced."],
+          "already_specified": ["The existing improvement-loop receipt and WorkerResult-v1 remain unchanged."],
+          "no_change": ["No projection or authority change is made when registry bytes and projection bytes already match."],
+          "semantic_mutation": ["Renaming a record field or changing its status changes the expected projection and is detected."],
+          "specification_evolution": ["A future registry schema change must update the renderer and schema together before adoption."],
+          "measures": ["projection byte equality", "registry digest equality", "claim ceiling remains source-local"]
+        },
+        "results": [
+          "The current candidate has one adopted learning and one held learning in the canonical registry.",
+          "The validator recomputes the projection and refuses stale or hand-edited bytes."
+        ],
+        "decision": "adopt",
+        "review_date": "2026-07-23",
+        "expiry_or_invalidation": [
+          "The registry schema or projection path changes without a coordinated renderer update.",
+          "The projection ceases to be generated solely from registry bytes."
+        ],
+        "rollback": "Remove the learning-adoption block and projection together, then retain the pre-existing loop receipt and validator behavior.",
+        "residual_risks": [
+          "This source-local control does not establish product improvement, installation, runtime activation, or human adoption."
+        ],
+        "authority_handoff": "The existing improvement-loop audit remains the sole executable checker; root retains adoption, claim, release, and completion authority.",
+        "repair_budget": {
+          "task_family": "registry projection validation",
+          "operating_envelope": "source-local improvement-loop registry and generated Markdown projection on a clean candidate",
+          "max_repair_attempts": 2,
+          "calibration_basis": "One renderer correction and one exact confirmation are sufficient for a deterministic projection mismatch.",
+          "universal_count": false
+        }
+      },
+      {
+        "record_id": "universal-repair-budget",
+        "version": "1.0.0",
+        "owner": "improvement-loop-audit",
+        "status": "held",
+        "observation": "A single repair-attempt count is tempting to reuse across all behavior and operating envelopes.",
+        "provenance": [
+          "docs/improvement-loop-registry.json",
+          "agent-standards/08-observability-and-repair-loop.md"
+        ],
+        "operating_envelope": "behavior-level skill/control evaluation for source-local repair loops",
+        "evidence_class": "unresolved",
+        "facts": [
+          "Repair cost and safe stopping conditions differ between deterministic projection work and behavior evaluation.",
+          "The semantic repair circuit breaker already records changed mechanism and evidence."
+        ],
+        "interpretations": [
+          "A universal count would hide the named task family and operating envelope that justify the budget."
+        ],
+        "hypotheses": [
+          "Keeping this learning held preserves calibrated budgets without adding a second repair tracker."
+        ],
+        "counterevidence": [
+          "Some small deterministic repairs may share a practical budget, but that does not make the budget universal."
+        ],
+        "responsible_layer": "loop",
+        "mechanism_hypothesis": "The existing semantic repair circuit breaker should remain the mechanism, with each candidate record naming its own budget.",
+        "recurrence": "The pressure to standardize repair counts recurs whenever a new evaluation family is added.",
+        "severity": "quality and attention-cost risk",
+        "intervention_burden": "none while held; calibrate only when a named task family supplies evidence",
+        "proposed_intervention": "Adopt one universal three-attempt repair cap for every learning and skill evaluation.",
+        "rejected_alternatives": [
+          "A hidden global counter outside the existing circuit breaker.",
+          "An unbounded retry loop justified by reviewer agreement."
+        ],
+        "evaluation": {
+          "baseline": ["Existing repair controls are task-specific and do not claim a universal cap."],
+          "visible": ["The held record names the proposed cap and the reason it is not adopted."],
+          "held_out": ["A different task family requires a separately calibrated budget."],
+          "negative_controls": ["A record declaring universal_count true is invalid."],
+          "overlap": ["No second repair tracker or lifecycle is introduced."],
+          "already_specified": ["The semantic repair circuit breaker remains current authority."],
+          "no_change": ["No universal cap is added while evidence is unresolved."],
+          "semantic_mutation": ["Changing the task family or envelope requires recalibration, not silent reuse."],
+          "specification_evolution": ["A future repair contract must preserve named calibration and the existing circuit breaker."],
+          "measures": ["task-family calibration present", "universal count absent", "repair authority unchanged"]
+        },
+        "results": [
+          "The proposed universal cap is held and no new global counter is introduced.",
+          "The adopted projection control uses a two-attempt budget only for its named deterministic task family."
+        ],
+        "decision": "hold",
+        "review_date": "2026-07-23",
+        "expiry_or_invalidation": [
+          "A representative behavior-evaluation corpus demonstrates a calibrated budget for a named task family.",
+          "The semantic repair circuit breaker changes authority."
+        ],
+        "rollback": "Delete this held proposal from the registry if the root retires the universal-budget question without adopting it.",
+        "residual_risks": [
+          "Future task families still require explicit budget calibration before repair work begins."
+        ],
+        "authority_handoff": "The existing semantic repair circuit breaker and WorkerResult-v1 remain authoritative; this held record cannot authorize a repair or claim.",
+        "repair_budget": {
+          "task_family": "behavior-level skill/control evaluation",
+          "operating_envelope": "behavior-level skill/control evaluation for source-local repair loops",
+          "max_repair_attempts": 3,
+          "calibration_basis": "Provisional comparison only; not eligible for universal reuse while this learning is held.",
+          "universal_count": false
+        }
+      }
+    ],
+    "knowledge_projection": {
+      "path": "docs/improvement-loop/knowledge-projection.md",
+      "schema": "harness-ultragoal.improvement-loop-knowledge-projection.v1",
+      "format": "markdown",
+      "generator": "validator/src/audit/improvement_loop/mod.rs"
+    }
+  },
   "loops": [
     {
       "loop_id": "source-local-agent-improvement-loop-bootstrap",

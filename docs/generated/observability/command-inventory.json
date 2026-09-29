@@ -73,7 +73,6 @@
     "source audit",
     "source-obligations check",
     "standards-gardener rebind",
-    "target-repo audit",
     "transaction finalize",
     "typed-boundaries check",
     "update-goal eligibility"
@@ -117,11 +116,11 @@
   "observability_control_board": {
     "status": "blocked",
     "families": {
-    "commands": {
-      "total": 73,
-      "observable": 20,
-      "partially_observable": 27,
-      "unobservable": 26
+      "commands": {
+        "total": 73,
+        "observable": 20,
+        "partially_observable": 27,
+        "unobservable": 26
       },
       "surfaces": {
         "total": 10,
@@ -263,7 +262,6 @@
         "pass and fail stdout contract across source-audit statuses",
         "real runtime scheduler telemetry for source-audit normal and guard-error producer paths",
         "parser-level source audit rejection telemetry",
-        "parser-level target-repo audit rejection telemetry through shared audit parser hook",
         "fail-closed command observability accepts current blocked receipts without treating command failure as observability failure",
         "observe snapshot stable target command telemetry roundtrip",
         "observe snapshot non-fallback explain guard",
@@ -2329,56 +2327,6 @@
       "fail_stdout_contract": "missing fail stdout contract",
       "receipt_observability_binding": "missing receipt observability binding",
       "same_candidate_query_proof_paths": [],
-      "red_fixtures": [],
-      "green_fixtures": [],
-      "tamper_fixtures": []
-    },
-    "target-repo audit": {
-      "observability_status": "partially_observable",
-      "observed_surfaces": [
-        "parser-level target-repo audit rejection telemetry",
-        "fail-closed parse rejection stdout contract",
-        "same-candidate logs query proof for target-repo parse rejection",
-        "same-candidate metrics query proof for target-repo parse rejection",
-        "same-candidate traces query proof for target-repo parse rejection"
-      ],
-      "missing_surfaces": [
-        "target-surface pass telemetry",
-        "target-surface audit failure telemetry after parser",
-        "target-surface receipt binding for valid target repos",
-        "target-surface query proof for valid target repos",
-        "pass stdout contract",
-        "receipt observability binding",
-        "red fixture proof",
-        "green fixture proof",
-        "tamper fixture proof"
-      ],
-      "validator_check_id": "full-local-observability-stack-integration-non-opaque-failure",
-      "focused_tests": [
-        "target_repo_audit_parse_rejection_writes_target_observability"
-      ],
-      "receipt_paths": [
-        "validation_artifacts/observability/target-repo-audit.json"
-      ],
-      "live_query_proof_paths": [
-        "validation_artifacts/observability/target-repo-audit-logs-query.json",
-        "validation_artifacts/observability/target-repo-audit-metrics-query.json",
-        "validation_artifacts/observability/target-repo-audit-traces-query.json"
-      ],
-      "claim_impact": "blocks_observability_product_closure_readiness_release_update_goal; blocks_observability_product_closure_until_command_specific_red_green_tamper_fixture_proof",
-      "current_owner_surface": "command:target-repo audit",
-      "next_unobservable_surface": "target-surface pass telemetry",
-      "log_instrumentation": "observable log instrumentation",
-      "metric_instrumentation": "observable metric instrumentation",
-      "trace_instrumentation": "observable trace instrumentation",
-      "pass_stdout_contract": "missing pass stdout contract",
-      "fail_stdout_contract": "observable fail stdout contract",
-      "receipt_observability_binding": "missing receipt observability binding",
-      "same_candidate_query_proof_paths": [
-        "validation_artifacts/observability/target-repo-audit-logs-query.json",
-        "validation_artifacts/observability/target-repo-audit-metrics-query.json",
-        "validation_artifacts/observability/target-repo-audit-traces-query.json"
-      ],
       "red_fixtures": [],
       "green_fixtures": [],
       "tamper_fixtures": []

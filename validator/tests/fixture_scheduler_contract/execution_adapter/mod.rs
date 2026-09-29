@@ -1,14 +1,12 @@
 #![cfg(target_os = "macos")]
 
-#[path = "capture.rs"]
-mod capture;
 #[path = "detached_descendant.rs"]
 mod detached_descendant;
 #[path = "process_group/mod.rs"]
 mod process_group;
 
+use crate::cli::capture::fixture::FixtureCaptureAdapter;
 use crate::fixture_scheduler::*;
-use capture::fixture::FixtureCaptureAdapter;
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::ffi::OsString;
@@ -172,6 +170,29 @@ fn pinned_capture_adapter_executes_inside_the_confinement_plan() {
         &adapter,
         ObservedOutcome::pass(2),
     );
+    drop(scheduler);
+    std::fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+fn public_scheduled_execution_derives_the_outcome_from_the_child() {
+    let root = root("public-execution");
+    let fixture = spec("public-execution", ExpectedOutcome::pass(2));
+    let mut scheduler = FixtureScheduler::new(&root);
+    let lease = scheduler.schedule([fixture]).unwrap().pop().unwrap();
+    assert_eq!(
+        crate::capture::execute_scheduled_fixture(
+            &mut scheduler,
+            &lease,
+            "/usr/bin/true".into(),
+            Vec::new(),
+            4096,
+            Vec::new(),
+        )
+        .unwrap(),
+        RunDisposition::CleanupFailure
+    );
+    assert_exact_retained_run(&scheduler, &root, &lease, "public-execution");
     drop(scheduler);
     std::fs::remove_dir_all(root).unwrap();
 }

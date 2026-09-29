@@ -12,7 +12,7 @@ const MAX_ENTRIES: usize = 250_000;
 const MAX_HASHED_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 
 #[derive(Debug, Eq, PartialEq)]
-pub(in crate::cli::successor_public::strict) struct ZeroWriteSnapshot {
+pub(crate) struct ZeroWriteSnapshot {
     rows: Vec<SnapshotRow>,
 }
 
@@ -36,7 +36,7 @@ enum EntryKind {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(in crate::cli::successor_public::strict) enum ZeroWriteCaptureError {
+pub(crate) enum ZeroWriteCaptureError {
     RootUnavailable,
     TreeUnavailable,
     UnsupportedObject,
@@ -50,9 +50,7 @@ struct CaptureBudget {
     hashed_bytes: u64,
 }
 
-pub(in crate::cli::successor_public::strict) fn capture(
-    root: &Path,
-) -> Result<ZeroWriteSnapshot, ZeroWriteCaptureError> {
+pub(crate) fn capture(root: &Path) -> Result<ZeroWriteSnapshot, ZeroWriteCaptureError> {
     let root = root
         .canonicalize()
         .map_err(|_| ZeroWriteCaptureError::RootUnavailable)?;

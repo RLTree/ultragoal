@@ -199,16 +199,16 @@ pub(crate) fn concurrent_writers_and_readers_preserve_complete_rows_and_stable_o
             barrier.wait();
             for item in 0..8_u64 {
                 let id = format!("event-{worker}-{item}");
-                let event = SemanticEvent::new(
-                    "ctx-1",
-                    "cand-1",
-                    "source-1",
-                    id,
-                    worker * 10 + item,
-                    item,
-                    "check.run",
-                    "pass",
-                )
+                let event = SemanticEvent::new(SemanticEventInput {
+                    context_id: "ctx-1".to_owned(),
+                    candidate_id: "cand-1".to_owned(),
+                    source_id: "source-1".to_owned(),
+                    event_id: id,
+                    observed_at_unix_ms: worker * 10 + item,
+                    sequence: item,
+                    operation: "check.run".to_owned(),
+                    outcome: "pass".to_owned(),
+                })
                 .unwrap();
                 store.append(&event).unwrap();
             }

@@ -10,18 +10,6 @@ pub(crate) struct RootActionPermitIssuance<'a> {
     pub(crate) target: PermitTarget,
 }
 
-#[cfg(test)]
-pub(crate) struct RootReconcilePermitIssuance<'a> {
-    pub(crate) binding: Binding,
-    pub(crate) workspace_identity: &'a str,
-    pub(crate) journal_head_identity: &'a str,
-    pub(crate) issued_tick: u64,
-    pub(crate) expires_tick: u64,
-    pub(crate) nonce: &'a [u8],
-    pub(crate) target: PermitTarget,
-    pub(crate) resolution: &'a EffectResolution,
-}
-
 pub(super) struct RootPermitIssuance<'a> {
     pub(super) operation: RootOperation,
     pub(super) binding: Binding,
@@ -72,42 +60,6 @@ impl RootAuthority {
             nonce,
             target,
             decision_binding: PermitDecisionBinding::ActionOnly,
-        })
-    }
-
-    #[cfg(test)]
-    pub(crate) fn issue_reconcile(
-        &self,
-        request: RootReconcilePermitIssuance<'_>,
-    ) -> Result<RootPermit, ProductError> {
-        let RootReconcilePermitIssuance {
-            binding,
-            workspace_identity,
-            journal_head_identity,
-            issued_tick,
-            expires_tick,
-            nonce,
-            target,
-            resolution,
-        } = request;
-        resolution.validate_shape().map_err(ProductError::from)?;
-        if target.operation_id.as_deref() != Some(resolution.operation_id.as_str()) {
-            return Err(ProductError::AuthorityOperationMismatch);
-        }
-        let effect_resolution_commitment_id =
-            resolution.commitment_id().map_err(ProductError::from)?;
-        self.issue(RootPermitIssuance {
-            operation: RootOperation::Reconcile,
-            binding,
-            workspace_identity,
-            journal_head_identity,
-            issued_tick,
-            expires_tick,
-            nonce,
-            target,
-            decision_binding: PermitDecisionBinding::ReconcileEffect {
-                effect_resolution_commitment_id,
-            },
         })
     }
 

@@ -95,7 +95,6 @@ pub(crate) const REQUIRED_IDS: &[&str] = &[
     "skill-catalog-context-budget-omission-warning",
     "skill-local-reference-closure",
     "skill-progressive-disclosure-metadata",
-    "source-card-freshness-ceiling",
     "source-installed-cache-alignment",
     "source-obligation-parity-anti-bundling",
     "stable-identifier-normalization-collision",
@@ -105,7 +104,6 @@ pub(crate) const REQUIRED_IDS: &[&str] = &[
     "std-product-fitness-001",
     "subagent-custom-agent-sandbox-approval-inheritance",
     "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-    "target-repo-audit-capability",
     "targeted-refactor-debt-removal-standards-gardener-cadence",
     "template-generation-governance-template-creator-boundary",
     "third-party-dependency-legibility-typed-adapters",
@@ -120,3 +118,14 @@ pub(crate) const REQUIRED_IDS: &[&str] = &[
     "workspace-command-confinement-lifecycle-cleanup",
     "worktree-lane-owner-cost-policy",
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::REQUIRED_IDS;
+
+    #[test]
+    fn retained_compatibility_rows_are_not_current_requirements() {
+        assert!(!REQUIRED_IDS.contains(&"source-card-freshness-ceiling"));
+        assert!(!REQUIRED_IDS.contains(&"research-source-authority-article-to-law-integration"));
+    }
+}

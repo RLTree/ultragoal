@@ -1,5 +1,5 @@
 use std::path::Path;
-use ultragoal::context::{BuildRequest, LiveContext};
+use ultragoal::context::{BuildRequest, ContextError, EffectClass, LiveContext};
 
 fn repository_root() -> &'static Path {
     Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -38,4 +38,35 @@ fn accepted_live_candidate_builds_a_contract_bound_context() {
         context.candidate().status_sha256,
         context.candidate().untracked_content_sha256,
     );
+}
+
+#[test]
+fn public_callers_cannot_forge_non_read_effect_authority() {
+    let root = repository_root();
+    for effect in [
+        EffectClass::PlannedWrite,
+        EffectClass::WorkspaceWrite,
+        EffectClass::ExternalWrite,
+        EffectClass::Destructive,
+    ] {
+        assert!(matches!(
+            LiveContext::build(BuildRequest::new(root).with_effect(effect)),
+            Err(ContextError::EffectDenied(_))
+        ));
+    }
+}
+
+#[test]
+fn read_context_rejects_effect_escalation_and_root_substitution() {
+    let root = repository_root();
+    let context = LiveContext::build(BuildRequest::new(root)).expect("read context builds");
+    assert!(context.effect().authorize(EffectClass::Read).is_ok());
+    assert!(matches!(
+        context.effect().authorize(EffectClass::WorkspaceWrite),
+        Err(ContextError::EffectDenied(_))
+    ));
+    assert!(matches!(
+        LiveContext::build(BuildRequest::new(root).expect_worktree_root(root.join("validator"))),
+        Err(ContextError::RootMismatch { .. })
+    ));
 }

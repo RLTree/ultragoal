@@ -1,6 +1,6 @@
 use super::types::{
-    DirectoryIdentity, EntryKind, EntryMetadata, component, directory_identity, joined, last_errno,
-    open_error,
+    DirectoryIdentity, DirectoryObservationMetadata, EntryKind, EntryMetadata, component,
+    directory_identity, joined, last_errno, open_error,
 };
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use crate::distribution::filesystem::hooks::{self, EffectPoint};

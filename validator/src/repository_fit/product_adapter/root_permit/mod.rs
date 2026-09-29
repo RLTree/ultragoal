@@ -56,21 +56,21 @@ mod effect_preflight;
 mod mutation_lease;
 #[path = "object_metadata.rs"]
 mod object_metadata;
-#[path = "permit_activation.rs"]
+#[path = "permit/activation.rs"]
 mod permit_activation;
-#[path = "permit_identity.rs"]
+#[path = "permit/identity.rs"]
 mod permit_identity;
-#[path = "permit_scope.rs"]
+#[path = "permit/scope.rs"]
 mod permit_scope;
 #[path = "permitted_application.rs"]
 mod permitted_application;
 #[path = "prior_state_reconciliation.rs"]
 mod prior_state_reconciliation;
-#[path = "protected_descriptor_walk.rs"]
+#[path = "protected/descriptor_walk.rs"]
 mod protected_descriptor_walk;
-#[path = "protected_path_capture.rs"]
+#[path = "protected/path_capture.rs"]
 mod protected_path_capture;
-#[path = "protected_state_capture.rs"]
+#[path = "protected/state_capture.rs"]
 mod protected_state_capture;
 #[path = "recovery_leaf.rs"]
 mod recovery_leaf;

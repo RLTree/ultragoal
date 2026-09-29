@@ -1,0 +1,230 @@
+#[test]
+fn derived_lease_envelopes_refuse_unknown_or_stale_classification() {
+    let valid = source_repo("lease-derived-envelope-valid");
+    close_synthetic_graph(&valid);
+    mutate_registry(&valid, |registry| activate_n11_lease(&valid, registry));
+    let context = LiveContext::build(synthetic_request(&valid)).unwrap();
+    InventoryBuilder::new(&context)
+        .build()
+        .expect("derived lease is valid");
+
+    for (label, mutate, expected) in [
+        (
+            "unknown",
+            Box::new(|record: &mut serde_json::Value| {
+                record["changed_set"]["classification"] = "unknown".into()
+            }) as Box<dyn Fn(&mut serde_json::Value)>,
+            "lease envelope classification is unknown",
+        ),
+        (
+            "changed",
+            Box::new(|record: &mut serde_json::Value| {
+                record["changed_set"]["categories"]["files"] =
+                    serde_json::json!(["validator/src/evaluation/"])
+            }) as Box<dyn Fn(&mut serde_json::Value)>,
+            "lease envelope category digest is stale",
+        ),
+        (
+            "intersection",
+            Box::new(|record: &mut serde_json::Value| {
+                record["changed_set"]["intersection"] =
+                    serde_json::json!({"status":"intersects","categories":["files"]})
+            }) as Box<dyn Fn(&mut serde_json::Value)>,
+            "lease intersection disposition is stale",
+        ),
+        (
+            "consumed-intersection",
+            Box::new(|record: &mut serde_json::Value| {
+                record["consumed_set"]["intersection"]["status"] = "unknown".into()
+            }) as Box<dyn Fn(&mut serde_json::Value)>,
+            "lease intersection disposition is unknown",
+        ),
+    ] {
+        let repo = source_repo(&format!("lease-derived-envelope-{label}"));
+        close_synthetic_graph(&repo);
+        mutate_registry(&repo, |registry| {
+            activate_n11_lease(&repo, registry);
+            mutate(&mut registry["lease_state"]["active_records"][0]);
+        });
+        let context = LiveContext::build(synthetic_request(&repo)).unwrap();
+        assert!(
+            InventoryBuilder::new(&context)
+                .build()
+                .unwrap_err()
+                .to_string()
+                .contains(expected)
+        );
+    }
+}
+
+fn activate_n11_lease(repo: &TestRepo, registry: &mut serde_json::Value) {
+    registry["pre_adoption_source"]["frontier"] =
+        "N10_INTEGRATED_N11_ACTIVE_SOURCE_FRONTIER".into();
+    registry["pre_adoption_source"]["eligible_scheduler_nodes"] = serde_json::json!([]);
+
+    let lanes = registry["lanes"].as_array_mut().unwrap();
+    let n11 = lanes.iter_mut().find(|lane| lane["id"] == "N11").unwrap();
+    n11["state"] = "leased".into();
+    n11["current_identity"] = serde_json::Value::Null;
+    n11["ceiling"] = "adopted_reobservation_required".into();
+    let lane = n11.clone();
+
+    let scope = registry["scope_mappings"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|scope| scope["scope_id"] == "WS-EVAL")
+        .unwrap()
+        .clone();
+    let dependency_identities = lane["dependencies"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|id| {
+            registry["lanes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|candidate| candidate["id"] == *id)
+                .unwrap()["current_identity"]
+                .clone()
+        })
+        .collect::<Vec<_>>();
+
+    let mut record = registry["lease_state"]["record_template"].clone();
+    record["lease_id"] = "LEASE-TEST-N11".into();
+    record["lane_id"] = "N11".into();
+    record["owner"] = lane["owner"].clone();
+    record["scope_ids"] = lane["scope_ids"].clone();
+    record["owned_files"] = scope["owned_roots"].clone();
+    record["owned_symbols"] = scope["owned_symbols"].clone();
+    record["generated_outputs"] = scope["generated_roots"].clone();
+    record["fixtures"] = scope["fixture_roots"].clone();
+    record["effects"] = scope["effects"].clone();
+    let base = registry["prelaunch_gates"]
+        .as_array()
+        .and_then(|gates| gates.iter().find(|gate| gate["status"] == "current"))
+        .and_then(|gate| gate.get("observed_source_base"))
+        .expect("current source base");
+    record["base_commit"] = base["commit"].clone();
+    record["base_tree"] = base["tree"].clone();
+    let (worktree_root, worktree) = register_n11_worktree(repo, base["commit"].as_str().unwrap());
+    registry["lease_state"]["worktree_root"] = worktree_root.to_string_lossy().into_owned().into();
+    record["branch"] = "codex/test-n11".into();
+    record["worktree"] = worktree.to_string_lossy().into_owned().into();
+    record["consumed_set"]["dependency_identities"] =
+        serde_json::Value::Array(dependency_identities);
+    populate_envelopes(registry, &lane, &mut record);
+    record["invalidated_by"] = lane["invalidation_contract"]["invalidated_by"].clone();
+    record["status"] = "issued".into();
+    record["clean_handoff"] = "pending".into();
+    record["reachable_tip"] = true.into();
+
+    registry["lease_state"]["status"] = "active".into();
+    registry["lease_state"]["active_records"] = serde_json::json!([record]);
+    for gate in registry["prelaunch_gates"].as_array_mut().unwrap() {
+        if gate["status"] == "current" {
+            let id = gate["id"].as_str().unwrap().to_owned();
+            let commit = gate["observed_source_base"]["commit"]
+                .as_str()
+                .unwrap()
+                .to_owned();
+            let tree = gate["observed_source_base"]["tree"]
+                .as_str()
+                .unwrap()
+                .to_owned();
+            gate["operation_id"] = format!("prelaunch-{id}-{commit}-{tree}").into();
+        }
+    }
+}
+
+fn populate_envelopes(
+    registry: &serde_json::Value,
+    lane: &serde_json::Value,
+    record: &mut serde_json::Value,
+) {
+    let base = registry["prelaunch_gates"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|gate| gate["status"] == "current")
+        .unwrap()["observed_source_base"]
+        .clone();
+    let empty = serde_json::json!({"files":[],"symbols":[],"generated_outputs":[],"fixtures":[],"effects":[]});
+    record["changed_set"] = envelope("changed", "git-diff-name-status", &base, &empty, None);
+    let mut files = registry["root_freeze"]["permitted_root_paths"]
+        .as_array()
+        .unwrap()
+        .clone();
+    let mut symbols = Vec::new();
+    let mut generated = Vec::new();
+    let mut fixtures = Vec::new();
+    let mut effects = Vec::new();
+    for dependency in lane["dependencies"].as_array().unwrap() {
+        let lane = registry["lanes"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|row| row["id"] == *dependency)
+            .unwrap();
+        for id in lane["scope_ids"].as_array().unwrap() {
+            let scope = registry["scope_mappings"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|row| row["scope_id"] == *id)
+                .unwrap();
+            files.extend(scope["contract_roots"].as_array().unwrap().clone());
+            files.extend(scope["owned_roots"].as_array().unwrap().clone());
+            symbols.extend(scope["owned_symbols"].as_array().unwrap().clone());
+            generated.extend(scope["generated_roots"].as_array().unwrap().clone());
+            fixtures.extend(scope["fixture_roots"].as_array().unwrap().clone());
+            effects.extend(scope["effects"].as_array().unwrap().clone());
+        }
+    }
+    let categories = serde_json::json!({"files":sorted(files),"symbols":sorted(symbols),"generated_outputs":sorted(generated),"fixtures":sorted(fixtures),"effects":sorted(effects)});
+    record["consumed_set"] = envelope(
+        "consumed",
+        "registry-scope-consumption",
+        &base,
+        &categories,
+        Some(record["consumed_set"]["dependency_identities"].clone()),
+    );
+}
+
+fn envelope(
+    kind: &str,
+    algorithm: &str,
+    base: &serde_json::Value,
+    categories: &serde_json::Value,
+    dependencies: Option<serde_json::Value>,
+) -> serde_json::Value {
+    let base = serde_json::json!({"commit":base["commit"],"tree":base["tree"]});
+    let digests = serde_json::json!({"files":digest(&categories["files"]),"symbols":digest(&categories["symbols"]),"generated_outputs":digest(&categories["generated_outputs"]),"fixtures":digest(&categories["fixtures"]),"effects":digest(&categories["effects"])});
+    let aggregate = digest(
+        &serde_json::json!({"kind":kind,"algorithm":algorithm,"version":"v1","from":base,"to":base,"categories":categories,"category_digests":digests}),
+    );
+    let mut value = serde_json::json!({"kind":kind,"algorithm":algorithm,"version":"v1","from":base,"to":base,"classification":"classified","categories":categories,"category_digests":digests,"aggregate_digest":aggregate,"intersection":{"status":"none","categories":[]}});
+    if let Some(dependencies) = dependencies {
+        value["dependency_identities"] = dependencies;
+    }
+    value
+}
+
+fn sorted(mut values: Vec<serde_json::Value>) -> Vec<serde_json::Value> {
+    values.sort_by(|left, right| left.as_str().cmp(&right.as_str()));
+    values.dedup();
+    values
+}
+
+fn digest(value: &serde_json::Value) -> String {
+    use sha2::{Digest, Sha256};
+    format!("sha256:{:x}", Sha256::digest(value.to_string().as_bytes()))
+}
+
+fn mutate_registry(repo: &TestRepo, mutate: impl FnOnce(&mut serde_json::Value)) {
+    let path = repo.root.join("LANE_REGISTRY.json");
+    let mut registry = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    mutate(&mut registry);
+    fs::write(path, serde_json::to_vec(&registry).unwrap()).unwrap();
+}

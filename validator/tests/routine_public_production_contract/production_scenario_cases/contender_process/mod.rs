@@ -50,15 +50,6 @@ pub(crate) fn run_bounded_contender(
     )
 }
 
-pub(crate) fn run_contender_with_termination_faults(
-    command: &mut Command,
-    execution_bound: Duration,
-    cleanup_bound: Duration,
-    faults: TerminationFaults,
-) -> BoundedContender {
-    run_with_faults(command, execution_bound, cleanup_bound, faults, || {})
-}
-
 pub(crate) fn run_contender_with_termination_faults_after_spawn(
     command: &mut Command,
     execution_bound: Duration,

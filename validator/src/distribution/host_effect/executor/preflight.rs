@@ -71,7 +71,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
             permit_binding_sha256: effect.permit().binding_sha256(),
             semantic_key_sha256: effect.permit().semantic_key_sha256(),
             command_plan_sha256: effect.plan().plan_sha256(),
-            executable_identity_sha256: effect.executable().identity().binding_sha256().map_err(
+        executable_identity_sha256: effect.executable().binding_sha256().map_err(
                 |_| HostEffectExecutorFailure::new(HostEffectExecutorErrorId::ExecutableMutation),
             )?,
             target_identity_sha256: self.target.expected_target().target_sha256(),

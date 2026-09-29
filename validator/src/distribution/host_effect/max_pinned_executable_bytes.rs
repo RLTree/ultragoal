@@ -32,6 +32,7 @@ impl HostEffectLedgerHead {
         })
     }
 
+    #[cfg(test)]
     pub(crate) const fn generation(&self) -> u64 {
         self.generation
     }
@@ -53,6 +54,8 @@ pub(crate) struct HostEffectReservation {
     expected_head_sha256: String,
     issued_at_unix_ms: u64,
     expires_at_unix_ms: u64,
+    lifecycle_record: Option<crate::plugin_product::lifecycle::HostLifecycleRecord>,
+    lifecycle_record_sha256: Option<String>,
 }
 
 impl HostEffectReservation {
@@ -68,6 +71,8 @@ impl HostEffectReservation {
             expected_head_sha256: permit.binding().expected_head_sha256.clone(),
             issued_at_unix_ms: permit.binding().issued_at_unix_ms,
             expires_at_unix_ms: permit.binding().expires_at_unix_ms,
+            lifecycle_record: permit.binding().lifecycle_record.clone(),
+            lifecycle_record_sha256: permit.binding().lifecycle_record_sha256.clone(),
         }
     }
 
@@ -75,12 +80,23 @@ impl HostEffectReservation {
         &self.permit_id
     }
 
+    #[cfg(test)]
     pub(crate) fn semantic_key_sha256(&self) -> &str {
         &self.semantic_key_sha256
     }
 
     pub(crate) fn expected_head_sha256(&self) -> &str {
         &self.expected_head_sha256
+    }
+
+    pub(crate) fn lifecycle_record(
+        &self,
+    ) -> Option<&crate::plugin_product::lifecycle::HostLifecycleRecord> {
+        self.lifecycle_record.as_ref()
+    }
+
+    pub(crate) fn lifecycle_record_sha256(&self) -> Option<&str> {
+        self.lifecycle_record_sha256.as_deref()
     }
 }
 
@@ -105,6 +121,10 @@ impl HostEffectLedgerRecord {
 
     pub(crate) fn current_head(&self) -> &HostEffectLedgerHead {
         &self.current_head
+    }
+
+    pub(crate) fn prior_head(&self) -> &HostEffectLedgerHead {
+        &self.prior_head
     }
 }
 

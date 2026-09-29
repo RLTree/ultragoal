@@ -125,13 +125,12 @@ fn pending_effect_leases(
     let mut pending = BTreeMap::new();
     for event in snapshot.log.events() {
         match &event.event {
-            EventKind::EffectIntent { lease_id, request } => {
+            EventKind::EffectIntent { lease_id, request }
                 if pending
                     .insert(request.operation_id.clone(), lease_id.clone())
-                    .is_some()
-                {
-                    return Err(ProductError::AmbiguousRecovery);
-                }
+                    .is_some() =>
+            {
+                return Err(ProductError::AmbiguousRecovery);
             }
             EventKind::EffectApplied { receipt, .. } => {
                 pending.remove(&receipt.operation_id);

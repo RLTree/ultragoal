@@ -108,13 +108,12 @@ impl TargetDescriptorChain {
                     return Err(adapter_error(AdapterErrorId::TargetUnavailable));
                 }
             }
-            if let Some(missing) = &path.missing {
-                if exact_entry_at(&missing.parent, &missing.name)? != ExactEntry::Absent
-                    || named_object_at(&missing.parent, &missing.name, None)?.is_some()
-                {
-                    let _ = &missing.path;
-                    return Err(adapter_error(AdapterErrorId::TargetUnavailable));
-                }
+            if let Some(missing) = &path.missing
+                && (exact_entry_at(&missing.parent, &missing.name)? != ExactEntry::Absent
+                    || named_object_at(&missing.parent, &missing.name, None)?.is_some())
+            {
+                let _ = &missing.path;
+                return Err(adapter_error(AdapterErrorId::TargetUnavailable));
             }
         }
         Ok(())
@@ -140,10 +139,14 @@ pub(crate) fn open_target_at(
     flags: i32,
 ) -> Result<File, FitAdapterError> {
     let name = CString::new(name).map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?;
+    // SAFETY: `parent` is an open directory descriptor, `name` is NUL-free,
+    // and the caller supplies only flags valid for `openat`.
     let descriptor = unsafe { libc::openat(parent.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return Err(adapter_error(AdapterErrorId::TargetUnavailable));
     }
+    // SAFETY: a non-negative `openat` result is a newly owned descriptor that
+    // has not been wrapped or closed on any prior path.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
@@ -155,6 +158,8 @@ pub(crate) fn named_object_at(
 ) -> Result<Option<ObjectRow>, FitAdapterError> {
     let name = CString::new(name).map_err(|_| adapter_error(AdapterErrorId::TargetUnavailable))?;
     let mut stat = MaybeUninit::<libc::stat>::zeroed();
+    // SAFETY: `parent` is an open directory descriptor, `name` is NUL-free,
+    // and `stat` points to valid writable storage for one libc stat value.
     let result = unsafe {
         libc::fstatat(
             parent.as_raw_fd(),
@@ -170,6 +175,7 @@ pub(crate) fn named_object_at(
             Err(adapter_error(AdapterErrorId::TargetUnavailable))
         };
     }
+    // SAFETY: successful `fstatat` initialized the full stat value above.
     let stat = unsafe { stat.assume_init() };
     Ok(Some(stat_object(&stat, payload_sha256)?))
 }

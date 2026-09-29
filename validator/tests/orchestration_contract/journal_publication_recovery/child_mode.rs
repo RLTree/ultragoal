@@ -1,6 +1,7 @@
 const CHILD_MODE: &str = "HUL_ORCHESTRATION_PUBLICATION_CRASH_CHILD";
 const CHILD_PATH: &str = "HUL_ORCHESTRATION_PUBLICATION_CRASH_PATH";
 const CHILD_HEAD: &str = "HUL_ORCHESTRATION_PUBLICATION_CRASH_HEAD";
+const CHILD_POST_RENAME: &str = "HUL_ORCHESTRATION_PUBLICATION_CRASH_POST_RENAME";
 
 fn heartbeat_after(log: &EventLog) -> OrchestrationEvent {
     log.next(
@@ -12,6 +13,50 @@ fn heartbeat_after(log: &EventLog) -> OrchestrationEvent {
         },
     )
     .unwrap()
+}
+
+#[test]
+fn process_death_after_rename_before_directory_sync_recovers_exactly_once() {
+    if std::env::var_os(CHILD_MODE).is_some() {
+        let path = std::env::var(CHILD_PATH).unwrap();
+        let expected: JournalHead =
+            serde_json::from_str(&std::env::var(CHILD_HEAD).unwrap()).unwrap();
+        let journal = FileJournal::open(path).unwrap();
+        let snapshot = journal.inspect().unwrap();
+        let event = heartbeat_after(&snapshot.log);
+        let mut next = snapshot.log;
+        next.0.push(event);
+        if std::env::var_os(CHILD_POST_RENAME).is_some() {
+            FileJournal::set_test_post_rename_hook(|| std::process::exit(88));
+        }
+        journal.crash_after_log_publication(&expected, &binding(), &next);
+    }
+
+    let (journal, prior, log, event) = initialized("publication-post-rename-death");
+    let status = Command::new(std::env::current_exe().unwrap())
+        .arg("--exact")
+        .arg("orchestration::tests::contract::journal_publication_recovery::process_death_after_rename_before_directory_sync_recovers_exactly_once")
+        .arg("--nocapture")
+        .env(CHILD_MODE, "1")
+        .env(CHILD_POST_RENAME, "1")
+        .env(CHILD_PATH, journal.path())
+        .env(CHILD_HEAD, serde_json::to_string(&prior).unwrap())
+        .status()
+        .unwrap();
+    assert_eq!(status.code(), Some(88));
+    assert_eq!(
+        FileJournal::open(journal.path()).unwrap_err(),
+        OrchestrationError::JournalCorrupt
+    );
+    let recovered = FileJournal::recover_interrupted_append(
+        journal.path(),
+        &prior,
+        &event.event_id,
+        &binding(),
+    )
+    .unwrap();
+    assert_eq!(recovered.log.events().len(), log.events().len() + 1);
+    assert_eq!(recovered.head.last_event_id, event.event_id);
 }
 
 fn initialized(label: &str) -> (JournalRoot, JournalHead, EventLog, OrchestrationEvent) {
@@ -167,15 +212,13 @@ fn extra_truncated_substituted_or_noncanonical_publications_never_repair() {
     let head = fs::read(root.path().join("head.json")).unwrap();
     for bytes in cases {
         fs::write(root.path().join("events.jsonl"), &bytes).unwrap();
-        assert!(
-            FileJournal::recover_interrupted_append(
-                root.path(),
-                &prior,
-                &event.event_id,
-                &binding(),
-            )
-            .is_err()
-        );
+        assert!(FileJournal::recover_interrupted_append(
+            root.path(),
+            &prior,
+            &event.event_id,
+            &binding(),
+        )
+        .is_err());
         assert_eq!(fs::read(root.path().join("events.jsonl")).unwrap(), bytes);
         assert_eq!(fs::read(root.path().join("head.json")).unwrap(), head);
     }

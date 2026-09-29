@@ -11,11 +11,13 @@ pub(crate) struct SourceFixture {
 impl SourceFixture {
     pub(crate) fn new(label: &str) -> Self {
         let nonce = NEXT_SOURCE_FIXTURE.fetch_add(1, Ordering::Relaxed);
-        let root = PathBuf::from("/tmp/hul-repository-fit-public-adapter-056").join(format!(
-            "build-source-{}-{}-{nonce}",
-            label,
-            std::process::id()
-        ));
+        let root = std::env::temp_dir()
+            .join("hul-repository-fit-public-adapter-056")
+            .join(format!(
+                "build-source-{}-{}-{nonce}",
+                label,
+                std::process::id()
+            ));
         let templates = root.join("templates");
         let output = root.join("out");
         fs::create_dir_all(&templates).unwrap();
@@ -68,7 +70,11 @@ impl SourceFixture {
 
 impl Drop for SourceFixture {
     fn drop(&mut self) {
+        let base = self.root.parent().map(|path| path.to_path_buf());
         let _ = fs::remove_dir_all(&self.root);
+        if let Some(base) = base {
+            let _ = fs::remove_dir(base);
+        }
     }
 }
 

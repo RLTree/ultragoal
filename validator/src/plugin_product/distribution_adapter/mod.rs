@@ -12,15 +12,31 @@ mod observation;
 
 use binding::BoundPackage;
 use effects::Effects;
-pub use error::{AdapterError, AdapterErrorId};
+pub(crate) use error::{AdapterError, AdapterErrorId};
+
+#[cfg(test)]
+#[path = "../../../tests/plugin_distribution_adapter_contract/fixture_contract.rs"]
+mod fixture_contract;
+#[cfg(test)]
+#[path = "../../../tests/plugin_distribution_adapter_contract/negative.rs"]
+mod negative;
+#[cfg(test)]
+#[path = "../../../tests/plugin_distribution_adapter_contract/positive.rs"]
+mod positive;
+#[cfg(test)]
+#[path = "../../../tests/plugin_distribution_adapter_contract/recovery/mod.rs"]
+mod recovery;
+#[cfg(test)]
+#[path = "../../../tests/plugin_distribution_adapter_contract/security.rs"]
+mod security;
 
 use crate::distribution::{ConfinedRoot, PackagePlan, PackageSnapshot};
 use crate::plugin_product::lifecycle::{
-    ApplyReport, LifecycleEffect, LifecycleError, LifecyclePlan, LifecycleState, RecoveryToken,
-    apply, recover, recovery_token,
+    ApplyReport, LifecycleError, LifecyclePlan, LifecycleState, RecoveryToken, apply, recover,
+    recovery_token,
 };
 
-pub struct DistributionLifecycleOperation {
+pub(crate) struct DistributionLifecycleOperation {
     bound_plan: LifecyclePlan,
     bound_recovery_token: Option<RecoveryToken>,
     effects: Effects,
@@ -28,7 +44,7 @@ pub struct DistributionLifecycleOperation {
 }
 
 impl DistributionLifecycleOperation {
-    pub fn bind(
+    pub(crate) fn bind(
         root: ConfinedRoot,
         package_plan: &PackagePlan,
         package: &PackageSnapshot,
@@ -50,7 +66,7 @@ impl DistributionLifecycleOperation {
         })
     }
 
-    pub fn apply(
+    pub(crate) fn apply(
         &mut self,
         observed: &LifecycleState,
         plan: &LifecyclePlan,
@@ -63,7 +79,7 @@ impl DistributionLifecycleOperation {
         result
     }
 
-    pub fn recovery_token(&mut self) -> Result<RecoveryToken, LifecycleError> {
+    pub(crate) fn recovery_token(&mut self) -> Result<RecoveryToken, LifecycleError> {
         if !self.owns_execution {
             return Err(LifecycleError::RecoveryUnavailable);
         }
@@ -75,7 +91,7 @@ impl DistributionLifecycleOperation {
         Ok(token)
     }
 
-    pub fn recover(
+    pub(crate) fn recover(
         &mut self,
         observed: &LifecycleState,
         token: &RecoveryToken,
@@ -86,11 +102,7 @@ impl DistributionLifecycleOperation {
         recover(observed, token, &mut self.effects)
     }
 
-    pub fn observe_state(&self) -> Result<LifecycleState, AdapterError> {
+    pub(crate) fn observe_state(&self) -> Result<LifecycleState, AdapterError> {
         self.effects.observed_state()
-    }
-
-    pub fn completed_effects(&self) -> &[LifecycleEffect] {
-        self.effects.completed_effects()
     }
 }

@@ -3,6 +3,9 @@ use std::path::Path;
 
 const RECEIPT_REL: &str = "validation_artifacts/promptfoo/adapter-receipt.json";
 const SCHEMA: &str = "harness-ultragoal.promptfoo-adapter-receipt.v1";
+const PROMPTFOO_VERSION: &str = "0.121.17";
+
+mod receipt;
 
 #[cfg(test)]
 mod tests;
@@ -26,6 +29,6 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     if receipt.get("schema").and_then(Value::as_str) != Some(SCHEMA) {
         out.push("promptfoo_adapter_receipt_wrong_schema".to_string());
     }
-    out.extend(crate::cli::promptfoo::receipt_failures(root, &receipt));
+    out.extend(receipt::failures(root, &receipt));
     out
 }

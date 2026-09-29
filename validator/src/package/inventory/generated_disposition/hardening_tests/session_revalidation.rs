@@ -1,5 +1,5 @@
 use super::{
-    INPUT, OUTPUT, REGISTRY_PATH, assert_rejected_without_secret, digest, root, source_projection,
+    INPUT, OUTPUT, assert_rejected_without_secret, digest, retained, root, source_projection,
     write_manifest, write_registry,
 };
 use serde_json::json;
@@ -17,13 +17,14 @@ fn shared_package_session_rejects_generated_cross_resource_mutation() {
     .expect("output bytes");
     fs::write(root.join(OUTPUT), output).expect("output");
     write_registry(&root, source_projection(&root));
-    write_manifest(&root, &[INPUT, OUTPUT]);
     let input = root.join(INPUT);
     super::super::super::anchored::test_hooks::set_before_component(OUTPUT, 0, move || {
         fs::write(&input, super::SECRET).expect("mutate generated input");
     });
     assert_rejected_without_secret(
-        &super::super::super::package_digest(&root).expect_err("mixed generated snapshot"),
+        &super::Catalog::load(&root)
+            .err()
+            .expect("mixed generated snapshot"),
     );
     fs::remove_dir_all(root).expect("cleanup");
 }
@@ -33,11 +34,8 @@ fn generated_disposition_errors_do_not_echo_untrusted_safe_paths() {
     const CANARY_PATH: &str = "docs/generated/SECRET_CANARY.json";
     let root = root("generated-untrusted-path-non-echo");
     fs::write(root.join(CANARY_PATH), b"context").expect("generated context");
-    fs::write(
-        root.join(REGISTRY_PATH),
-        br#"{"schema_version":"GeneratedSurfaceAuthority-v3","contract_id":"harness-ultragoal-successor-contract-v2","registry_projection":{"generator":"scripts/project-generated-authority","canonical_sources":["migration/generated-surface-authority/test-shard.json"],"regeneration_command":"scripts/project-generated-authority write"},"surfaces":[]}"#,
-    )
-    .expect("empty registry");
+    fs::write(root.join(OUTPUT), b"context").expect("registered context");
+    write_registry(&root, retained(b"context"));
     write_manifest(&root, &[CANARY_PATH]);
     let error = super::super::super::package_digest(&root).expect_err("missing disposition");
     assert!(error.contains("no adopted disposition"), "{error}");

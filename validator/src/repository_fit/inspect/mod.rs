@@ -1,8 +1,9 @@
 use super::state::ObservedFile;
 use super::{
     CanonicalPath, DesiredState, ExpectedContent, FitCheck, FitConflict, FitError, FitErrorId,
-    FitInspection, FitMode, FitPlan, FitReader, ManagedPriorProof, Mutation, ObservedDisposition,
-    Ownership, OwnershipProvenance, RepositoryClass, RollbackPlan, digest, error, valid_digest,
+    FitInspection, FitMode, FitPlan, FitReader, LocalStatePlan, ManagedPriorProof, Mutation,
+    ObservedDisposition, Ownership, OwnershipProvenance, RepositoryClass, RollbackPlan, digest,
+    error, valid_digest,
 };
 use serde::Serialize;
 
@@ -12,4 +13,5 @@ mod inspection_classification;
 mod repository_inspection;
 
 pub(crate) use inspection_classification::*;
+pub(crate) use repository_inspection::plan_with_local_state;
 pub use repository_inspection::{inspect, inspect_with_managed_proofs, plan};

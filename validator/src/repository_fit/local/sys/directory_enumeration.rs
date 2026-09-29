@@ -34,22 +34,26 @@ pub(crate) fn enumerate<S: EntrySource>(
 
 #[cfg(target_vendor = "apple")]
 pub(crate) fn errno_location() -> *mut libc::c_int {
+    // SAFETY: `__error` returns the current thread's valid errno storage on Apple.
     unsafe { libc::__error() }
 }
 
 #[cfg(target_os = "linux")]
 pub(crate) fn errno_location() -> *mut libc::c_int {
+    // SAFETY: `__errno_location` returns the current thread's valid errno storage on Linux.
     unsafe { libc::__errno_location() }
 }
 
 #[cfg(any(target_vendor = "apple", target_os = "linux"))]
 pub(crate) fn clear_readdir_error() -> Result<(), FitError> {
+    // SAFETY: `errno_location` returns valid thread-local storage for the current platform.
     unsafe { *errno_location() = 0 };
     Ok(())
 }
 
 #[cfg(any(target_vendor = "apple", target_os = "linux"))]
 pub(crate) fn readdir_error() -> Result<i32, FitError> {
+    // SAFETY: `errno_location` returns valid thread-local storage for the current platform.
     Ok(unsafe { *errno_location() })
 }
 
@@ -64,15 +68,18 @@ pub(crate) fn readdir_error() -> Result<i32, FitError> {
 }
 
 pub(crate) fn duplicate(file: &File) -> Result<File, FitError> {
+    // SAFETY: `file` owns a live descriptor, and `fcntl` does not retain the borrowed handle.
     let descriptor = unsafe { libc::fcntl(file.as_raw_fd(), libc::F_DUPFD_CLOEXEC, 0) };
     if descriptor < 0 {
         return Err(error(FitErrorId::ReadFailed));
     }
+    // SAFETY: successful `F_DUPFD_CLOEXEC` returns a newly owned descriptor.
     Ok(unsafe { File::from_raw_fd(descriptor) })
 }
 
 pub(crate) fn open_at(directory: &File, name: &str, flags: i32) -> Result<Option<File>, FitError> {
     let name = CString::new(name).map_err(|_| error(FitErrorId::InvalidPath))?;
+    // SAFETY: the directory descriptor is live and `name` is a NUL-terminated `CString`.
     let descriptor = unsafe { libc::openat(directory.as_raw_fd(), name.as_ptr(), flags) };
     if descriptor < 0 {
         return match std::io::Error::last_os_error().raw_os_error() {
@@ -80,12 +87,14 @@ pub(crate) fn open_at(directory: &File, name: &str, flags: i32) -> Result<Option
             _ => Err(error(FitErrorId::UnsafeObject)),
         };
     }
+    // SAFETY: successful `openat` returns a newly owned descriptor.
     Ok(Some(unsafe { File::from_raw_fd(descriptor) }))
 }
 
 pub(crate) fn stat_at(directory: &File, name: &str) -> Result<Option<PathStat>, FitError> {
     let name = CString::new(name).map_err(|_| error(FitErrorId::InvalidPath))?;
     let mut stat = MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: the directory descriptor is live, `name` is NUL-terminated, and `stat` is writable.
     let result = unsafe {
         libc::fstatat(
             directory.as_raw_fd(),
@@ -100,10 +109,11 @@ pub(crate) fn stat_at(directory: &File, name: &str) -> Result<Option<PathStat>, 
             _ => Err(error(FitErrorId::ReadFailed)),
         };
     }
+    // SAFETY: a zero return from `fstatat` initialized `stat` completely.
     let stat = unsafe { stat.assume_init() };
     Ok(Some(PathStat {
         device: stat.st_dev as u64,
-        inode: stat.st_ino as u64,
+        inode: stat.st_ino,
         links: stat.st_nlink as u64,
         length: stat.st_size as u64,
         modified_seconds: stat.st_mtime,

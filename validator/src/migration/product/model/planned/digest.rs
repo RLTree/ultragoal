@@ -30,10 +30,10 @@ pub(crate) struct ProductPlanItem {
     source_id: String,
     canonical_target_id: String,
     disposition: PlanDisposition,
-    exact_active_readers: Vec<String>,
-    exact_active_writers: Vec<String>,
-    exact_public_routes: Vec<String>,
-    exact_generated_outputs: Vec<String>,
+    exact_active_readers: Option<Vec<String>>,
+    exact_active_writers: Option<Vec<String>>,
+    exact_public_routes: Option<Vec<String>>,
+    exact_generated_outputs: Option<Vec<String>>,
     effect_id: Option<String>,
     reason: String,
 }
@@ -48,15 +48,16 @@ impl ProductPlanItem {
             effect_id,
             reason,
         } = definition;
+        let exact = source.file_kind == SurfaceFileKind::Regular && source.link_count == 1;
         Self {
             route_id,
             source_id: source.stable_id.clone(),
             canonical_target_id,
             disposition,
-            exact_active_readers: source.active_readers.clone(),
-            exact_active_writers: source.active_writers.clone(),
-            exact_public_routes: source.public_routes.clone(),
-            exact_generated_outputs: source.generated_outputs.clone(),
+            exact_active_readers: exact.then(|| source.active_readers.clone()),
+            exact_active_writers: exact.then(|| source.active_writers.clone()),
+            exact_public_routes: exact.then(|| source.public_routes.clone()),
+            exact_generated_outputs: exact.then(|| source.generated_outputs.clone()),
             effect_id,
             reason: reason.to_owned(),
         }
@@ -87,6 +88,34 @@ pub(crate) struct ProductMigrationPlanProjection {
     effects: Vec<PlannedMigrationEffect>,
     plan_sha256: String,
     projection_sha256: String,
+}
+
+impl ProductMigrationPlanProjection {
+    pub(crate) fn item_count(&self) -> usize {
+        self.item_count
+    }
+
+    pub(crate) fn effect_count(&self) -> usize {
+        self.effect_count
+    }
+
+    pub(crate) fn pending_count(&self) -> usize {
+        self.items
+            .iter()
+            .filter(|item| item.disposition == PlanDisposition::PendingMigration)
+            .count()
+    }
+
+    pub(crate) fn to_canonical_json(&self) -> Result<Vec<u8>, ProductMigrationError> {
+        let bytes = serde_json::to_vec(self)
+            .map_err(|_| ProductMigrationError::new("migration-product-plan-output-invalid"))?;
+        if bytes.len() > MAX_MACHINE_OUTPUT_BYTES {
+            return Err(ProductMigrationError::new(
+                "migration-product-plan-output-too-large",
+            ));
+        }
+        Ok(bytes)
+    }
 }
 
 #[derive(Clone, Eq, PartialEq)]

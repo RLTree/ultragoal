@@ -2,13 +2,17 @@ use super::*;
 
 pub(crate) fn provision_host_state(home: &Path) {
     let components = [
-        ".codex",
-        ".codex/state",
         ".codex/state/harness-ultragoal",
         ".codex/state/harness-ultragoal/routine-public",
         ".codex/state/harness-ultragoal/routine-public/authority",
         ".codex/state/harness-ultragoal/routine-public/adapter",
+        ".codex/state/harness-ultragoal/routine-public/.routine-authority-launch",
     ];
+    for (component, mode) in [(".codex", 0o755), (".codex/state", 0o700)] {
+        let path = home.join(component);
+        fs::create_dir_all(&path).unwrap();
+        set_mode(&path, mode);
+    }
     for component in components {
         let path = home.join(component);
         fs::create_dir_all(&path).unwrap();
@@ -22,6 +26,15 @@ pub(crate) fn provision_host_state(home: &Path) {
         .open(&lock)
         .unwrap();
     file.write_all(b"routine-public-lock-v1\n").unwrap();
+    file.sync_all().unwrap();
+    let format = home.join(".codex/state/harness-ultragoal/routine-public/routine-state-format");
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .mode(0o600)
+        .open(&format)
+        .unwrap();
+    file.write_all(b"routine-host-state-v8\n").unwrap();
     file.sync_all().unwrap();
 }
 
@@ -53,6 +66,16 @@ pub(crate) fn git_output(root: &Path, args: &[&str]) -> Vec<u8> {
 }
 
 pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Command {
+    let mut command = routine_command_from_current_directory(root, home, binary);
+    command.arg("--root").arg(root);
+    command
+}
+
+pub(crate) fn routine_command_from_current_directory(
+    root: &Path,
+    home: &Path,
+    binary: &Path,
+) -> Command {
     let mut command = Command::new(binary);
     command
         .env_clear()
@@ -64,9 +87,7 @@ pub(crate) fn routine_command(root: &Path, home: &Path, binary: &Path) -> Comman
         .env("GIT_CONFIG_NOSYSTEM", "1")
         .env("GIT_OPTIONAL_LOCKS", "0")
         .env("GIT_TERMINAL_PROMPT", "0")
-        .current_dir(root)
-        .arg("--root")
-        .arg(root);
+        .current_dir(root);
     command
 }
 

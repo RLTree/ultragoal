@@ -5,12 +5,12 @@
 //! sibling child of `production` from inheriting field, signer, or ledger
 //! construction authority.
 
-#[path = "checkpoint.rs"]
-mod checkpoint;
-#[path = "execution_transaction.rs"]
+#[path = "execution_transaction/mod.rs"]
 mod execution_transaction;
 #[path = "ledger.rs"]
 mod ledger;
+#[path = "ledger_observation.rs"]
+mod ledger_observation;
 #[path = "root_authority.rs"]
 mod root_authority;
 #[path = "store.rs"]
@@ -33,9 +33,7 @@ pub(crate) use execution_transaction::ProductionExecutionOutcome;
 use root_authority::RootAuthority;
 use root_authority::RootPermitIssuance;
 #[cfg(test)]
-pub(crate) use root_authority::{
-    RootActionPermitIssuance, RootAuthority, RootReconcilePermitIssuance, root_authority_for_test,
-};
+pub(crate) use root_authority::{RootActionPermitIssuance, RootAuthority, root_authority_for_test};
 
 #[cfg(test)]
 #[path = "interruption_tests.rs"]

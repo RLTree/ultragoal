@@ -1,8 +1,8 @@
-use crate::agent_discovery::{
+use super::super::{
     AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession,
     HostAgentAuthorityTransactionError,
 };
-use crate::authority_fixtures::{FixtureReader, TempRepo};
+use super::authority_fixtures::{FixtureReader, TempRepo};
 
 #[test]
 fn source_catalog_without_host_transaction_cannot_produce_eligibility() {
@@ -68,7 +68,7 @@ fn fixture_eligibility_report_has_no_claim_or_adoption_effect() {
 }
 
 #[test]
-fn currently_observed_legacy_shape_blocks_even_when_version_strings_match() {
+fn unrelated_harness_prefixed_global_agent_does_not_become_plugin_authority() {
     let repo = TempRepo::canonical();
     let source = repo.capture();
     let session = AgentDiscoverySession::bind(source.clone()).unwrap();
@@ -79,8 +79,16 @@ fn currently_observed_legacy_shape_blocks_even_when_version_strings_match() {
             Some("read-only"),
         );
     });
-    assert_eq!(
-        session.verify(&mut reader).unwrap_err().id(),
-        AgentDiscoveryErrorId::LegacyAuthorityActive
+    let report = session.verify(&mut reader).unwrap();
+    assert!(report.route_eligible());
+    assert!(!report.has_claim_effect());
+    assert!(
+        report
+            .layers()
+            .iter()
+            .find(|layer| layer.layer() == AgentAuthorityLayer::Global)
+            .unwrap()
+            .canonical_agents()
+            .is_empty()
     );
 }

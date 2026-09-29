@@ -1,4 +1,5 @@
 use super::*;
+use crate::repository_fit::LocalStatePlan;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
@@ -186,6 +187,7 @@ pub struct FitPlan {
     pub(crate) checks: Vec<FitCheck>,
     pub(crate) mutations: Vec<Mutation>,
     pub(crate) conflicts: Vec<FitConflict>,
+    pub(crate) local_state: Option<LocalStatePlan>,
     pub(crate) rollback: RollbackPlan,
     pub(crate) plan_sha256: String,
 }

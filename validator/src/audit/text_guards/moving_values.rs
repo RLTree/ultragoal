@@ -1,4 +1,3 @@
-use serde_json::Value;
 use std::path::Path;
 
 const MOVING_VALUE_PATHS: &[&str] = &[
@@ -20,33 +19,6 @@ pub fn failures(root: &Path) -> Vec<String> {
                 .unwrap_or_default()
         })
         .collect()
-}
-
-pub fn value_failures(value: &Value) -> Vec<String> {
-    let mut failures = Vec::new();
-    json_failures(value, "materialized-json", &mut failures);
-    failures
-}
-
-fn json_failures(value: &Value, path: &str, failures: &mut Vec<String>) {
-    match value {
-        Value::String(text) => {
-            if let Some(failure) = line_failure(path, 1, text) {
-                failures.push(failure);
-            }
-        }
-        Value::Array(items) => {
-            for (index, item) in items.iter().enumerate() {
-                json_failures(item, &format!("{path}/{index}"), failures);
-            }
-        }
-        Value::Object(map) => {
-            for (key, item) in map {
-                json_failures(item, &format!("{path}/{key}"), failures);
-            }
-        }
-        _ => {}
-    }
 }
 
 fn text_failures(rel: &str, text: &str) -> Vec<String> {

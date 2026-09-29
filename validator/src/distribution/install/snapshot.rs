@@ -163,6 +163,7 @@ pub struct InstallTransaction {
     pub(super) snapshot: InstallSnapshot,
     pub(super) target: String,
     pub(super) previous: Option<Vec<u8>>,
+    pub(super) effect_applied: bool,
 }
 
 impl std::fmt::Debug for InstallTransaction {
@@ -179,6 +180,10 @@ impl std::fmt::Debug for InstallTransaction {
 impl InstallTransaction {
     pub fn snapshot(&self) -> &InstallSnapshot {
         &self.snapshot
+    }
+
+    pub fn reused_existing(&self) -> bool {
+        !self.effect_applied
     }
     pub fn bind_journey(
         &mut self,

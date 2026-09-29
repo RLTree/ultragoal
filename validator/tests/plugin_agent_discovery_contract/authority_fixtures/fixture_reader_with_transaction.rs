@@ -76,7 +76,7 @@ impl FixtureTransaction {
                 "name = \"{name}\"\ndescription = \"legacy\"\ndeveloper_instructions = \"legacy authority\"\n"
             ),
         };
-        self.add_global_agent_bytes(name, &format!("custom-agents/{name}.toml"), descriptor);
+        self.add_global_agent_bytes(name, &format!(".codex/agents/{name}.toml"), descriptor);
     }
 
     pub fn add_global_agent_bytes(
@@ -97,15 +97,6 @@ impl FixtureTransaction {
                 "file_kind": "regular",
                 "link_count": 1
             }));
-        });
-    }
-
-    pub fn remove_global_agent(&mut self, name: &str) {
-        self.mutate_catalog(AgentAuthorityLayer::Global, |value| {
-            value["agents"]
-                .as_array_mut()
-                .unwrap()
-                .retain(|row| row["name"].as_str() != Some(name));
         });
     }
 }

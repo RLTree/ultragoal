@@ -13,4 +13,5 @@ mod event_construction;
 #[path = "event_record.rs"]
 mod event_record;
 
+pub use event_construction::SemanticEventInput;
 pub use event_record::*;

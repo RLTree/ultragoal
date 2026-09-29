@@ -66,7 +66,6 @@ fn package_checks_preserve_current_check_context_inside_parallel_text_task() {
             "schema-valid".to_string(),
             "source-obligation-coverage".to_string(),
         ],
-        &[],
         crate::scheduler::SchedulerConfig::from_jobs(Some(2)).expect("jobs"),
     );
     let source_obligation = results
@@ -80,6 +79,12 @@ fn package_checks_preserve_current_check_context_inside_parallel_text_task() {
             .any(|failure| failure
                 == "mandatory_law_current_check_missing:schema-valid:schema-valid"),
         "{source_obligation:?}"
+    );
+    assert!(
+        !results
+            .failures
+            .contains_key("research-source-authority-article-to-law-integration"),
+        "retained research must not be scheduled as current package authority"
     );
     std::fs::remove_dir_all(root).expect("cleanup current check context");
 }

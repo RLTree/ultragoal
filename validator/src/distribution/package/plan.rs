@@ -46,6 +46,10 @@ impl PackageEntry {
         &self.sha256
     }
 
+    pub(crate) fn bytes(&self) -> &[u8] {
+        &self.bytes
+    }
+
     pub fn byte_length(&self) -> u64 {
         self.bytes.len() as u64
     }

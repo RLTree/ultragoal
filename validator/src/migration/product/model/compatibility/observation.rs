@@ -1,4 +1,5 @@
 impl CompatibilityBoundaryObservation {
+    #[cfg(test)]
     fn issue(
         authority_id: String,
         source_identity_sha256: String,
@@ -34,6 +35,7 @@ impl CompatibilityBoundaryObservation {
         Ok(value)
     }
 
+    #[cfg(test)]
     pub(super) fn observation_sha256(&self) -> &str {
         &self.observation_sha256
     }
@@ -62,6 +64,7 @@ impl CompatibilityBoundaryObservation {
                 )
     }
 
+    #[cfg(test)]
     pub(super) fn is_same_source_and_monotonic_after(&self, prior: &Self) -> bool {
         if !self.validate()
             || !prior.validate()
@@ -86,6 +89,7 @@ impl CompatibilityBoundaryObservation {
         !state_changed || self.observation_sequence > prior.observation_sequence
     }
 
+    #[cfg(test)]
     pub(super) fn seal_verified_by(&self, authority: &dyn ApplyAuthorizationAuthority) -> bool {
         self.validate()
             && authority.compatibility_boundary_authority_id() == self.authority_id
@@ -95,6 +99,7 @@ impl CompatibilityBoundaryObservation {
     }
 }
 
+#[cfg(test)]
 pub(super) fn capture_compatibility_boundary_observation(
     authority: &dyn ApplyAuthorizationAuthority,
 ) -> Result<CompatibilityBoundaryObservation, ProductMigrationError> {

@@ -1,4 +1,5 @@
 use super::*;
+use crate::cli::successor::runtime::DiagnosticDetails;
 use crate::routine_work::PRODUCTION_SUPPORT_LIMIT;
 
 pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
@@ -71,7 +72,7 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
         PublicFailure::Host(HostFailure::Unavailable) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
-            "preprovisioned owner-only routine host authority is unavailable",
+            "owner-only routine host authority is unavailable or unsafe",
             "routine production host authority",
             "install or repair the owner-only routine-public authority, adapter directory, and lock file",
             "none",
@@ -86,12 +87,30 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
+        PublicFailure::Host(HostFailure::TransitionAmbiguous) => (
+            ExitClass::ActionableFinding,
+            DiagnosticId::StateUnavailable,
+            "the routine host namespace changed but its durability or post-publish verification is uncertain",
+            "routine host namespace transition",
+            "preserve every transition artifact and diagnose before retrying any routine effect",
+            "host_state_namespace_or_durability_transition_preserved",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
         PublicFailure::Host(HostFailure::Invalid) => (
             ExitClass::BlockedAuthority,
             DiagnosticId::AuthorityRequired,
             "routine host authority or reuse state is aliased, stale, forged, malformed, or unsafe",
             "routine production host authority",
             "preserve the ledger, repair the exact owner-only state, and retry only after diagnosis",
+            "none",
+            PRODUCTION_SUPPORT_LIMIT,
+        ),
+        PublicFailure::ContinuationUnavailable => (
+            ExitClass::BlockedAuthority,
+            DiagnosticId::AuthorityRequired,
+            "the routine custody already has a terminal or pending record and no exact continuation was supplied",
+            "routine continuation authority",
+            "retry only with the opaque continuation emitted by a reservation interruption; selectors never grant reuse or recovery authority",
             "none",
             PRODUCTION_SUPPORT_LIMIT,
         ),
@@ -107,8 +126,40 @@ pub(crate) fn failure(failure: PublicFailure) -> RuntimeOutcome {
     };
     RuntimeOutcome::failure(
         class,
-        Diagnostic::new(id, class, cause, surface, repair, effect, RERUN, ceiling),
+        Diagnostic::new(
+            id,
+            class,
+            DiagnosticDetails {
+                cause,
+                affected_surface: surface,
+                repair,
+                effect,
+                rerun: RERUN,
+                ceiling,
+            },
+        ),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ambiguous_host_transition_never_projects_a_no_effect_failure() {
+        let outcome = failure(PublicFailure::Host(HostFailure::TransitionAmbiguous));
+        let diagnostic = serde_json::to_value(outcome.diagnostic.unwrap()).unwrap();
+
+        assert_eq!(outcome.exit_class, ExitClass::ActionableFinding);
+        assert_eq!(
+            diagnostic["diagnostic_id"],
+            DiagnosticId::StateUnavailable.as_str()
+        );
+        assert_eq!(
+            diagnostic["effect"],
+            "host_state_namespace_or_durability_transition_preserved"
+        );
+    }
 }
 
 pub(crate) fn routine_failure(

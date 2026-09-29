@@ -7,6 +7,7 @@ pub(crate) fn openat(
     mode: libc::mode_t,
 ) -> Result<File, HostFailure> {
     let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+    // SAFETY: the directory descriptor is borrowed, the C string is NUL-terminated, and flags are caller-controlled constants.
     let descriptor = unsafe {
         libc::openat(
             directory.as_raw_fd(),
@@ -18,13 +19,28 @@ pub(crate) fn openat(
     if descriptor < 0 {
         return Err(HostFailure::Unavailable);
     }
+    // SAFETY: a non-negative descriptor was returned exclusively to this call.
     Ok(unsafe { File::from_raw_fd(descriptor) })
+}
+
+pub(crate) fn mkdirat_owned(directory: &File, name: &str) -> Result<bool, HostFailure> {
+    let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+    // SAFETY: the directory descriptor is borrowed and the C string is NUL-terminated.
+    if unsafe { libc::mkdirat(directory.as_raw_fd(), encoded.as_ptr(), 0o700) } == 0 {
+        sync_directory(directory)?;
+        return Ok(true);
+    }
+    match std::io::Error::last_os_error().raw_os_error() {
+        Some(libc::EEXIST) => Ok(false),
+        _ => Err(HostFailure::Persistence),
+    }
 }
 
 pub(crate) fn rename_exclusive(directory: &File, old: &str, new: &str) -> Result<(), HostFailure> {
     let old = CString::new(old).map_err(|_| HostFailure::Invalid)?;
     let new = CString::new(new).map_err(|_| HostFailure::Invalid)?;
     let flags = libc::RENAME_EXCL as libc::c_uint | RENAME_NOFOLLOW_ANY | RENAME_RESOLVE_BENEATH;
+    // SAFETY: both descriptors are borrowed, both C strings are NUL-terminated, and flags are fixed constants.
     if unsafe {
         libc::renameatx_np(
             directory.as_raw_fd(),
@@ -42,6 +58,7 @@ pub(crate) fn rename_exclusive(directory: &File, old: &str, new: &str) -> Result
 
 pub(crate) fn unlink_at(directory: &File, name: &str) -> Result<(), HostFailure> {
     let encoded = CString::new(name).map_err(|_| HostFailure::Invalid)?;
+    // SAFETY: the directory descriptor is borrowed and the C string is NUL-terminated.
     if unsafe { libc::unlinkat(directory.as_raw_fd(), encoded.as_ptr(), 0) } != 0 {
         return Err(HostFailure::Persistence);
     }
@@ -49,6 +66,7 @@ pub(crate) fn unlink_at(directory: &File, name: &str) -> Result<(), HostFailure>
 }
 
 pub(crate) fn sync_directory(directory: &File) -> Result<(), HostFailure> {
+    // SAFETY: the directory descriptor is borrowed for the duration of this call.
     if unsafe { libc::fsync(directory.as_raw_fd()) } != 0 {
         return Err(HostFailure::Persistence);
     }
@@ -66,7 +84,10 @@ pub(crate) fn encode_hex(bytes: &[u8]) -> String {
 }
 
 pub(crate) fn decode_hex(value: &str) -> Result<Vec<u8>, HostFailure> {
-    if value.is_empty() || value.len() % 2 != 0 || value.len() > MAX_PENDING_BYTES as usize * 2 {
+    if value.is_empty()
+        || !value.len().is_multiple_of(2)
+        || value.len() > MAX_PENDING_BYTES as usize * 2
+    {
         return Err(HostFailure::Invalid);
     }
     value

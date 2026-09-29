@@ -126,6 +126,8 @@ pub(crate) fn open_source_descriptor(path: &Path) -> Result<std::fs::File, Fixtu
     let path = CString::new(path.as_os_str().as_bytes()).map_err(|_| {
         FixtureScheduleError::InvalidMetadata("fixture executable path contains NUL".to_owned())
     })?;
+    // SAFETY: `path` is a NUL-terminated CString retained for the call and the
+    // fixed flags prevent link traversal and descriptor inheritance.
     let descriptor = unsafe {
         libc::open(
             path.as_ptr(),
@@ -135,6 +137,7 @@ pub(crate) fn open_source_descriptor(path: &Path) -> Result<std::fs::File, Fixtu
     if descriptor < 0 {
         return Err(FixtureScheduleError::Io(std::io::Error::last_os_error()));
     }
+    // SAFETY: `open` returned a new owned nonnegative descriptor.
     Ok(unsafe { std::fs::File::from_raw_fd(descriptor) })
 }
 

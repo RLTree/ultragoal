@@ -18,7 +18,9 @@ mod reuse;
 mod runtime_adapter;
 mod snapshot;
 
-pub(crate) use behavior::trusted_rust_source_execution_observed;
+#[cfg(test)]
+mod tests;
+
 pub(crate) use behavior::{
     CHILD_MODE_ENV, CHILD_MODE_VALUE, LEGACY_BEHAVIOR_SELECTOR_ENV, LEGACY_CHILD_SELECTOR_ENV,
     activate_and_read_frame, frame_sandboxed_input,
@@ -27,6 +29,9 @@ pub use behavior::{
     RustSourceFrameInput, RustSourceSyntaxError, RustSourceSyntaxErrorKind,
     RustSourceSyntaxObservation, RustSourceSyntaxOutcome, encode_rust_source_syntax_frame,
     evaluate_rust_source_syntax_frame, rust_source_syntax_observation_json,
+};
+pub(crate) use behavior::{
+    refusal_json, trusted_refusal_failure_code, trusted_rust_source_execution_observed,
 };
 pub use binding::{BoundTool, RoutineBinding};
 pub(crate) use error::{
@@ -59,11 +64,24 @@ pub(crate) use catalog::{
     RunnerObservation, SelectedRoutineNode, TransitiveInputExpectation, load_production_catalog,
 };
 pub(crate) use runtime_adapter::{
-    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, RoutineAdapterSpec, RoutineCancellation,
+    PRODUCTION_SUPPORT_LIMIT, PreparedRoutineExecution, ProductionExecutionControl,
+    PublicRoutineControl, ReservedRecoveryEffectEvidence, ReservedRecoveryOwnerObservation,
+    RoutineAdapterSpec, RoutineContinuationOutcome, RoutineCustodyCapability,
     RoutineInvocationSpec, RoutineMediationResult, RoutineMediatorStatus, RoutineNodeDisposition,
-    RoutineReuseInput, bind_rust_source_syntax_invocation, fixed_environment,
-    mediate_public_routine_execution, prepare_routine_execution,
+    RoutineReservationPublication, RoutineReservedRecoveryAssessment, RoutineTerminalOutcome,
+    assess_public_routine_reserved_recovery, authenticate_public_routine_checkpoint,
+    bind_rust_source_syntax_invocation, fixed_environment,
+    mediate_public_routine_execution_with_control, observe_public_routine_terminal_settlement,
+    prepare_routine_execution, reconcile_public_routine_reservation,
     validate_immutable_routine_program,
+};
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::{RoutineCancellation, RoutineReuseInput};
+
+#[cfg(test)]
+pub(crate) use runtime_adapter::{
+    mediate_public_routine_execution, mediate_public_routine_execution_with_reservation_publication,
 };
 
 #[cfg(all(test, target_vendor = "apple"))]
@@ -77,6 +95,6 @@ pub(crate) use runtime_adapter::{
 pub(crate) use authority::set_test_live_authority_hook;
 #[cfg(test)]
 pub(crate) use runtime_adapter::{
-    set_test_output_capture_hook, set_test_read_source_capture_hook, test_last_spawn_group_absent,
-    validate_output_confinement_after, validate_read_confinement_after_bind,
+    set_test_output_capture_hook, test_last_spawn_group_absent, validate_output_confinement_after,
+    validate_read_confinement_after_bind,
 };

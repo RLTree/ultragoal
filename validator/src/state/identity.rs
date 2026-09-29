@@ -1,6 +1,8 @@
 use super::catalog::RuntimeMetadata;
 use super::ceiling::ClaimCeiling;
-use super::product_state::{Finding, NextAction, ProductGoalState, Repair, StateError};
+use super::product_state::{
+    CurrentBehaviorDisposition, Finding, NextAction, ProductGoalState, Repair, StateError,
+};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
@@ -9,8 +11,10 @@ pub(crate) struct StateIdentity<'a> {
     pub schema_version: &'static str,
     pub context_id: &'a str,
     pub authority_catalog_id: &'a str,
+    pub candidate_id: &'a str,
     pub dependency_action_catalog_id: &'a str,
     pub product_goal: ProductGoalState,
+    pub current_behavior: CurrentBehaviorDisposition,
     pub runtime_metadata: &'a RuntimeMetadata,
     pub findings: &'a [Finding],
     pub repairs: &'a [Repair],

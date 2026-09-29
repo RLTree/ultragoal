@@ -1,6 +1,7 @@
 #![cfg(target_vendor = "apple")]
 
 mod routine_public_production_contract {
+    #[path = "child/authority.rs"]
     mod child_authority;
     #[path = "fixture_ownership_controls.rs"]
     mod fixture_ownership_controls;
@@ -10,4 +11,5 @@ mod routine_public_production_contract {
     mod public_lock_contention;
     mod scenario;
     mod security;
+    mod store_admission;
 }

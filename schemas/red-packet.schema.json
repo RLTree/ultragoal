@@ -118,7 +118,6 @@
         "fixtures/mandatory-law-surfaces/valid/standards-gardener-promotion.json",
         "fixtures/mandatory-law-surfaces/valid/subagent-custom-agent-sandbox-approval-inheritance.json",
         "fixtures/mandatory-law-surfaces/valid/subagent-orchestration-explicitness-token-model-cost-result-reconciliation.json",
-        "fixtures/mandatory-law-surfaces/valid/target-repo-audit-capability.json",
         "fixtures/mandatory-law-surfaces/valid/targeted-refactor-debt-removal-standards-gardener-cadence.json",
         "fixtures/mandatory-law-surfaces/valid/template-generation-governance-template-creator-boundary.json",
         "fixtures/mandatory-law-surfaces/valid/third-party-dependency-legibility-typed-adapters.json",

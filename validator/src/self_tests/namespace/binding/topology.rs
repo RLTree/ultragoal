@@ -92,6 +92,78 @@ fn namespace_topology_accepts_semantic_validator_self_test_routes() {
 }
 
 #[test]
+fn namespace_topology_factors_only_missing_three_sibling_namespaces() {
+    let failures = crate::audit::namespace::source::topology::failures_with_repo_paths(
+        &[
+            "validator/src/audit/receipt_parse.rs".to_string(),
+            "validator/src/audit/receipt_report.rs".to_string(),
+            "validator/src/audit/receipt_write.rs".to_string(),
+            "validator/src/audit/response_parse.rs".to_string(),
+            "validator/src/audit/response_report.rs".to_string(),
+            "validator/src/audit/command.rs".to_string(),
+            "validator/src/audit/command_parse.rs".to_string(),
+            "validator/src/audit/command_report.rs".to_string(),
+            "validator/src/audit/command_write.rs".to_string(),
+            "validator/tests/receipt_parse.rs".to_string(),
+            "validator/tests/receipt_report.rs".to_string(),
+            "validator/tests/receipt_write.rs".to_string(),
+        ],
+        &[],
+    );
+    assert!(
+        failures.iter().any(|failure| {
+            failure.contains("namespace_validator_source_residual_prefix_encoding")
+                && failure.contains("prefix=receipt")
+        }),
+        "{failures:?}"
+    );
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("prefix=command")),
+        "{failures:?}"
+    );
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("prefix=response")),
+        "{failures:?}"
+    );
+    let cargo_entrypoints = crate::audit::namespace::source::topology::failures_with_repo_paths(
+        &[
+            "validator/tests/receipt_parse.rs".to_string(),
+            "validator/tests/receipt_report.rs".to_string(),
+            "validator/tests/receipt_write.rs".to_string(),
+        ],
+        &[],
+    );
+    assert!(
+        !cargo_entrypoints
+            .iter()
+            .any(|failure| failure.contains("namespace_validator_source_residual_prefix_encoding")),
+        "{cargo_entrypoints:?}"
+    );
+}
+
+#[test]
+fn namespace_topology_accepts_prefixes_owned_by_the_containing_directory() {
+    let failures = crate::audit::namespace::source::topology::failures_with_repo_paths(
+        &[
+            "validator/src/observability/event/event_record.rs".to_string(),
+            "validator/src/observability/event/event_query.rs".to_string(),
+            "validator/src/observability/event/event_publication.rs".to_string(),
+        ],
+        &[],
+    );
+    assert!(
+        !failures
+            .iter()
+            .any(|failure| failure.contains("namespace_validator_source_residual_prefix_encoding")),
+        "{failures:?}"
+    );
+}
+
+#[test]
 fn namespace_legacy_exception_surface_is_hard_failure() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("namespace-legacy-waiver");

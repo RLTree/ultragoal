@@ -1,6 +1,7 @@
 pub(super) const PLUGIN_ID: &str = "harness-ultragoal";
-pub(super) const SUPPORTED_VERSION: &str = "0.0.12";
+pub(super) const SUPPORTED_VERSION: &str = "0.0.42+codex.20260828085546";
 pub(super) const SUPPORTED_MANIFEST_PATH: &str = ".codex-plugin/plugin.json";
+pub(super) const CLI_RUNTIME_ENTRY: &str = "runtime/ultragoal";
 pub(super) const CANONICAL_SKILLS: [&str; 8] = [
     "harness-ultragoal",
     "repository-fit",
@@ -72,7 +73,6 @@ fn failure(id: ProductionPackageErrorId) -> ProductionPackageError {
 
 pub struct ProductionPackageSession {
     context: LiveContext,
-    catalog_id: String,
     capture: PackageCapture,
 }
 
@@ -86,12 +86,25 @@ impl ProductionPackageSession {
             .map_err(|_| failure(ProductionPackageErrorId::SourceUnavailable))?;
         Ok(Self {
             context: context.clone(),
-            catalog_id: catalog.catalog_id().to_owned(),
             capture,
         })
     }
 
     pub fn finish(self) -> Result<ProductionPackageArtifact, ProductionPackageError> {
+        self.finish_with_payload(None)
+    }
+
+    pub fn finish_with_cli(
+        self,
+        cli_payload: CandidateCliPayload,
+    ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
+        self.finish_with_payload(Some(cli_payload))
+    }
+
+    fn finish_with_payload(
+        self,
+        cli_payload: Option<CandidateCliPayload>,
+    ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
         let source = self
             .capture
             .finish()
@@ -99,7 +112,7 @@ impl ProductionPackageSession {
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
-        let artifact = build_artifact(&self.context, &self.catalog_id, source.as_ref())?;
+        let artifact = build_artifact(&self.context, source.as_ref(), cli_payload)?;
         self.context
             .revalidate()
             .map_err(|_| failure(ProductionPackageErrorId::ContextUnavailable))?;
@@ -114,6 +127,7 @@ pub struct ProductionPackageArtifact {
     catalog_id: String,
     source_snapshot_id: String,
     source_inventory: Vec<u8>,
+    cli_payload: Option<CandidateCliPayload>,
     plan: PackagePlan,
     snapshot: PackageSnapshot,
     binding: PackageArtifactBinding,
@@ -176,6 +190,14 @@ pub fn capture_product_package(
     catalog: &AuthorityCatalog,
 ) -> Result<ProductionPackageArtifact, ProductionPackageError> {
     ProductionPackageSession::begin(context, catalog)?.finish()
+}
+
+pub fn capture_product_package_with_cli(
+    context: &LiveContext,
+    catalog: &AuthorityCatalog,
+    cli_payload: CandidateCliPayload,
+) -> Result<ProductionPackageArtifact, ProductionPackageError> {
+    ProductionPackageSession::begin(context, catalog)?.finish_with_cli(cli_payload)
 }
 
 pub fn verify_product_package(

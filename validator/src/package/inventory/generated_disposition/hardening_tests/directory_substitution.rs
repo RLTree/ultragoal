@@ -35,7 +35,7 @@ fn descriptor_reads_reject_real_directory_substitution_for_generated_paths() {
     fs::write(replacement.join("source.txt"), SECRET).expect("secret");
     let inputs = input_root.join("inputs");
     let held = input_root.join("inputs-held");
-    anchored::set_before_component_open(move || {
+    super::super::super::anchored::test_hooks::set_before_component(INPUT, 0, move || {
         fs::rename(&inputs, &held).expect("hold inputs");
         fs::rename(&replacement, &inputs).expect("replace inputs");
     });

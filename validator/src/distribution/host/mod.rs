@@ -2,9 +2,11 @@ use crate::distribution::cache::MarketplaceEffects;
 use crate::distribution::error::{DistributionError, DistributionErrorId, error};
 use crate::distribution::model::PackageIdentity;
 use crate::distribution::reader::sha256;
-use crate::distribution::spec::digest;
 use serde::Serialize;
+use std::path::Path;
 
 include!("output_limit.rs");
 
-include!("execute_authorized.rs");
+include!("command.rs");
+include!("command_projection.rs");
+include!("command_isolated.rs");

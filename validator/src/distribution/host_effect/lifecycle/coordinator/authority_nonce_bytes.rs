@@ -26,13 +26,14 @@ impl DescriptorExecutionPlatform {
     }
 
     const fn supports_descriptor_execution(self) -> bool {
-        matches!(self, Self::Linux | Self::FreeBsd)
+        matches!(self, Self::Darwin | Self::Linux | Self::FreeBsd)
     }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum DescriptorExecutionPrimitive {
+    DarwinPosixSpawnSuspendedLoadedVnode,
     ExecveAtEmptyPath,
     Fexecve,
 }
@@ -56,6 +57,9 @@ impl DescriptorExecutionCapability {
         if !matches!(
             (platform, primitive),
             (
+                DescriptorExecutionPlatform::Darwin,
+                DescriptorExecutionPrimitive::DarwinPosixSpawnSuspendedLoadedVnode
+            ) | (
                 DescriptorExecutionPlatform::Linux,
                 DescriptorExecutionPrimitive::ExecveAtEmptyPath
             ) | (

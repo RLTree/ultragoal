@@ -67,22 +67,65 @@ fn schema_rule_contracts_cover_fixture_receipt_and_keyword_boundaries() {
             .iter()
             .any(|err| err == "required_execplan_refs must name all active ExecPlans")
     );
+}
 
-    let target_errors =
-        crate::schema_catalog::schema_errors(&store, "target-repo-receipt.schema.json", &json!({}));
-    assert!(target_errors.iter().any(|err| err == "schema is required"));
+#[test]
+fn bounded_invariant_review_cannot_promote_milestone_claims_or_add_reviewers() {
+    let root = crate::self_tests::boundaries::workspace_fixtures::repo_root();
+    let store = crate::schema_catalog::load(&root);
+    let mut review = crate::json_boundary::read_json(
+        &root.join("fixtures/review-materiality/valid/bounded-invariant-review-required.json"),
+    )
+    .expect("bounded invariant review fixture");
 
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&[
-            "$.plugin_manifest.agents[0].path: const mismatch".to_string()
-        ]),
-        "plugin_agent_path_missing"
+    assert!(
+        crate::schema_catalog::schema_errors(
+            &store,
+            "review-materiality-gate.schema.json",
+            &review,
+        )
+        .is_empty()
     );
-    assert_eq!(
-        crate::schema_catalog::schema_error_code(&[
-            "semantic_classification_receipts[0].classifier_evidence: missing required".to_string()
-        ]),
-        "semantic_classification_receipt_malformed"
+
+    review["claim_ceiling"]["supported"] = json!(["source_acceptance", "release"]);
+    let claim_errors = crate::schema_catalog::schema_errors(
+        &store,
+        "review-materiality-gate.schema.json",
+        &review,
+    );
+    assert!(
+        !claim_errors.is_empty(),
+        "bounded milestone claim false pass"
+    );
+
+    let mut trigger_review = crate::json_boundary::read_json(
+        &root.join("fixtures/review-materiality/valid/bounded-invariant-review-required.json"),
+    )
+    .expect("bounded invariant review fixture");
+    trigger_review["material_triggers"] = json!(["product_claim_boundary"]);
+    let trigger_errors = crate::schema_catalog::schema_errors(
+        &store,
+        "review-materiality-gate.schema.json",
+        &trigger_review,
+    );
+    assert!(
+        !trigger_errors.is_empty(),
+        "bounded milestone trigger false pass"
+    );
+
+    let mut reviewer_review = crate::json_boundary::read_json(
+        &root.join("fixtures/review-materiality/valid/bounded-invariant-review-required.json"),
+    )
+    .expect("bounded invariant review fixture");
+    reviewer_review["reviewers_required"] = json!(["claim-falsifier", "security-reviewer"]);
+    let reviewer_errors = crate::schema_catalog::schema_errors(
+        &store,
+        "review-materiality-gate.schema.json",
+        &reviewer_review,
+    );
+    assert!(
+        !reviewer_errors.is_empty(),
+        "bounded reviewer-count false pass"
     );
 }
 

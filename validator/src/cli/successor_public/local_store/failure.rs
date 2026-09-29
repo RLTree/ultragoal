@@ -27,16 +27,16 @@ impl LocalStoreFailure {
         Self { stage, class }
     }
 
-    pub(super) fn open(error: &str) -> Self {
-        Self::classify(FailureStage::Open, error)
-    }
-
     pub(super) fn query(error: &str) -> Self {
         Self::classify(FailureStage::Query, error)
     }
 
     pub(super) fn explain(error: &str) -> Self {
         Self::classify(FailureStage::Explain, error)
+    }
+
+    pub(super) fn append(error: &str) -> Self {
+        Self::classify(FailureStage::Append, error)
     }
 
     pub(super) const fn open_boundary() -> Self {
@@ -84,6 +84,7 @@ impl LocalStoreFailure {
             FailureStage::Open => "open",
             FailureStage::Query => "query",
             FailureStage::Explain => "explain",
+            FailureStage::Append => "append",
             FailureStage::Revalidate => "revalidate",
         }
     }
@@ -119,6 +120,7 @@ impl LocalStoreFailure {
             FailureStage::Open => "HCT-OBSERVE local store open",
             FailureStage::Query => "HCT-OBSERVE local store query",
             FailureStage::Explain => "HCT-OBSERVE local store explanation",
+            FailureStage::Append => "HCT-OBSERVE local store append",
             FailureStage::Revalidate => "HCT-OBSERVE local store revalidation",
         }
     }
@@ -193,6 +195,7 @@ enum FailureStage {
     Open,
     Query,
     Explain,
+    Append,
     Revalidate,
 }
 

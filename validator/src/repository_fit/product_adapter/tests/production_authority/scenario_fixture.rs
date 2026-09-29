@@ -1,7 +1,10 @@
 use super::*;
 
-pub(crate) const BASE: &str = "/private/tmp/hul-repository-fit-production-authority-085-fixtures";
 pub(crate) static NEXT_FIXTURE: AtomicU64 = AtomicU64::new(1);
+
+fn base() -> PathBuf {
+    std::env::temp_dir().join("hul-repository-fit-production-authority-085-fixtures")
+}
 
 pub(crate) const AUTHORITY_SCENARIO_HELPER: &str = "subprocess_authority_scenario_helper";
 
@@ -35,41 +38,6 @@ impl Drop for ChildGuard {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[serde(deny_unknown_fields)]
-#[allow(dead_code)]
-pub(crate) struct ProofWorkerResultV1 {
-    pub(crate) worker: String,
-    pub(crate) lease_id: String,
-    pub(crate) context_id: String,
-    pub(crate) candidate_identity: BTreeMap<String, serde_json::Value>,
-    pub(crate) base_state: BTreeMap<String, serde_json::Value>,
-    pub(crate) final_state: BTreeMap<String, serde_json::Value>,
-    pub(crate) touched_paths: Vec<String>,
-    pub(crate) touched_semantics: Vec<String>,
-    pub(crate) generated_outputs: Vec<String>,
-    pub(crate) fixtures: Vec<String>,
-    pub(crate) effects: Vec<serde_json::Value>,
-    pub(crate) requirements: Vec<String>,
-    pub(crate) dependency_nodes: Vec<String>,
-    pub(crate) changes: Vec<BTreeMap<String, serde_json::Value>>,
-    pub(crate) commands_and_tests: Vec<BTreeMap<String, serde_json::Value>>,
-    pub(crate) artifacts: Vec<ProofArtifactRecord>,
-    pub(crate) findings: Vec<BTreeMap<String, serde_json::Value>>,
-    pub(crate) unresolved_dependencies: Vec<String>,
-    pub(crate) requested_root_changes: Vec<serde_json::Value>,
-    pub(crate) limitations: Vec<String>,
-    pub(crate) no_claim_statement: String,
-}
-
-#[derive(serde::Deserialize)]
-#[serde(deny_unknown_fields)]
-pub(crate) struct ProofArtifactRecord {
-    pub(crate) path: String,
-    pub(crate) sha256: String,
-    pub(crate) byte_length: u64,
-}
-
 pub(crate) struct Fixture {
     pub(crate) container: PathBuf,
     pub(crate) root: PathBuf,
@@ -79,7 +47,7 @@ pub(crate) struct Fixture {
 impl Fixture {
     pub(crate) fn new(label: &str) -> Self {
         let serial = NEXT_FIXTURE.fetch_add(1, Ordering::Relaxed);
-        let container = PathBuf::from(BASE).join(format!(
+        let container = base().join(format!(
             "{}-{}-{serial}",
             label.replace(|character: char| !character.is_ascii_alphanumeric(), "-"),
             std::process::id()
@@ -156,8 +124,10 @@ impl Fixture {
 
 impl Drop for Fixture {
     fn drop(&mut self) {
-        debug_assert!(self.container.starts_with(BASE));
+        let base = base();
+        debug_assert!(self.container.starts_with(&base));
         let _ = fs::remove_dir_all(&self.container);
+        let _ = fs::remove_dir(base);
     }
 }
 

@@ -129,12 +129,11 @@ fn mechanized_failures(row: &Value, root: Option<&Path>, out: &mut Vec<String>) 
         out.push(format!("agent_standards_mechanized_without_gate:{id}"));
         return;
     }
-    if let Some(root) = root {
-        if crate::package::inventory::package_path_error(root, &path).is_some()
-            || !gate_path_exists(root, &path)
-        {
-            out.push(format!("agent_standards_gate_missing:{id}:{path}"));
-        }
+    if let Some(root) = root
+        && (crate::package::inventory::package_path_error(root, &path).is_some()
+            || !gate_path_exists(root, &path))
+    {
+        out.push(format!("agent_standards_gate_missing:{id}:{path}"));
     }
 }
 

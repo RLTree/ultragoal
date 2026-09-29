@@ -14,6 +14,7 @@ from .boundary_values import (
     strict_json,
     string_tuple,
 )
+from .adopted_schema_contract import AdoptedSchemaContract, parse as adopted_schema_contract
 
 
 CONTRACT_ID = "harness-ultragoal-successor-contract-v2"
@@ -106,13 +107,17 @@ class ToolProjection:
         }
 
 
-Definition = CanonicalProjection | RetainedContext | SourceProjection | ToolProjection
+Definition = (
+    AdoptedSchemaContract | CanonicalProjection | RetainedContext | SourceProjection | ToolProjection
+)
 
 
 def parse_definition(value: object, path: Path) -> Definition:
     if not isinstance(value, dict) or not isinstance(value.get("disposition"), str):
         raise AuthorityContractError(f"authority disposition missing in {path}")
     disposition = value["disposition"]
+    if disposition == "adopted_schema_contract":
+        return adopted_schema_contract(value, path)
     if disposition == "canonical_projection":
         row = exact(value, {"disposition", "output", "generator", "recipe", "inputs"}, path)
         return CanonicalProjection(

@@ -1,4 +1,3 @@
-use serde_json::Value;
 use std::path::Path;
 
 const CURRENT_LAW_PATHS: &[&str] = &[
@@ -46,37 +45,12 @@ pub fn failures(root: &Path) -> Vec<String> {
         .collect()
 }
 
-pub fn value_failures(value: &Value) -> Vec<String> {
-    let mut failures = Vec::new();
-    json_failures(value, "materialized-json", &mut failures);
-    failures
-}
-
 fn file_failures(root: &Path, rel: &str) -> Vec<String> {
     let text = std::fs::read_to_string(root.join(rel)).unwrap_or_default();
     text.lines()
         .enumerate()
         .flat_map(|(index, line)| line_failures(rel, index + 1, line))
         .collect()
-}
-
-fn json_failures(value: &Value, path: &str, failures: &mut Vec<String>) {
-    match value {
-        Value::String(text) => {
-            failures.extend(line_failures(path, 1, text));
-        }
-        Value::Array(items) => {
-            for (index, item) in items.iter().enumerate() {
-                json_failures(item, &format!("{path}/{index}"), failures);
-            }
-        }
-        Value::Object(map) => {
-            for (key, item) in map {
-                json_failures(item, &format!("{path}/{key}"), failures);
-            }
-        }
-        _ => {}
-    }
 }
 
 fn line_failures(rel: &str, line_number: usize, line: &str) -> Vec<String> {

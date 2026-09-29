@@ -60,7 +60,6 @@ fn legacy_command_classes_return_bounded_guidance_without_selecting_effects() {
             &["source-obligations", "check", "--strict"],
             LegacyCommand::SourceObligations,
         ),
-        (&["standards-gardener", "rebind"], LegacyCommand::Standards),
         (
             &["transaction", "finalize"],
             LegacyCommand::TransactionalFinalization,
@@ -75,6 +74,34 @@ fn legacy_command_classes_return_bounded_guidance_without_selecting_effects() {
         assert!(
             matches!(outcome, ParseOutcome::Compatibility { command, .. } if command == *expected),
             "{args:?}: {outcome:?}"
+        );
+    }
+}
+
+#[test]
+fn retired_skill_aliases_are_not_public_compatibility_routes() {
+    for args in [
+        &["agent-first-repo-init", "prove"][..],
+        &["agent-first-repo-retrofit", "prove"][..],
+        &["agent-improvement-loop", "prove"][..],
+        &["agent-observability-stack", "prove"][..],
+        &["agent-runtime-legibility", "prove"][..],
+        &["execplan-lane", "prove"][..],
+        &["fit-repo", "prove"][..],
+        &["harness-engineering", "prove"][..],
+        &["orchestrator-reconciler", "prove"][..],
+        &["product-cohesion-gate", "prove"][..],
+        &["product-fitness-gate", "prove"][..],
+        &["proof-gate", "prove"][..],
+        &["standards-gardener", "rebind"][..],
+        &["ultragoal", "prove"][..],
+    ] {
+        assert!(
+            !matches!(
+                parse_args(args.iter().copied()),
+                Ok(ParseOutcome::Compatibility { .. })
+            ),
+            "retired skill alias remained a public route: {args:?}"
         );
     }
 }
@@ -129,6 +156,9 @@ fn legacy_help_and_machine_guidance_never_echo_untrusted_tail_bytes() {
         "harness-ultragoal.compatibility-guidance.v1"
     );
     assert_eq!(value["legacy_effect_executed"], false);
-    assert_eq!(value["exit_code"], 4);
+    assert_eq!(
+        value["exit_code"],
+        super::successor::compatibility::COMPATIBILITY_EXIT_CODE
+    );
     assert!(!rendered.contains("NEVER_ECHO_COMPATIBILITY_CANARY_4819"));
 }

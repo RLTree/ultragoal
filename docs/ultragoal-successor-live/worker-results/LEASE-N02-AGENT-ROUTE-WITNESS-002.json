@@ -3,7 +3,7 @@
   "lease_id": "LEASE-N02-AGENT-ROUTE-WITNESS-002",
   "context_id": "sha256:d8e4e0b8365531e04fdf30ea3668cea95ee2f96b1e29294aea04ceaef6c00c57",
   "candidate_identity": {
-    "repository_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+    "repository_root": "<operator-home>/Projects/harness-ultragoal-plugin-proposal",
     "branch": "codex/successor-contract-v2-live-product",
     "head_commit": "e28347f0a5c4e23b703c41c0b9266ebb972d022a",
     "head_tree": "b7ab0fa569d0ee2acf52049b602b2a56d53a2b22",

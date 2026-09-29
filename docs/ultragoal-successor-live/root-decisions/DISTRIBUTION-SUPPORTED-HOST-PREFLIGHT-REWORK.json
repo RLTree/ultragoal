@@ -25,8 +25,8 @@
     "repo_local_agent_count": 6
   },
   "installed_observation": {
-    "installed_path": "/Users/terrynoblin/.codex/plugins/harness-ultragoal",
-    "cache_path": "/Users/terrynoblin/.codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.11",
+    "installed_path": "<operator-home>/.codex/plugins/harness-ultragoal",
+    "cache_path": "<operator-home>/.codex/plugins/cache/local-harness-plugins/harness-ultragoal/0.0.11",
     "version": "0.0.11",
     "plugin_manifest_sha256": "8e93403398fe1ccf6c93dcd15f2143677e1ab47c65b7ee59f53e051e5f7ffcb6",
     "package_inventory_sha256": "5254a77c3b0d3ac723bb9bdf8d0a54d17585b99e5cad49a9a8768b3809e8478f",
@@ -39,7 +39,7 @@
     "repo_local_agent_count": 0
   },
   "marketplace_observation": {
-    "path": "/Users/terrynoblin/.agents/plugins/marketplace.json",
+    "path": "<operator-home>/.agents/plugins/marketplace.json",
     "sha256": "42f83f69426f6b2c9adb8650ef8ef09238698101454bad7ecda34a2e3647e8c3",
     "root_resolution": "The personal marketplace root is coherent for the existing installed copy.",
     "candidate_binding": "The marketplace resolves to the older installed bytes, not the live repository candidate.",

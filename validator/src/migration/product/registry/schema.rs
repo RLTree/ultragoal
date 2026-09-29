@@ -74,6 +74,29 @@ struct ProductPlanParts {
     effects: Vec<PlannedMigrationEffect>,
 }
 
+pub(crate) fn derive_read_only_product_plan(
+    input: &ProductInputSnapshot,
+) -> Result<ProductMigrationPlan, ProductMigrationError> {
+    let parts = derive_product_plan_parts(input)?;
+    if parts
+        .effects
+        .iter()
+        .any(|effect| effect.disposition() == PlanDisposition::AdoptCompatibility)
+    {
+        return Err(ProductMigrationError::new(
+            "migration-product-compatibility-boundary-authority-required",
+        ));
+    }
+    ProductMigrationPlan::issue(
+        parts.input_binding,
+        parts.contract_id,
+        parts.items,
+        parts.effects,
+        None,
+    )
+}
+
+#[cfg(test)]
 pub(crate) fn derive_product_plan(
     input: &ProductInputSnapshot,
     boundary_authority: Option<&dyn ApplyAuthorizationAuthority>,
@@ -101,6 +124,7 @@ pub(crate) fn derive_product_plan(
     )
 }
 
+#[cfg(test)]
 pub(super) fn derive_product_plan_from_bound_observation(
     input: &ProductInputSnapshot,
     observation: Option<&CompatibilityBoundaryObservation>,

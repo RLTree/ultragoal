@@ -42,7 +42,7 @@ fn restore(
     match effects.compare_exchange_tree(Some(candidate), previous) {
         Ok(true) => {}
         Ok(false) => return Err(error(DistributionErrorId::InstallConflict)),
-        Err(()) => return Err(error(DistributionErrorId::RollbackFailed)),
+        Err(_) => return Err(error(DistributionErrorId::RollbackFailed)),
     }
     let restored = read(effects).map_err(|_| error(DistributionErrorId::RollbackFailed))?;
     if restored.as_deref() != previous {

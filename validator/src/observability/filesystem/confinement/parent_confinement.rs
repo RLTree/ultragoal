@@ -5,6 +5,7 @@ use super::*;
 pub(crate) struct VerifiedParent {
     pub(crate) ancestors: Vec<BoundDirectory>,
     pub(crate) name: CString,
+    pub(crate) required_owner_mode: Option<(u32, u32)>,
 }
 
 #[cfg(not(unix))]
@@ -93,7 +94,32 @@ pub(crate) fn open_verified_parent(path: &Path) -> Result<VerifiedParent, String
             "observe-store-path-denied: current directory substitution detected".to_owned(),
         );
     }
-    Ok(VerifiedParent { ancestors, name })
+    Ok(VerifiedParent {
+        ancestors,
+        name,
+        required_owner_mode: None,
+    })
+}
+
+#[cfg(unix)]
+pub(crate) fn verified_parent_from_descriptor(
+    directory: File,
+    name: &str,
+    owner: u32,
+    mode: u32,
+) -> Result<VerifiedParent, String> {
+    let name = CString::new(name)
+        .map_err(|_| "observe-store-path-denied: file name is required".to_owned())?;
+    let identity = directory_identity(&directory)?;
+    Ok(VerifiedParent {
+        ancestors: vec![BoundDirectory {
+            directory,
+            identity,
+            name_from_parent: None,
+        }],
+        name,
+        required_owner_mode: Some((owner, mode)),
+    })
 }
 
 #[cfg(unix)]
@@ -125,18 +151,22 @@ impl VerifiedParent {
 
 #[cfg(unix)]
 pub(crate) fn inspect_leaf(parent: &VerifiedParent) -> Result<Option<FileIdentity>, String> {
-    let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
+    let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: the verified parent retains a live directory descriptor, the
+    // leaf name is a NUL-terminated `CString`, and `stat` is writable storage.
     let result = unsafe {
         libc::fstatat(
             parent.directory().as_raw_fd(),
             parent.name.as_ptr(),
-            &mut stat,
+            stat.as_mut_ptr(),
             libc::AT_SYMLINK_NOFOLLOW,
         )
     };
     if result == 0 {
+        // SAFETY: a successful `fstatat` initialized the complete stat value.
+        let stat = unsafe { stat.assume_init() };
         validate_stat(&stat)?;
-        return Ok(Some(identity_stat(&stat)));
+        return Ok(Some(identity_stat(&stat)?));
     }
     let error = std::io::Error::last_os_error();
     if error.kind() == std::io::ErrorKind::NotFound {
@@ -152,6 +182,8 @@ pub(crate) fn open_leaf(
     flags: libc::c_int,
     operation: &str,
 ) -> Result<File, String> {
+    // SAFETY: the verified parent keeps the directory descriptor live, its
+    // leaf name is NUL-terminated, and the flags reject symlink traversal.
     let fd = unsafe {
         libc::openat(
             parent.directory().as_raw_fd(),
@@ -167,6 +199,7 @@ pub(crate) fn open_leaf(
         }
         return Err(io_code(operation, error));
     }
+    // SAFETY: successful `openat` returns one owned file descriptor.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 
@@ -181,6 +214,12 @@ pub(crate) fn validate_file(
         .metadata()
         .map_err(|error| io_code("metadata", error))?;
     validate_metadata(&opened)?;
+    if parent
+        .required_owner_mode
+        .is_some_and(|(owner, mode)| opened.uid() != owner || opened.mode() & 0o7777 != mode)
+    {
+        return Err("observe-store-path-denied: owner or mode rejected".to_owned());
+    }
     let current = inspect_leaf(parent)?
         .ok_or_else(|| "observe-store-path-denied: path substitution detected".to_owned())?;
     let opened_identity = identity(&opened);

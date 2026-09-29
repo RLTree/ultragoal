@@ -1,10 +1,28 @@
 # ARCHITECTURE
 
+## Current UltraGoal Next ownership
+
+`engines/ultragoal-next/` owns the installed UltraGoal Next CLI and plugin:
+`Engine.bend` and its imports own contracts, facts, predicates, query reuse,
+semantic admission and recovery decisions; `src/` owns descriptor custody,
+bounded native/process/session transport and the narrow Jev credential route.
+Start with the [engine map](engines/ultragoal-next/RUST_BOUNDARIES.md), its
+[operation guide](engines/ultragoal-next/README.md) and the source-owned
+`docs/legibility/` registry. Use `scripts/check-next --quick "$PWD"` while
+maintaining Next and `--full` before packaging. Root `scripts/check` includes
+the Next quick gate as well as labeled legacy and governance checks.
+
+## Legacy compatibility implementation
+
+The `validator/` ownership map below describes the older compatibility CLI.
+Its checks remain relevant to that surface; it is not the owner of Next's Bend
+rules, provider, sessions or source-bound package.
+
 Harness Ultragoal is one product with two delivery surfaces:
 
 - a Codex plugin package rooted at `.codex-plugin/plugin.json`, with skills,
   custom agents, installation metadata, and repository templates; and
-- the `ultragoal` Rust binary from `validator/src/bin/ultragoal.rs`, which
+- the legacy `ultragoal` Rust binary from `validator/src/bin/ultragoal.rs`, which
   supplies typed inspection, diagnosis, enforcement, orchestration, package,
   evaluation, migration, and proof behavior.
 
@@ -33,23 +51,161 @@ parse raw command arguments, mint root authority, or write public artifacts
 through an untyped convenience path. Tests exercise production entry points;
 test-only constructors cannot become a live authority route.
 
-Routine effect custody is one private production leaf. That leaf alone owns
-the durable store, non-clone attempt state, process lease and process-group
-identity, staged outputs, cleanup observation, terminal precommit, recovery,
-rollback, and atomic terminal publication. Mediators and output/process
-adapters supply typed requests or observations only; no sibling or descendant
-may construct, clone, settle, release, recover, roll back, register, or reopen
-routine authority. Source-shape checks are secondary regression controls, not
-semantic authority proof.
+Routine effect custody is one private production leaf. The existing private
+routine `HostState` adapter alone owns the durable store, non-clone attempt
+state, process lease and process-group identity, staged outputs, cleanup
+observation, descriptor-bound semantic-event append/read, terminal precommit,
+recovery, rollback, and atomic terminal publication. Every routine event is
+bound to the exact candidate, target, context, and source, and terminal
+checkpoints are authenticated. Joined checkpoint projections are required;
+the pending-append crash window may be absent or present. Reads are strictly
+observational and never bootstrap missing state. The owner pins an exact host
+state format before interpreting descendants. Diagnosis reads derive and
+verify only the selected canonical compartment plus common structure;
+mutations and explicit audits retain whole-state validation, so stale sibling
+history cannot veto diagnosis while inconsistent shared state cannot authorize
+a write. A behavior child may return only the closed refusal envelope; the
+mediator maps its fixed reason vocabulary to public failure codes and treats
+unknown, malformed, or signaled failures generically. Mediators and
+output/process adapters supply typed requests or observations only; no sibling or descendant
+may construct, clone, settle, release, recover, roll back, register, reopen,
+or access raw event storage for routine authority. Source-shape checks are
+secondary regression controls, not semantic authority proof.
+
+Legacy HostState inspection may construct a read-only
+`RoutineStateQuarantinePlan-v1` only while holding the legacy adapter lock and
+only from an authenticated single, equivalent, or strictly ordered history.
+The plan binds the complete descriptor inventory and specifies whole-owner
+quarantine followed by a fresh v8 bootstrap; it never rewrites selected legacy
+records in place. Conflicting, unsafe, unauthenticated, or changing history
+cannot mint a plan. Planning authorizes no rename, quarantine, bootstrap,
+migration, deletion, recovery, or claim. The only apply route is the separate
+exact-record boundary described below.
+
+Repository-fit authority uses device identity only while proving custody of
+objects opened during one operation. Durable ledger identity excludes the
+mount-session device number and binds the stable owner and lock attributes,
+authenticated event chain, generation, and head. New authority is written as
+`repository-fit-authority-ledger.v4`.
+
+The ledger reader accepts exact authenticated v4 bytes and one exact legacy v3
+compatibility shape. A legacy v3 read verifies the original device-bearing
+identity and HMAC but performs no write. The next accepted mutation emits v4,
+binds the predecessor envelope digest, and thereafter uses only the
+device-neutral durable identity. A durable inode or other stable-identity
+substitution still fails closed. The legacy-v3 encoder and device-renumbering
+helpers are test-only compatibility fixtures; they are not production readers,
+writers, diagnosis projections, or migration authority.
+
+The former repository-fit device-drift diagnosis, migration admission,
+quarantine plan, and whole-owner quarantine apply route are retired. No public
+command, compatibility route, migration-registry row, or production module can
+mint or consume them. Ordinary repository-fit parent locking, pending-state
+recovery, atomic publication, and same-operation descriptor custody remain.
+Routine `HostState` legacy inspection and quarantine are a separate state owner
+and remain unchanged.
+
+Routine production custody follows the same durable-identity rule. Device and
+inode remain paired for every descriptor/path comparison performed during one
+open operation, but `RoutineProductionCustodyStore-v5` persists only the stable
+inode, owner, mode, link, length, and change-time dimensions. Its reader accepts
+exact authenticated v5 bytes and one exact authenticated v4 predecessor. A v4
+read verifies the legacy HMAC and device-bearing authority identity, requires
+all durable dimensions to match the currently opened root and lock, and remains
+zero-write; the next accepted mutation publishes v5 and binds the exact v4
+envelope through the ordinary `previous_head_sha256` transition. Durable inode,
+HMAC, key, owner, mode, link, length, change-time, or payload substitution still
+fails closed. Device remains present in process, launch, output, and staged-file
+records where it identifies objects observed within the same operation.
+
+`RoutineNext-v1` is the stable navigation envelope, not a fixed action. Its
+action is derived from the exact authenticated current checkpoint: no record
+runs the current routine, a completed pending terminal event settles, a
+completed joined event reuses, and every reserved, reconciled, ambiguous, or
+failed state diagnoses before effect. Repository-fit guidance is available only
+when the routine source itself is absent. A present but unavailable, busy,
+invalid, unprojectable, or changing routine authority returns its causal typed
+HOLD and never falls back to repository fit. These read routes mint no recovery
+authority and carry no target-path fallback.
+
+Complete-repository fit does not implicitly reconcile a
+`validation_artifacts/` ignore rule. Candidate evidence is never ordinary
+repository behavior. If the explicit `fit plan --local-state` compatibility
+route remains supported, it is a narrow one-file policy only: it may reconcile
+the named `.gitignore` rule while preserving unrelated bytes, newline shape,
+mode, and dirt, but it cannot create or update a template-managed path.
+Inspection, planning, and verification remain zero-write; an authorized apply
+carries that prepared mutation through the existing confined compare-exchange,
+rollback, recovery, and revalidation transaction. Its production precondition
+is the descriptor-bound repository root and exact `.gitignore` target, not
+unrelated repository or Git-internal contents that the one-file effect never
+reads or follows.
+
+Routine-configuration fit uses the same narrow-scope rule for its two canonical
+configuration targets. Their descriptor chains, root binding, scope, and exact
+path set form the protected boundary; unrelated repository and Git-internal
+objects remain outside that effect. Complete-repository fit retains the full
+recursive protected-tree capture.
+
+Routine dirty-state capture treats Git-visible tracked and untracked paths as
+repository authority and excludes paths that the same bound Git observation
+classifies as ignored. This permits ordinary build caches such as `target/`
+without weakening visible symlink, hard-link, special-file, substitution, or
+concurrent-mutation refusal. Selected routine inputs and declared output scopes
+retain their separate exact filesystem revalidation.
 
 Local agent authority is one private production transaction under
-`plugin_product/agent_discovery/`. The registry control plane supplies one
-explicit home/package/project root set, while the transaction independently
+`plugin_product/agent_discovery/`. The public read route
+`inspect capabilities --package-root <host-path>` supplies one typed
+home/package/project root set, while the transaction independently
 captures source, package, installed, cache, empty-or-unrelated global, and
 project authority under one candidate and session binding. Registry rows are a
 four-role projection of the canonical six-role observation. This local
 observation never proves host discovery, new-session comprehension, runtime
 activation, route eligibility, exposure, or a claim effect.
+
+## Agentic Engineering Advisory Layer
+
+Harness Ultragoal has one implicit front door and one operational authority
+chain:
+
+```text
+user intent
+  -> Harness Ultragoal front door
+  -> current candidate, state, lifecycle, risk, evidence, and truth loop
+  -> smallest sufficient Agentic Engineering advisory selection
+  -> proposal-only, no-claim advice
+  -> root reuse / extend / map / reject decision
+  -> existing plan, lease, effect, recovery, evidence, and claim owners
+  -> operator-facing result
+```
+
+`engineering_advisory` owns the typed, read-only selection and adoption
+projections. `plugin_product::skill_catalog` owns exact plugin, profile,
+gateway, skill-set, candidate, and discovery-budget validation. Neither owns a
+lifecycle, scheduler, activation store, effect, receipt, or claim. The
+selection projection has no durable status: it is recomputed from current
+authority and binds one primary lens plus only the supporting lenses required
+by a genuine cross-layer decision.
+
+All thirty Agentic Engineering skills are mapped to existing Harness lifecycle
+owners. The existing eight-skill `ultragoal` co-install view and the core,
+product/lifecycle, and Rust-system stage views are candidate-bound projections
+under the external Harness gateway; the latter three cover the full skill set.
+A full profile is optional and must earn a safe combined discovery and context
+margin. Agentic's own gateway is explicit-only when co-installed.
+
+Advice becomes stale when its candidate, context, lifecycle, evidence,
+assumption, risk, failure mechanism, profile, or active truth-loop binding
+changes. That change causes a new selection. An unchanged fingerprint returns
+the current disposition and cannot recursively reactivate. Explicit expert
+requests use the same selector and adoption boundary; they never bypass
+authorization, effects, recovery, migration, or claim controls.
+
+The default product response describes the result, important tradeoff, and next
+action without requiring Agentic terminology. Intermediate and advanced
+read-only inspection expose the selected lenses, rationale, exact inputs,
+alternatives, adoption decision, unsupported surfaces, and claim ceiling.
 
 ## Public Surfaces
 
@@ -110,7 +266,13 @@ validation_artifacts/          candidate-bound evidence, never behavior
 - Replaced behavior: `migration/authority-routes.json` plus reader, writer,
   compatibility, and retirement tests.
 
-`scripts/check` is the repository-wide source/standards/coverage gate. The
-public `check strict --claim cli-self-law-compliance` route is the product
-self-law surface; neither command proves installation, runtime activation,
-journey fitness, release, or completion by itself.
+`scripts/check-product` is the source/product-boundary gate and
+`scripts/check-governance` checks governance projections only;
+`scripts/check` is their compatibility aggregate. `scripts/check-release`
+always stops at the authority boundary: it cannot perform an external,
+package, installation, host, publication, deployment, or release action
+without Tree approval. The public `check strict` route has separate,
+recursively read-only adapters for `cli-self-law-compliance` and the
+source-local `namespace-progressive-disclosure` law. A pass supports only
+the requested adapter's exact claim. No command proves installation, runtime
+activation, journey fitness, release, or completion by itself.

@@ -167,7 +167,10 @@ impl LocalEffects {
                 || require_same_device(self.root_identity.device, metadata.dev()).is_err()
                 || stat.is_none_or(|stat| stat_identity(stat) != identity)
                 || descriptor_path(&directory).ok() != Some(canonical.clone())
-                || unsafe { libc::fchmod(directory.as_raw_fd(), 0o700 as libc::mode_t) } != 0
+                || {
+                    // SAFETY: `directory` owns the descriptor opened for the newly created transaction.
+                    unsafe { libc::fchmod(directory.as_raw_fd(), 0o700 as libc::mode_t) != 0 }
+                }
                 || directory.sync_all().is_err()
             {
                 return Err(error(FitErrorId::RollbackFailed));

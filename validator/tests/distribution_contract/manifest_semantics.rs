@@ -2,6 +2,28 @@ use crate::distribution::{DistributionErrorId as ErrorId, plan_package};
 use crate::distribution_fixture::Fixture;
 use crate::package_manifest::{add, error, manifest, spec_value, write_manifest, write_sources};
 use serde_json::{Value, json};
+use std::collections::BTreeSet;
+
+#[test]
+fn invalid_manifest_metadata_is_classified_before_package_planning_rejects_it() {
+    let fixture = Fixture::complete("manifest-semantics-classification");
+    write_sources(&fixture);
+    let mut value = manifest();
+    value["name"] = json!("Bad Name");
+    let parsed = crate::plugin_manifest::parse(
+        &serde_json::to_vec(&value).unwrap(),
+        crate::plugin_manifest::MANIFEST_LIMIT,
+    )
+    .unwrap();
+    assert_eq!(
+        crate::plugin_manifest::semantic_issues(&parsed),
+        BTreeSet::from([crate::plugin_manifest::SemanticIssue::Metadata])
+    );
+    assert_eq!(
+        error(&fixture, &value, &spec_value(false)),
+        ErrorId::InvalidSpec
+    );
+}
 
 #[test]
 fn canonical_metadata_interface_and_url_issues_reach_distribution() {

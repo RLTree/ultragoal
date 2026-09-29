@@ -43,6 +43,72 @@ fn namespace_raw_string_scanner_keeps_negative_fixture_boundary_narrow() {
 }
 
 #[test]
+fn namespace_raw_string_scanner_ignores_embedded_source_without_authority_context() {
+    let source = r##"pub(crate) const EXAMPLE_SOURCE: &str = r#"
+{
+  "bad_path": "validator/src/cli/observe/fit_command/mod.rs"
+}
+"#;
+"##;
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/self_tests/namespace/binding/raw_string_edges.rs",
+        source,
+    );
+    assert!(failures.is_empty(), "{failures:?}");
+}
+
+#[test]
+fn namespace_string_scanner_ignores_parseable_embedded_rust_source() {
+    let line = r###"let source = br#"fn borrow<'a, 'b: 'a>(value: &'a str) -> &'b str where 'a: 'b { 'outer: loop { break 'outer; } let chars = ['a', '/', '\'', '\\']; todo!() }"#;"###;
+
+    let failure = crate::audit::namespace::source::string_labels::failure(
+        "validator/src/inventory/compatibility/reader_witness/tests.rs",
+        1,
+        line,
+    );
+    assert!(
+        failure.is_none(),
+        "embedded Rust fixture is not authority: {failure:?}"
+    );
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/inventory/compatibility/reader_witness/tests.rs",
+        line,
+    );
+    assert!(
+        failures.is_empty(),
+        "embedded Rust fixture is not authority: {failures:?}"
+    );
+}
+
+#[test]
+fn namespace_raw_string_scanner_ignores_parseable_embedded_rust_expression() {
+    let source = r##"pub(crate) const EXAMPLE_SOURCE: &str = r#"todo!()"#;"##;
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/inventory/compatibility/reader_witness/tests.rs",
+        source,
+    );
+    assert!(failures.is_empty(), "{failures:?}");
+}
+
+#[test]
+fn namespace_raw_string_scanner_keeps_direct_authority_label_red() {
+    let source = r##"pub(crate) const DIRTY_RECEIPT: &str =
+    r#"validation_artifacts/observability/fitting/source-audit.json"#;"##;
+
+    let failures = crate::audit::namespace::source::string_labels::raw_source_failures(
+        "validator/src/cli/observe/command_roundtrip/mod.rs",
+        source,
+    );
+    assert!(
+        failures.iter().any(|item| item.contains("label=fitting")),
+        "{failures:?}"
+    );
+}
+
+#[test]
 fn namespace_raw_string_scanner_flags_dirty_source_before_parse_success() {
     let source = r##"pub(crate) const DIRTY_RECEIPT: &str =
     r#"validation_artifacts/observability/fitting/source-audit.json;

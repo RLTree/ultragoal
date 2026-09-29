@@ -3,7 +3,7 @@ use super::super::command_contract::{
 };
 use super::options::{
     ADAPTER_OPTIONS, CANDIDATE_OUTPUT, INPUT_OUTPUT, MIGRATE_APPLY, MIGRATE_RETIRE,
-    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, descriptor,
+    REGISTRY_OPTION, SPEC_OPTION, SPEC_OUTPUT, TARGET_OPTION, descriptor,
 };
 use crate::context::EffectClass;
 
@@ -47,21 +47,28 @@ pub(super) const COMMANDS: &[CommandDescriptor] = &[
         SuccessorCommand::Migrate(MigrateAction::Plan),
         Some("plan"),
         EffectClass::Read,
-        "Plan routes, compatibility, and retirement from the migration registry.",
+        "Produce a read-only ProductMigration projection from the migration registry; it is not the Routine HostState apply record.",
         REGISTRY_OPTION,
+    ),
+    descriptor(
+        SuccessorCommand::Migrate(MigrateAction::Abandon),
+        Some("abandon-plan"),
+        EffectClass::Read,
+        "Produce a read-only exact-owner plan that explicitly abandons irreconcilable legacy Routine history; it does not authorize or apply the quarantine.",
+        TARGET_OPTION,
     ),
     descriptor(
         SuccessorCommand::Migrate(MigrateAction::Apply),
         Some("apply"),
-        EffectClass::WorkspaceWrite,
-        "Apply only an explicitly accepted, context-bound migration plan.",
+        EffectClass::ExternalWrite,
+        "Quarantine legacy Routine HostState only from an exact immutable diagnose or explicit abandonment record, its quarantine_plan.plan_id, and any required retirement approval.",
         MIGRATE_APPLY,
     ),
     descriptor(
         SuccessorCommand::Migrate(MigrateAction::Verify),
         Some("verify"),
         EffectClass::Read,
-        "Verify replacement behavior and absence of duplicate authority.",
+        "Verify current inventory errors and migration-plan closure without mutation.",
         REGISTRY_OPTION,
     ),
     descriptor(

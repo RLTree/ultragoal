@@ -1,4 +1,5 @@
 impl<'a> SupportedHostLifecycleCoordinator<'a> {
+    #[cfg(test)]
     pub(super) fn recovery_proposal(
         &self,
         classification: &PublicationClassification,
@@ -46,38 +47,6 @@ impl<'a> SupportedHostLifecycleCoordinator<'a> {
         request: HostEffectPreparationRequest<'_>,
     ) -> Result<DescriptorExecutionHandoff, SupportedHostLifecycleError> {
         self.prepare_for_platform(platform, request)
-    }
-}
-
-pub(crate) struct DescriptorExecutionHandoff {
-    capability: DescriptorExecutionCapability,
-    effect: AuthorizedHostEffect,
-    target: Box<dyn HostTargetLease>,
-}
-
-impl std::fmt::Debug for DescriptorExecutionHandoff {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter
-            .debug_struct("DescriptorExecutionHandoff")
-            .field("platform", &self.capability.platform)
-            .field("primitive", &self.capability.primitive)
-            .finish_non_exhaustive()
-    }
-}
-
-impl DescriptorExecutionHandoff {
-    /// Keeps the target lease owned by the opaque handoff for the complete
-    /// synchronous adapter call. Neither effect authority nor the lease can
-    /// escape as an owned value.
-    pub(in crate::distribution::host_effect) fn with_retained_authority<R>(
-        mut self,
-        adapter: impl FnOnce(
-            &DescriptorExecutionCapability,
-            &AuthorizedHostEffect,
-            &mut dyn HostTargetLease,
-        ) -> R,
-    ) -> R {
-        adapter(&self.capability, &self.effect, self.target.as_mut())
     }
 }
 

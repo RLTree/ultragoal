@@ -20,7 +20,7 @@ validation_artifacts/observability/agent-context.md
 The baseline is intentionally small. It does not require Grafana, Loki,
 Prometheus, Tempo, OpenTelemetry, Docker, or cloud credentials. If those already
 exist, the repo should expose them through `scripts/observe` rather than
-duplicating their storage. The target-repo audit validates this query surface
+duplicating their storage. The successor routine check validates this query surface
 statically by default so a marker plus event file cannot masquerade as an
 agent-usable observability stack without executing target-owned code.
 
@@ -53,7 +53,7 @@ harness-check:observability pass
 ```
 
 The marker is accepted only with the baseline files or a documented stronger
-adapter exposed through `scripts/observe`. The target-repo audit treats missing
+adapter exposed through `scripts/observe`. The successor routine check treats missing
 observability as a failure only when observability is explicitly required by
 flag, goal contract, or claim dependency; otherwise it records that
 observability was not requested.

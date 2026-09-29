@@ -68,23 +68,6 @@ fn exact_execplan_refs(value: &Value, errors: &mut Vec<String>) {
     }
 }
 
-pub fn target_receipt_schema_errors(value: &Value) -> Vec<String> {
-    let mut errors = Vec::new();
-    for key in [
-        "schema",
-        "mode",
-        "target_repo",
-        "status",
-        "checks",
-        "command",
-    ] {
-        if value.get(key).is_none() {
-            errors.push(format!("{key} is required"));
-        }
-    }
-    errors
-}
-
 pub fn semantic_receipt_errors(value: &Value) -> Vec<String> {
     let mut errors = Vec::new();
     for key in [

@@ -9,6 +9,7 @@ const DIRECTORY_NAME_BYTES_LIMIT: usize = 1024 * 1024;
 
 pub(super) fn names(directory: &Directory) -> Result<Vec<String>, DistributionError> {
     let parent = directory.current_descriptor()?;
+    // SAFETY: `parent` is a live directory descriptor and `.` is NUL-terminated.
     let duplicate = unsafe {
         libc::openat(
             parent.as_raw_fd(),
@@ -19,14 +20,17 @@ pub(super) fn names(directory: &Directory) -> Result<Vec<String>, DistributionEr
     if duplicate < 0 {
         return Err(error(DistributionErrorId::ObjectUnavailable));
     }
+    // SAFETY: `duplicate` is an owned directory descriptor returned by openat.
     let stream = unsafe { libc::fdopendir(duplicate) };
     if stream.is_null() {
+        // SAFETY: fdopendir did not consume `duplicate` when it failed.
         unsafe { libc::close(duplicate) };
         return Err(error(DistributionErrorId::ObjectUnavailable));
     }
     struct Stream(*mut libc::DIR);
     impl Drop for Stream {
         fn drop(&mut self) {
+            // SAFETY: Stream owns the non-null DIR pointer returned by fdopendir.
             unsafe { libc::closedir(self.0) };
         }
     }
@@ -35,6 +39,7 @@ pub(super) fn names(directory: &Directory) -> Result<Vec<String>, DistributionEr
     let mut name_bytes = 0usize;
     loop {
         clear_errno();
+        // SAFETY: `stream.0` remains owned and valid until Stream is dropped.
         let entry = unsafe { libc::readdir(stream.0) };
         if entry.is_null() {
             if last_errno().is_some_and(|value| value != 0) {
@@ -42,6 +47,7 @@ pub(super) fn names(directory: &Directory) -> Result<Vec<String>, DistributionEr
             }
             break;
         }
+        // SAFETY: readdir returned a non-null entry whose d_name is NUL-terminated.
         let bytes = unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes();
         if matches!(bytes, b"." | b"..") {
             continue;
@@ -63,10 +69,12 @@ pub(super) fn names(directory: &Directory) -> Result<Vec<String>, DistributionEr
 
 #[cfg(target_os = "linux")]
 fn clear_errno() {
+    // SAFETY: __errno_location returns writable thread-local errno storage.
     unsafe { *libc::__errno_location() = 0 };
 }
 
 #[cfg(not(target_os = "linux"))]
 fn clear_errno() {
+    // SAFETY: __error returns writable thread-local errno storage.
     unsafe { *libc::__error() = 0 };
 }

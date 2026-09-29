@@ -8,17 +8,21 @@ their owning boundary.
 
 ## Required Gates
 
-- `python3 scripts/check-python-source-laws .` checks typed Python entry points,
-  file size, and embedded authority-script violations.
-- `python3 scripts/check-agent-standards .` verifies the adopted standards
-  index against current evidence digests.
-- `cargo test -p ultragoal --offline --jobs 16 -- --test-threads 16` exercises
-  Rust boundary, race, mutation, recovery, and false-pass controls.
-- `scripts/check .` runs the repository-wide standards and coverage gate.
-- `ultragoal --root . check strict --claim cli-self-law-compliance` is the
-  public, recursively zero-write CLI self-law check on a built candidate.
+- `scripts/check-product .` runs source/package-local compilation and the
+  exact focused product-boundary checks selected for the candidate.
+- `scripts/check-governance .` runs current source-law and standards
+  projections only.
+- `scripts/check .` is the compatibility aggregate of product and governance
+  gates; it is not a coverage or full-repository proof route.
+- `scripts/check-release .` performs clean exact-candidate preflight and then
+  holds at the release authority boundary. A later release-surface transition
+  requires separate Tree approval and an explicit implementation change.
+- Built `ultragoal --root . check strict --claim cli-self-law-compliance` is
+  an explicit, recursively zero-write compatibility adapter, not an ordinary
+  product gate.
 
-Passing one gate does not substitute for a different proof surface.
+Passing one gate does not substitute for a different proof surface. None proves
+package, installation, discovery, runtime, journey, or release.
 
 ## Trust Boundaries
 
@@ -46,6 +50,15 @@ may neither construct nor advance custody, even with a known local signing key;
 privacy and executing transition controls carry this claim, while source-text
 shape checks remain secondary.
 
+Routine semantic events are private `HostState` operations, never files under
+`validation_artifacts/` or a sibling event-store API. Each append and terminal
+checkpoint is descriptor-bound to the exact candidate, target, context, and
+source; terminal checkpoints require authentication. Readers cannot initialize
+missing state or turn a partial observation into authority. Historical
+read-only stale-auth access may report only settled `Complete`, `Failed`,
+`Cancelled`, or `Incomplete` outcomes, never `Ambiguous`; mutation requires
+the exact current head.
+
 ## Data And Process Rules
 
 - Do not persist secrets, prompt bodies, transcripts, credentials, personal
@@ -58,6 +71,9 @@ shape checks remain secondary.
 - Network access, installation outside the candidate fixture, publishing,
   credential use, and destructive cleanup require the authority named by the
   product contract and explicit user approval where applicable.
+- `check-release` is an authority-gated boundary, not release authority. It
+  does not query or change external/package/install/release state or infer
+  approval from environment, arguments, or local state.
 - Dependencies require an adopted workspace change and lockfile update; tool
   projections must bind the exact dependency inputs and tool version.
 

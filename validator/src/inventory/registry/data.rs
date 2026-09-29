@@ -17,5 +17,4 @@ pub(crate) struct RegistryData {
     pub counts: BTreeMap<String, usize>,
     pub entries: Vec<InventoryEntry>,
     pub findings: Vec<InventoryFinding>,
-    pub legacy_skills: BTreeMap<String, String>,
 }

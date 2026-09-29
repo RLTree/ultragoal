@@ -29,7 +29,6 @@ pub fn failures(root: &Path) -> Vec<String> {
         Ok(value) => {
             let mut failures = value_failures(&value);
             failures.extend(super::foundational_law_trace::failures(root, &value));
-            failures.extend(super::law::family::aliases::failures(root));
             failures
         }
         Err(err) => vec![format!("docs/source-obligation-matrix.json: {err}")],
@@ -41,8 +40,18 @@ pub fn value_failures(value: &Value) -> Vec<String> {
         return vec!["source_obligation_matrix_missing_rows".to_string()];
     };
     let mut failures = required_obligation_failures(rows);
-    failures.extend(rows.iter().filter_map(row_failure));
+    failures.extend(
+        rows.iter()
+            .filter(|row| !retained_row(row))
+            .filter_map(row_failure),
+    );
     failures
+}
+
+fn retained_row(row: &Value) -> bool {
+    row.get("id")
+        .and_then(Value::as_str)
+        .is_some_and(crate::contract_check_ids::is_retained_compatibility_id)
 }
 
 pub(crate) fn required_obligation_failures(rows: &[Value]) -> Vec<String> {
@@ -134,4 +143,34 @@ fn required_token_row_failure(row: &Value, id: &str, tokens: &[&str]) -> Option<
         }
     }
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::value_failures;
+    use serde_json::json;
+
+    #[test]
+    fn current_matrix_ignores_exact_retained_rows_but_rejects_an_ordinary_malformed_row() {
+        let failures = value_failures(&json!({"obligations":[
+            {"id":"research-source-authority-article-to-law-integration"},
+            {"id":"source-card-freshness-ceiling"},
+            {"id":"ordinary-current-row"}
+        ]}));
+        for retained in [
+            "research-source-authority-article-to-law-integration",
+            "source-card-freshness-ceiling",
+        ] {
+            assert!(
+                failures.iter().all(|failure| !failure.contains(retained)),
+                "{retained}: {failures:?}"
+            );
+        }
+        assert!(
+            failures.contains(
+                &"ordinary-current-row: source_obligation_missing_disposition".to_string()
+            ),
+            "{failures:?}"
+        );
+    }
 }

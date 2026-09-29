@@ -6,7 +6,10 @@ mod descriptor;
 mod exit;
 mod invocation;
 
-pub use arguments::{OptionArgument, OptionName, OptionSpec, ParsedValue, RelativePath, ValueKind};
+pub use arguments::{
+    HostPath, OptionArgument, OptionName, OptionSpec, ParsedValue, RelativePath, RepositoryTarget,
+    ValueKind,
+};
 pub use command_line::{ParsedCommandLine, WorkspaceRoot};
 pub use commands::{
     CheckProfile, EvalAction, FitAction, Group, InspectTarget, MigrateAction, ObserveAction,

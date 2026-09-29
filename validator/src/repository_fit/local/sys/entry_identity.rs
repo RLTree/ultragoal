@@ -85,15 +85,19 @@ pub(crate) struct DirectoryEntries {
 
 impl DirectoryEntries {
     pub(crate) fn open(directory: &File) -> Result<Self, FitError> {
+        // SAFETY: `directory` owns a live descriptor; `fcntl` does not retain the borrow.
         let duplicated = unsafe { libc::fcntl(directory.as_raw_fd(), libc::F_DUPFD_CLOEXEC, 0) };
         if duplicated < 0 {
             return Err(error(FitErrorId::ReadFailed));
         }
+        // SAFETY: `duplicated` is a successful owned duplicate and is transferred to `fdopendir`.
         let stream = unsafe { libc::fdopendir(duplicated) };
         if stream.is_null() {
+            // SAFETY: `fdopendir` did not take ownership on failure, so close the owned duplicate.
             unsafe { libc::close(duplicated) };
             return Err(error(FitErrorId::ReadFailed));
         }
+        // SAFETY: `stream` is a non-null directory stream returned by `fdopendir`.
         unsafe { libc::rewinddir(stream) };
         Ok(Self {
             stream: Some(stream),
@@ -105,6 +109,7 @@ impl EntrySource for DirectoryEntries {
     fn next(&mut self) -> Result<Option<&[u8]>, FitError> {
         let stream = self.stream.ok_or_else(|| error(FitErrorId::ReadFailed))?;
         clear_readdir_error()?;
+        // SAFETY: `stream` remains owned by this instance until `close` or `drop`.
         let entry = unsafe { libc::readdir(stream) };
         if entry.is_null() {
             return if readdir_error()? == 0 {
@@ -113,6 +118,8 @@ impl EntrySource for DirectoryEntries {
                 Err(error(FitErrorId::ReadFailed))
             };
         }
+        // SAFETY: a non-null `readdir` result points to a valid dirent whose name is NUL-terminated
+        // for the duration of this stream's next call.
         Ok(Some(
             unsafe { CStr::from_ptr((*entry).d_name.as_ptr()) }.to_bytes(),
         ))
@@ -122,6 +129,7 @@ impl EntrySource for DirectoryEntries {
         let Some(stream) = self.stream.take() else {
             return Ok(());
         };
+        // SAFETY: this instance owns `stream`, and `take` prevents any later close.
         if unsafe { libc::closedir(stream) } != 0 {
             return Err(error(FitErrorId::ReadFailed));
         }
@@ -132,6 +140,7 @@ impl EntrySource for DirectoryEntries {
 impl Drop for DirectoryEntries {
     fn drop(&mut self) {
         if let Some(stream) = self.stream.take() {
+            // SAFETY: this instance owns `stream`; `take` ensures it is closed at most once.
             unsafe { libc::closedir(stream) };
         }
     }

@@ -1,6 +1,7 @@
 pub(crate) mod evidence;
 pub(crate) mod receipt;
 pub(crate) mod substitutions;
+pub(crate) mod v2;
 use serde_json::Value;
 use std::path::Path;
 
@@ -30,22 +31,6 @@ pub fn package_failures(root: &Path) -> Vec<String> {
 
 pub fn canonical_package_receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
     crate::audit::product::fitness::receipt::canonical_package_failures(root, receipt)
-}
-
-pub fn canonical_package_receipt_value_failures_with_candidate(
-    root: &Path,
-    receipt: &Value,
-    target_digest: &str,
-) -> Vec<String> {
-    crate::audit::product::fitness::receipt::canonical_package_failures_with_candidate(
-        root,
-        receipt,
-        target_digest,
-    )
-}
-
-pub fn receipt_value_failures(root: &Path, receipt: &Value) -> Vec<String> {
-    crate::audit::product::fitness::receipt::failures(root, receipt)
 }
 
 fn strict_language_failures(root: &Path) -> Vec<String> {

@@ -1,0 +1,71 @@
+{
+  "schema": "harness-ultragoal.review-materiality-gate.v2",
+  "decision_authority": "deterministic_rust",
+  "reviewer_output_authority": "falsification_only_cannot_raise_claims",
+  "confidence": "high",
+  "deterministic_gates_required": [
+    "anchor_existence_and_digest",
+    "validator_receipt_status",
+    "reviewer_registry_role_exposure",
+    "stale_receipt_check",
+    "package_private_artifact_hygiene",
+    "readiness_validator",
+    "claim_ceiling_check",
+    "proof_surface_substitution_check"
+  ],
+  "deterministic_gates_run": [
+    "anchor_existence_and_digest",
+    "validator_receipt_status",
+    "reviewer_registry_role_exposure",
+    "stale_receipt_check",
+    "package_private_artifact_hygiene",
+    "readiness_validator",
+    "claim_ceiling_check",
+    "proof_surface_substitution_check"
+  ],
+  "anchors_checked": [
+    {
+      "path": "fixtures/review-round/anchors/validator-receipt.json",
+      "digest": "sha256:821431f3d1ef2baa309f5c68067c2e9d14ca212a4b7ff6747cd2674d32bdcbfa"
+    },
+    {
+      "path": "fixtures/review-round/anchors/review-target-receipt.json",
+      "digest": "sha256:0f5772d8b272853e61cbcf07c2d01a691bc744a77286f2ab99f7e1fe22e794a7"
+    },
+    {
+      "path": "fixtures/review-round/anchors/archive-receipt.json",
+      "digest": "sha256:11d2afb70eafc45d939f6b75575c8492491daae401ffe5ff573abca4231b1e28"
+    }
+  ],
+  "reviewer_registry_evidence": [
+    {
+      "path": "fixtures/review-round/anchors/live-registry-exposure.json",
+      "digest": "sha256:a9174e9ca23ce0a341080f7bb056f52f03da2b877e743bb82f24f5a47295b31d"
+    }
+  ],
+  "validator_repairs_recommended": [],
+  "claim_ceiling": {
+    "supported": [
+      "source_acceptance"
+    ],
+    "unsupported": [
+      "material_signoff",
+      "major_root_integration",
+      "product",
+      "readiness",
+      "release",
+      "completion"
+    ],
+    "blocked": []
+  },
+  "decision": "BOUNDED_INVARIANT_REVIEW_REQUIRED",
+  "reason": "One risk-matched specialist must exhaustively review the named source invariant without promoting a milestone claim.",
+  "material_triggers": [
+    "bounded_invariant_change",
+    "worktree_freeze"
+  ],
+  "reviewers_required": [
+    "claim-falsifier"
+  ],
+  "output_may_be_used_for_material_signoff": false
+}

@@ -3,6 +3,17 @@ use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum GeneratedSurfaceDefinition {
+    AdoptedSchemaContract {
+        output: RepositoryPath,
+        sha256: Sha256Digest,
+        schema: RepositoryPath,
+        schema_sha256: Sha256Digest,
+        source_contract: RepositoryPath,
+        source_contract_sha256: Sha256Digest,
+        amendment_log: RepositoryPath,
+        amendment_id: String,
+        amendment_hash: Sha256Digest,
+    },
     CanonicalProjection {
         output: RepositoryPath,
         generator: String,
@@ -32,7 +43,8 @@ pub(crate) enum GeneratedSurfaceDefinition {
 impl GeneratedSurfaceDefinition {
     pub(crate) fn output(&self) -> &RepositoryPath {
         match self {
-            Self::CanonicalProjection { output, .. }
+            Self::AdoptedSchemaContract { output, .. }
+            | Self::CanonicalProjection { output, .. }
             | Self::RetainedContext { output, .. }
             | Self::SourceProjection { output, .. }
             | Self::ToolProjection { output, .. } => output,

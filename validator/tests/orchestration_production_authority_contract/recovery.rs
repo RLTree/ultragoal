@@ -55,3 +55,25 @@ fn interrupted_publication_uses_production_issuance_and_blocks_fresh_reopen() {
         ultragoal::orchestration::product::ProductError::AuthorityCheckpointRequired
     );
 }
+
+#[test]
+fn orphaned_or_expired_interrupted_recovery_refuses_without_a_permit_or_write() {
+    let (journal, _prior, _event, inspection) = interrupted_heartbeat("recover-refusal");
+    let context = context();
+    let workspace = ProductWorkspace::open(journal.path()).unwrap();
+    let adapter = OrchestrationRuntimeAdapter::new(&context, &workspace).unwrap();
+    let before = recursive_fingerprint(journal.path());
+    let mut orphaned = inspection.clone();
+    orphaned.live_workers.clear();
+    assert_eq!(
+        adapter.inspect_interrupted(&orphaned).unwrap_err(),
+        ultragoal::orchestration::product::ProductError::UnknownWorker
+    );
+    let mut expired = inspection;
+    expired.tick = 41;
+    assert_eq!(
+        adapter.inspect_interrupted(&expired).unwrap_err(),
+        ultragoal::orchestration::product::ProductError::LeaseExpired
+    );
+    assert_eq!(recursive_fingerprint(journal.path()), before);
+}

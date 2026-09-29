@@ -25,6 +25,39 @@ fn canonical_escape_guard_reports_outside_package() {
 }
 
 #[test]
+fn current_package_manifest_lists_only_materializable_source_members() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .expect("validator crate has repository root parent");
+    let manifest: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(root.join("plugin-manifest-draft.json")).expect("read current manifest"),
+    )
+    .expect("parse current manifest");
+    let resources = manifest
+        .get("resources")
+        .and_then(serde_json::Value::as_array)
+        .expect("current manifest resources");
+    for required in [
+        "GOAL_CONTRACT.md",
+        "PRODUCT_SUCCESS_CONTRACT.md",
+        "docs/exec-plans/active/usable-product-milestone.md",
+    ] {
+        assert_eq!(
+            resources
+                .iter()
+                .filter(|resource| resource.as_str() == Some(required))
+                .count(),
+            1,
+            "current authority input must appear exactly once in package resources: {required}"
+        );
+    }
+    assert!(
+        super::package_digest(root).is_ok(),
+        "current package manifest must not retain deleted source members"
+    );
+}
+
+#[test]
 fn package_digest_rejects_missing_directories_and_invalid_paths() {
     let root =
         crate::self_tests::boundaries::workspace_fixtures::temp_root("package-inventory-digest");
@@ -92,7 +125,7 @@ fn package_digest_rejects_builder_contract_resources() {
     std::fs::create_dir_all(root.join("docs")).expect("docs");
     std::fs::write(root.join("docs/package.md"), "package resource").expect("package doc");
     std::fs::write(
-        root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+        root.join("docs/package-contract-compatibility-prompt-2026-06-25.md"),
         "builder contract",
     )
     .expect("parent prompt");
@@ -106,7 +139,7 @@ fn package_digest_rejects_builder_contract_resources() {
     write_manifest(&root, json!(["docs/package.md"]));
     let before = super::package_digest(&root).expect("digest before");
     std::fs::write(
-        root.join("docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"),
+        root.join("docs/package-contract-compatibility-prompt-2026-06-25.md"),
         "updated builder contract",
     )
     .expect("parent prompt update");
@@ -120,7 +153,7 @@ fn package_digest_rejects_builder_contract_resources() {
 
     write_manifest(
         &root,
-        json!(["docs/parent-session-full-ultragoal-compliance-prompt-2026-06-25.md"]),
+        json!(["docs/package-contract-compatibility-prompt-2026-06-25.md"]),
     );
     let err = super::package_digest(&root).expect_err("builder contract listed");
     assert!(

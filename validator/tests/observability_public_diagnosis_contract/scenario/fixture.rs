@@ -5,7 +5,7 @@ use std::process::{Command, Output, Stdio};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::thread;
 use std::time::{Duration, Instant};
-use ultragoal::observability::{EventStore, SemanticEvent};
+use ultragoal::observability::{EventStore, SemanticEvent, SemanticEventInput};
 
 #[path = "fixture_components/process_output_fixture.rs"]
 mod process_output_fixture;

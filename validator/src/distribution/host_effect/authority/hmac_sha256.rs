@@ -1,5 +1,7 @@
 type HmacSha256 = Hmac<Sha256>;
 
+use crate::plugin_product::lifecycle::HostLifecycleRecord;
+
 const KEY_BYTES: usize = 32;
 const NONCE_BYTES: usize = 32;
 const MAX_PERMIT_TTL_MS: u64 = 5 * 60 * 1000;
@@ -9,6 +11,7 @@ const PERMIT_SCHEMA: &str = "harness-ultragoal.host-effect-permit.v1";
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum HostEffectDecision {
     Authorize,
+    #[cfg(test)]
     Refuse,
 }
 
@@ -39,6 +42,8 @@ pub(crate) struct HostEffectPermitBinding {
     pub(in crate::distribution::host_effect) issued_at_unix_ms: u64,
     pub(in crate::distribution::host_effect) expires_at_unix_ms: u64,
     pub(in crate::distribution::host_effect) expected_head_sha256: String,
+    pub(in crate::distribution::host_effect) lifecycle_record: Option<HostLifecycleRecord>,
+    pub(in crate::distribution::host_effect) lifecycle_record_sha256: Option<String>,
     pub(in crate::distribution::host_effect) decision: HostEffectDecision,
 }
 
@@ -64,6 +69,10 @@ pub(crate) struct HostEffectPermit {
     semantic_key_sha256: String,
     permit_id: String,
     tag: [u8; 32],
+}
+
+pub(crate) struct VerifiedHostEffectPermit {
+    permit: HostEffectPermit,
 }
 
 impl HostEffectAuthority {
@@ -165,6 +174,30 @@ impl HostEffectAuthority {
             return Err(authority_error(HostEffectAuthorityErrorId::InvalidBinding));
         }
         Ok(())
+    }
+
+    pub(in crate::distribution::host_effect) fn verify_at(
+        &self,
+        permit: HostEffectPermit,
+        trusted_now_unix_ms: u64,
+    ) -> Result<VerifiedHostEffectPermit, HostEffectAuthorityError> {
+        self.verify(&permit, trusted_now_unix_ms)?;
+        Ok(VerifiedHostEffectPermit { permit })
+    }
+
+    #[cfg(test)]
+    pub(in crate::distribution::host_effect) fn verify_current(
+        &self,
+        permit: HostEffectPermit,
+    ) -> Result<VerifiedHostEffectPermit, HostEffectAuthorityError> {
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_err(|_| authority_error(HostEffectAuthorityErrorId::NotYetValid))?
+            .as_millis()
+            .try_into()
+            .map_err(|_| authority_error(HostEffectAuthorityErrorId::Expired))?;
+        self.verify(&permit, now)?;
+        Ok(VerifiedHostEffectPermit { permit })
     }
 }
 

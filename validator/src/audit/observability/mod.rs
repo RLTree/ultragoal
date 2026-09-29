@@ -6,9 +6,9 @@ mod read;
 mod receipt;
 mod redaction;
 mod registry;
-pub(crate) mod specs;
 
 pub(crate) const LAW: &str = "full-local-observability-stack-integration-non-opaque-failure";
+pub(crate) const RECEIPT_SCHEMA: &str = "harness-ultragoal.observability-receipt.v1";
 
 pub(crate) fn package_failures(root: &Path) -> Vec<String> {
     let mut out = Vec::new();
@@ -48,8 +48,4 @@ pub(crate) fn required_dimension_families() -> Vec<(
     &'static [&'static str],
 )> {
     registry::required_dimension_families()
-}
-
-pub(crate) fn command_inventory_failures(root: &Path) -> Vec<String> {
-    registry::command_inventory_failures(root)
 }

@@ -6,10 +6,11 @@ impl RetainedDescriptorProcessBackend for CountingBackend {
     fn execute(
         &mut self,
         _capability: &DescriptorExecutionCapability,
-        _executable: &PinnedHostExecutable,
+        _executable: &SelectedCodexExecutable,
         _command: &crate::distribution::HostCommand,
         _policy: &HostEffectExecutionPolicy,
         _cancellation: &HostEffectCancellation,
+        _cwd: std::os::fd::RawFd,
     ) -> Result<CommandCapture, BackendFailure> {
         self.calls += 1;
         Err(BackendFailure::before_start(
@@ -49,18 +50,15 @@ fn fresh_lifecycle(package: &PackageIdentity) -> AcceptedLifecyclePlan {
 fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     let fixture = Fixture::new();
     let package = fixture.package();
-    let host = HostCapabilityDeclaration::isolated(
-        &fixture.home,
-        &fixture.project,
-        "fixture-host",
-        Some(&fixture.executable),
-    )
-    .unwrap();
+    let host = fixture
+        .executable_fixture
+        .host_capability(&fixture.home, &fixture.project, "fixture-host")
+        .unwrap();
     let journey = JourneyBinding::new(package.clone(), &host, "fixture-marketplace").unwrap();
     let (scope, target, expected_target) = fixture.scope_and_target();
     let mut target_observer = target.observer();
-    let ledger = FileHostEffectLedger::create(&fixture.ledger_root, "fixture-ledger".to_owned())
-        .unwrap();
+    let ledger =
+        FileHostEffectLedger::create(&fixture.ledger_root, "fixture-ledger".to_owned()).unwrap();
     let coordinator = SupportedHostLifecycleCoordinator::bind(
         "fixture-authority".to_owned(),
         "fixture-ledger".to_owned(),
@@ -68,7 +66,10 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
     )
     .unwrap();
     let plan = HostCommandPlan::personal_install(&package, "fixture-marketplace").unwrap();
-    let pinned = PinnedHostExecutable::pin(&fixture.executable).unwrap();
+    let projection = plan.projection().unwrap();
+    let mut custody = lifecycle_custody(&fixture, &plan);
+    let lifecycle_record = custody.pre_effect_record().clone();
+    let pinned = fixture.executable_fixture.selected().unwrap();
     let accepted = coordinator
         .accept(HostEffectAcceptanceRequest {
             package: package.clone(),
@@ -76,13 +77,13 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             host,
             lifecycle: fresh_lifecycle(&package),
             scope,
-            plan: &plan,
+            plan: &projection,
             executable: &pinned,
             expected_target,
             expected_head: ledger.head().unwrap(),
+            lifecycle_record: &lifecycle_record,
         })
         .unwrap();
-    let mut custody = RootPlanCustody::bind(plan, &accepted).unwrap();
     let mut clock = TestClock { sequence: 0 };
     let mut adapter = LinuxDescriptorAdapter;
     let handoff = coordinator
@@ -91,7 +92,7 @@ fn executor_refuses_foreign_platform_handoff_without_backend_start() {
             HostEffectPreparationRequest {
                 accepted: &accepted,
                 custody: &mut custody,
-                executable: PinnedHostExecutable::pin(&fixture.executable).unwrap(),
+                executable: fixture.executable_fixture.selected().unwrap(),
                 target: &mut target_observer,
                 clock: &mut clock,
                 adapter: &mut adapter,

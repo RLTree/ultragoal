@@ -80,6 +80,7 @@ impl<'a> SupportedHostEffectExecutor<'a> {
         Ok(HostEffectExecutionReceipt::new(
             effect_identity_sha256.to_owned(),
             outcome,
+            terminal.clone(),
             terminal.current_head().clone(),
             command_output_sha256,
             acknowledgement,

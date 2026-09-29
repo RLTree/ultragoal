@@ -1,0 +1,172 @@
+{
+  "worker": "/root/n03_typed_cli_state_capture",
+  "lease_id": "LEASE-N03-TYPED-CLI-STATE-CAPTURE-001",
+  "context_id": "sha256:ee08b2bb5c16d86f0b8255127007410ddb32d41085ddcf9909f1c154b829b2c6",
+  "candidate_identity": {
+    "candidate_id": "sha256:ee08b2bb5c16d86f0b8255127007410ddb32d41085ddcf9909f1c154b829b2c6",
+    "context_id": "sha256:ee08b2bb5c16d86f0b8255127007410ddb32d41085ddcf9909f1c154b829b2c6",
+    "source_head": "46ad7794a7e597d93d0afc3465f287d6a7161885",
+    "source_tree": "7b8c0647422db58bd5216b6444724ad882cb09d5",
+    "artifact_set_formula": "sorted accepted source paths with sha256 digests"
+  },
+  "base_state": {
+    "exact_base": "fe9000d2e31b75a6658cf9031de97a74561e3eae",
+    "shared_dependency": "Capture test topology was isolated by the root-owned fe9000d2e change before this lane mutated source.",
+    "root_owned_surfaces_preserved": [
+      "Cargo.toml and Cargo.lock",
+      "public CLI catalog and dispatcher",
+      "shared schemas and generated authority",
+      "lane registry, claims, migration and retirement registries",
+      "package, release, readiness, and completion records"
+    ]
+  },
+  "final_state": {
+    "status": "candidate_for_root_acceptance",
+    "acceptance_ceiling": "Accepted N03 source and focused test-fixture closure only; root integration and all product/release claims remain withheld.",
+    "source_head": "46ad7794a7e597d93d0afc3465f287d6a7161885",
+    "source_tree": "7b8c0647422db58bd5216b6444724ad882cb09d5",
+    "parent_boundary": "9 passed; 0 failed; 7.28s",
+    "diff_check": "pass",
+    "warning_suppression_scan": "clean",
+    "maximum_touched_file_lines": 250,
+    "network_performed": false,
+    "external_product_effect_performed": false,
+    "root_integration_performed": false,
+    "parent_source_acceptance": "accepted_46ad7794a"
+  },
+  "touched_paths": [
+    "validator/src/cli/capture/run/run_capture.rs",
+    "validator/tests/cli_contract/capture/secret/capture_fixture.rs",
+    "validator/tests/cli_contract/state/authority_inputs.rs",
+    "validator/tests/cli_contract/state/fixture.rs",
+    "validator/tests/cli_contract/state/mod.rs",
+    "validator/tests/cli_contract/state/mutation.rs",
+    "validator/tests/cli_contract/successor/boundaries.rs",
+    "validator/tests/cli_contract/successor/catalog.rs",
+    "validator/tests/cli_contract/successor/command_line.rs",
+    "validator/tests/cli_contract/successor/compatibility.rs",
+    "validator/tests/cli_contract/successor/state_views.rs",
+    "docs/ultragoal-successor-live/worker-results/LEASE-N03-TYPED-CLI-STATE-CAPTURE-001.json"
+  ],
+  "touched_semantics": [
+    "N03-CAPTURE-AUTHORITY-CLOSURE",
+    "N03-TYPED-CLI-EXPORT-CLOSURE",
+    "N03-STATE-FIXTURE-CLOSURE",
+    "N03-FIXTURE-PATH-CONFINEMENT",
+    "N03-FIXTURE-CLEANUP"
+  ],
+  "generated_outputs": [],
+  "fixtures": [],
+  "effects": [
+    {
+      "class": "workspace_write",
+      "target": "n03-cli-state",
+      "performed": true
+    },
+    {
+      "class": "fixture_write",
+      "target": "n03-fixture",
+      "performed": true
+    },
+    {
+      "class": "network",
+      "target": "network",
+      "performed": false
+    },
+    {
+      "class": "external_write",
+      "target": "external-write",
+      "performed": false
+    }
+  ],
+  "requirements": [
+    "REQ-CLI-001",
+    "REQ-CLI-002",
+    "REQ-CLI-003",
+    "REQ-SECURITY-001"
+  ],
+  "dependency_nodes": [
+    "N01-CONTEXT-EFFECT",
+    "N02-INVENTORY"
+  ],
+  "changes": [
+    {
+      "area": "production warning closure",
+      "result": "Deleted only unsupported dead capture API and exercised retained exported behavior through real existing CLI contract controls without suppression or test-only dummy reachability."
+    },
+    {
+      "area": "state fixture closure",
+      "result": "The fixture reads the aggregate, validates every shard before reading it, and copies the declared generated-authority closure through one confined regular-file boundary."
+    },
+    {
+      "area": "fixture security controls",
+      "result": "Absolute, parent traversal, source symlink escape, non-regular input, and destination intermediate-symlink paths fail before out-of-root fixture I/O; valid closure remains supported."
+    }
+  ],
+  "commands_and_tests": [
+    {
+      "command": "CARGO_NET_OFFLINE=true cargo test --locked -p ultragoal --test cli_contract capture::artifact -- --test-threads=1",
+      "result": "pass",
+      "summary": "27 passed; 0 failed."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true cargo test --locked -p ultragoal --test cli_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "Serial focused CLI contract harness completed successfully at the source freeze."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true cargo test --locked -p ultragoal --test cli_contract authority_inputs -- --test-threads=1",
+      "result": "pass",
+      "summary": "6 passed; 0 failed; aggregate shard, source, destination, and valid-closure controls."
+    },
+    {
+      "command": "CARGO_NET_OFFLINE=true cargo test --locked -p ultragoal --test cli_contract state_contract -- --test-threads=1",
+      "result": "pass",
+      "summary": "9 passed; 0 failed; helper controls plus stale-context and zero-write state boundaries."
+    },
+    {
+      "command": "parent independent source acceptance boundary",
+      "result": "pass",
+      "summary": "9 passed; 0 failed; 7.28s. Diff-check, 250-line scan, and warning-suppression scan clean."
+    }
+  ],
+  "artifacts": [
+    {"path": "validator/src/cli/capture/run/run_capture.rs", "sha256": "sha256:86bbfd8bcc54a5f64c03c55a3e921db0f540bad1e44af9a918a66788dff72543", "byte_length": 8539},
+    {"path": "validator/tests/cli_contract/capture/secret/capture_fixture.rs", "sha256": "sha256:18a0d33d6cc185df9a91132f88b8f6368eaa72902120b7768c83bda51f9baab9", "byte_length": 3911},
+    {"path": "validator/tests/cli_contract/state/authority_inputs.rs", "sha256": "sha256:6a9193c626e361233d3b4146fb4883d2f4596a2edac7397904ac9f857b32de13", "byte_length": 7901},
+    {"path": "validator/tests/cli_contract/state/fixture.rs", "sha256": "sha256:7ec1a7bb43e1b1922c4f956dba3652b72d2da4b6e70d0c2f09176353e444d60d", "byte_length": 6008},
+    {"path": "validator/tests/cli_contract/state/mod.rs", "sha256": "sha256:da6825bdca13a1eb60de6914ff812305776de7ba5860689fd9ba3388e3a7938d", "byte_length": 70},
+    {"path": "validator/tests/cli_contract/state/mutation.rs", "sha256": "sha256:134070255bba5c13b3d67e3b5d55b91e9c4e75037290a36ea224b4d118fc3c36", "byte_length": 4944},
+    {"path": "validator/tests/cli_contract/successor/boundaries.rs", "sha256": "sha256:a07bb072a5fafb4113ceba76123b54df545ec7aa47b1e2c05a78a493e15183f5", "byte_length": 3655},
+    {"path": "validator/tests/cli_contract/successor/catalog.rs", "sha256": "sha256:87c0f99881c26c04d86db897851068e7ecd5a193069e189c684e6f647ef41aa3", "byte_length": 10158},
+    {"path": "validator/tests/cli_contract/successor/command_line.rs", "sha256": "sha256:4d2ab90e5c01f9cd5be4f7ecdfda99b6423477e8ab5cee79adf31e1bc41a9521", "byte_length": 3552},
+    {"path": "validator/tests/cli_contract/successor/compatibility.rs", "sha256": "sha256:31818dfd6e1b8654010386336d690a613d9e1d44e56ef7e663fb95bc7b75a607", "byte_length": 5070},
+    {"path": "validator/tests/cli_contract/successor/state_views.rs", "sha256": "sha256:c74456333b4b475b78b25a304ba33ef7cca53781c418d49db149c1e45e936164", "byte_length": 8718}
+  ],
+  "findings": [
+    {
+      "severity": "accepted-source",
+      "finding": "Parent accepted exact clean HEAD 46ad7794a with the named 9/9 boundary, diff, line, and suppression evidence."
+    },
+    {
+      "severity": "advisory",
+      "finding": "A hostile concurrent path swap after validation is outside the frozen single-owner fixture claim; no openat, hardlink, or atomic-copy subsystem was added."
+    },
+    {
+      "severity": "proof-ceiling",
+      "finding": "The evidence is source and focused-test evidence only, not root integration, installed discovery, runtime/product behavior, readiness, release, or completion proof."
+    }
+  ],
+  "unresolved_dependencies": [
+    "ROOT-CLI-INTEGRATION-PENDING",
+    "ROOT-RUNTIME-PROOF-PENDING",
+    "ROOT-CLAIM-ADOPTION-PENDING"
+  ],
+  "requested_root_changes": [],
+  "limitations": [
+    "No root integration, package, install, discovery, runtime, Product Fitness, readiness, release, or completion claim is made.",
+    "No candidate-wide product or release audit was run in this lane.",
+    "The frozen single-owner fixture claim excludes a hostile concurrent post-validation pathname swap."
+  ],
+  "no_claim_statement": "This worker does not claim readiness, release, or completion."
+}

@@ -1,19 +1,9 @@
 use super::*;
 
 #[cfg(unix)]
-pub(crate) fn remove_created_leaf(
-    parent: &VerifiedParent,
-    created: FileIdentity,
-) -> Result<(), String> {
-    if inspect_leaf(parent)? != Some(created) {
-        return Ok(());
-    }
-    let result = unsafe { libc::unlinkat(parent.directory().as_raw_fd(), parent.name.as_ptr(), 0) };
-    if result == 0 || std::io::Error::last_os_error().kind() == std::io::ErrorKind::NotFound {
-        Ok(())
-    } else {
-        Err(io_code("rollback", std::io::Error::last_os_error()))
-    }
+pub(crate) fn created_leaf_recovery_required(_: &VerifiedParent, _: FileIdentity) -> String {
+    "observe-store-recovery-required: created leaf cleanup cannot bind unlink to the observed identity"
+        .to_owned()
 }
 
 #[cfg(unix)]
@@ -61,6 +51,7 @@ pub(crate) fn cstr(bytes: &'static [u8]) -> CString {
 
 #[cfg(unix)]
 pub(crate) fn open_directory(directory: libc::c_int, name: &CStr) -> Result<File, String> {
+    // SAFETY: `name` is NUL-terminated and `directory` is an owned directory descriptor.
     let fd = unsafe {
         libc::openat(
             directory,
@@ -75,12 +66,15 @@ pub(crate) fn open_directory(directory: libc::c_int, name: &CStr) -> Result<File
         }
         return Err(io_code("parent", error));
     }
+    // SAFETY: `openat` returned a new owned descriptor on this success path.
     Ok(unsafe { File::from_raw_fd(fd) })
 }
 
 #[cfg(unix)]
 pub(crate) fn entry_is_symlink(directory: libc::c_int, name: &CStr) -> bool {
+    // SAFETY: zero is a valid initialization pattern for `libc::stat` before `fstatat` fills it.
     let mut stat = unsafe { std::mem::zeroed::<libc::stat>() };
+    // SAFETY: `stat` is valid writable storage and `name` is NUL-terminated.
     unsafe {
         libc::fstatat(
             directory,

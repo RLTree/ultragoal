@@ -9,7 +9,9 @@ impl RoutingData {
         let source_rows = groups
             .iter()
             .flatten()
-            .filter(|entry| is_source_kind(&entry.kind))
+            .filter(|entry| {
+                by_stable_id(&entry.stable_id).is_some_and(|spec| spec.kind == entry.kind)
+            })
             .collect::<Vec<_>>();
         let target_rows = groups
             .iter()
@@ -22,6 +24,9 @@ impl RoutingData {
             .iter()
             .filter(|route| pending_route_candidate(route))
             .collect::<Vec<_>>();
+        if source_rows.is_empty() && route_rows.is_empty() {
+            return Ok(BTreeSet::new());
+        }
 
         let sources = source_rows
             .iter()

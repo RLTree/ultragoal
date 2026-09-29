@@ -261,7 +261,6 @@
               "standards-gardener-promotion",
               "subagent-custom-agent-sandbox-approval-inheritance",
               "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-              "target-repo-audit-capability",
               "targeted-refactor-debt-removal-standards-gardener-cadence",
               "template-generation-governance-template-creator-boundary",
               "third-party-dependency-legibility-typed-adapters",
@@ -1895,15 +1894,6 @@
               "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
               "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
               "target-advanced-after-validation",
-              "target-repo-audit-capability-fixture-used-as-live-target-red",
-              "target-repo-audit-capability-generic-repo-support-overclaim-red",
-              "target-repo-audit-capability-mode-substitution-red",
-              "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-              "target-repo-audit-capability-source-obligation-parity-red",
-              "target-repo-audit-capability-target-classification-missing-red",
-              "target-repo-audit-capability-target-command-missing-success-emitted-red",
-              "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-              "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
               "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -2263,7 +2253,6 @@
         "standards-gardener-promotion",
         "subagent-custom-agent-sandbox-approval-inheritance",
         "subagent-orchestration-explicitness-token-model-cost-result-reconciliation",
-        "target-repo-audit-capability",
         "targeted-refactor-debt-removal-standards-gardener-cadence",
         "template-generation-governance-template-creator-boundary",
         "third-party-dependency-legibility-typed-adapters",
@@ -3476,15 +3465,6 @@
         "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
         "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
         "target-advanced-after-validation",
-        "target-repo-audit-capability-fixture-used-as-live-target-red",
-        "target-repo-audit-capability-generic-repo-support-overclaim-red",
-        "target-repo-audit-capability-mode-substitution-red",
-        "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-        "target-repo-audit-capability-source-obligation-parity-red",
-        "target-repo-audit-capability-target-classification-missing-red",
-        "target-repo-audit-capability-target-command-missing-success-emitted-red",
-        "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-        "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
         "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -4104,11 +4084,6 @@
         },
         {
           "contains": {
-            "const": "target-repo-audit-capability"
-          }
-        },
-        {
-          "contains": {
             "const": "targeted-refactor-debt-removal-standards-gardener-cadence"
           }
         },
@@ -4176,8 +4151,8 @@
       "items": {
         "$ref": "schema-authority-primitives.schema.json#/$defs/requiredValidatorCheckId"
       },
-      "maxItems": 153,
-      "minItems": 153,
+      "maxItems": 152,
+      "minItems": 152,
       "type": "array",
       "uniqueItems": true
     },
@@ -9971,51 +9946,6 @@
         },
         {
           "contains": {
-            "const": "target-repo-audit-capability-fixture-used-as-live-target-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-generic-repo-support-overclaim-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-mode-substitution-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-source-obligation-parity-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-target-classification-missing-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-target-command-missing-success-emitted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-unknown-language-runtime-accepted-red"
-          }
-        },
-        {
-          "contains": {
-            "const": "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red"
-          }
-        },
-        {
-          "contains": {
             "const": "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red"
           }
         },
@@ -11757,15 +11687,6 @@
           "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-source-obligation-parity-red",
           "subagent-orchestration-explicitness-token-model-cost-result-reconciliation-subagent-launch-without-explicit-requested-contracted-role-red",
           "target-advanced-after-validation",
-          "target-repo-audit-capability-fixture-used-as-live-target-red",
-          "target-repo-audit-capability-generic-repo-support-overclaim-red",
-          "target-repo-audit-capability-mode-substitution-red",
-          "target-repo-audit-capability-product-surface-not-detected-product-claim-emitted-red",
-          "target-repo-audit-capability-source-obligation-parity-red",
-          "target-repo-audit-capability-target-classification-missing-red",
-          "target-repo-audit-capability-target-command-missing-success-emitted-red",
-          "target-repo-audit-capability-unknown-language-runtime-accepted-red",
-          "target-repo-audit-capability-unsupported-repo-marked-fit-repo-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-backlog-debt-supporting-claim-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-quality-grade-not-updated-after-hardening-red",
           "targeted-refactor-debt-removal-standards-gardener-cadence-recurring-cleanup-receipt-with-wrong-candidate-digest-red",
@@ -11885,8 +11806,8 @@
           "wrong-worktree-or-root"
         ]
       },
-      "maxItems": 1280,
-      "minItems": 1280,
+      "maxItems": 1271,
+      "minItems": 1271,
       "type": "array",
       "uniqueItems": true
     },

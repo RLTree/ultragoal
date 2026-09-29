@@ -1,20 +1,20 @@
 #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 pub(super) enum RawAuthorityMarker {
-    RawJson,
-    RawMap,
-    RawObservation,
-    RawPath,
-    RawString,
+    Json,
+    Map,
+    Observation,
+    Path,
+    String,
 }
 
 impl RawAuthorityMarker {
     pub(super) fn as_str(self) -> &'static str {
         match self {
-            Self::RawJson => "raw_json",
-            Self::RawMap => "raw_map",
-            Self::RawObservation => "raw_observation",
-            Self::RawPath => "raw_path",
-            Self::RawString => "raw_string",
+            Self::Json => "raw_json",
+            Self::Map => "raw_map",
+            Self::Observation => "raw_observation",
+            Self::Path => "raw_path",
+            Self::String => "raw_string",
         }
     }
 }
@@ -22,22 +22,22 @@ impl RawAuthorityMarker {
 pub(super) fn raw_authority_markers(text: &str) -> Vec<RawAuthorityMarker> {
     let mut out = Vec::new();
     if text.contains("serde_json::Map") || contains_identifier(text, "raw_map") {
-        out.push(RawAuthorityMarker::RawMap);
+        out.push(RawAuthorityMarker::Map);
     }
     if contains_raw_path_authority(text) {
-        out.push(RawAuthorityMarker::RawPath);
+        out.push(RawAuthorityMarker::Path);
     }
     if contains_identifier(text, "raw_string") {
-        out.push(RawAuthorityMarker::RawString);
+        out.push(RawAuthorityMarker::String);
     }
     if super::contains_json_value_binding(text)
         || text.contains(": &Value")
         || text.contains(": &[Value]")
     {
-        out.push(RawAuthorityMarker::RawJson);
+        out.push(RawAuthorityMarker::Json);
     }
     if text.contains("\"raw_") || contains_identifier(text, "raw_observation") {
-        out.push(RawAuthorityMarker::RawObservation);
+        out.push(RawAuthorityMarker::Observation);
     }
     out.sort_unstable();
     out.dedup();

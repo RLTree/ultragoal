@@ -1,6 +1,7 @@
 use super::*;
 
-pub(crate) const SCHEMA: &str = "RoutineProductionCustodyStore-v4";
+pub(crate) const SCHEMA: &str = "RoutineProductionCustodyStore-v5";
+pub(crate) const LEGACY_SCHEMA: &str = "RoutineProductionCustodyStore-v4";
 pub(crate) const KEY_NAME: &str = "routine-authority.key";
 pub(crate) const LOCK_NAME: &str = "routine-authority.lock";
 pub(crate) const STATE_NAME: &str = "routine-authority.state";
@@ -99,11 +100,30 @@ pub(super) struct TerminalRecord {
     pub(super) state: AttemptState,
     pub(super) result_sha256: String,
     pub(super) artifacts: BTreeMap<String, String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub(super) mediation: Option<TerminalMediation>,
     pub(super) process_cleanup: CleanupEvidence,
     pub(super) staged_cleanup: CleanupEvidence,
     pub(super) prior_head_sha256: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub(super) failure_evidence: Option<ReservationFailureEvidence>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalMediation {
+    pub(in crate::routine_work::runtime_adapter::production::custody) nodes:
+        Vec<TerminalNodeMediation>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(in crate::routine_work::runtime_adapter::production::custody) struct TerminalNodeMediation {
+    pub(in crate::routine_work::runtime_adapter::production::custody) intent_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) node_id: String,
+    pub(in crate::routine_work::runtime_adapter::production::custody) plan_order: usize,
+    pub(in crate::routine_work::runtime_adapter::production::custody) result_artifact_sha256:
+        String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -159,6 +179,7 @@ pub(super) struct ReservationToken {
     pub(super) request_id: String,
     pub(super) grant_id: String,
     pub(super) recovery_marker: String,
+    pub(super) predecessor_continuations: Vec<String>,
     pub(super) expires_tick: Cell<u64>,
     pub(super) output_journal: OutputProvisionJournal,
     pub(super) intents: Vec<IntentBinding>,

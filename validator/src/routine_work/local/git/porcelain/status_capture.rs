@@ -78,6 +78,27 @@ pub(crate) fn parse_status(bytes: &[u8]) -> Result<Vec<StatusRow>, RoutineError>
     Ok(rows)
 }
 
+pub(crate) fn parse_ignored_paths(bytes: &[u8]) -> Result<BTreeSet<RepoPath>, RoutineError> {
+    if bytes.len() > STATUS_LIMIT {
+        return Err(limit_error("git-status-output-limit-exceeded"));
+    }
+    let mut paths = BTreeSet::new();
+    for record in bytes.split(|byte| *byte == 0) {
+        if !record.starts_with(b"! ") {
+            continue;
+        }
+        let raw = record
+            .get(2..)
+            .ok_or_else(|| capture_error("ignored-row-short"))?;
+        let raw = raw.strip_suffix(b"/").unwrap_or(raw);
+        let path = parse_path(raw)?;
+        if !paths.insert(path) {
+            return Err(invalid_snapshot("ignored-path-duplicated"));
+        }
+    }
+    Ok(paths)
+}
+
 pub(crate) fn parse_ordinary(record: &[u8]) -> Result<StatusRow, RoutineError> {
     let text = std::str::from_utf8(record).map_err(|_| capture_error("git-status-non-utf8"))?;
     let fields = text.splitn(9, ' ').collect::<Vec<_>>();

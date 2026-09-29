@@ -5,15 +5,15 @@ pub(crate) fn reconciliation_binds_every_target_collect_to_the_authorized_snapsh
     for (label, phase) in [
         (
             "target-reconciliation-before-first-target-aba",
-            ReconciliationTargetPhase::AfterAuthorizedRevalidation,
+            ReconciliationTargetPhase::AuthorizedRevalidation,
         ),
         (
             "target-reconciliation-between-targets-aba",
-            ReconciliationTargetPhase::AfterFirstTarget,
+            ReconciliationTargetPhase::FirstTarget,
         ),
         (
             "target-reconciliation-after-protected-after-aba",
-            ReconciliationTargetPhase::AfterProtectedAfter,
+            ReconciliationTargetPhase::ProtectedAfter,
         ),
     ] {
         let fixture = Fixture::new(label);

@@ -1,6 +1,12 @@
 use serde_json::Value;
 use std::path::Path;
 
+#[path = "output/receipt.rs"]
+mod output_receipt;
+mod policy;
+#[path = "provider/policy.rs"]
+mod provider_policy;
+
 const POLICY_REL: &str = "docs/openai-key-policy.json";
 const RECEIPT_REL: &str = "validation_artifacts/openai/config-receipt.json";
 const CALL_RECEIPT_REL: &str = "validation_artifacts/openai/call-receipt.json";
@@ -8,6 +14,9 @@ const OUTPUT_RECEIPT_REL: &str = "validation_artifacts/openai/model-output-autho
 const SCHEMA: &str = "harness-ultragoal.openai-config-receipt.v1";
 const CALL_SCHEMA: &str = "harness-ultragoal.openai-call-receipt.v1";
 const PROVIDER_POLICY_REL: &str = "docs/openai-provider-policy.json";
+pub(crate) const LAW_ID: &str = "openai-api-key-model-cost-external-ai-boundary";
+
+pub(crate) use policy::contains_secret_shape;
 
 #[cfg(test)]
 mod tests;
@@ -23,7 +32,7 @@ pub(crate) fn package_failures(root: &Path) -> Vec<String> {
 }
 
 fn check_policy(root: &Path, out: &mut Vec<String>) {
-    let policy = crate::cli::openai::policy::load(root, Path::new(POLICY_REL));
+    let policy = policy::load(root, Path::new(POLICY_REL));
     out.extend(policy.failures());
 }
 
@@ -32,13 +41,13 @@ fn candidate_or_empty(root: &Path) -> String {
 }
 
 fn check_provider_policy(root: &Path, out: &mut Vec<String>) {
-    let policy = crate::cli::openai::budget::load(
+    let failures = provider_policy::failures(
         root,
         Path::new(PROVIDER_POLICY_REL),
         "source_no_network",
         "no_network",
     );
-    out.extend(policy.failures);
+    out.extend(failures);
 }
 
 fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
@@ -71,7 +80,7 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
         out.push("openai_call_receipt_candidate_digest_mismatch".to_string());
     }
     if receipt.get("redaction_status").and_then(Value::as_str) != Some("pass")
-        || crate::cli::openai::policy::contains_secret_shape(&receipt)
+        || contains_secret_shape(&receipt)
     {
         out.push("openai_call_receipt_secret_leak_or_redaction_failure".to_string());
     }
@@ -88,7 +97,7 @@ fn check_call_receipt(root: &Path, out: &mut Vec<String>) {
     if !blocks_completion_claims(&receipt) {
         out.push("openai_call_receipt_missing_completion_blockers".to_string());
     }
-    out.extend(crate::cli::openai::budget::receipt_failures(root, &receipt));
+    out.extend(provider_policy::receipt_failures(root, &receipt));
     check_observability_binding(&receipt, &candidate, "openai_call", out);
 }
 
@@ -107,7 +116,7 @@ fn check_output_receipt(root: &Path, out: &mut Vec<String>) {
             return;
         }
     };
-    out.extend(crate::cli::openai::output::receipt_failures(root, &receipt));
+    out.extend(output_receipt::failures(root, &receipt));
     check_observability_binding(
         &receipt,
         &candidate_or_empty(root),
@@ -143,7 +152,7 @@ fn check_receipt(root: &Path, out: &mut Vec<String>) {
         out.push("openai_config_receipt_candidate_digest_mismatch".to_string());
     }
     if receipt.get("redaction_status").and_then(Value::as_str) != Some("pass")
-        || crate::cli::openai::policy::contains_secret_shape(&receipt)
+        || contains_secret_shape(&receipt)
     {
         out.push("openai_config_receipt_secret_leak_or_redaction_failure".to_string());
     }
@@ -195,11 +204,11 @@ fn check_observability_binding(
         return;
     };
     if obs.get("schema").and_then(Value::as_str)
-        != Some(crate::cli::observe::command::RECEIPT_SCHEMA)
+        != Some(crate::audit::observability::RECEIPT_SCHEMA)
         || obs.get("status").and_then(Value::as_str) != Some("pass")
         || obs.get("candidate_digest").and_then(Value::as_str) != Some(candidate)
-        || obs.get("law_id").and_then(Value::as_str) != Some(crate::cli::openai::LAW_ID)
-        || obs.get("check_id").and_then(Value::as_str) != Some(crate::cli::openai::LAW_ID)
+        || obs.get("law_id").and_then(Value::as_str) != Some(LAW_ID)
+        || obs.get("check_id").and_then(Value::as_str) != Some(LAW_ID)
     {
         out.push(format!("{prefix}_receipt_observability_binding_invalid"));
     }

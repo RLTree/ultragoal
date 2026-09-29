@@ -3,22 +3,45 @@ const CANDIDATE: &str = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 const SUBSTITUTE: &str = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
 const WRONG_HOME: &str = "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
 const WRONG_TREE: &str = "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-const R3_CONTEXT: &str = "sha256:94705c615b06f6c59c08a3234713d0cf6c57b12d557bffe8121e7a8d18ae5168";
-const R3_CANDIDATE: &str =
-    "sha256:2f1c22491962bd8f3211d4b71709f98406c318b42bcacc48e8c9ff5fb2773ce1";
-const R3_RESULT_PATH: &str =
-    "docs/ultragoal-successor-live/worker-results/SUPPORTED-PACKAGE-IDENTITY-074.json";
-const R3_WORK_PACKAGE_PATH: &str =
-    "docs/ultragoal-successor-live/work-packages/SUPPORTED-PACKAGE-IDENTITY-074-R3.json";
-const R3_WORK_PACKAGE_SHA256: &str =
-    "sha256:a786a53849d5503b76908c6e0e2a4ec1a421be8f68d0180934bbe3746149c6b0";
 static NEXT: AtomicU64 = AtomicU64::new(0);
+
+fn snapshot_tree(root: &Path) -> Vec<(PathBuf, Vec<u8>)> {
+    fn walk(root: &Path, current: &Path, rows: &mut Vec<(PathBuf, Vec<u8>)>) {
+        let mut entries = fs::read_dir(current)
+            .unwrap()
+            .map(|row| row.unwrap())
+            .collect::<Vec<_>>();
+        entries.sort_by_key(|row| row.file_name());
+        for entry in entries {
+            let path = entry.path();
+            if entry.file_type().unwrap().is_dir() {
+                walk(root, &path, rows);
+            } else {
+                rows.push((
+                    path.strip_prefix(root).unwrap().into(),
+                    fs::read(path).unwrap(),
+                ));
+            }
+        }
+    }
+    let mut rows = Vec::new();
+    walk(root, root, &mut rows);
+    rows
+}
+
+fn digest(bytes: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+    format!("sha256:{:x}", Sha256::digest(bytes))
+}
 
 #[derive(Default)]
 struct Sink(Option<Vec<u8>>);
 
 impl PackageEffects for Sink {
-    fn read_package(&mut self, _: usize) -> Result<Option<Vec<u8>>, ()> {
+    fn read_package(
+        &mut self,
+        _: usize,
+    ) -> Result<Option<Vec<u8>>, ultragoal::distribution::EffectFailure> {
         Ok(self.0.clone())
     }
 
@@ -26,7 +49,7 @@ impl PackageEffects for Sink {
         &mut self,
         expected: Option<&str>,
         replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
+    ) -> Result<bool, ultragoal::distribution::EffectFailure> {
         if self.0.as_deref().map(digest).as_deref() != expected {
             return Ok(false);
         }
@@ -35,40 +58,14 @@ impl PackageEffects for Sink {
     }
 }
 
-#[derive(Default)]
-struct Installed(Option<Vec<u8>>);
-
-impl InstallEffects for Installed {
-    fn read_installed(&mut self, _: &str, _: usize) -> Result<Option<Vec<u8>>, ()> {
-        Ok(self.0.clone())
-    }
-
-    fn compare_exchange_installed(
-        &mut self,
-        _: &str,
-        expected: &ExpectedPrior,
-        replacement: Option<&[u8]>,
-    ) -> Result<bool, ()> {
-        let matches = match expected {
-            ExpectedPrior::Absent => self.0.is_none(),
-            ExpectedPrior::ExactDigest(expected) => {
-                self.0.as_deref().map(digest).as_deref() == Some(expected)
-            }
-        };
-        if matches {
-            self.0 = replacement.map(<[u8]>::to_vec);
-        }
-        Ok(matches)
-    }
-}
-
 struct Fixture(PathBuf);
 
 impl Fixture {
     fn new(label: &str) -> Self {
         let base = std::env::var_os("HUL_SUPPORTED_PACKAGE_SCRATCH_ROOT")
+            .or_else(|| std::env::var_os("CODEX_WORKTREE_TMP"))
             .map(PathBuf::from)
-            .unwrap_or_else(std::env::temp_dir);
+            .unwrap_or_else(|| PathBuf::from("/tmp"));
         let root = base.join(format!(
             "hul-distribution-archive-{label}-{}-{}",
             std::process::id(),
@@ -114,17 +111,14 @@ impl Fixture {
             b"---\nname: prove\ndescription: Proof workflow\n---\n",
         )
         .unwrap();
-        fs::create_dir_all(root.join("runtime")).unwrap();
-        let runtime = root.join("runtime/runtime-probe-bin");
+        fs::create_dir_all(root.join("plugins/harness-ultragoal/runtime")).unwrap();
+        let runtime = root.join("plugins/harness-ultragoal/runtime/ultragoal");
         fs::write(
             &runtime,
-            br##"#!/bin/sh
-if [ "$#" -ne 0 ]; then
-  printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"stale\"}"
-  exit 0
-fi
-printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-probe.v1\",\"session_nonce\":\"$HUL_SESSION_NONCE\"}"
-"##,
+            format!(
+                "#!/bin/sh\ntest \"$1\" = --json && test \"$2\" = --help || exit 64\n/bin/cat <<'HUL_HELP'\n{}\nHUL_HELP\n",
+                ultragoal::distribution::canonical_runtime_help_json(),
+            ),
         )
         .unwrap();
         #[cfg(unix)]
@@ -138,7 +132,7 @@ printf '%s\n' "HUL_RUNTIME_OBSERVATION={\"schema\":\"harness-ultragoal.runtime-p
     fn plan(&self) -> PackagePlan {
         let entries = [
             json!({"path":".codex-plugin/plugin.json","source_path":"source/plugin.json","role":"manifest","executable":false}),
-            json!({"path":"runtime/runtime-probe-bin","source_path":"runtime/runtime-probe-bin","role":"executable","executable":true}),
+            json!({"path":"runtime/ultragoal","source_path":"plugins/harness-ultragoal/runtime/ultragoal","role":"executable","executable":true}),
             json!({"path":"skills/harness-ultragoal/SKILL.md","source_path":"source/skill-one.md","role":"skill","executable":false}),
             json!({"path":"skills/prove/SKILL.md","source_path":"source/skill-two.md","role":"skill","executable":false}),
         ];

@@ -10,5 +10,4 @@ mod supported;
 
 #[path = "public_effect.rs"]
 mod public_effect;
-
 pub(crate) use public_effect::*;

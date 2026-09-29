@@ -6,7 +6,10 @@ impl LocalEffects {
         unix_modes: BTreeMap<String, u32>,
     ) -> Result<Self, FitError> {
         if unix_modes.iter().any(|(path, mode)| {
-            CanonicalPath::parse(path).is_err() || !matches!(mode, 0o644 | 0o755)
+            CanonicalPath::parse(path).is_err()
+                || (*path != crate::repository_fit::LOCAL_STATE_PATH
+                    && !matches!(mode, 0o644 | 0o755))
+                || *mode > 0o7777
         }) {
             return Err(error(FitErrorId::InvalidSpec));
         }

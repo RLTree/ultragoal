@@ -15,6 +15,8 @@ use std::path::Path;
 
 const EXACT_AGENT_ENTRY_COUNT: usize = 6;
 const EXACT_PLUGIN_ENTRY_COUNT: usize = 1;
+const EXACT_RUNTIME_ENTRY_COUNT: usize = 1;
+const MAX_RUNTIME_BYTES: usize = 65 * 1024 * 1024;
 
 #[derive(Clone, Debug)]
 struct SourceAgentFile {
@@ -36,6 +38,66 @@ pub struct SourceAgentCatalog {
     session_id: String,
     catalog_sha256: String,
     agents: Vec<SourceAgentFile>,
+}
+
+pub(crate) struct InstalledSourceAuthorityCapture {
+    catalog: SourceAgentCatalog,
+    runtime_root: AnchoredDirectory,
+    runtime: SecureFile,
+}
+
+impl InstalledSourceAuthorityCapture {
+    pub(crate) fn capture(
+        root: &Path,
+        candidate_id: &str,
+        session_id: &str,
+    ) -> Result<Self, AgentDiscoveryError> {
+        let catalog = SourceAgentCatalog::capture(root, candidate_id, session_id)?;
+        let runtime_root = catalog.root.open_dir("runtime")?;
+        let expected = [OsString::from("ultragoal")]
+            .into_iter()
+            .collect::<BTreeSet<_>>();
+        if expected.len() != EXACT_RUNTIME_ENTRY_COUNT
+            || !runtime_root.exact_regular_entries(&expected)?
+        {
+            return Err(invalid_source());
+        }
+        let runtime = runtime_root.read_file(OsStr::new("ultragoal"), MAX_RUNTIME_BYTES)?;
+        let capture = Self {
+            catalog,
+            runtime_root,
+            runtime,
+        };
+        capture.revalidate()?;
+        Ok(capture)
+    }
+
+    pub(crate) fn catalog_sha256(&self) -> &str {
+        self.catalog.catalog_sha256()
+    }
+
+    pub(crate) fn plugin_version(&self) -> &str {
+        self.catalog.plugin_version()
+    }
+
+    pub(crate) fn runtime_sha256(&self) -> &str {
+        &self.runtime.sha256
+    }
+
+    pub(crate) fn revalidate(&self) -> Result<(), AgentDiscoveryError> {
+        self.catalog.revalidate()?;
+        self.catalog
+            .root
+            .revalidate_dir("runtime", &self.runtime_root)?;
+        if !self.runtime_root.same_file(
+            OsStr::new("ultragoal"),
+            MAX_RUNTIME_BYTES,
+            &self.runtime,
+        )? {
+            return Err(changed());
+        }
+        Ok(())
+    }
 }
 
 impl SourceAgentCatalog {

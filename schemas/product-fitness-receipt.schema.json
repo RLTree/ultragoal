@@ -33,11 +33,53 @@
   ],
   "properties": {
     "schema": {
-      "const": "harness-ultragoal.product-fitness-receipt.v1"
+      "enum": [
+        "harness-ultragoal.product-fitness-receipt.v1",
+        "harness-ultragoal.product-fitness-receipt.v2"
+      ]
     },
     "receipt_version": {
       "type": "string",
       "minLength": 1
+    },
+    "operator_kind": {
+      "enum": [
+        "agent",
+        "human",
+        "agent_with_human_supervision"
+      ]
+    },
+    "evidence_class": {
+      "enum": [
+        "intent",
+        "research",
+        "prototype",
+        "source",
+        "package",
+        "installed",
+        "runtime",
+        "agent_use",
+        "human_use",
+        "repeated_human_use"
+      ]
+    },
+    "surface_identities": {
+      "$ref": "#/$defs/surfaceIdentities"
+    },
+    "public_entry_observation": {
+      "$ref": "#/$defs/publicEntryObservation"
+    },
+    "real_work_observation": {
+      "$ref": "#/$defs/realWorkObservation"
+    },
+    "manual_journey_row": {
+      "$ref": "#/$defs/manualJourneyRow"
+    },
+    "claimed_surface": {
+      "$ref": "#/$defs/truthSurface"
+    },
+    "surface_claim_ceilings": {
+      "$ref": "#/$defs/surfaceClaimCeilings"
     },
     "claim": {
       "type": "object",
@@ -279,7 +321,239 @@
     }
   },
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema": {
+            "const": "harness-ultragoal.product-fitness-receipt.v2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "operator_kind",
+          "evidence_class",
+          "surface_identities",
+          "public_entry_observation",
+          "real_work_observation",
+          "manual_journey_row",
+          "claimed_surface",
+          "surface_claim_ceilings"
+        ],
+        "properties": {
+          "substitution_rejections": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "rejected_substitute",
+                "reason"
+              ],
+              "properties": {
+                "rejected_substitute": {
+                  "const": "legacy_dogfood_receipt"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "minContains": 1,
+            "maxContains": 1
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
+    "truthSurface": {
+      "enum": [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey"
+      ]
+    },
+    "surfaceClaimCeiling": {
+      "enum": [
+        "package_static_fixture_only",
+        "withheld_or_blocked",
+        "live_same_surface_proven"
+      ]
+    },
+    "surfaceClaimCeilings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "package": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "marketplace": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "install": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "cache": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "app_registry": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "discovery": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "runtime": { "$ref": "#/$defs/surfaceClaimCeiling" },
+        "journey": { "$ref": "#/$defs/surfaceClaimCeiling" }
+      }
+    },
+    "surfaceIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "observed",
+            "withheld"
+          ]
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/v2EvidenceBinding"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "observed"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "identity",
+              "evidence"
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                { "required": ["identity"] },
+                { "required": ["evidence"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "surfaceIdentities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "package",
+        "marketplace",
+        "install",
+        "cache",
+        "app_registry",
+        "discovery",
+        "runtime",
+        "journey"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/surfaceIdentity" },
+        "package": { "$ref": "#/$defs/surfaceIdentity" },
+        "marketplace": { "$ref": "#/$defs/surfaceIdentity" },
+        "install": { "$ref": "#/$defs/surfaceIdentity" },
+        "cache": { "$ref": "#/$defs/surfaceIdentity" },
+        "app_registry": { "$ref": "#/$defs/surfaceIdentity" },
+        "discovery": { "$ref": "#/$defs/surfaceIdentity" },
+        "runtime": { "$ref": "#/$defs/surfaceIdentity" },
+        "journey": { "$ref": "#/$defs/surfaceIdentity" }
+      }
+    },
+    "publicEntryObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surface_id",
+        "route",
+        "bypass_attempted",
+        "bypass_rejected",
+        "evidence"
+      ],
+      "properties": {
+        "surface_id": { "const": "PS-ENTRY" },
+        "route": { "const": "harness-ultragoal" },
+        "bypass_attempted": { "type": "boolean" },
+        "bypass_rejected": { "type": "boolean" },
+        "evidence": { "$ref": "#/$defs/v2EvidenceBinding" }
+      }
+    },
+    "realWorkObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "repository_evidence",
+        "task_id",
+        "task",
+        "useful_outcome",
+        "evidence"
+      ],
+      "properties": {
+        "repository_identity": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "repository_evidence": { "$ref": "#/$defs/v2EvidenceBinding" },
+        "task_id": { "type": "string", "minLength": 1 },
+        "task": { "type": "string", "minLength": 1 },
+        "useful_outcome": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/$defs/v2EvidenceBinding" }
+      }
+    },
+    "manualJourneyRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "time_to_verified_value_ms",
+        "human_interventions",
+        "review_rounds",
+        "failure",
+        "diagnosis",
+        "recovery_outcome",
+        "repeat_use_outcome",
+        "retained_artifact_bytes",
+        "retained_cache_bytes",
+        "false_passes",
+        "false_rejections"
+      ],
+      "properties": {
+        "time_to_verified_value_ms": { "type": "integer", "minimum": 0 },
+        "human_interventions": { "type": "integer", "minimum": 0 },
+        "review_rounds": { "type": "integer", "minimum": 0 },
+        "failure": { "type": "string" },
+        "diagnosis": { "type": "string" },
+        "recovery_outcome": { "type": "string", "minLength": 1 },
+        "repeat_use_outcome": { "type": "string", "minLength": 1 },
+        "retained_artifact_bytes": { "type": "integer", "minimum": 0 },
+        "retained_cache_bytes": { "type": "integer", "minimum": 0 },
+        "false_passes": { "type": "integer", "minimum": 0 },
+        "false_rejections": { "type": "integer", "minimum": 0 }
+      }
+    },
     "namedEvidence": {
       "type": "object",
       "required": [
@@ -452,6 +726,37 @@
         "digest": {
           "type": "string",
           "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "v2EvidenceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest",
+        "candidate_id",
+        "same_surface",
+        "current_session"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-fA-F0-9]{64}$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "same_surface": {
+          "const": true
+        },
+        "current_session": {
+          "const": true
         }
       }
     }

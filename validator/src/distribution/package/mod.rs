@@ -3,6 +3,7 @@ mod manifest;
 mod manifest_bind;
 mod materialize;
 mod output;
+mod personal_marketplace_source_observation;
 mod plan;
 mod snapshot;
 mod source;
@@ -15,9 +16,14 @@ pub use materialize::{
     materialize_package, reconcile as reconcile_materialized_tree, rollback_materialization,
     tree_sha256,
 };
+#[cfg(test)]
+pub(crate) use output::output_filename_version;
 pub use output::{
     PackageArtifactBinding, PackageArtifactTransaction, publish_package_artifact,
     reconcile_package_artifact, recover_package_artifact, rollback_package_artifact,
+};
+pub(crate) use personal_marketplace_source_observation::{
+    PERSONAL_MARKETPLACE_SOURCE_RELATIVE, PersonalMarketplaceSourceObservation,
 };
 pub use plan::{
     PackageEffects, PackageEntry, PackagePlan, PackageSnapshot, build_package, plan_package,
@@ -25,9 +31,18 @@ pub use plan::{
 };
 include_production_package_module!();
 #[cfg(not(test))]
+pub(crate) use product::ISOLATED_MARKETPLACE_NAME;
+#[cfg(test)]
+pub(crate) use product::{
+    CandidateCliPayload, ISOLATED_MARKETPLACE_NAME, ProductionPackageArtifact,
+    ProductionPackageErrorId, capture_product_package, capture_product_package_with_cli,
+    verify_product_package,
+};
+#[cfg(not(test))]
 pub use product::{
-    ProductionPackageArtifact, ProductionPackageError, ProductionPackageErrorId,
-    ProductionPackageSession, capture_product_package, verify_product_package,
+    CandidateCliPayload, MarketplaceSourceObservation, ProductionPackageArtifact,
+    ProductionPackageError, ProductionPackageErrorId, ProductionPackageSession,
+    capture_product_package, capture_product_package_with_cli, verify_product_package,
 };
 pub use spec::PackageRole;
 

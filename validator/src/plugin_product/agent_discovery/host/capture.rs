@@ -2,7 +2,7 @@ use super::HostAgentAuthorityRequest;
 use crate::plugin_manifest;
 use crate::plugin_product::agent_discovery::error::{AgentDiscoveryError, AgentDiscoveryErrorId};
 use crate::plugin_product::agent_discovery::filesystem::{
-    digest, parse_descriptor, safe_relative, valid_sha256,
+    digest, parse_descriptor, parse_global_descriptor, safe_relative, valid_sha256,
 };
 use crate::plugin_product::agent_discovery::model::{
     AgentAuthorityLayer, AgentLayerObservation, HostFileKind, PLUGIN_NAME, PluginManifest,
@@ -123,11 +123,35 @@ fn verify_catalog(
         if digest(row.descriptor_toml.as_bytes()) != row.descriptor_sha256 {
             return Err(conflict());
         }
-        if harness_agent_authority_namespace(&row.name) {
-            return Err(AgentDiscoveryError::new(
-                AgentDiscoveryErrorId::LegacyAuthorityActive,
-            ));
+        if expected_layer == AgentAuthorityLayer::Global {
+            if row.manifest_path != format!(".codex/agents/{}.toml", row.name) {
+                return Err(conflict());
+            }
+            let descriptor =
+                parse_global_descriptor(row.descriptor_toml.as_bytes()).map_err(|error| {
+                    if error.id() == AgentDiscoveryErrorId::InputTooLarge {
+                        error
+                    } else {
+                        conflict()
+                    }
+                })?;
+            if normalized_name(&descriptor.name) != normalized_name(&row.name) {
+                return Err(conflict());
+            }
+            // Global descriptors are collision-only evidence. A present sandbox
+            // value is parsed and bounded, but never grants or withholds effects.
+            let _ = descriptor.sandbox_mode.as_deref();
+            let normalized_name = normalized_name(&row.name);
+            if canonical_normalized.contains(&normalized_name)
+                || closed_wrapper_alias(&normalized_name)
+            {
+                return Err(AgentDiscoveryError::new(
+                    AgentDiscoveryErrorId::CollidingAuthorityActive,
+                ));
+            }
+            continue;
         }
+
         let descriptor = parse_descriptor(row.descriptor_toml.as_bytes()).map_err(|error| {
             if error.id() == AgentDiscoveryErrorId::InputTooLarge {
                 error
@@ -142,16 +166,6 @@ fn verify_catalog(
             return Err(AgentDiscoveryError::new(
                 AgentDiscoveryErrorId::SandboxPolicyRejected,
             ));
-        }
-
-        if expected_layer == AgentAuthorityLayer::Global {
-            let normalized_name = normalized_name(&row.name);
-            if canonical_normalized.contains(&normalized_name) {
-                return Err(AgentDiscoveryError::new(
-                    AgentDiscoveryErrorId::CollidingAuthorityActive,
-                ));
-            }
-            continue;
         }
 
         let expected_row = expected.get(&row.name).ok_or_else(conflict)?;
@@ -209,18 +223,8 @@ fn normalized_name(value: &str) -> String {
         .collect()
 }
 
-fn harness_agent_authority_namespace(value: &str) -> bool {
-    value
-        .strip_prefix("harness")
-        .and_then(|suffix| suffix.strip_prefix(['-', '_']))
-        .is_some_and(|suffix| {
-            !suffix.is_empty()
-                && suffix.bytes().all(|byte| {
-                    byte.is_ascii_lowercase()
-                        || byte.is_ascii_digit()
-                        || matches!(byte, b'-' | b'_')
-                })
-        })
+fn closed_wrapper_alias(normalized: &str) -> bool {
+    matches!(normalized, "harness" | "ultragoal" | "harnessultragoal")
 }
 
 fn conflict() -> AgentDiscoveryError {

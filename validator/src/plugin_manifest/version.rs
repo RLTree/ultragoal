@@ -68,6 +68,25 @@ impl Version {
             (Some(left), Some(right)) => compare_prerelease(left, right),
         }
     }
+
+    pub(crate) fn parse_codex_plugin(value: &str) -> Option<Self> {
+        let parsed = Self::parse(value)?;
+        let Some((_, build)) = value.split_once('+') else {
+            return Some(parsed);
+        };
+        let cachebuster = build.strip_prefix("codex.")?;
+        normalized_cachebuster(cachebuster).then_some(parsed)
+    }
+}
+
+fn normalized_cachebuster(value: &str) -> bool {
+    !value.is_empty()
+        && !value.starts_with('-')
+        && !value.ends_with('-')
+        && !value.contains("--")
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-')
 }
 
 impl Numeric {
@@ -97,10 +116,8 @@ fn parse_identifiers(value: &str, strict_numeric: bool) -> Option<Vec<Identifier
             {
                 return None;
             }
-            if part.bytes().all(|byte| byte.is_ascii_digit()) {
-                if strict_numeric {
-                    return Numeric::parse(part).map(Identifier::Numeric);
-                }
+            if strict_numeric && part.bytes().all(|byte| byte.is_ascii_digit()) {
+                return Numeric::parse(part).map(Identifier::Numeric);
             }
             Some(Identifier::Text(part.to_owned()))
         })
@@ -183,5 +200,28 @@ mod tests {
                 .precedence_cmp(&Version::parse("1.2.3+two").unwrap()),
             Ordering::Equal
         );
+    }
+
+    #[test]
+    fn codex_plugin_versions_accept_only_one_normalized_cachebuster() {
+        for valid in [
+            "0.0.39",
+            "0.0.39+codex.20260820190706",
+            "1.2.3-beta.1+codex.local-20260824-120000",
+        ] {
+            assert!(Version::parse_codex_plugin(valid).is_some(), "{valid}");
+        }
+        for invalid in [
+            "0.0.39+other.token",
+            "0.0.39+codex.",
+            "0.0.39+codex.-token",
+            "0.0.39+codex.token-",
+            "0.0.39+codex.two--hyphens",
+            "0.0.39+codex.UPPER",
+            "0.0.39+codex.two.parts",
+            "0.0.39+codex.token+extra",
+        ] {
+            assert!(Version::parse_codex_plugin(invalid).is_none(), "{invalid}");
+        }
     }
 }

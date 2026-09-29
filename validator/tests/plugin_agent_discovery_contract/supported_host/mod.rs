@@ -1,8 +1,8 @@
-use crate::agent_discovery::{
+use super::super::{
     AgentAuthorityLayer, AgentDiscoveryErrorId, AgentDiscoverySession,
     SupportedAgentAuthorityFindingKind, SupportedHostAgentAuthorityReader,
 };
-use crate::authority_fixtures::{
+use super::authority_fixtures::{
     SupportedHostFixture, TempRepo, canonical_names, descriptor, tree_snapshot,
 };
 use std::collections::BTreeSet;

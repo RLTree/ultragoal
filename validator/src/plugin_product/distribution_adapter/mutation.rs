@@ -9,7 +9,7 @@ pub(super) enum Surface {
 pub(super) enum Mutation {
     Installed {
         surface: Surface,
-        transaction: InstallTransaction,
+        transaction: Box<InstallTransaction>,
     },
     Removed {
         surface: Surface,

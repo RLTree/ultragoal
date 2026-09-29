@@ -1,28 +1,29 @@
 use super::*;
 
+pub struct SemanticEventInput {
+    pub context_id: String,
+    pub candidate_id: String,
+    pub source_id: String,
+    pub event_id: String,
+    pub observed_at_unix_ms: u64,
+    pub sequence: u64,
+    pub operation: String,
+    pub outcome: String,
+}
+
 impl SemanticEvent {
-    #[allow(clippy::too_many_arguments)]
-    pub fn new(
-        context_id: impl Into<String>,
-        candidate_id: impl Into<String>,
-        source_id: impl Into<String>,
-        event_id: impl Into<String>,
-        observed_at_unix_ms: u64,
-        sequence: u64,
-        operation: impl Into<String>,
-        outcome: impl Into<String>,
-    ) -> Result<Self, String> {
+    pub fn new(input: SemanticEventInput) -> Result<Self, String> {
         let event = Self {
             schema_version: EVENT_SCHEMA.to_owned(),
-            event_id: event_id.into(),
-            context_id: context_id.into(),
-            candidate_id: candidate_id.into(),
-            source_id: source_id.into(),
-            observed_at_unix_ms,
-            sequence,
+            event_id: input.event_id,
+            context_id: input.context_id,
+            candidate_id: input.candidate_id,
+            source_id: input.source_id,
+            observed_at_unix_ms: input.observed_at_unix_ms,
+            sequence: input.sequence,
             parent_event_id: None,
-            operation: operation.into(),
-            outcome: outcome.into(),
+            operation: input.operation,
+            outcome: input.outcome,
             duration_ms: None,
             selected_work: None,
             reused_work: None,
@@ -44,18 +45,17 @@ impl SemanticEvent {
         operation: impl Into<String>,
         outcome: impl Into<String>,
     ) -> Result<Self, String> {
-        Self::new(
-            context.context_id(),
-            super::super::binding::candidate_id(context)?,
-            source_id,
-            event_id,
+        Self::new(SemanticEventInput {
+            context_id: context.context_id().to_owned(),
+            candidate_id: super::super::binding::candidate_id(context)?,
+            source_id: source_id.into(),
+            event_id: event_id.into(),
             observed_at_unix_ms,
             sequence,
-            operation,
-            outcome,
-        )
+            operation: operation.into(),
+            outcome: outcome.into(),
+        })
     }
-    #[allow(clippy::too_many_arguments)]
     pub fn from_captured_run(
         run: &CapturedRun,
         source_id: impl Into<String>,
@@ -65,16 +65,16 @@ impl SemanticEvent {
         operation: impl Into<String>,
         outcome: impl Into<String>,
     ) -> Result<Self, String> {
-        let mut event = Self::new(
-            run.observed_context_id(),
-            run.candidate_id(),
-            source_id,
-            event_id,
+        let mut event = Self::new(SemanticEventInput {
+            context_id: run.observed_context_id().to_owned(),
+            candidate_id: run.candidate_id().to_owned(),
+            source_id: source_id.into(),
+            event_id: event_id.into(),
             observed_at_unix_ms,
             sequence,
-            operation,
-            outcome,
-        )?;
+            operation: operation.into(),
+            outcome: outcome.into(),
+        })?;
         event.set_duration_ms(run.monotonic_duration_ns() / 1_000_000)?;
         Ok(event)
     }
@@ -184,5 +184,8 @@ impl SemanticEvent {
     }
     pub fn outcome(&self) -> &str {
         &self.outcome
+    }
+    pub fn public_attributes(&self) -> &BTreeMap<String, String> {
+        &self.public_attributes
     }
 }

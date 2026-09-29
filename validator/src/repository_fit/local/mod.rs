@@ -39,7 +39,7 @@ impl LocalRepository {
     pub fn open(root: impl AsRef<Path>) -> Result<Self, FitError> {
         #[cfg(unix)]
         {
-            return unix::Workspace::open(root.as_ref()).map(|inner| Self { inner });
+            unix::Workspace::open(root.as_ref()).map(|inner| Self { inner })
         }
         #[cfg(not(unix))]
         {
@@ -53,7 +53,7 @@ impl FitReader for LocalRepository {
     fn root_binding(&mut self) -> Result<String, FitError> {
         #[cfg(unix)]
         {
-            return self.inner.root_binding();
+            self.inner.root_binding()
         }
         #[cfg(not(unix))]
         {
@@ -68,7 +68,7 @@ impl FitReader for LocalRepository {
     ) -> Result<Option<Vec<u8>>, FitError> {
         #[cfg(unix)]
         {
-            return self.inner.read_file(path, maximum_bytes);
+            self.inner.read_file(path, maximum_bytes)
         }
         #[cfg(not(unix))]
         {

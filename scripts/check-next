@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:---quick}"
+case "$mode" in --quick|--full) ;; *) echo 'usage: scripts/check-next --quick|--full REPO' >&2; exit 2;; esac
+root="${2:-${CODEX_WORKTREE_PATH:-$PWD}}"
+cd "$root"
+engine="$root/engines/ultragoal-next"
+test -f "$engine/Cargo.toml" || { echo 'Next engine absent' >&2; exit 2; }
+echo "check-next $mode: exact local source/build, material ownership and offline behavior; no install, provider or host acceptance" >&2
+cd "$engine"
+export CARGO_TARGET_DIR="$engine/target"
+python3 verify_identity.py
+python3 check_ownership.py
+cargo test --manifest-path "$root/engines/ultragoal-legibility/Cargo.toml" --locked --offline
+export UG_BINARY="$engine/target/release/ultragoal"
+cargo test --locked --offline
+python3 -m unittest discover -s tests -p source_inventory_test.py
+python3 -m unittest discover -s tests -p package_guard.py
+python3 -m unittest discover -s tests -p migration_guard.py
+python3 -m unittest discover -s tests -p ownership_negative.py
+python3 -m unittest discover -s tests -p query_revisions.py
+python3 -m unittest discover -s tests -p provider_key_boundary.py
+if [[ "$mode" == --full ]]; then
+  bend PROOF.bend --check-only
+  python3 -m unittest discover -s tests -p retained_session.py
+  python3 -m unittest discover -s tests -p stream_capture.py
+  python3 -m unittest discover -s tests -p context_journey.py
+  python3 -m unittest discover -s tests -p semantic_materials.py
+  python3 -m unittest discover -s tests -p native_observation.py
+  python3 -m unittest discover -s tests -p verify_large_source.py
+  python3 -m unittest discover -s tests -p stream.py
+  python3 -m unittest discover -s tests -p journey.py
+  python3 -m unittest discover -s tests -p fit_journey.py
+  python3 tests/proofs.py
+  python3 tests/chunk_differential.py 120 20260928
+fi

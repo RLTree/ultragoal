@@ -42,6 +42,9 @@ mod selection_order;
 #[path = "source_ancestor_capture.rs"]
 mod source_ancestor_capture;
 
+#[cfg(test)]
+mod tests;
+
 pub(crate) use catalog_contract::*;
 pub(crate) use catalog_path_normalization::*;
 pub(crate) use catalog_validation::*;

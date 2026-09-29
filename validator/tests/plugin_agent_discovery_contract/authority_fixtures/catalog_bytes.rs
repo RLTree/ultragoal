@@ -48,10 +48,6 @@ pub fn catalog_bytes(
     .unwrap()
 }
 
-pub fn replace_source_file(path: &Path, bytes: &[u8]) {
-    fs::write(path, bytes).unwrap();
-}
-
 pub fn tree_snapshot(root: &Path) -> Vec<(String, String)> {
     let mut rows = walkdir::WalkDir::new(root)
         .follow_links(false)

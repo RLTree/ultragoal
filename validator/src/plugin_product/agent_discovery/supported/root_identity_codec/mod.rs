@@ -7,6 +7,7 @@ pub(super) enum RootIdentityCodecRequest<'a> {
         cache: &'a str,
         global: &'a str,
         project: &'a str,
+        registry_observation_sha256: &'a str,
     },
     PluginRoot {
         root: &'a str,
@@ -49,13 +50,15 @@ pub(super) fn encode(
             cache,
             global,
             project,
+            registry_observation_sha256,
         } => serde_json::to_vec(&(
-            "SupportedHostAgentRoots-v1",
+            "SupportedHostAgentRoots-v2",
             package,
             installed,
             cache,
             global,
             project,
+            registry_observation_sha256,
         )),
         RootIdentityCodecRequest::PluginRoot {
             root,
