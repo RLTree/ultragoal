@@ -177,7 +177,7 @@ fn read(path: &Path, limit: usize) -> Result<Vec<u8>, String> {
 fn read_bound(path: &Path, limit: usize) -> Result<(Vec<u8>, String), String> {
     let mut f = OpenOptions::new()
         .read(true)
-        .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC)
+        .custom_flags(libc::O_NOFOLLOW | libc::O_CLOEXEC | libc::O_NONBLOCK)
         .open(path)
         .map_err(|e| format!("open {}: {e}", path.display()))?;
     let m = f.metadata().map_err(|e| e.to_string())?;
@@ -1334,9 +1334,10 @@ fn native_syntax(args: &[String], language: &str) -> Result<(Value, i32), String
     };
     let tool = fs::canonicalize(&tool)
         .map_err(|_| format!("{language} native parser unavailable at {tool}"))?;
-    if let Some(module) = &extra {
-        fs::canonicalize(module).map_err(|_| format!("{language} parser module unavailable at {module}"))?;
-    }
+    let extra = extra.map(|module| {
+        fs::canonicalize(&module)
+            .map_err(|_| format!("{language} parser module unavailable at {module}"))
+    }).transpose()?;
     let mut command = Command::new(&tool);
     command.env_clear().env("PATH", "/usr/bin:/bin");
     if language == "python" {
@@ -1349,7 +1350,7 @@ fn native_syntax(args: &[String], language: &str) -> Result<(Value, i32), String
     }
     native_observation::Pending::issue(
         if language=="python" {"python-ast"} else {"typescript-parse"},
-        command,Path::new(&input),bytes,extra.as_deref().map(Path::new),
+        command,Path::new(&input),bytes,extra.as_deref(),
     )?.execute()
 }
 

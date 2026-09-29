@@ -25,6 +25,12 @@ impl Repository {
         git(&root, &["init", "-q"]);
         git(&root, &["config", "user.email", "public@example.invalid"]);
         git(&root, &["config", "user.name", "Successor Public"]);
+        // The snapshot oracle includes .git byte-for-byte. Keep Git's own
+        // asynchronous housekeeping out of this short-lived repository.
+        git(&root, &["config", "gc.auto", "0"]);
+        git(&root, &["config", "maintenance.auto", "false"]);
+        git(&root, &["config", "core.fsmonitor", "false"]);
+        git(&root, &["config", "core.untrackedCache", "false"]);
         copy_authority_inputs(&live, &root);
         git(&root, &["add", "-A"]);
         git(&root, &["commit", "-qm", "fixture"]);
@@ -76,6 +82,10 @@ impl Repository {
         git(&root, &["init", "-q"]);
         git(&root, &["config", "user.email", "public@example.invalid"]);
         git(&root, &["config", "user.name", "Successor Public"]);
+        git(&root, &["config", "gc.auto", "0"]);
+        git(&root, &["config", "maintenance.auto", "false"]);
+        git(&root, &["config", "core.fsmonitor", "false"]);
+        git(&root, &["config", "core.untrackedCache", "false"]);
         copy_authority_inputs(&live, &root);
         git(&root, &["add", "-A"]);
         git(&root, &["commit", "-qm", "fixture"]);
@@ -186,7 +196,8 @@ pub(super) fn tree(root: &Path) -> Vec<(String, Vec<u8>)> {
         for entry in entries {
             let path = entry.path();
             let relative = path.strip_prefix(root).unwrap().to_string_lossy();
-            let metadata = fs::symlink_metadata(&path).unwrap();
+            let metadata = fs::symlink_metadata(&path)
+                .unwrap_or_else(|error| panic!("snapshot entry {} vanished: {error}", path.display()));
             if metadata.is_dir() {
                 rows.push((format!("directory:{relative}"), Vec::new()));
                 collect(root, &path, rows);

@@ -125,7 +125,7 @@ def retry_result(ok: Bool) -> String:
 def retry(r: W.Record) -> String:
   match r:
     case W.Row{+status <> remaining <> time <> state <> Nil{}}:
-      retry_result((String.eq(status,"not-sent") || String.eq(status,"429") || String.eq(status,"500") || String.eq(status,"502") || String.eq(status,"503") || String.eq(status,"504")) && nonzero(U32.read(remaining)) && Bool.not(within(U32.read(time),49)) && String.eq(state,"running"))
+      retry_result((String.eq(status,"not-sent") || String.eq(status,"429") || String.eq(status,"500") || String.eq(status,"502") || String.eq(status,"503") || String.eq(status,"504")) && nonzero(U32.read(remaining)) && at_least(U32.read(time),50) && String.eq(state,"running"))
     case _: "STOP\n"
 
 def proof_lines(lines: List<&2,String>) -> Bool:

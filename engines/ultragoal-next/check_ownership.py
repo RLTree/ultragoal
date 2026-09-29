@@ -10,11 +10,11 @@ from functools import lru_cache
 from pathlib import Path
 import subprocess
 import sys
-from source_inventory import hashes, paths as authored_paths
+from source_inventory import admitted_bytes, hashes, rust_parse_limit, stream_digest
 
 EFFECTS = {'filesystem', 'process', 'environment', 'structured_input'}
 STRUCTURAL_SOURCE = Path(__file__).resolve().parent.parent / 'ultragoal-legibility'
-STRUCTURAL_PROVENANCE_SHA256 = '1beee07b98975acea7321d6c1c36fa4506e105734f9ee79af6f93c48fa08bb50'
+STRUCTURAL_PROVENANCE_SHA256 = 'e201f38ecfcfbddf78851eeeebb2ae06b621db1a135a0c18033007c8996b9e06'
 LIBC_EFFECTS = {'libc::open', 'libc::openat', 'libc::close', 'libc::closedir', 'libc::fdopendir',
                 'libc::fstatat', 'libc::readdir', 'libc::kill', 'libc::signal', 'libc::setsockopt',
                 'libc::flock', 'libc::host_statistics64', 'libc::mach_host_self',
@@ -78,14 +78,13 @@ def strict_json(text):
 
 def structural_audit(root):
     """Run the pinned project-owned structural engine, never a plugin cache."""
-    provenance = (STRUCTURAL_SOURCE / 'UPSTREAM_PROVENANCE.json').read_bytes()
+    provenance = admitted_bytes(STRUCTURAL_SOURCE / 'UPSTREAM_PROVENANCE.json', rust_parse_limit())
     if hashlib.sha256(provenance).hexdigest() != STRUCTURAL_PROVENANCE_SHA256:
         raise ValueError('structural analyzer provenance differs from UG-pinned identity')
     manifest = strict_json(provenance.decode())
     expected = manifest['source_files']
-    actual = {path.relative_to(STRUCTURAL_SOURCE).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
-              for path in authored_paths(STRUCTURAL_SOURCE)
-              if path.name != 'UPSTREAM_PROVENANCE.json'}
+    actual = hashes(STRUCTURAL_SOURCE, expected_paths=set(expected) | {'UPSTREAM_PROVENANCE.json'})
+    actual.pop('UPSTREAM_PROVENANCE.json')
     if not isinstance(expected, dict) or actual != expected:
         raise ValueError('structural analyzer source or lock differs from pinned provenance')
     qualified = manifest['qualified_binary']
@@ -101,7 +100,7 @@ def structural_audit(root):
                                capture_output=True, text=True)
         if built.returncode:
             raise ValueError(f'structural analyzer build unavailable ({built.returncode}): {built.stderr[-300:]}')
-    if binary.is_symlink() or hashlib.sha256(binary.read_bytes()).hexdigest() != qualified['sha256']:
+    if binary.is_symlink() or stream_digest(binary) != qualified['sha256']:
         raise ValueError('structural analyzer binary differs from qualified source/toolchain build')
     observed = subprocess.run([str(binary), '--root', str(root), '--inventory'], capture_output=True, text=True)
     if observed.returncode not in (0, 1):
@@ -277,6 +276,15 @@ def canonical_direct(path, call, aliases):
 
 def check(root: Path):
     audit = structural_audit(root)
+    required = [finding for finding in audit['failures']
+                if finding.split(':', 1)[0] not in ADVISORY_EJ]
+    if required:
+        # In particular, resource-pressure and unavailable-source findings
+        # precede every Python source hash or token read.
+        return {'schema': 'ultragoal-material-ownership/1', 'passed': False,
+                'effects': 0, 'dependencies': 0, 'strict_ej_passed': audit['passed'],
+                'strict_ej_findings': len(audit['failures']),
+                'failures': [f'EJ required: {finding}' for finding in required]}
     inventory = audit['inventory']
     if not isinstance(inventory.get('rust'), list) or not isinstance(inventory.get('files'), list):
         raise ValueError('EJ Rust/source inventory incomplete')

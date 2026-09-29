@@ -1,6 +1,11 @@
 """Exact root-relative authored and build-generated inputs for build and package."""
 from __future__ import annotations
 import hashlib
+import os
+import re
+import stat
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT_CACHE_DIRS = frozenset({'target', '.ruff_cache'})
@@ -10,6 +15,79 @@ GENERATED = {
 }
 
 SOURCE_MACROS = frozenset({'include', 'include_str', 'include_bytes'})
+
+def rust_parse_limit() -> int:
+    """Admit the expanding token scan only when current host memory can hold it."""
+    try:
+        physical = os.sysconf('SC_PHYS_PAGES') * os.sysconf('SC_PAGE_SIZE')
+        if sys.platform == 'darwin':
+            result = subprocess.run(['/usr/bin/vm_stat'], capture_output=True, text=True,
+                                    check=True, timeout=2)
+            page = int(re.search(r'page size of (\d+) bytes', result.stdout).group(1))
+            counts = {name: int(re.search(rf'^Pages {name}:\s*(\d+)\.', result.stdout,
+                                          re.MULTILINE).group(1))
+                      for name in ('free', 'inactive', 'speculative')}
+            available = sum(counts.values()) * page
+        elif sys.platform.startswith('linux'):
+            available = int(re.search(r'^MemAvailable:\s*(\d+) kB',
+                                      Path('/proc/meminfo').read_text(), re.MULTILINE).group(1)) * 1024
+        else:
+            raise ValueError('unsupported host')
+    except (OSError, ValueError, AttributeError, subprocess.SubprocessError) as error:
+        raise ValueError(f'source_headroom_unavailable: {error}') from error
+    # Token tuples and decoded text can multiply the source bytes manyfold.
+    limit = max(0, available - physical // 8) // 64
+    if not limit:
+        raise ValueError('source_resource_pressure: Rust token headroom unavailable')
+    return limit
+
+def signature(info: os.stat_result) -> tuple[int, int, int, int, int]:
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+def source_fd(path: Path) -> tuple[int, os.stat_result]:
+    flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NONBLOCK | os.O_NOFOLLOW
+    fd = os.open(path, flags)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or signature(path.lstat()) != signature(info):
+            raise ValueError(f'source_changed_or_not_regular: {path}')
+        return fd, info
+    except BaseException:
+        os.close(fd)
+        raise
+
+def admitted_bytes(path: Path, limit: int) -> bytes:
+    info = path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
+        raise ValueError(f'source_resource_pressure: {path}: bytes={info.st_size}:headroom={limit}')
+    fd, opened = source_fd(path)
+    with os.fdopen(fd, 'rb') as stream:
+        data = stream.read(limit + 1)
+        after = os.fstat(stream.fileno())
+    if len(data) > limit:
+        raise ValueError(f'source_resource_pressure: {path}: bytes>{limit}')
+    if len(data) != opened.st_size or signature(after) != signature(opened) or signature(path.lstat()) != signature(opened):
+        raise ValueError(f'source_changed: {path}')
+    return data
+
+def rust_text(path: Path, limit: int) -> str:
+    try:
+        return admitted_bytes(path, limit).decode('utf-8')
+    except UnicodeError as error:
+        raise ValueError(f'source_not_utf8: {path}') from error
+
+def stream_digest(path: Path) -> str:
+    fd, opened = source_fd(path)
+    digest = hashlib.sha256()
+    count = 0
+    with os.fdopen(fd, 'rb') as stream:
+        while chunk := stream.read(1024 * 1024):
+            count += len(chunk)
+            digest.update(chunk)
+        after = os.fstat(stream.fileno())
+    if count != opened.st_size or signature(after) != signature(opened) or signature(path.lstat()) != signature(opened):
+        raise ValueError(f'source_changed: {path}')
+    return digest.hexdigest()
 
 def rust_tokens(source: str):
     """Small Rust token reader for source-bearing attributes and macros only."""
@@ -94,8 +172,8 @@ def enclosed(tokens, start, opening, closing):
         end += 1
     raise ValueError('unclosed Rust source-bearing construct')
 
-def checked_rust_inputs(path: Path, included: set[Path]):
-    tokens = rust_tokens(path.read_text())
+def checked_rust_inputs(path: Path, included: set[Path], limit: int):
+    tokens = rust_tokens(rust_text(path, limit))
     def bind(literal):
         if '\\' in literal or '\0' in literal:
             raise ValueError(f'unresolved Rust source input: {path}: {literal}')
@@ -132,7 +210,7 @@ def checked_rust_inputs(path: Path, included: set[Path]):
             continue
         i += 1
 
-def paths(root: Path) -> list[Path]:
+def paths(root: Path, expected_paths: set[str] | None = None) -> list[Path]:
     root = root.resolve(strict=True)
     found: list[Path] = []
     def visit(directory: Path) -> None:
@@ -153,12 +231,19 @@ def paths(root: Path) -> list[Path]:
     # Every explicit Rust source-bearing input must be among the enumerated
     # files. This covers all excluded cache classes and outside-root paths;
     # computed forms fail closed until a real generator/input mapping owns them.
+    if expected_paths is not None:
+        actual = {path.relative_to(root).as_posix() for path in found}
+        if actual != expected_paths:
+            changed = sorted(actual ^ expected_paths)
+            raise ValueError('stale build source membership: ' + ', '.join(changed[:12]))
     included = set(found)
-    for path in found:
-        if path.suffix == '.rs': checked_rust_inputs(path, included)
+    rust = [path for path in found if path.suffix == '.rs']
+    limit = rust_parse_limit() if rust else 0
+    for path in rust:
+        checked_rust_inputs(path, included, limit)
     return found
 
-def hashes(root: Path) -> dict[str, str]:
+def hashes(root: Path, expected_paths: set[str] | None = None) -> dict[str, str]:
     root = root.resolve(strict=True)
-    return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in paths(root)}
+    return {p.relative_to(root).as_posix(): stream_digest(p)
+            for p in paths(root, expected_paths)}

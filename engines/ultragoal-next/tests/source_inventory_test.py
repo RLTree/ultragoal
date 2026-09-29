@@ -1,9 +1,13 @@
 """Source identity admits authored inputs, not caches or source-root artifact aliases."""
+import json
 import pathlib
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 from source_inventory import GENERATED, hashes
+import check_ownership
+import verify_identity
 
 
 class SourceInventory(unittest.TestCase):
@@ -17,6 +21,47 @@ class SourceInventory(unittest.TestCase):
 
     def tearDown(self):
         self.tmp.cleanup()
+
+    def test_expected_membership_rejects_sparse_unlisted_rust_before_token_read(self):
+        expected = hashes(self.root)
+        (self.root / 'oversized.rs').touch()
+        with (self.root / 'oversized.rs').open('r+b') as sparse:
+            sparse.truncate(1 << 40)
+        with mock.patch('source_inventory.checked_rust_inputs', side_effect=AssertionError('token read')):
+            with self.assertRaisesRegex(ValueError, 'stale build source membership: oversized.rs'):
+                hashes(self.root, expected_paths=set(expected))
+        release = self.root / 'target/release'
+        release.mkdir(parents=True)
+        (release / 'identity.json').write_text(json.dumps({'source': expected}))
+        with mock.patch.object(verify_identity, 'ROOT', self.root), mock.patch.object(verify_identity, 'RELEASE', release), mock.patch('source_inventory.checked_rust_inputs', side_effect=AssertionError('token read')):
+            with self.assertRaisesRegex(ValueError, 'stale build source membership: oversized.rs'):
+                verify_identity.verify()
+
+    def test_rust_token_admission_precedes_open_and_hashes_stream(self):
+        source = self.root / 'large.rs'
+        source.write_text(' ' * 4096)
+        with mock.patch('source_inventory.rust_parse_limit', return_value=1024), mock.patch('source_inventory.source_fd', side_effect=AssertionError('source opened')):
+            with self.assertRaisesRegex(ValueError, 'source_resource_pressure: .*large.rs'):
+                hashes(self.root)
+        source.unlink()
+        with mock.patch.object(pathlib.Path, 'read_bytes', side_effect=AssertionError('whole-file read')):
+            self.assertEqual(hashes(self.root), hashes(self.root, expected_paths={'Rule.bend', 'tests/meaning.py'}))
+
+    def test_sparse_identity_metadata_is_refused_before_json_read(self):
+        release = self.root / 'target/release'
+        release.mkdir(parents=True)
+        with (release / 'identity.json').open('wb') as sparse:
+            sparse.truncate(1 << 40)
+        with mock.patch.object(verify_identity, 'ROOT', self.root), mock.patch.object(verify_identity, 'RELEASE', release), mock.patch.object(verify_identity, 'rust_parse_limit', return_value=1024), mock.patch('source_inventory.source_fd', side_effect=AssertionError('identity opened')):
+            with self.assertRaisesRegex(ValueError, 'source_resource_pressure: .*identity.json'):
+                verify_identity.verify()
+
+    def test_required_analyzer_pressure_stops_before_python_source_hashes(self):
+        audit = {'passed': False, 'failures': ['inventory_resource_pressure:oversized.rs:bytes=1099511627776'], 'inventory': {}}
+        with mock.patch.object(check_ownership, 'structural_audit', return_value=audit), mock.patch.object(check_ownership, 'hashes', side_effect=AssertionError('source hash')):
+            result = check_ownership.check(self.root)
+        self.assertFalse(result['passed'])
+        self.assertIn('EJ required: inventory_resource_pressure:oversized.rs', result['failures'][0])
 
     def test_authored_changes_bind_and_caches_do_not(self):
         before = hashes(self.root)

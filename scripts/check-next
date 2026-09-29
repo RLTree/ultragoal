@@ -17,6 +17,7 @@ export UG_BINARY="$engine/target/release/ultragoal"
 cargo test --locked --offline
 python3 -m unittest discover -s tests -p source_inventory_test.py
 python3 -m unittest discover -s tests -p package_guard.py
+python3 -m unittest discover -s tests -p migration_guard.py
 python3 -m unittest discover -s tests -p ownership_negative.py
 python3 -m unittest discover -s tests -p query_revisions.py
 python3 -m unittest discover -s tests -p provider_key_boundary.py

@@ -484,31 +484,39 @@ fn serve_request(
         return Err("session binding changed before dispatch".into());
     }
     let watched = stream.try_clone().map_err(|e| e.to_string())?;
+    let departed_or_extra = |socket: &UnixStream| {
+        let mut byte = 0u8;
+        let observed = unsafe {
+            libc::recv(socket.as_raw_fd(), (&mut byte as *mut u8).cast(), 1,
+                       libc::MSG_PEEK | libc::MSG_DONTWAIT)
+        };
+        observed >= 0 || !matches!(std::io::Error::last_os_error().kind(),
+                                   ErrorKind::WouldBlock | ErrorKind::Interrupted)
+    };
     let done = Arc::new(AtomicBool::new(false));
     let stopped = done.clone();
+    let disconnected = Arc::new(AtomicBool::new(false));
+    let watcher_disconnected = disconnected.clone();
     let watcher = std::thread::spawn(move || {
         while !stopped.load(Ordering::SeqCst) {
-            let mut b = 0u8;
-            let n = unsafe {
-                libc::recv(
-                    watched.as_raw_fd(),
-                    (&mut b as *mut u8).cast(),
-                    1,
-                    libc::MSG_PEEK | libc::MSG_DONTWAIT,
-                )
-            };
-            if n >= 0 {
-                INTERRUPTED.store(true, Ordering::SeqCst);
+            if departed_or_extra(&watched) {
+                watcher_disconnected.store(true, Ordering::SeqCst);
                 break;
             }
             wait_readable(watched.as_raw_fd(), 1);
         }
     });
-    let answer = core_session::request_local(frames, index, deadline, limit);
+    let answer = core_session::request_local_with_cancel(frames, index, deadline, limit, Some(&disconnected));
     done.store(true, Ordering::SeqCst);
     watcher
         .join()
         .map_err(|_| "session disconnect watcher panicked")?;
+    if disconnected.load(Ordering::SeqCst) || departed_or_extra(&stream) {
+        // A client may leave while its own request is in flight. The request's
+        // core is retired before its unobserved result can be reused.
+        core_session::abandon_local()?;
+        return Ok(());
+    }
     let answer = answer?;
     active(deadline)?;
     if !root.binding_current(root_identity)
@@ -517,12 +525,16 @@ fn serve_request(
     {
         return Err("session binding changed before publication".into());
     }
-    write_header(
+    let published = write_header(
         &mut stream,
         &json!({"schema":"ultragoal-session-response/1","incarnation":meta["incarnation"],"instance":id,"sequence":sequence,"core_pid":core_session::observed_pid()}),
         deadline,
-    )?;
-    write_bytes(&mut stream, &answer, deadline)
+    ).and_then(|_| write_bytes(&mut stream, &answer, deadline));
+    if published.is_err() && departed_or_extra(&stream) {
+        core_session::abandon_local()?;
+        return Ok(());
+    }
+    published
 }
 fn seconds(args: &[String], flag: &str, (default, least, most): (u64, u64, u64)) -> Result<u64, String> {
     option(args, flag)?.map_or(Ok(default), |v| {

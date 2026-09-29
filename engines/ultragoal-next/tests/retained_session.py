@@ -1,5 +1,5 @@
 """Real foreground owner / fresh frontend integration; no provider access."""
-import json,os,pathlib,selectors,subprocess,tempfile,unittest,shutil
+import json,os,pathlib,selectors,subprocess,tempfile,unittest,shutil,socket,signal,time
 from journey import BIN,obligation
 
 class RetainedSession(unittest.TestCase):
@@ -21,6 +21,18 @@ class RetainedSession(unittest.TestCase):
  def test_fresh_frontends_use_same_core_and_revalidate_changes(self):
   self.start();a,pa=self.check();b,pb=self.check();self.assertNotEqual(pa,pb);self.assertEqual(a['computation_session']['core_pid'],b['computation_session']['core_pid']);self.assertEqual(a['computation_session']['owner_pid'],self.owner.pid);self.assertEqual(b['computation_session']['frontend_pid'],pb);self.assertEqual(b['obligations'][0]['computation'],'reused');self.assertEqual(a['work']['parsed'],1);self.assertEqual(b['work']['parsed'],0);self.assertEqual(b['work']['reused_in_core'],1);self.assertEqual(a['work']['graph_invalidated'],2);self.assertEqual(b['work']['graph_invalidated'],0)
   (self.root/'a.py').write_text('# import pathlib\n');changed,_=self.check(expected=1);cold,_=self.check(session=False,expected=1);self.assertEqual(changed['obligations'][0]['state'],cold['obligations'][0]['state']);self.assertEqual(changed['obligations'][0]['computation'],'computed');self.assertEqual(changed['work']['disk_results_admitted'],0)
+ def test_client_disconnect_and_extra_bytes_cancel_only_that_request(self):
+  self.start();before,_=self.check();handle=json.loads(self.handle.read_text())
+  def frame(body):return len(body).to_bytes(8,'big')+body
+  for extra in (b'',b'extra'):
+   request={'schema':'ultragoal-session-request/1','incarnation':handle['incarnation'],'workspace_identity':handle['workspace_identity'],'core_sha256':handle['core_sha256'],'instance':os.urandom(16).hex(),'sequence':0,'index':False,'frames':1,'output_limit':4096,'remaining_ms':5000}
+   with socket.socket(socket.AF_UNIX) as client:
+    client.connect(handle['endpoint']);client.sendall(frame(json.dumps(request,separators=(',',':')).encode())+frame(b'EXCLUSIONS\n')+extra)
+   time.sleep(.1)
+   if self.owner.poll() is not None:
+    out,err=self.owner.communicate(timeout=8);self.fail(f'owner exited after client departure {extra!r}: {self.owner.returncode} {out} {err}')
+   after,_=self.check();self.assertEqual(after['obligations'][0]['state'],'verified');self.assertIsNone(self.owner.poll());self.assertNotEqual(before['computation_session']['core_pid'],after['computation_session']['core_pid']);before=after
+  self.owner.send_signal(signal.SIGTERM);out,err=self.owner.communicate(timeout=8);self.assertEqual(self.owner.returncode,130,(out,err));self.assertEqual(json.loads(out)['state'],'cancelled')
  def test_rotated_cores_keep_reuse_and_expiry_is_session_unavailable(self):
   self.start();reports=[self.check()[0] for _ in range(12)];pids=[r['computation_session']['core_pid'] for r in reports]
   self.assertGreater(len(set(pids)),1,pids);self.assertEqual(len({r['computation_session']['owner_pid'] for r in reports}),1)

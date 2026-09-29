@@ -98,7 +98,7 @@ class OwnershipNegative(unittest.TestCase):
             nested.write_text('pub fn hidden() {}\n')
             code, findings = self.check(copy)
             self.assertEqual(code, 1)
-            self.assertTrue(any('structural analyzer source or lock differs' in f for f in findings), findings)
+            self.assertTrue(any('stale build source membership: src/target/extra.rs' in f for f in findings), findings)
         finally:
             temp.cleanup()
 

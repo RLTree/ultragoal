@@ -1,5 +1,5 @@
 """Conditional Bend bindings plus actual fixed native-call/import behavior."""
-import json,tempfile,pathlib,subprocess,unittest
+import json,tempfile,pathlib,subprocess,unittest,shutil,os
 from journey import core,row,BIN
 
 class NativeBindings(unittest.TestCase):
@@ -23,6 +23,27 @@ class NativeBindings(unittest.TestCase):
   self.assertEqual((large[0][0],large[0][8]),('VERIFICATION_REQUEST','16777217'))
 
 class NativeCurrentCall(unittest.TestCase):
+ def test_fifo_source_is_refused_without_waiting_for_a_writer(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   fifo=pathlib.Path(tmp)/'source.rs';os.mkfifo(fifo)
+   p=subprocess.run([str(BIN),'verify','--rust',str(fifo)],capture_output=True,text=True,timeout=5)
+   self.assertNotEqual(p.returncode,0,p.stdout+p.stderr)
+   self.assertIn('nonregular',p.stdout+p.stderr)
+
+ @unittest.skipUnless(shutil.which('node'), 'Node is needed for the TypeScript adapter')
+ def test_relative_typescript_module_is_bound_to_the_executed_absolute_path(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=pathlib.Path(tmp);source=root/'source.ts';source.write_text('let value: number = 1;\n')
+   module=root/'typescript-module.js'
+   module.write_text("exports.version='fixture';exports.ScriptTarget={Latest:99};exports.ScriptKind={TS:3};exports.createSourceFile=()=>({parseDiagnostics:[]});exports.flattenDiagnosticMessageText=x=>x;\n")
+   tools=root/'tools.json';tools.write_text(json.dumps({'node':shutil.which('node'),'typescript':os.path.relpath(module,pathlib.Path.cwd())}))
+   p=subprocess.run([str(BIN),'verify','--typescript',str(source),'--tools',str(tools)],capture_output=True,text=True,timeout=20)
+   self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+   report=json.loads(p.stdout)
+   self.assertEqual(report['state'],'verified')
+   self.assertEqual(report['verification_request']['invocation']['additional_tool']['path'],str(module.resolve()))
+   self.assertEqual(report['verification_request']['invocation']['argv'][-1],str(module.resolve()))
+
  def test_real_captured_python_then_import_is_reported_only(self):
   with tempfile.TemporaryDirectory()as tmp:
    root=pathlib.Path(tmp);source=root/'source.py';source.write_text('def value(): return 1\n')

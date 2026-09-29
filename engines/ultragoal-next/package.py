@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Prepare an identity-checked local candidate; never install or publish."""
 import hashlib,json,pathlib,shutil,tempfile
-from source_inventory import hashes as source_hashes
+from source_inventory import admitted_bytes, hashes as source_hashes, rust_parse_limit, stream_digest
 ROOT=pathlib.Path(__file__).resolve().parent
-def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def digest(path):return stream_digest(path)
 def sources():
  try:return source_hashes(ROOT)
  except ValueError as error:raise SystemExit(str(error))
-identity=json.loads((ROOT/'target/release/identity.json').read_text())
+identity=json.loads(admitted_bytes(ROOT/'target/release/identity.json',rust_parse_limit()))
 if sources()!=identity['source']:raise SystemExit('source identity mismatch; build the exact source before packaging')
 for name,expected in identity['binaries'].items():
  path=ROOT/'target/release'/name
@@ -26,7 +26,7 @@ with tempfile.TemporaryDirectory(prefix='.preparing-',dir=OUT.parent)as d:
  if sources()!=identity['source']:raise SystemExit('source changed during packaging')
  for name,expected in identity['binaries'].items():
   if digest(stage/'bin'/name)!=expected:raise SystemExit('binary changed during packaging: '+name)
- if json.loads((stage/'bin/identity.json').read_text())!=identity:raise SystemExit('identity changed during packaging')
+ if json.loads(admitted_bytes(stage/'bin/identity.json',rust_parse_limit()))!=identity:raise SystemExit('identity changed during packaging')
  files={str(p.relative_to(stage)):digest(p)for p in sorted(stage.rglob('*'))if p.is_file()}
  (stage/'MANIFEST.json').write_text(json.dumps({'files':files,'build_identity_sha256':digest(stage/'bin/identity.json'),'claim':'local package candidate only; install/discovery/runtime journey unqualified'},indent=2)+'\n')
  if OUT.exists():raise SystemExit('another candidate appeared; no replacement performed')

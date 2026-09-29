@@ -121,6 +121,12 @@ class Journey(unittest.TestCase):
   self.assertEqual(retry('not-sent','0','2000','running'),'STOP')
   self.assertEqual(retry('000','1','2000','running'),'STOP')
   self.assertEqual(retry('503','1','2000','running'),'RETRY')
+  self.assertEqual(retry('503','1','49','running'),'STOP')
+  self.assertEqual(retry('503','1','50','running'),'RETRY')
+  for time_left in ('','unknown','4294967296'):
+   self.assertEqual(retry('not-sent','1',time_left,'running'),'STOP',time_left)
+  for ambiguous in ('timeout','connection-closed','sent-unknown'):
+   self.assertEqual(retry(ambiguous,'1','2000','running'),'STOP',ambiguous)
  def test_score_accepts_two_decimal_wire_rounding_only(self):
   # Observed jev-1.13 answers whose score differs from the rounded probabilities' mean.
   for frame in ['SCORE\tx\t0.03\t0.98\t0.98\t0.02\t0\t0\t0','SCORE\tx\t0.88\t0.46\t0.38\t0.42\t0.15\t0.03\t0.02','SCORE\tx\t1.44\t0.62\t0.01\t0.56\t0.43\t0\t0','SCORE\tx\t0.05\t0.9\t1\t0\t0\t0\t0']:

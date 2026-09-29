@@ -19,7 +19,8 @@ def main():
  with tempfile.TemporaryDirectory(prefix='ug-rollback-rehearsal-')as d:
   with tarfile.open(archive)as tar:tar.extractall(d,filter='data')
   restored={rel:sha(pathlib.Path(d)/rel)for rel in paths}
-  assert all(restored[k]==v['sha256']for k,v in observed.items())
+  wrong=[rel for rel,v in observed.items()if restored.get(rel)!=v['sha256']]
+  if wrong:raise SystemExit(f'restoration mismatch: {wrong}')
  # Re-read after archive creation to reject changes during custody capture.
  changed=[rel for rel,v in observed.items()if sha(root/rel)!=v['sha256']]
  if changed:raise SystemExit(f'source changed during archive: {changed}')

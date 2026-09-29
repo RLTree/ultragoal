@@ -1,19 +1,20 @@
 """Refuse stale build inputs, release binaries and development proof probes."""
 import argparse
-import hashlib
 import json
 from pathlib import Path
-from source_inventory import hashes
+from source_inventory import admitted_bytes, hashes, rust_parse_limit, stream_digest
 
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / 'target/release'
 
 def digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return stream_digest(path)
 
 def verify():
-    identity = json.loads((RELEASE / 'identity.json').read_text())
-    actual = hashes(ROOT)
+    identity = json.loads(admitted_bytes(RELEASE / 'identity.json', rust_parse_limit()))
+    # Refuse a new or missing source by name before opening it for Rust token
+    # validation or hashing. A sparse unlisted file must be stale, not work.
+    actual = hashes(ROOT, expected_paths=set(identity['source']))
     if actual != identity['source']:
         changed = sorted(set(actual) ^ set(identity['source']) |
                          {path for path in actual.keys() & identity['source'].keys()

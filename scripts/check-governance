@@ -9,4 +9,5 @@ echo "check-governance: current source-authority and standards projections only;
 python3 scripts/project-agent-standards check "$root"
 python3 scripts/project-generated-authority check "$root"
 python3 scripts/check-python-source-laws "$root"
+python3 -m unittest scripts.python_source_laws.test_scope
 python3 scripts/check-agent-standards "$root"

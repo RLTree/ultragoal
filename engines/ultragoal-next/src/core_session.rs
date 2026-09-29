@@ -24,9 +24,12 @@ fn retained_budget() -> usize {
 /// bytes and rows, so total time grows with the number of requests, not a phase cap.
 pub const REQUEST_STALL: Duration = Duration::from_secs(30);
 
-fn late(deadline: Instant) -> Result<(), String> {
+fn late(deadline: Instant, cancelled: Option<&AtomicBool>) -> Result<(), String> {
     if is_interrupted() {
         return Err("core request cancelled".into());
+    }
+    if cancelled.is_some_and(|flag| flag.load(Ordering::SeqCst)) {
+        return Err("session client disconnected".into());
     }
     if Instant::now() >= deadline {
         return Err("core request deadline exceeded".into());
@@ -193,6 +196,7 @@ pub struct Session {
 }
 
 const STDERR_TAIL: usize = 4096;
+const CORE_REQUESTS: u64 = 4096;
 
 impl Session {
     fn start(path: &Path) -> Result<Self, String> {
@@ -311,23 +315,34 @@ impl Session {
         deadline: Instant,
         limit: usize,
     ) -> Result<Vec<u8>, String> {
+        self.exchange_with_cancel(frames, index, deadline, limit, None)
+    }
+
+    fn exchange_with_cancel(
+        &mut self,
+        frames: Vec<String>,
+        index: bool,
+        deadline: Instant,
+        limit: usize,
+        cancelled: Option<&AtomicBool>,
+    ) -> Result<Vec<u8>, String> {
         let evaluation = !index && frames.len() == 1 && frames[0].starts_with("UG\t");
         if !evaluation {
-            return self.exchange_raw(frames, index, deadline, limit).map(|(_, bytes)| bytes);
+            return self.exchange_raw(frames, index, deadline, limit, cancelled).map(|(_, bytes)| bytes);
         }
         let lines: Vec<String> = frames[0].split('\n').map(str::to_string).collect();
         self.evaluations += 1;
         if let Some((seq, old)) = self.base.take() {
             let body = delta_body(seq, &old, &lines);
             if body.len() < frames[0].len() / 2 {
-                let (sequence, bytes) = self.exchange_raw(vec![body], false, deadline, limit)?;
+                let (sequence, bytes) = self.exchange_raw(vec![body], false, deadline, limit, cancelled)?;
                 if bytes != DELTA_UNAVAILABLE {
                     self.base = Some((sequence, lines));
                     return Ok(bytes);
                 }
             }
         }
-        let (sequence, bytes) = self.exchange_raw(frames, false, deadline, limit)?;
+        let (sequence, bytes) = self.exchange_raw(frames, false, deadline, limit, cancelled)?;
         self.base = Some((sequence, lines));
         Ok(bytes)
     }
@@ -338,9 +353,10 @@ impl Session {
         index: bool,
         deadline: Instant,
         limit: usize,
+        cancelled: Option<&AtomicBool>,
     ) -> Result<(u64, Vec<u8>), String> {
         if self.stopped
-            || self.next >= 4096
+            || self.next >= CORE_REQUESTS
             || frames.is_empty()
             || frames.len() > 128
             || limit > REPORT_MAX
@@ -371,7 +387,7 @@ impl Session {
         if total_input > capacity {
             return Err("core cumulative input byte bound".into());
         }
-        late(deadline)?;
+        late(deadline, cancelled)?;
         self.expected.store(sequence, Ordering::SeqCst);
         let remaining_output = capacity
             .checked_sub(self.output_bytes)
@@ -392,7 +408,7 @@ impl Session {
             let mut output = Vec::new();
             let mut chunks = 0usize;
             loop {
-                late(deadline)?;
+                late(deadline, cancelled)?;
                 if self.failed.load(Ordering::SeqCst) {
                     return Err("core transport write/stderr failure".into());
                 }
@@ -407,7 +423,7 @@ impl Session {
                         done,
                         bytes,
                     }) => {
-                        late(deadline)?;
+                        late(deadline, cancelled)?;
                         chunks += 1;
                         if observed != sequence
                             || chunks > 128
@@ -452,7 +468,7 @@ impl Session {
     /// `limit` bytes within `budget` cumulative bytes per direction.
     fn fits(&self, input: usize, limit: usize, budget: usize) -> bool {
         !self.stopped
-            && self.next < u32::MAX as u64 - 1
+            && self.next < CORE_REQUESTS
             && self.input_bytes.saturating_add(input) <= budget
             && self.output_bytes.saturating_add(limit) <= budget
     }
@@ -736,9 +752,19 @@ pub fn request_local(
     deadline: Instant,
     limit: usize,
 ) -> Result<Vec<u8>, String> {
+    request_local_with_cancel(frames, index, deadline, limit, None)
+}
+
+pub fn request_local_with_cancel(
+    frames: Vec<String>,
+    index: bool,
+    deadline: Instant,
+    limit: usize,
+    cancelled: Option<&AtomicBool>,
+) -> Result<Vec<u8>, String> {
     let cell = SESSION.get_or_init(|| Mutex::new(None));
     let mut guard = loop {
-        late(deadline)?;
+        late(deadline, cancelled)?;
         match cell.try_lock() {
             Ok(guard) => break guard,
             Err(std::sync::TryLockError::Poisoned(_)) => {
@@ -767,7 +793,14 @@ pub fn request_local(
             *standby = Some(prime(&frames[0])?);
         }
     }
-    session.exchange(frames, index, deadline, limit)
+    let result = session.exchange_with_cancel(frames, index, deadline, limit, cancelled);
+    if cancelled.is_some_and(|flag| flag.load(Ordering::SeqCst)) {
+        if let Some(mut abandoned) = guard.take() {
+            abandoned.stop()?;
+        }
+        return Err("session client disconnected".into());
+    }
+    result
 }
 
 pub fn finish_local() -> Result<(), String> {
@@ -784,6 +817,15 @@ pub fn finish_local() -> Result<(), String> {
     if let Some(mut session) = guard.take() {
         session.finish()?;
     }
+    Ok(())
+}
+
+/// Retire a request whose client left after the core answered but before the
+/// response was published. Its retained state cannot be assumed observed.
+pub fn abandon_local() -> Result<(), String> {
+    let Some(cell) = SESSION.get() else { return Ok(()); };
+    let mut guard = cell.lock().map_err(|_| "core session lock poisoned")?;
+    if let Some(mut session) = guard.take() { session.stop()?; }
     Ok(())
 }
 
@@ -1047,6 +1089,28 @@ while True:
         }
         assert!(pids.len() >= 2, "{pids:?}");
         assert_eq!(lane.finish().unwrap(), pids.len());
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    fn request_count_rotates_independent_lane_and_refuses_retained_lane() {
+        let (root, path) = mock(ECHO);
+        let mut independent = Lane::with(path.clone(), "probe", SESSION_BYTES, Duration::from_secs(3));
+        let first = String::from_utf8(independent.request(vec!["first".into()], 64).unwrap()).unwrap();
+        independent.session.as_mut().unwrap().next = CORE_REQUESTS;
+        let second = String::from_utf8(independent.request(vec!["second".into()], 64).unwrap()).unwrap();
+        assert_ne!(first.split_once(':').unwrap().0, second.split_once(':').unwrap().0);
+        assert!(second.ends_with(":second"));
+        assert_eq!(independent.finish().unwrap(), 2);
+
+        let mut retained = Lane::with(path, "retained", SESSION_BYTES, Duration::from_secs(3));
+        retained.request_one("first".into(), 64).unwrap();
+        retained.session.as_mut().unwrap().next = CORE_REQUESTS;
+        let error = retained.request_one("second".into(), 64).unwrap_err();
+        assert!(error.contains("retry from revalidated input"), "{error}");
+        assert_eq!(retained.cores, 1);
+        // The synthetic count cannot be closed normally; this is a refusal control.
+        retained.session.take().unwrap().stop().unwrap();
         fs::remove_dir_all(root).unwrap();
     }
 

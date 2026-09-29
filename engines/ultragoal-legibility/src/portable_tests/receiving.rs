@@ -54,6 +54,31 @@ fn no_registry_and_outside_registry_fail_with_setup_guidance() {
 
 #[cfg(unix)]
 #[test]
+fn fifo_registry_fails_without_a_writer_or_a_second_read() {
+    let project = Project::clean();
+    let path = project.0.join("docs/legibility/registry.json");
+    std::fs::remove_file(&path).unwrap();
+    let name = std::ffi::CString::new(path.to_str().unwrap()).unwrap();
+    assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
+    let started = std::time::Instant::now();
+    let audit = project.audit();
+    assert!(started.elapsed() < std::time::Duration::from_secs(2));
+    assert!(
+        has(&audit, "governed_not_regular:docs/legibility/registry.json"),
+        "{audit:#}"
+    );
+    assert!(
+        has(
+            &audit,
+            "registry_not_regular_or_unavailable:docs/legibility/registry.json"
+        ),
+        "{audit:#}"
+    );
+    assert_eq!(audit["passed"], false);
+}
+
+#[cfg(unix)]
+#[test]
 fn symlinked_source_and_pruned_directory_are_refused() {
     for path in ["outside", "target"] {
         let project = Project::clean();

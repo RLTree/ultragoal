@@ -8,7 +8,7 @@ The direct dependencies are pinned from Cargo.toml with current owners and upstr
 
 Current project ownership check: 96 exact material sites, including direct
 native FFI, Unix socket and the actual `serde_json::to_writer` hash sink;
-285 exact pinned dependency uses; eight privileged caller rules; every Rust
+286 exact pinned dependency uses; eight privileged caller rules; every Rust
 source byte bound for review; and one indirect ordered-index callback. The
 disposable controls in `tests/ownership_negative.py` exercise new and
 same-kind effects, unprofiled libc/network calls, skipped validation, removed

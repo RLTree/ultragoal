@@ -87,7 +87,7 @@ pub fn run(root: &Path, registry_path: &str, show_inventory: bool) -> serde_json
     for (path, report) in &production {
         reports.insert(path.clone(), report.clone());
     }
-    match registry::load(root, registry_path) {
+    match registry::load(&inventory, registry_path) {
         Ok(registry) => {
             failures.extend(registry::source_map(&registry.sources, &inventory));
             failures.extend(registry::commands(

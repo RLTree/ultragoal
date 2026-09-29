@@ -4,7 +4,7 @@ use crate::{
     model::*,
 };
 use serde::de::DeserializeOwned;
-use std::{collections::BTreeSet, path::Path};
+use std::collections::BTreeSet;
 
 pub struct Loaded {
     pub sources: Vec<SourceRow>,
@@ -14,36 +14,23 @@ pub struct Loaded {
     pub outputs: Vec<OutputRow>,
 }
 
-fn read<T: RegistryPayload>(root: &Path, path: &str) -> Result<T, RegistryError> {
+fn read<T: RegistryPayload>(inventory: &Inventory, path: &str) -> Result<T, RegistryError> {
     if !safe_path(path) {
         return Err(format!("registry_path_not_exact:{path}").into());
     }
-    let full = root.join(path);
-    let mut checked = root.to_path_buf();
-    for part in Path::new(path).components() {
-        checked.push(part);
-        if checked
-            .symlink_metadata()
-            .map_err(|e| format!("registry_read:{path}:{e}"))?
-            .file_type()
-            .is_symlink()
-        {
-            return Err(format!("registry_symlink:{path}").into());
-        }
-    }
-    if full
-        .symlink_metadata()
-        .map_err(|e| format!("registry_read:{path}:{e}"))?
-        .file_type()
-        .is_symlink()
-    {
-        return Err(format!("registry_symlink:{path}").into());
-    }
-    let bytes = std::fs::read(&full).map_err(|e| format!("registry_read:{path}:{e}"))?;
-    serde_json::from_slice(&bytes).map_err(|e| RegistryError(format!("registry_parse:{path}:{e}")))
+    // The inventory already opened, bounded and classified this exact file.
+    // Reading a registry path again could block on a substituted FIFO.
+    let bytes = inventory
+        .files
+        .get(path)
+        .ok_or_else(|| RegistryError(format!("registry_not_regular_or_unavailable:{path}")))?;
+    serde_json::from_slice(bytes).map_err(|e| RegistryError(format!("registry_parse:{path}:{e}")))
 }
 
-fn parts<T: DeserializeOwned>(root: &Path, paths: &[String]) -> Result<Vec<T>, RegistryError>
+fn parts<T: DeserializeOwned>(
+    inventory: &Inventory,
+    paths: &[String],
+) -> Result<Vec<T>, RegistryError>
 where
     Vec<T>: RegistryPayload,
 {
@@ -53,17 +40,17 @@ where
         if !seen.insert(path) {
             return Err(format!("registry_duplicate_part:{path}").into());
         }
-        output.extend(read::<Vec<T>>(root, path)?);
+        output.extend(read::<Vec<T>>(inventory, path)?);
     }
     Ok(output)
 }
 
-pub fn load(root: &Path, path: &str) -> Result<Loaded, RegistryError> {
-    let registry: Registry = read(root, path)?;
+pub fn load(inventory: &Inventory, path: &str) -> Result<Loaded, RegistryError> {
+    let registry: Registry = read(inventory, path)?;
     if registry.schema_version != 1 {
         return Err("registry_schema_version".into());
     }
-    let mut dependencies: Vec<DependencyRow> = parts(root, &registry.dependency_registries)?;
+    let mut dependencies: Vec<DependencyRow> = parts(inventory, &registry.dependency_registries)?;
     let mut profile_parts = BTreeSet::new();
     for row in &mut dependencies {
         for part in &row.profile_registries {
@@ -71,15 +58,17 @@ pub fn load(root: &Path, path: &str) -> Result<Loaded, RegistryError> {
                 return Err(format!("dependency_profile_part_duplicate:{part}").into());
             }
         }
-        row.profiles
-            .extend(parts::<DependencyProfile>(root, &row.profile_registries)?);
+        row.profiles.extend(parts::<DependencyProfile>(
+            inventory,
+            &row.profile_registries,
+        )?);
     }
     Ok(Loaded {
-        sources: parts(root, &registry.source_maps)?,
+        sources: parts(inventory, &registry.source_maps)?,
         dependencies,
-        boundaries: parts(root, &registry.boundary_registries)?,
-        commands: parts(root, &registry.command_registries)?,
-        outputs: parts(root, &registry.output_registries)?,
+        boundaries: parts(inventory, &registry.boundary_registries)?,
+        commands: parts(inventory, &registry.command_registries)?,
+        outputs: parts(inventory, &registry.output_registries)?,
     })
 }
 

@@ -144,6 +144,7 @@
   {"path":"tests/native_observation.py","class":"test","owner":"src/main.rs","purpose":"Python receiving regression: native_observation"},
   {"path":"tests/ownership_negative.py","class":"test","owner":"check_ownership.py","purpose":"Actual unowned process/dependency and skipped credential validation red controls"},
   {"path":"tests/package_guard.py","class":"test","owner":"src/main.rs","purpose":"Python receiving regression: package_guard"},
+  {"path":"tests/migration_guard.py","class":"test","owner":"migration.py","purpose":"Optimized-Python rollback extraction refusal"},
   {"path":"tests/proofs.py","class":"test","owner":"src/main.rs","purpose":"Python receiving regression: proofs"},
   {"path":"tests/provider_key_boundary.py","class":"test","owner":"src/provider/credential.rs","purpose":"Invalid present key refuses before provider dispatch or attempt accounting"},
   {"path":"tests/query_revisions.py","class":"test","owner":"src/main.rs","purpose":"Python receiving regression: query_revisions"},
