@@ -7,3 +7,4 @@ cd "$root"
 echo "scripts/check compatibility aggregate: product plus governance only; it proves neither package/install/discovery/runtime/journey nor release." >&2
 scripts/check-product "$root"
 scripts/check-governance "$root"
+scripts/check-next --quick "$root"

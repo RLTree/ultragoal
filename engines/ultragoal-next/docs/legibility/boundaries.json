@@ -1,0 +1,47 @@
+[
+  {
+    "path": "src/resources.rs",
+    "symbol": "measure",
+    "authorities": [
+      "filesystem"
+    ],
+    "response": "Headroom",
+    "error": "HeadroomError",
+    "validation": []
+  },
+  {
+    "path": "src/fs_adapter/stream.rs",
+    "symbol": "Root::stream_source",
+    "authorities": [
+      "string"
+    ],
+    "response": "StreamedSource",
+    "error": "StreamError",
+    "validation": []
+  },
+  {
+    "path": "src/provider/credential.rs",
+    "symbol": "key",
+    "authorities": [
+      "environment",
+      "string"
+    ],
+    "response": "ProviderCredential",
+    "error": "CredentialError",
+    "validation": [
+      "validate_credential"
+    ]
+  },
+  {
+    "path": "src/provider/credential.rs",
+    "symbol": "keychain_key",
+    "authorities": [
+      "process"
+    ],
+    "response": "ProviderCredential",
+    "error": "CredentialError",
+    "validation": [
+      "accept_lookup"
+    ]
+  }
+]

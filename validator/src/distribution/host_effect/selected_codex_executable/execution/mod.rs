@@ -56,15 +56,15 @@ pub(super) fn execute_runtime(
     }
     #[cfg(not(target_os = "macos"))]
     {
-    execute_with_program(
-        executable,
-        capability,
-        command,
-        policy,
-        cancellation,
-        cwd,
-        "ultragoal",
-    )
+        execute_with_program(
+            executable,
+            capability,
+            command,
+            policy,
+            cancellation,
+            cwd,
+            "ultragoal",
+        )
     }
 }
 

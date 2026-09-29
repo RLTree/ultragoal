@@ -1,0 +1,381 @@
+# UltraGoal Next — Opus 5.5 complete implementation handoff
+
+**Ready for handoff.** The previous implementer delivered its terminal freeze,
+confirmed no further writes or automatic continuation, and reported no remaining
+owned processes. Codex verified the complete bundle, source snapshot, live owned
+source and executable manifests. Opus has not been launched by this handoff.
+Codex remains responsible for final independent acceptance.
+
+## Goal
+
+You are the implementation owner for completing UltraGoal Next, a substantially
+simpler, faster, more capable engineering system. Finish the existing approved
+PRD and coupled implementation, evaluations, documentation and migration
+preparation. This is continuation of a substantial existing implementation, not
+a restart, a one-to-one Rust port, or a new Jev supervisor product.
+
+Terry has explicitly chosen Opus 5.5 for the remaining implementation to reduce
+Codex usage. Own ordinary investigation, coding, testing, evaluation, integration
+and correction through one complete candidate. Use internal milestones to manage
+dependencies; do not stop after each milestone for routine Codex review. Codex
+will independently review the final code, replay evidence, validate the product
+journey and decide acceptance. Model-generated completion claims are not that
+acceptance.
+
+The desired outcome is better completed engineering work, useful semantic and
+deterministic coverage, lower latency/cost and less operator attention. More
+rules, documents, proof counts, model calls or receipts are not success metrics.
+Preserve the primary agent's freedom to plan, invent, investigate and choose
+approaches. Enforce important outcomes and boundaries without compulsory generic
+planning/review ceremonies.
+
+## Success
+
+Complete all authorized remaining requirements and produce a coherent candidate
+ready for independent final evaluation. Track every PRD requirement to its actual
+implementation and appropriate verifier in the existing implementation-status
+document. A named missing capability cannot disappear because another test passed.
+
+Required completion surfaces include:
+
+1. **Bend-first engine:** parsing, facts, requirements/obligations, dependency
+   graph, invalidation, scheduling decisions, evidence composition/admission,
+   semantic schemas/rubrics and other suitable pure logic belong in Bend.
+   Exploit balanced native parallelism, useful data structures and proofs; do not
+   merely translate earlier Rust algorithms. Retain Rust only for specifically
+   justified interfaces with measured crossing costs and exit criteria.
+2. **Useful correct incremental work:** additions/deletions/renames, negative
+   queries, membership, rule/config/tool changes and unknown dependencies are
+   represented. Reuse unaffected computation; recompute live applicability and
+   admission for every operation. Integrate actual reverse-dependency invalidation
+   and retained parsed/fact/query state. Current-process branch labels alone do
+   not establish evaluated retained values or fresh-command warm behavior.
+3. **Reliable semantic capability:** direct TypeSafe Jev Choice, Noul and Score
+   are integrated where they improve work. Complete canonical material packets,
+   exact evidence retrieval/grouping, bounded advisory choices, diagnosis/reuse/
+   verification assistance and consequence-appropriate calibration. Preserve
+   insufficient/unavailable and conflicting results. Demonstrate useful effects
+   rather than merely adding endpoints.
+4. **Usable product journey:** compact entry point; safe repository fitting,
+   minimal proposal/apply/verify workflow, dirty tracked/untracked preservation,
+   diagnosis, recovery, explain, native-tool integration and clear next actions.
+   Help/inspection must not unexpectedly write or call providers. End-to-end
+   behavior must agree with the original user requirement, not merely a narrower
+   literal predicate.
+5. **Operational and failure correctness:** bounded processes/streams/state,
+   cancellation/supersession/deadline/late-response handling, real adapter tests,
+   local captured-input/current-call observation binding, correct unsupported
+   host behavior and honest protection/adoption limits.
+6. **Reproducible verification and migration:** same-candidate build/proof/runtime
+   evidence, meaningful regressions/negative controls, final latency/coverage/
+   outcome evaluations within authority, verified package and rollback
+   preparation, exact consumers/mutations for eventual EJ retirement.
+
+Do not declare the product complete while required functionality or failing
+performance remains. Where an external capability or permission is genuinely
+unavailable, implement the proper supported/unknown behavior, finish independent
+authorized work, and isolate the precise unqualified obligation. A truthful
+unresolved result is necessary coverage, not satisfaction of that obligation.
+
+## Context
+
+### Verified starting custody
+
+- Canonical repository:
+  `/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal`
+- Existing implementation worktree:
+  `/Users/terrynoblin/.codex/worktrees/ultragoal-next-owner/harness-ultragoal-plugin-proposal`
+- Exclusive writable implementation root is its `engines/ultragoal-next`
+  directory. Other worktree files include preserved unrelated changes. Prepare
+  necessary repository-level integration patches separately for Codex; do not
+  overwrite shared canonical contracts or expand write ownership silently.
+- Known starting base commit:
+  `f447a7a83e16f983f2ffe831e19ee7ba72ac8cec`.
+- Durable transfer directory, called `TRANSFER` below:
+  `/Users/terrynoblin/.codex/worktrees/ultragoal-next-owner/harness-ultragoal-plugin-proposal/.codex-worktree/transfers/20260923-opus55`
+- Read `TRANSFER/HANDOFF.md` and `TRANSFER/TRANSFER_STATE.json` first.
+  `TRANSFER/MANIFEST.json` SHA-256:
+  `655deabde6b81cadba66382bb6fecb2d6a278dc0d06bfc5de78ce2a2811e62b9`.
+  All 3,131 listed payloads were verified by Codex.
+- `TRANSFER/source/` is the immutable source copy.
+  `TRANSFER/SOURCE_MANIFEST.json` SHA-256:
+  `f611f873538e8cb30615d7cc6206db3e54d7007f8ac2d344370e52eceb428a31`.
+  All 114 source files matched the live writable root at transfer.
+- Latest runnable package: `TRANSFER/executable/harness-ultragoal`, candidate
+  `de4faa19fda8226f`. Its `MANIFEST.json` SHA-256:
+  `d2b0b7a4d440f30df23cc51f94bcd5453dd20b22959f5874e2077756d958fa19`.
+  All eight package files were verified. Use its `bin/ultragoal` and sibling
+  `bin/ug-core` together, or a freshly verified build.
+- Frozen executable hashes: `bin/ultragoal` is
+  `acfcf14b2c407a1300ffe7640d882f4c5a659ecab1ec0b4e299dc9fd27488207`;
+  `bin/ug-core` is
+  `0efbdc3e0771ad56d0ee9b942dedfa3e4ddfc92905a15dfb016bb9101d456a72`.
+- Code/tests match the runnable source identity. Three transfer documents differ:
+  `README.md`, `IMPLEMENTATION_STATUS.md`, `RUST_BOUNDARIES.md`. An additional
+  old `ug-core` in the writable source root is preserved legacy state;
+  **do not run that binary as the current core**. Details are in
+  `SOURCE_DELTA_VS_EXECUTABLE.json`.
+- `TRANSFER/custody/` contains tracked diff, status, untracked inventory and
+  cleanup evidence. `PATH_MAP.json` maps essential temporary evidence to copied
+  durable artifacts. No essential requested copy was reported missing; no
+  unbuilt implementation patch or hidden running experiment remains.
+
+Before your first source edit, verify these manifests and the live source against
+the source manifest. A mismatch needs reconciliation; never reset or copy over it
+to manufacture a match. The previous implementation owner is frozen and must not
+be restarted concurrently with you.
+
+The implementation is under `engines/ultragoal-next` in the owner worktree.
+Use that assigned directory as the writable source. Treat archived source,
+raw evaluation outputs, original labels and manifests as immutable evidence.
+Never execute against a guessed live `/tmp/ug-next-build` path merely because a
+historical runner names it. Rebind a copied replay script to the exact archived
+executable when needed; preserve the original.
+
+### Read the actual implementation documents
+
+Read these current canonical files, in this order, before changing source:
+
+1. `AGENTS.md`, `GOAL_CONTRACT.md` and the current successor section of the sole
+   active plan, `docs/exec-plans/active/usable-product-milestone.md`. The plan also
+   contains extensive older history; its latest explicit decisions control over
+   historical stage instructions. Do not reactivate old EJ campaigns.
+2. The five documents in `docs/proposals/ultragoal-next-2026-09-21/`:
+   `PRD.md`, `ARCHITECTURE.md`, `EVALUATION.md`, `MIGRATION.md`, `AUDIT.md`.
+   Read the first four completely; use the audit for consequential source and
+   research decisions. These define the product, not just examples in this prompt.
+3. The frozen implementation's `README.md`, `IMPLEMENTATION_STATUS.md`,
+   `RUST_BOUNDARIES.md`, `SOURCE_GRAMMARS.md`, `SEMANTIC_MATERIALS.md`,
+   `SEMANTIC_CONTRACT.md`, `HASHING.md`, package commands, and final owner handoff notes.
+4. Repository `ARCHITECTURE.md`, `AGENT_STANDARDS.md` and the relevant routed
+   standard when editing existing integration points. Distinguish legacy
+   ownership from the approved successor design. Do not blindly import older
+   Rust-first or EJ-driven architecture.
+
+The transfer includes canonical document snapshots and a mapped evidence
+inventory. Use the current canonical five-document specification for the latest
+retained-session and 420-second build amendments; reconcile any older copy in
+the worktree before using it. Local source is primary; extensive historical
+documentation is not proof of behavior. Later user instructions and this explicit
+transfer supersede the old planning-only pause and per-stage review defaults.
+
+A frozen acceptance-reference copy of these twelve requirement/guidance documents
+is retained at
+`docs/proposals/ultragoal-next-2026-09-21/opus-handoff-baseline/` in the canonical
+repository. Its `MANIFEST.json` records exact bytes. Treat it as read-only history
+for final comparison; it is not a new active plan or protected host authority.
+Legitimate changes to working documentation must be explicitly reconciled with
+this baseline, not silently substituted for the user's completion requirements.
+
+The acceptance-reference manifest SHA-256 is
+`686e4933a3022594c4095a99ddd5bb48b9defe18cf0e84471e71fca8791ef39b`.
+Verify that manifest and its twelve payloads before using the reference copy.
+The final source handoff has a separate identity; matching the requirements
+baseline is not proof that a binary was built from the working source.
+
+### Current technical truth and known failures
+
+- Bend-native structured parsing, typed grouped parse results, full-row provenance
+  laws, a production projection/predicate query graph, current admission and one
+  private core per invocation are implemented. Language envelopes remain bounded;
+  a tokenizer/import extractor is not full type resolution, macro expansion or
+  runtime semantics.
+- Choice layouts and excerpt-window policy have moved into Bend. Exact-body and
+  grammar grouping retain all alias provenance and required unranked anchors;
+  hidden aliases are not silently assessed.
+- A foreground retained-session design was adopted to meet genuine warm reuse
+  across fresh frontend processes. Restricted Unix sockets provide local
+  transport, not protected same-user attestation. The service performs pure
+  computation, not arbitrary command/provider execution or permission decisions.
+- The latest reported genuine benchmark has 121 fresh frontend commands sharing
+  an owner/core. Unchanged p95 is about **1,019 ms**, one-file p95 about
+  **1,498 ms**: both FAIL. The workload is all-name membership plus one JSON fact,
+  not full-index warm retention. Correct results and zero new parses do not
+  excuse these failures.
+- A separate 30-run full-index candidate had median **6,655 ms**, p95 **9,647 ms**
+  on 10,000 files/~100 MB: FAIL five-second cold target. Candidate identities differ;
+  never transfer old timing acceptance to a new build.
+- Direct-core isolation also slows across 20 membership-only requests, including
+  changed projections, with observed RSS eventually flat. Frontend/socket/FS and
+  cache-hit equality alone are insufficient explanations. Deferred computation,
+  sharing/reclamation and time-order effects remain hypotheses. The nominal
+  `bend_parse_fact_evaluate` timer includes roundtrip transport/decoding; use actual
+  stage evidence. Later equal-size HASH controls stay about 31 ms; resetting the
+  graph partly reduces latency before growth resumes; fresh-core controls stay
+  about 69–75 ms, but were not interleaved. These observations narrow the problem
+  without proving a cause. No constructor/state-forcing or normal-form repair
+  was implemented before the freeze. Proof transitivity syntax does not prove
+  runtime proof chains.
+- Builds have used substantial memory. The current prospective native build
+  guard is **420 seconds aggregate C emission + Clang**, changed from an operational
+  300-second script limit. Preserve prior failed attempts. Compilation is a
+  separate measured cost, never hidden inside check latency or waived entirely.
+- Jev v1/v2 corpora and the v3 27-case development set have been examined/tuned
+  against. They are development evidence, not untouched confirmation. The v3
+  blind comparison was 23/27 model/reviewer agreement; unknown-helper false
+  concern persists. Five clarified cases are separate originals, not relabeling.
+- Local fixed-tool observations bind a consumed pending invocation and captured
+  input. Stored reports are imported/reported evidence. Current inspected Codex
+  interfaces do not establish protected adopted requirements or authenticated
+  complete read sets/executable configuration. Implemented local guarantees must
+  not be presented as that missing host capability.
+- Canonical computation IDs now hash in Bend. Raw OS/tool/transport/bootstrap
+  hashing remains a scoped temporary Rust optimization documented in `HASHING.md`;
+  its final boundary-cost qualification and replacement criteria remain open.
+  Other retained experiments are prototypes/controls, not extra production code.
+
+## Constraints
+
+### Authority and ownership
+
+- Work within the transferred exclusive implementation root and explicit scratch/test roots.
+  Preserve unrelated dirty/untracked files, historical evidence and all other
+  owners' changes. Do not reset, clean, checkout over dirty state or blindly copy
+  directories. The original Codex owner must be idle before you write.
+- Full implementation and **TypeSafe Jev API spending for development,
+  evaluation/testing and production are already authorized**. Do not impose a
+  recurring human approval gate or arbitrary tiny experiment cap on that usage.
+  Use the existing authorized credential adapter without exposing secrets;
+  configured credentials do not grant unrelated data-disclosure authority.
+- This prompt is for the user's chosen Opus coding environment. It does not
+  authorize buying additional model credits, a separate paid primary-model API
+  campaign, or silently running paid Astra comparisons. Prepare those campaigns
+  concretely; request only genuinely missing scope/budget authority.
+- Commits, pushes, pull requests, publication/deployment, global plugin installs
+  or configuration, destructive EJ retirement and unrelated private-data uploads
+  remain separately controlled. Perform authorized preparation first. No raw
+  conversation-history access is needed or authorized.
+- **Do not use Engineering Judgment as guidance, evaluator or decision authority.**
+  Its source/evidence may be inspected only as an audit/migration subject. This
+  prohibition overrides generic automatic skill-routing suggestions.
+- Maintain one implementation owner. No background GPT implementation writer
+  should continue alongside you. Default to working locally; any genuinely
+  independent helper must respect the existing shared maximum of two delegated
+  workers across the whole task tree and the host's permissions. Do not require
+  unavailable Codex tools inside Claude. No task polling, repeated status requests,
+  mandatory reviewer panels or routine stage approvals. Report material blockers
+  and final delivery through the available user-facing host.
+
+### Product and proof invariants
+
+- Keep one Bend policy/state-transition owner. Necessary Rust OS/TLS/native
+  ecosystem integrations are allowed; each needs an exact reason, minimal
+  interface, trust/failure boundary, crossing cost and migration criterion.
+- Use the most recent official Bend release and run `bend guide`; record exact
+  compiler/Base/effect identities. Keep a run's toolchain stable and requalify
+  affected behavior on upgrade. Obey native permissions for any installation;
+  do not silently downgrade or modify the global compiler to make UG pass.
+- Preserve `LAWS.bend`/`PROOF.bend`, prove actual production paths and verify
+  diagnostics/import closure. “All terms check” with unsafe/foreign/open claims
+  is not a trusted proof. Do not replace a required property with a weaker law,
+  unchecked cast, forged witness or a premise that already assumes the desired
+  result. Keep native adapter assumptions explicit and separately tested.
+- Permissions, identities, freshness, mandatory coverage, budgets, policy
+  thresholds and consequences stay deterministic. Jev cannot authorize actions
+  or discharge obligations requiring runtime/formal evidence. Preserve its raw
+  probabilities: Choice selected probability, Choice confidence, Noul probability
+  and Score distributions are distinct. No universal threshold or invented joint
+  probability. Independently valid partial answers may remain useful, but a
+  coupled assessment requiring both probes cannot succeed with one missing.
+- Preserve requirement statement/origin/revision and original acceptance scope.
+  Computation reuse is not current evidence admission. Unknown/unavailable is
+  never success. Do not drop unsupported obligations or claim N/A without a basis.
+- Actively exploit Bend and Jev where materially useful. Calibration for a
+  consequential rule must not block unrelated retrieval/advice/triage uses.
+  Batch independent questions on shared relevant evidence; no cross-answer
+  dependency hidden inside one parallel model request. Native agents keep
+  generative planning and ambiguous judgment responsibilities.
+- Retained sessions are explicit, foreground, bounded and workspace/incarnation
+  bound. No default daemon, boot service or generalized executor. Per-request
+  observation and admission stay fresh; cancel/disconnect/crash/endpoint change
+  cannot revive late results. Kill/restart loses in-memory witnesses and starts
+  cold. Watcher loss/unknown dependencies expand checking or remain unknown.
+- Native hooks, sockets, checksums, PIDs, files labeled approved and same-user
+  tokens are not a universal enforcement or protected-adoption channel.
+
+### Freedom to improve the implementation
+
+Choose better algorithms, representations, batching, pure function boundaries
+and investigation strategies. Challenge earlier hypotheses and replace failed
+mechanisms using evidence. You need not repeat the previous owner's sequence
+or preserve accidental module boundaries. Keep compatibility where the product
+requires it and preserve recoverable checkpoints. Do not spend repeated full
+builds on an unchanged hypothesis; use a discriminating minimal probe.
+
+Do not weaken tests, omit failed runs, revise held-out labels after model output,
+change performance targets or silently reduce coverage to obtain a pass. A real
+fixture defect may be fixed with explicit before/after evidence and justification;
+preserve the failed original and avoid claiming its replacement was preregistered.
+Material requirement changes are decisions to surface, not ordinary implementation
+shortcuts. Useful resource-bound tuning is allowed with recorded rationale;
+it cannot conceal changed acceptance semantics.
+
+## Output
+
+Deliver one coherent local candidate and a concise final handoff for Codex:
+
+- Exact source/diff/untracked inventory, base revision and package/executable/
+  toolchain identities; identify any source not represented in the binary.
+- Completed requirement-to-implementation/verifier map using the existing
+  `IMPLEMENTATION_STATUS.md`, including failures and externally blocked gates.
+- Final build/proof/native/CLI/session/evaluation commands, inputs and replayable
+  original results; all-attempt cost/time and uncertainty where relevant.
+- Final Rust exceptions, supported language/construct envelope, Jev policies and
+  calibration limits, session lifetime/assurance limits and operating requirements.
+- Updated original five-document design only where actual implementation decisions
+  require it; reconcile latest session/build amendments from canonical before
+  integration. Do not create a second active plan or another product front door.
+- Migration/consumer/cutover and rollback artifacts ready for separate approved
+  installation/retirement; preserve useful EJ provenance and original state.
+- Remaining authority or capability limitations, cleanup of owned processes and
+  explicit confirmation that you stopped writes for independent final review.
+
+Keep raw artifacts bounded and durable where they are essential to this handoff.
+Do not require Codex to read your complete chat or reconstruct temporary staging.
+Freeze the final candidate before review. You remain responsible for resulting
+corrections in the same worktree after Codex returns findings; do not hand off
+ordinary unfinished implementation as “future work.”
+
+## Verification
+
+Read and execute the appropriate actual checks; do not assume a listed command
+exists or ran. Use the frozen implementation's build/test entrypoints and
+environment overrides to target the exact candidate. Run the repository
+`scripts/check` before final completion claims; isolate a reproduced legacy or
+environment gap rather than refreshing unrelated historical systems.
+
+Required evidence includes real parser/Unicode/malformed-input checks; proof
+mutation rejection; actual captured native-tool behavior; traceability and
+dirty-repository fit/apply/recovery; provider envelopes/outages/cancellation/
+partial responses; session death/restart/concurrency/duplicate/stale/cross-scope
+behavior; reverse invalidation and full-recompute differential checks. Prove the
+modeled incremental equivalence and independently test adapter observations.
+
+The detailed denominators and experimental design live in `EVALUATION.md`.
+Preserve at least these acceptance expectations:
+
+- Zero observed stale/authority/user-work-loss/requirement-weakening errors;
+  100% applicable mandatory obligations represented at correct assurance.
+- 10k-file/~100MB reference: cold index p95 ≤5s, genuine fresh-frontend warm
+  unchanged ≤200ms, affected one-file ≤500ms, at least 30 relevant repeats.
+  Include session initialization separately and amortized; include IPC, current
+  observation/admission and actual reuse counters. Scoped membership checks are
+  not full parsing or full-index warm qualification.
+- 100k randomized mutation sequences plus named adversarial cases for reuse;
+  the six-stratum 240-scenario corpus and construct coverage must remain explicit.
+- For consequential Jev interventions: per-rubric recall ≥85%, precision ≥95%
+  with the specified lower confidence bound; targeted gain vs deterministic
+  controls, insufficient-evidence false-clear and service-latency gates apply.
+  Unqualified advisory uses stay labeled and are evaluated for actual usefulness.
+- Product task satisfaction/time/cost/attention/footprint requirements and matched
+  Native/current-UG/deterministic/Bend±Jev controls remain as specified. The named
+  target is **gpt-6-astra**; Opus is the implementer, not a substitute evaluation
+  model. Prepare permission-dependent campaign cells honestly and leave them
+  unqualified if unavailable; do not fabricate host access or billing authority.
+- Implementer-authored tests and self-scored corpora are not independent final
+  acceptance. Preserve untouched confirmatory labels/cases and allow Codex to
+  evaluate against original requirements. Development-tuned corpora stay development.
+
+Completion means a verified deliverable at the stated assurance, not successful
+tool calls, counts of tests, hashes or persuasive prose. The final Codex review
+will independently inspect code and behavior and can require correction.

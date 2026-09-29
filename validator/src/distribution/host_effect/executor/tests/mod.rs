@@ -7,8 +7,8 @@ use crate::distribution::host_effect::lifecycle::{
     AcceptedReconciliationPolicy, AcceptedRollbackPolicy, DescriptorExecutionAdapter,
     DescriptorExecutionCapability, DescriptorExecutionPrimitive, HostEffectAcceptanceRequest,
     HostEffectPreparationRequest, HostTargetObserver, PublicationAcknowledgementIdentity,
-    PublicationClassificationId, SupportedHostLifecycleCoordinator,
-    SupportedHostLifecycleError, SupportedHostLifecycleErrorId, TrustedTimeSample, lifecycle_error,
+    PublicationClassificationId, SupportedHostLifecycleCoordinator, SupportedHostLifecycleError,
+    SupportedHostLifecycleErrorId, TrustedTimeSample, lifecycle_error,
 };
 use crate::distribution::host_effect::{
     DurableHostEffectLedger, FileHostEffectLedger, HostEffectAuthority, HostEffectDecision,
@@ -16,9 +16,7 @@ use crate::distribution::host_effect::{
     HostEffectPermitBinding, HostEffectReservation, HostEffectState, HostEffectTransition,
     SelectedCodexExecutable, SelectedCodexExecutableTestFixture, selected_test_fixture,
 };
-use crate::distribution::{
-    HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity,
-};
+use crate::distribution::{HostCommandPlan, JourneyBinding, PackageIdentity, SourceIdentity};
 use std::collections::VecDeque;
 use std::fs::{self, OpenOptions};
 use std::io::Write;

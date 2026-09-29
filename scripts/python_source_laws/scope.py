@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 from .violation import SourceViolation
 
@@ -46,9 +47,10 @@ def discover(root: Path) -> tuple[list[Path], list[SourceViolation]]:
 
 def embedded_python(relative: str, content: bytes) -> list[SourceViolation]:
     text = content.decode("utf-8", errors="replace")
-    markers = ("python3 -", "python -", "<<'PY'", '<<"PY"', "<<PY")
+    heredoc_markers = ("<<'PY'", '<<"PY"', "<<PY")
+    stdin_program = re.compile(r"(?<![\w./-])python(?:3)?[ \t]+-(?:[ \t]|$)")
     return [
         SourceViolation(relative, line_number, "embedded_python_authority_rejected")
         for line_number, line in enumerate(text.splitlines(), start=1)
-        if any(marker in line for marker in markers)
+        if any(marker in line for marker in heredoc_markers) or stdin_program.search(line)
     ]

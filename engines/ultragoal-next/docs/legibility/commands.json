@@ -1,0 +1,44 @@
+[
+  {
+    "id": "build",
+    "owner": "build.py",
+    "entrypoint": "build.py",
+    "kind": "python",
+    "argv": [
+      "python3",
+      "build.py"
+    ]
+  },
+  {
+    "id": "package",
+    "owner": "package.py",
+    "entrypoint": "package.py",
+    "kind": "python",
+    "argv": [
+      "python3",
+      "package.py"
+    ]
+  },
+  {
+    "id": "rust-tests",
+    "owner": "Cargo.toml",
+    "entrypoint": "Cargo.toml",
+    "kind": "cargo",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline"
+    ]
+  },
+  {
+    "id": "product-cli",
+    "owner": "src/main.rs",
+    "entrypoint": "src/main.rs",
+    "kind": "binary",
+    "argv": [
+      "ultragoal",
+      "inspect"
+    ]
+  }
+]

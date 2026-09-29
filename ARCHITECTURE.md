@@ -1,10 +1,28 @@
 # ARCHITECTURE
 
+## Current UltraGoal Next ownership
+
+`engines/ultragoal-next/` owns the installed UltraGoal Next CLI and plugin:
+`Engine.bend` and its imports own contracts, facts, predicates, query reuse,
+semantic admission and recovery decisions; `src/` owns descriptor custody,
+bounded native/process/session transport and the narrow Jev credential route.
+Start with the [engine map](engines/ultragoal-next/RUST_BOUNDARIES.md), its
+[operation guide](engines/ultragoal-next/README.md) and the source-owned
+`docs/legibility/` registry. Use `scripts/check-next --quick "$PWD"` while
+maintaining Next and `--full` before packaging. Root `scripts/check` includes
+the Next quick gate as well as labeled legacy and governance checks.
+
+## Legacy compatibility implementation
+
+The `validator/` ownership map below describes the older compatibility CLI.
+Its checks remain relevant to that surface; it is not the owner of Next's Bend
+rules, provider, sessions or source-bound package.
+
 Harness Ultragoal is one product with two delivery surfaces:
 
 - a Codex plugin package rooted at `.codex-plugin/plugin.json`, with skills,
   custom agents, installation metadata, and repository templates; and
-- the `ultragoal` Rust binary from `validator/src/bin/ultragoal.rs`, which
+- the legacy `ultragoal` Rust binary from `validator/src/bin/ultragoal.rs`, which
   supplies typed inspection, diagnosis, enforcement, orchestration, package,
   evaluation, migration, and proof behavior.
 

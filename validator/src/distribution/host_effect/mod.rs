@@ -12,12 +12,12 @@ pub(crate) use authority::{
     HostEffectAuthority, HostEffectDecision, HostEffectPermit, HostEffectPermitBinding,
     VerifiedHostEffectPermit,
 };
+pub(crate) use executor::HostEffectRecoveryHandoff;
 pub(crate) use executor::{
     ConfinedHostEffectTarget, DurableHostLifecycleAdmission, HostEffectCancellation,
     HostEffectCompletion, HostEffectCompletionOutcome, HostEffectExecutionPolicy,
     NativeRetainedDescriptorProcessBackend, SupportedHostEffectExecutor,
 };
-pub(crate) use executor::HostEffectRecoveryHandoff;
 pub(crate) use ledger::FileHostEffectLedger;
 
 use super::HostCommandPlan;
@@ -31,15 +31,14 @@ include!("max_pinned_executable_bytes.rs");
 include!("host_effect_ledger_error_new.rs");
 include!("same_executable_object.rs");
 mod selected_codex_executable;
-pub(crate) use selected_codex_executable::{resolve_codex_executable, SelectedCodexExecutable};
+pub(crate) use selected_codex_executable::{SelectedCodexExecutable, resolve_codex_executable};
 #[cfg(test)]
 pub(crate) use selected_codex_executable::{
-    selected_test_fixture, SelectedCodexExecutableTestFixture,
+    SelectedCodexExecutableTestFixture, selected_test_fixture,
 };
 mod transaction;
-mod transaction_effectful;
-mod transaction_recovery_carrier;
 mod transaction_carrier;
+mod transaction_effectful;
 mod transaction_failure;
 mod transaction_identity;
 mod transaction_observation;
@@ -51,6 +50,7 @@ mod transaction_policy;
 mod transaction_preparation;
 mod transaction_read_only;
 mod transaction_recovery;
+mod transaction_recovery_carrier;
 mod transaction_tree;
 pub(crate) use transaction::execute_host_lifecycle_transaction;
 pub(crate) use transaction_observation::HostLifecycleObservationInput;
@@ -140,12 +140,8 @@ pub(crate) fn execute_runtime_help(
                 HostEffectExecutorErrorId::ProcessSpawnFailed => {
                     DistributionErrorId::ObjectUnavailable
                 }
-                HostEffectExecutorErrorId::OutputOverflow => {
-                    DistributionErrorId::ObjectTooLarge
-                }
-                HostEffectExecutorErrorId::ExecutableMutation => {
-                    DistributionErrorId::ObjectChanged
-                }
+                HostEffectExecutorErrorId::OutputOverflow => DistributionErrorId::ObjectTooLarge,
+                HostEffectExecutorErrorId::ExecutableMutation => DistributionErrorId::ObjectChanged,
                 _ => DistributionErrorId::EffectFailed,
             };
             return Err(error(id));

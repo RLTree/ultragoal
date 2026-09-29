@@ -22,11 +22,7 @@ pub(super) fn spawn(path: &Path, command: &HostCommand, cwd: RawFd) -> Result<Sp
     spawn_with_arguments(arguments, environment, cwd, None)
 }
 
-pub(super) fn spawn_runtime(
-    path: &Path,
-    command: &HostCommand,
-    cwd: RawFd,
-) -> Result<Spawned, ()> {
+pub(super) fn spawn_runtime(path: &Path, command: &HostCommand, cwd: RawFd) -> Result<Spawned, ()> {
     let arguments = sandbox::runtime_arguments(path, command)?;
     let environment = command
         .environment()

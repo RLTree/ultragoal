@@ -1,0 +1,78 @@
+# ExecPlan Rules
+
+Current program state belongs in one self-contained file under
+`docs/exec-plans/active/`. Stable planning rules belong here.
+
+## One milestone and one plan
+
+Each goal has one observable milestone and one active ExecPlan. The plan names:
+
+- user outcome, acceptance conditions, and non-goals;
+- current candidate, facts, assumptions, and claim ceiling;
+- owned, shared, and forbidden surfaces;
+- dependency order and one integration owner;
+- concrete commands or oracles that distinguish success from failure;
+- approval, cost, repair, recovery, stop, and cleanup boundaries; and
+- decisions with no safe default.
+
+Keep Progress, Surprises, Decisions, Validation, Recovery, and Outcome current
+enough that another operator can resume without chat or a parallel registry.
+
+## Ownership and parallel work
+
+Use one implementation path for coupled work. Parallelize only when current
+source proves disjoint semantic authority and write paths, no unmerged peer
+dependency, a local independent oracle, and reserved root fan-in capacity.
+
+Each worker gets one exact base commit/tree, exclusive owned paths, forbidden
+and shared paths, consumed interfaces, an effect ceiling, local oracle, repair
+budget, stop condition, and concise handoff. Root owns shared public grammar,
+schemas, dependency files, migrations, effect authority, integration, and
+final acceptance.
+
+## Proportional validation
+
+Use the lowest tier that can falsify the current claim:
+
+- context/source inspection for a local hypothesis;
+- focused changed-behavior and failure-path checks for an implementation;
+- integrated checks on one exact candidate for fan-in;
+- adversarial boundary tests and focused independent review for security,
+  authority, custody, recovery, or external effects;
+- same-surface package/install/runtime/journey evidence for a product claim;
+- release evidence only after explicit release authority.
+
+A zero exit code, source coverage, package bytes, install success, reviewer
+agreement, or receipt cannot substitute for a different surface.
+
+## Evidence economy
+
+Keep reproducible build, test, and diagnostic output ephemeral. Persist only
+the smallest artifact required by a current claim, cross-process custody,
+irreproducible observation, recovery need, or explicitly authorized release.
+Retained evidence names its owner, candidate/environment, consumed inputs,
+oracle, claim ceiling, invalidation trigger, and deletion boundary.
+
+Evidence becomes stale only when a declared dependency changes or contradictory
+same-surface evidence appears. Staleness lowers the claim; it does not trigger
+unrelated regeneration.
+
+## Configuration and budgets
+
+Use the least costly supported configuration that passes the representative task-class evaluation; parallelize only genuinely independent work with reserved integration capacity.
+
+Every uncertain repair has a bounded hypothesis and oracle. After two similar
+failures, change the hypothesis, variable, or oracle. Stop when the budget is
+exhausted, coordination costs exceed the likely benefit, the next action needs
+new authority, or continuing would broaden the milestone.
+
+## Recovery and stopping
+
+Before a risky transition, record exact custody and how to resume, roll back,
+or clean up. Never use destructive recovery against an ambiguous root or
+unowned state. A blocker records its exact condition, evidence, claim impact,
+and next authorized transition.
+
+Goal completion means the single milestone passes on the exact integrated
+candidate. Release, a second representative journey, broader autonomy, or a
+new product cycle requires a new user decision.

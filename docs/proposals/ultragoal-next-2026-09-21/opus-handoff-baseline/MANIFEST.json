@@ -1,0 +1,19 @@
+{
+  "schema": "ultragoal-opus-requirements-baseline/1",
+  "purpose": "Frozen reference for final independent acceptance; not a second active plan or protected host authority",
+  "source_root": "/Users/terrynoblin/Projects/harness-ultragoal-plugin-proposal",
+  "files": {
+    "AGENTS.md": "b2f9b0ff70f941b65120aabedb39192ee9b1b071642f7622c00e1488622ca815",
+    "GOAL_CONTRACT.md": "85e89120d7f6894420dc84a3c7acbc7294979e11f6e71eafa3bd34cd55cdbca9",
+    "ARCHITECTURE.md": "c2e3ddf6a7fc1561832e22e50df705db5365febc59ef4b320b7ffe068aee562a",
+    "AGENT_STANDARDS.md": "4060079f83012be26e051575bfeabe63162756d4558df7f9ce163bf91527393e",
+    "PLANS.md": "584118abb247f797c09e36bf9d881ff47eeee0502deff450d695e7420125bf09",
+    "agent-standards/03-execplans-worktrees-and-orchestration.md": "bbd08240abbf42c7e1e3444b5eb4d857bcc768d19cc34bf8e8b995e5663680fb",
+    "agent-standards/05-review-and-completion.md": "ce343a7a9e747d7e61c9aa8b20855c9f60472f2c415d476941498f1aac4248fb",
+    "docs/proposals/ultragoal-next-2026-09-21/PRD.md": "12fe741601e70b8a7b122740db529462b81fc571e8a5661e2ae0d848ef045b30",
+    "docs/proposals/ultragoal-next-2026-09-21/ARCHITECTURE.md": "4a68b10b8331afac95984557c5d47bde83a24195b1995969b9813250ac09492e",
+    "docs/proposals/ultragoal-next-2026-09-21/EVALUATION.md": "37a0dc43108cee13667eb740981eb34f339a83d097d1b45fdbb655ef0b0f7721",
+    "docs/proposals/ultragoal-next-2026-09-21/MIGRATION.md": "a34accd679e8c3e1c2336b6b9a12f537628ec7d8484f8d50db35c0eae494bbed",
+    "docs/proposals/ultragoal-next-2026-09-21/AUDIT.md": "d79570f0c388b42e8de38499fadf1ff35d5d3ea676dd26651d2662f23d57c4f6"
+  }
+}

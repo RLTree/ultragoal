@@ -1,5 +1,26 @@
 # Harness UltraGoal Usable Product Goal
 
+## Current authorization — UltraGoal Next implementation
+
+Terry authorized full implementation of the five-document PRD at
+`docs/proposals/ultragoal-next-2026-09-21/`, using Conduct Agent Cadence.
+This supersedes that proposal's planning-only pause and the older milestone's
+scope for new work. TypeSafe Jev API spending is explicitly authorized for
+development, evaluation/testing and production; do not ask again for that
+spending authority. Minimize disclosed project evidence and never disclose
+credentials or raw personal histories. The primary target remains gpt-6-astra;
+Bend development uses the newest official release with exact per-run identity.
+
+Deliver the complete Bend-first product, bounded internal Jev assessments,
+necessary Rust adapters, meaningful proofs/tests, native observation,
+incremental reuse, usable CLI/plugin integration and the specified evaluation
+and migration support. The existing active ExecPlan remains the sole execution
+record. Preserve unrelated dirty/untracked work. Commits, pushes, publication,
+global installation/configuration changes and destructive EJ retirement still
+require their own authority; prepare their concrete verified transition first.
+The older milestone and observations below remain historical constraints and
+evidence, not a restriction to the old syntax-only engine.
+
 ## Authority and history
 
 This contract is the current product-goal authority for Harness UltraGoal. It

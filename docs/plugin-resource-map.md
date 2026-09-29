@@ -7,15 +7,15 @@ sequence of lanes, gates, receipts, or helper scripts.
 ## Canonical skill topology
 
 `$harness-ultragoal:harness-ultragoal` is the only front door. It selects
-exactly one primary route:
+ordinary native execution or one specialized primary route when needed:
 
 | Immediate outcome | Canonical skill | First capability probe | Effect ceiling |
 | --- | --- | --- | --- |
-| Classify an unknown request | `harness-ultragoal` | `ultragoal --json inspect capabilities` | Read |
+| Complete a self-contained implementation, analysis or documentation task | `harness-ultragoal` directly | Relevant task inputs; no runtime startup sequence | Existing authorized scope only |
 | Set up a fresh repository or retrofit an existing one | `repository-fit` | `ultragoal --json fit inspect --target <relative-path>` | Read until an accepted apply plan |
 | Run affected checks while preserving a dirty tree | `routine-work` | `ultragoal --json check routine --target <relative-path>` | Declared local `WorkspaceWrite` |
 | Explain a failure, query local events, or choose the next action | `diagnose-and-observe` | `ultragoal --json inspect findings` | Read; export is separately approved `ExternalWrite` |
-| Coordinate durable multi-scope work and recover it after interruption | `goal-run` | `ultragoal --json inspect context` | Per-work-package effects only |
+| Coordinate multi-owner dependencies or recover in-flight work | `goal-run` | Current acceptance and ownership; typed context only when needed | Existing authorized scope only |
 | Prove one named claim at its exact truth surface | `prove` | `ultragoal --json inspect claims` | Declared proof output `WorkspaceWrite` |
 | Evaluate, research, migrate, preserve compatibility, or retire | `improve-and-maintain` | `ultragoal --json eval audit --spec <relative-path>` or `migrate plan` | Read until an accepted bounded operation |
 | Independently falsify a real operator journey | `product-journey-review` | Probe every required command and host surface | Read-only reviewer |
@@ -50,7 +50,9 @@ Fitness, and release are later independent proof surfaces.
 
 ## Deterministic selection
 
-Select the skill that owns the requested immediate outcome:
+Complete ordinary self-contained work directly with native tools. Do not load another
+skill or inspect runtime state just because the task includes code, analysis or
+documentation. For a specialized capability, select its owning skill:
 
 1. A request to independently review or falsify an existing journey selects
    `product-journey-review`.
@@ -61,43 +63,35 @@ Select the skill that owns the requested immediate outcome:
    `repository-fit`.
 5. Affected tests, changed-impact validation, or safe reuse selects
    `routine-work`.
-6. Coordinated execution across multiple dependency-bound scopes selects
-   `goal-run`.
+6. Substantial multi-owner execution or recovery of in-flight dependencies selects
+   `goal-run`; sequential dependencies remain with the existing owner.
 7. Evaluation, research refresh, compatibility, migration, or retirement
    selects `improve-and-maintain`.
 
-When one prompt contains multiple outcomes, choose the earliest outcome the
-operator must complete and name the others as follow-ons. Do not merge skill
-authorities. If two outcomes are truly simultaneous and require coordination,
-select `goal-run`, then create disjoint work packages that invoke the owning
-specialized workflows. If a repository-dependent route lacks a target, or a
-write route lacks required authority, stop before execution and ask one focused
-question. Unknown intents produce no route.
+When one prompt contains multiple outcomes, choose the earliest required dependency
+and continue through the remaining authorized outcome. Implementation that includes
+diagnosis, checks or documentation does not by itself require another skill.
+Multiple outcomes do not mandate workers. Resolve a target from current workspace evidence when
+unambiguous; ask only for a missing decision that materially changes correctness
+or authority. A missing typed capability holds its dependent operation. Independent
+native work retains its own authorization and actual execution proof surface.
 
 ## Calibrated next action
 
-Route selection is followed by one ephemeral calibration. It names the next
-dependency-legal action that reaches operator value, one representative
-acceptance check, the lowest sufficient exposed execution configuration, the
-required review scope, the current proof boundary, and whether any output must
-persist. It is returned as guidance only: `LANE_REGISTRY.json`, root authority,
-and the claim kernel remain authoritative, while `next` remains a zero-write
-read model.
+Keep one outcome, constraints and acceptance contract across Astra, Sol, Terra
+and Luna. Model and effort remain configurable; record effective values only
+when the runtime exposes them. Select context and probes for the next dependent
+action, revalidating identity and authority before typed effects. The existing
+plan and actual operation owner retain authority; historical lane registries do
+not schedule ordinary work.
 
-Use one lean Goal, Success, Context, Constraints, Output, Verification contract
-across exposed routes. Change model, reasoning, or orchestration before
-rewriting a working prompt, and change the prompt only for a measured missing
-goal, context, boundary, output, or verification requirement. Never infer the
-effective configuration from prompt text.
-
-Spend review and proof where they can affect a decision. Routine observation
-needs no independent reviewer; a material source or lane freeze gets one
-exhaustive risk-matched specialist; material or major root integration and
-protected cross-domain, product, release, and completion boundaries get the
-milestone team. Reproducible checks and outputs stay ephemeral. Durable evidence
-exists only while a current claim,
-cross-process handoff, irreproducible observation, audit, or recovery path
-consumes it.
+Delegate substantial independent work when its benefit earns the extra cost.
+One root owns integration; sequential dependencies do not require a team. Use
+bounded independent review for material trust-boundary or uncertain acceptance
+decisions. Run required and relevant checks, expanding only for changed state,
+failures or unresolved risk. Keep reproducible output ephemeral unless a current
+claim, cross-process handoff or recovery consumes it. Report useful outcomes
+and material caveats rather than internal routing fields.
 
 ## Automatic Agentic advisory selection
 
@@ -218,9 +212,10 @@ that owns its effect.
 
 ### Interrupted orchestration
 
-Use `goal-run`. Recompute candidate identity, leases, worker results, reviews,
-and preserved state. Reconcile accepted work at the root, reissue stale work,
-and advance independent ready work. Parallel activity does not prove recovery.
+Use `goal-run`. Refresh candidate, target, authority and preserved state for the
+next action. Reconcile worker leases/results only when workers exist; preserve
+accepted outputs and unique partial effects. Resume the legal remainder after
+stale or ambiguous state is resolved. Parallel activity does not prove recovery.
 
 ### Strict proof
 
@@ -267,11 +262,11 @@ next action.
 ## Calibrated assurance
 
 Use the smallest proof loop that can honestly support the current claim.
-Implementation uses cheap deterministic checks. A material source lane or
-worktree freeze receives one exhaustive review of its complete named invariant
-from one risk-matched specialist and can support only source or lane acceptance.
-The four-persona team is reserved for major root integration, Product Fitness,
-release, completion, protected cross-domain change, or explicit escalation.
+Implementation uses required and relevant checks. A material trust-boundary
+change or ambiguous acceptance decision gets a bounded independent review of
+the named invariant. Add reviewers only for distinct unresolved risks or when
+the specific milestone contract requires them; ordinary completion does not
+automatically require a team. Source review supports only source acceptance.
 
 Re-review requires changed authority-bearing bytes, a changed consumed
 dependency, a newly eligible claim surface, or observed behavior that

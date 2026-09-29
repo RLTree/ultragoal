@@ -67,7 +67,6 @@ impl SelectedCodexExecutableTestFixture {
         fs::remove_file(&self.path).expect("fixture executable removal");
         fs::hard_link(&source.path, &self.path).expect("fixture executable hard link");
     }
-
 }
 
 impl Drop for SelectedCodexExecutableTestFixture {

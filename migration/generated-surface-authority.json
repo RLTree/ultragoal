@@ -216,7 +216,7 @@
         "AGENTS.md"
       ],
       "regeneration_command": "scripts/project-agent-standards write",
-      "output_sha256": "fb4d921dc2ac0bf33d70068fb5a979547054e6f4766f8cb094c186817957ecb3"
+      "output_sha256": "0dff4e47e44a90562a320bb918cf41982a6373edbff0cd2d457f690e9d30aaf0"
     },
     {
       "disposition": "source_projection",

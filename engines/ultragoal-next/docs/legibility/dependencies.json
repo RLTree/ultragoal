@@ -1,0 +1,199 @@
+[
+  {
+    "manifest": "Cargo.toml",
+    "crate": "libc",
+    "version_requirement": "=0.2.186",
+    "owner": "src/os.rs",
+    "purpose": "POSIX and Mach host observation primitives",
+    "upstream_docs": "https://docs.rs/libc/0.2.186/libc/",
+    "profiles": [
+      {
+        "adapter_id": "headroom-mach",
+        "boundary_kind": "effect_adapter",
+        "contract": {
+          "kind": "function_adapters",
+          "module": "src/resources.rs",
+          "functions": [
+            "measure"
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "One synchronous host measurement"
+        },
+        "retry": {
+          "applicability": "required",
+          "policy": "Caller resamples before each physical work unit"
+        },
+        "cache_invalidation_inputs": [
+          "current Mach free/inactive/speculative page counts",
+          "current host page size"
+        ]
+      },
+      {
+        "adapter_id": "source-mode",
+        "boundary_kind": "filesystem_adapter",
+        "contract": {
+          "kind": "function_adapters",
+          "module": "src/fs_adapter/stream.rs",
+          "functions": [
+            "Root::stream_source"
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "Descriptor-bound local source read"
+        },
+        "retry": {
+          "applicability": "required",
+          "policy": "Retry only from freshly listed identity after a pressure outcome"
+        },
+        "cache_invalidation_inputs": [
+          "file descriptor identity",
+          "root lineage",
+          "selected path identity"
+        ]
+      }
+    ]
+  },
+  {
+    "manifest": "Cargo.toml",
+    "crate": "serde",
+    "version_requirement": "=1.0.228",
+    "owner": "src/provider.rs",
+    "purpose": "Typed deserialization contract for provider JSON",
+    "upstream_docs": "https://docs.rs/serde/1.0.228/serde/",
+    "profiles": [
+      {
+        "adapter_id": "strict-json-declaration",
+        "boundary_kind": "typed_contract_derive",
+        "contract": {
+          "kind": "typed_declarations",
+          "declarations": [
+            {
+              "module": "src/provider.rs",
+              "symbols": [
+                "Strict"
+              ]
+            }
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "Compile-time type declaration"
+        },
+        "retry": {
+          "applicability": "not_applicable",
+          "rationale": "No effects to retry"
+        },
+        "cache_invalidation_inputs": [
+          "Strict source definition"
+        ]
+      }
+    ]
+  },
+  {
+    "manifest": "Cargo.toml",
+    "crate": "serde_json",
+    "version_requirement": "=1.0.150",
+    "owner": "src/provider.rs",
+    "purpose": "Strict provider JSON decoding and report serialization",
+    "upstream_docs": "https://docs.rs/serde_json/1.0.150/serde_json/",
+    "profiles": [
+      {
+        "adapter_id": "provider-json-emission",
+        "boundary_kind": "pure_operations",
+        "contract": {
+          "kind": "pure_operations",
+          "module": "src/provider.rs",
+          "symbols": [
+            "serde_json::json",
+            "serde_json::to_vec",
+            "serde_json::to_string",
+            "serde_json::Map::new",
+            "serde_json::Value::Array",
+            "serde_json::Value::Null"
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "Pure value construction and serialization"
+        },
+        "retry": {
+          "applicability": "not_applicable",
+          "rationale": "No effects to retry"
+        },
+        "cache_invalidation_inputs": [
+          "exact request fields",
+          "validated response fields"
+        ]
+      }
+    ]
+  },
+  {
+    "manifest": "Cargo.toml",
+    "crate": "sha2",
+    "version_requirement": "=0.10.9",
+    "owner": "src/main.rs",
+    "purpose": "Host byte digests for custody and wire identities",
+    "upstream_docs": "https://docs.rs/sha2/0.10.9/sha2/",
+    "profiles": [
+      {
+        "adapter_id": "source-stream-digest",
+        "boundary_kind": "crypto_adapter",
+        "contract": {
+          "kind": "function_adapters",
+          "module": "src/fs_adapter/stream.rs",
+          "functions": [
+            "Root::stream_source"
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "Local source hashing"
+        },
+        "retry": {
+          "applicability": "not_applicable",
+          "rationale": "A failed source hash is not retried without recapture"
+        },
+        "cache_invalidation_inputs": [
+          "captured source bytes",
+          "source identity"
+        ]
+      }
+    ]
+  },
+  {
+    "manifest": "Cargo.toml",
+    "crate": "syn",
+    "version_requirement": "=2.0.117",
+    "owner": "src/native_syntax.rs",
+    "purpose": "Captured Rust syntax compatibility parser",
+    "upstream_docs": "https://docs.rs/syn/2.0.117/syn/",
+    "profiles": [
+      {
+        "adapter_id": "captured-rust-syntax",
+        "boundary_kind": "pure_operations",
+        "contract": {
+          "kind": "pure_operations",
+          "module": "src/native_syntax.rs",
+          "symbols": [
+            "syn::parse_file"
+          ]
+        },
+        "timeout": {
+          "applicability": "not_applicable",
+          "rationale": "Local parse of one captured Rust source, with no external effect"
+        },
+        "retry": {
+          "applicability": "not_applicable",
+          "rationale": "A source change requires fresh capture and a new parse result"
+        },
+        "cache_invalidation_inputs": [
+          "captured Rust source bytes",
+          "pinned syn version and generated native parser identity"
+        ]
+      }
+    ]
+  }
+]

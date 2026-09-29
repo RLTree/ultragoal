@@ -1,0 +1,102 @@
+# Review And Completion
+
+## Falsification Law
+
+Review tests the current claim against likely counterexamples. It is not a
+recurring ceremony.
+
+- Current candidate bytes and same-surface observations outrank prose.
+- Source, package, install, host discovery, runtime, recovery, release, and
+  quality-in-use are separate proof surfaces. A pass on one cannot close
+  another.
+- Missing evidence blocks only the claim that consumes it. Historical,
+  detached, superseded, or unrelated evidence drift is context or cleanup, not
+  a reason to restart delivery.
+- Check repeated identifiers, digests, paths, required lists, generated
+  artifacts, and schema enums only when the current change or claim consumes
+  them.
+- Rerun the current focused gate when feasible. Supplied-only evidence must be
+  labeled supplied-only.
+- Negative fixtures pin the failure class they are intended to prove.
+- One exhaustive pass over the named invariant returns all demonstrated
+  sibling defects in scope. Stop only when continuing is unsafe, destructive,
+  or outside the contract.
+- A fresh review is eligible only after relevant candidate bytes, consumed
+  authority, consumed dependencies, or the claim surface changed, or current
+  observation contradicted the previous decision.
+- When an unchanged candidate has survived the named falsification, close the
+  loop. Speculative hardening becomes backlog or residual risk; it does not
+  trigger another round.
+- Approval names the proof surfaces checked and every material claim still
+  unsupported.
+
+## Proportional Independent Review
+
+Choose the smallest independent review that fits the current risk:
+
+| Work or claim | Required independent review |
+| --- | --- |
+| Ordinary implementation confined to an owned lane | None by default; root inspects the diff and focused checks at fan-in |
+| Security, authority, custody, concurrency, recovery, migration, or external-effect boundary | One fresh focused falsifier for the touched boundary |
+| Current product milestone | Product/Simplicity review of the same-surface journey plus any boundary falsifier made necessary by the candidate |
+| Release-grade or repository-wide completion claim spanning contract, orchestration, security, and product | The full four-lens team, once, against one unchanged candidate |
+
+The four canonical lenses remain:
+
+1. Contract and Claim.
+2. Orchestration and Recovery.
+3. Security Trust Boundary.
+4. Product and Simplicity.
+
+Do not require all four for ordinary lanes, documentation-only planning,
+focused bug repair, or a claim that does not span all four. Do not rerun a
+review because unrelated receipts aged or because a historical plan requested
+another round.
+
+Before review, bind:
+
+- the exact candidate and diff;
+- the current claim;
+- the specific failure model or user journey;
+- the minimum oracle that can falsify it;
+- the claim ceiling.
+
+Reviewer tools, model, reasoning, or registry exposure are recorded only when a
+current claim depends on them. Tool registration is not product proof.
+
+For bounded invariant review, use the lowest sufficient standard-tier route.
+Persist no separate review receipt unless a current claim, cross-process
+handoff, irreproducible observation, or recovery need consumes it. One
+exhaustive pass with no material finding closes the loop.
+
+## Completion And Claim Ceiling Law
+
+Do not say complete, ready, done, fixed, passing, or production-ready without
+fresh named evidence from the same surface.
+
+Completion means the current contract's acceptance checks passed for the exact
+candidate. Missing evidence, blocked approval, dirty owned work, stale consumed
+authority, or unavailable same-surface proof lowers the affected claim. It does
+not automatically reopen unrelated claims.
+
+Final packets, archives, review targets, transaction finalization, and
+update-goal eligibility fail closed when they are current product surfaces and
+their consumed evidence is stale, forged, unavailable, circular, or bound to a
+different candidate. They are not mandatory artifacts for ordinary
+implementation.
+
+Production-use proof is required before production-ready claims. Useful output
+on one representative real task may close a bounded product milestone; it does
+not prove repeated use, daily-driver fitness, or release readiness.
+
+## Completion Report Contract
+
+For non-trivial work, final reports state:
+
+- outcome and claim ceiling;
+- exact verification and outcome;
+- residual blockers or unsupported surfaces;
+- security or performance implications when relevant.
+
+Write `N/A` when a section truly does not apply. Do not manufacture an artifact
+solely so the report can link to it.

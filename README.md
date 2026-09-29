@@ -1,5 +1,20 @@
 # Harness Ultragoal
 
+## Current Next development route
+
+The installed UltraGoal Next product is owned by
+[`engines/ultragoal-next/`](engines/ultragoal-next/README.md): Bend rules and
+proofs, Rust host adapters, plugin skill, tests and source-bound build/package.
+For a Next change, read [architecture](ARCHITECTURE.md) and the active ExecPlan,
+then run `scripts/check-next --quick "$PWD"`; use `--full` before delivery.
+The root `scripts/check` includes this quick gate. A stale binary or proof probe
+is a failure requiring the exact engine `build.py`, not a reason to use the
+legacy validator checks as a substitute. Current installed behavior and the
+dogfooding acceptance ceiling are recorded in the active plan.
+
+The routes below are retained for the legacy compatibility implementation and
+its still-supported migration obligations. They do not own Next maintenance.
+
 Harness Ultragoal is a Codex plugin and typed Rust CLI candidate for fitting
 repositories, running conservative routine checks, diagnosing failures,
 orchestrating durable goals, proving named claims, reviewing product journeys,
@@ -23,7 +38,7 @@ and release-grade evidence run only when those claims are current. Historical
 v2 registries, receipts, and mandatory-law proof projections are frozen
 compatibility inputs and are not refreshed.
 
-## Start here
+## Legacy compatibility routes
 
 Use `$harness-ultragoal:harness-ultragoal` as the only first-entry skill. It
 selects one of seven specialized workflows after disclosing the effect,
@@ -57,7 +72,9 @@ selection and ask one focused question.
 - `.codex/agents/`: the six current project-scoped read-only agent roles.
 - `skills/`: canonical skills plus compatibility sources awaiting root-owned
   migration and retirement decisions.
-- `validator/`: the Rust enforcement and acceleration kernel.
+- `validator/`: the legacy Rust compatibility kernel.
+- `engines/ultragoal-next/`: the installed Next Bend core, Rust host bridge,
+  plugin package and maintained verification path.
 
 ## Command boundary
 
